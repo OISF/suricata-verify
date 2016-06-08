@@ -1,0 +1,10 @@
+%YAML 1.1
+---
+
+include: default.yaml
+
+outputs:
+  - tcp-data:
+      enabled: yes
+      type: file
+      filename: tcp-data.log
