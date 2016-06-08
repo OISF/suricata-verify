@@ -1,0 +1,11 @@
+%YAML 1.1
+---
+
+include: default.yaml
+
+outputs:
+  - lua:
+      enabled: yes
+      scripts-dir: ../verify/output-lua
+      scripts:
+        - http2.lua
