@@ -1,0 +1,15 @@
+%YAML 1.1
+---
+
+include: suricata-3.1.yaml
+
+outputs:
+  # Extensible Event Format (nicknamed EVE) event log in JSON format
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - files:
+            force-magic: no   # force logging magic on all logged files
+            force-md5: no     # force logging of md5 checksums
