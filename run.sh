@@ -5,23 +5,25 @@ set -e
 prefix=$(dirname $0)
 tests=$(find ${prefix}/* -maxdepth 0 -type d)
 
-# Disable leak checks.
-export ASAN_OPTIONS="detect_leaks=0"
+export ASAN_OPTIONS="detect_leaks=${DETECT_LEAKS:=1},disable_core=1"
+export LSAN_OPTIONS="suppressions=qa/lsan.suppress"
 
 check() {
     dir="$1"
     for filename in $(find ${dir}/expected/ -type f); do
-	echo "===> $(basename $1): checking $(basename ${filename})"
-	if ! cmp ${dir}/expected/$(basename ${filename}) \
+	echo -n "===> $(basename $1): checking $(basename ${filename}): "
+	if ! cmp -s ${dir}/expected/$(basename ${filename}) \
 	     ${dir}/output/$(basename ${filename}); then
+	    echo "FAIL"
 	    return 1
 	fi
+	echo "OK"
     done
 }
 
 verify() {
-    name="$1"
-    echo "===> $(basename ${name})"
+    name="$(basename $1)"
+    echo "===> ${name}"
     dir=${prefix}/${name}
     if [ ! -e ${dir} ]; then
 	echo "error: test ${name} does not exist"
@@ -39,15 +41,16 @@ verify() {
 		   -S /dev/null \
 		   --runmode=single \
 		   -l ${dir}/output \
-		   #> ${dir}/output/stdout \
-		   #2> ${dir}/output/stderr
+		   > ${dir}/output/stdout \
+		   2> ${dir}/output/stderr
     if [ $? -ne 0 ]; then
-	echo "***> $(basename ${name}) FAIL: non-zero exit."
+	echo "***> ${name}: FAIL: non-zero exit (see: $1/output/stderr)."
+	exit 1
     else
 	if check ${dir}; then
-	    echo "===> $(basename ${name}): PASS"
+	    echo "===> ${name}: PASS"
 	else
-	    echo "***> $(basename ${name}): FAIL"
+	    echo "***> ${name}: FAIL"
 	    exit 1
 	fi
     fi
