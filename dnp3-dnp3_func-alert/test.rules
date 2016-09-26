@@ -1,0 +1,13 @@
+# Should match.
+alert dnp3 any any -> any any (msg:"DNP3 Function code test bi-directional"; \
+      dnp3_func:21; sid:1; rev:1;)
+
+# Should match.
+alert dnp3 any any -> any any (msg:"DNP3 Function code test to-server"; \
+      flow:established,to_server; \
+      dnp3_func:21; sid:2; rev:1;)
+
+# Should not match.
+alert dnp3 any any -> any any (msg:"DNP3 Function code test to-client"; \
+      flow:established,to_client; \
+      dnp3_func:21; sid:3; rev:1;)
