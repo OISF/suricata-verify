@@ -50,16 +50,22 @@ verify() {
     rm -rf ${dir}/output
     mkdir -p ${dir}/output
 
-    rules=/dev/null
-    if [ -e ${dir}/rules.rules ]; then
-	rules=${dir}/rules.rules
+    args=""
+
+    if [ -e ${dir}/suricata.yaml ]; then
+	args="${args} -c ${dir}/suricata.yaml"
+    else
+	args="${args} -c ./suricata.yaml"
+    fi
+
+    if [ -e ${dir}/test.rules ]; then
+	args="${args} -S ${dir}/test.rules"
     fi
 
     set +e
-    ${SURICATA} -c ${dir}/suricata.yaml \
+    ${SURICATA} ${args} \
         -r ${dir}/input.pcap \
 	-k none \
-	-S ${rules} \
 	--runmode=${RUNMODE} \
 	-l ${dir}/output \
 	--set "classification-file=${dir}/../etc/classification.config" \
