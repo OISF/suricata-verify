@@ -60,6 +60,8 @@ verify() {
 
     if [ -e ${dir}/test.rules ]; then
 	args="${args} -S ${dir}/test.rules"
+    else
+	args="${args} -S /dev/null"
     fi
 
     set +e
@@ -88,6 +90,10 @@ verify() {
 
 for t in ${tests}; do
     if [ "$1" = "" ]; then
+	if [ -e "$t/skip" ]; then
+	    echo "===> $(basename $t): SKIPPED"
+	    continue
+	fi
 	match=yes
     elif echo ${t} | grep -q "$1"; then
 	match=yes
