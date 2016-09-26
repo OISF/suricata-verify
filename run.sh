@@ -3,13 +3,29 @@
 set -e
 
 prefix=$(dirname $0)
-tests=$(find ${prefix}/* -maxdepth 0 -type d)
+
+# Find all the tests.
+tests=$(find ${prefix}/* -type f -name input.pcap -exec dirname {} \;)
+
+if [ -e ./src/suricata ]; then
+    SURICATA=./src/suricata
+else
+    SURICATA=suricata
+fi
 
 export ASAN_OPTIONS="detect_leaks=${DETECT_LEAKS:=1},disable_core=1"
 export LSAN_OPTIONS="suppressions=qa/lsan.suppress"
 
+RUNMODE=${RUNMODE:=single}
+
 check() {
     dir="$1"
+
+    if ! test -e ${dir}/expected; then
+	echo "FAIL: expected directory does not exist."
+	return 1
+    fi
+
     for filename in $(find ${dir}/expected/ -type f); do
 	echo -n "===> $(basename $1): checking $(basename ${filename}): "
 	if ! cmp -s ${dir}/expected/$(basename ${filename}) \
@@ -34,15 +50,22 @@ verify() {
     rm -rf ${dir}/output
     mkdir -p ${dir}/output
 
+    rules=/dev/null
+    if [ -e ${dir}/rules.rules ]; then
+	rules=${dir}/rules.rules
+    fi
+
     set +e
-    ./src/suricata -c ${dir}/suricata.yaml \
+    ${SURICATA} -c ${dir}/suricata.yaml \
 		   -r ${dir}/input.pcap \
 		   -k none \
-		   -S /dev/null \
-		   --runmode=single \
+		   -S ${rules} \
+		   --runmode=${RUNMODE} \
 		   -l ${dir}/output \
-		   > ${dir}/output/stdout \
-		   2> ${dir}/output/stderr
+		   --set "classification-file=${dir}/../etc/classification.config" \
+		   --set "reference-config-file=${dir}/../etc/reference.config" \
+		   #> ${dir}/output/stdout \
+		   #2> ${dir}/output/stderr
     if [ $? -ne 0 ]; then
 	echo "***> ${name}: FAIL: non-zero exit (see: $1/output/stderr)."
 	exit 1
