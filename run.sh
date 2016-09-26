@@ -57,15 +57,15 @@ verify() {
 
     set +e
     ${SURICATA} -c ${dir}/suricata.yaml \
-		   -r ${dir}/input.pcap \
-		   -k none \
-		   -S ${rules} \
-		   --runmode=${RUNMODE} \
-		   -l ${dir}/output \
-		   --set "classification-file=${dir}/../etc/classification.config" \
-		   --set "reference-config-file=${dir}/../etc/reference.config" \
-		   #> ${dir}/output/stdout \
-		   #2> ${dir}/output/stderr
+        -r ${dir}/input.pcap \
+	-k none \
+	-S ${rules} \
+	--runmode=${RUNMODE} \
+	-l ${dir}/output \
+	--set "classification-file=${dir}/../etc/classification.config" \
+	--set "reference-config-file=${dir}/../etc/reference.config" \
+	> ${dir}/output/stdout \
+	2> ${dir}/output/stderr
     if [ $? -ne 0 ]; then
 	echo "***> ${name}: FAIL: non-zero exit (see: $1/output/stderr)."
 	exit 1
