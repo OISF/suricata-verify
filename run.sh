@@ -52,6 +52,10 @@ verify() {
 
     args=""
 
+    if [ -e ${dir}/vars.sh ]; then
+	. ${dir}/vars.sh
+    fi
+
     if [ -e ${dir}/suricata.yaml ]; then
 	args="${args} -c ${dir}/suricata.yaml"
     else
@@ -100,6 +104,6 @@ for t in ${tests}; do
     else
 	match=no
     fi
-    test "${match}" = "yes" && verify $t
+    test "${match}" = "yes" && (verify $t)
 done
 
