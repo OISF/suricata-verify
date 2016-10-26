@@ -1,1 +1,1 @@
-args="${args} --simulate-ips"
+SIMULATE_IPS=yes
