@@ -1,0 +1,5 @@
+# Trivial dnp3_data match rule.
+alert dnp3 any any -> any any (msg:"DNP3 Data match"; \
+      flow:established,to_client; dnp3_data; content:"|02 01 28 01 00|"; \
+      dnp3_func:unsolicited_response; \
+      sid:4; rev:1;)
