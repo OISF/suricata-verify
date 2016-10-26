@@ -1,11 +1,11 @@
-# Suricata Integration Tests
+# Suricata Verification Tests
 
 ## Running All Tests
 
 From your Suricata source directory run:
 
 ```
-../path/to/suricata-tests/run.sh
+../path/to/suricata-verify/run.sh
 ```
 
 Or to run a single test:
@@ -17,9 +17,10 @@ Or to run a single test:
 
 - Create a directory that is the name of the new test.
 
-- Copy a pcap file to ${dir}/input.pcap.
+- Copy a single pcap file into the test directory. It must end in
+  ".pcap".
 
-- Create ${dir}/suricata.yaml.
+- Optional: Create a suricata.yaml in the test directory.
 
     Note: You may want to add something like:
     ```
@@ -27,6 +28,9 @@ Or to run a single test:
     ```
     to the top and then just make the necessary overrides in the tests
     suricata.yaml.
+
+	If the test directory does not include a suricata.yaml, the one
+    found in your build directory will be used.
 
 - Add any rules required to ${dir}/test.rules.
 
