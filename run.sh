@@ -34,14 +34,20 @@ done
 patterns="$@"
 
 # Find all non-private tests.
-tests=$(find ${prefix}/* -maxdepth 0 -type d | grep -v '^etc$')
+tests=$(cd ${prefix} && find * -maxdepth 0 -type d | grep -v '^private$')
+
+# And the private tests.
+if [ -e "${prefix}/private" ]; then
+    private=$(cd ${prefix} && find private/* -maxdepth 0 -type d)
+    tests="${tests} ${private}"
+fi
 
 export ASAN_OPTIONS="detect_leaks=${DETECT_LEAKS:=1},disable_core=1"
 export LSAN_OPTIONS="suppressions=qa/lsan.suppress"
 
 run_test() {
-    tdir="$1"
-    tname=$(basename "$1")
+    t="$1"
+    tdir="${prefix}/${t}"
 
     logdir="${tdir}/output"
 
@@ -56,7 +62,6 @@ run_test() {
     fi
 
     args="-l ${logdir} -r ${pcap}"
-    #args="${args} --runmode=single"
 
     # If "ips" exists in the test name, then simulate ips.
     if echo "${tname}" | grep -q "ips"; then
@@ -134,8 +139,8 @@ check_patterns() {
 
 # Check if a test should be skipped.
 check_skip() {
-    tdir="$1"
-    tname=$(basename "${tdir}")
+    t="$1"
+    tdir="${prefix}/${t}"
 
     if [ -e "${tdir}/skip" ]; then
 	return 0
@@ -169,11 +174,10 @@ generic_verify() {
 # verification script, then the generic file compare will be
 # performed.
 verify() {
-    tdir="$1"
-    tname=$(basename "${tdir}")
+    t="$1"
 
     (
-	cd ${tdir}
+	cd ${prefix}/${t}
 	
 	if [ -e "verify.sh" ]; then
 	    if ! ./verify.sh; then
@@ -190,34 +194,44 @@ verify() {
 
 # Run Suricata and verify the output.
 run_and_verify() {
-    tdir="$1"
-    tname=$(basename "$1")
-    if ! (run_test "${tdir}"); then
-	echo "===> ${tname}: FAIL with non-zero exit (see $1/output/stderr)"
+    t="${1}"
+    tdir="${prefix}/${t}"
+
+    # If test has its own run script, just use that.
+    if [ -e "${tdir}/run.sh" ]; then
+	if ! "${tdir}/run.sh"; then
+	    echo "===> ${t}: FAIL"
+	    return 1
+	fi
+	echo "===> ${t}: OK"
+	return 0
+    fi
+    
+    if ! (run_test "${t}"); then
+	echo "===> ${t}: FAIL with non-zero exit (see ${tdir}/output/stderr)"
 	return 1
     fi
-    if ! (verify "${tdir}"); then
-	echo "===> ${tname}: FAIL with verification error"
+    if ! (verify "${t}"); then
+	echo "===> ${t}: FAIL with verification error"
 	return 1
     fi
-    echo "===> ${tname}: OK"
+    echo "===> ${t}: OK"
 }
 
-for tdir in ${tests}; do
-    tname=$(basename ${tdir})
+for t in ${tests}; do
 
     # These are not tests, but helper directories.
-    if [ "${tname}" = "etc" ]; then
+    if [ "${t}" = "etc" ]; then
 	continue
     fi
 
-    if check_patterns ${tname}; then
-	if test "${force}" = "no" && check_skip "${tdir}"; then
-	    echo "===> ${tname}: SKIPPED"
+    if check_patterns ${t}; then
+	if test "${force}" = "no" && check_skip "${t}"; then
+	    echo "===> ${t}: SKIPPED"
 	    continue
 	fi
-	echo "===> Running ${tname}."
-	if ! (run_and_verify "${tdir}"); then
+	echo "===> Running ${t}."
+	if ! (run_and_verify "${t}"); then
 	    exit 1
 	fi
     fi
