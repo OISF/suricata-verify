@@ -1,0 +1,5 @@
+# Should not fire, expected an established flow.
+alert ip any any -> any any (msg:"GPL ATTACK_RESPONSE id check returned root"; content:"uid=0|28|root|29|"; flow:established; classtype:bad-unknown; sid:1; rev:7;)
+
+# Should fire.
+alert ip any any -> any any (msg:"GPL ATTACK_RESPONSE id check returned root"; content:"uid=0|28|root|29|"; flow:not_established; classtype:bad-unknown; sid:2; rev:7;)
