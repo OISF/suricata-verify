@@ -61,7 +61,7 @@ run_test() {
 	exit 1
     fi
 
-    args="-l ${logdir} -r ${pcap}"
+    args="-vvv -l ${logdir} -r ${pcap}"
 
     # If "ips" exists in the test name, then simulate ips.
     if echo "${tname}" | grep -q "ips"; then

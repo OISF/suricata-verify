@@ -13,3 +13,10 @@ outputs:
             payload: yes
             packet: yes
             dnp3: yes
+
+app-layer:
+  protocols:
+    dnp3:
+      enabled: yes
+      detection-ports:
+        dp: 20000
