@@ -113,7 +113,7 @@ run_test() {
     args="${args} --set classification-file=./classification.config"
     args="${args} --set reference-config-file=./reference.config"
 
-    ./src/suricata --init-errors-fatal ${args} \
+    TZ="UTC" ./src/suricata --init-errors-fatal ${args} \
 		   > ${_stdout} 2> ${_stderr}
     return "$?"
 }
