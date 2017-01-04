@@ -76,8 +76,9 @@ run_test() {
 
     # If test specific rules are not provided then use /dev/null to
     # avoid loading any.
-    if [ -e "${tdir}/test.rules" ]; then
-	args="${args} -S ${tdir}/test.rules"
+    rules=$(for n in ${tdir}/*.rules; do echo $n; break; done)
+    if [ -e "${rules}" ]; then
+	args="${args} -S ${rules}"
     else
 	args="${args} -S /dev/null"
     fi
@@ -157,7 +158,7 @@ check_skip() {
 
 # Generic verification script. For any file in the expected directory,
 # a comparison is done with the actual output.
-generic_verify() {
+generic_check() {
     if [ ! -e "expected" ]; then
 	echo "error: test does not have a directory of expected output"
 	exit 1
@@ -170,21 +171,21 @@ generic_verify() {
     done
 }
 
-# Verify the output of Suricata. If a test doesn't provide its own
+# Check the output of Suricata. If a test doesn't provide its own
 # verification script, then the generic file compare will be
 # performed.
-verify() {
+check() {
     t="$1"
 
     (
 	cd ${prefix}/${t}
 	
-	if [ -e "verify.sh" ]; then
-	    if ! ./verify.sh; then
+	if [ -e "check.sh" ]; then
+	    if ! ./check.sh; then
 		exit 1
 	    fi
 	else
-	    if ! generic_verify; then
+	    if ! generic_check; then
 		exit 1
 	    fi
 	fi
@@ -192,8 +193,8 @@ verify() {
     return $?
 }
 
-# Run Suricata and verify the output.
-run_and_verify() {
+# Run Suricata and check the output.
+run_and_check() {
     t="${1}"
     tdir="${prefix}/${t}"
 
@@ -211,7 +212,7 @@ run_and_verify() {
 	echo "===> ${t}: FAIL with non-zero exit (see ${tdir}/output/stderr)"
 	return 1
     fi
-    if ! (verify "${t}"); then
+    if ! (check "${t}"); then
 	echo "===> ${t}: FAIL with verification error"
 	return 1
     fi
@@ -231,7 +232,7 @@ for t in ${tests}; do
 	    continue
 	fi
 	echo "===> Running ${t}."
-	if ! (run_and_verify "${t}"); then
+	if ! (run_and_check "${t}"); then
 	    exit 1
 	fi
     fi
