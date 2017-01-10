@@ -147,8 +147,8 @@ check_skip() {
 	return 0
     fi
 
-    if [ -e "${tdir}/skipcheck.sh" ]; then
-	if "${tdir}/skipcheck.sh"; then
+    if [ -e "${tdir}/skip.sh" ]; then
+	if /bin/sh "${tdir}/skip.sh"; then
 	    return 0
 	fi
     fi
@@ -181,7 +181,7 @@ check() {
 	cd ${prefix}/${t}
 	
 	if [ -e "check.sh" ]; then
-	    if ! ./check.sh; then
+	    if ! /bin/sh ./check.sh; then
 		exit 1
 	    fi
 	else
