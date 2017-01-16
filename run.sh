@@ -12,8 +12,19 @@ force=no
 stdout=
 stderr=
 
+# Continue if a test fails.
+continue=no
+
+# Set if any tests fails, so when continue is set we can still exit
+# with a failure status.
+failed=no
+
 for arg in $@; do
     case "${arg}" in
+	-c|--continue)
+	    continue=yes
+	    shift
+	    ;;
 	-v|--verbose)
 	    stdout=/dev/stdout
 	    stderr=/dev/stderr
@@ -161,12 +172,18 @@ check_skip() {
 generic_check() {
     if [ ! -e "expected" ]; then
 	echo "error: test does not have a directory of expected output"
-	exit 1
+	failed=yes
+	if [ "${continue}" != "yes" ]; then
+	    exit 1
+	fi
     fi
     for filename in $(find expected/ -type f); do
 	if ! cmp -s ${filename} output/$(basename ${filename}); then
 	    echo "FAIL: output/$(basename ${filename})"
-	    exit 1
+	    failed=yes
+	    if [ "${continue}" != "yes" ]; then
+		exit 1
+	    fi
 	fi
     done
 }
@@ -233,7 +250,16 @@ for t in ${tests}; do
 	fi
 	echo "===> Running ${t}."
 	if ! (run_and_check "${t}"); then
-	    exit 1
+	    failed=yes
+	    if [ "${continue}" != "yes" ]; then
+		exit 1
+	    fi
 	fi
     fi
 done
+
+if [ "${failed}" = "yes" ]; then
+    exit 1
+fi
+
+exit 0
