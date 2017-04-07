@@ -34,7 +34,23 @@ for arg in $@; do
 	    force=yes
 	    shift
 	    ;;
-	-)
+	-h)
+	    cat <<EOF
+
+usage: $0 [options] [test-pattern]
+
+options:
+    -c     continue on failed test
+    -v     verbose output (stderr and stdout to terminal, not file)
+    -f     run tests that would other be skipped
+
+To only run specific tests and pattern can be provided. For example, a
+pattern of "dnp3" will run all tests with "dnp3" in the name.
+
+EOF
+	    exit 0
+	    ;;
+	-*)
 	    echo "error: unknown argument: ${arg}"
 	    exit 1
 	    ;;
