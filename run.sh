@@ -69,7 +69,14 @@ if [ -e "${prefix}/private" ]; then
     tests="${tests} ${private}"
 fi
 
-export ASAN_OPTIONS="detect_leaks=${DETECT_LEAKS:=1},disable_core=1"
+case $(uname) in
+    Darwin)
+	true
+	;;
+    *)
+	export ASAN_OPTIONS="detect_leaks=${DETECT_LEAKS:=1},disable_core=1"
+	;;
+esac
 export LSAN_OPTIONS="suppressions=qa/lsan.suppress"
 
 run_test() {
