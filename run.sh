@@ -124,9 +124,11 @@ run_test() {
 
     args="${args} --set classification-file=./classification.config"
     args="${args} --set reference-config-file=./reference.config"
+    args="${args} --init-errors-fatal"
 
-    TZ="UTC" ./src/suricata --init-errors-fatal ${args} \
-		   > ${_stdout} 2> ${_stderr}
+    cmd="TZ=UTC ./src/suricata ${args}"
+    echo "${cmd}" > ${logdir}/cmdline
+    eval "${cmd}" > ${_stdout} 2> ${_stderr}
     return "$?"
 }
 
