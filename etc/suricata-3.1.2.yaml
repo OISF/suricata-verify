@@ -100,8 +100,8 @@ rule-files:
 # - modbus-events.rules  # available in suricata sources under rules dir
 # - app-layer-events.rules  # available in suricata sources under rules dir
 
-classification-file: /home/jason/projects/oisf/etc/suricata/classification.config
-reference-config-file: /home/jason/projects/oisf/etc/suricata/reference.config
+classification-file: ./classification.config
+reference-config-file: ./reference.config
 # threshold-file: /home/jason/projects/oisf/etc/suricata/threshold.config
 
 

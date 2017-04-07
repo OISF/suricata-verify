@@ -217,7 +217,7 @@ run_and_check() {
 
     # If test has its own run script, just use that.
     if [ -e "${tdir}/run.sh" ]; then
-	if ! "${tdir}/run.sh"; then
+	if ! TEST_DIR="${tdir}" "${tdir}/run.sh"; then
 	    echo "===> ${t}: FAIL"
 	    return 1
 	fi
