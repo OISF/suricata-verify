@@ -192,33 +192,11 @@ check_skip() {
     return 1
 }
 
-# Generic verification script. For any file in the expected directory,
-# a comparison is done with the actual output.
-generic_check() {
-    if [ ! -e "expected" ]; then
-	echo "error: test does not have a directory of expected output"
-	failed=yes
-	if [ "${continue}" != "yes" ]; then
-	    exit 1
-	fi
-    fi
-    for filename in $(find expected/ -type f); do
-	if ! cmp -s ${filename} output/$(basename ${filename}); then
-	    echo "FAIL: output/$(basename ${filename})"
-	    failed=yes
-	    if [ "${continue}" != "yes" ]; then
-		exit 1
-	    fi
-	fi
-    done
-}
-
 # Check the output of Suricata. If a test doesn't provide its own
 # verification script, then the generic file compare will be
 # performed.
 check() {
     t="$1"
-
     (
 	cd ${prefix}/${t}
 	
@@ -227,9 +205,8 @@ check() {
 		exit 1
 	    fi
 	else
-	    if ! generic_check; then
-		exit 1
-	    fi
+	    echo "error: test has no check.sh script"
+	    exit 1
 	fi
     )
     return $?
