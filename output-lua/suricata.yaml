@@ -8,4 +8,4 @@ outputs:
       enabled: yes
       scripts-dir: ../verify/output-lua
       scripts:
-        - http2.lua
+        - http.lua

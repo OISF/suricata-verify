@@ -8,6 +8,6 @@ run() {
 }
 
 mkdir -p ${TEST_DIR}/output
-run > ${TEST_DIR}/output/stdout 2> ${TEST_DIR}/output/stderr
+run
 
 exit 0
