@@ -34,6 +34,8 @@ Or to run a single test:
 
 - Add any rules required to ${dir}/test.rules.
 
-- Add the expected output to ${dir}/expected. This might most easily
-  be done by running the test then copying the desired files in the
-  output directory to the expected directory (after verification).
+- Add a "check.sh" script. This script is run after Suricata is
+  executed and should validate any Suricata output. It is executed
+  with the test directory as the working directory. This script should
+  exit 1 for failure, and 0 for success.
+
