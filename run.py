@@ -139,6 +139,12 @@ def check_skip(directory):
     if os.path.exists(os.path.join(directory, "skip")):
         return (True, None)
 
+    if os.path.exists(os.path.join(directory, "skip.sh")):
+        rc = subprocess.call([
+            "/bin/sh", os.path.join(directory, "skip.sh")])
+        if rc == 0:
+            return True, None
+
     if directory.find("lua") > -1:
         if not check_for_lua():
             return (True, "lua not available")
@@ -193,7 +199,15 @@ def main():
             # If a test matches a pattern, we do not skip it.
             for pattern in args.patterns:
                 if name.find(pattern) > -1:
-                    do_test = True
+                    skip, reason = check_skip(dirpath)
+                    if skip:
+                        skipped += 1
+                        if reason:
+                            print("===> %s: SKIPPED: %s" % (name, reason))
+                        else:
+                            print("===> %s: SKIPPED" % (name))
+                    else:
+                        do_test = True
                     break
 
         if do_test:
