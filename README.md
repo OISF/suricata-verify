@@ -1,5 +1,8 @@
 # Suricata Verification Tests
 
+These are tests that run Suricata with a specific configuration and/or
+inputs and verify the outputs.
+
 ## Running All Tests
 
 From your Suricata source directory run:
