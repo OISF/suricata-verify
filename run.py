@@ -47,6 +47,7 @@ class TestRunner:
         env = {
             "TZ": "UTC",
             "TEST_DIR": self.directory,
+            "ASAN_OPTIONS": "detect_leaks=0",
         }
 
         # Cleanup the output directory.
