@@ -31,7 +31,7 @@ function log(args)
     if http_ua == nil then
         http_ua = "<useragent unknown>"
     end
-    http_ua = string.gsub(http_ua, "%g", ".")
+    http_ua = string.gsub(http_ua, "%c", ".")
 
     ts = SCPacketTimeString()
     ipver, srcip, dstip, proto, sp, dp = SCFlowTuple()
