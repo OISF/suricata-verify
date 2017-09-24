@@ -1,5 +1,5 @@
 jq_count() {
-    cat "$1" | jq -c "$2" | wc -l
+    cat "$1" | jq -c "$2" | wc -l | xargs
 }
 
 assert_eq() {

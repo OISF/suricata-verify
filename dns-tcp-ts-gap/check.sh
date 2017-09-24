@@ -8,12 +8,12 @@ log=./output/eve.json
 
 n=$(cat ${log} | \
 	jq -c 'select(.event_type == "dns") | select(.dns.type == "query")' | \
-	wc -l)
+	wc -l | xargs)
 assert_eq 2 $n
 
 n=$(cat ${log} | \
 	jq -c 'select(.event_type == "dns") | select(.dns.type == "answer")' | \
-	wc -l)
+	wc -l | xargs)
 assert_eq 36 $n
 
 exit 0
