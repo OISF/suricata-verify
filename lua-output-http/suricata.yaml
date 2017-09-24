@@ -6,6 +6,6 @@ include: default.yaml
 outputs:
   - lua:
       enabled: yes
-      scripts-dir: ../verify/output-lua
+      scripts-dir: ../verify/lua-output-http
       scripts:
         - http.lua
