@@ -37,8 +37,8 @@ function log(args)
     ipver, srcip, dstip, proto, sp, dp = SCFlowTuple()
 
     file:write (ts .. " " .. http_host .. " [**] " .. http_uri .. " [**] " ..
-           http_ua .. " [**] " .. srcip .. ":" .. sp .. " -> " ..
-           dstip .. ":" .. dp .. "\n")
+           http_ua .. " [**] " .. srcip .. ":" .. math.floor(sp) .. " -> " ..
+           dstip .. ":" .. math.floor(dp) .. "\n")
     file:flush()
 
     http = http + 1
