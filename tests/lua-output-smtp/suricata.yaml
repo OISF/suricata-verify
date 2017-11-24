@@ -6,6 +6,6 @@ include: default.yaml
 outputs:
   - lua:
       enabled: yes
-      scripts-dir: ../verify/tests/lua-output-smtp
+      scripts-dir: .
       scripts:
         - smtp.lua

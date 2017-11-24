@@ -1,4 +1,26 @@
 #! /usr/bin/env python2
+#
+# Copyright 2017 Jason Ish
+#
+# Permission is hereby granted, free of charge, to any person
+# obtaining a copy of this software and associated documentation files
+# (the "Software"), to deal in the Software without restriction,
+# including without limitation the rights to use, copy, modify, merge,
+# publish, distribute, sublicense, and/or sell copies of the Software,
+# and to permit persons to whom the Software is furnished to do so,
+# subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+# BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+# ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+# CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 
 from __future__ import print_function
 
@@ -22,7 +44,8 @@ def pipe_reader(fileobj, output=None, verbose=False):
 
 class TestRunner:
 
-    def __init__(self, directory, verbose=False):
+    def __init__(self, cwd, directory, verbose=False):
+        self.cwd = cwd
         self.directory = directory
         self.verbose = verbose
         self.output = os.path.join(self.directory, "output")
@@ -45,6 +68,8 @@ class TestRunner:
             args += self.default_args()
 
         env = {
+            # The suricata source directory.
+            "SRCDIR": self.cwd,
             "TZ": "UTC",
             "TEST_DIR": self.directory,
             "ASAN_OPTIONS": "detect_leaks=0",
@@ -62,7 +87,8 @@ class TestRunner:
             " ".join(args))
 
         p = subprocess.Popen(
-            args, env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            args, cwd=self.directory, env=env,
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         self.start_reader(p.stdout, stdout)
         self.start_reader(p.stderr, stderr)
@@ -90,11 +116,14 @@ class TestRunner:
         return True
         
     def default_args(self):
-        args = ["./src/suricata",
-                "--set", "classification-file=./classification.config",
-                "--set", "reference-config-file=./reference.config",
-                "--init-errors-fatal",
-                "-l", self.output,
+        args = [
+            os.path.join(self.cwd, "src/suricata"),
+            "--set", "classification-file=%s" % os.path.join(
+                self.cwd, "classification.config"),
+            "--set", "reference-config-file=%s" % os.path.join(
+                self.cwd, "reference.config"),
+            "--init-errors-fatal",
+            "-l", self.output,
         ]
 
         if "ips" in self.name:
@@ -103,7 +132,7 @@ class TestRunner:
         if os.path.exists(os.path.join(self.directory, "suricata.yaml")):
             args += ["-c", os.path.join(self.directory, "suricata.yaml")]
         else:
-            args += ["-c", "./suricata.yaml"]
+            args += ["-c", os.path.join(self.cwd, "suricata.yaml")]
 
         # Find pcaps.
         pcaps = glob.glob(os.path.join(self.directory, "*.pcap"))
@@ -163,11 +192,20 @@ def main():
     parser.add_argument("patterns", nargs="*", default=[])
     args = parser.parse_args()
 
-    topdir = os.path.dirname(sys.argv[0])
+    topdir = os.path.abspath(os.path.dirname(sys.argv[0]))
     
     skipped = 0
     passed = 0
     failed = 0
+
+    # Get the current working directory, which should be the top
+    # suricata source directory.
+    cwd = os.getcwd()
+    if not (os.path.exists("./suricata.yaml") and
+            os.path.exists("./src/suricata")):
+        print("error: this is not a suricata source directory or " +
+              "suricata is not built")
+        return 1
 
     for dirpath, dirnames, filenames in os.walk(os.path.join(topdir, "tests")):
 
@@ -210,7 +248,7 @@ def main():
                     break
 
         if do_test:
-            test_runner = TestRunner(dirpath, args.verbose)
+            test_runner = TestRunner(cwd, dirpath, args.verbose)
             try:
                 success = test_runner.run()
             except Exception as err:

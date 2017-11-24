@@ -8,6 +8,6 @@ rule-files:
 outputs:
   - lua:
       enabled: yes
-      scripts-dir: ../verify/tests/lua-output-dns
+      scripts-dir: .
       scripts:
         - test.lua
