@@ -23,6 +23,9 @@ Or to run a single test:
 - Copy a single pcap file into the test directory. It must end in
   ".pcap".
 
+  This is enough for a basic test that will run Suricata over the pcap
+  testing for a successful exit code.
+
 - Optional: Create a suricata.yaml in the test directory.
 
     Note: You may want to add something like:
@@ -41,4 +44,3 @@ Or to run a single test:
   executed and should validate any Suricata output. It is executed
   with the test directory as the working directory. This script should
   exit 1 for failure, and 0 for success.
-
