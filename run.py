@@ -169,12 +169,10 @@ def main():
     passed = 0
     failed = 0
 
-    for dirpath, dirnames, filenames in os.walk(topdir):
+    for dirpath, dirnames, filenames in os.walk(os.path.join(topdir, "tests")):
 
         # The top directory is not a test...
-        if dirpath == topdir:
-            dirnames.remove(".git")
-            dirnames.remove("etc")
+        if dirpath == os.path.join(topdir, "tests"):
             continue
 
         # We only want to go one level deep.

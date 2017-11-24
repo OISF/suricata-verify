@@ -1,0 +1,13 @@
+%YAML 1.1
+---
+
+include: ../../etc/suricata-3.1.2.yaml
+
+rule-files:
+
+outputs:
+  - lua:
+      enabled: yes
+      scripts-dir: ../verify/tests/lua-output-dns
+      scripts:
+        - test.lua

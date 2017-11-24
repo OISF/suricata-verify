@@ -27,7 +27,7 @@ Or to run a single test:
 
     Note: You may want to add something like:
     ```
-    include: ../etc/suricata-3.1.2
+    include: ../../etc/suricata-3.1.2
     ```
     to the top and then just make the necessary overrides in the tests
     suricata.yaml.
