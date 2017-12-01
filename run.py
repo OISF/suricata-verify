@@ -88,6 +88,18 @@ class TestConfig:
                     raise UnsatisfiedRequirementError(
                         "requires at least version %s" % (min_version.raw))
 
+            if "features" in requires:
+                for feature in requires["features"]:
+                    if not self.suricata_config.has_feature(feature):
+                        raise UnsatisfiedRequirementError(
+                            "requires feature %s" % (feature))
+
+            if "not-features" in requires:
+                for feature in requires["not-features"]:
+                    if self.suricata_config.has_feature(feature):
+                        raise UnsatisfiedRequirementError(
+                            "not for feature %s" % (feature))
+
     def _version_gte(self, v1, v2):
         """Return True if v1 is great than or equal to v2."""
         if v1.major < v2.major:
@@ -109,6 +121,18 @@ class SuricataConfig:
 
     def __init__(self, version):
         self.version = version
+        self.features = set()
+
+        self.load_build_info()
+
+    def load_build_info(self):
+        output = subprocess.check_output(["./src/suricata", "--build-info"])
+        for line in output.splitlines():
+            if line.startswith("Features:"):
+                self.features = set(line.split()[1:])
+
+    def has_feature(self, feature):
+        return feature in self.features
 
 class TestRunner:
 
@@ -135,6 +159,12 @@ class TestRunner:
                 open(os.path.join(self.directory, "test.yaml"), "rb"))
             test_config = TestConfig(test_config, self.suricata_config)
             test_config.check_requires()
+
+        # Additional requirement checks.
+        # - If lua is in the test name, make sure we HAVE_LUA.
+        if self.directory.find("lua"):
+            if not self.suricata_config.has_feature("HAVE_LUA"):
+                raise UnsatisfiedRequirementError("requires feature HAVE_LUA")
 
         args = []
         if os.path.exists(os.path.join(self.directory, "run.sh")):
@@ -234,27 +264,8 @@ class TestRunner:
         t.start()
         self.readers.append(t)
 
-def check_for_lua():
-    output = subprocess.check_output(["./src/suricata", "--build-info"])
-    if output.find("HAVE_LUA") > -1:
-        return True
-    return False
-
 def check_skip(directory):
-    if os.path.exists(os.path.join(directory, "skip")):
-        return (True, None)
-
-    if os.path.exists(os.path.join(directory, "skip.sh")):
-        rc = subprocess.call([
-            "/bin/sh", os.path.join(directory, "skip.sh")])
-        if rc == 0:
-            return True, None
-
-    if directory.find("lua") > -1:
-        if not check_for_lua():
-            return (True, "lua not available")
-
-    return (False, None)
+    return os.path.exists(os.path.join(directory, "skip"))
 
 def main():
 
@@ -301,13 +312,8 @@ def main():
             if args.force:
                 do_test = True
             else:
-                skip, reason = check_skip(dirpath)
-                if skip:
-                    skipped += 1
-                    if reason:
-                        print("===> %s: SKIPPED: %s" % (name, reason))
-                    else:
-                        print("===> %s: SKIPPED" % (name))
+                if check_skip(dirpath):
+                    print("===> %s: SKIPPED" % (name))
                 else:
                     do_test = True
         else:
