@@ -335,8 +335,10 @@ def main():
             test_runner = TestRunner(
                 cwd, dirpath, suricata_config, args.verbose)
             try:
-                test_runner.run()
-                passed += 1
+                if test_runner.run():
+                    passed += 1
+                else:
+                    failed += 1
             except UnsatisfiedRequirementError as err:
                 print("SKIPPED: %s" % (str(err)))
                 skipped += 1

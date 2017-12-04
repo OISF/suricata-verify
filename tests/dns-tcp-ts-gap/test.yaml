@@ -1,0 +1,3 @@
+requires:
+  # App-layer gap handling didn't happen until v4.
+  min-version: 4.0.0
