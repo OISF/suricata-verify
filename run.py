@@ -100,6 +100,12 @@ class TestConfig:
                         raise UnsatisfiedRequirementError(
                             "not for feature %s" % (feature))
 
+    def has_command(self):
+        return "command" in self.config
+
+    def get_command(self):
+        return self.config["command"]
+
     def _version_gte(self, v1, v2):
         """Return True if v1 is great than or equal to v2."""
         if v1.major < v2.major:
@@ -158,7 +164,10 @@ class TestRunner:
             test_config = yaml.load(
                 open(os.path.join(self.directory, "test.yaml"), "rb"))
             test_config = TestConfig(test_config, self.suricata_config)
-            test_config.check_requires()
+        else:
+            test_config = TestConfig({}, self.suricata_config)
+
+        test_config.check_requires()
 
         # Additional requirement checks.
         # - If lua is in the test name, make sure we HAVE_LUA.
@@ -166,11 +175,13 @@ class TestRunner:
             if not self.suricata_config.has_feature("HAVE_LUA"):
                 raise UnsatisfiedRequirementError("requires feature HAVE_LUA")
 
-        args = []
-        if os.path.exists(os.path.join(self.directory, "run.sh")):
-            args.append(os.path.join(self.directory, "run.sh"))
+        shell = False
+
+        if test_config.has_command():
+            args = test_config.get_command()
+            shell = True
         else:
-            args += self.default_args()
+            args = self.default_args()
 
         env = {
             # The suricata source directory.
@@ -192,7 +203,7 @@ class TestRunner:
             " ".join(args))
 
         p = subprocess.Popen(
-            args, cwd=self.directory, env=env,
+            args, shell=shell, cwd=self.directory, env=env,
             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         self.start_reader(p.stdout, stdout)
@@ -211,7 +222,7 @@ class TestRunner:
 
     def check(self):
         if not os.path.exists(os.path.join(self.directory, "check.sh")):
-            print("OK (no check script)")
+            print("OK")
             return True
         r = subprocess.call(["./check.sh"], cwd=self.directory)
         if r != 0:
@@ -320,13 +331,9 @@ def main():
             # If a test matches a pattern, we do not skip it.
             for pattern in args.patterns:
                 if name.find(pattern) > -1:
-                    skip, reason = check_skip(dirpath)
-                    if skip:
+                    if check_skip(dirpath):
                         skipped += 1
-                        if reason:
-                            print("===> %s: SKIPPED: %s" % (name, reason))
-                        else:
-                            print("===> %s: SKIPPED" % (name))
+                        print("===> %s: SKIPPED" % (name))
                     else:
                         do_test = True
                     break

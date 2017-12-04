@@ -1,2 +1,9 @@
 requires:
   min-version: 4.0.0
+
+# Override the default command. This is also an example of how it can
+# be broken up over multiple lines for readability.
+command: |
+  ${SRCDIR}/src/suricata -T -c ${TEST_DIR}/suricata.yaml -vvv \
+      -l ${TEST_DIR}/output --set default-rule-path="${TEST_DIR}"
+  
