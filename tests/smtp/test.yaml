@@ -1,0 +1,16 @@
+checks:
+
+  # Check that there is only one SMTP event with specific parameters.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        smtp.mail_from: <gurpartap@patriots.in>
+        smtp.rcpt_to[0]: <raj_deol2002in@yahoo.co.in>
+        
+  # Check the stats. A stats check is a specialization of a filter
+  # that only checks the last stats entry.
+  - stats:
+      decoder.pkts: 60
+      decoder.bytes: 26866
+      decoder.invalid: 0
