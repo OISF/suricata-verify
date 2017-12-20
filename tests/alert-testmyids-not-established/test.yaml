@@ -1,0 +1,10 @@
+checks:
+
+  - shell:
+      args: cat output/fast.log | wc -l | xargs
+      expect: 1
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
