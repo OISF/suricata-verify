@@ -100,6 +100,12 @@ class TestConfig:
                         raise UnsatisfiedRequirementError(
                             "not for feature %s" % (feature))
 
+            if "env" in requires:
+                for env in requires["env"]:
+                    if not env in os.environ:
+                        raise UnsatisfiedRequirementError(
+                            "requires env var %s" % (env))
+
     def has_command(self):
         return "command" in self.config
 
