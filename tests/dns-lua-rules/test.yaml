@@ -1,0 +1,8 @@
+requires:
+  features:
+    - HAVE_LUA
+
+checks:
+  - signature-id: 1
+  - signature-id: 2
+  - signature-id: 3
