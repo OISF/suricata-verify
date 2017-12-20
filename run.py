@@ -34,6 +34,7 @@ import argparse
 import yaml
 import glob
 import re
+import json
 from collections import namedtuple
 
 import yaml
@@ -128,7 +129,7 @@ class TestConfig:
             return False
 
         return True
-                
+
 class SuricataConfig:
 
     def __init__(self, version):
@@ -224,9 +225,18 @@ class TestRunner:
             print("FAIL: process returned with non-0 exit code: %d" % r)
             return False
 
-        return self.check()
+        return self.check(test_config)
 
-    def check(self):
+    def check(self, test_config):
+
+        if "checks" in test_config.config:
+            for check in test_config.config["checks"]:
+                for key in check:
+                    if key == "signature-id":
+                        if not self.check_signature_id(check[key]):
+                            raise Exception("signature-id %d not found" % (
+                                check[key]))
+
         if not os.path.exists(os.path.join(self.directory, "check.sh")):
             print("OK")
             return True
@@ -237,6 +247,17 @@ class TestRunner:
         print("OK")
         return True
         
+    def check_signature_id(self, sig_id):
+        with open(
+                os.path.join(
+                    self.directory, "output", "eve.json"), "rb") as fileobj:
+            for line in fileobj:
+                event = json.loads(line)
+                if "alert" in event:
+                    if event["alert"]["signature_id"] == sig_id:
+                        return True
+        return False
+
     def default_args(self):
         args = [
             os.path.join(self.cwd, "src/suricata"),
