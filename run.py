@@ -390,9 +390,6 @@ class TestRunner:
         t.start()
         self.readers.append(t)
 
-def check_skip(directory):
-    return os.path.exists(os.path.join(directory, "skip"))
-
 def main():
 
     parser = argparse.ArgumentParser(description="Verification test runner.")
@@ -435,22 +432,12 @@ def main():
 
         do_test = False
         if not args.patterns:
-            if args.force:
-                do_test = True
-            else:
-                if check_skip(dirpath):
-                    print("===> %s: SKIPPED" % (name))
-                else:
-                    do_test = True
+            do_test = True
         else:
             # If a test matches a pattern, we do not skip it.
             for pattern in args.patterns:
                 if name.find(pattern) > -1:
-                    if check_skip(dirpath):
-                        skipped += 1
-                        print("===> %s: SKIPPED" % (name))
-                    else:
-                        do_test = True
+                    do_test = True
                     break
 
         if do_test:
