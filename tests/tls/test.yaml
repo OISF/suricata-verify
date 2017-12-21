@@ -1,0 +1,24 @@
+checks:
+
+  - filter:
+      count: 4
+      match:
+        event_type: tls
+        tls.serial: 00:97:E6:47:09:8E:EA:C9:B4
+        tls.issuerdn: C=FR, ST=IDF, L=Paris, O=Stamus, CN=SELKS
+
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+        tls.session_resumed: true
+        
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 1
+
+  - stats:
+      app_layer.flow.tls: 5
+      app_layer.tx.tls: 0
