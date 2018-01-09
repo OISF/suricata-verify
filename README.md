@@ -30,7 +30,7 @@ Or to run a single test:
 
     Note: You may want to add something like:
     ```
-    include: ../../etc/suricata-3.1.2
+    include: ../../etc/suricata-4.0.3.yaml
     ```
     to the top and then just make the necessary overrides in the tests
     suricata.yaml.
@@ -40,7 +40,26 @@ Or to run a single test:
 
 - Add any rules required to ${dir}/test.rules.
 
-- Add a "check.sh" script. This script is run after Suricata is
-  executed and should validate any Suricata output. It is executed
-  with the test directory as the working directory. This script should
-  exit 1 for failure, and 0 for success.
+- Add a *test.yaml* descriptor file to add further control to your
+  tests such as restricting features required for the test, and
+  validating output.
+
+## Example test.yaml
+
+```
+# Override the default command. This is also an example of how it can
+# be broken up over multiple lines for readability.
+command: |
+  ${SRCDIR}/src/suricata -T -c ${TEST_DIR}/suricata.yaml -vvv \
+      -l ${TEST_DIR}/output --set default-rule-path="${TEST_DIR}"
+
+requires:
+
+  # Require the presence of specific features.
+  features:
+    # Restrict the test to builds with HAVE_LUA.
+    - HAVE_LUA
+
+  # Require that Suricata not be built with specific features.
+  not-features:
+    - RUST
