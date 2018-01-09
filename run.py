@@ -464,6 +464,8 @@ def main():
                     passed += 1
                 else:
                     failed += 1
+                    if args.fail:
+                        return 1
             except UnsatisfiedRequirementError as err:
                 print("SKIPPED: %s" % (str(err)))
                 skipped += 1
