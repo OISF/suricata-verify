@@ -219,6 +219,9 @@ class FilterCheck:
                     count += 1
         if count == self.config["count"]:
             return True
+        if self.config["comment"]:
+            raise Exception("%s: expected %d, got %d" % (
+                self.config["comment"], self.config["count"], count))
         raise Exception("expected %d matches; got %d for filter %s" % (
             self.config["count"], count, str(self.config)))
 
@@ -259,12 +262,6 @@ class TestRunner:
             test_config = TestConfig({}, self.suricata_config)
 
         test_config.check_requires()
-
-        # Additional requirement checks.
-        # - If lua is in the test name, make sure we HAVE_LUA.
-        if self.directory.find("lua"):
-            if not self.suricata_config.has_feature("HAVE_LUA"):
-                raise UnsatisfiedRequirementError("requires feature HAVE_LUA")
 
         shell = False
 
