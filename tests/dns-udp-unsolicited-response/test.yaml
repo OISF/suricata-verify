@@ -2,3 +2,5 @@ requires:
   # Test will be skipped if any of these features are present.
   not-features:
     - RUST
+  features:
+    - HAVE_LIBJANSSON

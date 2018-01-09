@@ -1,3 +1,5 @@
 requires:
   # Linktype 228 wasn't supported until version 4.1.0
   min-version: 4.1.0
+  features:
+    - HAVE_LIBJANSSON
