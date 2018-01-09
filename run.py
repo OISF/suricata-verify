@@ -143,7 +143,7 @@ class SuricataConfig:
         output = subprocess.check_output(["./src/suricata", "--build-info"])
         for line in output.splitlines():
             if line.decode().startswith("Features:"):
-                self.features = set(line.split()[1:])
+                self.features = set(line.decode().split()[1:])
 
     def has_feature(self, feature):
         return feature in self.features
