@@ -387,7 +387,25 @@ class TestRunner:
         t.start()
         self.readers.append(t)
 
+def check_deps():
+    try:
+        subprocess.check_call("jq --version > /dev/null 2>&1", shell=True)
+    except:
+        print("error: jq is required")
+        return False
+
+    try:
+        subprocess.check_call("echo | xargs > /dev/null 2>&1", shell=True)
+    except:
+        print("error: xargs is required")
+        return False
+
+    return True
+
 def main():
+
+    if not check_deps():
+        return 1
 
     parser = argparse.ArgumentParser(description="Verification test runner.")
     parser.add_argument("-v", dest="verbose", action="store_true")
