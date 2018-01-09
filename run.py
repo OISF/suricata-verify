@@ -67,6 +67,7 @@ def get_suricata_version():
 
 def pipe_reader(fileobj, output=None, verbose=False):
     for line in fileobj:
+        line = line.decode()
         if output:
             output.write(line)
         if verbose:
@@ -141,7 +142,7 @@ class SuricataConfig:
     def load_build_info(self):
         output = subprocess.check_output(["./src/suricata", "--build-info"])
         for line in output.splitlines():
-            if line.startswith("Features:"):
+            if line.decode().startswith("Features:"):
                 self.features = set(line.split()[1:])
 
     def has_feature(self, feature):
@@ -183,7 +184,7 @@ class ShellCheck:
     def run(self):
         output = subprocess.check_output(self.config["args"], shell=True)
         if "expect" in self.config:
-            return str(self.config["expect"]) == output.strip()
+            return str(self.config["expect"]) == output.decode().strip()
         return True
 
 class StatsCheck:
