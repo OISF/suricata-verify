@@ -194,7 +194,7 @@ class StatsCheck:
 
     def run(self):
         stats = None
-        with open(os.path.join("output", "eve.json"), "rb") as fileobj:
+        with open(os.path.join("output", "eve.json"), "r") as fileobj:
             for line in fileobj:
                 event = json.loads(line)
                 if event["event_type"] == "stats":
@@ -213,7 +213,7 @@ class FilterCheck:
 
     def run(self):
         count = 0
-        with open(os.path.join("output", "eve.json"), "rb") as fileobj:
+        with open(os.path.join("output", "eve.json"), "r") as fileobj:
             for line in fileobj:
                 event = json.loads(line)
                 if self.match(event):
