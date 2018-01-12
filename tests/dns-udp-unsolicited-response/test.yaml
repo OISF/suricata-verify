@@ -1,6 +1,6 @@
 requires:
   # Test will be skipped if any of these features are present.
   not-features:
-    - RUST
+    RUST:
   features:
     - HAVE_LIBJANSSON

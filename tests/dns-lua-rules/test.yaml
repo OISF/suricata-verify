@@ -2,7 +2,7 @@ requires:
   features:
     - HAVE_LUA
   not-features:
-    - RUST
+    RUST: known issue with feature RUST
 
 checks:
   - filter:

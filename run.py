@@ -102,8 +102,12 @@ class TestConfig:
             if "not-features" in requires:
                 for feature in requires["not-features"]:
                     if self.suricata_config.has_feature(feature):
-                        raise UnsatisfiedRequirementError(
-                            "not for feature %s" % (feature))
+                        if requires["not-features"][feature]:
+                            comment = "%s" % (
+                                requires["not-features"][feature])
+                        else:
+                            comment = "not for feature %s" % (feature)
+                        raise UnsatisfiedRequirementError(comment)
 
             if "env" in requires:
                 for env in requires["env"]:

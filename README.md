@@ -62,4 +62,4 @@ requires:
 
   # Require that Suricata not be built with specific features.
   not-features:
-    - RUST
+    RUST: option reason
