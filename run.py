@@ -115,6 +115,12 @@ class TestConfig:
                         raise UnsatisfiedRequirementError(
                             "requires env var %s" % (env))
 
+            if "files" in requires:
+                for filename in requires["files"]:
+                    if not os.path.exists(filename):
+                        raise UnsatisfiedRequirementError(
+                            "requires file %s" % (filename))
+
     def has_command(self):
         return "command" in self.config
 
@@ -189,10 +195,13 @@ class ShellCheck:
         self.config = config
 
     def run(self):
-        output = subprocess.check_output(self.config["args"], shell=True)
-        if "expect" in self.config:
-            return str(self.config["expect"]) == output.decode().strip()
-        return True
+        try:
+            output = subprocess.check_output(self.config["args"], shell=True)
+            if "expect" in self.config:
+                return str(self.config["expect"]) == output.decode().strip()
+            return True
+        except subprocess.CalledProcessError as err:
+            raise TestError(err)
 
 class StatsCheck:
 
