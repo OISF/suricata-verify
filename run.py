@@ -441,6 +441,8 @@ def main():
                         help="Force running of skipped tests")
     parser.add_argument("--fail", action="store_true",
                         help="Exit on test failure")
+    parser.add_argument("--dir", action="store",
+                        help="Runs tests from custom directory")
     parser.add_argument("patterns", nargs="*", default=[])
     args = parser.parse_args()
 
@@ -462,10 +464,16 @@ def main():
     # Create a SuricataConfig object that is passed to all tests.
     suricata_config = SuricataConfig(get_suricata_version())
 
-    for dirpath, dirnames, filenames in os.walk(os.path.join(topdir, "tests")):
+    tdir = os.path.join(topdir, "tests")
+    if args.dir:
+        tdir = os.path.abspath(args.dir)
+
+    for dirpath, dirnames, filenames in os.walk(tdir):
 
         # The top directory is not a test...
         if dirpath == os.path.join(topdir, "tests"):
+            continue
+        if dirpath == tdir:
             continue
 
         # We only want to go one level deep.
