@@ -393,7 +393,7 @@ class TestRunner:
         # Find pcaps.
         pcaps = glob.glob(os.path.join(self.directory, "*.pcap"))
         if not pcaps:
-            raise TestError("No pcap file found")
+            raise UnsatisfiedRequirementError("No pcap file found")
         elif len(pcaps) > 1:
             raise TestError("More than 1 pcap file found")
         args += ["-r", pcaps[0]]
