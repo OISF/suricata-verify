@@ -47,13 +47,10 @@ Or to run a single test:
 ## Example test.yaml
 
 ```
-# Override the default command. This is also an example of how it can
-# be broken up over multiple lines for readability.
-command: |
-  ${SRCDIR}/src/suricata -T -c ${TEST_DIR}/suricata.yaml -vvv \
-      -l ${TEST_DIR}/output --set default-rule-path="${TEST_DIR}"
-
 requires:
+
+  # Require a minimum version of Suricata.
+  min-version: 4.1.0
 
   # Require the presence of specific features.
   features:
@@ -63,3 +60,19 @@ requires:
   # Require that Suricata not be built with specific features.
   not-features:
     RUST: option reason
+
+  # Don't require a pcap file to be present. By default a test will be skipped
+  # if there is no pcap file in the test directory. Not applicable if a
+  # command is provided.
+  pcap: false
+
+# Add additional arguments to Suricata.
+args:
+  - --set stream.reassembly.depth=0
+
+# Override the default command. This is also an example of how it can
+# be broken up over multiple lines for readability. If providing the command
+# all arguments must be provided as part of the command.
+command: |
+  ${SRCDIR}/src/suricata -T -c ${TEST_DIR}/suricata.yaml -vvv \
+      -l ${TEST_DIR}/output --set default-rule-path="${TEST_DIR}"

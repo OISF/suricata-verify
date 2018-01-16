@@ -228,8 +228,12 @@ class FilterCheck:
         self.config = config
 
     def run(self):
+        eve_json_path = os.path.join("output", "eve.json")
+        if not os.path.exists(eve_json_path):
+            raise TestError("%s does not exist" % (eve_json_path))
+
         count = 0
-        with open(os.path.join("output", "eve.json"), "r") as fileobj:
+        with open(eve_json_path, "r") as fileobj:
             for line in fileobj:
                 event = json.loads(line)
                 if self.match(event):
@@ -266,15 +270,40 @@ class TestRunner:
         # List of thread readers.
         self.readers = []
 
-    def setup(self, config):
-        if "setup" in config:
-            for setup in config["setup"]:
+        self.load_config()
+
+    def load_config(self):
+        if os.path.exists(os.path.join(self.directory, "test.yaml")):
+            self.config = yaml.safe_load(
+                open(os.path.join(self.directory, "test.yaml"), "rb"))
+        else:
+            self.config = {}
+
+    def setup(self):
+        if "setup" in self.config:
+            for setup in self.config["setup"]:
                 for command in setup:
                     if command == "script":
                         subprocess.check_call(
                             "%s" % setup[command],
                             shell=True,
                             cwd=self.directory)
+
+    def check_requires(self):
+        if not "requires" in self.config:
+            return
+        requires = self.config["requires"]
+
+        # Check if a pcap is required or not. By default a pcap is
+        # required unless a "command" has been provided.
+        if not "command" in self.config:
+            if "pcap" in requires:
+                pcap_required = requires["pcap"]
+            else:
+                pcap_required = True
+            if pcap_required:
+                if not glob.glob(os.path.join(self.directory, "*.pcap")):
+                    raise UnsatisfiedRequirementError("No pcap file found")
 
     def run(self):
 
@@ -294,7 +323,8 @@ class TestRunner:
         os.makedirs(self.output)
 
         test_config.check_requires()
-        self.setup(test_config.config)
+        self.check_requires()
+        self.setup()
 
         shell = False
 
@@ -374,6 +404,16 @@ class TestRunner:
     def default_args(self):
         args = [
             os.path.join(self.cwd, "src/suricata"),
+        ]
+
+        # Load args from config file.
+        if "args" in self.config:
+            assert(type(self.config["args"]) == type([]))
+            for arg in self.config["args"]:
+                args += re.split("\s", arg)
+
+        # Add other fixed arguments.
+        args += [
             "--set", "classification-file=%s" % os.path.join(
                 self.cwd, "classification.config"),
             "--set", "reference-config-file=%s" % os.path.join(
@@ -392,11 +432,10 @@ class TestRunner:
 
         # Find pcaps.
         pcaps = glob.glob(os.path.join(self.directory, "*.pcap"))
-        if not pcaps:
-            raise UnsatisfiedRequirementError("No pcap file found")
-        elif len(pcaps) > 1:
+        if len(pcaps) > 1:
             raise TestError("More than 1 pcap file found")
-        args += ["-r", pcaps[0]]
+        if pcaps:
+            args += ["-r", pcaps[0]]
 
         # Find rules.
         rules = glob.glob(os.path.join(self.directory, "*.rules"))
