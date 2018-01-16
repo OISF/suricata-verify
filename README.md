@@ -76,3 +76,7 @@ args:
 command: |
   ${SRCDIR}/src/suricata -T -c ${TEST_DIR}/suricata.yaml -vvv \
       -l ${TEST_DIR}/output --set default-rule-path="${TEST_DIR}"
+
+# Execute Suricata with the test parameters this many times. All checks will
+# done after each iteration.
+count: 10

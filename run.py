@@ -322,26 +322,37 @@ class TestRunner:
         stdout = open(os.path.join(self.output, "stdout"), "w")
         stderr = open(os.path.join(self.output, "stderr"), "w")
 
-        open(os.path.join(self.output, "cmdline"), "w").write(
-            " ".join(args))
+        if "count" in self.config:
+            count = self.config["count"]
+        else:
+            count = 1
 
-        p = subprocess.Popen(
-            args, shell=shell, cwd=self.directory, env=env,
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        for _ in range(count):
 
-        self.start_reader(p.stdout, stdout)
-        self.start_reader(p.stderr, stderr)
+            open(os.path.join(self.output, "cmdline"), "w").write(
+                " ".join(args))
 
-        for r in self.readers:
-            r.join()
+            p = subprocess.Popen(
+                args, shell=shell, cwd=self.directory, env=env,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-        r = p.wait()
+            self.start_reader(p.stdout, stdout)
+            self.start_reader(p.stderr, stderr)
 
-        if r != 0:
-            print("FAIL: process returned with non-0 exit code: %d" % r)
-            return False
+            for r in self.readers:
+                r.join()
 
-        return self.check()
+            r = p.wait()
+
+            if r != 0:
+                print("FAIL: process returned with non-0 exit code: %d" % r)
+                return False
+
+            if not self.check():
+                return False
+
+        print("OK%s" % (" (%dx)" % count if count > 1 else ""))
+        return True
 
     def check(self):
 
@@ -369,13 +380,11 @@ class TestRunner:
             os.chdir(pdir)
 
         if not os.path.exists(os.path.join(self.directory, "check.sh")):
-            print("OK")
             return True
         r = subprocess.call(["./check.sh"], cwd=self.directory)
         if r != 0:
             print("FAILED: verification failed")
             return False
-        print("OK")
         return True
         
     def default_args(self):
