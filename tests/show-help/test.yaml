@@ -1,0 +1,6 @@
+requires:
+  # No pcap required.
+  pcap: false
+
+args:
+  - -h
