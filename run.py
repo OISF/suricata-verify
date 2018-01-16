@@ -266,6 +266,16 @@ class TestRunner:
         # List of thread readers.
         self.readers = []
 
+    def setup(self, config):
+        if "setup" in config:
+            for setup in config["setup"]:
+                for command in setup:
+                    if command == "script":
+                        subprocess.check_call(
+                            "%s" % setup[command],
+                            shell=True,
+                            cwd=self.directory)
+
     def run(self):
 
         sys.stdout.write("===> %s: " % os.path.basename(self.directory))
@@ -278,7 +288,13 @@ class TestRunner:
         else:
             test_config = TestConfig({}, self.suricata_config)
 
+        # Cleanup the output directory.
+        if os.path.exists(self.output):
+            shutil.rmtree(self.output)
+        os.makedirs(self.output)
+
         test_config.check_requires()
+        self.setup(test_config.config)
 
         shell = False
 
@@ -295,11 +311,6 @@ class TestRunner:
             "TEST_DIR": self.directory,
             "ASAN_OPTIONS": "detect_leaks=0",
         }
-
-        # Cleanup the output directory.
-        if os.path.exists(self.output):
-            shutil.rmtree(self.output)
-        os.makedirs(self.output)
 
         stdout = open(os.path.join(self.output, "stdout"), "w")
         stderr = open(os.path.join(self.output, "stderr"), "w")
