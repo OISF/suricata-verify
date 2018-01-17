@@ -240,9 +240,10 @@ class TestRunner:
                             cwd=self.directory)
 
     def check_requires(self):
-        if not "requires" in self.config:
-            return
-        requires = self.config["requires"]
+        if "requires" in self.config:
+            requires = self.config["requires"]
+        else:
+            requires = {}
 
         if "min-version" in requires:
             min_version = parse_suricata_version(requires["min-version"])
@@ -287,7 +288,8 @@ class TestRunner:
             else:
                 pcap_required = True
             if pcap_required:
-                if not glob.glob(os.path.join(self.directory, "*.pcap")):
+                if not glob.glob(os.path.join(self.directory, "*.pcap")) + \
+                   glob.glob(os.path.join(self.directory, "*.pcapng")):
                     raise UnsatisfiedRequirementError("No pcap file found")
 
     def run(self):
