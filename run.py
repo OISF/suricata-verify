@@ -418,6 +418,7 @@ class TestRunner:
 
         # Find pcaps.
         pcaps = glob.glob(os.path.join(self.directory, "*.pcap"))
+        pcaps += glob.glob(os.path.join(self.directory, "*.pcapng"))
         if len(pcaps) > 1:
             raise TestError("More than 1 pcap file found")
         if pcaps:
