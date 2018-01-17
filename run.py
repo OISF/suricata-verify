@@ -496,8 +496,9 @@ def main():
     if args.dir:
         tdir = os.path.abspath(args.dir)
 
+    # First gather the tests so we can run them in alphabetic order.
+    tests = []
     for dirpath, dirnames, filenames in os.walk(tdir):
-
         # The top directory is not a test...
         if dirpath == os.path.join(topdir, "tests"):
             continue
@@ -507,38 +508,38 @@ def main():
         # We only want to go one level deep.
         dirnames[0:] = []
 
+        if not args.patterns:
+            tests.append(dirpath)
+        else:
+            for pattern in args.patterns:
+                if os.path.basename(dirpath).find(pattern) > -1:
+                    tests.append(dirpath)
+
+    # Sort alphabetically.
+    tests.sort()
+
+    for dirpath in tests:
         name = os.path.basename(dirpath)
 
-        do_test = False
-        if not args.patterns:
-            do_test = True
-        else:
-            # If a test matches a pattern, we do not skip it.
-            for pattern in args.patterns:
-                if name.find(pattern) > -1:
-                    do_test = True
-                    break
-
-        if do_test:
-            test_runner = TestRunner(
-                cwd, dirpath, suricata_config, args.verbose)
-            try:
-                if test_runner.run():
-                    passed += 1
-                else:
-                    failed += 1
-                    if args.fail:
-                        return 1
-            except UnsatisfiedRequirementError as err:
-                print("SKIPPED: %s" % (str(err)))
-                skipped += 1
-            except TestError as err:
-                print("FAIL: %s" % (str(err)))
+        test_runner = TestRunner(
+            cwd, dirpath, suricata_config, args.verbose)
+        try:
+            if test_runner.run():
+                passed += 1
+            else:
                 failed += 1
                 if args.fail:
                     return 1
-            except Exception as err:
-                raise
+        except UnsatisfiedRequirementError as err:
+            print("SKIPPED: %s" % (str(err)))
+            skipped += 1
+        except TestError as err:
+            print("FAIL: %s" % (str(err)))
+            failed += 1
+            if args.fail:
+                return 1
+        except Exception as err:
+            raise
 
     print("")
     print("PASSED:  %d" % (passed))
