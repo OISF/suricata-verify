@@ -287,7 +287,7 @@ class TestRunner:
                 pcap_required = requires["pcap"]
             else:
                 pcap_required = True
-            if pcap_required:
+            if pcap_required and not "pcap" in self.config:
                 if not glob.glob(os.path.join(self.directory, "*.pcap")) + \
                    glob.glob(os.path.join(self.directory, "*.pcapng")):
                     raise UnsatisfiedRequirementError("No pcap file found")
@@ -419,12 +419,15 @@ class TestRunner:
             args += ["-c", os.path.join(self.cwd, "suricata.yaml")]
 
         # Find pcaps.
-        pcaps = glob.glob(os.path.join(self.directory, "*.pcap"))
-        pcaps += glob.glob(os.path.join(self.directory, "*.pcapng"))
-        if len(pcaps) > 1:
-            raise TestError("More than 1 pcap file found")
-        if pcaps:
-            args += ["-r", pcaps[0]]
+        if "pcap" in self.config:
+            args += ["-r", self.config["pcap"]]
+        else:
+            pcaps = glob.glob(os.path.join(self.directory, "*.pcap"))
+            pcaps += glob.glob(os.path.join(self.directory, "*.pcapng"))
+            if len(pcaps) > 1:
+                raise TestError("More than 1 pcap file found")
+            if pcaps:
+                args += ["-r", pcaps[0]]
 
         # Find rules.
         rules = glob.glob(os.path.join(self.directory, "*.rules"))
