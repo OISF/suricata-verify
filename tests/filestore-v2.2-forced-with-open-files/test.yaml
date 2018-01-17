@@ -1,0 +1,15 @@
+requires:
+  files:
+    - src/output-filestore.c
+
+pcap: ../filestore-v2.1-forced/suricata-update-pdf.pcap
+
+checks:
+
+  - shell:
+      args: test -e output/filestore/48/48d179a2f8d17331446c7a75a082851eee9ad841705ed5fbce730f51a0598d62
+
+  - stats:
+      file_store.fs_errors: 0
+
+      
