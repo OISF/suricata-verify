@@ -295,13 +295,7 @@ class TestRunner:
         sys.stdout.write("===> %s: " % os.path.basename(self.directory))
         sys.stdout.flush()
 
-        # Cleanup the output directory.
-        if os.path.exists(self.output):
-            shutil.rmtree(self.output)
-        os.makedirs(self.output)
-
         self.check_requires()
-        self.setup()
 
         shell = False
 
@@ -319,15 +313,21 @@ class TestRunner:
             "ASAN_OPTIONS": "detect_leaks=0",
         }
 
-        stdout = open(os.path.join(self.output, "stdout"), "w")
-        stderr = open(os.path.join(self.output, "stderr"), "w")
-
         if "count" in self.config:
             count = self.config["count"]
         else:
             count = 1
 
         for _ in range(count):
+
+            # Cleanup the output directory.
+            if os.path.exists(self.output):
+                shutil.rmtree(self.output)
+            os.makedirs(self.output)
+            self.setup()
+
+            stdout = open(os.path.join(self.output, "stdout"), "w")
+            stderr = open(os.path.join(self.output, "stderr"), "w")
 
             open(os.path.join(self.output, "cmdline"), "w").write(
                 " ".join(args))
