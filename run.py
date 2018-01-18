@@ -320,6 +320,11 @@ class TestRunner:
         else:
             count = 1
 
+        if "exit-code" in self.config:
+            expected_exit_code = self.config["exit-code"]
+        else:
+            expected_exit_code = 0
+
         for _ in range(count):
 
             # Cleanup the output directory.
@@ -346,9 +351,9 @@ class TestRunner:
 
             r = p.wait()
 
-            if r != 0:
-                print("FAIL: process returned with non-0 exit code: %d" % r)
-                return False
+            if r != expected_exit_code:
+                raise TestError("got exit code %d, expected %d" % (
+                    r, expected_exit_code));
 
             if not self.check():
                 return False
