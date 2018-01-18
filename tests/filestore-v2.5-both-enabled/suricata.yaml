@@ -1,0 +1,12 @@
+%YAML 1.1
+---
+
+include: ../../etc/suricata-4.0.3.yaml
+
+outputs:
+  - file-store:
+      version: 2
+      enabled: yes
+      
+  - file-store:
+      enabled: yes

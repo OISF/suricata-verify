@@ -1,0 +1,10 @@
+requires:
+  features:
+    - HAVE_NSS
+  files:
+    - src/output-filestore.c
+
+pcap: ../filestore-v2.1-forced/suricata-update-pdf.pcap
+
+# For this test we expect an exit code.
+exit-code: 1
