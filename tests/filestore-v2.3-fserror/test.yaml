@@ -4,6 +4,10 @@ requires:
   files:
     - src/output-filestore.c
 
+skip:
+  - uid: 0
+    msg: "Test fails when run as root"
+
 pcap: ../filestore-v2.1-forced/suricata-update-pdf.pcap
 
 setup:
