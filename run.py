@@ -239,6 +239,18 @@ class TestRunner:
                             shell=True,
                             cwd=self.directory)
 
+    def check_skip(self):
+        if not "skip" in self.config:
+            return
+        for skip in self.config["skip"]:
+            if "uid" in skip:
+                if os.getuid() == skip["uid"]:
+                    if "msg" in skip:
+                        msg = skip["msg"]
+                    else:
+                        msg = "not for uid %d" % (skip["uid"])
+                    raise UnsatisfiedRequirementError(msg)
+
     def check_requires(self):
         if "requires" in self.config:
             requires = self.config["requires"]
@@ -298,6 +310,7 @@ class TestRunner:
         sys.stdout.flush()
 
         self.check_requires()
+        self.check_skip()
 
         shell = False
 
