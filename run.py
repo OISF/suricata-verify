@@ -243,12 +243,21 @@ class TestRunner:
         if not "skip" in self.config:
             return
         for skip in self.config["skip"]:
+
             if "uid" in skip:
                 if os.getuid() == skip["uid"]:
                     if "msg" in skip:
                         msg = skip["msg"]
                     else:
                         msg = "not for uid %d" % (skip["uid"])
+                    raise UnsatisfiedRequirementError(msg)
+
+            if "feature" in skip:
+                if self.suricata_config.has_feature(skip["feature"]):
+                    if "msg" in skip:
+                        msg = skip["msg"]
+                    else:
+                        msg = "not for feature %s" % (skip["feature"])
                     raise UnsatisfiedRequirementError(msg)
 
     def check_requires(self):
@@ -269,16 +278,6 @@ class TestRunner:
                 if not self.suricata_config.has_feature(feature):
                     raise UnsatisfiedRequirementError(
                         "requires feature %s" % (feature))
-
-        if "not-features" in requires:
-            for feature in requires["not-features"]:
-                if self.suricata_config.has_feature(feature):
-                    if requires["not-features"][feature]:
-                        comment = "%s" % (
-                            requires["not-features"][feature])
-                    else:
-                        comment = "not for feature %s" % (feature)
-                    raise UnsatisfiedRequirementError(comment)
 
         if "env" in requires:
             for env in requires["env"]:

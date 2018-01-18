@@ -57,10 +57,6 @@ requires:
     # Restrict the test to builds with HAVE_LUA.
     - HAVE_LUA
 
-  # Require that Suricata not be built with specific features.
-  not-features:
-    RUST: option reason
-
   # Don't require a pcap file to be present. By default a test will be skipped
   # if there is no pcap file in the test directory. Not applicable if a
   # command is provided.
