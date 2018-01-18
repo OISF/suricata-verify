@@ -1,4 +1,6 @@
 requires:
+  features:
+    - HAVE_NSS
   files:
     - src/output-filestore.c
 
