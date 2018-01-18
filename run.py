@@ -508,7 +508,7 @@ def main():
                         help="Force running of skipped tests")
     parser.add_argument("--fail", action="store_true",
                         help="Exit on test failure")
-    parser.add_argument("--dir", action="store",
+    parser.add_argument("--testdir", action="store",
                         help="Runs tests from custom directory")
     parser.add_argument("--outdir", action="store",
                         help="Outputs to custom directory")
@@ -534,8 +534,8 @@ def main():
     suricata_config = SuricataConfig(get_suricata_version())
 
     tdir = os.path.join(TOPDIR, "tests")
-    if args.dir:
-        tdir = os.path.abspath(args.dir)
+    if args.testdir:
+        tdir = os.path.abspath(args.testdir)
 
     # First gather the tests so we can run them in alphabetic order.
     tests = []
