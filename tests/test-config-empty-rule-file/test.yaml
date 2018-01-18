@@ -5,5 +5,5 @@ requires:
 # be broken up over multiple lines for readability.
 command: |
   ${SRCDIR}/src/suricata -T -c ${TEST_DIR}/suricata.yaml -vvv \
-      -l ${TEST_DIR}/output --set default-rule-path="${TEST_DIR}"
+      -l ${OUTPUT_DIR} --set default-rule-path="${TEST_DIR}"
   

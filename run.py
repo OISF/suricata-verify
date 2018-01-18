@@ -154,8 +154,9 @@ class ShellCheck:
 
 class StatsCheck:
 
-    def __init__(self, config):
+    def __init__(self, config, outdir):
         self.config = config
+        self.outdir = outdir
 
     def run(self):
         stats = None
@@ -173,8 +174,9 @@ class StatsCheck:
 
 class FilterCheck:
 
-    def __init__(self, config):
+    def __init__(self, config, outdir):
         self.config = config
+        self.outdir = outdir
 
     def run(self):
         eve_json_path = "eve.json"
@@ -206,12 +208,12 @@ class FilterCheck:
 
 class TestRunner:
 
-    def __init__(self, cwd, directory, suricata_config, verbose=False):
+    def __init__(self, cwd, directory, outdir, suricata_config, verbose=False):
         self.cwd = cwd
         self.directory = directory
         self.suricata_config = suricata_config
         self.verbose = verbose
-        self.output = os.path.join(self.directory, "output")
+        self.output = os.path.join(outdir, "output")
 
         # The name is just the directory name.
         self.name = os.path.basename(self.directory)
@@ -237,7 +239,7 @@ class TestRunner:
                         subprocess.check_call(
                             "%s" % setup[command],
                             shell=True,
-                            cwd=os.path.join(self.directory, "output"))
+                            cwd=self.output)
 
     def check_skip(self):
         if not "skip" in self.config:
@@ -324,6 +326,7 @@ class TestRunner:
             "SRCDIR": self.cwd,
             "TZ": "UTC",
             "TEST_DIR": self.directory,
+            "OUTPUT_DIR": self.output,
             "ASAN_OPTIONS": "detect_leaks=0",
         }
 
@@ -376,13 +379,13 @@ class TestRunner:
     def check(self):
 
         pdir = os.getcwd()
-        os.chdir(os.path.join(self.directory, "output"))
+        os.chdir(self.output)
         try:
             if "checks" in self.config:
                 for check in self.config["checks"]:
                     for key in check:
                         if key == "filter":
-                            if not FilterCheck(check[key]).run():
+                            if not FilterCheck(check[key], self.output).run():
                                 raise TestError("filter did not match: %s" % (
                                     str(check[key])))
                         elif key == "shell":
@@ -391,7 +394,7 @@ class TestRunner:
                                     "shell output did not match: %s" % (
                                         str(check[key])))
                         elif key == "stats":
-                            if not StatsCheck(check[key]).run():
+                            if not StatsCheck(check[key], self.output).run():
                                 raise TestError("stats check did not pass")
                         else:
                             raise TestError("Unknown check type: %s" % (key))
@@ -400,7 +403,7 @@ class TestRunner:
 
         # Old style check script.
         pdir = os.getcwd()
-        os.chdir(os.path.join(self.directory, "output"))
+        os.chdir(self.output)
         try:
             if not os.path.exists(os.path.join(self.directory, "check.sh")):
                 return True
@@ -507,6 +510,8 @@ def main():
                         help="Exit on test failure")
     parser.add_argument("--dir", action="store",
                         help="Runs tests from custom directory")
+    parser.add_argument("--outdir", action="store",
+                        help="Outputs to custom directory")
     parser.add_argument("patterns", nargs="*", default=[])
     args = parser.parse_args()
 
@@ -557,8 +562,12 @@ def main():
     for dirpath in tests:
         name = os.path.basename(dirpath)
 
+        outdir = os.path.join(dirpath, "output")
+        if args.outdir:
+            outdir = os.path.join(args.outdir, name)
+
         test_runner = TestRunner(
-            cwd, dirpath, suricata_config, args.verbose)
+            cwd, dirpath, outdir, suricata_config, args.verbose)
         try:
             if test_runner.run():
                 passed += 1
