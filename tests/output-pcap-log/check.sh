@@ -1,3 +1,3 @@
 #! /bin/sh
 
-exec cmp expected/log.pcap.1444144603 output/log.pcap.1444144603
+exec cmp ${TEST_DIR}/expected/log.pcap.1444144603 log.pcap.1444144603

@@ -1,3 +1,3 @@
 #! /bin/sh
 
-exec cmp output/http_lua.log expected/http_lua.log
+exec cmp http_lua.log ${TEST_DIR}/expected/http_lua.log

@@ -1,3 +1,3 @@
 #! /bin/sh
 
-exec cmp expected/tcp-data.log output/tcp-data.log
+exec cmp ${TEST_DIR}/expected/tcp-data.log tcp-data.log

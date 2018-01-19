@@ -159,7 +159,7 @@ class StatsCheck:
 
     def run(self):
         stats = None
-        with open(os.path.join("output", "eve.json"), "r") as fileobj:
+        with open("eve.json", "r") as fileobj:
             for line in fileobj:
                 event = json.loads(line)
                 if event["event_type"] == "stats":
@@ -177,7 +177,7 @@ class FilterCheck:
         self.config = config
 
     def run(self):
-        eve_json_path = os.path.join("output", "eve.json")
+        eve_json_path = "eve.json"
         if not os.path.exists(eve_json_path):
             raise TestError("%s does not exist" % (eve_json_path))
 
@@ -237,7 +237,7 @@ class TestRunner:
                         subprocess.check_call(
                             "%s" % setup[command],
                             shell=True,
-                            cwd=self.directory)
+                            cwd=os.path.join(self.directory, "output"))
 
     def check_skip(self):
         if not "skip" in self.config:
@@ -376,7 +376,7 @@ class TestRunner:
     def check(self):
 
         pdir = os.getcwd()
-        os.chdir(self.directory)
+        os.chdir(os.path.join(self.directory, "output"))
         try:
             if "checks" in self.config:
                 for check in self.config["checks"]:
@@ -398,14 +398,29 @@ class TestRunner:
         finally:
             os.chdir(pdir)
 
-        if not os.path.exists(os.path.join(self.directory, "check.sh")):
+        # Old style check script.
+        pdir = os.getcwd()
+        os.chdir(os.path.join(self.directory, "output"))
+        try:
+            if not os.path.exists(os.path.join(self.directory, "check.sh")):
+                return True
+            env = {
+                # The suricata source directory.
+                "SRCDIR": self.cwd,
+                "TZ": "UTC",
+                "TEST_DIR": self.directory,
+                "TOPDIR": TOPDIR,
+                "ASAN_OPTIONS": "detect_leaks=0",
+            }
+            r = subprocess.call(
+                [os.path.join(self.directory, "check.sh")], env=env)
+            if r != 0:
+                print("FAILED: verification failed")
+                return False
             return True
-        r = subprocess.call(["./check.sh"], cwd=self.directory)
-        if r != 0:
-            print("FAILED: verification failed")
-            return False
-        return True
-        
+        finally:
+            os.chdir(pdir)
+
     def default_args(self):
         args = [
             os.path.join(self.cwd, "src/suricata"),
@@ -479,6 +494,7 @@ def check_deps():
     return True
 
 def main():
+    global TOPDIR
 
     if not check_deps():
         return 1
@@ -494,8 +510,8 @@ def main():
     parser.add_argument("patterns", nargs="*", default=[])
     args = parser.parse_args()
 
-    topdir = os.path.abspath(os.path.dirname(sys.argv[0]))
-    
+    TOPDIR = os.path.abspath(os.path.dirname(sys.argv[0]))
+
     skipped = 0
     passed = 0
     failed = 0
@@ -512,7 +528,7 @@ def main():
     # Create a SuricataConfig object that is passed to all tests.
     suricata_config = SuricataConfig(get_suricata_version())
 
-    tdir = os.path.join(topdir, "tests")
+    tdir = os.path.join(TOPDIR, "tests")
     if args.dir:
         tdir = os.path.abspath(args.dir)
 
@@ -520,7 +536,7 @@ def main():
     tests = []
     for dirpath, dirnames, filenames in os.walk(tdir):
         # The top directory is not a test...
-        if dirpath == os.path.join(topdir, "tests"):
+        if dirpath == os.path.join(TOPDIR, "tests"):
             continue
         if dirpath == tdir:
             continue

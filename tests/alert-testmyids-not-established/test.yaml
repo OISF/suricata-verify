@@ -5,7 +5,7 @@ requires:
 checks:
 
   - shell:
-      args: cat output/fast.log | wc -l | xargs
+      args: cat fast.log | wc -l | xargs
       expect: 1
 
   - filter:

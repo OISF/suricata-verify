@@ -13,8 +13,8 @@ pcap: ../filestore-v2.1-forced/suricata-update-pdf.pcap
 setup:
   # Create a filestore directory where the rename to will fail.
   - script: |
-      mkdir -p output/filestore/48
-      chmod 444 output/filestore/48
+      mkdir -p filestore/48
+      chmod 444 filestore/48
 
 checks:
   # We should have one file_store.fs_errors.
