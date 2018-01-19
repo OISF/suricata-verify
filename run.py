@@ -564,7 +564,7 @@ def main():
 
         outdir = os.path.join(dirpath, "output")
         if args.outdir:
-            outdir = os.path.join(args.outdir, name)
+            outdir = os.path.join(os.path.realpath(args.outdir), name)
 
         test_runner = TestRunner(
             cwd, dirpath, outdir, suricata_config, args.verbose)
