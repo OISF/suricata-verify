@@ -425,7 +425,12 @@ class TestRunner:
             os.chdir(pdir)
 
     def default_args(self):
-        args = [
+        args = []
+        if self.suricata_config.valgrind:
+            suppression_opt = "--suppressions=%s" % os.path.join(self.cwd, "qa/valgrind.suppress")
+            args += [ "valgrind", "-v", "--error-exitcode=255", suppression_opt ]
+
+        args += [
             os.path.join(self.cwd, "src/suricata"),
         ]
 
@@ -512,6 +517,8 @@ def main():
                         help="Runs tests from custom directory")
     parser.add_argument("--outdir", action="store",
                         help="Outputs to custom directory")
+    parser.add_argument("--valgrind", dest="valgrind", action="store_true",
+                        help="Run tests in with valgrind")
     parser.add_argument("patterns", nargs="*", default=[])
     args = parser.parse_args()
 
@@ -532,6 +539,7 @@ def main():
 
     # Create a SuricataConfig object that is passed to all tests.
     suricata_config = SuricataConfig(get_suricata_version())
+    suricata_config.valgrind = args.valgrind
 
     tdir = os.path.join(TOPDIR, "tests")
     if args.testdir:
