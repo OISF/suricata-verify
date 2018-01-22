@@ -213,7 +213,7 @@ class TestRunner:
         self.directory = directory
         self.suricata_config = suricata_config
         self.verbose = verbose
-        self.output = os.path.join(outdir, "output")
+        self.output = outdir
 
         # The name is just the directory name.
         self.name = os.path.basename(self.directory)
@@ -572,7 +572,7 @@ def main():
 
         outdir = os.path.join(dirpath, "output")
         if args.outdir:
-            outdir = os.path.join(os.path.realpath(args.outdir), name)
+            outdir = os.path.join(os.path.realpath(args.outdir), name, "output")
 
         test_runner = TestRunner(
             cwd, dirpath, outdir, suricata_config, args.verbose)
