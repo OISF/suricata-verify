@@ -1,0 +1,34 @@
+requires:
+
+  # Require that we have metadata support, checked by looking for a
+  # function.
+  script:
+    - grep JsonAddMetadata src/output-json.h > /dev/null
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        metadata.flowbits[0]: traffic/label/cli-http
+        metadata.flowvars.gid: "0"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        metadata.flowbits[0]: traffic/label/cli-http
+
+  - filter:
+      count: 2
+      match:
+        event_type: netflow
+        metadata.flowbits[0]: traffic/label/cli-http
+        
+  - filter:
+      count: 1
+      match:
+        event_type: metadata
+        metadata.pktvars[0].uid: "0"
+        metadata.flowvars.gid: "0"
