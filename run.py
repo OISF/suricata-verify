@@ -134,7 +134,10 @@ def find_value(name, obj):
         obj = obj[name]
 
         if index is not None:
-            obj = obj[int(index)]
+            try:
+                obj = obj[int(index)]
+            except:
+                return None
 
     return obj
 
@@ -292,6 +295,14 @@ class TestRunner:
                 if not os.path.exists(filename):
                     raise UnsatisfiedRequirementError(
                         "requires file %s" % (filename))
+
+        if "script" in requires:
+            for script in requires["script"]:
+                try:
+                    subprocess.check_call("%s" % script, shell=True)
+                except:
+                    raise UnsatisfiedRequirementError(
+                        "requires script returned false")
 
         # Check if a pcap is required or not. By default a pcap is
         # required unless a "command" has been provided.
