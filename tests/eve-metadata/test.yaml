@@ -11,24 +11,25 @@ checks:
       count: 1
       match:
         event_type: flow
-        metadata.flowbits[0]: traffic/label/cli-http
-        metadata.flowvars.gid: "0"
+        traffic.id[0]: curl
+        traffic.label[0]: cli-http
 
   - filter:
       count: 1
       match:
         event_type: alert
-        metadata.flowbits[0]: traffic/label/cli-http
+        traffic.id[0]: curl
+        traffic.label[0]: cli-http
 
   - filter:
       count: 2
       match:
         event_type: netflow
-        metadata.flowbits[0]: traffic/label/cli-http
+        traffic.label[0]: cli-http
         
   - filter:
       count: 1
       match:
         event_type: metadata
         metadata.pktvars[0].uid: "0"
-        metadata.flowvars.gid: "0"
+        metadata.flowvars[0].gid: "0"

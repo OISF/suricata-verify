@@ -1,9 +1,12 @@
 # Silly rule to set the flowbit "traffic/label/cli-http" on
 # the curl user-agent.
-alert http any any -> any any (content:"curl"; http_user_agent; flowbits:set,traffic/label/cli-http; sid:1; rev:1;)
+alert http any any -> any any (content:"curl"; http_user_agent; flowbits:set,traffic/label/cli-http; flowbits:set,traffic/id/curl; flowbits:set,junkbit; sid:1; rev:1;)
 
 # Capture the UID as a pktvar.
-alert http any any -> any any (pcre:"/uid=(\d+)/, pkt:uid";  noalert; sid:2; rev:1;)
+alert http any any -> any any (pcre:"/uid=(\d+)\(([^)]+)\)/, pkt:uid, pkt:username"; noalert; sid:2; rev:1;)
 
 # Capture the GID as a flowvar.
 alert http any any -> any any (pcre:"/gid=(\d+)/, flow:gid"; noalert; sid:3; rev:1;)
+
+# Capture the GID as a flowvar.
+alert http any any -> any any (pcre:"/gid=(\d+)/, flow:gid"; noalert; sid:4; rev:1;)
