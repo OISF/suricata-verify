@@ -268,6 +268,8 @@ class TestRunner:
     def check_requires(self):
         if "requires" in self.config:
             requires = self.config["requires"]
+            if not requires:
+                return True
         else:
             requires = {}
 
