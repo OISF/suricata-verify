@@ -201,12 +201,19 @@ class FilterCheck:
             self.config["count"], count, str(self.config)))
 
     def match(self, event):
-        for field in self.config["match"]:
-            val = find_value(field, event)
-            if val is None:
-                return False
-            if val != self.config["match"][field]:
-                return False
+        for key, expected in self.config["match"].items():
+            if key == "has-key":
+                val = find_value(expected, event)
+                if val is None:
+                    return False
+            elif key == "not-has-key":
+                val = find_value(expected, event)
+                if val is not None:
+                    return False
+            else:
+                val = find_value(key, event)
+                if val != expected:
+                    return False
         return True
 
 class TestRunner:

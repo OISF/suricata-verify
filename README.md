@@ -76,3 +76,26 @@ command: |
 # Execute Suricata with the test parameters this many times. All checks will
 # done after each iteration.
 count: 10
+
+checks:
+
+  # A verification filter that is run over the eve.json. Multiple
+  # filters may exist and all must pass for the test to pass.
+  - filter:
+      # The number of records this filter should match.
+	  count: 1
+	  
+	  # The fields to match on.
+	  match:
+	    # Example match on event_type:
+		event_type: alert
+		
+		# Example match on array item:
+		alert.metadata.tag[0]: "tag1"
+		
+		# Check that a field exists:
+		has-key: alert.rule
+		
+		# Check that a field does not exist:
+		not-has-key: flow
+```		
