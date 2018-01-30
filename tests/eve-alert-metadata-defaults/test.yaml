@@ -1,0 +1,16 @@
+requires:
+
+  script:
+    - grep METADATA_DEFAULTS src/output-json-alert.c > /dev/null
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.metadata.created_at[0]: "2018-01-30"
+        alert.metadata.tag[0]: "tag1"
+        has-key: flow
+        has-key: http
+        not-has-key: alert.rule
