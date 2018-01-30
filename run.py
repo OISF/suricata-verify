@@ -365,7 +365,7 @@ class TestRunner:
             stderr = open(os.path.join(self.output, "stderr"), "w")
 
             open(os.path.join(self.output, "cmdline"), "w").write(
-                " ".join(args))
+                " ".join(args) + "\n")
 
             p = subprocess.Popen(
                 args, shell=shell, cwd=self.directory, env=env,
