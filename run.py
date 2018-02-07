@@ -35,9 +35,46 @@ import yaml
 import glob
 import re
 import json
+import unittest
 from collections import namedtuple
 
 import yaml
+
+class SelfTest(unittest.TestCase):
+
+    def test_parse_suricata_version(self):
+        version = parse_suricata_version("4.0.0")
+        self.assertEqual(
+            (4, 0, 0), (version.major, version.minor, version.patch))
+
+        version = parse_suricata_version("444.444.444")
+        self.assertEqual(
+            (444, 444, 444), (version.major, version.minor, version.patch))
+
+        version = parse_suricata_version("4.1.0-dev")
+        self.assertEqual(
+            (4, 1, 0), (version.major, version.minor, version.patch))
+
+        version = parse_suricata_version("4")
+        self.assertEqual(
+            (4, None, None), (version.major, version.minor, version.patch))
+
+        version = parse_suricata_version("4.0.3")
+        self.assertEqual(
+            (4, 0, 3), (version.major, version.minor, version.patch))
+
+    def test_version_equal(self):
+        self.assertTrue(version_equal("4", "4.0.3"))
+        self.assertTrue(version_equal("4.0", "4.0.3"))
+        self.assertTrue(version_equal("4.0.3", "4.0.3"))
+
+        self.assertTrue(version_equal("4.0.3", "4"))
+        self.assertTrue(version_equal("4.0.3", "4.0"))
+        self.assertTrue(version_equal("4.0.3", "4.0.3"))
+
+        self.assertFalse(version_equal("3", "4.0.3"))
+        self.assertFalse(version_equal("4.0", "4.1.3"))
+        self.assertFalse(version_equal("4.0.2", "4.0.3"))
 
 class TestError(Exception):
     pass
@@ -46,27 +83,55 @@ class UnsatisfiedRequirementError(Exception):
     pass
 
 SuricataVersion = namedtuple(
-    "SuricataVersion", ["major", "minor", "patch", "full", "short", "raw"])
+    "SuricataVersion", ["major", "minor", "patch"])
 
 def parse_suricata_version(buf):
-    m = re.search("((\d+)\.(\d+)(\.(\d+))?(\w+)?)", str(buf).strip())
+    m = re.search("(\d+)\.?(\d+)?\.?(\d+)?.*", str(buf).strip())
     if m:
-        full = m.group(1)
-        major = int(m.group(2))
-        minor = int(m.group(3))
-        if not m.group(5):
-            patch = 0
+        if m.group(1) is not None:
+            major = int(m.group(1))
         else:
-            patch = int(m.group(5))
-        short = "%s.%s" % (major, minor)
+            major = None
+
+        if m.group(2) is not None:
+            minor = int(m.group(2))
+        else:
+            minor = None
+
+        if m.group(3) is not None:
+            patch = int(m.group(3))
+        else:
+            patch = None
+
         return SuricataVersion(
-            major=major, minor=minor, patch=patch, short=short, full=full,
-            raw=buf)
+            major=major, minor=minor, patch=patch)
+
     return None
 
 def get_suricata_version():
     output = subprocess.check_output(["./src/suricata", "-V"])
     return parse_suricata_version(output)
+
+def version_equal(a, b):
+    """Check if version a and version b are equal in a semantic way.
+
+    For example:
+      - 4 would match 4, 4.x and 4.x.y.
+      - 4.0 would match 4.0.x.
+      - 4.0.3 would match only 4.0.3.
+    """
+    if not a.major == b.major:
+        return False
+
+    if a.minor is not None and b.minor is not None:
+        if a.minor != b.minor:
+            return False
+
+    if a.patch is not None and b.patch is not None:
+        if a.patch != b.patch:
+            return False
+
+    return True
 
 def version_gte(v1, v2):
     """Return True if v1 is great than or equal to v2."""
@@ -286,6 +351,14 @@ class TestRunner:
             if not version_gte(suri_version, min_version):
                 raise UnsatisfiedRequirementError(
                     "requires at least version %s" % (min_version.raw))
+
+        if "version" in requires:
+            requires_version = parse_suricata_version(requires["version"])
+            if not version_equal(
+                    self.suricata_config.version,
+                    requires_version):
+                raise UnsatisfiedRequirementError(
+                    "only for version %s" % (requires["version"]))
 
         if "features" in requires:
             for feature in requires["features"]:

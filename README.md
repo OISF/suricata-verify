@@ -52,6 +52,10 @@ requires:
   # Require a minimum version of Suricata.
   min-version: 4.1.0
 
+  # Test is only for this version. For example, 4.0 would match any 4.0 
+  # release, but 4.0.3 would only match 4.0.3.
+  version: 4.0
+
   # Require the presence of specific features.
   features:
     # Restrict the test to builds with HAVE_LUA.
