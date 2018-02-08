@@ -350,7 +350,7 @@ class TestRunner:
             suri_version = self.suricata_config.version
             if not version_gte(suri_version, min_version):
                 raise UnsatisfiedRequirementError(
-                    "requires at least version %s" % (min_version.raw))
+                    "requires at least version %s" % (requires["min-version"]))
 
         if "version" in requires:
             requires_version = parse_suricata_version(requires["version"])
