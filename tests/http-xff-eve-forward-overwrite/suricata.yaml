@@ -1,0 +1,15 @@
+%YAML 1.1
+---
+
+include: ../../etc/suricata-4.0.3.yaml
+
+outputs:
+  - eve-log:
+      enabled: yes
+      types:
+        - alert:
+            metadata: no
+            xff:
+              enabled: yes
+              mode: overwrite
+              deployment: forward

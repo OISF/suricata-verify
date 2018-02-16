@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"TEST RULE"; content:"uid"; http_server_body; sid:1; rev:1;)
