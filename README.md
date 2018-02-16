@@ -66,6 +66,13 @@ requires:
   # command is provided.
   pcap: false
 
+  # Run the script and only continue with the test if the script exists
+  # successfully.
+  script:
+	- command1
+	- command2
+	- ...
+
 # Add additional arguments to Suricata.
 args:
   - --set stream.reassembly.depth=0
@@ -80,6 +87,10 @@ command: |
 # Execute Suricata with the test parameters this many times. All checks will
 # done after each iteration.
 count: 10
+
+pre-check: |
+  # Some script to run before running checks.
+  cp eve.json eve.json.bak
 
 checks:
 

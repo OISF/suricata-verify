@@ -247,12 +247,15 @@ class FilterCheck:
         self.outdir = outdir
 
     def run(self):
-        eve_json_path = "eve.json"
-        if not os.path.exists(eve_json_path):
-            raise TestError("%s does not exist" % (eve_json_path))
+        if "filename" in self.config:
+            json_filename = self.config["filename"]
+        else:
+            json_filename = "eve.json"
+        if not os.path.exists(json_filename):
+            raise TestError("%s does not exist" % (json_filename))
 
         count = 0
-        with open(eve_json_path, "r") as fileobj:
+        with open(json_filename, "r") as fileobj:
             for line in fileobj:
                 event = json.loads(line)
                 if self.match(event):
@@ -469,11 +472,16 @@ class TestRunner:
         print("OK%s" % (" (%dx)" % count if count > 1 else ""))
         return True
 
+    def pre_check(self):
+        if "pre-check" in self.config:
+            subprocess.call(self.config["pre-check"], shell=True)
+
     def check(self):
 
         pdir = os.getcwd()
         os.chdir(self.output)
         try:
+            self.pre_check()
             if "checks" in self.config:
                 for check in self.config["checks"]:
                     for key in check:
