@@ -1,0 +1,25 @@
+requires:
+  script:
+    - grep Unified2XFFTypeAlert src/alert-unified2-alert.c > /dev/null
+    # Require the idstools-u2json tool.
+    - which idstools-u2json > /dev/null 2>&1
+
+args:
+  - -k none
+
+pre-check: |
+  # Convert the unified2 to json.
+  idstools-u2json --output unified2.json unified2.alert 2> /dev/null
+
+checks:
+  - filter:
+      filename: unified2.json
+      count: 1
+      match:
+        type: event
+  - filter:
+      filename: unified2.json
+      count: 1
+      match:
+        type: extra-data
+        extra-data.extra-data-type: xff_ip4
