@@ -8,12 +8,12 @@ inputs and verify the outputs.
 From your Suricata source directory run:
 
 ```
-../path/to/suricata-verify/run.sh
+../path/to/suricata-verify/run.py
 ```
 
 Or to run a single test:
 ```
-../path/to/suricata-tests/run.sh TEST-NAME
+../path/to/suricata-tests/run.py TEST-NAME
 ```
 
 ## Adding a New Test
