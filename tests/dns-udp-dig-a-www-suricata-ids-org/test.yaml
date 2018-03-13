@@ -1,6 +1,9 @@
 requires:
   features:
     - HAVE_LIBJANSSON
+  config:
+    # Requires eve dns version 2.
+    outputs.\d.eve-log.types.\d.dns.version: 2
 
 checks:
 
