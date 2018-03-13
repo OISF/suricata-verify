@@ -1,0 +1,26 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 4.1.0
+  script:
+    - grep OutputAnswerV2 src/output-json-dns.c > /dev/null 2>&1
+
+checks:
+
+  - filter:
+      comment: request
+      count: 1
+      match:
+        event_type: dns
+        dns.type: query
+        dns.rrname: www.suricata-ids.org
+
+  - filter:
+      comment: response
+      count: 1
+      match:
+        event_type: dns
+        dns.type: answer
+        dns.answers[0].rrtype: CNAME
+        dns.answers[1].rrtype: A
+        dns.answers[2].rrtype: A

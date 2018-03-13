@@ -361,9 +361,9 @@ class TestRunner:
                 for pattern, need_val in skip["config"].items():
                     for key, val in self.suricata_config.config.items():
                         if re.match(pattern, key):
-                            if need_val != val:
+                            if str(need_val) == str(val):
                                 raise UnsatisfiedRequirementError(
-                                    "requires %s = %s" % (
+                                    "not for %s = %s" % (
                                         key, need_val))
 
     def check_requires(self):
@@ -417,6 +417,21 @@ class TestRunner:
                     except:
                         raise UnsatisfiedRequirementError(
                             "requires script returned false")
+
+            elif key == "config":
+                for pattern, need_val in requires["config"].items():
+                    found = False
+                    for key, val in self.suricata_config.config.items():
+                        if re.match(pattern, key):
+                            print("%s -> %s" % (pattern, key))
+                            if str(need_val) != str(val):
+                                raise UnsatisfiedRequirementError(
+                                    "requires %s = %s" % (
+                                        key, need_val))
+                    print(found)
+                    if not found:
+                        raise UnsatisfiedRequirementError(
+                            "requires %s = %s" % (pattern, need_val))
 
             elif key == "pcap":
                 # Handle below...

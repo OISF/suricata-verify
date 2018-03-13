@@ -1,0 +1,12 @@
+%YAML 1.1
+---
+
+include: ../../etc/suricata-4.0.3.yaml
+
+outputs:
+  - eve-log:
+      enabled: true
+      types:
+        - dns:
+            enabled: true
+            version: 2
