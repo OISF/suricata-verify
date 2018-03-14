@@ -73,6 +73,11 @@ requires:
 	- command2
 	- ...
 
+skip:
+  # Skip a test if a feature is present, with a message that is logged.
+  - feature: RUST
+    msg: eve dns v1 not supported by rust
+
 # Add additional arguments to Suricata.
 args:
   - --set stream.reassembly.depth=0
