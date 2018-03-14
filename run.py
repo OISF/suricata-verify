@@ -178,7 +178,7 @@ class SuricataConfig:
             "-c", config_filename,
             "--dump-config"])
         self.config = {}
-        for line in output.split("\n"):
+        for line in output.decode("utf-8").split("\n"):
             parts = [p.strip() for p in line.split("=", 1)]
             if parts and parts[0]:
                 if len(parts) > 1:
