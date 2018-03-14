@@ -1,3 +1,8 @@
 requires:
   features:
     - HAVE_LIBJANSSON
+
+skip:
+  - feature: RUST
+    msg: eve dns v1 not supported by rust
+    

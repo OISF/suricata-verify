@@ -3,5 +3,8 @@
 
 include: ../../etc/suricata-3.1.2.yaml
 
+# Redefine outputs so eve/dns v1 isn't picked up by default.
+outputs:
+
 rule-files:
   - empty.rules

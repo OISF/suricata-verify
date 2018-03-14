@@ -5,6 +5,10 @@ requires:
   script:
     - grep JsonAddMetadata src/output-json.h > /dev/null
 
+skip:
+  - feature: RUST
+    msg: eve dns v1 not supported by rust
+
 checks:
 
   - filter:
