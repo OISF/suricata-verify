@@ -1,0 +1,20 @@
+min-version: 4.1.0
+
+requires:
+  features:
+    - HAVE_LIBJANSSON
+    - HAVE_NSS
+
+args:
+  - -k none
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: tls 
+        tls.version: "TLS 1.3 draft-<16"
+        tls.ja3.hash: "65825469c473e48f3ee2571129256ab0"
+        tls.ja3.string: "772,49195-49199-52393-52392-49196-49200-49162-49161-49171-49172-51-57-47-53-10,0-23-65281-10-11-35-13172-16-5-65282-40-13,23-24-25-256-257-258-259-260,0"
+
