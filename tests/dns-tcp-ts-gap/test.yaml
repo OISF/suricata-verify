@@ -4,7 +4,14 @@ requires:
   features:
     - HAVE_LIBJANSSON
 
-skip:
-  - config:
-      # Skip if using eve.dns version 2.
-      outputs.\d.eve-log.types.\d.dns.version: 2
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: dns
+        dns.type: query
+  - filter:
+      count: 36
+      match:
+        event_type: dns
+        dns.type: answer

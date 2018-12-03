@@ -2,9 +2,9 @@ requires:
   features:
     - HAVE_LUA
 
-skip:
-  - feature: RUST
-    msg: Known issue with feature RUST
+# skip:
+#   - feature: RUST
+#     msg: Known issue with feature RUST
 
 checks:
   - filter:

@@ -3,10 +3,6 @@ requires:
   script:
     - grep METADATA_DEFAULTS src/output-json-alert.c > /dev/null
 
-skip:
-  - feature: RUST
-    msg: eve dns v1 not supported by rust
-
 checks:
 
   - filter:

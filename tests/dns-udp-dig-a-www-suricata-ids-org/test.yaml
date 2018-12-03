@@ -2,11 +2,6 @@ requires:
   features:
     - HAVE_LIBJANSSON
 
-skip:
-  - config:
-      # Skip if using eve.dns version 2.
-      outputs.\d.eve-log.types.\d.dns.version: 2
-
 checks:
 
   - filter:

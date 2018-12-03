@@ -9,4 +9,3 @@ outputs:
       types:
         - dns:
             version: 1
-            custom: [aaaa]
