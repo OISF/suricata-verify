@@ -2,5 +2,14 @@ requires:
   features:
     - HAVE_LIBJANSSON
 
-skip:
-  - feature: RUST
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: dns
+        dns.type: query
+  - filter:
+      count: 2
+      match:
+        event_type: dns
+        dns.type: answer

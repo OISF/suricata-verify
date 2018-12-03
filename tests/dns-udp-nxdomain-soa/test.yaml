@@ -2,6 +2,10 @@ requires:
   features:
     - HAVE_LIBJANSSON
 
-skip:
-  - feature: RUST
-    msg: eve dns v1 not supported by rust
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: dns
+        dns.rcode: NXDOMAIN
+    
