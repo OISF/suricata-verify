@@ -1,0 +1,18 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+# disables checksum verification
+args:
+  - -k none
+
+checks:
+
+  # Check that there is one SMTP event with specific parameters.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        smtp.mail_from: <username@domain.com>
+        smtp.rcpt_to[0]: <john.doe@example.com>
+        email.status: PARSE_DONE
