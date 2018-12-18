@@ -30,7 +30,7 @@ Or to run a single test:
 
     Note: You may want to add something like:
     ```
-    include: ../../etc/suricata-4.0.3.yaml
+    include: ../../etc/suricata-4.1.1.yaml
     ```
     to the top and then just make the necessary overrides in the tests
     suricata.yaml.
