@@ -2,8 +2,6 @@ requires:
   features:
     - HAVE_LIBJANSSON
   min-version: 4.1.0
-  script:
-    - grep OutputAnswerV2 src/output-json-dns.c > /dev/null 2>&1
 
 checks:
 
@@ -24,3 +22,11 @@ checks:
         dns.answers[0].rrtype: CNAME
         dns.answers[1].rrtype: A
         dns.answers[2].rrtype: A
+
+  # Check that the alert contains a DNS object.
+  - filter:
+      count: 1
+      comment: alert with dns object
+      match:
+        event_type: alert
+        dns.query[0].type: query
