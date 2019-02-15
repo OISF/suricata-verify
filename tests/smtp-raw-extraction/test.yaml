@@ -1,0 +1,11 @@
+requires:
+  min-version: 5.0.0
+  features:
+    - HAVE_NSS
+  files:
+    - src/output-filestore.c
+
+checks:
+
+  - shell:
+      args: test -e filestore/01/018e4f86e830d85dc21cb54ee6554f01ac0b2a73a24f83c64b6acb489e8f4f3d

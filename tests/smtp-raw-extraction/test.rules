@@ -1,0 +1,1 @@
+alert smtp any any -> any any (msg:"SMTP file"; flow:established, to_server; file_data; content:"Content-Type: multipart/"; nocase; filestore; sid:1; rev:1;)
