@@ -1,9 +1,9 @@
-min-version: 4.1.0
 
 requires:
   features:
     - HAVE_LIBJANSSON
     - HAVE_NSS
+  min-version: 4.1.0
 
 args:
   - -k none
