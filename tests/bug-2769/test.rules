@@ -1,0 +1,2 @@
+alert tcp any any -> any any (flow:to_server,established; content:"functions"; pcre:"/\/[0-9]{2,8}\.functions/Ui"; sid:1; rev:1;)
+alert tcp any any -> any any (flow:to_server,established; content:"functions"; pcre:"/somethingelse/Ui"; sid:2; rev:1;)
