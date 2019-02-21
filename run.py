@@ -167,14 +167,20 @@ class SuricataConfig:
         self.load_build_info()
 
     def load_build_info(self):
-        output = subprocess.check_output(["./src/suricata", "--build-info"])
+        cmd = "./src/suricata"
+        if sys.platform == "win32":
+            cmd = "src\suricata.exe"
+        output = subprocess.check_output([cmd, "--build-info"])
         for line in output.splitlines():
             if line.decode().startswith("Features:"):
                 self.features = set(line.decode().split()[1:])
 
     def load_config(self, config_filename):
+        cmd = "./src/suricata"
+        if sys.platform == "win32":
+            cmd = "src\suricata.exe"
         output = subprocess.check_output([
-            "./src/suricata",
+            cmd,
             "-c", config_filename,
             "--dump-config"])
         self.config = {}
@@ -460,15 +466,22 @@ class TestRunner:
         self.check_requires()
         self.check_skip()
 
+        if sys.platform == "win32" and os.path.exists(os.path.join(self.directory, "check.sh")):
+            raise UnsatisfiedRequirementError("check.sh tests are not supported on Windows")
+
         shell = False
 
         if "command" in self.config:
+            # on Windows skip 'command' tests
+            if sys.platform == "win32":
+                raise UnsatisfiedRequirementError("\"command\" tests are not supported on Windows")
+
             args = self.config["command"]
             shell = True
         else:
             args = self.default_args()
 
-        env = {
+        extraenv = {
             # The suricata source directory.
             "SRCDIR": self.cwd,
             "TZ": "UTC",
@@ -476,6 +489,8 @@ class TestRunner:
             "OUTPUT_DIR": self.output,
             "ASAN_OPTIONS": "detect_leaks=0",
         }
+        env = os.environ.copy()
+        env.update(extraenv)
 
         if "count" in self.config:
             count = self.config["count"]
@@ -559,7 +574,7 @@ class TestRunner:
         try:
             if not os.path.exists(os.path.join(self.directory, "check.sh")):
                 return True
-            env = {
+            extraenv = {
                 # The suricata source directory.
                 "SRCDIR": self.cwd,
                 "TZ": "UTC",
@@ -567,6 +582,8 @@ class TestRunner:
                 "TOPDIR": TOPDIR,
                 "ASAN_OPTIONS": "detect_leaks=0",
             }
+            env = os.environ.copy()
+            env.update(extraenv)
             r = subprocess.call(
                 [os.path.join(self.directory, "check.sh")], env=env)
             if r != 0:
@@ -621,7 +638,10 @@ class TestRunner:
         # Find rules.
         rules = glob.glob(os.path.join(self.directory, "*.rules"))
         if not rules:
-            args += ["-S", "/dev/null"]
+            if sys.platform == "win32":
+                args += ["--disable-detection"]
+            else:
+                args += ["-S", "/dev/null"]
         elif len(rules) == 1:
             args += ["-S", rules[0]]
         else:
@@ -644,13 +664,20 @@ class TestRunner:
 
 def check_deps():
     try:
-        subprocess.check_call("jq --version > /dev/null 2>&1", shell=True)
+        cmd = "jq --version > /dev/null 2>&1"
+        if sys.platform == "win32":
+            cmd = "jq --version > nil"
+
+        subprocess.check_call(cmd, shell=True)
     except:
         print("error: jq is required")
         return False
 
     try:
-        subprocess.check_call("echo | xargs > /dev/null 2>&1", shell=True)
+        cmd = "echo | xargs > /dev/null 2>&1"
+        if sys.platform == "win32":
+            cmd = "echo suricata | xargs > nil"
+        subprocess.check_call(cmd, shell=True)
     except:
         print("error: xargs is required")
         return False
@@ -687,11 +714,18 @@ def main():
     # Get the current working directory, which should be the top
     # suricata source directory.
     cwd = os.getcwd()
-    if not (os.path.exists("./suricata.yaml") and
-            os.path.exists("./src/suricata")):
-        print("error: this is not a suricata source directory or " +
-              "suricata is not built")
-        return 1
+    if sys.platform == "win32":
+        if not (os.path.exists("suricata.yaml") and
+                os.path.exists("src\suricata.exe")):
+            print("error: this is not a suricata source directory or " +
+                  "suricata is not built")
+            return 1
+    else:
+        if not (os.path.exists("./suricata.yaml") and
+                os.path.exists("./src/suricata")):
+            print("error: this is not a suricata source directory or " +
+                  "suricata is not built")
+            return 1
 
     # Create a SuricataConfig object that is passed to all tests.
     suricata_config = SuricataConfig(get_suricata_version())
