@@ -1,0 +1,19 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 5.0.0
+
+checks:
+  - filter:
+      comment: single vlan
+      count: 1
+      match:
+        event_type: flow
+        vlan: [6]
+
+  - filter:
+      comment: double-tagged vlan
+      count: 1
+      match:
+        event_type: flow
+        vlan: [1, 10]
