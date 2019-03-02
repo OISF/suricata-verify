@@ -1,0 +1,6 @@
+checks:
+  - filter:
+      count: 28
+      match:
+        event_type: alert
+        alert.signature_id: 2
