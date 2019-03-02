@@ -1,0 +1,1 @@
+alert http any any -> any any (flow:to_client; http.location; content: "http://ca.msn.com";sid:1;)

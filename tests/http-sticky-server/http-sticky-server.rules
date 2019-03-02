@@ -1,0 +1,1 @@
+alert http any any -> any any (flow:to_client; http.server; content: "Omniture DC/2.0.0";sid:2;)
