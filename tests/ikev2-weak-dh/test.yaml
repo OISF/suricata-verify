@@ -1,0 +1,26 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+    - RUST
+  min-version: 4.1.0
+
+args:
+  - -k none
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        alert.signature: "SURICATA IKEv2 weak cryptographic parameters (Diffie-Hellman)"
+
+  - filter:
+      count: 1
+      match:
+        event_type: ikev2
+        ikev2.version_major: 2
+        ikev2.exchange_type: 34
+        ikev2.init_spi: "61d3693ce12af528"
+        ikev2.resp_spi: "0000000000000000"
