@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"test"; flow:established,to_server; content:"login=foo&password=bar"; http_client_body; app-layer-event:http.request_body_unexpected; sid:1; rev:1;)
