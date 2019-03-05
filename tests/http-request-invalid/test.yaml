@@ -1,0 +1,7 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+# disables checksum verification
+args:
+  - -k none
