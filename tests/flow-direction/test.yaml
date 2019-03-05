@@ -1,0 +1,23 @@
+command: |
+        ${SRCDIR}/src/suricata -c ${TEST_DIR}/suricata.yaml \
+                -l ${TEST_DIR}/output -r HTTP.pcap
+
+pre-check: |
+        rm ${TEST_DIR}/output/eve.json
+
+checks:
+  - filter:
+        count: 1
+        match:
+                event_type: fileinfo
+                flow_direction: to_server
+  - filter:
+        count: 1
+        match:
+                event_type: http
+                flow_direction: to_server
+  - filter:
+        count: 1
+        match:
+                event_type: flow
+                not-has-key: flow_direction
