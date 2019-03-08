@@ -1,0 +1,3 @@
+alert http any any -> any any (msg:"EICAR file data"; file_data; content:"EICAR-STANDARD-ANTIVIRUS-TEST-FILE"; sid:1;)
+alert http any any -> any any (msg:"EICAR file data X"; file_data; content:"X5O!P%@AP[4"; sid:2;)
+#alert http any any -> any any (msg:"EICAR file data"; file_data; content:"|58354f2150254041505b345c505a58353428505e2937434329377d2445494341522d5354414e444152442d414e544956495255532d544553542d46494c452124482b482a0a|"; sid:1;)
