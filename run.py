@@ -621,7 +621,7 @@ class TestRunner:
         # Find rules.
         rules = glob.glob(os.path.join(self.directory, "*.rules"))
         if not rules:
-            args += ["-S", "/dev/null"]
+            args.append("--disable-detection")
         elif len(rules) == 1:
             args += ["-S", rules[0]]
         else:
