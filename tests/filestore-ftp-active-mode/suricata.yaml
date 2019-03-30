@@ -1,0 +1,12 @@
+%YAML 1.1
+---
+
+include: ../../etc/suricata-4.0.3.yaml
+
+pcap-file:
+    checksum-checks: no
+
+outputs:
+  - file-store:
+      enabled: yes       # set to yes to enable
+      force-filestore: yes # force storing of all files

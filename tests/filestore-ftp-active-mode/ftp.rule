@@ -1,0 +1,1 @@
+alert tcp any 20 -> any any (msg:"File Found within FTP and stored"; filestore;  sid:1; rev:1;)

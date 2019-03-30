@@ -1,0 +1,4 @@
+checks:
+  - shell:
+      args: echo file.[0-9].meta | wc -w
+      expect: 3
