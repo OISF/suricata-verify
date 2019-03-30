@@ -1,0 +1,11 @@
+requires:
+  min-version: 5.0.0
+
+checks:
+  - shell:
+      args: echo file.[0-9].meta | wc -w
+      expect: 3
+
+
+args:
+  - --runmode=single

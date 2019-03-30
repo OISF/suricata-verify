@@ -1,0 +1,11 @@
+%YAML 1.1
+---
+
+pcap-file:
+    checksum-checks: no
+
+outputs:
+  - file-store:
+      enabled: yes       # set to yes to enable
+      version: 2
+      force-filestore: yes # force storing of all files
