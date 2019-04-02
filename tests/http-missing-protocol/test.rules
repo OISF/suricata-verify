@@ -1,0 +1,1 @@
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"http_header_names testcase 2"; flow:established,to_server; content:"GET"; http_method; http_header_names; content:"User-Agent"; classtype:trojan-activity; sid:10003658; rev:2;)
