@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"uri with space and after"; flow:established,to_server; content:" afterspace"; http_uri; sid:1; rev:1;)
