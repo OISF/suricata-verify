@@ -1,0 +1,16 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+# disables checksum verification
+args:
+  - -k none
+
+checks:
+
+  # Check that there is one file event with content range.
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        http.http_content_range: bytes 500-1000/146515
