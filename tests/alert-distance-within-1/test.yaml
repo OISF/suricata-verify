@@ -1,0 +1,16 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+checks:
+
+  # Check that we have the following events in eve.json
+  # 2 - alert events
+  # 1 - http event
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+      count: 1
+      match:
+        event_type: http

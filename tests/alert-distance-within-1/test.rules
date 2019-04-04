@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"AllWorkAndNoPlay"; content:"AllWorkAndNoPlayMakesWill"; content:"DullBoy"; distance:1; within:7; sid:2;)
