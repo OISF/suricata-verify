@@ -1,0 +1,1 @@
+alert http any any -> any any (filestore; sid:1; rev:1;)

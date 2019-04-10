@@ -1,0 +1,17 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+args:
+  - -k none
+
+pcap: ../filestore-v2.1-forced/suricata-update-pdf.pcap
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.state: "CLOSED"
+        fileinfo.stored: true
