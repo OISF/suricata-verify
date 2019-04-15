@@ -112,43 +112,6 @@ def get_suricata_version():
     output = subprocess.check_output(["./src/suricata", "-V"])
     return parse_suricata_version(output)
 
-def version_equal(a, b):
-    """Check if version a and version b are equal in a semantic way.
-
-    For example:
-      - 4 would match 4, 4.x and 4.x.y.
-      - 4.0 would match 4.0.x.
-      - 4.0.3 would match only 4.0.3.
-    """
-    if not a.major == b.major:
-        return False
-
-    if a.minor is not None and b.minor is not None:
-        if a.minor != b.minor:
-            return False
-
-    if a.patch is not None and b.patch is not None:
-        if a.patch != b.patch:
-            return False
-
-    return True
-
-def version_gte(v1, v2):
-    """Return True if v1 is great than or equal to v2."""
-    if v1.major < v2.major:
-        return False
-    elif v1.major > v2.major:
-        return True
-
-    if v1.minor < v2.minor:
-        return False
-    elif v1.minor > v2.minor:
-        return True
-
-    if v1.patch < v2.patch:
-        return False
-
-    return True
 
 def pipe_reader(fileobj, output=None, verbose=False):
     for line in fileobj:
@@ -157,6 +120,50 @@ def pipe_reader(fileobj, output=None, verbose=False):
             output.write(line)
         if verbose:
             print(line.strip())
+
+
+class Version:
+    """
+    Class to compare Suricata versions.
+    """
+    def is_equal(self, a, b):
+        """Check if version a and version b are equal in a semantic way.
+
+        For example:
+          - 4 would match 4, 4.x and 4.x.y.
+          - 4.0 would match 4.0.x.
+          - 4.0.3 would match only 4.0.3.
+        """
+        if not a.major == b.major:
+            return False
+
+        if a.minor is not None and b.minor is not None:
+            if a.minor != b.minor:
+                return False
+
+        if a.patch is not None and b.patch is not None:
+            if a.patch != b.patch:
+                return False
+
+        return True
+
+    def is_gte(self, v1, v2):
+        """Return True if v1 is great than or equal to v2."""
+        if v1.major < v2.major:
+            return False
+        elif v1.major > v2.major:
+            return True
+
+        if v1.minor < v2.minor:
+            return False
+        elif v1.minor > v2.minor:
+            return True
+
+        if v1.patch < v2.patch:
+            return False
+
+        return True
+
 
 class SuricataConfig:
 
@@ -221,6 +228,16 @@ def find_value(name, obj):
 
     return obj
 
+
+def is_version_compatible(version, suri_version, expr):
+    config_version = parse_suricata_version(version)
+    version_obj = Version()
+    func = getattr(version_obj, "is_{}".format(expr))
+    if not func(suri_version, config_version):
+        return False
+    return True
+
+
 class ShellCheck:
 
     def __init__(self, config):
@@ -257,11 +274,24 @@ class StatsCheck:
 
 class FilterCheck:
 
-    def __init__(self, config, outdir):
+    def __init__(self, config, outdir, suri_version):
         self.config = config
         self.outdir = outdir
+        self.suri_version = suri_version
 
     def run(self):
+        req_version = self.config.get("version")
+        min_version = self.config.get("min-version")
+        expr = "equal" if req_version else "gte"
+        if (req_version == None) ^ (min_version == None):
+            version = req_version or min_version
+            if not is_version_compatible(version=version,
+                    suri_version=self.suri_version, expr=expr):
+                raise UnsatisfiedRequirementError(
+                        "Suricata v{} not found".format(version))
+        elif req_version and min_version:
+            raise TestError("Specify either min-version or version")
+
         if "filename" in self.config:
             json_filename = self.config["filename"]
         else:
@@ -373,25 +403,20 @@ class TestRunner:
                 return True
         else:
             requires = {}
-
+        suri_version = self.suricata_config.version
         for key in requires:
-
             if key == "min-version":
-                min_version = parse_suricata_version(requires["min-version"])
-                suri_version = self.suricata_config.version
-                if not version_gte(suri_version, min_version):
+                min_version = requires["min-version"]
+                if not is_version_compatible(version=min_version,
+                        suri_version=suri_version, expr="gte"):
                     raise UnsatisfiedRequirementError(
-                        "requires at least version %s" % (
-                            requires["min-version"]))
-
+                            "requires at least version {}".format(min_version))
             elif key == "version":
-                requires_version = parse_suricata_version(requires["version"])
-                if not version_equal(
-                        self.suricata_config.version,
-                        requires_version):
+                req_version = requires["version"]
+                if not is_version_compatible(version=req_version,
+                        suri_version=suri_version, expr="equal"):
                     raise UnsatisfiedRequirementError(
-                        "only for version %s" % (requires["version"]))
-
+                            "only for version {}".format(req_version))
             elif key == "features":
                 for feature in requires["features"]:
                     if not self.suricata_config.has_feature(feature):
@@ -517,48 +542,93 @@ class TestRunner:
                 raise TestError("got exit code %d, expected %d" % (
                     r, expected_exit_code));
 
-            if not self.check():
-                return False
+            check_value = self.check()
+            if check_value["check_sh"]:
+                return check_value
 
         print("OK%s" % (" (%dx)" % count if count > 1 else ""))
-        return True
+        return check_value
 
     def pre_check(self):
         if "pre-check" in self.config:
             subprocess.call(self.config["pre-check"], shell=True)
 
-    def check(self):
+    def perform_filter_checks(self, check, count):
+        try:
+            FilterCheck(check, self.output, self.suricata_config.version).run()
+        except TestError as te:
+            print("FAIL: {}".format(te))
+            count["failure"] += 1
+        except UnsatisfiedRequirementError as ue:
+            print("SKIPPED: {}".format(ue))
+            count["skipped"] += 1
+        else:
+            print("OK")
+            count["success"] += 1
+        return count
 
+    def perform_shell_checks(self, check, count):
+        try:
+            ShellCheck(check).run()
+        except TestError as te:
+            print("FAIL : {}".format(te))
+            count["failure"] += 1
+        else:
+            print("OK")
+            count["success"] += 1
+        return count
+
+    def perform_stats_checks(self, check, count):
+        try:
+            StatsCheck(check, self.output).run()
+        except TestError as te:
+            print("FAIL: {}".format(te))
+            count["failure"] += 1
+        else:
+            print("OK")
+            count["success"] += 1
+        return count
+
+    def check(self):
         pdir = os.getcwd()
         os.chdir(self.output)
+        count = {
+            "success": 0,
+            "failure": 0,
+            "skipped": 0,
+            "check_sh": 0,
+                }
         try:
             self.pre_check()
             if "checks" in self.config:
-                for check in self.config["checks"]:
+                for check_count, check in enumerate(self.config["checks"]):
+                    print("\n|\n --> Sub test #{}: ".format(check_count + 1), end="")
                     for key in check:
                         if key == "filter":
-                            if not FilterCheck(check[key], self.output).run():
-                                raise TestError("filter did not match: %s" % (
-                                    str(check[key])))
+                            count = self.perform_filter_checks(check=check[key], count=count)
                         elif key == "shell":
-                            if not ShellCheck(check[key]).run():
-                                raise TestError(
-                                    "shell output did not match: %s" % (
-                                        str(check[key])))
+                            count = self.perform_shell_checks(check=check[key], count=count)
                         elif key == "stats":
-                            if not StatsCheck(check[key], self.output).run():
-                                raise TestError("stats check did not pass")
+                            count = self.perform_stats_checks(check=check[key], count=count)
                         else:
-                            raise TestError("Unknown check type: %s" % (key))
+                            print("FAIL: Unknown check type: {}".format(key))
         finally:
             os.chdir(pdir)
+
+        if count["failure"] or count["skipped"]:
+            return count
 
         # Old style check script.
         pdir = os.getcwd()
         os.chdir(self.output)
         try:
             if not os.path.exists(os.path.join(self.directory, "check.sh")):
-                return True
+                success_c = count["success"]
+                # Covering cases like "tests/show-help" which do not have
+                # check.sh and/or no checks in test.yaml should be counted
+                # successful
+                count["success"] = 1 if not success_c else success_c
+                return count
             env = {
                 # The suricata source directory.
                 "SRCDIR": self.cwd,
@@ -571,8 +641,12 @@ class TestRunner:
                 [os.path.join(self.directory, "check.sh")], env=env)
             if r != 0:
                 print("FAILED: verification failed")
-                return False
-            return True
+                count["failure"] = 1
+                count["check_sh"] = 1
+                return count
+            else:
+                count["success"] = 1
+            return count
         finally:
             os.chdir(pdir)
 
@@ -733,22 +807,18 @@ def main():
         test_runner = TestRunner(
             cwd, dirpath, outdir, suricata_config, args.verbose)
         try:
-            if test_runner.run():
-                passed += 1
-            else:
-                failed += 1
-                if args.fail:
-                    return 1
-        except UnsatisfiedRequirementError as err:
-            print("SKIPPED: %s" % (str(err)))
+            results = test_runner.run()
+            passed += results["success"]
+            failed += results["failure"]
+            skipped += results["skipped"]
+        except UnsatisfiedRequirementError as ue:
+            print("SKIPPED: {}".format(ue))
             skipped += 1
-        except TestError as err:
-            print("FAIL: %s" % (str(err)))
+        except TestError as te:
+            print("FAILED: {}".format(te))
             failed += 1
-            if args.fail:
-                return 1
-        except Exception as err:
-            raise
+        if args.fail:
+            return 1
 
     print("")
     print("PASSED:  %d" % (passed))

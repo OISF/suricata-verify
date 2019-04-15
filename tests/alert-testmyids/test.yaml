@@ -6,9 +6,15 @@ checks:
 
   # Check that we only have one alert event type in eve.
   - filter:
+      version: 2
       count: 1
       match:
         event_type: alert
+  - filter:
+      version: 5.0
+      count: 1
+      match:
+          event_type: alert
 
   # Check how many lines were logged to fast.log.
   - shell:
