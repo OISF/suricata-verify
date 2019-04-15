@@ -112,43 +112,6 @@ def get_suricata_version():
     output = subprocess.check_output(["./src/suricata", "-V"])
     return parse_suricata_version(output)
 
-def version_equal(a, b):
-    """Check if version a and version b are equal in a semantic way.
-
-    For example:
-      - 4 would match 4, 4.x and 4.x.y.
-      - 4.0 would match 4.0.x.
-      - 4.0.3 would match only 4.0.3.
-    """
-    if not a.major == b.major:
-        return False
-
-    if a.minor is not None and b.minor is not None:
-        if a.minor != b.minor:
-            return False
-
-    if a.patch is not None and b.patch is not None:
-        if a.patch != b.patch:
-            return False
-
-    return True
-
-def version_gte(v1, v2):
-    """Return True if v1 is great than or equal to v2."""
-    if v1.major < v2.major:
-        return False
-    elif v1.major > v2.major:
-        return True
-
-    if v1.minor < v2.minor:
-        return False
-    elif v1.minor > v2.minor:
-        return True
-
-    if v1.patch < v2.patch:
-        return False
-
-    return True
 
 def pipe_reader(fileobj, output=None, verbose=False):
     for line in fileobj:
@@ -157,6 +120,50 @@ def pipe_reader(fileobj, output=None, verbose=False):
             output.write(line)
         if verbose:
             print(line.strip())
+
+
+class Version:
+    """
+    Class to compare Suricata versions.
+    """
+    def is_equal(a, b):
+        """Check if version a and version b are equal in a semantic way.
+
+        For example:
+          - 4 would match 4, 4.x and 4.x.y.
+          - 4.0 would match 4.0.x.
+          - 4.0.3 would match only 4.0.3.
+        """
+        if not a.major == b.major:
+            return False
+
+        if a.minor is not None and b.minor is not None:
+            if a.minor != b.minor:
+                return False
+
+        if a.patch is not None and b.patch is not None:
+            if a.patch != b.patch:
+                return False
+
+        return True
+
+    def is_gte(v1, v2):
+        """Return True if v1 is great than or equal to v2."""
+        if v1.major < v2.major:
+            return False
+        elif v1.major > v2.major:
+            return True
+
+        if v1.minor < v2.minor:
+            return False
+        elif v1.minor > v2.minor:
+            return True
+
+        if v1.patch < v2.patch:
+            return False
+
+        return True
+
 
 class SuricataConfig:
 
@@ -221,6 +228,15 @@ def find_value(name, obj):
 
     return obj
 
+
+def is_version_compatible(version, suri_version, expr):
+    config_version = parse_suricata_version(version)
+    func = getattr(Version, "is_{}".format(expr))
+    if not func(suri_version, config_version):
+        return False
+    return True
+
+
 class ShellCheck:
 
     def __init__(self, config):
@@ -257,11 +273,24 @@ class StatsCheck:
 
 class FilterCheck:
 
-    def __init__(self, config, outdir):
+    def __init__(self, config, outdir, suri_version):
         self.config = config
         self.outdir = outdir
+        self.suri_version = suri_version
 
     def run(self):
+        req_version = self.config.get("version")
+        min_version = self.config.get("min-version")
+        expr = "equal" if req_version else "gte"
+        if (req_version == None) ^ (min_version == None):
+            version = req_version or min_version
+            if not is_version_compatible(version=version,
+                    suri_version=self.suri_version, expr=expr):
+                raise UnsatisfiedRequirementError(
+                        "Suricata v{} not found".format(version))
+        elif req_version and min_version:
+            raise TestError("Specify either min-version or version")
+
         if "filename" in self.config:
             json_filename = self.config["filename"]
         else:
@@ -373,25 +402,20 @@ class TestRunner:
                 return True
         else:
             requires = {}
-
+        suri_version = self.suricata_config.version
         for key in requires:
-
             if key == "min-version":
-                min_version = parse_suricata_version(requires["min-version"])
-                suri_version = self.suricata_config.version
-                if not version_gte(suri_version, min_version):
+                min_version = requires["min-version"]
+                if not is_version_compatible(version=min_version,
+                        suri_version=suri_version, expr="gte"):
                     raise UnsatisfiedRequirementError(
-                        "requires at least version %s" % (
-                            requires["min-version"]))
-
+                            "requires at least version {}".format(min_version))
             elif key == "version":
-                requires_version = parse_suricata_version(requires["version"])
-                if not version_equal(
-                        self.suricata_config.version,
-                        requires_version):
+                req_version = requires["version"]
+                if not is_version_compatible(version=req_version,
+                        suri_version=suri_version, expr="equal"):
                     raise UnsatisfiedRequirementError(
-                        "only for version %s" % (requires["version"]))
-
+                            "only for version {}".format(req_version))
             elif key == "features":
                 for feature in requires["features"]:
                     if not self.suricata_config.has_feature(feature):
@@ -528,7 +552,6 @@ class TestRunner:
             subprocess.call(self.config["pre-check"], shell=True)
 
     def check(self):
-
         pdir = os.getcwd()
         os.chdir(self.output)
         try:
@@ -537,7 +560,8 @@ class TestRunner:
                 for check in self.config["checks"]:
                     for key in check:
                         if key == "filter":
-                            if not FilterCheck(check[key], self.output).run():
+                            if not FilterCheck(check[key], self.output,
+                                    self.suricata_config.version).run():
                                 raise TestError("filter did not match: %s" % (
                                     str(check[key])))
                         elif key == "shell":
