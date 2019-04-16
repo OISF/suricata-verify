@@ -448,8 +448,7 @@ class TestRunner:
             else:
                 pcap_required = True
             if pcap_required and not "pcap" in self.config:
-                if not glob.glob(os.path.join(self.directory, "*.pcap")) + \
-                   glob.glob(os.path.join(self.directory, "*.pcapng")):
+                if not glob.glob(os.path.join(self.directory, "*.pcap")):
                     raise UnsatisfiedRequirementError("No pcap file found")
 
     def run(self):
@@ -612,7 +611,6 @@ class TestRunner:
             args += ["-r", self.config["pcap"]]
         else:
             pcaps = glob.glob(os.path.join(self.directory, "*.pcap"))
-            pcaps += glob.glob(os.path.join(self.directory, "*.pcapng"))
             if len(pcaps) > 1:
                 raise TestError("More than 1 pcap file found")
             if pcaps:
