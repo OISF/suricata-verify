@@ -1,0 +1,1 @@
+alert tcp any 20 -> any any (msg:"Simple rule"; filestore;  sid:31; rev:1;)

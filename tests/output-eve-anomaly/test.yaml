@@ -1,0 +1,26 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+checks:
+  - filter:
+      filename: eve.json
+      count: 1000
+      match:
+        event_type: anomaly
+  - filter:
+      filename: eve.json
+      count: 920
+      match:
+        anomaly.event: decoder.icmpv4.unknown_type
+  - filter:
+      filename: eve.json
+      count: 14
+      match:
+        anomaly.event: decoder.ipv4.trunc_pkt
+  - filter:
+      filename: eve.json
+      count: 1000
+      match:
+        anomaly.type: packet
+
