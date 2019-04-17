@@ -1,0 +1,27 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+  files:
+    - src/output-json-anomaly.c
+
+checks:
+  - filter:
+      count: 48
+      match:
+        event_type: anomaly
+        anomaly.type: packet
+        packet_info.linktype: 1
+        has-key: packet
+  - filter:
+      count: 4
+      match:
+        anomaly.event: decoder.icmpv4.unknown_code
+  - filter:
+      count: 42
+      match:
+        anomaly.event: decoder.icmpv4.unknown_type
+  - filter:
+      count: 2
+      match:
+        anomaly.event: decoder.ipv4.trunc_pkt
