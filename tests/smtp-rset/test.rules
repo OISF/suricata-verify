@@ -1,0 +1,1 @@
+alert smtp any any -> any any (msg:"SURICATA SMTP BDAT Chunk len exceeded"; flow:established,to_server; app-layer-event:smtp.bdat_chunk_len_exceeded; classtype:protocol-command-decode; sid:1; rev:1;)
