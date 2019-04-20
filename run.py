@@ -558,6 +558,7 @@ class TestRunner:
             FilterCheck(check, self.output, self.suricata_config.version).run()
         except TestError as te:
             print("FAIL: {}".format(te))
+            check_args_fail()
             count["failure"] += 1
         except UnsatisfiedRequirementError as ue:
             print("SKIPPED: {}".format(ue))
@@ -572,6 +573,7 @@ class TestRunner:
             ShellCheck(check).run()
         except TestError as te:
             print("FAIL : {}".format(te))
+            check_args_fail()
             count["failure"] += 1
         else:
             print("OK")
@@ -583,6 +585,7 @@ class TestRunner:
             StatsCheck(check, self.output).run()
         except TestError as te:
             print("FAIL: {}".format(te))
+            check_args_fail()
             count["failure"] += 1
         else:
             print("OK")
@@ -716,6 +719,12 @@ class TestRunner:
         t.start()
         self.readers.append(t)
 
+
+def check_args_fail():
+    if args.fail:
+        sys.exit(1)
+
+
 def check_deps():
     try:
         subprocess.check_call("jq --version > /dev/null 2>&1", shell=True)
@@ -733,6 +742,7 @@ def check_deps():
 
 def main():
     global TOPDIR
+    global args
 
     if not check_deps():
         return 1
@@ -816,9 +826,8 @@ def main():
             skipped += 1
         except TestError as te:
             print("FAILED: {}".format(te))
+            check_args_fail()
             failed += 1
-        if args.fail:
-            return 1
 
     print("")
     print("PASSED:  %d" % (passed))
