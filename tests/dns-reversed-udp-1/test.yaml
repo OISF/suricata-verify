@@ -1,0 +1,24 @@
+requires:
+  min-version: 5.0.0
+
+args:
+  - --set stream.midstream=true
+
+checks:
+
+  - filter:
+      comment: request
+      count: 0
+      match:
+        event_type: dns
+        dns.type: query
+
+  - filter:
+      comment: response
+      count: 1
+      match:
+        event_type: dns
+        dns.type: answer
+        dns.answers[0].rrtype: CNAME
+        dns.answers[1].rrtype: A
+        dns.answers[2].rrtype: A
