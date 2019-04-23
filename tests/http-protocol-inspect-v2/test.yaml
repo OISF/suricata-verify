@@ -1,0 +1,15 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+args:
+  - -k none
+
+pcap: http.pcap
+
+checks:
+
+  - filter:
+      count: 4
+      match:
+        event_type: alert

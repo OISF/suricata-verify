@@ -1,0 +1,4 @@
+alert http any any -> any any (flow:to_client; http_protocol; content:"HTTP/1.1"; sid:1;)
+alert http any any -> any any (flow:to_server; http_protocol; content:"HTTP/1.1"; sid:2;)
+alert http any any -> any any (flow:to_client; http.protocol; content:"HTTP/1.1"; sid:3;)
+alert http any any -> any any (flow:to_server; http.protocol; content:"HTTP/1.1"; sid:4;)
