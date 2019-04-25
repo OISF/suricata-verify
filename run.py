@@ -131,14 +131,13 @@ def handle_exceptions(func):
         try:
             func(*args,**kwargs)
         except TestError as te:
-            print("FAIL : {}".format(te))
+            print("Sub test #{}: FAIL : {}".format(kwargs["test_num"], te))
             check_args_fail()
             kwargs["count"]["failure"] += 1
         except UnsatisfiedRequirementError as ue:
-            print("SKIPPED : {}".format(ue))
+            print("Sub test #{}: SKIPPED : {}".format(kwargs["test_num"], ue))
             kwargs["count"]["skipped"] += 1
         else:
-            print("OK")
             kwargs["count"]["success"] += 1
         return kwargs["count"]
     return applicator
@@ -577,7 +576,8 @@ class TestRunner:
             if check_value["check_sh"]:
                 return check_value
 
-        print("OK%s" % (" (%dx)" % count if count > 1 else ""))
+        if not check_value["failure"]:
+            print("OK%s" % (" (%dx)" % count if count > 1 else ""))
         return check_value
 
     def pre_check(self):
@@ -585,17 +585,18 @@ class TestRunner:
             subprocess.call(self.config["pre-check"], shell=True)
 
     @handle_exceptions
-    def perform_filter_checks(self, check, count):
-        count = FilterCheck(check, self.output, self.suricata_config.version).run()
+    def perform_filter_checks(self, check, count, test_num):
+        count = FilterCheck(check, self.output,
+                self.suricata_config.version).run()
         return count
 
     @handle_exceptions
-    def perform_shell_checks(self, check, count):
+    def perform_shell_checks(self, check, count, test_num):
         count = ShellCheck(check).run()
         return count
 
     @handle_exceptions
-    def perform_stats_checks(self, check, count):
+    def perform_stats_checks(self, check, count, test_num):
         count = StatsCheck(check, self.output).run()
         return count
 
@@ -612,12 +613,11 @@ class TestRunner:
             self.pre_check()
             if "checks" in self.config:
                 for check_count, check in enumerate(self.config["checks"]):
-                    print("\n|\n --> Sub test #{}: ".format(check_count + 1),
-                            end="")
                     for key in check:
                         if key in ["filter", "shell", "stats"]:
                             func = getattr(self, "perform_{}_checks".format(key))
-                            count = func(check=check[key], count=count)
+                            count = func(check=check[key], count=count,
+                                    test_num=check_count + 1)
                         else:
                             print("FAIL: Unknown check type: {}".format(key))
         finally:
