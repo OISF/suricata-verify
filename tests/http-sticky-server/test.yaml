@@ -1,3 +1,8 @@
+requires:
+  features:
+    - HAVE_JANSSON
+  min-version: 5.0.0
+
 checks:
   - filter:
       count: 28

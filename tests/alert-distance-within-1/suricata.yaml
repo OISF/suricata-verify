@@ -13,4 +13,4 @@ outputs:
             payload-printable: no
             packet: no
             metadata: no
-        - http:
+        - http
