@@ -5,6 +5,9 @@ requires:
   files:
     - src/output-json-anomaly.c
 
+args:
+  - -k none
+
 checks:
   - filter:
       count: 48
