@@ -1,6 +1,6 @@
 requires:
   features:
-    - HAVE_JANSSON
+    - HAVE_LIBJANSSON
   min-version: 5.0.0
 
 checks:
