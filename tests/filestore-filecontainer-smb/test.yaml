@@ -1,0 +1,34 @@
+requires:
+  features:
+    - HAVE_NSS
+  files:
+    - src/output-filestore.c
+
+checks:
+
+  - shell:
+        args: test -e filestore/1d/1d4d787047200fc7bcbfc03a496cafda8e49075d2fbf2ff7feab90a4fdea8f89
+
+  - shell:
+        args: test -e filestore/1d/1dc15d9d3532d957656f7a16e9c3ad0c91c13b44ac2ab83f4d8fdc02648a2146
+
+  - shell:
+        args: test -e filestore/ab/ab46c7b740a7a994608c4210ae8c4d253e49cc23cc8b63e89d0400ea83b1ae77
+
+  - shell:
+        args: test ! -e filestore/23/2365c924112355ddd2d3da985fb09cfc5350f9abc73949c45199c923dab7c40a
+
+  - shell:
+        args: test ! -e filestore/4d/4d1c83f5254186d58ce235d0cecd1cc82ff9a3df9f3ed8361c6c173bc426ddd0
+
+  - shell:
+        args: test ! -e filestore/88/88aac8a3c7a955e521151ba16b4dc81d9de3e091a76abd19bb4f0e01d572dd5e
+
+  - shell:
+        args: test ! -e filestore/a7/a709c2551b8818d7849d31a65446dc2f8c4cca2dcbbc5385604286f49cfdaf1c
+
+  - shell:
+        args: test ! -e filestore/be/be41c136b2ac9e3ad69cdd80bbe54a960a436e41f612bbf184a265603b81b745
+
+  - stats:
+      file_store.fs_errors: 0
