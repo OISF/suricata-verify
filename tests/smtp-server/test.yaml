@@ -1,0 +1,12 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+checks:
+
+  # Check that there is only one SMTP event with specific parameters.
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: smtp
