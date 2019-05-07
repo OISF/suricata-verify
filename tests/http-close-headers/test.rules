@@ -1,0 +1,1 @@
+alert http any any -> any any (msg: "'ng1nx' Server header found"; flow: established, from_server; content: "ng1nx"; nocase; http_header; classtype: attempted-admin; sid: 1; rev: 1; )
