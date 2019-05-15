@@ -1,0 +1,1 @@
+alert udp any any -> any any (msg:"TEST SUCCESFULL - Missing Semicolon INVALID combination "; content:"AA" depth:20; sid:6666666; rev:1;)
