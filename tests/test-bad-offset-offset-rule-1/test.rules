@@ -1,0 +1,1 @@
+alert udp any any -> any any (msg:"TEST SUCCESFULL - Offset/Offset INVALID combination "; content:"AA"; offset:20; offset:20; sid:5555559; rev:1;)
