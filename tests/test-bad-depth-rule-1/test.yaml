@@ -12,7 +12,7 @@ checks:
       count: 1
       match:
         event_type: engine
-        engine.message: "depth needs preceding content, uricontent option, http_client_body, http_server_body, http_header option, http_raw_header option, http_method option, http_cookie, http_raw_uri, http_stat_msg, http_stat_code, http_user_agent, http_host, http_raw_host or file_data\/dce_stub_data sticky buffer options"
+        engine.message: "depth needs preceding content, uricontent option, http_client_body, http_server_body, http_header option, http_raw_header option, http_method option, http_cookie, http_raw_uri, http_stat_msg, http_stat_code, http_user_agent, http_host, http_raw_host or file_data/dce_stub_data sticky buffer options"
 
   - filter:
       count: 1
