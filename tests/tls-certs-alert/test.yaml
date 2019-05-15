@@ -1,0 +1,20 @@
+requires:
+  min-version: 5.0.0
+  features:
+    - HAVE_LIBJANSSON
+
+args:
+ - -k none
+
+checks:
+  # Check that we have the following events in eve.json
+  # 2 - alert events
+  # 1 - tls event
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+  - filter:
+      count: 1
+      match:
+        event_type: tls
