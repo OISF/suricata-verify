@@ -1,0 +1,1 @@
+alert udp any any -> any any (msg:"TEST SUCCESFULL - Depth/Distance INVALID combination "; content:"AA"; depth:50; distance:5; sid:5555556; rev:1;)

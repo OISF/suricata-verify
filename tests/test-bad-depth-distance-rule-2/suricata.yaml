@@ -1,0 +1,10 @@
+%YAML 1.1
+---
+
+logging:
+  default-log-level: info
+  outputs:
+  - file:
+      enabled: yes
+      filename: eve.json
+      type: json
