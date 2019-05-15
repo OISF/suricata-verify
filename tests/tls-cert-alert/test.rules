@@ -1,0 +1,3 @@
+alert tls any any -> any any (msg:"tls.cert test1"; tls.cert; content:"|30160603550403130f|"; sid:1;)
+alert tls any any -> any any (msg:"tls.cert test2"; tls.cert; content:"|30250603550403131e|"; sid:2;)
+alert tls any any -> any any (msg:"tls.cert test3"; tls.cert; content:"|301e06035504031317|"; sid:3;)
