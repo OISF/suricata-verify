@@ -1,0 +1,1 @@
+alert udp any any -> any any (msg:"TEST SUCCESFULL - Missing-Quotation-Marks INVALID combination "; content:AA; sid:6666667; rev:1;)
