@@ -1,0 +1,12 @@
+%YAML 1.1
+---
+
+include: ../../etc/suricata-4.0.3.yaml
+
+app-layer:
+  protocols:
+    http:
+      libhtp:
+        default-config:
+          double-decode-path: yes
+          double-decode-query: yes
