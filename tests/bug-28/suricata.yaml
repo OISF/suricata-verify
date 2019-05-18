@@ -1,0 +1,14 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      types:
+        - alert:
+            payload: no
+            payload-buffer-size: 4kb
+            payload-printable: no
+            packet: no
+            metadata: no
+        - http:

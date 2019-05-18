@@ -1,0 +1,98 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+args:
+ - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: 192.168.2.7
+        src_port: 1041
+        dest_ip: 208.75.250.50
+        dest_port: 80
+        proto: TCP
+        tx_id: 0
+        alert:
+          action: allowed
+          gid: 1
+          signature_id: 2001340
+          rev: 9
+          signature: "ET MALWARE LocalNRD Spyware Checkin (Original Sig Fails to Fire)"
+          category: A Network Trojan was detected
+          severity: 1
+        app_proto: http
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: 192.168.2.7
+        src_port: 1041
+        dest_ip: 208.75.250.50
+        dest_port: 80
+        proto: TCP
+        app_proto: http
+        tx_id: 0
+        alert:
+          action: allowed
+          gid: 1
+          signature_id: 2001341
+          rev: 9
+          signature: "ET MALWARE LocalNRD Spyware Checkin (OISF changed to content fails also)"
+          category: A Network Trojan was detected
+          severity: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: 192.168.2.7
+        src_port: 1041
+        dest_ip: 208.75.250.50
+        dest_port: 80
+        proto: TCP
+        app_proto: http
+        tx_id: 0
+        alert:
+          action: allowed
+          gid: 1
+          signature_id: 2001342
+          rev: 9
+          signature: "ET MALWARE LocalNRD Spyware Checkin (OISF remove space between colon and quote uricontent works)"
+          category: A Network Trojan was detected
+          severity: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: 192.168.2.7
+        src_port: 1041
+        dest_ip: 208.75.250.50
+        dest_port: 80
+        proto: TCP
+        app_proto: http
+        tx_id: 0
+        alert:
+          action: allowed
+          gid: 1
+          signature_id: 2001343
+          rev: 9
+          signature: "ET MALWARE LocalNRD Spyware Checkin (OISF remove space between colon and quote content works)"
+          category: A Network Trojan was detected
+          severity: 1
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        src_ip: 192.168.2.7
+        src_port: 1041
+        dest_ip: 208.75.250.50
+        dest_port: 80
+        proto: TCP
+        tx_id: 0
+        http:
+          hostname: btg.btgrab.com
+          url: "/a/Drk.syn?adcontext=ROUTINE_CHECKIN&contextpeak=0&contextcount=0&countrycodein=XX&lastAdTime=0&lastAdCode=0&cookie1=0&cookie2=0&cookie3=0&cookie4=0&InstID={2CAA09DF-35D8-471C-9979-A11DA0CC54DB}&status=1&smode=11&event=&bho=aurora.exe&NumWindows=4&PartnerId=0&BundleId=0&HN=bob7&VSN=189A97F7&PI=55274-640-1781551-23400&MA=005400123457&TM=-1"
+          http_user_agent: "{2CAA09DF-35D8-471C-9979-A11DA0CC54DB}|0.21.5.110"
