@@ -14,7 +14,7 @@ checks:
       count: 1
       match:
         event_type: engine
-        engine.message: "signature can't match as content length 2 with offset 100 (=102) is bigger than dsize 50"
+        engine.message: "signature can't match as content length 2 with offset 100 (=102) is bigger than dsize 50."
 
   - filter:
       count: 1
