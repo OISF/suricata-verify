@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"invalid hex test rule"; content:"|01 10 0j|"; sid:12346; rev:1;)
