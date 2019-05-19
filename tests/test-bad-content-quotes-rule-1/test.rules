@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"invalid quotes in content"; content:"thisisbad""; sid:1234546; rev:1;)
