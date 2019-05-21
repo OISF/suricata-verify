@@ -1,0 +1,31 @@
+requires:
+  features:
+    - RUST
+
+args:
+  - -k none
+
+checks:
+
+ - filter:
+     count: 8
+     match:
+       event_type: snmp
+       snmp.version: 2
+
+ - filter:
+     count: 3
+     match:
+       event_type: snmp
+       snmp.pdu_type: GetRequest
+       snmp.community: "[R0_C@cti!]"
+       snmp.version: 2
+
+ - filter:
+     count: 1
+     match:
+       event_type: snmp
+       snmp.pdu_type: GetNextRequest
+       snmp.community: "[R0_C@cti!]"
+       snmp.version: 2
+       snmp.vars: ["0.1"]

@@ -1,0 +1,28 @@
+requires:
+  features:
+    - RUST
+
+args:
+  - -k none
+
+checks:
+
+ - filter:
+     count: 8
+     match:
+       event_type: snmp
+       snmp.version: 3
+
+ - filter:
+     count: 2
+     match:
+       event_type: snmp
+       snmp.pdu_type: GetRequest
+       snmp.version: 3
+
+ - filter:
+     count: 4
+     match:
+       event_type: snmp
+       snmp.pdu_type: encrypted
+       snmp.version: 3
