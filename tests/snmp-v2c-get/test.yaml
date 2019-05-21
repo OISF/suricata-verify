@@ -1,0 +1,34 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+    - RUST
+  files:
+    - rust/src/snmp/snmp.rs
+
+args:
+  - -k none
+
+checks:
+
+ - filter:
+     count: 8
+     match:
+       event_type: snmp
+       snmp.version: 2
+
+ - filter:
+     count: 3
+     match:
+       event_type: snmp
+       snmp.pdu_type: get_request
+       snmp.community: "[R0_C@cti!]"
+       snmp.version: 2
+
+ - filter:
+     count: 1
+     match:
+       event_type: snmp
+       snmp.pdu_type: get_next_request
+       snmp.community: "[R0_C@cti!]"
+       snmp.version: 2
+       snmp.vars: ["0.1"]

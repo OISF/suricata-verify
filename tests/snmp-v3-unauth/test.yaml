@@ -1,0 +1,31 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+    - RUST
+  files:
+    - rust/src/snmp/snmp.rs
+
+args:
+  - -k none
+
+checks:
+
+ - filter:
+     count: 8
+     match:
+       event_type: snmp
+       snmp.version: 3
+
+ - filter:
+     count: 3
+     match:
+       event_type: snmp
+       snmp.pdu_type: get_request
+       snmp.version: 3
+
+ - filter:
+     count: 1
+     match:
+       event_type: snmp
+       snmp.pdu_type: get_bulk_request
+       snmp.version: 3
