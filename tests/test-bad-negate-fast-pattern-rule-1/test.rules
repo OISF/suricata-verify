@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"bad relative negated keyword with fast_pattern"; content:"first"; content:!"second"; fast_pattern; offset:6;  sid:5542341; rev:1;)
