@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"bad depth value rule"; content:"first"; depth:-5; byte_extract:2,0,size; sid:111232; rev:1;)
