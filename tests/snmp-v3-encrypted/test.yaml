@@ -17,7 +17,7 @@ checks:
      count: 2
      match:
        event_type: snmp
-       snmp.pdu_type: GetRequest
+       snmp.pdu_type: get_request
        snmp.version: 3
 
  - filter:

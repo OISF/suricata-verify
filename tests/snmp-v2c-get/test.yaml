@@ -17,7 +17,7 @@ checks:
      count: 3
      match:
        event_type: snmp
-       snmp.pdu_type: GetRequest
+       snmp.pdu_type: get_request
        snmp.community: "[R0_C@cti!]"
        snmp.version: 2
 
@@ -25,7 +25,7 @@ checks:
      count: 1
      match:
        event_type: snmp
-       snmp.pdu_type: GetNextRequest
+       snmp.pdu_type: get_next_request
        snmp.community: "[R0_C@cti!]"
        snmp.version: 2
        snmp.vars: ["0.1"]
