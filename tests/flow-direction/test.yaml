@@ -1,7 +1,3 @@
-command: |
-        ${SRCDIR}/src/suricata -c ${TEST_DIR}/suricata.yaml \
-                -l ${TEST_DIR}/output -r HTTP.pcap
-
 pre-check: |
         rm ${TEST_DIR}/output/eve.json
 
