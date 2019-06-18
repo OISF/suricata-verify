@@ -1,0 +1,1 @@
+alert tcp any any -> any any (tcp.mss:<536; sid:1234; rev:5;)
