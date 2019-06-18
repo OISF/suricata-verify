@@ -1,0 +1,22 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+args:
+ - -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.0.10
+      dest_port: 69
+      event_type: tftp
+      pcap_cnt: 1
+      proto: UDP
+      src_ip: 192.168.0.253
+      src_port: 50618
+      tftp:
+        file: rfc1350.txt
+        mode: octet
+        packet: read
