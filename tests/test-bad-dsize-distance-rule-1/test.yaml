@@ -1,0 +1,21 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+command: |
+  ${SRCDIR}/src/suricata --set classification-file="${SRCDIR}/classification.config" --set reference-config-file="${SRCDIR}/reference.config" -l ${OUTPUT_DIR} -c ${TEST_DIR}/suricata.yaml -r ${TEST_DIR}/ -S ${TEST_DIR}/test.rules
+
+checks:
+  # check that we have the following entres in eve.json
+  # match 1 specific rule load failure reason
+  - filter:
+      count: 1
+      match:
+        event_type: engine
+        engine.message: "signature can't match as depth 10 can't be the same as distance 10."
+
+  - filter:
+      count: 1
+      match:
+        event_type: engine
+        engine.error: "SC_ERR_NO_RULES_LOADED"
