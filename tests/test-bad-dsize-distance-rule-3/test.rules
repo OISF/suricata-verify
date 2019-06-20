@@ -1,0 +1,1 @@
+alert udp any any -> any any (msg:"bad dsize distance and content combination"; dsize:12; content:"loose"; content:"local"; distance:5; sid:653; rev:1;)

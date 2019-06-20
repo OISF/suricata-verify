@@ -1,0 +1,1 @@
+alert udp any any -> any any (msg:"TEST SUCCESFULL - dsize/distance INVALID combination "; dsize:10; content:"boom"; content:"loom"; distance:10; sid:6666663; rev:1;)
