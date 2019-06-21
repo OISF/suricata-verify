@@ -1,0 +1,1 @@
+alert udp any any -> any any (udp.hdr; content:"|00 08|"; offset:4; depth:2; sid:1234;)
