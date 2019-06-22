@@ -1,0 +1,59 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+args:
+    - -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      alert:
+        action: allowed
+        category: ''
+        gid: 1
+        rev: 0
+        severity: 3
+        signature: msg escape tests
+        signature_id: 100
+      app_proto: http
+      dest_ip: 208.69.36.231
+      dest_port: 80
+      event_type: alert
+      flow:
+        bytes_toclient: 1588
+        bytes_toserver: 379
+        pkts_toclient: 2
+        pkts_toserver: 4
+        start: 2009-10-16T16:44:16.083524+0000
+      http:
+        hostname: www.google.com
+        http_content_type: text/html
+        http_method: GET
+        http_user_agent: Wget/1.11.4
+        length: 1194
+        protocol: HTTP/1.0
+        status: 404
+        url: /blah/
+      pcap_cnt: 6
+      proto: TCP
+      src_ip: 192.168.2.3
+      src_port: 37010
+      tx_id: 0
+- filter:
+    count: 1
+    match:
+      dest_ip: 208.69.36.231
+      dest_port: 80
+      event_type: http
+      http:
+        hostname: www.google.com
+        http_content_type: text/html
+        http_user_agent: Wget/1.11.4
+        url: /blah/
+      pcap_cnt: 7
+      proto: TCP
+      src_ip: 192.168.2.3
+      src_port: 37010
+      tx_id: 0
