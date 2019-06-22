@@ -1,0 +1,4 @@
+This test is for regression matching with http_uri. In order to make suricata-verify more robust,
+it is good to add tests for issues that existed before suricata-verify did.
+There was a bug introduced in the early stages https://redmine.openinfosecfoundation.org/issues/78,
+the pcap and signature mentioned in the bug report has been used to create this test.
