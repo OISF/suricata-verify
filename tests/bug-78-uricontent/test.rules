@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"msg escape tests"; uricontent:"blah"; sid: 100;)
