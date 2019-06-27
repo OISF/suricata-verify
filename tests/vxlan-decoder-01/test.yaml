@@ -1,0 +1,19 @@
+requires:
+  min-version: 5.0.0
+  features:
+    - HAVE_LIBJANSSON
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_port: 53
+        dest_port: 12345
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_port: 32021
+        dest_port: 12345
+
