@@ -1,0 +1,29 @@
+requires:
+  min-version: 5.0.0
+  features:
+    - HAVE_LIBJANSSON
+
+checks:
+  - filter:
+      count: 13
+      match:
+        event_type: flow
+        dest_port: 4789
+        flow.pkts_toclient: 0
+        flow.bytes_toclient: 0
+  - filter:
+      count: 4
+      match:
+        event_type: ssh
+        dest_port: 22
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: ntp
+        dest_port: 123
+  - filter:
+      count: 8
+      match:
+        event_type: dns
+        dns.rrname: "ec2-18-196-145-224.eu-central-1.compute.amazonaws.com"
