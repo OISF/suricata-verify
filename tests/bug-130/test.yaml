@@ -1,0 +1,82 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+args:
+ - -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      alert:
+        action: allowed
+        category: access to a potentially vulnerable web application
+        gid: 1
+        rev: 1
+        severity: 2
+        signature: no1
+        signature_id: 9000000
+      app_proto: http
+      dest_ip: 10.100.0.8
+      dest_port: 44270
+      event_type: alert
+      pcap_cnt: 14
+      proto: TCP
+      src_ip: 162.2.41.200
+      src_port: 80
+- filter:
+    count: 1
+    match:
+      alert:
+        action: allowed
+        category: access to a potentially vulnerable web application
+        gid: 1
+        rev: 1
+        severity: 2
+        signature: ok1
+        signature_id: 9000001
+      app_proto: http
+      dest_ip: 10.100.0.8
+      dest_port: 44270
+      event_type: alert
+      pcap_cnt: 14
+      proto: TCP
+      src_ip: 162.2.41.200
+      src_port: 80
+- filter:
+    count: 1
+    match:
+      alert:
+        action: allowed
+        category: access to a potentially vulnerable web application
+        gid: 1
+        rev: 1
+        severity: 2
+        signature: ok2
+        signature_id: 9000002
+      app_proto: http
+      dest_ip: 10.100.0.8
+      dest_port: 44270
+      event_type: alert
+      pcap_cnt: 14
+      proto: TCP
+      src_ip: 162.2.41.200
+      src_port: 80
+- filter:
+    count: 1
+    match:
+      dest_ip: 162.2.41.200
+      dest_port: 80
+      event_type: http
+      http:
+        hostname: www.abcdefghij.com
+        http_content_type: text/html
+        http_user_agent: Mozilla/5.0 (X11; U; Linux i686; fr; rv:1.9.0.6) Gecko/2009011912
+          Firefox/3.0.6
+        url: /publication/pub.home/home.html
+      pcap_cnt: 14
+      proto: TCP
+      src_ip: 10.100.0.8
+      src_port: 44270
+      tx_id: 0
