@@ -1,0 +1,1 @@
+alert ip any any -> any any (ipv6.hdr; content:"|11 00 00 00 00 00 00 00|"; offset:40; endswith; sid:1234;)
