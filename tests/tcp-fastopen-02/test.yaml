@@ -1,0 +1,46 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+    - TFO
+
+args:
+  - --simulate-ips
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 2
+      match:
+        event_type: http
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.url: "/index.php"
+        http.http_user_agent: "Mozilla/5.0" 
+        http.http_content_type: text/html
+        http.http_method: "GET"
+        http.protocol: "HTTP/1.0"
+        http.status: 302
+        http.redirect: "/index.php?page=main.php"
+        http.length: 0
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.url: "//index.php?page=../../../etc/passwd"
+        http.status: 200
+  - filter:
+      count: 2
+      match:
+        event_type: flow
+        proto: TCP

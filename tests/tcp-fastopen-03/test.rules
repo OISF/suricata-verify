@@ -1,0 +1,2 @@
+alert http any any -> any any (content:"/etc/passwd"; http_uri; sid:1;)
+alert http any any -> any any (content:"/etc/passwd"; http_raw_uri; sid:2;)
