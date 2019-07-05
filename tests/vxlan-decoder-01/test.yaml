@@ -2,6 +2,9 @@ requires:
   features:
     - HAVE_LIBJANSSON
 
+args:
+  - --set decoder.vxlan.enabled=true
+
 checks:
   - filter:
       count: 1
