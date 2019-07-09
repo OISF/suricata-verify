@@ -119,3 +119,31 @@ checks:
 		# Check that a field does not exist:
 		not-has-key: flow
 ```		
+
+## Adding a new test the automated way: createst
+
+Script to create a test directory with test.yaml for a given PCAP. This
+needs to be run from a valid Suricata source directory.
+
+### Usage
+```
+usage: createst.py [-h] [--output-path <output-path>] [--eventtype-only]
+                   [--allow-events [ALLOW_EVENTS]]
+                   <test-name> <pcap-file>
+
+Create tests with a given PCAP. Execute the script from a valid Suricata source
+directory.
+
+positional arguments:
+  <test-name>           Name of the test folder
+  <pcap-file>           Path to the PCAP file
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --output-path <output-path>
+                        Path to the folder where generated test.yaml should be
+                        put
+  --eventtype-only      Create filter blocks based on event types only
+  --allow-events [ALLOW_EVENTS]
+                        Create filter blocks for the specified events
+```
