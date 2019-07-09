@@ -119,3 +119,28 @@ checks:
 		# Check that a field does not exist:
 		not-has-key: flow
 ```		
+
+## eve2test
+
+Script to convert eve.json into test.yaml file. This currently implements the
+functionality of creating the "checks" block in `test.yaml` from a given `eve.json`. You can add other configuration in the file thus created.
+
+### Usage
+```
+$ python eve2test.py -h
+ usage: eve2test [-h] [--eventtype-only] [--allow-events [ALLOW_EVENTS]]
+                  <path-to-eve> <output-path>
+
+  Convert eve.json to test.yaml
+
+  positional arguments:
+    <path-to-eve>         Path to eve.json
+    <output-path>         Path to the folder where generated test.yaml should be
+                          put
+
+  optional arguments:
+    -h, --help            show this help message and exit
+    --eventtype-only      Create filter blocks based on count of event types only
+    --allow-events [ALLOW_EVENTS]
+                          Create filter blocks for the specified events
+```
