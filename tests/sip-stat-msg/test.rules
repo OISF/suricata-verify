@@ -1,0 +1,1 @@
+alert sip any any -> any any (flow:to_client; sip.stat_msg; content:"Trying"; sid:1;)

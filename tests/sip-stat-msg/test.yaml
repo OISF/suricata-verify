@@ -1,0 +1,15 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 5.0.0
+
+args:
+  - -k none
+
+pcap: ../sip-method/sip.pcap
+
+checks:
+  - filter:
+      count: 6
+      match:
+        event_type: alert
