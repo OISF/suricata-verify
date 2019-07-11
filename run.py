@@ -764,6 +764,8 @@ def main():
                         help="Exit on test failure")
     parser.add_argument("--testdir", action="store",
                         help="Runs tests from custom directory")
+    parser.add_argument("--skip-tests", nargs="?", default=None,
+                        help="Skip tests with a given pattern")
     parser.add_argument("--outdir", action="store",
                         help="Outputs to custom directory")
     parser.add_argument("--valgrind", dest="valgrind", action="store_true",
@@ -789,11 +791,9 @@ def main():
     # Create a SuricataConfig object that is passed to all tests.
     suricata_config = SuricataConfig(get_suricata_version())
     suricata_config.valgrind = args.valgrind
-
     tdir = os.path.join(TOPDIR, "tests")
     if args.testdir:
         tdir = os.path.abspath(args.testdir)
-
     # First gather the tests so we can run them in alphabetic order.
     tests = []
     for dirpath, dirnames, filenames in os.walk(tdir):
@@ -802,9 +802,19 @@ def main():
             continue
         if dirpath == tdir:
             continue
+        if args.skip_tests:
+            skip_tests_opt = False
+            patterns = args.skip_tests.split(",")
+            for pattern in patterns:
+                if os.path.basename(dirpath).find(pattern) > -1:
+                    skip_tests_opt = True
+                    break
+            if skip_tests_opt:
+                continue
 
         # Check if there are sub-test directories
         if "test.yaml" in filenames or "check.sh" in filenames:
+            # gets used by os.walk in this for loop
             dirnames[0:] = []
         else:
             continue
