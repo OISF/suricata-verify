@@ -1,0 +1,1 @@
+alert sip any any -> any any (flow:to_client; sip.response_line; content:"sip:SIP/2.0 200 OK"; sid:1;)
