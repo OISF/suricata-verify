@@ -803,8 +803,11 @@ def main():
         if dirpath == tdir:
             continue
 
-        # We only want to go one level deep.
-        dirnames[0:] = []
+        # Check if there are sub-test directories
+        if "test.yaml" in filenames or "check.sh" in filenames:
+            dirnames[0:] = []
+        else:
+            continue
 
         if not args.patterns:
             tests.append(dirpath)
