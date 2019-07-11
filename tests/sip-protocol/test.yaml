@@ -1,0 +1,25 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 5.0.0
+
+args:
+  - -k none
+
+pcap: ../sip-method/sip.pcap
+
+checks:
+  - filter:
+      count: 81
+      match:
+        event_type: alert
+  - filter:
+      count: 47
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 34
+      match:
+        event_type: alert
+        alert.signature_id: 2
