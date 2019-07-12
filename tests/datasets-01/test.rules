@@ -1,0 +1,1 @@
+alert http any any -> any any (http.user_agent; dataset:set,ua-seen,type string,save datasets.csv; sid:1;)
