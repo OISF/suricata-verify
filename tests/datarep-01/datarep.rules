@@ -1,0 +1,1 @@
+alert dns any any -> any any (dns.query; datarep:dns_string, >, 200, load dns_string.rep, type string; sid:1;)

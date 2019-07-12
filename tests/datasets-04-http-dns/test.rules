@@ -1,0 +1,2 @@
+alert dns any any -> any any (dns.query; dataset:set,dns-seen, type string; sid:1;)
+alert http any any -> any any (http.host; dataset:set,dns-seen, type string; sid:2;)
