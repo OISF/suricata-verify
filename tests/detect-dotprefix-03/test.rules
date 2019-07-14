@@ -1,0 +1,1 @@
+alert dns any any -> any any (dns.query; dotprefix; content:".google.com"; sid:1;)
