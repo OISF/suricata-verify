@@ -1,0 +1,1 @@
+alert dns any any -> any any (dns.query; domain; content:"download.windowsupdate.com"; sid:1;)
