@@ -1,0 +1,1 @@
+alert dns any any -> any any (dns.query; tld; content:"net"; sid:1;)
