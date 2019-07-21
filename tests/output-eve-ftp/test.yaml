@@ -1,0 +1,65 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+checks:
+  - filter:
+      count: 8
+      match:
+        event_type: ftp
+
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: USER
+
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: PASS
+
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: NLST
+
+  - filter:
+      count: 2
+      match:
+        event_type: ftp
+        ftp.command: PORT
+
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: RETR
+
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: QUIT
+
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: PASS
+        ftp.command_data: anonymous
+        ftp.reply: ['Login successful.']
+        ftp.completion_code: ['230']
+
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: NLST
+        ftp.reply: [
+          "Here comes the directory listing.\r\n",
+          "Directory send OK.",
+          "PORT command successful. Consider using PASV."]
+        ftp.dynamic_port: 59926
