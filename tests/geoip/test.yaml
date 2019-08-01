@@ -1,0 +1,19 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+    - GeoIP2
+
+checks:
+
+  # Check that we only have one alert event type in eve.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+
+  # Check alert is the good one
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2

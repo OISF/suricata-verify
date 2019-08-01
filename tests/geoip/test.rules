@@ -1,0 +1,2 @@
+alert tcp any any -> any any (msg:"French IP"; flow:established,to_server; geoip:dst,FR; sid:1; rev:1; flowbits:isnotset,french; flowbits:set,french;)
+alert tcp any any -> any any (msg:"German IP"; flow:established,to_server; geoip: dst,DE; sid:2; rev:1; flowbits:isnotset,german; flowbits:set,german;)
