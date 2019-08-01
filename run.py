@@ -226,9 +226,18 @@ class SuricataConfig:
 
     def load_build_info(self):
         output = subprocess.check_output([suricata_bin, "--build-info"])
+        start_support = False
         for line in output.splitlines():
             if line.decode().startswith("Features:"):
                 self.features = set(line.decode().split()[1:])
+            if "Suricata Configuration" in line.decode():
+                start_support = True
+            if start_support and "support:" in line.decode():
+                (fkey, val) = line.decode().split(" support:")
+                fkey = fkey.strip()
+                val = val.strip()
+                if val.startswith("yes"):
+                    self.features.add(fkey)
 
     def load_config(self, config_filename):
         output = subprocess.check_output([
