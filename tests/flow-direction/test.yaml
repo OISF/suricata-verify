@@ -1,6 +1,3 @@
-pre-check: |
-        rm ${TEST_DIR}/output/eve.json
-
 checks:
   - filter:
         count: 1
