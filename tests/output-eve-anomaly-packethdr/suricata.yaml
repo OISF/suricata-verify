@@ -7,5 +7,6 @@ outputs:
       filetype: regular
       types:
         - anomaly:
-            protodecode: yes
+            types:
+              packet: yes
             packethdr: yes            # enable dumping of packet header
