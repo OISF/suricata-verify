@@ -8,5 +8,5 @@ outputs:
       types:
         - anomaly:
             types:
-              decode: yes
-            packethdr: yes            # enable dumping of packet header
+                stream: yes
+                application-layer: no

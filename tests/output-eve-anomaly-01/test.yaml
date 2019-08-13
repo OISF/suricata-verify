@@ -10,10 +10,15 @@ args:
 
 checks:
   - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.type: stream
+  - filter:
       count: 48
       match:
         event_type: anomaly
-        anomaly.type: packet
+        anomaly.type: decode
   - filter:
       count: 4
       match:
