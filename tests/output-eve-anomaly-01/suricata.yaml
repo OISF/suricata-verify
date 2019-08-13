@@ -9,4 +9,3 @@ outputs:
         - anomaly:
             types:
               decode: yes
-            packethdr: yes            # enable dumping of packet header

@@ -1,0 +1,28 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+  files:
+    - src/output-json-anomaly.c
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.type: applayer
+        anomaly.event: APPLAYER_MISMATCH_PROTOCOL_BOTH_DIRECTIONS
+        anomaly.layer: proto_detect
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.type: decode
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.type: stream

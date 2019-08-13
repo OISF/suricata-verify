@@ -7,4 +7,3 @@ outputs:
       filetype: regular
       types:
         - anomaly:
-            protodecode: yes
