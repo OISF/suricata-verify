@@ -1,7 +1,6 @@
 requires:
   features:
     - HAVE_LIBJANSSON
-    - HTTP_EVADER_OK
 
 # disables checksum verification
 args:
