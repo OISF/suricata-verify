@@ -648,6 +648,7 @@ class TestRunner:
                 "SRCDIR": self.cwd,
                 "TZ": "UTC",
                 "TEST_DIR": self.directory,
+                "OUTPUT_DIR": self.output,
                 "TOPDIR": TOPDIR,
                 "ASAN_OPTIONS": "detect_leaks=0",
             }
