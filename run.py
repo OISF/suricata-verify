@@ -30,6 +30,7 @@ import os.path
 import subprocess
 import threading
 import shutil
+import string
 import argparse
 import yaml
 import glob
@@ -553,8 +554,13 @@ class TestRunner:
             stdout = open(os.path.join(self.output, "stdout"), "w")
             stderr = open(os.path.join(self.output, "stderr"), "w")
 
-            open(os.path.join(self.output, "cmdline"), "w").write(
-                " ".join(args) + "\n")
+            if shell:
+                template = string.Template(args)
+                cmdline = template.substitute(env)
+            else:
+                cmdline = " ".join(args) + "\n"
+
+            open(os.path.join(self.output, "cmdline"), "w").write(cmdline)
 
             p = subprocess.Popen(
                 args, shell=shell, cwd=self.directory, env=env,
