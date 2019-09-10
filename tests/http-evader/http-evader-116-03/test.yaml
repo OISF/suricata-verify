@@ -7,19 +7,13 @@ args:
   - -k none
   - --set app-layer.protocols.http.libhtp.default-config.response-body-decompress-layer-limit=3
   - --set app-layer.protocols.http.libhtp.default-config.lzma-memlimit=16000000
-  - --set app-layer.protocols.http.libhtp.default-config.lzma-max-dict-ratio=1000000
 
 checks:
   - filter:
       count: 1
       match:
         event_type: alert
-        alert.signature_id: 1
-  - filter:
-      count: 1
-      match:
-        event_type: alert
-        alert.signature_id: 2
+        alert.signature_id: 2221046
   - filter:
       count: 1
       match:
