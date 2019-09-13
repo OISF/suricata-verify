@@ -1,6 +1,8 @@
 requires:
   features:
     - HAVE_LIBJANSSON
+  files:
+    - src/detect-transform-dotprefix.c
 
 checks:
   - filter:
