@@ -1,0 +1,2 @@
+alert dns any any -> any any (msg:"TEST OPCODE MATCH"; dns.opcode:4; flow:to_server; sid:1; rev:1;)
+alert dns any any -> any any (msg:"TEST OPCODE NEGATED MATCH"; dns.opcode:!0; flow:to_server; sid:2; rev:1;)

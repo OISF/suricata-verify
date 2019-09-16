@@ -1,0 +1,21 @@
+requires:
+  min-version: 5.0.0
+
+checks:
+  # Should have one event for sid 1.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # Should have one event for sid 2.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  # Should have 2 events total.
+  - filter:
+      count: 2
+      match:
+        event_type: alert
