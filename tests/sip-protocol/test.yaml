@@ -5,6 +5,7 @@ requires:
 
 args:
   - -k none
+  - --set app-layer.protocols.sip.enabled=yes
 
 pcap: ../sip-method/sip.pcap
 
