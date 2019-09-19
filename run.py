@@ -620,8 +620,10 @@ class TestRunner:
             if check_value["check_sh"]:
                 return check_value
 
-        if not check_value["failure"]:
+        if not check_value["failure"] and not check_value["skipped"]:
             print("OK%s" % (" (%dx)" % count if count > 1 else ""))
+        elif not check_value["failure"]:
+            print("OK (checks: {}, skipped: {})".format(sum(check_value.values()), check_value["skipped"]))
         return check_value
 
     def pre_check(self):
@@ -644,6 +646,10 @@ class TestRunner:
         count = StatsCheck(check, self.output).run()
         return count
 
+    def reset_count(self, dictionary):
+        for k in dictionary.keys():
+            dictionary[k] = 0
+
     def check(self):
         pdir = os.getcwd()
         os.chdir(self.output)
@@ -656,6 +662,7 @@ class TestRunner:
         try:
             self.pre_check()
             if "checks" in self.config:
+                self.reset_count(count)
                 for check_count, check in enumerate(self.config["checks"]):
                     for key in check:
                         if key in ["filter", "shell", "stats"]:
@@ -913,11 +920,13 @@ def main():
             cwd, dirpath, outdir, suricata_config, args.verbose, args.force)
         try:
             results = test_runner.run()
-            passed += results["success"]
-            failed += results["failure"]
-            skipped += results["skipped"]
             if results["failure"] > 0:
+                failed += 1
                 failedLogs.append(dirpath)
+            elif results["skipped"] > 0 and results["success"] == 0:
+                skipped += 1
+            elif results["success"] > 0:
+                passed += 1
         except UnsatisfiedRequirementError as ue:
             print("SKIPPED: {}".format(ue))
             skipped += 1
