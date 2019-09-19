@@ -606,6 +606,10 @@ class TestRunner:
         count = StatsCheck(check, self.output).run()
         return count
 
+    def reset_count(self, dictionary):
+        for k in dictionary.keys():
+            dictionary[k] = 0
+
     def check(self):
         pdir = os.getcwd()
         os.chdir(self.output)
@@ -621,6 +625,7 @@ class TestRunner:
                 for check_count, check in enumerate(self.config["checks"]):
                     for key in check:
                         if key in ["filter", "shell", "stats"]:
+                            self.reset_count(count)
                             func = getattr(self, "perform_{}_checks".format(key))
                             count = func(check=check[key], count=count,
                                     test_num=check_count + 1)
@@ -847,9 +852,12 @@ def main():
             cwd, dirpath, outdir, suricata_config, args.verbose)
         try:
             results = test_runner.run()
-            passed += results["success"]
-            failed += results["failure"]
-            skipped += results["skipped"]
+            if results["failure"]:
+                failed += 1
+            elif results["skipped"]:
+                skipped += 1
+            elif results["success"]:
+                passed += 1
         except UnsatisfiedRequirementError as ue:
             print("SKIPPED: {}".format(ue))
             skipped += 1
