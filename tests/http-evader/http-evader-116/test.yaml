@@ -4,7 +4,9 @@ requires:
 
 # disables checksum verification
 args:
-  - -k none --set app-layer.protocols.http.libhtp.default-config.response-body-decompress-layer-limit=3
+  - -k none
+  - --set app-layer.protocols.http.libhtp.default-config.response-body-decompress-layer-limit=3
+  - --set app-layer.protocols.http.libhtp.default-config.lzma-enabled=yes
 
 checks:
   - filter:
