@@ -1,0 +1,4 @@
+# filemd5 rule without filestore keyword.
+alert http any any -> any any (msg:"test"; filemd5: target.md5; classtype: bad-unknown; sid:1530024;)
+
+#alert http any any -> any any (msg:"test"; filemd5: target.md5; filestore; classtype: bad-unknown; sid:1530024;)
