@@ -683,12 +683,32 @@ class TestRunner:
             for arg in self.config["args"]:
                 args += re.split("\s", arg)
 
+        # In Suricata 5.0 the classification.config and
+        # reference.config were moved into the etc/ directory. For now
+        # check there and the top level directory to still support
+        # 4.1.
+        classification_configs = [
+            os.path.join(self.cwd, "etc", "classification.config"),
+            os.path.join(self.cwd, "classification.config"),
+        ]
+
+        for config in classification_configs:
+            if os.path.exists(config):
+                args += ["--set", "classification-file=%s" % config]
+                break
+
+        reference_configs = [
+            os.path.join(self.cwd, "etc", "reference.config"),
+            os.path.join(self.cwd, "reference.config"),
+        ]
+
+        for config in reference_configs:
+            if os.path.exists(config):
+                args += ["--set", "reference-config-file=%s" % config]
+                break
+
         # Add other fixed arguments.
         args += [
-            "--set", "classification-file=%s" % os.path.join(
-                self.cwd, "classification.config"),
-            "--set", "reference-config-file=%s" % os.path.join(
-                self.cwd, "reference.config"),
             "--init-errors-fatal",
             "-l", self.output,
         ]
