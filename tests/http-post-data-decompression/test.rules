@@ -1,0 +1,1 @@
+alert http any any -> any any (msg: "GZIPPED REQUEST"; flow: established, to_server; content: "name"; http_client_body; nocase; sid: 1; rev: 1; )
