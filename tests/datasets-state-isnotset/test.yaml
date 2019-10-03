@@ -1,0 +1,13 @@
+requires:
+  min-version: 5.0.0
+
+pcap: ../datasets-05-state/input.pcap
+
+args:
+  - --data-dir ./output
+
+checks:
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 1 

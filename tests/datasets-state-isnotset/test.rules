@@ -1,0 +1,4 @@
+alert dns any any -> any any (dns.query; to_md5; \
+	dataset:isnotset, dns-seen.md5, type md5, state dns-seen.md5; \
+	dataset:set, dns-seen.md5; \
+	sid:1; rev:1;)
