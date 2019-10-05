@@ -1,5 +1,9 @@
 requires:
   min-version: 5.0.0
+  features:
+    - HAVE_NSS
+    - HAVE_LIBJANSSON
+
 
 command: |
   ${SRCDIR}/src/suricata --set classification-file="${SRCDIR}/classification.config"    \
