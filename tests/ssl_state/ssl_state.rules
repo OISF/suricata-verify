@@ -1,0 +1,4 @@
+alert tls any any -> any [465,25,587] (msg:"Test 1 SNI in SMTPS desired state (client_hello)"; tls_sni; content:"flagstring"; flow:established,to_server; ssl_state:client_hello; classtype:attempted-admin; sid:1003924; rev:1;)
+alert tls any any -> any any (msg:"Test 2 SNI in HTTPS desired state (client_hello)"; tls_sni; content:"www.google.com"; flow:established,to_server; ssl_state:client_hello; classtype:attempted-admin; sid:1003926; rev:1;)
+alert tls any any -> any any (msg:"Test 3 HTTPS certificate desired state"; content:"Google Trust Services"; flow:established,to_client; ssl_state:server_hello; classtype:attempted-admin; sid:1003929; rev:1;)
+
