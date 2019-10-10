@@ -1,0 +1,1 @@
+alert tcp 127.0.0.1 any -> 127.0.0.1 1212 ( msg:"RULE:to_server,established #1"; content:"MATCH?"; flow:to_server,established; priority:3; sid:13371340;)
