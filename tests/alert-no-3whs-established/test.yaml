@@ -1,0 +1,11 @@
+requires:
+    features:
+        - HAVE_LIBJANSSON
+    min-version: 6.0.0
+
+checks:
+    - filter:
+        count: 0
+        match:
+            event_type: alert
+            alert.signature_id: 13371340
