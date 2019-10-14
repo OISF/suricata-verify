@@ -1,0 +1,11 @@
+Description
+===========
+This test ensures that dcerpc keywords alert as expected and that bug 3109 is no longer valid.
+
+PCAP
+====
+PCAP comes from https://redmine.openinfosecfoundation.org/issues/3109
+
+Reported by
+===========
+Travis Green <travis@travisgreen.net>
