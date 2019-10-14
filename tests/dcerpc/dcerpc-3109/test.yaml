@@ -1,0 +1,15 @@
+args:
+  - -k none --set stream.midstream=true
+
+checks:
+
+  - filter:
+      count: 2
+      match:
+        event_type: smb
+        smb.dcerpc.call_id: 2
+
+  - filter:
+      count: 2
+      match:
+        event_type: alert

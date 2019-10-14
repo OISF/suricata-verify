@@ -1,0 +1,4 @@
+alert smb any any -> any any (msg:"TGI LATERAL DCERPC ATSVC v1.0 Bind UUID 1ff70682-0a51-30e8-076d-740be8cee98b"; flow:established; dce_iface:1ff70682-0a51-30e8-076d-740be8cee98b,any_frag; reference:url,401trg.com/an-introduction-to-smb-for-network-security-analysts/; classtype:attempted-admin; sid:2610115; rev:1; metadata:notworking;)
+
+# example of a rule working without dcerpc:
+#alert tcp any any -> any any (msg:"TGI LATERAL DCERPC ATSVC v1.0 Bind UUID"; flow:established; content:"|82 06 f7 1f 51 0a e8 30 07 6d 74 0b e8 ce e9 8b|"; reference:url,401trg.com/an-introduction-to-smb-for-network-security-analysts/; classtype:attempted-admin; sid:2610113; rev:1;)
