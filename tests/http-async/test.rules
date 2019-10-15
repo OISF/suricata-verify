@@ -1,0 +1,2 @@
+alert http any any -> any any (msg:"World"; file_data; content:"World"; sid:1;)
+alert http any any -> any any (msg:"People"; file_data; content:"People"; sid:2;)

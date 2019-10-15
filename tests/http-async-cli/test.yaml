@@ -1,0 +1,23 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 5.0.0
+
+# disables checksum verification
+args:
+  - -k none
+  - --set stream.async-oneside=true
+
+checks:
+
+  # Check that there is one file event with content range.
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.url: "/1"
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.url: "/2"
