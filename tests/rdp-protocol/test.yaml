@@ -1,0 +1,35 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+checks:
+
+  # Check if rdp is detected and some protocol specific details are in the output
+  #
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: rdp
+
+  - filter:
+      count: 1
+      match:
+        event_type: rdp
+        rdp.event_type: "initial_request"
+        rdp.cookie: "A70067"
+
+  - filter:
+      count: 1
+      match:
+        event_type: rdp
+        rdp.event_type: "connect_request"
+        rdp.client.version: "v5"
+        rdp.client.build: "Windows XP"
+        rdp.client.desktop_height: 864
+        rdp.client.client_name: "ISD2-KM84178"
+        rdp.client.capabilities[0]: "support_errinfo_pdf"
+        rdp.client.id: "55274-OEM-0011903-00107"
+        rdp.channels[0]: "rdpdr"
+        rdp.channels[1]: "cliprdr"
+        rdp.channels[2]: "rdpsnd"
