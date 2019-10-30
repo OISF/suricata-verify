@@ -837,6 +837,8 @@ def main():
                         help="Run tests in with valgrind")
     parser.add_argument("--self-test", action="store_true",
                         help="Run self tests")
+    parser.add_argument("--debug-failed", dest="debugfailed", action="store_true",
+                        help="Prints debug output for failed tests")
     parser.add_argument("patterns", nargs="*", default=[])
     args = parser.parse_args()
 
@@ -898,6 +900,7 @@ def main():
 
     # Sort alphabetically.
     tests.sort()
+    failedLogs = []
 
     for dirpath in tests:
         name = os.path.basename(dirpath)
@@ -913,6 +916,8 @@ def main():
             passed += results["success"]
             failed += results["failure"]
             skipped += results["skipped"]
+            if results["failure"] > 0:
+                failedLogs.append(dirpath)
         except UnsatisfiedRequirementError as ue:
             print("SKIPPED: {}".format(ue))
             skipped += 1
@@ -925,6 +930,18 @@ def main():
     print("PASSED:  %d" % (passed))
     print("FAILED:  %d" % (failed))
     print("SKIPPED: %d" % (skipped))
+
+    if args.debugfailed:
+        if len(failedLogs) > 0:
+            print("")
+            print("Failed tests debug output:")
+        for dirpath in failedLogs:
+            print("- Test %s:" % os.path.basename(dirpath))
+            for r, d, f in os.walk(dirpath+"/output"):
+                for fname in f:
+                    print("  - %s" % fname)
+                    with open(dirpath + "/output/" + fname, "r") as fcontents:
+                        print(fcontents.read())
 
     if failed > 0:
         return 1
