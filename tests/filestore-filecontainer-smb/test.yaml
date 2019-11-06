@@ -2,8 +2,7 @@ requires:
   features:
     - HAVE_NSS
     - MAGIC
-  files:
-    - src/output-filestore.c
+  min-version: 4.1
 
 checks:
 

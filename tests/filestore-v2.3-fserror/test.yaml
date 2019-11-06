@@ -1,8 +1,7 @@
 requires:
   features:
     - HAVE_NSS
-  files:
-    - src/output-filestore.c
+  min-version: 4.1
 
 skip:
   - uid: 0

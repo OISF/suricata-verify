@@ -2,8 +2,7 @@ requires:
   features:
     - HAVE_NSS
     - HAVE_LIBJANSSON
-  files:
-    - src/output-filestore.c
+  min-version: 4.1
 
 pcap: ../filestore-v2.1-forced/suricata-update-pdf.pcap
 

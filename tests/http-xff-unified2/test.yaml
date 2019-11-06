@@ -1,6 +1,6 @@
 requires:
   script:
-    - grep Unified2XFFTypeAlert src/alert-unified2-alert.c > /dev/null
+    - grep Unified2XFFTypeAlert src/outputs/alert-unified2-alert.c > /dev/null
     # Require the idstools-u2json tool.
     - which idstools-u2json > /dev/null 2>&1
 

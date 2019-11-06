@@ -1,7 +1,5 @@
 requires:
-
-  script:
-    - grep METADATA_DEFAULTS src/output-json-alert.c > /dev/null
+  min-version: 4.1
 
 checks:
 
