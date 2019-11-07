@@ -224,6 +224,15 @@ def find_value(name, obj):
     """
     parts = name.split(".")
     for part in parts:
+
+        if part == "__len":
+            # Get the length of the object. Return -1 if the object is
+            # not a type that has a length (numbers).
+            try:
+                return len(obj)
+            except:
+                return -1
+
         name = None
         index = None
         m = re.match("^(.*)\[(\d+)\]$", part)

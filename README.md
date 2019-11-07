@@ -28,12 +28,8 @@ Or to run a single test:
 
 - Optional: Create a suricata.yaml in the test directory.
 
-    Note: You may want to add something like:
-    ```
-    include: ../../etc/suricata-4.0.3.yaml
-    ```
-    to the top and then just make the necessary overrides in the tests
-    suricata.yaml.
+    Its usually OK to just add the bits of YAML required to enable
+    features for the test.
 
 	If the test directory does not include a suricata.yaml, the one
     found in your build directory will be used.
@@ -112,6 +108,9 @@ checks:
 		
 		# Example match on array item:
 		alert.metadata.tag[0]: "tag1"
+
+        # Example match on the length of an array.
+        alert.metadata.tag.__len: 3
 		
 		# Check that a field exists:
 		has-key: alert.rule
