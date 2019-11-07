@@ -1,10 +1,34 @@
 requires:
-    min-version: 5.0.0
-    features:
-        - HAVE_LIBJANSSON
+  min-version: 5.0.0
 
 checks:
-    - filter:
-            count: 1
-            match:
-                event_type: http
+  - filter:
+      count: 1
+      match:
+        event_type: http
+
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.request_headers[0].name: Host
+        http.request_headers[0].value: www.ethereal.com
+
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.response_headers[5].name: Content-Length
+        http.response_headers[5].value: "18070"
+
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.response_headers.__len: 9
+
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.request_headers.__len: 9
