@@ -1,0 +1,19 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+# disables checksum verification
+args:
+  - -k none
+  - --set outputs.1.eve-log.types.0.alert.http-headers=yes
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        http.request_headers[1].name: Connection
+        http.request_headers[1].value: keep-alive
+        http.response_headers[0].name: Server
+        http.response_headers[0].value: ng1nx
