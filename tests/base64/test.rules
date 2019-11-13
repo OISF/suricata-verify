@@ -1,6 +1,6 @@
 # input pcap contains a query to http://home.regit.org/?arg=dGhpc2lzYXRlc3QK
 # "dGhpc2lzYXRlc3QK" is "thisisatest"
-alert http any any -> any any (msg:"Example"; http.uri; content:"arg"; base64_decode:bytes 17, offset 1, relative; base64_data; content:"thisisatest"; sid:1; rev:1;)
+alert http any any -> any any (msg:"Example"; content:"arg"; http_uri; base64_decode:bytes 17, offset 1, relative; base64_data; content:"thisisatest"; sid:1; rev:1;)
 alert http any any -> any any (msg:"Example"; content:"arg"; http_uri; base64_decode:bytes 17, offset 1, relative; base64_data; content:"thisisatest"; sid:2; rev:1;)
-alert http any any -> any any (msg:"Example"; http.uri; content:"arg"; base64_decode:bytes 10, offset 1, relative; base64_data; content:"test"; sid:3; rev:1;)
-alert http any any -> any any (msg:"Example"; http.uri; content:"arg"; base64_decode:bytes 17, offset 1, relative; base64_data; content:"toast"; sid:4; rev:1;)
+alert http any any -> any any (msg:"Example"; content:"arg"; http_uri; base64_decode:bytes 10, offset 1, relative; base64_data; content:"test"; sid:3; rev:1;)
+alert http any any -> any any (msg:"Example"; content:"arg"; http_uri; base64_decode:bytes 17, offset 1, relative; base64_data; content:"toast"; sid:4; rev:1;)
