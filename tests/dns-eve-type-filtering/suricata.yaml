@@ -1,0 +1,39 @@
+%YAML 1.1
+---
+
+outputs:
+
+  - eve-log:
+      enabled: yes
+      filename: all.json
+      types:
+        - dns:
+            version: 2
+
+  - eve-log:
+      enabled: yes
+      filename: only-a.json
+      types:
+        - dns:
+            version: 2
+            types: [a]
+
+  - eve-log:
+      enabled: yes
+      filename: a-and-aaaa-requests-only.json
+      types:
+        - dns:
+            version: 2
+            requests: yes
+            responses: no
+            types: [a, aaaa]
+
+  - eve-log:
+      enabled: yes
+      filename: mx-responses-only.json
+      types:
+        - dns:
+            version: 2
+            requests: no
+            responses: yes
+            types: [mx]
