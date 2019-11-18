@@ -6,10 +6,14 @@ checks:
   - filter:
       count: 1
       match:
+        src_ip: "10.16.1.11"
+        dest_ip: "8.8.4.4"
         event_type: dns
         dns.type: query
   - filter:
       count: 12
       match:
+        src_ip: "10.16.1.11"
+        dest_ip: "8.8.4.4"
         event_type: dns
         dns.type: answer
