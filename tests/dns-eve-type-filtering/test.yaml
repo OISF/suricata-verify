@@ -22,6 +22,29 @@ checks:
         event_type: "dns"
         dns.rrtype: "A"
 
+  # Also check that the source and destination addresses and ports are
+  # as expected.
+  - filter:
+      filename: only-a.json
+      count: 1
+      match:
+        pcap_cnt: 1
+        src_ip: "10.16.1.11"
+        src_port: 54888
+        dest_ip: "8.8.8.8"
+        dest_port: 53
+        dns.type: "query"
+  - filter:
+      filename: only-a.json
+      count: 1
+      match:
+        pcap_cnt: 2
+        src_ip: "10.16.1.11"
+        src_port: 54888
+        dest_ip: "8.8.8.8"
+        dest_port: 53
+        dns.type: "answer"
+
   # Check that we only have A and AAAA requests.
   - filter:
       filename: a-and-aaaa-requests-only.json

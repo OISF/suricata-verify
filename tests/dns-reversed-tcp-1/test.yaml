@@ -16,3 +16,11 @@ checks:
       match:
         event_type: dns
         dns.type: answer
+
+  - filter:
+      count: 1
+      match:
+        event_type: dns
+        dns.type: answer
+        src_ip: "10.16.1.11"
+        dest_ip: "8.8.4.4"
