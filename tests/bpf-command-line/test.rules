@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"Example"; content:"arg"; http_uri; base64_decode:bytes 17, offset 1, relative; base64_data; content:"thisisatest"; sid:1; rev:1;)
