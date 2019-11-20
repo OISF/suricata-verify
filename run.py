@@ -353,11 +353,12 @@ class FilterCheck:
 
 class TestRunner:
 
-    def __init__(self, cwd, directory, outdir, suricata_config, verbose=False):
+    def __init__(self, cwd, directory, outdir, suricata_config, verbose=False, force=False):
         self.cwd = cwd
         self.directory = directory
         self.suricata_config = suricata_config
         self.verbose = verbose
+        self.force = force
         self.output = outdir
 
         # The name is just the directory name.
@@ -509,8 +510,9 @@ class TestRunner:
         sys.stdout.write("===> %s: " % os.path.basename(self.directory))
         sys.stdout.flush()
 
-        self.check_requires()
-        self.check_skip()
+        if not self.force:
+            self.check_requires()
+            self.check_skip()
 
         if WIN32 and os.path.exists(os.path.join(self.directory, "check.sh")):
             raise UnsatisfiedRequirementError("check.sh tests are not supported on Windows")
@@ -869,7 +871,7 @@ def main():
             outdir = os.path.join(os.path.realpath(args.outdir), name, "output")
 
         test_runner = TestRunner(
-            cwd, dirpath, outdir, suricata_config, args.verbose)
+            cwd, dirpath, outdir, suricata_config, args.verbose, args.force)
         try:
             results = test_runner.run()
             passed += results["success"]
