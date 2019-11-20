@@ -1,0 +1,20 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 5.0.0
+
+args:
+  - -k none
+  - --set app-layer.protocols.sip.enabled=yes
+  - --set eve-log.types.sip.enabled=yes
+
+pcap: ../sip-method/sip.pcap
+
+checks:
+  - filter:
+      count: 18
+      match:
+        event_type: alert
+        src_ip: 192.168.1.2
+        dest_ip: 212.242.33.35
+        alert.signature_id: 1
