@@ -1,5 +1,5 @@
 requires:
-  min-version: 5.0
+  min-version: 5.0.0
   features:
     - HAVE_LIBJANSSON
 
@@ -22,12 +22,6 @@ checks:
       dest_ip: 10.100.0.8
       dest_port: 44270
       event_type: alert
-      flow:
-        bytes_toclient: 2295
-        bytes_toserver: 1036
-        pkts_toclient: 7
-        pkts_toserver: 7
-        start: 2009-02-23T13:23:33.331321+0000
       http:
         hostname: www.abcdefghij.com
         http_content_type: text/html
@@ -58,12 +52,6 @@ checks:
       dest_ip: 10.100.0.8
       dest_port: 44270
       event_type: alert
-      flow:
-        bytes_toclient: 2295
-        bytes_toserver: 1036
-        pkts_toclient: 7
-        pkts_toserver: 7
-        start: 2009-02-23T13:23:33.331321+0000
       http:
         hostname: www.abcdefghij.com
         http_content_type: text/html
@@ -94,12 +82,6 @@ checks:
       dest_ip: 10.100.0.8
       dest_port: 44270
       event_type: alert
-      flow:
-        bytes_toclient: 2295
-        bytes_toserver: 1036
-        pkts_toclient: 7
-        pkts_toserver: 7
-        start: 2009-02-23T13:23:33.331321+0000
       http:
         hostname: www.abcdefghij.com
         http_content_type: text/html
@@ -174,17 +156,6 @@ checks:
       dest_ip: 162.2.41.200
       dest_port: 80
       event_type: flow
-      flow:
-        age: 0
-        alerted: true
-        bytes_toclient: 2295
-        bytes_toserver: 1036
-        end: 2009-02-23T13:23:33.589165+0000
-        pkts_toclient: 7
-        pkts_toserver: 7
-        reason: shutdown
-        start: 2009-02-23T13:23:33.331321+0000
-        state: closed
       proto: TCP
       src_ip: 10.100.0.8
       src_port: 44270
