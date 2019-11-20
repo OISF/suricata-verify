@@ -93,20 +93,9 @@ SuricataVersion = namedtuple(
 def parse_suricata_version(buf):
     m = re.search("(\d+)\.?(\d+)?\.?(\d+)?.*", str(buf).strip())
     if m:
-        if m.group(1) is not None:
-            major = int(m.group(1))
-        else:
-            major = None
-
-        if m.group(2) is not None:
-            minor = int(m.group(2))
-        else:
-            minor = None
-
-        if m.group(3) is not None:
-            patch = int(m.group(3))
-        else:
-            patch = None
+        major = int(m.group(1)) if m.group(1) else 0
+        minor = int(m.group(2)) if m.group(2) else 0
+        patch = int(m.group(3)) if m.group(3) else 0
 
         return SuricataVersion(
             major=major, minor=minor, patch=patch)
