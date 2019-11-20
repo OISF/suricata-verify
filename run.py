@@ -367,6 +367,7 @@ class TestRunner:
         self.readers = []
 
         # Load the test configuration.
+        self.config = None
         self.load_config()
 
         self.suricata_config.load_config(self.get_suricata_yaml_path())
@@ -375,7 +376,7 @@ class TestRunner:
         if os.path.exists(os.path.join(self.directory, "test.yaml")):
             self.config = yaml.safe_load(
                 open(os.path.join(self.directory, "test.yaml"), "rb"))
-        else:
+        if self.config is None:
             self.config = {}
 
     def setup(self):
