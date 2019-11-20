@@ -1,0 +1,9 @@
+# Skip by default, can take a long time to run until Suricata is fixed
+# for this case.
+skip: true
+
+checks:
+  - filter:
+      count: 10000
+      match:
+        event_type: dhcp
