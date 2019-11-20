@@ -11,6 +11,6 @@ pcap: ../sip-method/sip.pcap
 
 checks:
   - filter:
-      count: 5
+      count: 3
       match:
         event_type: alert
