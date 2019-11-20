@@ -392,6 +392,10 @@ class TestRunner:
     def check_skip(self):
         if not "skip" in self.config:
             return
+        if isinstance(self.config["skip"], bool):
+            if self.config["skip"]:
+                raise UnsatisfiedRequirementError("skipped by default")
+            return
         for skip in self.config["skip"]:
 
             if "uid" in skip:
