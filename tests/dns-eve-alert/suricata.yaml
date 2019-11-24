@@ -1,0 +1,43 @@
+%YAML 1.1
+---
+
+stats:
+  enabled: yes
+  # The interval field (in seconds) controls at what interval
+  # the loggers are invoked.
+  interval: 8
+
+# Configure the type of alert (and other) logging you would like.
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert:
+            # payload: yes             # enable dumping payload in Base64
+            # payload-buffer-size: 4kb # max size of payload buffer to output in eve-log
+            # payload-printable: yes   # enable dumping payload in printable (lossy) format
+            # packet: yes              # enable dumping of packet (without stream segments)
+            # http: yes                # enable dumping of http fields
+            # tls: yes                 # enable dumping of tls fields
+            # ssh: yes                 # enable dumping of ssh fields
+            # smtp: yes                # enable dumping of smtp fields
+
+            # HTTP X-Forwarded-For support by adding an extra field or overwriting
+            # the source or destination IP address (depending on flow direction)
+            # with the one reported in the X-Forwarded-For HTTP header. This is
+            # helpful when reviewing alerts for traffic that is being reverse
+            # or forward proxied.
+            xff:
+              enabled: no
+              # Two operation modes are available, "extra-data" and "overwrite".
+              mode: extra-data
+              # Two proxy deployments are supported, "reverse" and "forward". In
+              # a "reverse" deployment the IP address used is the last one, in a
+              # "forward" deployment the first IP address is used.
+              deployment: reverse
+              # Header name where the actual IP address will be reported, if more
+              # than one IP address is present, the last IP address will be the
+              # one taken into consideration.
+              header: X-Forwarded-For
