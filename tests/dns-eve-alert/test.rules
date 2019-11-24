@@ -1,0 +1,1 @@
+alert dns any any -> any any (msg: "test alert"; sid: 1;)
