@@ -1,7 +1,7 @@
 requires:
   features:
     - HAVE_LIBJANSSON
-    - HAVE_RUST
+    - RUST
 
 args:
  - -k none
