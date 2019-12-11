@@ -1,0 +1,18 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+args:
+- --set app-layer.protocols.http.libhtp.default-config.response-body-limit=1mb
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        tx_id: 0
+  - filter:
+      count: 1
+      match:
+        event_type: http
