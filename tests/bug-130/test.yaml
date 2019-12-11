@@ -145,7 +145,7 @@ checks:
         protocol: HTTP/1.1
         status: 401
         url: /publication/pub.home/home.html
-      pcap_cnt: 14
+      #pcap_cnt: 14
       proto: TCP
       src_ip: 162.2.41.200
       src_port: 80
