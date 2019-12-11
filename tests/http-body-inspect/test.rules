@@ -1,0 +1,1 @@
+alert http any any -> any any (file_data; content:"|60 5c f3 f0 29 2b|"; sid:1;)
