@@ -195,6 +195,8 @@ def get_manipulated_list():
     all_content_list = []
     for e in jcontent_list:
         md = {k: v for k, v in e.items() if k not in skip_fields}
+        if "event_type" in md and md["event_type"] == "stats":
+            continue
         all_content_list.append(md)
     if allow_events:
         def_eve_content_list = [item for item in all_content_list if item["event_type"] in allow_events]
