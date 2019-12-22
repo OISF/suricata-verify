@@ -1,0 +1,12 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+  - file-store:
+      version: 2
+      enabled: yes
+
+engine-analysis:
+  rules: yes

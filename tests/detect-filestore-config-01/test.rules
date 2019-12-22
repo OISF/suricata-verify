@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"test filestore required"; file.name; content:".exe"; filestore; sid:10; rev:1;)
