@@ -112,6 +112,7 @@ def pipe_reader(fileobj, output=None, verbose=False):
         line = line.decode()
         if output:
             output.write(line)
+            output.flush()
         if verbose:
             print(line.strip())
 
