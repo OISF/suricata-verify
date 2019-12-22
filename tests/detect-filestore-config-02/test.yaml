@@ -1,0 +1,7 @@
+requires:
+  min-version: 5.0.1
+
+command: |
+  ${SRCDIR}/src/suricata --set classification-file="${SRCDIR}/classification.config"    \
+      --set reference-config-file="${SRCDIR}/reference.config" -l ${OUTPUT_DIR}         \
+      -c "${TEST_DIR}/suricata.yaml" -S ${TEST_DIR}/test.rules --engine-analysis

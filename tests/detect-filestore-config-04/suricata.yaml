@@ -1,0 +1,7 @@
+%YAML 1.1
+---
+
+outputs:
+  - file-store:
+      version: 2
+      enabled: no

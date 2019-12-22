@@ -1,0 +1,9 @@
+%YAML 1.1
+---
+
+outputs:
+  - file-store:
+      enabled: no
+
+engine-analysis:
+  rules: yes
