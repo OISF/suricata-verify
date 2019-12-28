@@ -1,0 +1,15 @@
+requires:
+
+  min-version: 5.0.2
+
+
+checks:
+
+    - filter:
+        count: 2
+        match:
+            event_type: flow
+
+    - stats:
+        decoder.gre: 42
+        decoder.erspan: 42
