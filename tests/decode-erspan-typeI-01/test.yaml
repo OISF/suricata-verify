@@ -1,0 +1,32 @@
+requires:
+
+  min-version: 6.0.0
+
+
+checks:
+
+    - filter:
+        count: 2
+        match:
+            event_type: flow
+
+    - filter:
+        count: 1
+        match:
+            event_type: flow
+            src_ip: 100.95.2.201
+            proto: ICMP
+            vlan: [1011]
+
+    - filter:
+        count: 1
+        match:
+            event_type: flow
+            src_ip: 100.95.3.105
+            proto: ICMP
+            vlan: [999]
+
+    - stats:
+        decoder.ipv4: 84
+        decoder.gre: 42
+        decoder.erspan: 42
