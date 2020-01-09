@@ -40,6 +40,9 @@ function match(args)
       return 0
    end
 
+   local rcode = DnsGetRcode()
+   print(rcode)
+
    local answers = DnsGetAnswers()
    if answers == nil then return 0 end
    if count(answers) ~= 3 then return 0 end
