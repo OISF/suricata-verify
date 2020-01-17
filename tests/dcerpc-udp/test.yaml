@@ -1,0 +1,17 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+checks:
+- filter:
+    count: 1
+    match:
+      dcerpc.request: REQUEST_LOST
+      dcerpc.response: UNREPLIED
+      dest_ip: 141.81.0.10
+      dest_port: 33000
+      event_type: dcerpc
+      pcap_cnt: 1169
+      proto: UDP
+      src_ip: 141.81.0.11
+      src_port: 33002
