@@ -255,6 +255,8 @@ class ShellCheck:
         self.config = config
 
     def run(self):
+        if not self.config or "args" not in self.config:
+            raise TestError("shell check missing args")
         try:
             output = subprocess.check_output(self.config["args"], shell=True)
             if "expect" in self.config:
