@@ -118,4 +118,15 @@ checks:
 		
 		# Check that a field does not exist:
 		not-has-key: flow
+
+  - shell:
+      # A simple shell check. If the command exits with a non-0 exit code the
+      # check will fail. The script is run in the output directory of the
+      # test.
+      args: grep "GPL ATTACK_RESPONSE" fast.log
+
+  - shell:
+      # A shell check that also tests the output of the command.
+      args: cat fast.log | wc -l | xargs
+      expect: 1
 ```		
