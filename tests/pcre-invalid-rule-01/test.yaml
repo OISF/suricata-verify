@@ -1,0 +1,59 @@
+checks:
+
+    - shell:
+        args: grep "1 rule files processed. 11 rules successfully loaded, 13 rules failed" suricata.log | wc -l | xargs
+        expect: 1
+
+    - shell:
+        args: grep SC_ERR_INVALID_SIGNATURE suricata.log | wc -l | xargs
+        expect: 26
+
+    - shell:
+        args: grep "Expression seen with a sticky buffer" suricata.log | wc -l | xargs
+        expect: 13
+
+    - shell:
+        args: grep -o "use a sticky.*\"http request body" suricata.log | wc -l | xargs
+        expect: 2
+
+    - shell:
+        args: grep -o "use a sticky.*\"raw http uri" suricata.log | wc -l | xargs
+        expect: 1
+
+    - shell:
+        args: grep -o "use a sticky.*\"http response body" suricata.log | wc -l | xargs
+        expect: 1
+
+    - shell:
+        args: grep -o "use a sticky.*\"raw http headers" suricata.log | wc -l | xargs
+        expect: 1
+
+    - shell:
+        args: grep -o "use a sticky.*\"http headers" suricata.log | wc -l | xargs
+        expect: 1
+
+    - shell:
+        args: grep -o "use a sticky.*\"http request method" suricata.log | wc -l | xargs
+        expect: 2
+
+    - shell:
+        args: grep -o "use a sticky.*\"http cookie header" suricata.log | wc -l | xargs
+        expect: 1
+
+    - shell:
+        args: grep -o "use a sticky.*\"http response status code" suricata.log | wc -l | xargs
+        expect: 1
+
+    - shell:
+        args: grep -o "use a sticky.*\"http response status message" suricata.log | wc -l | xargs
+        expect: 1
+
+    - shell:
+        args: grep -o "use a sticky.*\"http user agent" suricata.log | wc -l | xargs
+        expect: 1
+
+    - shell:
+        args: grep -o "use a sticky.*\"http host" suricata.log | wc -l | xargs
+        expect: 1
+
+exit-code: 1
