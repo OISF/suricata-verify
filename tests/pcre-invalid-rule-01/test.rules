@@ -1,0 +1,233 @@
+# failure cases
+alert http $HOME_NET any -> $EXTERNAL_NET any \
+( \
+    msg:"suri 5 pcre fun"; \
+    flow:established,to_server; \
+    http.method; content:"POST"; \
+    http.uri; content:".php"; \
+    http.header; content:"|0d 0a|User-Agent|0d 0a|"; content:!"Referer|3a 20|"; \
+    pcre:"/^(?:[A-F0-9]{2}){200,}$/P"; \
+    sid:1; \
+)
+alert http $HOME_NET any -> $EXTERNAL_NET any \
+( \
+    msg:"suri 5 pcre fun"; \
+    flow:established,to_server; \
+    http.method; content:"POST"; \
+    http.uri; content:".php"; \
+    http.header; content:"|0d 0a|User-Agent|0d 0a|"; content:!"Referer|3a 20|"; \
+    http.uri; pcre:"/^(?:[A-F0-9]{2}){200,}$/P"; \
+    sid:2; \
+)
+alert http $HOME_NET any -> $EXTERNAL_NET any \
+( \
+    msg:"suri 5 pcre fun"; \
+    flow:established,to_server; \
+    http.method; content:"POST"; \
+    http.uri; content:".php"; \
+    http.header; content:"|0d 0a|User-Agent|0d 0a|"; content:!"Referer|3a 20|"; \
+    http.request_body; pcre:"/^(?:[A-F0-9]{2}){200,}$/I"; \
+    sid:3; \
+)
+alert http $HOME_NET any -> $EXTERNAL_NET any \
+( \
+    msg:"suri 5 pcre fun"; \
+    flow:established,to_server; \
+    http.method; content:"POST"; \
+    http.uri; content:".php"; \
+    http.header; content:"|0d 0a|User-Agent|0d 0a|"; content:!"Referer|3a 20|"; \
+    http.request_body; pcre:"/^(?:[A-F0-9]{2}){200,}$/Q"; \
+    sid:4; \
+)
+alert http $HOME_NET any -> $EXTERNAL_NET any \
+( \
+    msg:"suri 5 pcre fun"; \
+    flow:established,to_server; \
+    http.method; content:"POST"; \
+    http.uri; content:".php"; \
+    http.header; content:"|0d 0a|User-Agent|0d 0a|"; content:!"Referer|3a 20|"; \
+    http.request_body; pcre:"/^(?:[A-F0-9]{2}){200,}$/D"; \
+    sid:5; \
+)
+alert http $HOME_NET any -> $EXTERNAL_NET any \
+( \
+    msg:"suri 5 pcre fun"; \
+    flow:established,to_server; \
+    http.method; content:"POST"; \
+    http.uri; content:".php"; \
+    http.header; content:"|0d 0a|User-Agent|0d 0a|"; content:!"Referer|3a 20|"; \
+    http.request_body; pcre:"/^(?:[A-F0-9]{2}){200,}$/H"; \
+    sid:6; \
+)
+alert http $HOME_NET any -> $EXTERNAL_NET any \
+( \
+    msg:"suri 5 pcre fun"; \
+    flow:established,to_server; \
+    http.method; content:"POST"; \
+    http.uri; content:".php"; \
+    http.header; content:"|0d 0a|User-Agent|0d 0a|"; content:!"Referer|3a 20|"; \
+    http.request_body; pcre:"/^(?:[A-F0-9]{2}){200,}$/M"; \
+    sid:7; \
+)
+alert http $HOME_NET any -> $EXTERNAL_NET any \
+( \
+    msg:"suri 5 pcre fun"; \
+    flow:established,to_server; \
+    http.method; content:"POST"; \
+    http.uri; content:".php"; \
+    http.header; content:"|0d 0a|User-Agent|0d 0a|"; content:!"Referer|3a 20|"; \
+    http.request_body; pcre:"/^(?:[A-F0-9]{2}){200,}$/C"; \
+    sid:8; \
+)
+alert http $HOME_NET any -> $EXTERNAL_NET any \
+( \
+    msg:"suri 5 pcre fun"; \
+    flow:established,to_server; \
+    http.method; content:"POST"; \
+    http.uri; content:".php"; \
+    http.header; content:"|0d 0a|User-Agent|0d 0a|"; content:!"Referer|3a 20|"; \
+    http.request_body; pcre:"/^(?:[A-F0-9]{2}){200,}$/S"; \
+    sid:9; \
+)
+alert http $HOME_NET any -> $EXTERNAL_NET any \
+( \
+    msg:"suri 5 pcre fun"; \
+    flow:established,to_client; \
+    http.method; content:"GET"; \
+    http.uri; content:".php"; \
+    http.header; content:"|0d 0a|User-Agent|0d 0a|"; content:!"Referer|3a 20|"; \
+    http.request_body; pcre:"/^(?:[A-F0-9]{2}){200,}$/Y"; \
+    sid:10; \
+)
+alert http $HOME_NET any -> $EXTERNAL_NET any \
+( \
+    msg:"suri 5 pcre fun"; \
+    flow:established,to_server; \
+    http.method; content:"POST"; \
+    http.uri; content:".php"; \
+    http.header; content:"|0d 0a|User-Agent|0d 0a|"; content:!"Referer|3a 20|"; \
+    http.request_body; pcre:"/^(?:[A-F0-9]{2}){200,}$/V"; \
+    sid:11; \
+)
+alert http $HOME_NET any -> $EXTERNAL_NET any \
+( \
+    msg:"suri 5 pcre fun"; \
+    flow:established,to_server; \
+    http.method; content:"POST"; \
+    http.uri; content:".php"; \
+    http.header; content:"|0d 0a|User-Agent|0d 0a|"; content:!"Referer|3a 20|"; \
+    http.request_body; pcre:"/^(?:[a-f0-9]{2}){200,}$/W"; \
+    sid:12; \
+)
+alert http $HOME_NET any -> $EXTERNAL_NET any \
+( \
+    msg:"suri 5 pcre fun"; \
+    flow:established,to_server; \
+    http.method; content:"POST"; \
+    http.uri; content:".php"; \
+    http.header; content:"|0d 0a|User-Agent|0d 0a|"; content:!"Referer|3a 20|"; \
+    http.request_body; pcre:"/^(?:[A-F0-9]{2}){200,}$/M"; \
+    sid:13; \
+)
+# success cases
+alert http $HOME_NET any -> $EXTERNAL_NET any \
+( \
+    msg:"suri 5 pcre fun"; \
+    flow:established,to_server; \
+    http.method; content:"POST"; \
+    http.uri; content:".php"; \
+    http.header; content:"|0d 0a|User-Agent|0d 0a|"; content:!"Referer|3a 20|"; \
+    http.request_body; pcre:"/^(?:[A-F0-9]{2}){200,}$/P"; \
+    sid:14; \
+)
+alert http $HOME_NET any -> $EXTERNAL_NET any \
+( \
+    msg:"suri 5 pcre fun"; \
+    flow:established,to_server; \
+    http.method; content:"POST"; \
+    http.uri; content:".php"; \
+    http.header; content:"|0d 0a|User-Agent|0d 0a|"; content:!"Referer|3a 20|"; \
+    http.uri.raw; pcre:"/^(?:[A-F0-9]{2}){200,}$/I"; \
+    sid:15; \
+)
+alert http $HOME_NET any -> $EXTERNAL_NET any \
+( \
+    msg:"suri 5 pcre fun"; \
+    flow:established,to_client; \
+    http.response_body; pcre:"/^(?:[A-F0-9]{2}){200,}$/Q"; \
+    sid:16; \
+)
+alert http $HOME_NET any -> $EXTERNAL_NET any \
+( \
+    msg:"suri 5 pcre fun"; \
+    flow:established,to_server; \
+    http.method; content:"POST"; \
+    http.uri; content:".php"; \
+    http.header; content:"|0d 0a|User-Agent|0d 0a|"; content:!"Referer|3a 20|"; \
+    http.header.raw; pcre:"/^(?:[A-F0-9]{2}){200,}$/D"; \
+    sid:17; \
+)
+alert http $HOME_NET any -> $EXTERNAL_NET any \
+( \
+    msg:"suri 5 pcre fun"; \
+    flow:established,to_server; \
+    http.method; content:"POST"; \
+    http.uri; content:".php"; \
+    http.header; content:"|0d 0a|User-Agent|0d 0a|"; content:!"Referer|3a 20|"; \
+    http.header; pcre:"/^(?:[A-F0-9]{2}){200,}$/H"; \
+    sid:18; \
+)
+alert http $HOME_NET any -> $EXTERNAL_NET any \
+( \
+    msg:"suri 5 pcre fun"; \
+    flow:established,to_server; \
+    http.method; content:"POST"; \
+    http.uri; content:".php"; \
+    http.header; content:"|0d 0a|User-Agent|0d 0a|"; content:!"Referer|3a 20|"; \
+    http.cookie; pcre:"/^(?:[A-F0-9]{2}){200,}$/C"; \
+    sid:19; \
+)
+alert http $HOME_NET any -> $EXTERNAL_NET any \
+( \
+    msg:"suri 5 pcre fun"; \
+    flow:established,to_client; \
+    http.stat_code; pcre:"/^(?:[A-F0-9]{2}){200,}$/S"; \
+    sid:20; \
+)
+alert http $HOME_NET any -> $EXTERNAL_NET any \
+( \
+    msg:"suri 5 pcre fun"; \
+    flow:established,to_client; \
+    http.stat_msg; pcre:"/^(?:[A-F0-9]{2}){200,}$/Y"; \
+    sid:21; \
+)
+alert http $HOME_NET any -> $EXTERNAL_NET any \
+( \
+    msg:"suri 5 pcre fun"; \
+    flow:established,to_server; \
+    http.method; content:"POST"; \
+    http.uri; content:".php"; \
+    http.header; content:"|0d 0a|User-Agent|0d 0a|"; content:!"Referer|3a 20|"; \
+    http.user_agent; pcre:"/^(?:[A-F0-9]{2}){200,}$/V"; \
+    sid:22; \
+)
+alert http $HOME_NET any -> $EXTERNAL_NET any \
+( \
+    msg:"suri 5 pcre fun"; \
+    flow:established,to_server; \
+    http.method; content:"POST"; \
+    http.uri; content:".php"; \
+    http.header; content:"|0d 0a|User-Agent|0d 0a|"; content:!"Referer|3a 20|"; \
+    http.host; pcre:"/^(?:[a-f0-9]{2}){200,}$/W"; \
+    sid:23; \
+)
+alert http $HOME_NET any -> $EXTERNAL_NET any \
+( \
+    msg:"suri 5 pcre fun"; \
+    flow:established,to_server; \
+    http.method; content:"POST"; \
+    http.uri; content:".php"; \
+    http.header; content:"|0d 0a|User-Agent|0d 0a|"; content:!"Referer|3a 20|"; \
+    http.method; pcre:"/^(?:[A-F0-9]{2}){200,}$/M"; \
+    sid:24; \
+)
