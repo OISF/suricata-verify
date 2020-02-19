@@ -118,8 +118,9 @@ def pipe_reader(fileobj, output=None, verbose=False):
 
 def handle_exceptions(func):
     def applicator(*args, **kwargs):
+        result = False
         try:
-            func(*args,**kwargs)
+            result = func(*args,**kwargs)
         except TestError as te:
             print("Sub test #{}: FAIL : {}".format(kwargs["test_num"], te))
             check_args_fail()
@@ -128,7 +129,11 @@ def handle_exceptions(func):
             print("Sub test #{}: SKIPPED : {}".format(kwargs["test_num"], ue))
             kwargs["count"]["skipped"] += 1
         else:
-            kwargs["count"]["success"] += 1
+            if result:
+              kwargs["count"]["success"] += 1
+            else:
+              print("\nSub test #{}: FAIL : {}".format(kwargs["test_num"], kwargs["check"]["args"]))
+              kwargs["count"]["failure"] += 1
         return kwargs["count"]
     return applicator
 
