@@ -1,0 +1,17 @@
+requires:
+  # No pcap required.
+  pcap: false
+
+exit-code: 1
+
+args:
+  - --engine-analysis
+
+checks:
+    - shell:
+        args: grep "snmp.pdu_type requires a value" suricata.log| wc -l | xargs
+        expect: 1
+
+    - shell:
+        args: grep "snmp.version requires a value" suricata.log| wc -l | xargs
+        expect: 1
