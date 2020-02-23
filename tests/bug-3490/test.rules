@@ -1,0 +1,2 @@
+alert snmp any any -> any any (msg:"SNMP test1"; snmp.version; sid:1000003;)
+alert snmp any any -> any any (msg:"SNMP test2"; snmp.pdu_type; sid:1000007;)
