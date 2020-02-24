@@ -1,0 +1,8 @@
+alert http any any -> any any (msg:"HTTP with pcrexform"; \
+    http.request_line; pcrexform:"[a-zA-Z]+\s+(.*)\s+HTTP"; \
+        content:"/z4d4kWk.jpg"; \
+    http.user_agent; pcrexform:"([a-zA-Z]+\/[0-9]\.54\.0)"; \
+        content:"curl/7.54.0"; \
+    http.host; pcrexform:"([a-zA-Z]\.[a-zA-Z]+\.com+)"; \
+        content:"i.imgur.com"; \
+    sid:1;)

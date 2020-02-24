@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"HTTP with pcrexform"; http.response_line; pcrexform; content:"/dropper.php"; sid:2;)
