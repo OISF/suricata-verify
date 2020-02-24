@@ -1,0 +1,7 @@
+requires:
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
