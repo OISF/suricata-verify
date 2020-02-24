@@ -1,0 +1,9 @@
+requires:
+
+exit-code: 1
+
+checks:
+
+    - shell:
+        args: grep "invalid formatting to pcrexform keyword" suricata.log | wc -l | xargs
+        expect: 1

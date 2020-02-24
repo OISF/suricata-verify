@@ -1,0 +1,8 @@
+requires:
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
