@@ -1,0 +1,11 @@
+requires:
+
+  files:
+    - src/detect-transform-pcrexform.c
+
+exit-code: 1
+
+checks:
+    - shell:
+        args: grep "invalid formatting or malformed option to pcrexform keyword" suricata.log | wc -l | xargs
+        expect: 1

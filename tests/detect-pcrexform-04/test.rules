@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"HTTP with pcrexform"; http.request_line; pcrexform:[a-zA-Z]+\s+(.*)\s+HTTP; content:"/z4d4kWk.jpg"; sid:1;)
