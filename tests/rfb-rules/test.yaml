@@ -1,0 +1,32 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  files:
+    - rust/src/rfb/parser.rs
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "rfb-name1"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "rfb-sectype1"
+
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature: "rfb-name2"
+
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature: "rfb-sectype2"
+
