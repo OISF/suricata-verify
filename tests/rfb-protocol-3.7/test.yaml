@@ -1,0 +1,40 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  files:
+    - rust/src/rfb/parser.rs
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: rfb
+
+  - filter:
+      count: 1
+      match:
+        event_type: rfb
+        rfb.server_protocol_version.major: "003"
+        rfb.server_protocol_version.minor: "007"
+        rfb.client_protocol_version.major: "003"
+        rfb.client_protocol_version.minor: "007"
+        rfb.authentication.security_type: 2
+        rfb.authentication.vnc.challenge: "ea5150a99e0feb6343c045c6f95ce44c"
+        rfb.authentication.vnc.response: "c39d5ad5c8242ed6bea28a773dbd3a29"
+        rfb.authentication.security-result: "OK"
+        #rfb.screen_shared: "OK"
+        rfb.framebuffer.width: 1280
+        rfb.framebuffer.height: 800
+        rfb.framebuffer.name: "aneagles@localhost.localdomain"
+        rfb.framebuffer.pixel_format.bits_per_pixel: 32
+        rfb.framebuffer.pixel_format.depth: 24
+        rfb.framebuffer.pixel_format.big_endian: false
+        rfb.framebuffer.pixel_format.true_color: true
+        rfb.framebuffer.pixel_format.red_max: 255
+        rfb.framebuffer.pixel_format.green_max: 255
+        rfb.framebuffer.pixel_format.blue_max: 255
+        rfb.framebuffer.pixel_format.red_shift: 16
+        rfb.framebuffer.pixel_format.green_shift: 8
+        rfb.framebuffer.pixel_format.blue_shift: 0
