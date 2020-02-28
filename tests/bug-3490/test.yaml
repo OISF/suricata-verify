@@ -11,9 +11,9 @@ args:
 
 checks:
     - shell:
-        args: grep "snmp.pdu_type requires a value" suricata.log| wc -l | xargs
+        args: grep "invalid formatting or malformed option to snmp.pdu_type keyword" suricata.log | wc -l | xargs
         expect: 1
 
     - shell:
-        args: grep "snmp.version requires a value" suricata.log| wc -l | xargs
+        args: grep "invalid formatting or malformed option to snmp.version keyword" suricata.log | wc -l | xargs
         expect: 1
