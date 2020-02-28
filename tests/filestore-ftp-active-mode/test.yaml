@@ -3,9 +3,8 @@ requires:
 
 checks:
   - shell:
-      args: echo file.[0-9].meta | wc -w
-      expect: 3
-
+      args: find filestore -type f | xargs | wc -l
+      expect: 1
 
 args:
   - --runmode=single
