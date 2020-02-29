@@ -1,4 +1,6 @@
 requires:
+  min-version: 6.0.0
+
   # No pcap required.
   pcap: false
 
