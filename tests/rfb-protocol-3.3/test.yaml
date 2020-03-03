@@ -24,7 +24,7 @@ checks:
         rfb.authentication.vnc.challenge: "263cd2330c2902a68c88aae131ba552c"
         rfb.authentication.vnc.response: "3f0526502c716d0ed6a7de026af40c5a"
         rfb.authentication.security-result: "OK"
-        #rfb.screen_shared: "OK"
+        rfb.screen_shared: false
         rfb.framebuffer.width: 800
         rfb.framebuffer.height: 600
         rfb.framebuffer.name: "\\xa0"

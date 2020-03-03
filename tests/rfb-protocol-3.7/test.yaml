@@ -24,7 +24,7 @@ checks:
         rfb.authentication.vnc.challenge: "ea5150a99e0feb6343c045c6f95ce44c"
         rfb.authentication.vnc.response: "c39d5ad5c8242ed6bea28a773dbd3a29"
         rfb.authentication.security-result: "OK"
-        #rfb.screen_shared: "OK"
+        rfb.screen_shared: false
         rfb.framebuffer.width: 1280
         rfb.framebuffer.height: 800
         rfb.framebuffer.name: "aneagles@localhost.localdomain"

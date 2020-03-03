@@ -1,5 +1,5 @@
-alert rfb any any -> any 5900 (msg:"rfb-name1"; rfb.name; pcre:"/.*\.localdomain/"; sid:1;)
-alert rfb any any -> any 5900 (msg:"rfb-name2"; rfb.name; pcre:"/.*\.localdoom/"; sid:2;)
-alert rfb any any -> any 5900 (msg:"rfb-sectype1"; rfb.sectype:2; sid:3;)
-alert rfb any any -> any 5900 (msg:"rfb-sectype2"; rfb.sectype:>3; sid:4;)
+alert rfb any any -> any any (msg:"rfb-name1"; rfb.name; pcre:"/.*\.localdomain/"; sid:1;)
+alert rfb any any -> any any (msg:"rfb-name2"; rfb.name; pcre:"/.*\.localdoom/"; sid:2;)
+alert rfb any any -> any any (msg:"rfb-sectype1"; rfb.sectype:2; sid:3;)
+alert rfb any any -> any any (msg:"rfb-sectype2"; rfb.sectype:>3; sid:4;)
 
