@@ -1,0 +1,13 @@
+requires:
+  min-version: 6.0.0
+  pcap: false
+
+exit-code: 1
+
+args:
+    - --engine-analysis
+
+checks:
+    - shell:
+        args: grep "multiple \"threshold\" options are not allowed in the same rule" suricata.log | wc -l | xargs
+        expect: 1

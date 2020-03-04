@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"CURL2"; flow:established,to_server; content:"GET"; http_method;  content:"curl"; http_user_agent; threshold: type limit, track by_src, count 1 , seconds 60; content: "| 0a|";threshold: type limit, track by_src, count 1 , seconds 60; sid:2;)
