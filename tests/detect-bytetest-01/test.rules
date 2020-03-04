@@ -1,0 +1,5 @@
+alert tcp-pkt any any -> any any (msg:"byte-test test 1"; content: "|48 54 54 50|"; byte_test:1,=,0x9,0, bitmask 0xf8; sid:1; rev:1;)
+alert tcp-pkt any any -> any any (msg:"byte-test test 1"; content: "|48 54 54 50|"; byte_test:1,>,0x8,0, bitmask 0xf8; sid:2; rev:1;)
+alert tcp-pkt any any -> any any (msg:"byte-test test 1"; content: "|48 54 54 50|"; byte_test:1,<,0xa,0, bitmask 0xf8; sid:3; rev:1;)
+alert tcp-pkt any any -> any any (msg:"byte-test test 1"; content: "|48 54 54 50|"; byte_test:1,!=,0x48,0, bitmask 0xf8; sid:4; rev:1;)
+alert tcp-pkt any any -> any any (msg:"byte-test test 1"; content: "|48 54 54 50|"; byte_test:2,=,0x90a,0, bitmask 0xf8f8; sid:5; rev:1;)
