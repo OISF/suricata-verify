@@ -1,0 +1,1 @@
+alert icmp any any -> any any (msg:"SURICATA ICMPv6 invalid checksum"; icmpv6-csum:invalid; classtype:protocol-command-decode; sid:2200079; rev:2;)

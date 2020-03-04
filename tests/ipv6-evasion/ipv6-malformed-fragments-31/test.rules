@@ -1,0 +1,1 @@
+alert pkthdr any any -> any any (msg:"SURICATA FRAG IPv6 Packet size too large"; decode-event:ipv6.frag_pkt_too_large; classtype:protocol-command-decode; sid:2200071; rev:3;)

@@ -1,0 +1,2 @@
+# DST option that we don't understand
+alert pkthdr any any -> any any (msg:"SURICATA IPv6 DSTOPTS unknown option"; decode-event:ipv6.dstopts_unknown_opt; classtype:protocol-command-decode; sid:2200088; rev:2;)

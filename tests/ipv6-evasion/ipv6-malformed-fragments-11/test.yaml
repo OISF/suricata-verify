@@ -1,0 +1,15 @@
+requires:
+    features:
+        - HAVE_LIBJANSSON
+
+checks:
+    - filter:
+        count: 1
+        match:
+            event_type: alert
+            alert.signature_id: 2200080
+    - filter:
+        count: 1
+        match:
+            event_type: alert
+            alert.signature_id: 2200015

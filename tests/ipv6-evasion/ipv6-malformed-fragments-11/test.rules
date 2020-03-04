@@ -1,0 +1,2 @@
+alert pkthdr any any -> any any (msg:"SURICATA IPv6 useless Fragment extension header"; decode-event:ipv6.exthdr_useless_fh; classtype:protocol-command-decode; sid:2200080; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA IPv6 duplicated Fragment extension header"; decode-event:ipv6.exthdr_dupl_fh; classtype:protocol-command-decode; sid:2200015; rev:2;)
