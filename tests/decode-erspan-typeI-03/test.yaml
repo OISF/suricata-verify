@@ -1,0 +1,18 @@
+requires:
+
+  min-version: 5
+  lt-version: 6
+
+
+args:
+    - --set decoder.erspan.typeI.enabled=false
+
+checks:
+
+    - filter:
+        count: 0
+        match:
+            event_type: flow
+
+    - stats:
+        decoder.erspan: 0
