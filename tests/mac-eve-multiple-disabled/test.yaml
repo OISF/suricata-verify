@@ -1,0 +1,14 @@
+requires:
+  min-version: 6.0.0
+  files:
+    - src/util-macset.c
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1 
+      match:
+        event_type: flow
+        not-has-key: ether

@@ -1,0 +1,15 @@
+requires:
+  min-version: 6.0.0
+  files:
+    - src/util-macset.c
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1 
+      match:
+        event_type: flow
+        ether.dest_macs: ["00:00:0c:01:01:14","00:00:0c:01:01:12"] 
+        ether.src_macs: ["00:00:0c:01:01:13","00:00:0c:01:01:11"]

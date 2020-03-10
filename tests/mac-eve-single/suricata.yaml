@@ -1,0 +1,12 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular #regular|syslog|unix_dgram|unix_stream|redis
+      filename: eve.json
+      ethernet: yes
+      types:
+        - dns
+        - flow
