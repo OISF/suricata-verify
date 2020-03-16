@@ -62,7 +62,5 @@ checks:
         event_type: ftp
         ftp.command: NLST
         ftp.reply: [
-          "Here comes the directory listing.\r\n",
-          "Directory send OK.",
-          "PORT command successful. Consider using PASV."]
-        ftp.dynamic_port: 59926
+          "Here comes the directory listing.",
+          "Directory send OK."]
