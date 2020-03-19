@@ -1,0 +1,115 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 5.0.0
+
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 5
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 6
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 7
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 8
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 10
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 11
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 12
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 13
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 14
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 15
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 16
+  - filter:
+      count: 2
+      match:
+        event_type: flow
+        proto: TCP
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        proto: TCP
+        dest_port: 80
+        tx_id: 0
+        http.hostname: "10.0.0.61"
+        http.url: "//a1a2a3a4a5a6a7a8a9a0b1b2b3b4b5b6b7b8b9b0c1c2c3c4c5c6c7c8c9c0d1d2d3d4d5d6d7d8d9d0"
+        http.http_user_agent: "czxt2s"
+        http.http_content_type: "text/html"
+        http.http_method: "GET"
+        http.protocol: "HTTP/1.1"
+        http.status: 404
+        http.length: 153
+  - filter:
+      count: 2
+      match:
+        event_type: flow
+        tcp.state: closed
+
