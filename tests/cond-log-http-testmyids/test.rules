@@ -1,0 +1,1 @@
+config http any any -> any any (http.host; content:"test"; config:logging disable, type tx, scope tx; sid:1;)
