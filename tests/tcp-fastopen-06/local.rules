@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"WEB-ATTACKS /etc/passwd command attempt"; content:"/etc/passwd"; classtype:web-application-attack; sid:1328; rev:6;)
