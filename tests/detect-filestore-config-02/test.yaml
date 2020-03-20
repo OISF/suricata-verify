@@ -1,5 +1,7 @@
 requires:
   min-version: 5.0.1
+  features:
+    - HAVE_NSS
 
 command: |
   ${SRCDIR}/src/suricata --set classification-file="${SRCDIR}/classification.config"    \
