@@ -338,6 +338,9 @@ class FilterCheck:
                     return False
             else:
                 val = find_value(key, event)
+                if type(val) != type(expected):
+                    print("Different type", type(val), val, type(expected), expected)
+                    return False
                 if val != expected:
                     return False
         return True
