@@ -1,0 +1,4 @@
+# should match:
+alert tcp any any -> any 25 (msg:"VIRUS INBOUND bad file attachment"; flow:to_server,established; content:"content-disposition|3a| attachment|3b|"; nocase; content:".zip|22|"; nocase; within:128; file_data; content:".pdf.exe"; within:64; sid:13371339; rev:1;)
+# should match:
+alert tcp any any -> any any (msg:"ATTACK-RESPONSES directory listing"; flow:established; content:"Volume Serial Number"; sid:13371338; rev:1;)

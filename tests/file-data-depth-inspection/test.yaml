@@ -8,8 +8,3 @@ checks:
         match:
             event_type: alert
             alert.signature_id: 13371339
-    - filter:
-        count: 1
-        match:
-            event_type: alert
-            alert.signature_id: 13371338
