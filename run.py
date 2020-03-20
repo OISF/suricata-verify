@@ -357,6 +357,9 @@ class FilterCheck:
             else:
                 val = find_value(key, event)
                 if val != expected:
+                    if str(val) == str(expected):
+                        print("Different types but same string", type(val), val, type(expected), expected)
+                        return False
                     return False
         return True
 
