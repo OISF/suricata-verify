@@ -1,4 +1,4 @@
 requires:
-  min-version: 5.0.1
+  min-version: 6.0
   features:
     - HAVE_NSS
