@@ -1,0 +1,71 @@
+name: builds
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  suricata:
+    name: suricata
+    runs-on: ubuntu-18.04
+    container: ubuntu:18.04
+    strategy:
+      fail-fast: false
+      matrix:
+        branch:
+          - master
+          - master-5.0.x
+          - master-4.1.x
+    steps:
+      - name: Install dependencies
+        run: |
+          apt update
+          apt -y install \
+                autoconf \
+                automake \
+                build-essential \
+                git \
+                jq \
+                libpcre3 \
+                libpcre3-dev \
+                libtool \
+                libpcap-dev \
+                libnet1-dev \
+                libyaml-0-2 \
+                libyaml-dev \
+                libcap-ng-dev \
+                libcap-ng0 \
+                libmagic-dev \
+                libnetfilter-queue-dev \
+                libnetfilter-queue1 \
+                libnfnetlink-dev \
+                libnfnetlink0 \
+                libhiredis-dev \
+                libjansson-dev \
+                libevent-dev \
+                libevent-pthreads-2.1.6 \
+                libjansson-dev \
+                libpython2.7 \
+                libnss3-dev \
+                make \
+                parallel \
+                python3-distutils \
+                python3-yaml \
+                rustc \
+                software-properties-common \
+                zlib1g \
+                zlib1g-dev
+      - run: cargo install --force cbindgen
+      - run: echo "::add-path::$HOME/.cargo/bin"
+      - uses: actions/checkout@v1
+      - run: git clone https://github.com/OISF/suricata -b ${{ matrix.branch }}
+      - run: git clone https://github.com/OISF/libhtp suricata/libhtp
+      - name: Build Suricata
+        working-directory: suricata
+        run: |
+          ./autogen.sh
+          ./configure
+          make -j2
+      - name: Running suricata-verify
+        working-directory: suricata
+        run: python3 ../run.py
