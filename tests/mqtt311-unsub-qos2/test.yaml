@@ -1,0 +1,109 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  files:
+    - rust/src/mqtt/parser.rs
+
+args:
+  - -k none
+
+checks:
+
+  - filter:
+      count: 5
+      match:
+        dest_port: 1883
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.connect.qos: 0
+        mqtt.connect.retain: false
+        mqtt.connect.dup: false
+        mqtt.connect.protocol_string: MQTT
+        mqtt.connect.protocol_version: 4
+        mqtt.connect.flags.username: true
+        mqtt.connect.flags.password: true
+        mqtt.connect.flags.will: false
+        mqtt.connect.flags.will_retain: false
+        mqtt.connect.flags.clean_session: true
+        mqtt.connect.client_id: myvoiceismypassport
+        mqtt.connect.username: user
+        mqtt.connect.password: pass
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.connack.qos: 0
+        mqtt.connack.retain: false
+        mqtt.connack.dup: false
+        mqtt.connack.session_present: false
+        mqtt.connack.return_code: 0
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.subscribe.qos: 1
+        mqtt.subscribe.retain: false
+        mqtt.subscribe.dup: false
+        mqtt.subscribe.topics: [ {topic: topicX, qos: 2} ]
+        mqtt.subscribe.message_id: 1
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.suback.qos: 0
+        mqtt.suback.retain: false
+        mqtt.suback.dup: false
+        mqtt.suback.message_id: 1
+        mqtt.suback.qos_granted: [ 2 ]
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.unsubscribe.qos: 1
+        mqtt.unsubscribe.retain: false
+        mqtt.unsubscribe.dup: false
+        mqtt.unsubscribe.topics: [ topicX ]
+        mqtt.unsubscribe.message_id: 2
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.unsubscribe.qos: 1
+        mqtt.unsubscribe.retain: false
+        mqtt.unsubscribe.dup: false
+        mqtt.unsubscribe.topics: [ topicY ]
+        mqtt.unsubscribe.message_id: 3
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.unsuback.qos: 0
+        mqtt.unsuback.retain: false
+        mqtt.unsuback.dup: false
+        mqtt.unsuback.message_id: 2
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.unsuback.qos: 0
+        mqtt.unsuback.retain: false
+        mqtt.unsuback.dup: false
+        mqtt.unsuback.message_id: 3
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.disconnect.qos: 0
+        mqtt.disconnect.retain: false
+        mqtt.disconnect.dup: false

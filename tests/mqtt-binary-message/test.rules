@@ -1,0 +1,1 @@
+alert mqtt any any -> any any (msg:"MQTT PUBLISH JPEG message"; mqtt.type:PUBLISH; mqtt.publish.message; content:"|FF D8 FF E0|"; startswith; fast_pattern;)

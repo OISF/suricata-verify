@@ -1,0 +1,24 @@
+#1
+alert mqtt any any -> any any (msg:"MQTT Test CONNACK"; mqtt.type:CONNACK; sid:1;)
+#1
+alert mqtt any any -> any any (msg:"MQTT Test DISCONNECT"; mqtt.type:DISCONNECT; sid:3;)
+#4
+alert mqtt any any -> any any (msg:"MQTT Test flags"; mqtt.flags: !retain,!dup; sid:4;)
+#4
+alert mqtt any any -> any any (msg:"MQTT QOS 1 (val0)"; mqtt.qos:0; sid:6;)
+#1
+alert mqtt any any -> any any (msg:"MQTT proto version 5 CONNECT"; mqtt.protocol_version:5; mqtt.type:CONNECT; sid:12;)
+#1
+alert mqtt any any -> any any (msg:"MQTT CONNECT flags"; mqtt.connect.flags:username,password,clean_session; sid:13;)
+#1
+alert mqtt any any -> any any (msg:"MQTT CONNECT username"; mqtt.connect.username; content:"user"; sid:19;)
+#1
+alert mqtt any any -> any any (msg:"MQTT CONNECT password"; mqtt.connect.password; content:"pass"; sid:20;)
+#1
+alert mqtt any any -> any any (msg:"MQTT UNSUBSCRIBE topicX"; mqtt.type:UNSUBSCRIBE; mqtt.unsubscribe.topic; content:"topicX"; sid:16;)
+#1
+alert mqtt any any -> any any (msg:"MQTT UNSUBSCRIBE topicY"; mqtt.type:UNSUBSCRIBE; mqtt.unsubscribe.topic; content:"topicY"; sid:17;)
+#1
+alert mqtt any any -> any any (msg:"MQTT UNSUBACK reason 17"; mqtt.type:UNSUBACK; mqtt.reason_code:17; sid:18;)
+#1
+alert mqtt any any -> any any (msg:"MQTT UNSUBACK reason 0"; mqtt.type:UNSUBACK; mqtt.reason_code:0; sid:21;)

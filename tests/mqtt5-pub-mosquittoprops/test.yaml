@@ -1,0 +1,98 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  files:
+    - rust/src/mqtt/parser.rs
+
+args:
+  - -k none
+
+checks:
+
+  - filter:
+      count: 3
+      match:
+        dest_port: 1883
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.connect.qos: 0
+        mqtt.connect.retain: false
+        mqtt.connect.dup: false
+        mqtt.connect.protocol_string: MQTT
+        mqtt.connect.protocol_version: 5
+        mqtt.connect.flags.username: true
+        mqtt.connect.flags.password: true
+        mqtt.connect.flags.will: true
+        mqtt.connect.flags.will_retain: false
+        mqtt.connect.flags.clean_session: true
+        mqtt.connect.client_id: myvoiceismypassport
+        mqtt.connect.username: user
+        mqtt.connect.password: pass
+        mqtt.connect.will.topic: willtopic
+        mqtt.connect.will.message: willmessage
+        mqtt.connect.will.properties.content_type: mywilltype
+        mqtt.connect.will.properties.correlation_data: "1234567"
+        mqtt.connect.will.properties.message_expiry_interval: 133
+        mqtt.connect.will.properties.payload_format_indicator: 144
+        mqtt.connect.will.properties.response_topic: response_topic1
+        mqtt.connect.will.properties.userprop5: userval5
+        mqtt.connect.will.properties.will_delay_interval: 200
+        mqtt.connect.properties.maximum_packet_size: 11111
+        mqtt.connect.properties.receive_maximum: 222
+        mqtt.connect.properties.session_expiry_interval: 555
+        mqtt.connect.properties.topic_alias_maximum: 666
+        mqtt.connect.properties.userprop1: userval1
+        mqtt.connect.properties.userprop2: userval2
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.connack.qos: 0
+        mqtt.connack.retain: false
+        mqtt.connack.dup: false
+        mqtt.connack.session_present: false
+        mqtt.connack.return_code: 0
+        mqtt.connack.properties.topic_alias_maximum: 10
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.publish.qos: 1
+        mqtt.publish.retain: false
+        mqtt.publish.dup: false
+        mqtt.publish.topic: topicX
+        mqtt.publish.message: baabaablacksheep
+        mqtt.publish.message_id: 1
+        mqtt.publish.properties.content_type: mytype
+        mqtt.publish.properties.correlation_data: "12345"
+        mqtt.publish.properties.message_expiry_interval: 77
+        mqtt.publish.properties.payload_format_indicator: 88
+        mqtt.publish.properties.response_topic: response_topic1
+        mqtt.publish.properties.topic_alias: 5
+        mqtt.publish.properties.userprop3: userval3
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.puback.qos: 0
+        mqtt.puback.retain: false
+        mqtt.puback.dup: false
+        mqtt.puback.message_id: 1
+        mqtt.puback.reason_code: 16
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.disconnect.qos: 0
+        mqtt.disconnect.retain: false
+        mqtt.disconnect.dup: false
+        mqtt.disconnect.reason_code: 0
+        mqtt.disconnect.properties.session_expiry_interval: 122
+        mqtt.disconnect.properties.userprop4: userval4

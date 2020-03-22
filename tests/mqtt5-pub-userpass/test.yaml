@@ -1,0 +1,64 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  files:
+    - rust/src/mqtt/parser.rs
+
+args:
+  - -k none
+
+checks:
+
+  - filter:
+      count: 3
+      match:
+        dest_port: 1883
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.connect.qos: 0
+        mqtt.connect.retain: false
+        mqtt.connect.dup: false
+        mqtt.connect.protocol_string: MQTT
+        mqtt.connect.protocol_version: 5
+        mqtt.connect.flags.username: true
+        mqtt.connect.flags.password: true
+        mqtt.connect.flags.will: false
+        mqtt.connect.flags.will_retain: false
+        mqtt.connect.flags.clean_session: true
+        mqtt.connect.client_id: myvoiceismypassport
+        mqtt.connect.username: user
+        mqtt.connect.password: pass
+        mqtt.connect.properties.receive_maximum: 20
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.connack.qos: 0
+        mqtt.connack.retain: false
+        mqtt.connack.dup: false
+        mqtt.connack.session_present: false
+        mqtt.connack.return_code: 0
+        mqtt.connack.properties.topic_alias_maximum: 10
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.publish.qos: 0
+        mqtt.publish.retain: false
+        mqtt.publish.dup: false
+        mqtt.publish.topic: topicX
+        mqtt.publish.message: baabaablacksheep
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.disconnect.qos: 0
+        mqtt.disconnect.retain: false
+        mqtt.disconnect.dup: false
+        mqtt.disconnect.reason_code: 0
