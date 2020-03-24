@@ -409,6 +409,8 @@ class TestRunner:
         for skip in self.config["skip"]:
 
             if "uid" in skip:
+                if WIN32:
+                    raise UnsatisfiedRequirementError("uid based skip not supported on Windows")
                 if os.getuid() == skip["uid"]:
                     if "msg" in skip:
                         msg = skip["msg"]
