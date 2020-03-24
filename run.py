@@ -273,6 +273,9 @@ class ShellCheck:
         if not self.config or "args" not in self.config:
             raise TestError("shell check missing args")
         try:
+            if WIN32:
+                print("skipping shell check on windows")
+                return True;
             output = subprocess.check_output(self.config["args"], shell=True)
             if "expect" in self.config:
                 return str(self.config["expect"]) == output.decode().strip()
@@ -522,6 +525,8 @@ class TestRunner:
 
         if WIN32 and os.path.exists(os.path.join(self.directory, "check.sh")):
             raise UnsatisfiedRequirementError("check.sh tests are not supported on Windows")
+        if WIN32 and "setup" in self.config:
+            raise UnsatisfiedRequirementError("test \"setup\" not supported on Windows")
 
         shell = False
 
