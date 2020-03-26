@@ -91,7 +91,7 @@ SuricataVersion = namedtuple(
     "SuricataVersion", ["major", "minor", "patch"])
 
 def parse_suricata_version(buf):
-    m = re.search("(\d+)\.?(\d+)?\.?(\d+)?.*", str(buf).strip())
+    m = re.search("(?:Suricata version |^)(\d+)\.?(\d+)?\.?(\d+)?.*", str(buf).strip())
     if m:
         major = int(m.group(1)) if m.group(1) else 0
         minor = int(m.group(2)) if m.group(2) else 0
