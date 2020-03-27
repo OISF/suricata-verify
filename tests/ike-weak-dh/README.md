@@ -1,7 +1,4 @@
 Simple test that tests a IKEv2 SA_INIT initiator request with weak Diffie-Hellman parameters.
 
-This test is deprecated from version 6, since event_type for ikev2 changed with unification of ike-parsers.
-The new test is now ike-weak-dh.
-
 PCAP URL:
   https://redmine.openinfosecfoundation.org/attachments/1630
