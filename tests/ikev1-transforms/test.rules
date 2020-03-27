@@ -1,0 +1,23 @@
+alert ike any any -> any any (msg:"ike initiator dotprefix transform"; ike.init_spi; dotprefix; content:".e47a591fd057587f"; sid:1;)
+alert ike any any -> any any (msg:"ike responder dotprefix transform"; ike.resp_spi; dotprefix; content:".a00b8ef0902bb8ec"; sid:2;)
+alert ike any any -> any any (msg:"ike vendor dotprefix transform"; ike.vendor;  dotprefix; content:".4a131c81070358455c5728f20e95452f"; sid:3;)
+alert ike any any -> any any (msg:"ike client key exchange payload dotprefix transform"; ike.key_exchange_payload; dotprefix; content:".|3504d3d2ed14e0ca03b851a51a9da2e5a4c14c1d7ec3e1fbe950025424514b3c69ed7fbb44e09225da52d2a92604a99bf61b7beed7fbfa635e82f065f4fe780751354dbe474c3de7207dcf69fdbbed32c1691cc149b318eee00370e65fc3069bbacfb013467173966e9d5f4bc4f3857e359bba3adbb6efeea516f3897d8534f3|"; flow:to_server; sid:4;)
+alert ike any any -> any any (msg:"ike nonce payload dotprefix transform"; ike.nonce_payload; dotprefix; content:".|89d7c8fbf94b515b521d5d9589c2602021e1a709|"; sid:5;)
+
+alert ike any any -> any any (msg:"ike initiator to_md5 transform"; ike.init_spi; to_md5; content:"|c425436c2caafccfd6f3bd77a4d88ab0|"; sid:6;)
+alert ike any any -> any any (msg:"ike responder to_md5 transform"; ike.resp_spi; to_md5; content:"|76b4acbef2c13c43eb5cf5e81d58241d|"; sid:7;)
+alert ike any any -> any any (msg:"ike vendor to_md5 transform"; ike.vendor;  to_md5; content:"|ec40f2ccc00b3179451710ed006176d1|"; sid:8;)
+alert ike any any -> any any (msg:"ike client key exchange payload to_md5 transform"; ike.key_exchange_payload; to_md5; content:"|b23996b320d79be9740df1547b35f999|"; flow:to_server; sid:9;)
+alert ike any any -> any any (msg:"ike nonce payload to_md5 transform"; ike.nonce_payload; to_md5; content:"|b3699f775cd7732cd353935042bd17ce|"; sid:10;)
+
+alert ike any any -> any any (msg:"ike initiator to_sha1 transform"; ike.init_spi; to_sha1; content:"|67026f4ccd2f4fda51320a141b8fce449163efe0|"; sid:11;)
+alert ike any any -> any any (msg:"ike responder to_sha1 transform"; ike.resp_spi; to_sha1; content:"|04e706e0f1cff119f3b32d2d0ac594b2bb54f17e|"; sid:12;)
+alert ike any any -> any any (msg:"ike vendor to_sha1 transform"; ike.vendor;  to_sha1; content:"|5e1e225574f26e92824c4514540422950b7a2550|"; sid:13;)
+alert ike any any -> any any (msg:"ike client key exchange payload to_sha1 transform"; ike.key_exchange_payload; to_sha1; content:"|684eba913e19ba6471e7de4d2090c01b4a408a9a|"; flow:to_server; sid:14;)
+alert ike any any -> any any (msg:"ike nonce payload to_sha1 transform"; ike.nonce_payload; to_sha1; content:"|8514a97792d885b5e37329c185d75966ce60ae46|"; sid:15;)
+
+alert ike any any -> any any (msg:"ike initiator to_sha256 transform"; ike.init_spi; to_sha256; content:"|3f5bba5d85489f5e30cd1c4b5c9b2af6fc303ea91118f285f68e5ff92dd64a51|"; sid:16;)
+alert ike any any -> any any (msg:"ike responder to_sha256 transform"; ike.resp_spi; to_sha256; content:"|13e3a95111356f1b69212597e06c3460279a7fa008bb03bb41cf49290174801c|"; sid:17;)
+alert ike any any -> any any (msg:"ike vendor to_sha256 transform"; ike.vendor;  to_sha256; content:"|13b2a33b9c3386bb0de09d9a5e2ec9a39cc69030ba8bdce496553bf55b05ca4c|"; sid:18;)
+alert ike any any -> any any (msg:"ike client key exchange payload to_sha256 transform"; ike.key_exchange_payload; to_sha256; content:"|06b0f2cd9b698b95b8a4b42782c3b34224d80d9a733f2e904592ffbb3dfd47a9|"; flow:to_server; sid:19;)
+alert ike any any -> any any (msg:"ike nonce payload to_sha256 transform"; ike.nonce_payload; to_sha256; content:"|2da6f496ffa69a37431c8d014be18400d1bc25a7faa659b82c7f550bd282dfa8|"; sid:20;)
