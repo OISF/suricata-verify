@@ -1,0 +1,49 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 5.0.0
+
+args:
+  - --simulate-ips
+  - --runmode=single
+  - --no-random
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        alert.signature_id: 2
+        pcap_cnt: 103
+  - filter:
+      count: 8
+      match:
+        event_type: drop
+        flow_id: 746850855319537
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+        pcap_cnt: 135
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        alert.signature_id: 3
+        pcap_cnt: 135
+  - filter:
+      count: 7
+      match:
+        event_type: drop
+        flow_id: 948787333709074
