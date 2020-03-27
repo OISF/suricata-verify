@@ -19,7 +19,7 @@ checks:
   - filter:
       count: 1
       match:
-        event_type: ikev2
+        event_type: ike
         ikev2.version_major: 2
         ikev2.exchange_type: 34
         ikev2.message_id: 0

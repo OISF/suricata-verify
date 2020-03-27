@@ -1,1 +1,1 @@
-alert ikev2 any any -> any any (msg:"SURICATA IKEv2 weak cryptographic parameters (Diffie-Hellman)"; flow:to_server; app-layer-event:ikev2.weak_crypto_dh; classtype:protocol-command-decode; sid:1; rev:1;)
+alert ike any any -> any any (msg:"SURICATA IKEv2 weak cryptographic parameters (Diffie-Hellman)"; flow:to_server; app-layer-event:ike.weak_crypto_dh; classtype:protocol-command-decode; sid:1; rev:1;)
