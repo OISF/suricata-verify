@@ -1,0 +1,28 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  files:
+    - rust/src/ike/parser.rs
+  min-version: 6.0.0
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: ike
+
+  - filter:
+      count: 1
+      match:
+        event_type: ike
+        ikev1.init_spi: "e47a591fd057587f"
+        ikev1.resp_spi: "a00b8ef0902bb8ec"
+        ikev1.exchange_type: 2
+        ikev1.client.nonce_payload: "89d7c8fbf94b515b521d5d9589c2602021e1a709"
+        ikev1.server.nonce_payload: "15b688421ed5c3dd92d3b86e47a76f0d39cc09e0"
+        ikev1.server.chosen_proposal.encryption_algorithm: 7
+        ikev1.server.chosen_proposal.hash_algorithm: 2
+        ikev1.server.chosen_proposal.group_description: 2
+        ikev1.server.chosen_proposal.authentication_method: 1
+
