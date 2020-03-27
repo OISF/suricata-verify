@@ -1,0 +1,4 @@
+alert http any any -> any any (msg:"File stored: EXE"; fileext:"exe"; filestore; sid:1; rev:1;)
+drop http any any -> any any (msg:"Malicious file detected"; filesha256:blacklist; xbits:set, blocked_http, track ip_pair, expire 3600; sid:2; rev:2;)
+drop http any any -> any any (msg:"Block 206 response for IPPair"; content:"206"; http_stat_code; xbits:isset, blocked_http, track ip_pair; priority:1; sid:3; rev:1;)
+#drop http any any -> any any (msg:"Request blocked for IPPair"; content:"GET"; http_method; content:"exe"; http_uri; xbits:isset, blocked_http, track ip_pair; priority:1; sid:4; rev:2;)
