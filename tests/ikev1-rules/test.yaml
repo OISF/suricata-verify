@@ -1,0 +1,110 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  files:
+    - rust/src/ikev1/parser.rs
+
+checks:
+
+  - filter:
+      count: 9
+      match:
+        event_type: alert
+        alert.signature: "ikev1 initiator"
+
+  - filter:
+      count: 7
+      match:
+        event_type: alert
+        alert.signature: "ikev1 responder"
+
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature: "ikev1 client nonce payload length"
+
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature: "ikev1 server nonce payload length"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ikev1 hash algorithm"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ikev1 encryption algorithm"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ikev1 auth method"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ikev1 group description"
+
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature: "ikev1 server key payload length"
+
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature: "ikev1 client key payload length"
+
+  - filter:
+      count: 11
+      match:
+        event_type: alert
+        alert.signature: "ikev1 exchange type"
+
+
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature: "ikev1 vendor"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ikev1 server key exchange"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ikev1 client key exchange"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ikev1 life type"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ikev1 life duration"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ikev1 key length"
