@@ -1,0 +1,128 @@
+requires:
+  features:
+    - HAVE_NSS
+    - HAVE_LIBJANSSON
+  files:
+    - rust/src/ike/parser.rs
+  min-version: 7.0.0
+
+checks:
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        alert.signature: "ike initiator dotprefix transform"
+
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature: "ike responder dotprefix transform"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ike nonce payload dotprefix transform"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ike vendor dotprefix transform"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ike client key exchange payload dotprefix transform"
+
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        alert.signature: "ike initiator to_md5 transform"
+
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature: "ike responder to_md5 transform"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ike nonce payload to_md5 transform"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ike vendor to_md5 transform"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ike client key exchange payload to_md5 transform"
+
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        alert.signature: "ike initiator to_sha1 transform"
+
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature: "ike responder to_sha1 transform"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ike nonce payload to_sha1 transform"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ike vendor to_sha1 transform"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ike client key exchange payload to_sha1 transform"
+
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        alert.signature: "ike initiator to_sha256 transform"
+
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature: "ike responder to_sha256 transform"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ike nonce payload to_sha256 transform"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ike vendor to_sha256 transform"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ike client key exchange payload to_sha256 transform"

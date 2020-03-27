@@ -1,0 +1,104 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  files:
+    - rust/src/ike/parser.rs
+  min-version: 7.0.0
+
+checks:
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        alert.signature: "ike initiator"
+
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature: "ike responder"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ike nonce payload"
+
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature: "ike nonce payload length"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ike hash algorithm"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ike encryption algorithm"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ike auth method"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ike group description"
+
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature: "ike key payload length"
+
+  - filter:
+      count: 6
+      match:
+        event_type: alert
+        alert.signature: "ike exchange type"
+
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ike vendor"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ike server key exchange"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ike client key exchange"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ike life type"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ike life duration"
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "ike key length"
