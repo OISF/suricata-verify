@@ -18,6 +18,7 @@ checks:
 
   - filter:
       count: 1
+      version: 4
       match:
         event_type: ikev2
         ikev2.version_major: 2
@@ -31,3 +32,38 @@ checks:
         ikev2.payload[1]: KeyExchange
         ikev2.payload[2]: SecurityAssociation
         ikev2.payload[3]: NoNextPayload
+
+  - filter:
+      count: 1
+      version: 5
+      match:
+        event_type: ikev2
+        ikev2.version_major: 2
+        ikev2.exchange_type: 34
+        ikev2.message_id: 0
+        ikev2.init_spi: "61d3693ce12af528"
+        ikev2.resp_spi: "0000000000000000"
+        ikev2.role: initiator
+        ikev2.errors: 0
+        ikev2.payload[0]: Nonce
+        ikev2.payload[1]: KeyExchange
+        ikev2.payload[2]: SecurityAssociation
+        ikev2.payload[3]: NoNextPayload
+
+  # from suricata version >=6 the event_type for ikev2 is ike
+  - filter:
+      count: 1
+      min-version: 6
+      match:
+        event_type: ike
+        ike.version_major: 2
+        ike.exchange_type: 34
+        ike.message_id: 0
+        ike.init_spi: "61d3693ce12af528"
+        ike.resp_spi: "0000000000000000"
+        ike.role: initiator
+        ike.ikev2.errors: 0
+        ike.payload[0]: Nonce
+        ike.payload[1]: KeyExchange
+        ike.payload[2]: SecurityAssociation
+        ike.payload[3]: NoNextPayload
