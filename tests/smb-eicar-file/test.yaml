@@ -1,6 +1,7 @@
 requires:
   features:
     - HAVE_LIBJANSSON
+    - HAVE_RUST
 
 # disables checksum verification
 args:
