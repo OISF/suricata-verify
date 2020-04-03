@@ -67,7 +67,7 @@ jobs:
                 zlib1g-dev
       - run: cargo install --force --debug cbindgen
       - run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - run: python3 ./run.py --self-test
       - run: git clone https://github.com/OISF/suricata -b ${{ matrix.branch }}
       - run: git clone https://github.com/OISF/libhtp suricata/libhtp
