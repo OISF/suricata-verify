@@ -5,6 +5,16 @@ on:
   - pull_request
 
 jobs:
+  
+  pcapng-check:
+    name: PCAP-NG Check
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - run: sudo apt update
+      - run: sudo apt -y install tshark
+      - run: ./pcapng-check.sh
+
   suricata:
     name: suricata
     runs-on: ubuntu-18.04
