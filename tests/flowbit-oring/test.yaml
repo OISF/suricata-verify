@@ -1,0 +1,7 @@
+# *** Add configuration here ***
+
+checks:
+- filter:
+    count: 3
+    match:
+      event_type: alert

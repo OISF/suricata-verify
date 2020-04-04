@@ -1,0 +1,4 @@
+alert http any any -> any any (msg:"Setting flowbit fb1";content:"testmyids.com";http_header;flowbits:set,fb1;noalert;sid:1;rev:1;)
+alert http any any -> any any (msg:"Setting flowbit fb2";content:"something";flowbits:set,fb2;sid:2;rev:1;)
+alert http any any -> any any (msg:"Setting flowbit fb3";content:"wwnotginh";flowbits:set,fb3;sid:3;rev:1;)
+alert http any any -> any any (msg:"Testing flowbits OR isset";flowbits:isset,fb4|fb2|fb1;sid:4;rev:1;)
