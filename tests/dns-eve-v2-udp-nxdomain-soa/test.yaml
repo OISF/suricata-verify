@@ -1,0 +1,21 @@
+requires:
+  min-version: 6.0.0
+  features:
+    - HAVE_LIBJANSSON
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: dns
+        dns.rcode: NXDOMAIN
+        dns.authorities[0].rrname: oisf.net
+        dns.authorities[0].rrtype: SOA
+        dns.authorities[0].ttl: 899
+        dns.authorities[0].soa.mname: ns-110.awsdns-13.com
+        dns.authorities[0].soa.rname: awsdns-hostmaster.amazon.com
+        dns.authorities[0].soa.serial: 1
+        dns.authorities[0].soa.refresh: 7200
+        dns.authorities[0].soa.retry: 900
+        dns.authorities[0].soa.expire: 1209600
+        dns.authorities[0].soa.minimum: 86400
