@@ -1,0 +1,123 @@
+# *** Add configuration here ***
+
+checks:
+- filter:
+    count: 1
+    match:
+      dest_ip: 10.16.1.1
+      dest_port: 53
+      dns.id: 39372
+      dns.rrname: textsecure-service-ca.whispersystems.org
+      dns.rrtype: A
+      dns.tx_id: 0
+      dns.type: query
+      event_type: dns
+      pcap_cnt: 3
+      proto: UDP
+      src_ip: 10.16.1.11
+      src_port: 60922
+- filter:
+    count: 1
+    match:
+      dest_ip: 10.16.1.1
+      dest_port: 53
+      dns.id: 28243
+      dns.rrname: google.com
+      dns.rrtype: TXT
+      dns.tx_id: 0
+      dns.type: query
+      event_type: dns
+      pcap_cnt: 1
+      proto: UDP
+      src_ip: 10.16.1.11
+      src_port: 52345
+- filter:
+    count: 1
+    match:
+      dest_ip: 10.16.1.1
+      dest_port: 53
+      dns.answers[0].rdata: 34.197.178.240
+      dns.answers[0].rrname: textsecure-service-ca.whispersystems.org
+      dns.answers[0].rrtype: A
+      dns.answers[0].ttl: 5
+      dns.flags: '8180'
+      dns.grouped.A[0]: 34.197.178.240
+      dns.id: 39372
+      dns.qr: true
+      dns.ra: true
+      dns.rcode: NOERROR
+      dns.rd: true
+      dns.rrname: textsecure-service-ca.whispersystems.org
+      dns.rrtype: A
+      dns.type: answer
+      dns.version: 2
+      event_type: dns
+      pcap_cnt: 4
+      proto: UDP
+      src_ip: 10.16.1.11
+      src_port: 60922
+- filter:
+    count: 1
+    match:
+      dest_ip: 10.16.1.1
+      dest_port: 53
+      dns.answers[0].rdata: v=spf1 include:_spf.google.com ~all
+      dns.answers[0].rrname: google.com
+      dns.answers[0].rrtype: TXT
+      dns.answers[0].ttl: 3217
+      dns.flags: '8180'
+      dns.grouped.TXT[0]: v=spf1 include:_spf.google.com ~all
+      dns.id: 28243
+      dns.qr: true
+      dns.ra: true
+      dns.rcode: NOERROR
+      dns.rd: true
+      dns.rrname: google.com
+      dns.rrtype: TXT
+      dns.type: answer
+      dns.version: 2
+      event_type: dns
+      pcap_cnt: 2
+      proto: UDP
+      src_ip: 10.16.1.11
+      src_port: 52345
+- filter:
+    count: 1
+    match:
+      app_proto: dns
+      dest_ip: 10.16.1.1
+      dest_port: 53
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 116
+      flow.bytes_toserver: 100
+      flow.end: 2017-06-08T15:45:58.525601+0000
+      flow.pkts_toclient: 1
+      flow.pkts_toserver: 1
+      flow.reason: shutdown
+      flow.start: 2017-06-08T15:45:58.520996+0000
+      flow.state: established
+      proto: UDP
+      src_ip: 10.16.1.11
+      src_port: 60922
+- filter:
+    count: 1
+    match:
+      app_proto: dns
+      dest_ip: 10.16.1.1
+      dest_port: 53
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 129
+      flow.bytes_toserver: 81
+      flow.end: 2017-06-08T15:45:57.833020+0000
+      flow.pkts_toclient: 1
+      flow.pkts_toserver: 1
+      flow.reason: shutdown
+      flow.start: 2017-06-08T15:45:57.828730+0000
+      flow.state: established
+      proto: UDP
+      src_ip: 10.16.1.11
+      src_port: 52345

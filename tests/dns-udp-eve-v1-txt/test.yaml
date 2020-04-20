@@ -1,0 +1,79 @@
+pcap: ../dns-udp-eve-v2-txt/input.pcap
+
+checks:
+- filter:
+    count: 4
+    match:
+      event_type: dns
+- filter:
+    count: 1
+    match:
+      dest_ip: 10.16.1.1
+      dest_port: 53
+      dns.id: 28243
+      dns.rrname: google.com
+      dns.rrtype: TXT
+      dns.tx_id: 0
+      dns.type: query
+      event_type: dns
+      pcap_cnt: 1
+      proto: UDP
+      src_ip: 10.16.1.11
+      src_port: 52345
+- filter:
+    count: 1
+    match:
+      dest_ip: 10.16.1.1
+      dest_port: 53
+      dns.id: 39372
+      dns.rrname: textsecure-service-ca.whispersystems.org
+      dns.rrtype: A
+      dns.tx_id: 0
+      dns.type: query
+      event_type: dns
+      pcap_cnt: 3
+      proto: UDP
+      src_ip: 10.16.1.11
+      src_port: 60922
+- filter:
+    count: 1
+    match:
+      dest_ip: 10.16.1.1
+      dest_port: 53
+      dns.flags: '8180'
+      dns.id: 28243
+      dns.qr: true
+      dns.ra: true
+      dns.rcode: NOERROR
+      dns.rd: true
+      dns.rdata: v=spf1 include:_spf.google.com ~all
+      dns.rrname: google.com
+      dns.rrtype: TXT
+      dns.ttl: 3217
+      dns.type: answer
+      event_type: dns
+      pcap_cnt: 2
+      proto: UDP
+      src_ip: 10.16.1.11
+      src_port: 52345
+- filter:
+    count: 1
+    match:
+      dest_ip: 10.16.1.1
+      dest_port: 53
+      dns.flags: '8180'
+      dns.id: 39372
+      dns.qr: true
+      dns.ra: true
+      dns.rcode: NOERROR
+      dns.rd: true
+      dns.rdata: 34.197.178.240
+      dns.rrname: textsecure-service-ca.whispersystems.org
+      dns.rrtype: A
+      dns.ttl: 5
+      dns.type: answer
+      event_type: dns
+      pcap_cnt: 4
+      proto: UDP
+      src_ip: 10.16.1.11
+      src_port: 60922
