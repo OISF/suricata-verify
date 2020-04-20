@@ -1,0 +1,18 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+#args:
+#- --set detect.prefilter.default=auto
+
+checks:
+  - filter:
+      count: 75
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 75
+      match:
+        event_type: alert
+        alert.signature_id: 2
+

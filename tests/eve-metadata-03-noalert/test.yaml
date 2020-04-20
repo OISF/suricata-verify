@@ -1,0 +1,21 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  files:
+    - src/output-json-metadata.c
+args:
+- --set stream.midstream=true
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        traffic.id[0]: mozilla
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        traffic.id[0]: mozilla
+

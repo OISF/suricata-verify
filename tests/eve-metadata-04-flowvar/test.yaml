@@ -1,0 +1,23 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  files:
+    - src/output-json-metadata.c
+args:
+- --set stream.midstream=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        metadata.flowvars[0].key: Mozilla
+        metadata.flowvars[1].value: "5.0"
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        metadata.flowvars[0].key: Mozilla
+        metadata.flowvars[1].value: "5.0"
+

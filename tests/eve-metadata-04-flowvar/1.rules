@@ -1,0 +1,1 @@
+alert http any any -> any any (content:"Mozilla"; startswith; http_user_agent; pcre:"/^(.*)\/(\d+\.\d+)/VG, flow:key,flow:value"; sid:1; rev:1;)
