@@ -1,1 +1,0 @@
-alert dns any any -> any any (msg:"TEST dns_query"; dns_query; content:"suricata-ids.org"; sid:1; rev:1;)
