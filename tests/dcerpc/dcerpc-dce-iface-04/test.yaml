@@ -1,0 +1,12 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
