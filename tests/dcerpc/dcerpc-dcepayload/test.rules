@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"DCE Response stub data"; flow:established,to_client; dce_stub_data; content:"no"; offset:22; content:"12DOM"; within:13; content:"REDHAT"; distance:5; sid:1;)

@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"DCE Iface test";flow:established,to_server;dce_iface:afa8bd80-7d8a-11c9-bef4-08002b102989;sid:1;)
