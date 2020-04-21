@@ -1,0 +1,14 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+  files:
+    - src/output-json-ftp.c
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.ftp.memuse: 0
+
