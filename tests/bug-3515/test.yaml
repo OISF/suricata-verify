@@ -1,0 +1,12 @@
+requires:
+  # No pcap required.
+  pcap: false
+  min-version: 6
+
+args:
+  - --engine-analysis --set decoder.erspan.typeI.enabled=true
+
+checks:
+    - shell:
+        args: grep "SC_WARN_ERSPAN_CONFIG" suricata.log | wc -l | xargs
+        expect: 1
