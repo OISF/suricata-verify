@@ -2,7 +2,7 @@ requires:
   features:
     - HAVE_NSS
     - MAGIC
-    - HAVE_RUST
+    - RUST
   files:
     - src/output-filestore.c
 
