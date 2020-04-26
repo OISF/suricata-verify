@@ -1,0 +1,15 @@
+# currently failing
+skip: true
+
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+checks:
+  - filter:
+      # only match once per flow
+      count: 1
+      match:
+        event_type: alert
+        app_proto: tls
+        alert.signature_id: 2230007
