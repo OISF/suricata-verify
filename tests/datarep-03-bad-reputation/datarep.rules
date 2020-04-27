@@ -1,0 +1,1 @@
+alert dns any any -> any any (dns.query; to_md5; datarep:dns_md5, >, 200, load dns_md5.rep, type md5; sid:1;)

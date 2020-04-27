@@ -1,0 +1,18 @@
+requires:
+  features:
+    - HAVE_NSS
+  files:
+    - src/datasets.c
+
+  # No pcap required.
+  pcap: false
+
+exit-code: 1
+
+args:
+  - --engine-analysis
+
+checks:
+  - shell:
+      args: grep "SC_ERR_INVALID_NUMERIC_VALUE" suricata.log | wc -l | xargs
+      expect: 1
