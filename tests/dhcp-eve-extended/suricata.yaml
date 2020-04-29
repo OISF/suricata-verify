@@ -1,0 +1,11 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: true
+      filename: eve.json
+      types:
+        - dhcp:
+            extended: true
+        - flow
