@@ -1,5 +1,6 @@
 requires:
-  min-version: 6
+  version: 5
+  lt-version: 6
 
   features:
     - HAVE_LIBJANSSON
@@ -14,7 +15,7 @@ checks:
       count: 1
       match:
         event_type: engine
-        engine.message: "unknown byte_ keyword var seen in depth - d."
+        engine.message: "unknown byte_extract var seen in depth - d."
 
   - filter:
       count: 1
