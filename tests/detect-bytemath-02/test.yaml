@@ -1,0 +1,13 @@
+requires:
+  min-version: 6
+  pcap: false
+
+exit-code: 1
+
+args:
+    - --engine-analysis
+
+checks:
+  - shell:
+      args: grep -o "relative specified without previous pattern match" suricata.log | wc -l | xargs
+      expect: 1

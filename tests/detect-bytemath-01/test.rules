@@ -1,0 +1,4 @@
+alert tcp any any -> any any (msg:"Byte-math test"; \
+    ipv4.hdr; byte_math:bytes 1, offset 1, oper <<, rvalue 2, result result_val; \
+    tcp.hdr; byte_test: 1, =, 0x88, 1, relative; \
+    sid:1;)
