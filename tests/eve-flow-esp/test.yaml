@@ -1,0 +1,74 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 6.0.0
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        spi: 123
+        src_ip: 190.0.0.1
+        dest_ip: 190.0.0.2
+        flow.pkts_toserver: 2
+        flow.pkts_toclient: 0
+  - filter:
+      count: 1
+      match:
+        event_type: netflow
+        spi: 123
+        src_ip: 190.0.0.1
+        dest_ip: 190.0.0.2
+        netflow.pkts: 2
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        spi: 321
+        src_ip: 190.0.0.1
+        dest_ip: 190.0.0.2
+        flow.pkts_toserver: 2
+        flow.pkts_toclient: 0
+  - filter:
+      count: 1
+      match:
+        event_type: netflow
+        spi: 321
+        src_ip: 190.0.0.1
+        dest_ip: 190.0.0.2
+        netflow.pkts: 2
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        spi: 123
+        src_ip: 190.0.0.1
+        dest_ip: 190.0.0.3
+        flow.pkts_toserver: 2
+        flow.pkts_toclient: 0
+  - filter:
+      count: 1
+      match:
+        event_type: netflow
+        spi: 123
+        src_ip: 190.0.0.1
+        dest_ip: 190.0.0.3
+        netflow.pkts: 2
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        spi: 123
+        src_ip: 0000:0000:0000:0000:0000:0000:0000:0001
+        dest_ip: 0000:0000:0000:0000:0000:0000:0000:0002
+        flow.pkts_toserver: 2
+        flow.pkts_toclient: 0
+  - filter:
+      count: 1
+      match:
+        event_type: netflow
+        spi: 123
+        src_ip: 0000:0000:0000:0000:0000:0000:0000:0001
+        dest_ip: 0000:0000:0000:0000:0000:0000:0000:0002
+        netflow.pkts: 2
