@@ -2,6 +2,7 @@ requires:
   features:
     - HAVE_LIBJANSSON
   min-version: 5.0.0
+  lt-version: 6
 
 args:
   - -k none
