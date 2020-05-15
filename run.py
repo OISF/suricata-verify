@@ -62,24 +62,24 @@ class SelfTest(unittest.TestCase):
 
         version = parse_suricata_version("4")
         self.assertEqual(
-            (4, None, None), (version.major, version.minor, version.patch))
+            (4, 0, 0), (version.major, version.minor, version.patch))
 
         version = parse_suricata_version("4.0.3")
         self.assertEqual(
             (4, 0, 3), (version.major, version.minor, version.patch))
 
     def test_version_equal(self):
-        self.assertTrue(version_equal("4", "4.0.3"))
-        self.assertTrue(version_equal("4.0", "4.0.3"))
-        self.assertTrue(version_equal("4.0.3", "4.0.3"))
+        self.assertTrue(Version().is_equal(SuricataVersion(5, 0, 0), SuricataVersion(5, 0, 0)))
+        self.assertTrue(Version().is_equal(SuricataVersion(5, 1, 0), SuricataVersion(5, None, None)))
+        self.assertFalse(Version().is_equal(SuricataVersion(4, 1, 0), SuricataVersion(5, None, None)))
 
-        self.assertTrue(version_equal("4.0.3", "4"))
-        self.assertTrue(version_equal("4.0.3", "4.0"))
-        self.assertTrue(version_equal("4.0.3", "4.0.3"))
-
-        self.assertFalse(version_equal("3", "4.0.3"))
-        self.assertFalse(version_equal("4.0", "4.1.3"))
-        self.assertFalse(version_equal("4.0.2", "4.0.3"))
+    def test_version_lt(self):
+        comp = Version()
+        self.assertTrue(comp.is_lt(SuricataVersion(5, 0, 3), SuricataVersion(6, None, None)))
+        self.assertTrue(comp.is_lt(SuricataVersion(6, 0, 0), SuricataVersion(6, 0, 1)))
+        self.assertTrue(comp.is_lt(SuricataVersion(6, 0, 0), SuricataVersion(6, 1, 1)))
+        self.assertFalse(comp.is_lt(SuricataVersion(6, 1, 2), SuricataVersion(6, 1, 1)))
+        self.assertTrue(comp.is_lt(SuricataVersion(6, 0, 0), SuricataVersion(7, 0, 0)))
 
 class TestError(Exception):
     pass
@@ -835,8 +835,13 @@ def main():
                         help="Outputs to custom directory")
     parser.add_argument("--valgrind", dest="valgrind", action="store_true",
                         help="Run tests in with valgrind")
+    parser.add_argument("--self-test", action="store_true",
+                        help="Run self tests")
     parser.add_argument("patterns", nargs="*", default=[])
     args = parser.parse_args()
+
+    if args.self_test:
+        return unittest.main(argv=[sys.argv[0]])
 
     TOPDIR = os.path.abspath(os.path.dirname(sys.argv[0]))
 
