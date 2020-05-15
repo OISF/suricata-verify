@@ -55,7 +55,7 @@ jobs:
                 software-properties-common \
                 zlib1g \
                 zlib1g-dev
-      - run: cargo install --force cbindgen
+      - run: cargo install --force --debug cbindgen
       - run: echo "::add-path::$HOME/.cargo/bin"
       - uses: actions/checkout@v1
       - run: python3 ./run.py --self-test
