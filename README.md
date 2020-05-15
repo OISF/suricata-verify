@@ -48,6 +48,9 @@ requires:
   # Require a minimum version of Suricata.
   min-version: 4.1.0
 
+  # Require that the Suricata version be less than a version.
+  lt-version: 6
+
   # Test is only for this version. For example, 4.0 would match any 4.0 
   # release, but 4.0.3 would only match 4.0.3.
   version: 4.0
