@@ -181,6 +181,15 @@ class Version:
 
         return True
 
+    def is_lt(self, v1, v2):
+        """Return True if v1 is less than v2."""
+        if v1.major < v2.major:
+            return True
+        elif v1.minor < v2.minor:
+            return True
+        elif v1.patch < v2.patch:
+            return True
+        return False
 
 class SuricataConfig:
 
@@ -453,6 +462,12 @@ class TestRunner:
                         suri_version=suri_version, expr="gte"):
                     raise UnsatisfiedRequirementError(
                             "requires at least version {}".format(min_version))
+            elif key == "lt-version":
+                lt_version = requires["lt-version"]
+                if not is_version_compatible(version=lt_version,
+                        suri_version=suri_version, expr="lt"):
+                    raise UnsatisfiedRequirementError(
+                            "for version less than {}".format(lt_version))
             elif key == "version":
                 req_version = requires["version"]
                 if not is_version_compatible(version=req_version,
