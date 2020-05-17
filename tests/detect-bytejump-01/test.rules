@@ -1,0 +1,4 @@
+# Jump value from payload will be 13 (dec)
+# payload; `Question?13When will the pandemic end?`
+alert tcp any any -> any any (msg:"Byte-jump test 1";content:"Question?"; byte_jump:2,0,relative,string,from_end,post_offset -26; content:"pandemic";distance:0; sid:1;)
+alert tcp any any -> any any (msg:"Byte-jump test 2";content:"Question?"; byte_jump:0,0,relative,string,from_end,post_offset -3; content:"pandemic";distance:0; sid:2;)
