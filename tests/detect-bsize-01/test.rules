@@ -1,0 +1,6 @@
+alert http any any -> any any (msg:"bsize test TEST"; http.uri; content:"abcdefgh123456"; bsize:2; sid:1; rev:1;)
+alert http any any -> any any (msg:"bsize test TEST"; http.uri; content:"abcdefgh123456"; bsize:>2; sid:2; rev:1;)
+alert http any any -> any any (msg:"bsize test TEST"; http.uri; content:"abcdefgh123456"; bsize:<13; sid:3; rev:1;)
+alert http any any -> any any (msg:"bsize test TEST"; http.uri; content:"abcdefgh123456"; bsize:>15; sid:4; rev:1;)
+alert http any any -> any any (msg:"bsize test TEST"; http.uri; content:"abcdefgh123456"; bsize:10<>15; sid:5; rev:1;)
+
