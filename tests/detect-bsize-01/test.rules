@@ -1,0 +1,13 @@
+# invalid
+alert http any any -> any any (msg:"bsize: value < content len"; http.uri; content:"abcdefgh123456"; bsize:2; sid:1;)
+alert http any any -> any any (msg:"bsize: value < content len"; http.uri; content:"abcdefgh123456"; bsize:<13; sid:2;)
+alert http any any -> any any (msg:"bsize: value < content len"; http.uri; content:"abcdefgh123456"; bsize:10<>13; sid:3;)
+alert http any any -> any any (msg:"bsize: value < content len";http.uri; content:"abcdefghi123456"; offset:12;  bsize:3; sid:4;)
+alert http any any -> any any (msg:"bsize: value < content len"; http.uri; content:"abc"; offset:3; depth:3; bsize:3; sid:5;)
+alert http any any -> any any (msg:"bsize: value < content len"; http.uri; content:"abcef"; content: "gh"; bsize:1; sid:6;)
+alert http any any -> any any (msg:"bsize test";http.uri; content:"abcef"; content: "g"; bsize:1; sid:8;)
+alert http any any -> any any (msg:"bsize test";http.uri; content:"abcef"; content: "g"; bsize:4; sid:9;)
+# good
+alert http any any -> any any (msg:"bsize test"; http.uri; content:"/index.php"; bsize:>1024; sid:7;)
+alert http any any -> any any (msg:"bsize test"; http.uri; content:"abcdefgh123456"; bsize:<20; sid:10;)
+alert http any any -> any any (msg:"bsize test"; http.uri; content:"abcdefgh123456"; bsize:15<>25; sid:11;)
