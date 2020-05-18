@@ -1,0 +1,37 @@
+requires:
+    min-version: 7.0.0
+    pcap: false
+
+args:
+    - --engine-analysis
+
+exit-code: 1
+
+checks:
+    - shell:
+        args: grep "signature can.*t match as required content length 14 exceeds bsize value.*2" suricata.log | wc -l | xargs
+        expect: 1
+
+    - shell:
+        args: grep "signature can.*t match as required content length 14 exceeds bsize value.*13" suricata.log | wc -l | xargs
+        expect: 1
+
+    - shell:
+        args: grep "signature can.*t match as required content length 15 exceeds bsize value.*3" suricata.log | wc -l | xargs
+        expect: 1
+
+    - shell:
+        args: grep "signature can.*t match as required content length 14 exceeds bsize range.*10-13" suricata.log | wc -l | xargs
+        expect: 1
+
+    - shell:
+        args: grep "signature can.*t match as required content length 6 exceeds bsize value.*3" suricata.log | wc -l | xargs
+        expect: 1
+
+    - shell:
+        args: grep "signature can.*t match as required content length 5 exceeds bsize value.*1" suricata.log | wc -l | xargs
+        expect: 2
+
+    - shell:
+        args: grep "signature can.*t match as required content length 5 exceeds bsize value.*4" suricata.log | wc -l | xargs
+        expect: 1
