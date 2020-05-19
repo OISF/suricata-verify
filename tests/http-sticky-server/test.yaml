@@ -5,7 +5,7 @@ requires:
 
 checks:
   - filter:
-      count: 28
+      count: 29
       match:
         event_type: alert
         alert.signature_id: 2
