@@ -1,0 +1,1 @@
+alert smtp any any -> any any (msg:"SMTP WILDCARD"; content:"QUIT"; sid:1; rev:1;)

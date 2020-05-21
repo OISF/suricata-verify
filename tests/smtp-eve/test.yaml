@@ -1,0 +1,105 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 5.0.0
+
+checks:
+- filter:
+    count: 1
+    match:
+      dest_ip: 74.53.140.153
+      dest_port: 25
+      email.attachment[0]: NEWS.txt
+      email.from: '"Gurpartap Singh" <gurpartap@patriots.in>'
+      email.status: PARSE_DONE
+      email.to[0]: <raj_deol2002in@yahoo.co.in>
+      event_type: smtp
+      pcap_cnt: 46
+      proto: TCP
+      smtp.helo: GP
+      smtp.mail_from: <gurpartap@patriots.in>
+      smtp.rcpt_to[0]: <raj_deol2002in@yahoo.co.in>
+      src_ip: 10.10.1.4
+      src_port: 1470
+      tx_id: 0
+- filter:
+    count: 1
+    match:
+      app_proto: smtp
+      dest_ip: 74.53.140.153
+      dest_port: 25
+      email.attachment[0]: NEWS.txt
+      email.from: '"Gurpartap Singh" <gurpartap@patriots.in>'
+      email.status: PARSE_DONE
+      email.to[0]: <raj_deol2002in@yahoo.co.in>
+      event_type: fileinfo
+      fileinfo.filename: NEWS.txt
+      fileinfo.gaps: false
+      fileinfo.size: 10735
+      fileinfo.state: CLOSED
+      fileinfo.stored: false
+      fileinfo.tx_id: 0
+      pcap_cnt: 46
+      proto: TCP
+      smtp.helo: GP
+      smtp.mail_from: <gurpartap@patriots.in>
+      smtp.rcpt_to[0]: <raj_deol2002in@yahoo.co.in>
+      src_ip: 10.10.1.4
+      src_port: 1470
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 1
+      alert.severity: 3
+      alert.signature: SMTP WILDCARD
+      alert.signature_id: 1
+      app_proto: smtp
+      app_proto_tc: failed
+      dest_ip: 74.53.140.153
+      dest_port: 25
+      event_type: alert
+      flow.bytes_toclient: 4280
+      flow.bytes_toserver: 22065
+      flow.pkts_toclient: 28
+      flow.pkts_toserver: 28
+      pcap_cnt: 58
+      proto: TCP
+      src_ip: 10.10.1.4
+      src_port: 1470
+- filter:
+    count: 1
+    match:
+      app_proto: smtp
+      app_proto_tc: failed
+      dest_ip: 74.53.140.153
+      dest_port: 25
+      event_type: flow
+      flow.age: 8
+      flow.alerted: true
+      flow.bytes_toclient: 4340
+      flow.bytes_toserver: 22065
+      flow.pkts_toclient: 29
+      flow.pkts_toserver: 28
+      flow.reason: shutdown
+      flow.state: closed
+      proto: TCP
+      src_ip: 10.10.1.4
+      src_port: 1470
+      tcp.ack: true
+      tcp.fin: true
+      tcp.psh: true
+      tcp.state: closed
+      tcp.syn: true
+      tcp.tcp_flags: 1b
+      tcp.tcp_flags_tc: 1b
+      tcp.tcp_flags_ts: 1b
+
+# Check the stats. A stats check is a specialization of a filter
+# that only checks the last stats entry.
+- stats:
+    decoder.pkts: 60
+    decoder.bytes: 26866
+    decoder.invalid: 0
