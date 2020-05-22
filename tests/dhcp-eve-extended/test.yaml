@@ -11,7 +11,7 @@ checks:
       dhcp.client_ip: 10.16.1.4
       dhcp.client_mac: 00:11:32:17:49:f0
       dhcp.dhcp_type: request
-      dhcp.hostname: nas1\x00
+      dhcp.hostname: "nas1\u0000"
       dhcp.id: 4016330564
       dhcp.params[0]: subnet_mask
       dhcp.params[1]: router
@@ -33,7 +33,7 @@ checks:
       dhcp.client_mac: 00:11:32:17:49:f0
       dhcp.dhcp_type: ack
       dhcp.dns_servers[0]: 10.16.1.1
-      dhcp.hostname: nas1\x00
+      dhcp.hostname: "nas1\u0000"
       dhcp.id: 4016330564
       dhcp.lease_time: 3600
       dhcp.next_server_ip: 10.16.1.1
