@@ -1,5 +1,7 @@
 requires:
   min-version: 5.0.0
+  features:
+    - HAVE_NSS
 
 checks:
   - shell:

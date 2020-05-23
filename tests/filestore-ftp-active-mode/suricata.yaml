@@ -1,10 +1,6 @@
 %YAML 1.1
 ---
 
-requires:
-  features:
-    - HAVE_NSS
-
 pcap-file:
     checksum-checks: no
 
