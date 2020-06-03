@@ -1,0 +1,37 @@
+requires:
+  min-version: 6.0.0
+features:
+    - RUST
+
+args:
+ - -k none
+
+checks:
+  # Check that we have the following events in eve.json
+  # 4 - alert events, one per each type of data (ssh.hassh, ssh.hassh.string, ssh.hassh.server, ssh.hassh.server.string)
+  - filter:
+      count: 1
+      match:
+         event_type: alert
+         alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+         event_type: alert
+         alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+         event_type: alert
+         alert.signature_id: 3
+  - filter:
+      count: 1
+      match:
+         event_type: alert
+         alert.signature_id: 4
+  - filter:
+      count: 1
+      match:
+        event_type: ssh
+        ssh.client.hassh: "2dd6531c7e89d3c925db9214711be76a"
+        ssh.server.hassh: "6832f1ce43d4397c2c0a3e2f8c94334e"
