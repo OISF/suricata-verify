@@ -1,0 +1,4 @@
+alert ssh any any -> any any (msg:"match SSH hash"; ssh.hassh; content:"3cc67862bceac0f334c62ad1b76895b4"; sid:1;)
+alert ssh any any -> any any (msg:"match SSH hash-server"; ssh.hassh.server; content:"3cc67862bceac0f334c62ad1b76895b4"; sid:2;)
+alert ssh any any -> any any (msg:"match SSH hash-string"; ssh.hassh.string; content:"diffie-hellman-group1-sha1"; sid:3;)
+alert ssh any any -> any any (msg:"match SSH hash-server-string"; ssh.hassh.server.string; content:"diffie-hellman-group1-sha1"; sid:4;)
