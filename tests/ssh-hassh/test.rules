@@ -1,0 +1,4 @@
+alert ssh any any -> any any (msg:"match SSH hash"; ssh.hassh; content:"2dd6531c7e89d3c925db9214711be76a"; sid:1;)
+alert ssh any any -> any any (msg:"match SSH hash-server"; ssh.hassh.server; content:"6832f1ce43d4397c2c0a3e2f8c94334e"; sid:2;)
+alert ssh any any -> any any (msg:"match SSH hash-string"; ssh.hassh.string; content:"umac-64-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,hmac-sha1-etm@openssh.com,umac-64@openssh.com,umac-128@openssh.com,hmac-sha2-256,hmac-sha2-512,hmac-sha1"; sid:3;)
+alert ssh any any -> any any (msg:"match SSH hash-server-string"; ssh.hassh.server.string; content:"none,zlib@openssh.com"; sid:4;)

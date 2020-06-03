@@ -1,0 +1,20 @@
+requires:
+  min-version: 5.0.0
+features:
+    - RUST
+
+args:
+ - -k none
+
+checks:
+  # Check that we have the following events in eve.json
+  # 2 - alert events
+  # 1 - http event
+  - filter:
+      count: 1
+      match:
+        event_type: ssh
+        ssh.client.proto_version: "2.0"
+        ssh.server.proto_version: "2.0"
+        ssh.client.software_version: "OpenSSH_for_Windows_7.7"
+        ssh.server.software_version: "OpenSSH_7.4"
