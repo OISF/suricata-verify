@@ -1,0 +1,46 @@
+requires:
+  min-version: 6.0.0
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 27
+      dcerpc.interfaces[0].ack_result: 2
+      dcerpc.interfaces[0].uuid: afa8bd80-7d8a-11c9-bef4-08002b102989
+      dcerpc.interfaces[0].version: '1.0'
+      dcerpc.interfaces[1].ack_result: 0
+      dcerpc.interfaces[1].uuid: afa8bd80-7d8a-11c9-bef4-08002b102989
+      dcerpc.interfaces[1].version: '1.0'
+      dcerpc.request: BIND
+      dcerpc.response: BINDACK
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.3.43
+      dest_port: 49302
+      event_type: dcerpc
+      pcap_cnt: 7
+      proto: TCP
+      src_ip: 10.0.2.15
+      src_port: 51286
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 27
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 4
+      dcerpc.req.stub_data_size: 24
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 68
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.3.43
+      dest_port: 49302
+      event_type: dcerpc
+      pcap_cnt: 10
+      proto: TCP
+      src_ip: 10.0.2.15
+      src_port: 51286
