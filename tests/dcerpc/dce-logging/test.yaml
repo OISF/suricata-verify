@@ -1,0 +1,40 @@
+# *** Add configuration here ***
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      dcerpc.opnum: 0
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.stub_data_size: 0
+      dcerpc.request: BIND
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 0
+      dcerpc.response: BINDACK
+      dest_ip: 192.168.3.43
+      dest_port: 49302
+      event_type: dcerpc
+      pcap_cnt: 7
+      proto: TCP
+      src_ip: 10.0.2.15
+      src_port: 51286
+- filter:
+    count: 1
+    match:
+      dcerpc.opnum: 4
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.stub_data_size: 24
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 68
+      dcerpc.response: RESPONSE
+      dest_ip: 192.168.3.43
+      dest_port: 49302
+      event_type: dcerpc
+      pcap_cnt: 10
+      proto: TCP
+      src_ip: 10.0.2.15
+      src_port: 51286
