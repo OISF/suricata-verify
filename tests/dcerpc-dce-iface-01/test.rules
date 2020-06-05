@@ -1,1 +1,0 @@
-alert tcp any any -> any [135,139,445,1024:] (msg:"ET POLICY DCERPC  SVCCTL OpenSCManagerW Request"; flow:established,to_server; dce_iface:367abb81-9844-35f1-ad32-98f038001003; dce_opnum:15; classtype:bad-unknown; sid:1; rev:1;)
