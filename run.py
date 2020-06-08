@@ -62,7 +62,7 @@ class SelfTest(unittest.TestCase):
 
         version = parse_suricata_version("4")
         self.assertEqual(
-            (4, 0, 0), (version.major, version.minor, version.patch))
+            (4, None, None), (version.major, version.minor, version.patch))
 
         version = parse_suricata_version("4.0.3")
         self.assertEqual(
@@ -70,11 +70,18 @@ class SelfTest(unittest.TestCase):
 
     def test_version_equal(self):
         self.assertTrue(Version().is_equal(SuricataVersion(5, 0, 0), SuricataVersion(5, 0, 0)))
+        self.assertTrue(Version().is_equal(SuricataVersion(5, None, None), SuricataVersion(5, None, None)))
+        self.assertTrue(Version().is_equal(SuricataVersion(5, None, None), SuricataVersion(5, 1, 4)))
+        self.assertTrue(Version().is_equal(SuricataVersion(5, 1, None), SuricataVersion(5, 1, 4)))
+        self.assertTrue(Version().is_equal(SuricataVersion(5, 1, None), SuricataVersion(5, 1, None)))
         self.assertTrue(Version().is_equal(SuricataVersion(5, 1, 0), SuricataVersion(5, None, None)))
         self.assertFalse(Version().is_equal(SuricataVersion(4, 1, 0), SuricataVersion(5, None, None)))
 
     def test_version_lt(self):
         comp = Version()
+        self.assertTrue(comp.is_lt(SuricataVersion(5, None, None), SuricataVersion(5, 0, 3)))
+        self.assertTrue(comp.is_lt(SuricataVersion(5, 0, None), SuricataVersion(5, 1, 3)))
+        self.assertTrue(comp.is_lt(SuricataVersion(6, None, None), SuricataVersion(7, None, None)))
         self.assertTrue(comp.is_lt(SuricataVersion(5, 0, 3), SuricataVersion(6, None, None)))
         self.assertTrue(comp.is_lt(SuricataVersion(6, 0, 0), SuricataVersion(6, 0, 1)))
         self.assertTrue(comp.is_lt(SuricataVersion(6, 0, 0), SuricataVersion(6, 1, 1)))
@@ -94,8 +101,8 @@ def parse_suricata_version(buf):
     m = re.search("(?:Suricata version |^)(\d+)\.?(\d+)?\.?(\d+)?.*", str(buf).strip())
     if m:
         major = int(m.group(1)) if m.group(1) else 0
-        minor = int(m.group(2)) if m.group(2) else 0
-        patch = int(m.group(3)) if m.group(3) else 0
+        minor = int(m.group(2)) if m.group(2) else None
+        patch = int(m.group(3)) if m.group(3) else None
 
         return SuricataVersion(
             major=major, minor=minor, patch=patch)
