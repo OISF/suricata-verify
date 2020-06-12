@@ -1,0 +1,15 @@
+requires:
+  min-version: 6
+
+  # No pcap required.
+  pcap: false
+
+exit-code: 1
+
+args:
+  - --engine-analysis
+
+checks:
+    - shell:
+        args: grep "incompatible with strip_whitespace" suricata.log | wc -l | xargs
+        expect: 4

@@ -1,0 +1,6 @@
+alert tcp any any -> any any (file.data; strip_whitespace; content:"has extra white   space"; sid:1;)
+alert tcp any any -> any any (file.data; strip_whitespace; content:"no-extra-whitespace"; sid:2;)
+alert tcp any any -> any any (file.data; strip_whitespace; content:"has-extra-whitespace-at-end "; sid:3;)
+alert tcp any any -> any any (file.data; strip_whitespace; content:" extra-whitespace-at-beginning"; sid:4;)
+alert tcp any any -> any any (file.data; strip_whitespace; content:"|53 75 72 69 63 61 74 61 0d|"; sid:5;)
+alert tcp any any -> any any (file.data; strip_whitespace; content:"|00 53 75 72 69 63 61 74 61|"; sid:6;)
