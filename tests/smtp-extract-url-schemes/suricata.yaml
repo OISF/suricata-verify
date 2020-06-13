@@ -1,0 +1,20 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      types:
+        - smtp
+
+app-layer:
+  protocols:
+    smtp:
+      enabled: yes
+      mime:
+        decode-mime: yes
+        decode-base64: yes
+        extract-urls: yes
+        extract-urls-schemes: [http, https, ftp, mailto]
+        log-url-scheme: yes
