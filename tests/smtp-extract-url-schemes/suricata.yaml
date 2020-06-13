@@ -1,0 +1,15 @@
+%YAML 1.1
+---
+
+include: ../../etc/suricata-4.0.3.yaml
+
+app-layer:
+  protocols:
+    smtp:
+      enabled: yes
+      mime:
+        decode-mime: yes
+        decode-base64: yes
+        extract-urls: yes
+        extract-urls-schemes: [http, https, ftp, mailto]
+        log-url-scheme: yes

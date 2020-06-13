@@ -1,0 +1,14 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 6.0.0
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        email.url[0]: "ftp://172.42.48.124"
+        email.url[1]: "https://facebook.com"
+        email.url[2]: "http://test-site.org/blah/123/"
+        email.url[3]: "http://google.com"
