@@ -1,0 +1,19 @@
+requires:
+  min-version: 5
+  features:
+    - HAVE_NSS
+
+args:
+  - -k none
+
+pcap: input.pcap
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.state: "TRUNCATED"
+        fileinfo.stored: true
+        fileinfo.size: 99400

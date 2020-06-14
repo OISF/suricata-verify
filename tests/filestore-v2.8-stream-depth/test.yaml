@@ -1,0 +1,25 @@
+requires:
+  features:
+    - HAVE_NSS
+  files:
+    - src/output-filestore.c
+  min-version: 6
+
+args:
+  - -k none
+
+pcap: ../filestore-v2.7-stream-depth/input.pcap
+
+checks:
+
+  - shell:
+      args: grep "SC_WARN_FILESTORE_CONFIG(330)] - file-store.stream-depth value 10000 must be larger than 1048576. Using 1048576 instead" stdout | wc -l | xargs
+      expect: 1
+
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.state: "CLOSED"
+        fileinfo.stored: true
+        fileinfo.size: 157548

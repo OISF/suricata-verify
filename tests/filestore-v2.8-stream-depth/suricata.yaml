@@ -1,0 +1,18 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      types:
+        - files
+        - alert
+  - file-store:
+      version: 2
+      enabled: yes
+      force-filestore: yes
+      stream-depth: 10000
+
+stream:
+  reassembly:
+    depth: 1mb
