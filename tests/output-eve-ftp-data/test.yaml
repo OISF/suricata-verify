@@ -1,0 +1,18 @@
+requires:
+  min-version: 5
+
+args:
+  - --runmode=single
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: ftp_data
+
+  - filter:
+      count: 1
+      match:
+        event_type: ftp_data
+        ftp_data.filename: temp.txt
+        ftp_data.command: RETR
