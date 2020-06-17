@@ -1,0 +1,1 @@
+alert http $EXTERNAL_NET any -> $HOME_NET any (flow:established,to_client; content:"Server|3a 20 20 20 20 20 20 20|Yx|28|"; http_raw_header; sid:1;)
