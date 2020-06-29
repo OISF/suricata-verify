@@ -1,0 +1,15 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+    - RUST
+
+# disables checksum verification
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 5
+      match:
+        event_type: smb
+        has-key: community_id

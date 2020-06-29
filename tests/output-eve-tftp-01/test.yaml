@@ -1,0 +1,13 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+    - RUST
+
+args:
+ - -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      has-key: community_id
