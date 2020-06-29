@@ -1,0 +1,9 @@
+requires:
+  features:
+    - RUST
+checks:
+- filter:
+    count: 2
+    match:
+      event_type: dhcp
+      has-key: community_id

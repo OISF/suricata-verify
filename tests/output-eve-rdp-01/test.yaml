@@ -1,0 +1,13 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  files:
+    - rust/src/rdp/parser.rs
+
+checks:
+
+  - filter:
+      count: 4
+      match:
+        event_type: rdp
+        has-key: community_id
