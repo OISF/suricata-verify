@@ -1,0 +1,15 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+# disables checksum verification, and uses midstream
+args:
+- -k none --set stream.midstream=true --set app-layer.protocols.dnp3.enabled=yes
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: dnp3
+        flow.pkts_toclient: 1
