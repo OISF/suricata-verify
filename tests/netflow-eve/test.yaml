@@ -1,0 +1,45 @@
+checks:
+- filter:
+    count: 1
+    match:
+      app_proto: http
+      dest_ip: 82.165.177.154
+      dest_port: 80
+      event_type: netflow
+      netflow.age: 0
+      netflow.bytes: 425
+      netflow.end: 2016-05-27T06:56:11.900923+0000
+      netflow.max_ttl: 64
+      netflow.min_ttl: 64
+      netflow.pkts: 6
+      netflow.start: 2016-05-27T06:56:11.304062+0000
+      proto: TCP
+      src_ip: 10.16.1.11
+      src_port: 46652
+      tcp.ack: true
+      tcp.fin: true
+      tcp.psh: true
+      tcp.syn: true
+      tcp.tcp_flags: 1b
+- filter:
+    count: 1
+    match:
+      app_proto: http
+      dest_ip: 10.16.1.11
+      dest_port: 46652
+      event_type: netflow
+      netflow.age: 0
+      netflow.bytes: 495
+      netflow.end: 2016-05-27T06:56:11.900923+0000
+      netflow.max_ttl: 50
+      netflow.min_ttl: 50
+      netflow.pkts: 4
+      netflow.start: 2016-05-27T06:56:11.304062+0000
+      proto: TCP
+      src_ip: 82.165.177.154
+      src_port: 80
+      tcp.ack: true
+      tcp.fin: true
+      tcp.psh: true
+      tcp.syn: true
+      tcp.tcp_flags: 1b
