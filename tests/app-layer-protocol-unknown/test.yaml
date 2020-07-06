@@ -1,0 +1,12 @@
+requires:
+    min-version: 6.0.0
+    features:
+      - HAVE_LIBJANSSON
+
+checks:
+- filter:
+    # two positive matches for app-layer-protocol:<failed && !http>
+    # one negative for app-layer-protocol:!failed
+    count: 2
+    match:
+        event_type: alert

@@ -1,0 +1,3 @@
+alert tcp any any -> any any (msg:"EXAMPLE App Layer Protocol Failed ls"; app-layer-protocol:failed; content:"ls|0A|"; classtype: misc-activity; sid:1; rev:1;)
+alert tcp any any -> any any (msg:"EXAMPLE App Layer Protocol Failed ls"; app-layer-protocol:!failed; content:"ls|0A|"; classtype: misc-activity; sid:2; rev:1;)
+alert tcp any any -> any any (msg:"EXAMPLE App Layer Protocol Failed ls"; app-layer-protocol:!http; content:"ls|0A|"; classtype: misc-activity; sid:3; rev:1;)
