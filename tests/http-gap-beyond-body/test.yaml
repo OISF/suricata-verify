@@ -1,0 +1,39 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 6.0.0
+
+# disables checksum verification
+args:
+  - -k none
+
+checks:
+
+  # Check that there is one file event with content range.
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.url: "/1"
+        http.status: 200
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.url: "/2"
+# response is not parsed in gap
+#       http.status: 200
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.url: "/3"
+# response is no longer parsed after gap
+#       http.status: 200
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.size: 0
+        fileinfo.state: "TRUNCATED"
+        fileinfo.gaps: true
