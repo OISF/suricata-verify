@@ -1,0 +1,52 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 6.0.0
+
+# disables checksum verification
+args:
+  - -k none --set stream.midstream=true
+
+checks:
+
+  # Check that there is one file event with content range.
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.url: /robots.txt
+        http.status: 101
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.http2.stream_id: 0
+        http.http2.response.settings[2].settings_id: "SETTINGSHEADERTABLESIZE"
+        http.http2.response.settings[2].settings_value: 8192
+  - filter:
+      count: 2
+      match:
+        event_type: http
+        http.http2.stream_id: 0
+        http.http2.request.settings[2].settings_id: "SETTINGSENABLEPUSH"
+        http.http2.request.settings[2].settings_value: 0
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.http2.stream_id: 1
+        http.version: "2"
+        http.http_method: "GET"
+        http.url: "/robots.txt"
+        http.request_headers[2].name: "Host"
+        http.request_headers[2].value: "nghttp2.org"
+        http.status: 200
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.http2.stream_id: 3
+        http.request_headers[0].table_size_update: 4096
+        http.http_method: "GET"
+        http.url: "/humans.txt"
+        http.status: 404
