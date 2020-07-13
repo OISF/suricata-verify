@@ -1,6 +1,7 @@
 requires:
   features:
     - HAVE_LIBJANSSON
+  min-version: 5.0.0
 
 # disables checksum verification, and uses midstream
 args:
