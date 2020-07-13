@@ -1,0 +1,20 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert:
+            tagged-packets: yes
+        - http:
+            extended: yes
+        - http2
+        - files
+
+app-layer:
+  protocols:
+    http2:
+      enabled: yes

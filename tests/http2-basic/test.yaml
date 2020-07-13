@@ -37,7 +37,9 @@ checks:
         http.length: 22617
         http.status: 200
         http.http_method: "GET"
+        http.url: "/doc/manual/html/index.html"
         http.http_user_agent: "nghttp2/0.5.2-DEV"
+        http.version: "2"
         http.http2.stream_id: 1
         http.request_headers[0].name: ":authority"
         http.request_headers[0].value: "localhost:3000"
