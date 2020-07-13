@@ -1,5 +1,8 @@
 requires:
   lt-version: 6.0.0
+  features:
+    - HAVE_LIBJANSSON
+    - RUST
 
 checks:
 - filter:
