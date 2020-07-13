@@ -1,0 +1,16 @@
+requires:
+  min-version: 6.0.0
+features:
+    - RUST
+
+args:
+ - -k none --simulate-ips --set app-layer.protocols.ssh.hassh=yes
+
+checks:
+  # Check that we have the following events in eve.json
+  - filter:
+      count: 1
+      match:
+        event_type: ssh
+        ssh.client.hassh: "46c5bd9748882f1a5d75753fb7d47a61"
+
