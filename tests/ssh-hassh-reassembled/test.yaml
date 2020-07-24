@@ -33,6 +33,6 @@ checks:
       count: 1
       match:
         event_type: ssh
-        ssh.client.hassh: "3cc67862bceac0f334c62ad1b76895b4"
-        ssh.server.hassh: "3cc67862bceac0f334c62ad1b76895b4"
+        ssh.client.hassh.hash: "3cc67862bceac0f334c62ad1b76895b4"
+        ssh.server.hassh.hash: "3cc67862bceac0f334c62ad1b76895b4"
 

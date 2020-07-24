@@ -33,5 +33,5 @@ checks:
       count: 1
       match:
         event_type: ssh
-        ssh.client.hassh: "2dd6531c7e89d3c925db9214711be76a"
-        ssh.server.hassh: "6832f1ce43d4397c2c0a3e2f8c94334e"
+        ssh.client.hassh.hash: "2dd6531c7e89d3c925db9214711be76a"
+        ssh.server.hassh.hash: "6832f1ce43d4397c2c0a3e2f8c94334e"
