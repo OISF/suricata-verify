@@ -1,0 +1,19 @@
+requires:
+  min-version: 6.0
+
+# disables checksum verification
+args:
+- -k none --set app-layer.protocols.dns.detection-ports.dp=5353
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: dns
+        dns.rrname: google.com
+        dns.type: query
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
