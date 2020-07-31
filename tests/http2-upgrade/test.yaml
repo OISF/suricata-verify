@@ -1,0 +1,57 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 6.0.0
+
+# disables checksum verification
+args:
+  - -k none --set stream.midstream=true
+
+checks:
+
+  # Check that there is one file event with content range.
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.url: /robots.txt
+        http.status: 101
+  - filter:
+      count: 1
+      match:
+        event_type: http2
+        http2.stream_id: 0
+        http2.response.settings[2].settings_id: "SETTINGSHEADERTABLESIZE"
+        http2.response.settings[2].settings_value: 8192
+  - filter:
+      count: 2
+      match:
+        event_type: http2
+        http2.stream_id: 0
+        http2.request.settings[2].settings_id: "SETTINGSENABLEPUSH"
+        http2.request.settings[2].settings_value: 0
+  - filter:
+      count: 1
+      match:
+        event_type: http2
+        http2.stream_id: 1
+        http2.request.headers[0].name: ":method"
+        http2.request.headers[0].value: "GET"
+        http2.request.headers[1].name: ":path"
+        http2.request.headers[1].value: "/robots.txt"
+        http2.request.headers[2].name: "Host"
+        http2.request.headers[2].value: "nghttp2.org"
+        http2.response.headers[0].name: ":status"
+        http2.response.headers[0].value: "200"
+  - filter:
+      count: 1
+      match:
+        event_type: http2
+        http2.stream_id: 3
+        http2.request.headers[0].table_size_update: 4096
+        http2.request.headers[1].name: ":method"
+        http2.request.headers[1].value: "GET"
+        http2.request.headers[2].name: ":path"
+        http2.request.headers[2].value: "/humans.txt"
+        http2.response.headers[0].name: ":status"
+        http2.response.headers[0].value: "404"
