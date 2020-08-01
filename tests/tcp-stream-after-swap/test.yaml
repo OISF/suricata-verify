@@ -1,0 +1,24 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 5.0.0
+
+# disables checksum verification, and uses midstream
+args:
+- -k none --set stream.midstream=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: "UNABLE_TO_MATCH_RESPONSE_TO_REQUEST"
+
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: http
+        dest_port: 80
+        flow.bytes_toserver: 608
+        flow.bytes_toclient: 1037
