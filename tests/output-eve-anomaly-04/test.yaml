@@ -1,0 +1,10 @@
+requires:
+  min-version: 6
+
+args:
+  - -k none
+
+checks:
+    - shell:
+        args: grep "only one 'anomaly' logger can be enabled" stderr | wc -l | xargs
+        expect: 1

@@ -1,0 +1,23 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filename: eve.json
+      filetype: regular
+      types:
+        - anomaly:
+            types:
+                stream: yes
+                applayer: no
+
+  - eve-log:
+      enabled: yes
+      filename: eve2.json
+      filetype: regular
+      types:
+        - anomaly:
+            types:
+                stream: yes
+                applayer: no
