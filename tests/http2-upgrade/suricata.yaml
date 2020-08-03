@@ -1,0 +1,18 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: true
+      types:
+        - alert
+        - http:
+            extended: yes
+        - http2
+
+app-layer:
+  protocols:
+    http:
+      enabled: true
+    http2:
+      enabled: true
