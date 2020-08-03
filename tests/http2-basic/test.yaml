@@ -13,36 +13,40 @@ checks:
   - filter:
       count: 1
       match:
-        event_type: http2
-        http2.stream_id: 0
-        http2.response.settings[0].settings_id: "SETTINGSMAXCONCURRENTSTREAMS"
-        http2.response.settings[0].settings_value: 100
+        event_type: http
+        http.http2.stream_id: 0
+        http.http2.response.settings[0].settings_id: "SETTINGSMAXCONCURRENTSTREAMS"
+        http.http2.response.settings[0].settings_value: 100
   - filter:
       count: 1
       match:
-        event_type: http2
-        http2.stream_id: 0
-        http2.request.settings[1].settings_id: "SETTINGSINITIALWINDOWSIZE"
-        http2.request.settings[1].settings_value: 65535
+        event_type: http
+        http.http2.stream_id: 0
+        http.http2.request.settings[1].settings_id: "SETTINGSINITIALWINDOWSIZE"
+        http.http2.request.settings[1].settings_value: 65535
   - filter:
       count: 1
       match:
-        event_type: http2
-        http2.stream_id: 0
-        http2.request.error_code: "NOERROR"
+        event_type: http
+        http.http2.stream_id: 0
+        http.http2.request.error_code: "NOERROR"
   - filter:
       count: 1
       match:
-        event_type: http2
-        http2.stream_id: 1
-        http2.request.headers[0].name: ":authority"
-        http2.request.headers[0].value: "localhost:3000"
-        http2.request.headers[1].name: ":method"
-        http2.request.headers[1].value: "GET"
-        http2.request.headers[2].name: ":path"
-        http2.request.headers[2].value: "/doc/manual/html/index.html"
-        http2.response.headers[0].name: ":status"
-        http2.response.headers[0].value: "200"
+        event_type: http
+        http.length: 22617
+        http.status: 200
+        http.http_method: "GET"
+        http.http_user_agent: "nghttp2/0.5.2-DEV"
+        http.http2.stream_id: 1
+        http.request_headers[0].name: ":authority"
+        http.request_headers[0].value: "localhost:3000"
+        http.request_headers[1].name: ":method"
+        http.request_headers[1].value: "GET"
+        http.request_headers[2].name: ":path"
+        http.request_headers[2].value: "/doc/manual/html/index.html"
+        http.response_headers[0].name: ":status"
+        http.response_headers[0].value: "200"
   - filter:
       count: 6
       match:
