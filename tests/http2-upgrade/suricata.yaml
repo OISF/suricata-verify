@@ -8,6 +8,7 @@ outputs:
         - alert
         - http:
             extended: yes
+            dump-all-headers: both
         - http2
 
 app-layer:
