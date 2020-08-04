@@ -68,9 +68,9 @@ requires:
   # Run the script and only continue with the test if the script exists
   # successfully.
   script:
-	- command1
-	- command2
-	- ...
+    - command1
+    - command2
+    - ...
 
 skip:
   # Skip a test if a feature is present, with a message that is logged.
@@ -102,24 +102,24 @@ checks:
   # filters may exist and all must pass for the test to pass.
   - filter:
       # The number of records this filter should match.
-	  count: 1
+      count: 1
 	  
-	  # The fields to match on.
-	  match:
-	    # Example match on event_type:
-		event_type: alert
-		
-		# Example match on array item:
-		alert.metadata.tag[0]: "tag1"
+      # The fields to match on.
+      match:
+        # Example match on event_type:
+        event_type: alert
+
+        # Example match on array item:
+        alert.metadata.tag[0]: "tag1"
 
         # Example match on the length of an array.
         alert.metadata.tag.__len: 3
 		
-		# Check that a field exists:
-		has-key: alert.rule
-		
-		# Check that a field does not exist:
-		not-has-key: flow
+        # Check that a field exists:
+        has-key: alert.rule
+
+        # Check that a field does not exist:
+        not-has-key: flow
 
   - shell:
       # A simple shell check. If the command exits with a non-0 exit code the
