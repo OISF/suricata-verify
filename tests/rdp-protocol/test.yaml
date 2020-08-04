@@ -35,3 +35,11 @@ checks:
         rdp.channels[0]: "rdpdr"
         rdp.channels[1]: "cliprdr"
         rdp.channels[2]: "rdpsnd"
+  - filter:
+      count: 1
+      match:
+        event_type: "alert"
+        pcap_cnt: 5
+        rdp.tx_id: 0
+        rdp.event_type: "initial_request"
+        rdp.cookie: "A70067"
