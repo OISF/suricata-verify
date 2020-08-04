@@ -18,3 +18,8 @@ checks:
       args: cat filestore/48/48d179a2f8d17331446c7a75a082851eee9ad841705ed5fbce730f51a0598d62.1515441287.1.json | jq -c 'select(.fileinfo.stored==true)' | wc -l | xargs
       expect: 1
 
+  - filter:
+      count: 1
+      filename: "filestore/48/48d179a2f8d17331446c7a75a082851eee9ad841705ed5fbce730f51a0598d62.1515441287.1.json"
+      match:
+        has-key: flow_id
