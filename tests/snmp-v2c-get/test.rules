@@ -1,0 +1,1 @@
+alert snmp any any -> any any (msg:"TEST SNMP ALERT"; sid:1; rev:1;)
