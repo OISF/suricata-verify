@@ -32,3 +32,12 @@ checks:
        snmp.community: "[R0_C@cti!]"
        snmp.version: 2
        snmp.vars: ["0.1"]
+ - filter:
+     count: 1
+     match:
+       event_type: alert
+       pcap_cnt: 7
+       snmp.version: 2
+       snmp.pdu_type: get_request
+       snmp.vars[0]: "1.3.6.1.2.1.31.1.1.1.6.1"
+       snmp.community: "[R0_C@cti!]"
