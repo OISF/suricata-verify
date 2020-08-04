@@ -939,9 +939,17 @@ def main():
             print("- Test %s:" % os.path.basename(dirpath))
             for r, d, f in os.walk(dirpath+"/output"):
                 for fname in f:
-                    print("  - %s" % fname)
-                    with open(dirpath + "/output/" + fname, "r") as fcontents:
-                        print(fcontents.read())
+                    path = os.path.join(r, fname)
+                    print("  - %s" % path)
+                    try:
+                        with open(path, "r") as fcontents:
+                            try:
+                                buf = fcontents.read().decode()
+                                print(buf)
+                            except:
+                                print("    - [Not dumping file that won't utf-8 decode]")
+                    except Exception as err:
+                        print("Failed to open %s: %s" % (path, str(err)))
 
     if failed > 0:
         return 1
