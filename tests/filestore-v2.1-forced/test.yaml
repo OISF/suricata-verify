@@ -11,3 +11,10 @@ checks:
 
   - stats:
       file_store.fs_errors: 0
+
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        has-key: flow_id
+
