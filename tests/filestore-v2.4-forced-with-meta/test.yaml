@@ -9,17 +9,21 @@ pcap: ../filestore-v2.1-forced/suricata-update-pdf.pcap
 
 checks:
 
-  # Check how many lines were logged to fast.log.
-  - shell:
-      args: cat filestore/48/48d179a2f8d17331446c7a75a082851eee9ad841705ed5fbce730f51a0598d62.1515441287.1.json | jq -c 'select(.fileinfo.sha256=="48d179a2f8d17331446c7a75a082851eee9ad841705ed5fbce730f51a0598d62")' | wc -l | xargs
-      expect: 1
-
-  - shell:
-      args: cat filestore/48/48d179a2f8d17331446c7a75a082851eee9ad841705ed5fbce730f51a0598d62.1515441287.1.json | jq -c 'select(.fileinfo.stored==true)' | wc -l | xargs
-      expect: 1
+  - filter:
+      filename: "filestore/48/48d179a2f8d17331446c7a75a082851eee9ad841705ed5fbce730f51a0598d62.1515441287.1.json"
+      count: 1
+      match:
+        fileinfo.sha256: 48d179a2f8d17331446c7a75a082851eee9ad841705ed5fbce730f51a0598d62
 
   - filter:
-      count: 1
       filename: "filestore/48/48d179a2f8d17331446c7a75a082851eee9ad841705ed5fbce730f51a0598d62.1515441287.1.json"
+      count: 1
+      match:
+        fileinfo.stored: true
+      
+
+  - filter:
+      filename: "filestore/48/48d179a2f8d17331446c7a75a082851eee9ad841705ed5fbce730f51a0598d62.1515441287.1.json"
+      count: 1
       match:
         has-key: flow_id
