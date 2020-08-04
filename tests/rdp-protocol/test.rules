@@ -1,0 +1,1 @@
+alert rdp any any -> any any (msg:"TEST RDP RULE"; sid:1; rev:1;)
