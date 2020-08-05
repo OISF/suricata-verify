@@ -1,0 +1,38 @@
+requires:
+  min-version: 6.0.0
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 1
+      dcerpc.interfaces[0].ack_result: 0
+      dcerpc.interfaces[0].uuid: 12345778-1234-abcd-ef00-0123456789ac
+      dcerpc.interfaces[0].version: '1.0'
+      dcerpc.request: BIND
+      dcerpc.response: BINDACK
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 172.31.9.211
+      dest_port: 49154
+      event_type: dcerpc
+      pcap_cnt: 9
+      proto: TCP
+      src_ip: 172.31.9.1
+      src_port: 59374
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 1
+      dcerpc.request: REQUEST_LOST
+      dcerpc.response: ALTER_CONTEXT_RESP
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 172.31.9.211
+      dest_port: 49154
+      event_type: dcerpc
+      pcap_cnt: 12
+      proto: TCP
+      src_ip: 172.31.9.1
+      src_port: 59374
