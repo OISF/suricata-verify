@@ -36,6 +36,7 @@ checks:
         rdp.channels[1]: "cliprdr"
         rdp.channels[2]: "rdpsnd"
   - filter:
+      version: 6
       count: 1
       match:
         event_type: "alert"
