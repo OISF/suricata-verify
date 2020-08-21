@@ -1,0 +1,28 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  files:
+    - rust/src/mqtt/parser.rs
+
+args:
+  - -k none
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        has-key: mqtt.pingreq
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        has-key: mqtt.pingresp
+
+  - filter:
+      count: 2
+      match:
+        event_type: anomaly
+        anomaly.event: unintroduced_message
