@@ -13,4 +13,6 @@ checks:
       match:
         event_type: flow
         app_proto: dnp3
-        flow.pkts_toclient: 1
+        flow.pkts_toserver: 2
+        flow.pkts_toclient: 3
+        dest_port: 20000
