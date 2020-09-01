@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 #
-# Copyright 2017 Jason Ish
+# Copyright (C) 2017-2020 Open Information Security Foundation
 #
 # Permission is hereby granted, free of charge, to any person
 # obtaining a copy of this software and associated documentation files
