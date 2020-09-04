@@ -1,0 +1,26 @@
+requires:
+  min-version: 6.0
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      dest_ip: 10.0.0.2
+      event_type: flow
+      flow.age: 3
+      flow.alerted: false
+      flow.bytes_toclient: 392
+      flow.bytes_toserver: 392
+      flow.pkts_toclient: 4
+      flow.pkts_toserver: 4
+      flow.reason: shutdown
+      flow.state: established
+      icmp_code: 0
+      icmp_type: 8
+      proto: ICMP
+      response_icmp_code: 0
+      response_icmp_type: 0
+      src_ip: 10.0.0.1
