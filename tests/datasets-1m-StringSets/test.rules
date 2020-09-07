@@ -1,0 +1,2 @@
+alert http any any -> any any (http.user_agent; dataset:isset,ua-seen,type string,load datasets.csv; sid:1;)
+alert http any any -> any any (http.user_agent; dataset:isnotset,ua-seen,type string,load datasets.csv; sid:2;)
