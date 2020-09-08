@@ -1,0 +1,4 @@
+c2s CONNECT abc:443 HTTP/1.1\r\nUser-Agent: Victor/1.0\r\n\r\n
+s2c HTTP/1.1 200 OK\r\nServer: VictorServer/1.0\r\n\r\n
+c2s GET / HTTP/1.1\r\nUser-Agent: Victor/1.0\r\n\r\n
+s2c HTTP/1.1 200 OK\r\nServer: VictorServer/1.0\r\n\r\n
