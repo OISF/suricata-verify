@@ -1,0 +1,28 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+# disables checksum verification
+args:
+  - -k none
+
+checks:
+
+  # Check that there is one file event with content range.
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        tx_id: 0
+        http.http_method: CONNECT
+        http.protocol: HTTP/1.1
+        http.status: 200
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        # new transaction id as we reset after CONNECT
+        tx_id: 0
+        http.http_method: GET
+        http.protocol: HTTP/1.1
+        http.status: 200
