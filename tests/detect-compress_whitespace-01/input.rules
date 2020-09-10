@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"HTTP strip_whitespace 1"; flow:established; file_data; compress_whitespace; content:"embrace   holistically"; sid:1;)
