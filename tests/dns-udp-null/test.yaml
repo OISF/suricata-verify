@@ -1,0 +1,20 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: dns
+        dns.type: query
+        dns.rrtype: "NULL"
+  - filter:
+      count: 1
+      match:
+        event_type: dns
+        dns.type: answer
+        dns.rcode: NOERROR
+        dns.rrtype: "NULL"
+        dns.rdata: "VACKD\u0003\\xc5\\xe9\u0001"
+    
