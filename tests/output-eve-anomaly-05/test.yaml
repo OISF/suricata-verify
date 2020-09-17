@@ -1,0 +1,26 @@
+requires:
+  min-version: 6
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.type: stream
+        anomaly.event: stream.pkt_invalid_timestamp
+        metadata.flowbits[0]: "ET.Evil"
+
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.type: decode
+
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.type: applayer

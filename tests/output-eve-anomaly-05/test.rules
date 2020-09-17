@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"ET CNC Shadowserver Reported CnC Server Port 80 Group 1"; flowbits:set,ET.Evil; flowbits:set,ET.BotccIP; sid:1; rev:1;)
