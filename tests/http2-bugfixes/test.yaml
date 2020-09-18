@@ -1,0 +1,16 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 6.0.0
+
+# disables checksum verification
+args:
+  - -k none
+
+checks:
+
+  # Check that there is no anomaly in HTTP2 parsing
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
