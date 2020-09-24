@@ -1,0 +1,14 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 6.0.0
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: quic
+        pcap_cnt: 1
+        quic.cyu.hash: "a46560d4548108cf99308319b3b85346"
+        quic.cyu.string: "46,PAD-SNI-STK-VER-CCS-NONC-AEAD-UAID-SCID-TCID-PDMD-SMHL-ICSL-NONP-PUBS-MIDS-SCLS-KEXS-XLCT-CSCT-COPT-CCRT-IRTT-CFCW-SFCW"
+

@@ -1,0 +1,21 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 6.0.0
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: quic
+        pcap_cnt: 1
+        quic.cyu.hash: "910a5e3a4d51593bd59a44611544f209"
+        quic.cyu.string: "46,PAD-SNI-VER-CCS-UAID-TCID-PDMD-SMHL-ICSL-NONP-MIDS-SCLS-CSCT-COPT-IRTT-CFCW-SFCW"
+
+  - filter:
+      count: 1
+      match:
+        event_type: quic
+        pcap_cnt: 5
+        quic.cyu.hash: "7b3ceb1adc974ad360cfa634e8d0a730"
+        quic.cyu.string: "46,PAD-SNI-STK-SNO-VER-CCS-NONC-AEAD-UAID-SCID-TCID-PDMD-SMHL-ICSL-NONP-PUBS-MIDS-SCLS-KEXS-XLCT-CSCT-COPT-CCRT-IRTT-CFCW-SFCW"
