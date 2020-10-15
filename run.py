@@ -32,14 +32,14 @@ import threading
 import shutil
 import string
 import argparse
-import yaml
+#import yaml
 import glob
 import re
 import json
 import unittest
 from collections import namedtuple
 
-import yaml
+#import yaml
 
 WIN32 = sys.platform == "win32"
 suricata_bin = "src\suricata.exe" if WIN32 else "./src/suricata"
@@ -284,12 +284,14 @@ class ShellCheck:
         try:
             if WIN32:
                 print("skipping shell check on windows")
-                return True;
+                return False;
             output = subprocess.check_output(self.config["args"], shell=True)
             if "expect" in self.config:
                 return str(self.config["expect"]) == output.decode().strip()
             return True
         except subprocess.CalledProcessError as err:
+            raise TestError(err)
+        else:
             raise TestError(err)
 
 class StatsCheck:
