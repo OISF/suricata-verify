@@ -32,14 +32,14 @@ import threading
 import shutil
 import string
 import argparse
-#import yaml
+import yaml
 import glob
 import re
 import json
 import unittest
 from collections import namedtuple
 
-#import yaml
+import yaml
 
 WIN32 = sys.platform == "win32"
 suricata_bin = "src\suricata.exe" if WIN32 else "./src/suricata"
