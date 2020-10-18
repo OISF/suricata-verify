@@ -207,6 +207,8 @@ def get_manipulated_list():
     mentioned in `skip_fields` variable.
     """
     eve_path = os.path.join(test_dir, "output", "eve.json")
+    exclude_fields = args["exclude_fields"].strip().split(",") if args["exclude_fields"] else []
+    skip_fields.extend(exclude_fields)
     allow_events = args["allow_events"].strip().split(",") if args["allow_events"] else []
     with open(eve_path, "r") as fp:
         content = fp.read()
@@ -372,6 +374,8 @@ def parse_args():
                         help="Adds a global suricata version")
     parser.add_argument("--cfg", metavar="<path-to-suricata.yaml>",
                         help="Adds a suricata.yaml to the test")
+    parser.add_argument("--exclude-fields", nargs="?", default=None,
+                        help="Exclude specified fields from filter block")
 
     # add arg to allow stdout only
     args = parser.parse_args()
