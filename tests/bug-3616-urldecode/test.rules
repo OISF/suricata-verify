@@ -1,0 +1,2 @@
+alert http any any -> any any (msg:"HTTP url_decode CANARY TEST"; file_data; content:"The requested URL /evil%27sqli was not found on this server"; sid:1;)
+alert http any any -> any any (msg:"HTTP url_decode test #1"; file_data; url_decode; content:"The requested URL /evil'sqli was not found on this server"; sid:2;)
