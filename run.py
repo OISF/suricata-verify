@@ -535,9 +535,8 @@ class TestRunner:
                     raise UnsatisfiedRequirementError("No pcap file found")
 
     def run(self):
-
-        directory_and_name = os.path.join(os.path.basename(os.path.dirname(self.directory)), self.name)
-        sys.stdout.write("===> %s: " % directory_and_name)
+        directory_and_name = os.path.join(os.path.basename(os.path.dirname(self.directory)), self.name)
+        sys.stdout.write("===> %s: " % directory_and_name)
         sys.stdout.flush()
 
         if not self.force:
