@@ -536,7 +536,8 @@ class TestRunner:
 
     def run(self):
 
-        sys.stdout.write("===> %s: " % os.path.basename(self.directory))
+        directory_and_name = os.path.join(os.path.basename(os.path.dirname(self.directory)), self.name)
+        sys.stdout.write("===> %s: " % directory_and_name)
         sys.stdout.flush()
 
         if not self.force:
