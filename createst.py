@@ -143,6 +143,8 @@ def write_to_file(data):
         fp.write("# *** Add configuration here ***\n\n")
         if not args["strictcsums"]:
             fp.write("args:\n- -k none\n\n")
+        if args["add_min_version"]:
+            fp.write("requires:\n   min-version: %s\n\n" % args["add_min_version"])
         fp.write(data)
 
 
@@ -344,6 +346,8 @@ def parse_args():
                         help="Create filter blocks for the specified events")
     parser.add_argument("--strictcsums", default=None, action="store_true",
                         help="Stricly validate checksum")
+    parser.add_argument("--add-min-version", default=None, metavar="<min-version>",
+                        help="Adds a global minimum required version")
 
     # add arg to allow stdout only
     args = parser.parse_args()
