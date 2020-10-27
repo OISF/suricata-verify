@@ -143,6 +143,8 @@ def write_to_file(data):
         fp.write("# *** Add configuration here ***\n\n")
         if not args["strictcsums"]:
             fp.write("args:\n- -k none\n\n")
+		if args["features"]:
+			fp.write("requires:\n  features: %s\n\n" % args["features"])
         fp.write(data)
 
 
@@ -344,6 +346,8 @@ def parse_args():
                         help="Create filter blocks for the specified events")
     parser.add_argument("--strictcsums", default=None, action="store_true",
                         help="Stricly validate checksum")
+	parser.add_argument("--features", default=None, action="store_true", required=True, metavar="<features>",
+                        help="Includes features defined globally")
 
     # add arg to allow stdout only
     args = parser.parse_args()
