@@ -346,7 +346,7 @@ def parse_args():
                         help="Create filter blocks for the specified events")
     parser.add_argument("--strictcsums", default=None, action="store_true",
                         help="Stricly validate checksum") 
-    parser.add_argument("--features", default=None, action="store_true", required=True, mdtavar="<features>", 
+    parser.add_argument("--features", default=None, action="store_true", required=True, metavar="<features>",
                         help="Includes features defined globally" )
 
     # add arg to allow stdout only
