@@ -143,10 +143,15 @@ def write_to_file(data):
         fp.write("# *** Add configuration here ***\n\n")
         if not args["strictcsums"]:
             fp.write("args:\n- -k none\n\n")
+        if check_requires():
+            fp.write("requires:\n")
         if args["min_version"]:
-            fp.write("requires:\n   min-version: %s\n\n" % args["min_version"])
+            fp.write("   min-version: %s\n\n" % args["min_version"])
         fp.write(data)
 
+def check_requires():
+    if args["min_version"]:
+        return True
 
 def test_yaml_format(func):
     """
