@@ -150,8 +150,10 @@ def write_to_file(data):
         fp.write(data)
 
 def check_requires():
-    if args["min_version"]:
-        return True
+    features = ["min_version"]
+    for item in features:
+        if args[item]:
+            return True
 
 def test_yaml_format(func):
     """
