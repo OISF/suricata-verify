@@ -456,6 +456,9 @@ class TestRunner:
             requires = {}
         suri_version = self.suricata_config.version
         for key in requires:
+        	if key == "HTTP_EVADER_OK":
+                http_evader_ok = requires["HTTP_EVADER_OK"]
+                return http_evader_ok
             if key == "min-version":
                 min_version = requires["min-version"]
                 if not is_version_compatible(version=min_version,
@@ -847,6 +850,10 @@ def main():
     parser.add_argument("--debug-failed", dest="debugfailed", action="store_true",
                         help="Prints debug output for failed tests")
     parser.add_argument("patterns", nargs="*", default=[])
+
+    # to produce --test-skip HTTP_EVADER_OK as outcome.
+    parser.add_argument("--test-skip", help="Run tests with HTTP_EVADER_OK",type=str,action="store")
+
     args = parser.parse_args()
 
     if args.self_test:
@@ -875,6 +882,7 @@ def main():
         tdir = os.path.abspath(args.testdir)
     # First gather the tests so we can run them in alphabetic order.
     tests = []
+    col_http_evader_tests = []
     for dirpath, dirnames, filenames in os.walk(tdir):
         # The top directory is not a test...
         if dirpath == os.path.join(TOPDIR, "tests"):
@@ -890,6 +898,15 @@ def main():
                     break
             if skip_tests_opt:
                 continue
+
+        # collecting http-evader tests from all tests
+        if args.test_skip
+            if dirpath == os.path.join(dirpath,"tests","http-evader"):
+
+       			col_http_evader_tests.append(dirpath)
+    	else:
+            continue
+
 
         # Check if there are sub-test directories
         if "test.yaml" in filenames or "check.sh" in filenames:
@@ -916,29 +933,26 @@ def main():
         if args.outdir:
             outdir = os.path.join(os.path.realpath(args.outdir), name, "output")
 
-        test_runner = TestRunner(
-            cwd, dirpath, outdir, suricata_config, args.verbose, args.force)
-        try:
-            results = test_runner.run()
-            if results["failure"] > 0:
-                failed += 1
-                failedLogs.append(dirpath)
-            elif results["skipped"] > 0 and results["success"] == 0:
-                skipped += 1
-            elif results["success"] > 0:
-                passed += 1
-        except UnsatisfiedRequirementError as ue:
-            print("SKIPPED: {}".format(ue))
-            skipped += 1
-        except TestError as te:
-            print("FAILED: {}".format(te))
-            check_args_fail()
-            failed += 1
+        if dirpath in col_http_evader_tests:
+            http_evader_test_runner = TestRunner(cwd, dirpath,outdir,suricata_config, args.verbose, args.force)
+            http_evader_test_results = show_results(http_evader_test_runner)
+        else:
+            all_tests_results = show_results(test_runner)
+    
+    if http_evader_test_results:
 
-    print("")
-    print("PASSED:  %d" % (passed))
-    print("FAILED:  %d" % (failed))
-    print("SKIPPED: %d" % (skipped))
+        print("")
+        print("PASSED:  %d" % (http_evader_test_results[0]))
+        print("FAILED:  %d" % (http_evader_test_results[1]))
+        print("SKIPPED: %d" % (http_evader_test_results[2]))
+    elif all_tests_results:
+        
+        print("")
+        print("PASSED:  %d" % (all_tests_results[0]))
+        print("FAILED:  %d" % (all_tests_results[1]))
+        print("SKIPPED: %d" % (all_tests_results[2]))
+        	
+
 
     if args.debugfailed:
         if len(failedLogs) > 0:
