@@ -801,7 +801,25 @@ class TestRunner:
         t.start()
         self.readers.append(t)
 
+def show_results(test_runner):
+    try:
+        results = test_runner.run()
+        if results["failure"] > 0:
+            failed += 1
+            failedLogs.append(dirpath)
+        elif results["skipped"] > 0 and results["success"] == 0:
+            skipped += 1
+        elif results["success"] > 0:
+            passed += 1
+    except UnsatisfiedRequirementError as ue:
+        print("SKIPPED: {}".format(ue))
+        skipped += 1
+    except TestError as te:
+        print("FAILED: {}".format(te))
+        check_args_fail()
+        failed += 1
 
+    return [passed, failed, skipped]
 def check_args_fail():
     if args.fail:
         sys.exit(1)
@@ -938,7 +956,7 @@ def main():
             http_evader_test_results = show_results(http_evader_test_runner)
         else:
             all_tests_results = show_results(test_runner)
-    
+   
     if http_evader_test_results:
 
         print("")
