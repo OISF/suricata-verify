@@ -1,0 +1,33 @@
+requires:
+  script:
+    - grep -q parse_rdata_srv rust/src/dns/parser.rs
+
+args:
+  - -k none
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: dns
+        dns.type: query
+        dns.rrname: _sip._udp.sip.voice.google.com
+        dns.rrtype: SRV
+
+  - filter:
+      count: 1
+      match:
+        event_type: dns
+        dns.type: answer
+        dns.rrname: _sip._udp.sip.voice.google.com
+        dns.rrtype: SRV
+        dns.rcode: NOERROR
+        dns.answers[0].srv.priority: 20
+        dns.answers[0].srv.weight: 1
+        dns.answers[0].srv.port: 5060
+        dns.answers[0].srv.name: sip-anycast-2.voice.google.com
+        dns.answers[1].srv.priority: 10
+        dns.answers[1].srv.weight: 1
+        dns.answers[1].srv.port: 5060
+        dns.answers[1].srv.name: sip-anycast-1.voice.google.com
