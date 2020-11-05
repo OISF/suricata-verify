@@ -1,0 +1,1 @@
+alert icmp any any -> any any (msg:"icmp hdr test"; icmpv4.hdr; content:"|0a 0e 50 54 42|"; sid:1; rev:1;)
