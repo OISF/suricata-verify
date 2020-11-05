@@ -1,0 +1,10 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+checks:
+  - filter:
+      count: 40
+      match:
+        event_type: http
+        http.protocol: HTTP/1.1
