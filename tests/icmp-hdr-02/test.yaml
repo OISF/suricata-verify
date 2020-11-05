@@ -1,0 +1,11 @@
+requires:
+  min-version: 6
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      proto: "ICMP"
+      icmp_code: 1
+      icmp_type: 5
