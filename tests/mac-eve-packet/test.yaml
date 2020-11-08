@@ -1,0 +1,15 @@
+requires:
+  min-version: 6.0.0
+  files:
+    - src/util-macset.c
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        ether.dest_mac: 00:25:90:e3:d2:e1
+        ether.src_mac: 0c:86:10:ed:d7:c6
