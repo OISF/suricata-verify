@@ -427,7 +427,7 @@ class TestRunner:
                     if "msg" in skip:
                         msg = skip["msg"]
                     else:
-                        msg = "not for uid c%d" % (skip["uid"])
+                        msg = "not for uid %d" % (skip["uid"])
                     raise UnsatisfiedRequirementError(msg)
 
             if "feature" in skip:
