@@ -74,3 +74,7 @@ checks:
       match:
         event_type: fileinfo
         fileinfo.state: CLOSED
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
