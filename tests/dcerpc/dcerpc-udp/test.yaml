@@ -1,0 +1,1977 @@
+# *** Add configuration here ***
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 1
+      dcerpc.request: REQUEST_LOST
+      dcerpc.response: UNREPLIED
+      dest_ip: 141.81.0.10
+      dest_port: 33000
+      event_type: dcerpc
+      pcap_cnt: 1169
+      proto: UDP
+      src_ip: 141.81.0.11
+      src_port: 33002
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.10
+      dest_port: 139
+      event_type: smb
+      pcap_cnt: 3704
+      proto: TCP
+      smb.client_dialects[0]: PC NETWORK PROGRAM 1.0
+      smb.client_dialects[1]: LANMAN1.0
+      smb.client_dialects[2]: Windows for Workgroups 3.1a
+      smb.client_dialects[3]: LM1.2X002
+      smb.client_dialects[4]: LANMAN2.1
+      smb.client_dialects[5]: NT LM 0.12
+      smb.command: SMB1_COMMAND_NEGOTIATE_PROTOCOL
+      smb.dialect: NT LM 0.12
+      smb.id: 1
+      smb.request_done: true
+      smb.response_done: true
+      smb.server_guid: d523159e-e4af-4a9e-7b9b-4e318c6f6f36
+      smb.session_id: 0
+      smb.status: STATUS_SUCCESS
+      smb.status_code: '0x0'
+      smb.tree_id: 0
+      src_ip: 141.81.0.182
+      src_port: 4548
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.10
+      dest_port: 139
+      event_type: smb
+      pcap_cnt: 3709
+      proto: TCP
+      smb.command: SMB1_COMMAND_SESSION_SETUP_ANDX
+      smb.dialect: NT LM 0.12
+      smb.id: 2
+      smb.request.native_lm: Windows 2002 5.1
+      smb.request.native_os: Windows 2002 Service Pack 3 2600
+      smb.request_done: true
+      smb.response.native_lm: Windows Server (R) 2008 Standard 6.0
+      smb.response.native_os: Windows Server (R) 2008 Standard 6002 Service Pack 2
+      smb.response_done: true
+      smb.session_id: 57346
+      smb.status: STATUS_MORE_PROCESSING_REQUIRED
+      smb.status_code: '0xc0000016'
+      smb.tree_id: 0
+      src_ip: 141.81.0.182
+      src_port: 4548
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.10
+      dest_port: 139
+      event_type: smb
+      pcap_cnt: 3714
+      proto: TCP
+      smb.command: SMB1_COMMAND_SESSION_SETUP_ANDX
+      smb.dialect: NT LM 0.12
+      smb.id: 3
+      smb.ntlmssp.domain: ''
+      smb.ntlmssp.host: PANELPC02
+      smb.ntlmssp.user: ''
+      smb.request.native_lm: Windows 2002 5.1
+      smb.request.native_os: Windows 2002 Service Pack 3 2600
+      smb.request_done: true
+      smb.response.native_lm: Windows Server (R) 2008 Standard 6.0
+      smb.response.native_os: Windows Server (R) 2008 Standard 6002 Service Pack 2
+      smb.response_done: true
+      smb.session_id: 57346
+      smb.status: STATUS_SUCCESS
+      smb.status_code: '0x0'
+      smb.tree_id: 0
+      src_ip: 141.81.0.182
+      src_port: 4548
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.10
+      dest_port: 139
+      event_type: smb
+      pcap_cnt: 3718
+      proto: TCP
+      smb.command: SMB1_COMMAND_TREE_CONNECT_ANDX
+      smb.dialect: NT LM 0.12
+      smb.id: 4
+      smb.named_pipe: \IAS01\IPC$
+      smb.request_done: true
+      smb.response_done: true
+      smb.service.request: ?????
+      smb.service.response: IPC
+      smb.session_id: 57346
+      smb.status: STATUS_SUCCESS
+      smb.status_code: '0x0'
+      smb.tree_id: 57349
+      src_ip: 141.81.0.182
+      src_port: 4548
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.10
+      dest_port: 139
+      event_type: smb
+      pcap_cnt: 3721
+      proto: TCP
+      smb.command: SMB1_COMMAND_SESSION_SETUP_ANDX
+      smb.dialect: NT LM 0.12
+      smb.id: 5
+      smb.request.native_lm: Windows 2002 5.1
+      smb.request.native_os: Windows 2002 Service Pack 3 2600
+      smb.request_done: true
+      smb.response.native_lm: Windows Server (R) 2008 Standard 6.0
+      smb.response.native_os: Windows Server (R) 2008 Standard 6002 Service Pack 2
+      smb.response_done: true
+      smb.session_id: 12291
+      smb.status: STATUS_MORE_PROCESSING_REQUIRED
+      smb.status_code: '0xc0000016'
+      smb.tree_id: 0
+      src_ip: 141.81.0.182
+      src_port: 4548
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.10
+      dest_port: 139
+      event_type: smb
+      pcap_cnt: 3729
+      proto: TCP
+      smb.command: SMB1_COMMAND_SESSION_SETUP_ANDX
+      smb.dialect: NT LM 0.12
+      smb.id: 6
+      smb.ntlmssp.domain: PANELPC02
+      smb.ntlmssp.host: PANELPC02
+      smb.ntlmssp.user: Administrator
+      smb.request.native_lm: Windows 2002 5.1
+      smb.request.native_os: Windows 2002 Service Pack 3 2600
+      smb.request_done: true
+      smb.response.native_lm: Windows Server (R) 2008 Standard 6.0
+      smb.response.native_os: Windows Server (R) 2008 Standard 6002 Service Pack 2
+      smb.response_done: true
+      smb.session_id: 12291
+      smb.status: STATUS_SUCCESS
+      smb.status_code: '0x0'
+      smb.tree_id: 0
+      src_ip: 141.81.0.182
+      src_port: 4548
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.10
+      dest_port: 139
+      event_type: smb
+      pcap_cnt: 3731
+      proto: TCP
+      smb.command: SMB1_COMMAND_TREE_CONNECT_ANDX
+      smb.dialect: NT LM 0.12
+      smb.id: 7
+      smb.request_done: true
+      smb.response_done: true
+      smb.service.request: ?????
+      smb.session_id: 12291
+      smb.share: \IAS01\ARCHESTRA-ENGWESTBURY-INTOUCHVIEWAPP_PANELPC02
+      smb.status: STATUS_BAD_NETWORK_NAME
+      smb.status_code: '0xc00000cc'
+      smb.tree_id: 0
+      src_ip: 141.81.0.182
+      src_port: 4548
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.10
+      dest_port: 139
+      event_type: smb
+      pcap_cnt: 3844
+      proto: TCP
+      smb.command: SMB1_COMMAND_LOGOFF_ANDX
+      smb.dialect: NT LM 0.12
+      smb.id: 8
+      smb.request_done: true
+      smb.response_done: true
+      smb.session_id: 12291
+      smb.status: STATUS_SUCCESS
+      smb.status_code: '0x0'
+      smb.tree_id: 0
+      src_ip: 141.81.0.182
+      src_port: 4548
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 17305
+      dcerpc.interfaces[0].ack_result: 0
+      dcerpc.interfaces[0].uuid: 99fcfec4-5260-101b-bbcb-00aa0021347a
+      dcerpc.interfaces[0].version: '0.0'
+      dcerpc.request: BIND
+      dcerpc.response: BINDACK
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 141.81.0.10
+      dest_port: 135
+      event_type: dcerpc
+      pcap_cnt: 5051
+      proto: TCP
+      src_ip: 141.81.0.187
+      src_port: 3802
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.10
+      dest_port: 139
+      event_type: smb
+      pcap_cnt: 10846
+      proto: TCP
+      smb.command: SMB1_COMMAND_LOGOFF_ANDX
+      smb.dialect: NT LM 0.12
+      smb.id: 9
+      smb.request_done: true
+      smb.response_done: true
+      smb.session_id: 57346
+      smb.status: STATUS_SUCCESS
+      smb.status_code: '0x0'
+      smb.tree_id: 0
+      src_ip: 141.81.0.182
+      src_port: 4548
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.10
+      dest_port: 139
+      event_type: smb
+      pcap_cnt: 10849
+      proto: TCP
+      smb.command: SMB1_COMMAND_TREE_DISCONNECT
+      smb.dialect: NT LM 0.12
+      smb.id: 10
+      smb.request_done: true
+      smb.response_done: true
+      smb.session_id: 57346
+      smb.status: STATUS_SUCCESS
+      smb.status_code: '0x0'
+      smb.tree_id: 57349
+      src_ip: 141.81.0.182
+      src_port: 4548
+- filter:
+    count: 1
+    match:
+      app_proto: failed
+      dest_ip: 141.81.0.86
+      dest_port: 502
+      event_type: flow
+      flow.age: 6
+      flow.alerted: false
+      flow.bytes_toclient: 1074
+      flow.bytes_toserver: 1052
+      flow.pkts_toclient: 17
+      flow.pkts_toserver: 17
+      flow.reason: shutdown
+      flow.state: established
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 60789
+      tcp.ack: true
+      tcp.psh: true
+      tcp.state: established
+      tcp.syn: true
+      tcp.tcp_flags: 1a
+      tcp.tcp_flags_tc: 1a
+      tcp.tcp_flags_ts: 1a
+- filter:
+    count: 1
+    match:
+      app_proto: dcerpc
+      dest_ip: 141.81.0.10
+      dest_port: 135
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 458
+      flow.bytes_toserver: 645
+      flow.pkts_toclient: 4
+      flow.pkts_toserver: 6
+      flow.reason: shutdown
+      flow.state: established
+      proto: TCP
+      src_ip: 141.81.0.187
+      src_port: 3802
+      tcp.ack: true
+      tcp.psh: true
+      tcp.state: established
+      tcp.syn: true
+      tcp.tcp_flags: 1a
+      tcp.tcp_flags_tc: 1a
+      tcp.tcp_flags_ts: 1a
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.11
+      dest_port: 49164
+      event_type: flow
+      flow.age: 16
+      flow.alerted: false
+      flow.bytes_toclient: 376
+      flow.bytes_toserver: 736
+      flow.pkts_toclient: 4
+      flow.pkts_toserver: 8
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 56835
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.10
+      dest_port: 135
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 108
+      flow.bytes_toserver: 120
+      flow.pkts_toclient: 2
+      flow.pkts_toserver: 2
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.188
+      src_port: 58451
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.111
+      dest_port: 102
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 14555
+      flow.bytes_toserver: 14162
+      flow.pkts_toclient: 191
+      flow.pkts_toserver: 179
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 52609
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.23
+      dest_port: 44818
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 61804
+      flow.bytes_toserver: 67372
+      flow.pkts_toclient: 384
+      flow.pkts_toserver: 332
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 62717
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.46
+      dest_port: 502
+      event_type: flow
+      flow.age: 20
+      flow.alerted: false
+      flow.bytes_toclient: 12656
+      flow.bytes_toserver: 8704
+      flow.pkts_toclient: 154
+      flow.pkts_toserver: 130
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 59796
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.11
+      dest_port: 1433
+      event_type: flow
+      flow.age: 11
+      flow.alerted: false
+      flow.bytes_toclient: 1768
+      flow.bytes_toserver: 2800
+      flow.pkts_toclient: 11
+      flow.pkts_toserver: 17
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 60622
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.11
+      dest_port: 49218
+      event_type: flow
+      flow.age: 19
+      flow.alerted: false
+      flow.bytes_toclient: 2360
+      flow.bytes_toserver: 3380
+      flow.pkts_toclient: 20
+      flow.pkts_toserver: 30
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 56836
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.10
+      dest_port: 49188
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 118
+      flow.bytes_toserver: 258
+      flow.pkts_toclient: 1
+      flow.pkts_toserver: 2
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.183
+      src_port: 1080
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.182
+      dest_port: 1117
+      event_type: flow
+      flow.age: 16
+      flow.alerted: false
+      flow.bytes_toclient: 660
+      flow.bytes_toserver: 5892
+      flow.pkts_toclient: 11
+      flow.pkts_toserver: 13
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 5413
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.11
+      dest_port: 1433
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 126
+      flow.bytes_toserver: 121
+      flow.pkts_toclient: 2
+      flow.pkts_toserver: 2
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 60550
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.163
+      dest_port: 502
+      event_type: flow
+      flow.age: 20
+      flow.alerted: false
+      flow.bytes_toclient: 15399
+      flow.bytes_toserver: 9179
+      flow.pkts_toclient: 162
+      flow.pkts_toserver: 131
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 59598
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.11
+      dest_port: 49218
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 4428
+      flow.bytes_toserver: 15670
+      flow.pkts_toclient: 42
+      flow.pkts_toserver: 73
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 56851
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.164
+      dest_port: 502
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 10277
+      flow.bytes_toserver: 8606
+      flow.pkts_toclient: 103
+      flow.pkts_toserver: 133
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 64342
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.43
+      dest_port: 44818
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 55892
+      flow.bytes_toserver: 60240
+      flow.pkts_toclient: 357
+      flow.pkts_toserver: 292
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 52594
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.10
+      dest_port: 5026
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 11330
+      flow.bytes_toserver: 5616
+      flow.pkts_toclient: 73
+      flow.pkts_toserver: 52
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.184
+      src_port: 4297
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.63
+      dest_port: 44818
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 55012
+      flow.bytes_toserver: 60498
+      flow.pkts_toclient: 350
+      flow.pkts_toserver: 309
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 52593
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.144
+      dest_port: 502
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 11173
+      flow.bytes_toserver: 10070
+      flow.pkts_toclient: 117
+      flow.pkts_toserver: 157
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 64341
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.86
+      dest_port: 502
+      event_type: flow
+      flow.age: 10
+      flow.alerted: false
+      flow.bytes_toclient: 180
+      flow.bytes_toserver: 224
+      flow.pkts_toclient: 3
+      flow.pkts_toserver: 4
+      flow.reason: shutdown
+      flow.state: closed
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 60788
+      tcp.ack: true
+      tcp.fin: true
+      tcp.rst: true
+      tcp.state: closed
+      tcp.syn: true
+      tcp.tcp_flags: '17'
+      tcp.tcp_flags_tc: '17'
+      tcp.tcp_flags_ts: '13'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.183
+      dest_port: 5026
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 3240
+      flow.bytes_toserver: 6031
+      flow.pkts_toclient: 30
+      flow.pkts_toserver: 52
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 62980
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.10
+      dest_port: 52606
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 9359
+      flow.bytes_toserver: 13784
+      flow.pkts_toclient: 121
+      flow.pkts_toserver: 127
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.151
+      src_port: 102
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.188
+      dest_port: 65297
+      event_type: flow
+      flow.age: 16
+      flow.alerted: false
+      flow.bytes_toclient: 660
+      flow.bytes_toserver: 5892
+      flow.pkts_toclient: 11
+      flow.pkts_toserver: 13
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 5413
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.188
+      dest_port: 49171
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 118
+      flow.bytes_toserver: 252
+      flow.pkts_toclient: 1
+      flow.pkts_toserver: 2
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 56245
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.183
+      dest_port: 1063
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 118
+      flow.bytes_toserver: 252
+      flow.pkts_toclient: 1
+      flow.pkts_toserver: 2
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 53919
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.31
+      dest_port: 102
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 14788
+      flow.bytes_toserver: 10118
+      flow.pkts_toclient: 131
+      flow.pkts_toserver: 127
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 63149
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.187
+      dest_port: 1380
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 118
+      flow.bytes_toserver: 252
+      flow.pkts_toclient: 1
+      flow.pkts_toserver: 2
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 59312
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.11
+      dest_port: 1433
+      event_type: flow
+      flow.age: 11
+      flow.alerted: false
+      flow.bytes_toclient: 508
+      flow.bytes_toserver: 810
+      flow.pkts_toclient: 3
+      flow.pkts_toserver: 6
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 60708
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.10
+      event_type: flow
+      flow.age: 2
+      flow.alerted: false
+      flow.bytes_toclient: 330
+      flow.bytes_toserver: 330
+      flow.pkts_toclient: 3
+      flow.pkts_toserver: 3
+      flow.reason: shutdown
+      flow.state: established
+      icmp_code: 0
+      icmp_type: 8
+      proto: ICMP
+      response_icmp_code: 0
+      response_icmp_type: 0
+      src_ip: 141.81.0.9
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.14
+      dest_port: 102
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 5434
+      flow.bytes_toserver: 5548
+      flow.pkts_toclient: 76
+      flow.pkts_toserver: 76
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 56928
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.10
+      dest_port: 52603
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 18849
+      flow.bytes_toserver: 17841
+      flow.pkts_toclient: 246
+      flow.pkts_toserver: 247
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.237
+      src_port: 102
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.111
+      dest_port: 102
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 16296
+      flow.bytes_toserver: 13301
+      flow.pkts_toclient: 170
+      flow.pkts_toserver: 169
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 52608
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.10
+      dest_port: 49188
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 118
+      flow.bytes_toserver: 258
+      flow.pkts_toclient: 1
+      flow.pkts_toserver: 2
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.184
+      src_port: 1078
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.10
+      dest_port: 49188
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 118
+      flow.bytes_toserver: 258
+      flow.pkts_toclient: 1
+      flow.pkts_toserver: 2
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.187
+      src_port: 2479
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.10
+      dest_port: 135
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 108
+      flow.bytes_toserver: 120
+      flow.pkts_toclient: 2
+      flow.pkts_toserver: 2
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.184
+      src_port: 4785
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.10
+      dest_port: 135
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 108
+      flow.bytes_toserver: 120
+      flow.pkts_toclient: 2
+      flow.pkts_toserver: 2
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.181
+      src_port: 1804
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.181
+      dest_port: 5026
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 3240
+      flow.bytes_toserver: 7062
+      flow.pkts_toclient: 30
+      flow.pkts_toserver: 52
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 62979
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.104
+      dest_port: 502
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 12133
+      flow.bytes_toserver: 10734
+      flow.pkts_toclient: 132
+      flow.pkts_toserver: 166
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 64340
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.166
+      dest_port: 102
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 45088
+      flow.bytes_toserver: 29865
+      flow.pkts_toclient: 585
+      flow.pkts_toserver: 387
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 60674
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.10
+      dest_port: 49188
+      event_type: flow
+      flow.age: 1
+      flow.alerted: false
+      flow.bytes_toclient: 118
+      flow.bytes_toserver: 258
+      flow.pkts_toclient: 1
+      flow.pkts_toserver: 2
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.182
+      src_port: 1072
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.187
+      dest_port: 5026
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 51812
+      flow.bytes_toserver: 93524
+      flow.pkts_toclient: 98
+      flow.pkts_toserver: 135
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 52582
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.184
+      dest_port: 1540
+      event_type: flow
+      flow.age: 15
+      flow.alerted: false
+      flow.bytes_toclient: 660
+      flow.bytes_toserver: 5892
+      flow.pkts_toclient: 11
+      flow.pkts_toserver: 13
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 5413
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.24
+      dest_port: 502
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 13656
+      flow.bytes_toserver: 11662
+      flow.pkts_toclient: 146
+      flow.pkts_toserver: 180
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 64338
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.91
+      dest_port: 102
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 12400
+      flow.bytes_toserver: 8619
+      flow.pkts_toclient: 113
+      flow.pkts_toserver: 111
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 52602
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.64
+      dest_port: 502
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 12423
+      flow.bytes_toserver: 9868
+      flow.pkts_toclient: 128
+      flow.pkts_toserver: 151
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 64368
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.187
+      dest_port: 4143
+      event_type: flow
+      flow.age: 15
+      flow.alerted: false
+      flow.bytes_toclient: 660
+      flow.bytes_toserver: 5892
+      flow.pkts_toclient: 11
+      flow.pkts_toserver: 13
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 5413
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.184
+      dest_port: 1058
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 118
+      flow.bytes_toserver: 252
+      flow.pkts_toclient: 1
+      flow.pkts_toserver: 2
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 62663
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.11
+      dest_port: 1433
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 126
+      flow.bytes_toserver: 121
+      flow.pkts_toclient: 2
+      flow.pkts_toserver: 2
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 60719
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.11
+      dest_port: 49290
+      event_type: flow
+      flow.age: 19
+      flow.alerted: false
+      flow.bytes_toclient: 940
+      flow.bytes_toserver: 1880
+      flow.pkts_toclient: 10
+      flow.pkts_toserver: 20
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 56837
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.11
+      dest_port: 1433
+      event_type: flow
+      flow.age: 20
+      flow.alerted: false
+      flow.bytes_toclient: 5623
+      flow.bytes_toserver: 8234
+      flow.pkts_toclient: 27
+      flow.pkts_toserver: 32
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 60707
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      app_proto: failed
+      dest_ip: 141.81.0.182
+      dest_port: 5026
+      event_type: flow
+      flow.age: 14
+      flow.alerted: false
+      flow.bytes_toclient: 0
+      flow.bytes_toserver: 216
+      flow.pkts_toclient: 0
+      flow.pkts_toserver: 4
+      flow.reason: shutdown
+      flow.state: new
+      proto: UDP
+      src_ip: 141.81.0.10
+      src_port: 64318
+- filter:
+    count: 1
+    match:
+      app_proto: dcerpc
+      dest_ip: 141.81.0.10
+      dest_port: 33000
+      event_type: flow
+      flow.age: 18
+      flow.alerted: false
+      flow.bytes_toclient: 5872
+      flow.bytes_toserver: 524
+      flow.pkts_toclient: 8
+      flow.pkts_toserver: 8
+      flow.reason: shutdown
+      flow.state: established
+      proto: UDP
+      src_ip: 141.81.0.11
+      src_port: 33002
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.10
+      dest_port: 49188
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 118
+      flow.bytes_toserver: 258
+      flow.pkts_toclient: 1
+      flow.pkts_toserver: 2
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.181
+      src_port: 1077
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.11
+      dest_port: 1433
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 126
+      flow.bytes_toserver: 121
+      flow.pkts_toclient: 2
+      flow.pkts_toserver: 2
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 60720
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.44
+      dest_port: 502
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 11690
+      flow.bytes_toserver: 10222
+      flow.pkts_toclient: 125
+      flow.pkts_toserver: 158
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 53414
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.183
+      dest_port: 1743
+      event_type: flow
+      flow.age: 16
+      flow.alerted: false
+      flow.bytes_toclient: 660
+      flow.bytes_toserver: 5892
+      flow.pkts_toclient: 11
+      flow.pkts_toserver: 13
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 5413
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      app_proto: failed
+      dest_ip: 141.81.0.10
+      dest_port: 5026
+      event_type: flow
+      flow.age: 14
+      flow.alerted: false
+      flow.bytes_toclient: 0
+      flow.bytes_toserver: 240
+      flow.pkts_toclient: 0
+      flow.pkts_toserver: 4
+      flow.reason: shutdown
+      flow.state: new
+      proto: UDP
+      src_ip: 141.81.0.182
+      src_port: 1067
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.83
+      dest_port: 44818
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 54608
+      flow.bytes_toserver: 57686
+      flow.pkts_toclient: 339
+      flow.pkts_toserver: 257
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 50275
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.146
+      dest_port: 102
+      event_type: flow
+      flow.age: 20
+      flow.alerted: false
+      flow.bytes_toclient: 45545
+      flow.bytes_toserver: 30899
+      flow.pkts_toclient: 609
+      flow.pkts_toserver: 403
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 60673
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.86
+      dest_port: 502
+      event_type: flow
+      flow.age: 5
+      flow.alerted: false
+      flow.bytes_toclient: 1921
+      flow.bytes_toserver: 1404
+      flow.pkts_toclient: 17
+      flow.pkts_toserver: 19
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 60689
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.182
+      dest_port: 1062
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 118
+      flow.bytes_toserver: 252
+      flow.pkts_toclient: 1
+      flow.pkts_toserver: 2
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 49216
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.26
+      dest_port: 502
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 13046
+      flow.bytes_toserver: 8506
+      flow.pkts_toclient: 155
+      flow.pkts_toserver: 125
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 51411
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.10
+      dest_port: 60116
+      event_type: flow
+      flow.age: 20
+      flow.alerted: false
+      flow.bytes_toclient: 8987
+      flow.bytes_toserver: 15507
+      flow.pkts_toclient: 127
+      flow.pkts_toserver: 162
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.143
+      src_port: 502
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.11
+      dest_port: 1433
+      event_type: flow
+      flow.age: 11
+      flow.alerted: false
+      flow.bytes_toclient: 30564
+      flow.bytes_toserver: 2016
+      flow.pkts_toclient: 28
+      flow.pkts_toserver: 18
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 60341
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.151
+      dest_port: 102
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 11752
+      flow.bytes_toserver: 8361
+      flow.pkts_toclient: 109
+      flow.pkts_toserver: 109
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 52604
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      app_proto: smb
+      dest_ip: 141.81.0.10
+      dest_port: 139
+      event_type: flow
+      flow.age: 12
+      flow.alerted: false
+      flow.bytes_toclient: 2321
+      flow.bytes_toserver: 2518
+      flow.pkts_toclient: 13
+      flow.pkts_toserver: 15
+      flow.reason: shutdown
+      flow.state: closed
+      proto: TCP
+      src_ip: 141.81.0.182
+      src_port: 4548
+      tcp.ack: true
+      tcp.fin: true
+      tcp.psh: true
+      tcp.state: closed
+      tcp.syn: true
+      tcp.tcp_flags: 1b
+      tcp.tcp_flags_tc: 1b
+      tcp.tcp_flags_ts: 1b
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.10
+      dest_port: 52601
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 8708
+      flow.bytes_toserver: 12632
+      flow.pkts_toclient: 113
+      flow.pkts_toserver: 120
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.71
+      src_port: 102
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.11
+      dest_port: 1433
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 126
+      flow.bytes_toserver: 121
+      flow.pkts_toclient: 2
+      flow.pkts_toserver: 2
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 56862
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.11
+      dest_port: 49290
+      event_type: flow
+      flow.age: 19
+      flow.alerted: false
+      flow.bytes_toclient: 940
+      flow.bytes_toserver: 1880
+      flow.pkts_toclient: 10
+      flow.pkts_toserver: 20
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 56852
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.10
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 74
+      flow.bytes_toserver: 74
+      flow.pkts_toclient: 1
+      flow.pkts_toserver: 1
+      flow.reason: shutdown
+      flow.state: established
+      icmp_code: 0
+      icmp_type: 8
+      proto: ICMP
+      response_icmp_code: 0
+      response_icmp_type: 0
+      src_ip: 141.81.0.182
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.181
+      dest_port: 1057
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 118
+      flow.bytes_toserver: 252
+      flow.pkts_toclient: 1
+      flow.pkts_toserver: 2
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 59605
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.130
+      dest_port: 102
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 18930
+      flow.bytes_toserver: 19431
+      flow.pkts_toclient: 247
+      flow.pkts_toserver: 245
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 52538
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.10
+      dest_port: 80
+      event_type: flow
+      flow.age: 1
+      flow.alerted: false
+      flow.bytes_toclient: 162
+      flow.bytes_toserver: 186
+      flow.pkts_toclient: 3
+      flow.pkts_toserver: 3
+      flow.reason: shutdown
+      flow.state: closed
+      proto: TCP
+      src_ip: 141.81.0.182
+      src_port: 4549
+      tcp.ack: true
+      tcp.rst: true
+      tcp.state: closed
+      tcp.syn: true
+      tcp.tcp_flags: '16'
+      tcp.tcp_flags_tc: '14'
+      tcp.tcp_flags_ts: '02'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.11
+      dest_port: 49164
+      event_type: flow
+      flow.age: 15
+      flow.alerted: false
+      flow.bytes_toclient: 376
+      flow.bytes_toserver: 736
+      flow.pkts_toclient: 4
+      flow.pkts_toserver: 8
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 56849
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.84
+      dest_port: 502
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 11817
+      flow.bytes_toserver: 9650
+      flow.pkts_toclient: 127
+      flow.pkts_toserver: 147
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 50594
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.11
+      dest_port: 1433
+      event_type: flow
+      flow.age: 16
+      flow.alerted: false
+      flow.bytes_toclient: 5346
+      flow.bytes_toserver: 8480
+      flow.pkts_toclient: 30
+      flow.pkts_toserver: 39
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 60762
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.182
+      dest_port: 1059
+      event_type: flow
+      flow.age: 20
+      flow.alerted: false
+      flow.bytes_toclient: 1080
+      flow.bytes_toserver: 2002
+      flow.pkts_toclient: 10
+      flow.pkts_toserver: 19
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 5026
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.181
+      dest_port: 1865
+      event_type: flow
+      flow.age: 16
+      flow.alerted: false
+      flow.bytes_toclient: 660
+      flow.bytes_toserver: 5892
+      flow.pkts_toclient: 11
+      flow.pkts_toserver: 13
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 5413
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.236
+      dest_port: 102
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 11781
+      flow.bytes_toserver: 11275
+      flow.pkts_toclient: 102
+      flow.pkts_toserver: 103
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 52610
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.11
+      dest_port: 1433
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 126
+      flow.bytes_toserver: 121
+      flow.pkts_toclient: 2
+      flow.pkts_toserver: 2
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 59728
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.10
+      dest_port: 60759
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 12792
+      flow.bytes_toserver: 20116
+      flow.pkts_toclient: 186
+      flow.pkts_toserver: 218
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.66
+      src_port: 502
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.51
+      dest_port: 102
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 14244
+      flow.bytes_toserver: 10056
+      flow.pkts_toclient: 131
+      flow.pkts_toserver: 131
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 52605
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.11
+      dest_port: 1433
+      event_type: flow
+      flow.age: 16
+      flow.alerted: false
+      flow.bytes_toclient: 117948
+      flow.bytes_toserver: 54612
+      flow.pkts_toclient: 162
+      flow.pkts_toserver: 141
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.10
+      src_port: 58454
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.10
+      dest_port: 52573
+      event_type: flow
+      flow.age: 21
+      flow.alerted: false
+      flow.bytes_toclient: 11746
+      flow.bytes_toserver: 5982
+      flow.pkts_toclient: 74
+      flow.pkts_toserver: 54
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.188
+      src_port: 5026
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 141.81.0.10
+      dest_port: 49188
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 118
+      flow.bytes_toserver: 258
+      flow.pkts_toclient: 1
+      flow.pkts_toserver: 2
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 141.81.0.188
+      src_port: 56282
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
