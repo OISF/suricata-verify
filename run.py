@@ -427,7 +427,7 @@ class TestRunner:
                     if "msg" in skip:
                         msg = skip["msg"]
                     else:
-                        msg = "not for uid %d" % (skip["uid"])
+                        msg = "not for uid c%d" % (skip["uid"])
                     raise UnsatisfiedRequirementError(msg)
 
             if "feature" in skip:
@@ -800,9 +800,13 @@ class TestRunner:
 
 
 def check_args_fail():
-    if args.fail:
-        sys.exit(1)
+	if args.fail and args.debugfailed:
+		pass
+	elif args.fail:
+		sys.exit(1)
+	
 
+		
 
 def check_deps():
     try:
@@ -820,7 +824,7 @@ def check_deps():
         return False
 
     return True
-
+      
 def main():
     global TOPDIR
     global args
@@ -918,6 +922,7 @@ def main():
 
         test_runner = TestRunner(
             cwd, dirpath, outdir, suricata_config, args.verbose, args.force)
+
         try:
             results = test_runner.run()
             if results["failure"] > 0:
@@ -931,16 +936,22 @@ def main():
             print("SKIPPED: {}".format(ue))
             skipped += 1
         except TestError as te:
+
             print("FAILED: {}".format(te))
             check_args_fail()
             failed += 1
 
+
+            
     print("")
     print("PASSED:  %d" % (passed))
     print("FAILED:  %d" % (failed))
     print("SKIPPED: %d" % (skipped))
 
+    
+
     if args.debugfailed:
+
         if len(failedLogs) > 0:
             print("")
             print("Failed tests debug output:")
@@ -959,7 +970,7 @@ def main():
                                 print("    - [Not dumping file that won't utf-8 decode]")
                     except Exception as err:
                         print("Failed to open %s: %s" % (path, str(err)))
-
+        
     if failed > 0:
         return 1
     return 0
