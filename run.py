@@ -840,6 +840,8 @@ def main():
                         help="Exit on test failure")
     parser.add_argument("--testdir", action="store",
                         help="Runs tests from custom directory")
+    parser.add_argument("--exact", dest="exact", action="store_true",
+                        help="Use supplied name to make an exact match")
     parser.add_argument("--skip-tests", nargs="?", default=None,
                         help="Skip tests with a given pattern")
     parser.add_argument("--outdir", action="store",
@@ -885,11 +887,16 @@ def main():
             continue
         if dirpath == tdir:
             continue
+        basename = os.path.basename(dirpath)
         if args.skip_tests:
             skip_tests_opt = False
             patterns = args.skip_tests.split(",")
             for pattern in patterns:
-                if os.path.basename(dirpath).find(pattern) > -1:
+                if args.exact:
+                    if pattern == basename:
+                        skip_tests_opt = True
+                        break
+                elif basename.find(pattern) > -1:
                     skip_tests_opt = True
                     break
             if skip_tests_opt:
@@ -906,7 +913,10 @@ def main():
             tests.append(dirpath)
         else:
             for pattern in args.patterns:
-                if os.path.basename(dirpath).find(pattern) > -1:
+                if args.exact:
+                    if pattern == basename:
+                        tests.append(dirpath)
+                elif basename.find(pattern) > -1:
                     tests.append(dirpath)
 
     # Sort alphabetically.
