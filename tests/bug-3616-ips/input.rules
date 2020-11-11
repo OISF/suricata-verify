@@ -1,0 +1,4 @@
+alert http any any -> any any (msg:"CANARY TEST #1"; file_data; content:"commonly-accepted commonly-used"; sid:1; rev:1;)
+alert http any any -> any any (msg:"CANARY TEST #2"; http.stat_code; content:"200"; fast_pattern; file_data; content:"commonly-accepted commonly-used"; sid:2; rev:1;)
+alert http any any -> any any (msg:"strip_whitespace HTTP test #1"; flow:established; file_data; strip_whitespace; content:"bricks-and-clicks"; sid:3; rev:1;)
+alert tcp any any -> any any (msg:"strip_whitespace TCP test #1"; flow:established; file_data; strip_whitespace; content:"inventedtheterm"; sid:4; rev:1;)
