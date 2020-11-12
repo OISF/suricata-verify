@@ -6,6 +6,7 @@ outputs:
       enabled: true
       types:
         - alert
+        - files
         - http2
         - anomaly
 
