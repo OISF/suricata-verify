@@ -14,3 +14,8 @@ checks:
       count: 0
       match:
         event_type: anomaly
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.size: 639
