@@ -695,7 +695,6 @@ class TestRunner:
                 "TEST_DIR": self.directory,
                 "OUTPUT_DIR": self.output,
                 "TOPDIR": TOPDIR,
-                "ASAN_OPTIONS": "detect_leaks=0",
             }
             env = os.environ.copy()
             env.update(extraenv)
