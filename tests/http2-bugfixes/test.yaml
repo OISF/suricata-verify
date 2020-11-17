@@ -14,8 +14,15 @@ checks:
       count: 0
       match:
         event_type: anomaly
+# check gzip decompresser
   - filter:
       count: 1
       match:
         event_type: fileinfo
         fileinfo.size: 639
+# check brotli decompresser
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.size: 880
