@@ -56,7 +56,7 @@ jobs:
                 zlib1g \
                 zlib1g-dev
       - run: cargo install --force --debug cbindgen
-      - run: echo "::add-path::$HOME/.cargo/bin"
+      - run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
       - uses: actions/checkout@v1
       - run: python3 ./run.py --self-test
       - run: git clone https://github.com/OISF/suricata -b ${{ matrix.branch }}
