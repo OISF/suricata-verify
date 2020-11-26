@@ -6,17 +6,15 @@ args:
 
 checks:
 - filter:
-    count: 1
+    count: 8
     match:
-      dcerpc.request: REQUEST_LOST
+      dcerpc.request: REQUEST
       dcerpc.response: UNREPLIED
-      dest_ip: 141.81.0.10
-      dest_port: 33000
+      dcerpc.activityuuid: "00000000-0000-0000-0000-000000000000"
+      dcerpc.seqnum: 0
+      dcerpc.rpc_version: "4.0"
       event_type: dcerpc
-      pcap_cnt: 1169
       proto: UDP
-      src_ip: 141.81.0.11
-      src_port: 33002
 - filter:
     count: 1
     match:
