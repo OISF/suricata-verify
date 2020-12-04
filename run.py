@@ -37,6 +37,7 @@ import glob
 import re
 import json
 import unittest
+import filecmp
 from collections import namedtuple
 
 import yaml
@@ -271,6 +272,20 @@ def is_version_compatible(version, suri_version, expr):
     if not func(suri_version, config_version):
         return False
     return True
+
+class FileCompareCheck:
+
+    def __init__(self, config, directory):
+        self.config = config
+        self.directory = directory
+
+    def run(self):
+        expected = os.path.join(self.directory, self.config["expected"])
+        filename = self.config["filename"]
+        if filecmp.cmp(expected, filename):
+            return True
+        else:
+            raise TestError("%s %s \nFAILED: verification failed" % (expected, filename))
 
 
 class ShellCheck:
@@ -646,6 +661,11 @@ class TestRunner:
         count = StatsCheck(check, self.output).run()
         return count
 
+    @handle_exceptions
+    def perform_file_compare_checks(self, check, count, test_num):
+        count = FileCompareCheck(check, self.directory).run()
+        return count
+
     def reset_count(self, dictionary):
         for k in dictionary.keys():
             dictionary[k] = 0
@@ -665,8 +685,8 @@ class TestRunner:
                 self.reset_count(count)
                 for check_count, check in enumerate(self.config["checks"]):
                     for key in check:
-                        if key in ["filter", "shell", "stats"]:
-                            func = getattr(self, "perform_{}_checks".format(key))
+                        if key in ["filter", "shell", "stats", "file-compare"]:
+                            func = getattr(self, "perform_{}_checks".format(key.replace("-","_")))
                             count = func(check=check[key], count=count,
                                     test_num=check_count + 1)
                         else:
