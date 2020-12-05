@@ -1,0 +1,1 @@
+alert http any any -> any any (http.request_body; url_decode; content:"mail=test@oisf.net"; sid:1;)
