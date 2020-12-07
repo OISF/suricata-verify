@@ -2,3 +2,8 @@ alert http2 any any -> any any (http2.header; content:"agent: nghttp2"; sid:1; r
 alert http2 any any -> any any (http2.frametype:GOAWAY; sid:2; rev:1;)
 alert http2 any any -> any any (http2.settings:SETTINGS_HEADER_TABLE_SIZE>1000; sid:3; rev:1;)
 alert http2 any any -> any any (http2.window:34634; sid:4; rev:1;)
+
+alert http any any -> any any (http.uri; content:"/doc/manual/html/index.html"; sid:10;)
+alert http1 any any -> any any (http.uri; content:"/doc/manual/html/index.html"; sid:11;)
+alert http2 any any -> any any (http.uri; content:"/doc/manual/html/index.html"; sid:12;)
+alert ip any any -> any any (http.uri; content:"/doc/manual/html/index.html"; sid:13;)
