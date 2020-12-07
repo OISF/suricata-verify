@@ -50,3 +50,19 @@ checks:
         http.http_method: "GET"
         http.url: "/humans.txt"
         http.status: 404
+# checks for http.uti keyword : 1 for HTTP1, 1 for mimicked HTTP2 response, so 2 for whole HTTP
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 10
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 11
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 12
