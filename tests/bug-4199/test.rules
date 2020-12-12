@@ -1,0 +1,2 @@
+alert http any any -> $HOME_NET any (msg: "detect (/etc/passwd) no transform"; flow:to_server,established; http.request_body;content:"/etc/passwd"; nocase; sid:1;)
+alert http any any -> $HOME_NET any (msg: "detect (/etc/passwd) with transform"; flow:to_server,established; http.request_body; url_decode; content:"/etc/passwd"; nocase; sid:2;)
