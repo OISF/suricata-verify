@@ -37,6 +37,7 @@ import glob
 import re
 import json
 import unittest
+import multiprocessing as mp
 from collections import namedtuple
 
 import yaml
@@ -44,6 +45,12 @@ import yaml
 WIN32 = sys.platform == "win32"
 suricata_bin = "src\suricata.exe" if WIN32 else "./src/suricata"
 suricata_yaml = "suricata.yaml" if WIN32 else "./suricata.yaml"
+
+manager = mp.Manager()
+count_dict = manager.dict()
+count_dict['passed'] = 0
+count_dict['failed'] = 0
+count_dict['skipped'] = 0
 
 class SelfTest(unittest.TestCase):
 
@@ -820,6 +827,32 @@ def check_deps():
 
     return True
 
+def run_test(dirpath, args, cwd, suricata_config, failedLogs):
+    name = os.path.basename(dirpath)
+
+    outdir = os.path.join(dirpath, "output")
+    if args.outdir:
+        outdir = os.path.join(os.path.realpath(args.outdir), name, "output")
+
+    test_runner = TestRunner(
+        cwd, dirpath, outdir, suricata_config, args.verbose, args.force)
+    try:
+        results = test_runner.run()
+        if results["failure"] > 0:
+            count_dict["failed"] += 1
+            failedLogs.append(dirpath)
+        elif results["skipped"] > 0 and results["success"] == 0:
+            count_dict["skipped"] += 1
+        elif results["success"] > 0:
+            count_dict["passed"] += 1
+    except UnsatisfiedRequirementError as ue:
+        print("SKIPPED: {}".format(ue))
+        count_dict["skipped"] += 1
+    except TestError as te:
+        print("FAILED: {}".format(te))
+        check_args_fail()
+        count_dict["failed"] += 1
+
 def main():
     global TOPDIR
     global args
@@ -854,7 +887,7 @@ def main():
         return unittest.main(argv=[sys.argv[0]])
 
     TOPDIR = os.path.abspath(os.path.dirname(sys.argv[0]))
-
+    
     skipped = 0
     passed = 0
     failed = 0
@@ -918,31 +951,17 @@ def main():
     tests.sort()
     failedLogs = []
 
+    pool = mp.Pool(mp.cpu_count())
+    
     for dirpath in tests:
-        name = os.path.basename(dirpath)
+        pool.apply_async(run_test, args=(dirpath, args, cwd, suricata_config, failedLogs))
 
-        outdir = os.path.join(dirpath, "output")
-        if args.outdir:
-            outdir = os.path.join(os.path.realpath(args.outdir), name, "output")
+    pool.close()
+    pool.join()
 
-        test_runner = TestRunner(
-            cwd, dirpath, outdir, suricata_config, args.verbose, args.force)
-        try:
-            results = test_runner.run()
-            if results["failure"] > 0:
-                failed += 1
-                failedLogs.append(dirpath)
-            elif results["skipped"] > 0 and results["success"] == 0:
-                skipped += 1
-            elif results["success"] > 0:
-                passed += 1
-        except UnsatisfiedRequirementError as ue:
-            print("SKIPPED: {}".format(ue))
-            skipped += 1
-        except TestError as te:
-            print("FAILED: {}".format(te))
-            check_args_fail()
-            failed += 1
+    passed = count_dict["passed"]
+    failed = count_dict["failed"]
+    skipped = count_dict["skipped"]
 
     print("")
     print("PASSED:  %d" % (passed))
