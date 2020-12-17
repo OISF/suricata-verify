@@ -1,3 +1,5 @@
 alert http1 any any -> any any (http.uri; content:"/robots.txt"; sid:10;)
 alert http2 any any -> any any (http.uri; content:"/robots.txt"; sid:11;)
 alert http any any -> any any (http.uri; content:"/robots.txt"; sid:12;)
+
+alert http2 any any -> any any (http.user_agent; content:"curl"; sid:20;)
