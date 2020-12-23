@@ -15,7 +15,7 @@ jobs:
         branch:
           - master
           - master-5.0.x
-          - master-4.1.x
+          - master-6.0.x
     steps:
       - name: Install dependencies
         run: |
