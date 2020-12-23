@@ -1,0 +1,24 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+    - HAVE_NSS
+
+checks:
+
+  # Check that there is only one SMTP event with specific parameters.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        smtp.mail_from: <gurpartap@patriots.in>
+        smtp.rcpt_to[0]: <raj_deol2002in@yahoo.co.in>
+        email.subject_md5: "c2239a92bde29f0a9f9173193cc2fe00"
+        email.body_md5: "199a623779019799f24fcf61204c55a8"
+
+        
+  # Check the stats. A stats check is a specialization of a filter
+  # that only checks the last stats entry.
+  - stats:
+      decoder.pkts: 60
+      decoder.bytes: 26866
+      decoder.invalid: 0
