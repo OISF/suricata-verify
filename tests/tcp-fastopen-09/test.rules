@@ -1,0 +1,5 @@
+alert pkthdr any any -> any any (msg:"SURICATA TCP packet too small"; decode-event:tcp.pkt_too_small; classtype:protocol-command-decode; sid:2200033; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA TCP header length too small"; decode-event:tcp.hlen_too_small; classtype:protocol-command-decode; sid:2200034; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA TCP invalid option length"; decode-event:tcp.invalid_optlen; classtype:protocol-command-decode; sid:2200035; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA TCP option invalid length"; decode-event:tcp.opt_invalid_len; classtype:protocol-command-decode; sid:2200036; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA TCP duplicated option"; decode-event:tcp.opt_duplicate; classtype:protocol-command-decode; sid:2200037; rev:2;)
