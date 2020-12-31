@@ -1,5 +1,5 @@
 requires:
-    min-version: 6
+    min-version: 7
 
 args:
 - -k none
@@ -9,6 +9,11 @@ checks:
       count: 1
       match:
         event_type: flow
+        src_ip: 10.0.0.1
+        dest_ip: 10.0.0.2
+        proto: UDP
+        src_port: 52377
+        dest_port: 52464
   - filter:
       count: 1
       match:
