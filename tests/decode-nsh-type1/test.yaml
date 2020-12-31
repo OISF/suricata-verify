@@ -8,6 +8,16 @@ checks:
   - filter:
       count: 1
       match:
+        event_type: alert
+        src_ip: 10.0.0.1
+        dest_ip: 10.0.0.2
+        proto: UDP
+        src_port: 52377
+        dest_port: 52464
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
         event_type: flow
         src_ip: 10.0.0.1
         dest_ip: 10.0.0.2
