@@ -876,7 +876,7 @@ def main():
         tdir = os.path.abspath(args.testdir)
     # First gather the tests so we can run them in alphabetic order.
     tests = []
-    for dirpath, dirnames, filenames in os.walk(tdir):
+    for dirpath, dirnames, filenames in os.walk(tdir, followlinks = True):
         # The top directory is not a test...
         if dirpath == os.path.join(TOPDIR, "tests"):
             continue
