@@ -314,10 +314,11 @@ class StatsCheck:
 
 class FilterCheck:
 
-    def __init__(self, config, outdir, suri_version):
+    def __init__(self, config, outdir, suricata_config):
         self.config = config
         self.outdir = outdir
-        self.suri_version = suri_version
+        self.suricata_config = suricata_config
+        self.suri_version = suricata_config.version
 
     def run(self):
         req_version = self.config.get("version")
@@ -331,7 +332,11 @@ class FilterCheck:
                         "Suricata v{} not found".format(version))
         elif req_version and min_version:
             raise TestError("Specify either min-version or version")
-
+        feature = self.config.get("feature")
+        if feature != None:
+            if not self.suricata_config.has_feature(feature):
+                raise UnsatisfiedRequirementError(
+                                                  "Suricata feature {} not present".format(feature))
         if "filename" in self.config:
             json_filename = self.config["filename"]
         else:
@@ -633,7 +638,7 @@ class TestRunner:
     @handle_exceptions
     def perform_filter_checks(self, check, count, test_num):
         count = FilterCheck(check, self.output,
-                self.suricata_config.version).run()
+                self.suricata_config).run()
         return count
 
     @handle_exceptions
