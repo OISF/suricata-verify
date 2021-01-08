@@ -882,7 +882,7 @@ def main():
 
     parser = argparse.ArgumentParser(description="Verification test runner.")
     parser.add_argument("-v", dest="verbose", action="store_true")
-    parser.add_argument("-j", type=int, default=mp.cpu_count(),
+    parser.add_argument("-j", type=int, default=min(8, mp.cpu_count()),
                         help="Number of jobs to run")
     parser.add_argument("--force", dest="force", action="store_true",
                         help="Force running of skipped tests")
