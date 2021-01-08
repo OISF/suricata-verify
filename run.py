@@ -1,4 +1,4 @@
-#! /usr/bin/env python2
+#! /usr/bin/env python3
 #
 # Copyright (C) 2017-2020 Open Information Security Foundation
 #
