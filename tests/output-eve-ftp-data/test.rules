@@ -1,0 +1,4 @@
+alert ftp-data any any -> any any (file.name; content:"temp.txt"; sid:1;)
+alert ftp-data any any -> any any (filename:"temp.txt"; sid:2;)
+alert ftp-data any any -> any any (fileext:"txt"; sid:3;)
+#alert ftp-data any any -> any any (file_data; content:"temp.txt"; sid:4;)
