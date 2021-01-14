@@ -43,6 +43,7 @@ from collections import namedtuple
 import yaml
 
 WIN32 = sys.platform == "win32"
+LINUX = sys.platform.startswith("linux")
 suricata_bin = "src\suricata.exe" if WIN32 else "./src/suricata"
 suricata_yaml = "suricata.yaml" if WIN32 else "./suricata.yaml"
 
@@ -873,6 +874,24 @@ def run_test(dirpath, args, cwd, suricata_config):
         with lock:
             count_dict["failed"] += 1
 
+def run_mp(jobs, tests, dirpath, args, cwd, suricata_config):
+    print("Number of concurrent jobs: %d" % jobs)
+    pool = mp.Pool(jobs)
+    try:
+        for dirpath in tests:
+            pool.apply_async(run_test, args=(dirpath, args, cwd, suricata_config))
+    except TerminatePoolError:
+        pool.terminate()
+    pool.close()
+    pool.join()
+
+def run_single(tests, dirpath, args, cwd, suricata_config):
+    try:
+        for dirpath in tests:
+            run_test(dirpath, args, cwd, suricata_config)
+    except TerminatePoolError:
+        sys.exit(1)
+
 def main():
     global TOPDIR
     global args
@@ -882,8 +901,6 @@ def main():
 
     parser = argparse.ArgumentParser(description="Verification test runner.")
     parser.add_argument("-v", dest="verbose", action="store_true")
-    parser.add_argument("-j", type=int, default=min(8, mp.cpu_count()),
-                        help="Number of jobs to run")
     parser.add_argument("--force", dest="force", action="store_true",
                         help="Force running of skipped tests")
     parser.add_argument("--fail", action="store_true",
@@ -903,6 +920,9 @@ def main():
     parser.add_argument("--debug-failed", dest="debugfailed", action="store_true",
                         help="Prints debug output for failed tests")
     parser.add_argument("patterns", nargs="*", default=[])
+    if LINUX:
+        parser.add_argument("-j", type=int, default=min(8, mp.cpu_count()),
+                        help="Number of jobs to run")
     args = parser.parse_args()
 
     if args.self_test:
@@ -972,19 +992,10 @@ def main():
     # Sort alphabetically.
     tests.sort()
 
-    jobs = args.j
-    print("Number of concurrent jobs: %d" % jobs)
-
-    pool = mp.Pool(jobs)
-
-    try:
-        for dirpath in tests:
-            pool.apply_async(run_test, args=(dirpath, args, cwd, suricata_config))
-    except TerminatePoolError:
-        pool.terminate()
-
-    pool.close()
-    pool.join()
+    if LINUX:
+        run_mp(args.j, tests, dirpath, args, cwd, suricata_config)
+    else:
+        run_single(tests, dirpath, args, cwd, suricata_config)
 
     passed = count_dict["passed"]
     failed = count_dict["failed"]
