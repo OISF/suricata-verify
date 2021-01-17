@@ -6,3 +6,4 @@ outputs:
       enabled: true
       types:
         - krb5
+        - alert

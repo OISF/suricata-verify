@@ -8,8 +8,18 @@ requires:
 
 args:
   - --set pcap-file.checksum-checks=no
-checks:
 
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 2
   - filter:
       comment: authentication service (AS) response
       count: 1
