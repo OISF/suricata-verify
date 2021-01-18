@@ -1,0 +1,26 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        src_ip: "10.120.128.236"
+        src_port: 53909
+        dest_ip: "10.123.173.114"
+        dest_port: 8080
+        http.http_method: "CONNECT"
+        http.hostname: "qagpublic.qg1.apps.qualys.com"
+
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+        src_ip: "10.120.128.236"
+        src_port: 53909
+        dest_ip: "10.123.173.114"
+        dest_port: 8080
+        tls.subject: "C=US, ST=California, L=Redwood City, O=Qualys, Inc., OU=Production, CN=qagpublic.qg1.apps.qualys.com"
+        tls.issuerdn: "C=US, O=Symantec Corporation, OU=Symantec Trust Network, CN=Symantec Class 3 Secure Server SHA256 SSL CA"
