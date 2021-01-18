@@ -1,0 +1,24 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+args:
+- --set stream.async-oneside=true
+- --set stream.midstream=true
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+
+
