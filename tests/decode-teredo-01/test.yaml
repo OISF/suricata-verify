@@ -1,0 +1,567 @@
+requires:
+  min-version: 7
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.2.1
+      dest_port: 53
+      dns.id: 16995
+      dns.rrname: ipv6.google.com
+      dns.rrtype: AAAA
+      dns.tx_id: 0
+      dns.type: query
+      event_type: dns
+      pcap_cnt: 21
+      proto: UDP
+      src_ip: 192.168.2.16
+      src_port: 1920
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.2.1
+      dest_port: 53
+      dns.answers[0].rdata: ipv6.l.google.com
+      dns.answers[0].rrname: ipv6.google.com
+      dns.answers[0].rrtype: CNAME
+      dns.answers[0].ttl: 8655
+      dns.answers[1].rdata: 2001:4860:0000:2001:0000:0000:0000:0068
+      dns.answers[1].rrname: ipv6.l.google.com
+      dns.answers[1].rrtype: AAAA
+      dns.answers[1].ttl: 300
+      dns.authorities[0].rdata: a.l.google.com
+      dns.authorities[0].rrname: l.google.com
+      dns.authorities[0].rrtype: NS
+      dns.authorities[0].ttl: 77923
+      dns.authorities[1].rdata: b.l.google.com
+      dns.authorities[1].rrname: l.google.com
+      dns.authorities[1].rrtype: NS
+      dns.authorities[1].ttl: 77923
+      dns.authorities[2].rdata: c.l.google.com
+      dns.authorities[2].rrname: l.google.com
+      dns.authorities[2].rrtype: NS
+      dns.authorities[2].ttl: 77923
+      dns.authorities[3].rdata: d.l.google.com
+      dns.authorities[3].rrname: l.google.com
+      dns.authorities[3].rrtype: NS
+      dns.authorities[3].ttl: 77923
+      dns.authorities[4].rdata: e.l.google.com
+      dns.authorities[4].rrname: l.google.com
+      dns.authorities[4].rrtype: NS
+      dns.authorities[4].ttl: 77923
+      dns.authorities[5].rdata: f.l.google.com
+      dns.authorities[5].rrname: l.google.com
+      dns.authorities[5].rrtype: NS
+      dns.authorities[5].ttl: 77923
+      dns.authorities[6].rdata: g.l.google.com
+      dns.authorities[6].rrname: l.google.com
+      dns.authorities[6].rrtype: NS
+      dns.authorities[6].ttl: 77923
+      dns.flags: '8180'
+      dns.grouped.AAAA[0]: 2001:4860:0000:2001:0000:0000:0000:0068
+      dns.grouped.CNAME[0]: ipv6.l.google.com
+      dns.id: 16995
+      dns.qr: true
+      dns.ra: true
+      dns.rcode: NOERROR
+      dns.rd: true
+      dns.rrname: ipv6.google.com
+      dns.rrtype: AAAA
+      dns.type: answer
+      dns.version: 2
+      event_type: dns
+      pcap_cnt: 22
+      proto: UDP
+      src_ip: 192.168.2.16
+      src_port: 1920
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.2.1
+      dest_port: 53
+      dns.id: 19995
+      dns.rrname: ipv6.google.com
+      dns.rrtype: A
+      dns.tx_id: 2
+      dns.type: query
+      event_type: dns
+      pcap_cnt: 23
+      proto: UDP
+      src_ip: 192.168.2.16
+      src_port: 1920
+- filter:
+    count: 1
+    match:
+      app_proto: http
+      dest_ip: 75.126.203.78
+      dest_port: 80
+      event_type: fileinfo
+      fileinfo.filename: /cgi-bin/iavs4stats.cgi
+      fileinfo.gaps: false
+      fileinfo.size: 589
+      fileinfo.state: CLOSED
+      fileinfo.stored: false
+      fileinfo.tx_id: 0
+      http.hostname: download913.avast.com
+      http.http_method: POST
+      http.http_user_agent: Syncer/4.80 (av_pro-1169;f)
+      http.length: 0
+      http.protocol: HTTP/1.0
+      http.url: /cgi-bin/iavs4stats.cgi
+      pcap_cnt: 16
+      proto: TCP
+      src_ip: 192.168.2.16
+      src_port: 1578
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.2.1
+      dest_port: 53
+      dns.answers[0].rdata: ipv6.l.google.com
+      dns.answers[0].rrname: ipv6.google.com
+      dns.answers[0].rrtype: CNAME
+      dns.answers[0].ttl: 8655
+      dns.authorities[0].rrname: l.google.com
+      dns.authorities[0].rrtype: SOA
+      dns.authorities[0].soa.expire: 1800
+      dns.authorities[0].soa.minimum: 60
+      dns.authorities[0].soa.mname: c.l.google.com
+      dns.authorities[0].soa.refresh: 900
+      dns.authorities[0].soa.retry: 900
+      dns.authorities[0].soa.rname: dns-admin.google.com
+      dns.authorities[0].soa.serial: 1345503
+      dns.authorities[0].ttl: 60
+      dns.flags: '8180'
+      dns.grouped.CNAME[0]: ipv6.l.google.com
+      dns.id: 19995
+      dns.qr: true
+      dns.ra: true
+      dns.rcode: NOERROR
+      dns.rd: true
+      dns.rrname: ipv6.google.com
+      dns.rrtype: A
+      dns.type: answer
+      dns.version: 2
+      event_type: dns
+      pcap_cnt: 24
+      proto: UDP
+      src_ip: 192.168.2.16
+      src_port: 1920
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.2.1
+      dest_port: 53
+      dns.id: 38477
+      dns.rrname: www.wireshark.org
+      dns.rrtype: AAAA
+      dns.tx_id: 4
+      dns.type: query
+      event_type: dns
+      pcap_cnt: 58
+      proto: UDP
+      src_ip: 192.168.2.16
+      src_port: 1920
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.2.1
+      dest_port: 53
+      dns.aa: true
+      dns.flags: '8580'
+      dns.id: 38477
+      dns.qr: true
+      dns.ra: true
+      dns.rcode: NOERROR
+      dns.rd: true
+      dns.rrname: www.wireshark.org
+      dns.rrtype: AAAA
+      dns.type: answer
+      dns.version: 2
+      event_type: dns
+      pcap_cnt: 59
+      proto: UDP
+      src_ip: 192.168.2.16
+      src_port: 1920
+- filter:
+    count: 1
+    match:
+      dest_ip: 75.126.203.78
+      dest_port: 80
+      event_type: http
+      http.hostname: download913.avast.com
+      http.http_content_type: text/plain
+      http.http_method: POST
+      http.http_user_agent: Syncer/4.80 (av_pro-1169;f)
+      http.length: 0
+      http.protocol: HTTP/1.0
+      http.status: 204
+      http.url: /cgi-bin/iavs4stats.cgi
+      pcap_cnt: 19
+      proto: TCP
+      src_ip: 192.168.2.16
+      src_port: 1578
+      tx_id: 0
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.2.1
+      dest_port: 53
+      dns.id: 26746
+      dns.rrname: www.wireshark.org.gateway.2wire.net
+      dns.rrtype: AAAA
+      dns.tx_id: 6
+      dns.type: query
+      event_type: dns
+      pcap_cnt: 60
+      proto: UDP
+      src_ip: 192.168.2.16
+      src_port: 1920
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.2.1
+      dest_port: 53
+      dns.aa: true
+      dns.flags: '8505'
+      dns.id: 26746
+      dns.qr: true
+      dns.rcode: REFUSED
+      dns.rd: true
+      dns.rrname: www.wireshark.org.gateway.2wire.net
+      dns.rrtype: AAAA
+      dns.type: answer
+      dns.version: 2
+      event_type: dns
+      pcap_cnt: 61
+      proto: UDP
+      src_ip: 192.168.2.16
+      src_port: 1920
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.2.1
+      dest_port: 53
+      dns.id: 34278
+      dns.rrname: www.wireshark.org
+      dns.rrtype: A
+      dns.tx_id: 8
+      dns.type: query
+      event_type: dns
+      pcap_cnt: 62
+      proto: UDP
+      src_ip: 192.168.2.16
+      src_port: 1920
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.2.1
+      dest_port: 53
+      dns.aa: true
+      dns.answers[0].rdata: 67.228.110.120
+      dns.answers[0].rrname: www.wireshark.org
+      dns.answers[0].rrtype: A
+      dns.answers[0].ttl: 14400
+      dns.flags: '8580'
+      dns.grouped.A[0]: 67.228.110.120
+      dns.id: 34278
+      dns.qr: true
+      dns.ra: true
+      dns.rcode: NOERROR
+      dns.rd: true
+      dns.rrname: www.wireshark.org
+      dns.rrtype: A
+      dns.type: answer
+      dns.version: 2
+      event_type: dns
+      pcap_cnt: 63
+      proto: UDP
+      src_ip: 192.168.2.16
+      src_port: 1920
+- filter:
+    count: 1
+    match:
+      dest_ip: 67.228.110.120
+      dest_port: 80
+      event_type: http
+      http.hostname: www.wireshark.org
+      http.http_content_type: text/html
+      http.http_method: GET
+      http.http_refer: http://ipv6.google.com/search?hl=en&q=Wireshark+%21&btnG=Google+Search
+      http.http_user_agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9b5)
+        Gecko/2008032620 Firefox/3.0b5
+      http.length: 3651
+      http.protocol: HTTP/1.1
+      http.status: 200
+      http.url: /
+      pcap_cnt: 75
+      proto: TCP
+      src_ip: 192.168.2.16
+      src_port: 1580
+      tx_id: 0
+- filter:
+    count: 1
+    match:
+      app_proto: http
+      dest_ip: 192.168.2.16
+      dest_port: 1580
+      event_type: fileinfo
+      fileinfo.filename: /
+      fileinfo.gaps: false
+      fileinfo.size: 11845
+      fileinfo.state: CLOSED
+      fileinfo.stored: false
+      fileinfo.tx_id: 0
+      http.hostname: www.wireshark.org
+      http.http_content_type: text/html
+      http.http_method: GET
+      http.http_refer: http://ipv6.google.com/search?hl=en&q=Wireshark+%21&btnG=Google+Search
+      http.http_user_agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9b5)
+        Gecko/2008032620 Firefox/3.0b5
+      http.length: 3651
+      http.protocol: HTTP/1.1
+      http.status: 200
+      http.url: /
+      pcap_cnt: 75
+      proto: TCP
+      src_ip: 67.228.110.120
+      src_port: 80
+- filter:
+    count: 1
+    match:
+      app_proto: failed
+      dest_ip: 192.168.2.16
+      dest_port: 3797
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 0
+      flow.bytes_toserver: 151
+      flow.pkts_toclient: 0
+      flow.pkts_toserver: 1
+      flow.reason: shutdown
+      flow.state: new
+      proto: UDP
+      src_ip: 65.55.158.81
+      src_port: 3544
+- filter:
+    count: 1
+    match:
+      app_proto: dns
+      dest_ip: 192.168.2.1
+      dest_port: 53
+      event_type: flow
+      flow.age: 16
+      flow.alerted: false
+      flow.bytes_toclient: 1246
+      flow.bytes_toserver: 399
+      flow.pkts_toclient: 5
+      flow.pkts_toserver: 5
+      flow.reason: shutdown
+      flow.state: established
+      proto: UDP
+      src_ip: 192.168.2.16
+      src_port: 1920
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.2.16
+      dest_port: 1576
+      event_type: flow
+      flow.age: 27
+      flow.alerted: false
+      flow.bytes_toclient: 108
+      flow.bytes_toserver: 108
+      flow.pkts_toclient: 2
+      flow.pkts_toserver: 2
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 75.126.130.163
+      src_port: 80
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      app_proto: failed
+      dest_ip: 192.168.2.255
+      dest_port: 137
+      event_type: flow
+      flow.age: 2
+      flow.alerted: false
+      flow.bytes_toclient: 0
+      flow.bytes_toserver: 276
+      flow.pkts_toclient: 0
+      flow.pkts_toserver: 3
+      flow.reason: shutdown
+      flow.state: new
+      proto: UDP
+      src_ip: 192.168.2.16
+      src_port: 137
+- filter:
+    count: 1
+    match:
+      app_proto: failed
+      dest_ip: 192.168.2.255
+      dest_port: 138
+      event_type: flow
+      flow.age: 29
+      flow.alerted: false
+      flow.bytes_toclient: 0
+      flow.bytes_toserver: 500
+      flow.pkts_toclient: 0
+      flow.pkts_toserver: 2
+      flow.reason: shutdown
+      flow.state: new
+      proto: UDP
+      src_ip: 192.168.2.16
+      src_port: 138
+- filter:
+    count: 1
+    match:
+      app_proto: dhcp
+      dest_ip: 255.255.255.255
+      dest_port: 67
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 0
+      flow.bytes_toserver: 342
+      flow.pkts_toclient: 0
+      flow.pkts_toserver: 1
+      flow.reason: shutdown
+      flow.state: new
+      proto: UDP
+      src_ip: 0.0.0.0
+      src_port: 68
+- filter:
+    count: 1
+    match:
+      dest_ip: 2001:4860:0000:2001:0000:0000:0000:0068
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 0
+      flow.bytes_toserver: 52
+      flow.pkts_toclient: 0
+      flow.pkts_toserver: 1
+      flow.reason: shutdown
+      flow.state: new
+      icmp_code: 0
+      icmp_type: 128
+      proto: IPv6-ICMP
+      src_ip: 2001:0000:4137:9e50:8000:f12a:b9c8:2815
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.2.16
+      dest_port: 1577
+      event_type: flow
+      flow.age: 24
+      flow.alerted: false
+      flow.bytes_toclient: 108
+      flow.bytes_toserver: 162
+      flow.pkts_toclient: 2
+      flow.pkts_toserver: 3
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 75.126.203.78
+      src_port: 80
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      app_proto: failed
+      dest_ip: 83.170.1.38
+      dest_port: 32900
+      event_type: flow
+      flow.age: 14
+      flow.alerted: false
+      flow.bytes_toclient: 11789
+      flow.bytes_toserver: 2863
+      flow.pkts_toclient: 13
+      flow.pkts_toserver: 12
+      flow.reason: shutdown
+      flow.state: established
+      proto: UDP
+      src_ip: 192.168.2.16
+      src_port: 3797
+- filter:
+    count: 1
+    match:
+      app_proto: http
+      dest_ip: 75.126.203.78
+      dest_port: 80
+      event_type: flow
+      flow.age: 19
+      flow.alerted: false
+      flow.bytes_toclient: 445
+      flow.bytes_toserver: 1122
+      flow.pkts_toclient: 5
+      flow.pkts_toserver: 6
+      flow.reason: shutdown
+      flow.state: closed
+      proto: TCP
+      src_ip: 192.168.2.16
+      src_port: 1578
+      tcp.ack: true
+      tcp.psh: true
+      tcp.rst: true
+      tcp.state: closed
+      tcp.syn: true
+      tcp.tcp_flags: 1e
+      tcp.tcp_flags_tc: 1e
+      tcp.tcp_flags_ts: 1e
+- filter:
+    count: 1
+    match:
+      app_proto: failed
+      dest_ip: 65.55.158.80
+      dest_port: 3544
+      event_type: flow
+      flow.age: 9
+      flow.alerted: false
+      flow.bytes_toclient: 90
+      flow.bytes_toserver: 213
+      flow.pkts_toclient: 1
+      flow.pkts_toserver: 2
+      flow.reason: shutdown
+      flow.state: established
+      proto: UDP
+      src_ip: 192.168.2.16
+      src_port: 3797
+- filter:
+    count: 1
+    match:
+      app_proto: http
+      dest_ip: 67.228.110.120
+      dest_port: 80
+      event_type: flow
+      flow.age: 1
+      flow.alerted: false
+      flow.bytes_toclient: 4248
+      flow.bytes_toserver: 855
+      flow.pkts_toclient: 6
+      flow.pkts_toserver: 7
+      flow.reason: shutdown
+      flow.state: closed
+      proto: TCP
+      src_ip: 192.168.2.16
+      src_port: 1580
+      tcp.ack: true
+      tcp.fin: true
+      tcp.psh: true
+      tcp.state: closed
+      tcp.syn: true
+      tcp.tcp_flags: 1b
+      tcp.tcp_flags_tc: 1b
+      tcp.tcp_flags_ts: 1b
