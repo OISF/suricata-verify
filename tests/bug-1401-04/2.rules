@@ -1,0 +1,1 @@
+alert tcp 66.155.11.238 any -> any any (flow:to_client; flags:SA; sid:2; rev:1;)

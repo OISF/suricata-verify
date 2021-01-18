@@ -1,0 +1,1 @@
+alert tcp 66.155.11.238 any -> any any (flags:SA; sid:1; rev:1;)
