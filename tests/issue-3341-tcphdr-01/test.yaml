@@ -1,0 +1,12 @@
+requires:
+  min-version: 5.0.0
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+
+args:
+- -k none

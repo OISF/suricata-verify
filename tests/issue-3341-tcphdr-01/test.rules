@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"EXPLOIT - Suricata 5.0 tcp.hdr test for CVE-2019-12260"; flow:to_server; tcp.hdr; content:"|1d 03 61 00|"; offset:20; depth:4; sid:1; rev:1;)
