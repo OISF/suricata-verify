@@ -1,0 +1,4 @@
+alert http any any -> any any (filestore; fileext:!"mp4"; sid:1; rev:1;)
+alert http any any -> any any (filestore; file.name; content:!"2008.mp4"; sid:2; rev:1;)
+alert http any any -> any any (filestore; file.name; content:!"tar.gz"; sid:3; rev:1;)
+alert http any any -> any any (file.name; content:"/a/expl/2008.mp4"; startswith; endswith; sid:4; rev:1;)
