@@ -1,0 +1,1 @@
+alert sctp any 7 -> any 7 (sid:1;)

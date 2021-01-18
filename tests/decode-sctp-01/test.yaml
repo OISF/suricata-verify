@@ -1,0 +1,26 @@
+# *** Add configuration here ***
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.170.8
+      dest_port: 7
+      event_type: alert
+      proto: SCTP
+      src_ip: 192.168.170.56
+      src_port: 7
+      alert.signature_id: 1
+
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.170.8
+      dest_port: 7
+      event_type: flow
+      proto: SCTP
+      src_ip: 192.168.170.56
+      src_port: 7
