@@ -1,0 +1,41 @@
+args:
+- -k none
+
+checks:
+- filter:
+    count: 0
+    match:
+      event_type: alert
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.38.129.234
+      dest_port: 53
+      dns.id: 28390
+      dns.rrname: code.msdn.microsoft.com
+      dns.rrtype: A
+      dns.tx_id: 0
+      dns.type: query
+      event_type: dns
+      pcap_cnt: 1
+      proto: UDP
+      src_ip: 192.168.69.156
+      src_port: 49379
+- filter:
+    count: 1
+    match:
+      app_proto: dns
+      dest_ip: 192.38.129.234
+      dest_port: 53
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 0
+      flow.bytes_toserver: 83
+      flow.pkts_toclient: 0
+      flow.pkts_toserver: 1
+      flow.reason: shutdown
+      flow.state: new
+      proto: UDP
+      src_ip: 192.168.69.156
+      src_port: 49379
