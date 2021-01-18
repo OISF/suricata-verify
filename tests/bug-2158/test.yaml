@@ -1,0 +1,20 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 223344
+        src_ip: "192.168.35.10"
+        src_port: 1030
+        dest_ip: "10.55.99.1"
+        dest_port: 53
+
+
