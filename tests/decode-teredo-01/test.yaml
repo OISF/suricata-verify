@@ -455,7 +455,6 @@ checks:
       flow.state: new
       icmp_code: 0
       icmp_type: 128
-      proto: IPv6-ICMP
       src_ip: 2001:0000:4137:9e50:8000:f12a:b9c8:2815
 - filter:
     count: 1
