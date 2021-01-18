@@ -1,0 +1,80 @@
+# *** Add configuration here ***
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 1
+      alert.severity: 3
+      alert.signature: TEST
+      alert.signature_id: 1
+      app_proto: http
+      dest_ip: fe80:0000:0000:0000:020c:29ff:faf2:ab42
+      dest_port: 80
+      event_type: alert
+      flow.bytes_toclient: 156
+      flow.bytes_toserver: 461
+      flow.pkts_toclient: 2
+      flow.pkts_toserver: 4
+      http.hostname: www.net1.bg
+      http.http_method: GET
+      http.http_user_agent: Mozilla/4.75 (Nikto/2.1.4) (Evasions:None) (Test:000003)
+      http.length: 0
+      http.protocol: HTTP/1.1
+      http.url: /cgi-bin/cart32.exe
+      pcap_cnt: 6
+      proto: TCP
+      src_ip: fe80:0000:0000:0000:020c:29ff:fef3:cf38
+      src_port: 58307
+      tx_id: 0
+      vlan[0]: 1111
+- filter:
+    count: 1
+    match:
+      dest_ip: fe80:0000:0000:0000:020c:29ff:faf2:ab42
+      dest_port: 80
+      event_type: http
+      http.hostname: www.net1.bg
+      http.http_method: GET
+      http.http_user_agent: Mozilla/4.75 (Nikto/2.1.4) (Evasions:None) (Test:000003)
+      http.length: 0
+      http.protocol: HTTP/1.1
+      http.url: /cgi-bin/cart32.exe
+      proto: TCP
+      src_ip: fe80:0000:0000:0000:020c:29ff:fef3:cf38
+      src_port: 58307
+      tx_id: 0
+      vlan[0]: 1111
+- filter:
+    count: 1
+    match:
+      app_proto: http
+      dest_ip: fe80:0000:0000:0000:020c:29ff:faf2:ab42
+      dest_port: 80
+      event_type: flow
+      flow.age: 0
+      flow.alerted: true
+      flow.bytes_toclient: 234
+      flow.bytes_toserver: 461
+      flow.pkts_toclient: 3
+      flow.pkts_toserver: 4
+      flow.reason: shutdown
+      flow.state: established
+      proto: TCP
+      src_ip: fe80:0000:0000:0000:020c:29ff:fef3:cf38
+      src_port: 58307
+      tcp.ack: true
+      tcp.fin: true
+      tcp.psh: true
+      tcp.state: close_wait
+      tcp.syn: true
+      tcp.tcp_flags: 1b
+      tcp.tcp_flags_tc: '12'
+      tcp.tcp_flags_ts: 1b
+      vlan[0]: 1111
