@@ -1,0 +1,4 @@
+alert tcp-pkt any any -> any 80 (msg:"tcp.hdr test1 SYN pkt 1"; tcp.hdr; content:"|00 50|"; offset:2; depth:2; tcp.hdr; content:"|80 c2 20 00|"; sid:1; rev:1;)
+alert tcp-pkt any any -> any 80 (msg:"tcp.hdr test2 SYN pkt 2"; tcp.hdr; content:"|00 00 00 00|"; offset:8; depth:4; sid:2; rev:1;)
+alert tcp-pkt any any -> any 80 (msg:"tcp.hdr test3 GET pkt 1"; content:"GET"; tcp.hdr; content:"|00 50|"; offset:2; depth:2; tcp.hdr; content:"|50 18|"; distance:8; within:2; sid:3; rev:1;)
+alert tcp-pkt any any -> any 80 (msg:"tcp.hdr test4 GET pkt 2"; content:"GET"; tcp.hdr; content:"|00 50|"; offset:2; depth:2; sid:4; rev:1;)

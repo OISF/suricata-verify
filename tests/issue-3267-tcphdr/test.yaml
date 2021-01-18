@@ -1,0 +1,51 @@
+requires:
+  min-version: 5.0.0
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      alert.signature_id: 1
+      dest_ip: 10.0.0.199
+      dest_port: 80
+      event_type: alert
+      pcap_cnt: 1
+      proto: TCP
+      src_ip: 10.0.0.111
+      src_port: 2904
+- filter:
+    count: 1
+    match:
+      alert.signature_id: 2
+      dest_ip: 10.0.0.199
+      dest_port: 80
+      event_type: alert
+      pcap_cnt: 1
+      proto: TCP
+      src_ip: 10.0.0.111
+      src_port: 2904
+- filter:
+    count: 1
+    match:
+      alert.signature_id: 3
+      dest_ip: 10.0.0.199
+      dest_port: 80
+      event_type: alert
+      pcap_cnt: 4
+      proto: TCP
+      src_ip: 10.0.0.111
+      src_port: 2904
+- filter:
+    count: 1
+    match:
+      alert.signature_id: 4
+      dest_ip: 10.0.0.199
+      dest_port: 80
+      event_type: alert
+      pcap_cnt: 4
+      proto: TCP
+      src_ip: 10.0.0.111
+      src_port: 2904
