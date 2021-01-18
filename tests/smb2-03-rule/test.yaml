@@ -1,0 +1,101 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+    - RUST
+  files:
+    - rust/src/smb/smb.rs
+args:
+- --set stream.reassembly.depth=0
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 20
+      match:
+        event_type: smb
+  - filter:
+      count: 2
+      match:
+        event_type: smb
+        smb.command: SMB2_COMMAND_WRITE
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.id: 3
+        smb.dialect: "2.02"
+        smb.command: SMB2_COMMAND_SESSION_SETUP
+        smb.status: STATUS_SUCCESS
+        smb.ntlmssp.domain: "CONTOSO"
+        smb.ntlmssp.user: "Administrator"
+        smb.ntlmssp.host: "SERVER01"
+        smb.session_id: 4398046511109
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.id: 4
+        smb.dialect: "2.02"
+        smb.command: SMB2_COMMAND_TREE_CONNECT
+        smb.status: STATUS_SUCCESS
+        smb.tree_id: 1
+        smb.session_id: 4398046511109
+        smb.share: "\\\\10.0.0.12\\smb2"
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.id: 6
+        smb.dialect: "2.02"
+        smb.command: SMB2_COMMAND_TREE_CONNECT
+        smb.status: STATUS_SUCCESS
+        smb.tree_id: 5
+        smb.session_id: 4398046511109
+        smb.named_pipe: "\\\\10.0.0.12\\IPC$"
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.dialect: "2.02"
+        smb.command: SMB2_COMMAND_CREATE
+        smb.status: STATUS_SUCCESS
+        smb.tree_id: 1
+        smb.session_id: 4398046511109
+        smb.filename: "WP_SMBPlugin.pdf"
+        smb.disposition: "FILE_CREATE"
+        smb.fuid: "0000004d-0000-0000-0009-0000ffffffff"
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.dialect: "2.02"
+        smb.command: SMB2_COMMAND_WRITE
+        smb.status: STATUS_SUCCESS
+        smb.tree_id: 1
+        smb.session_id: 4398046511109
+        smb.filename: "WP_SMBPlugin.pdf"
+        smb.fuid: "0000004d-0000-0000-0009-0000ffffffff"
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        app_proto: smb
+        fileinfo.filename: "WP_SMBPlugin.pdf"
+        fileinfo.state: CLOSED
+        fileinfo.gaps: false
+        fileinfo.size: 1508939
+        smb.session_id: 4398046511109
+        smb.filename: "WP_SMBPlugin.pdf"
+        smb.fuid: "0000004d-0000-0000-0009-0000ffffffff"
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: smb
+        tcp.state: established
+        flow.state: established
+

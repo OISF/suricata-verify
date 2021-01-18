@@ -1,0 +1,55 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+    - RUST
+  files:
+    - rust/src/smb/smb.rs
+args:
+- --set stream.reassembly.depth=0
+- -k none
+
+checks:
+  - filter:
+      count: 51
+      match:
+        event_type: fileinfo
+        fileinfo.state: CLOSED
+        app_proto: smb
+  - filter:
+      count: 17
+      match:
+        event_type: smb
+        smb.command: SMB2_COMMAND_WRITE
+  - filter:
+      count: 153
+      match:
+        event_type: smb
+        smb.status: STATUS_SUCCESS
+  - filter:
+      count: 17
+      match:
+        event_type: smb
+        smb.status: STATUS_ACCESS_DENIED
+  - filter:
+      count: 0
+      match:
+        event_type: smb
+        smb.status: STATUS_END_OF_FILE
+  - filter:
+      count: 2
+      match:
+        event_type: smb
+        smb.status: STATUS_NO_MORE_FILES
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.status: STATUS_MORE_PROCESSING_REQUIRED
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: smb
+        tcp.state: established
+        flow.state: established
+

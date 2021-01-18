@@ -1,0 +1,95 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+    - RUST
+  files:
+    - rust/src/smb/smb.rs
+args:
+- --set stream.midstream=true
+
+checks:
+  - filter:
+      count: 17
+      match:
+        event_type: smb
+  - filter:
+      count: 7
+      match:
+        event_type: smb
+        smb.dialect: "unknown"
+        smb.command: SMB2_COMMAND_CREATE
+        smb.status: STATUS_SUCCESS
+  - filter:
+      count: 7
+      match:
+        event_type: smb
+        smb.dialect: "unknown"
+        smb.command: SMB2_COMMAND_CLOSE
+        smb.status: STATUS_SUCCESS
+  - filter:
+      count: 0
+      match:
+        event_type: smb
+        smb.dialect: "unknown"
+        smb.command: SMB2_COMMAND_GET_INFO
+        smb.status: STATUS_SUCCESS
+  - filter:
+      count: 2
+      match:
+        event_type: smb
+        smb.dialect: "unknown"
+        smb.command: SMB2_COMMAND_FIND
+        smb.status: STATUS_SUCCESS
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.dialect: "unknown"
+        smb.command: SMB2_COMMAND_READ
+        smb.status: STATUS_SUCCESS
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.dialect: "unknown"
+        smb.command: SMB2_COMMAND_CREATE
+        smb.status: STATUS_SUCCESS
+        smb.session_id: 4398046511153
+        smb.tree_id: 1
+        smb.disposition: "FILE_OPEN"
+        smb.filename: "Test\\2009-12 Payroll.xlsx"
+        smb.fuid: "00000065-0030-0000-0025-0020ffffffff"
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.dialect: "unknown"
+        smb.command: SMB2_COMMAND_READ
+        smb.status: STATUS_SUCCESS
+        smb.session_id: 4398046511153
+        smb.tree_id: 1
+        smb.filename: "Test\\2009-12 Payroll.xlsx"
+        smb.fuid: "00000065-0030-0000-0025-0020ffffffff"
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        app_proto: smb
+        fileinfo.filename: "Test\\2009-12 Payroll.xlsx"
+        fileinfo.state: CLOSED
+        fileinfo.gaps: false
+        fileinfo.size: 25940
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.app_layer.tx.smb: 17
+        stats.app_layer.flow.smb: 1
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: smb
+        tcp.state: established
+        flow.state: established
+

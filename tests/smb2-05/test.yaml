@@ -1,0 +1,96 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+    - RUST
+  files:
+    - rust/src/smb/smb.rs
+args:
+- --set stream.reassembly.depth=0
+- --set stream.midstream=true
+
+checks:
+  - filter:
+      count: 15
+      match:
+        event_type: smb
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.command: SMB2_COMMAND_TREE_CONNECT
+        smb.status: STATUS_SUCCESS
+        smb.share: "\\\\admin-pc\\c$"
+        smb.tree_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.command: SMB2_COMMAND_FIND
+        smb.status: STATUS_NO_MORE_FILES
+        smb.tree_id: 1
+  - filter:
+      count: 3
+      match:
+        event_type: smb
+        smb.command: SMB2_COMMAND_CREATE
+        smb.status: STATUS_SUCCESS
+        smb.tree_id: 1
+        smb.filename: "temp\\mimikatz.exe"
+        smb.disposition: FILE_OPEN
+        smb.access: "normal"
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.command: SMB2_COMMAND_CREATE
+        smb.status: STATUS_SUCCESS
+        smb.tree_id: 1
+        smb.filename: "temp\\mimikatz.exe"
+        smb.disposition: FILE_OPEN
+        smb.access: "normal"
+        smb.created: 1512585399
+        smb.accessed: 1512585399
+        smb.modified: 1512171135
+        smb.changed: 1512585399
+        smb.size: 804352
+        smb.fuid: "00000049-0000-0000-0001-0000ffffffff"
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.command: SMB2_COMMAND_CREATE
+        smb.status: STATUS_SUCCESS
+        smb.tree_id: 1
+        smb.filename: "temp\\mimikatz.exe"
+        smb.disposition: FILE_OPEN
+        smb.access: "normal"
+        smb.created: 1512585399
+        smb.accessed: 1512585399
+        smb.modified: 1512171135
+        smb.changed: 1512585399
+        smb.size: 804352
+        smb.fuid: "00000055-0000-0000-000d-0000ffffffff"
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: "temp\\mimikatz.exe"
+        fileinfo.state: CLOSED
+        fileinfo.size: 804352
+        smb.dialect: "2.10"
+        smb.command: "SMB2_COMMAND_READ"
+        smb.status: "STATUS_SUCCESS"
+        smb.status_code: "0x0"
+        smb.session_id: 4398046511121
+        smb.tree_id: 1
+        smb.filename: "temp\\mimikatz.exe"
+        smb.share: "\\\\admin-pc\\c$"
+        smb.fuid: "00000055-0000-0000-000d-0000ffffffff"
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: smb
+        tcp.state: established
+        flow.state: established
+

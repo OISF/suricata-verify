@@ -1,0 +1,50 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+    - RUST
+  files:
+    - rust/src/smb/smb.rs
+  min-version: 5.0.0
+
+args:
+- --set stream.reassembly.depth=0
+- --set stream.midstream=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 3
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.id: 1
+        smb.dialect: "unknown"
+        smb.command: "SMB1_COMMAND_SESSION_SETUP_ANDX"
+        smb.status: "STATUS_MORE_PROCESSING_REQUIRED"
+        smb.status_code: "0xc0000016"
+        smb.tree_id: 65535
+        smb.request.native_os: "Mac OS X 10.10"
+        smb.request.native_lm: "SMBFS 3.0.0"
+        smb.response.native_os: "QTS"
+        smb.response.native_lm: "Samba 4.4.16"
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.id: 2
+        smb.dialect: "unknown"
+        smb.command: "SMB1_COMMAND_LOGOFF_ANDX"
+        smb.status: "SRV_BADUID"
+        smb.status_code: "0x005b"
+        smb.tree_id: 65535
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: smb
+        tcp.state: closed
+        flow.state: closed
+

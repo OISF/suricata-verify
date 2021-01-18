@@ -1,0 +1,1 @@
+alert smb any any -> any any (file_data; content:"%PDF-1.5"; startswith; sid:1;)

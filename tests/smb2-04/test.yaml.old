@@ -1,0 +1,38 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+    - RUST
+  files:
+    - rust/src/smb/smb.rs
+args:
+- --set stream.reassembly.depth=0
+- --set stream.midstream=true
+
+checks:
+  - filter:
+      count: 7
+      match:
+        event_type: smb
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.command: SMB2_COMMAND_CREATE
+        smb.status: STATUS_SUCCESS
+        smb.filename: "atsvc"
+        smb.disposition: "FILE_OPEN"
+        smb.access: "normal"
+        smb.created: 0
+        smb.accessed: 0
+        smb.modified: 0
+        smb.changed: 0
+        smb.size: 0
+        smb.fuid: "0000004d-0000-0000-0005-0000ffffffff"
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: smb
+        tcp.state: closed
+        flow.state: closed
+

@@ -1,0 +1,1 @@
+alert tcp-pkt any any -> any 445 (content:"|00 00 00 bc|"; depth:4; flow:to_server; sid:1;)

@@ -1,0 +1,26 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+    - RUST
+  files:
+    - rust/src/smb/smb.rs
+args:
+- --set stream.reassembly.depth=0
+- --set stream.midstream=true
+- -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: smb
+        dest_port: 445
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        dest_port: 445
+        smb.command: SMB2_COMMAND_TREE_CONNECT
+        smb.status: STATUS_SUCCESS
+        smb.named_pipe: "\\\\10.160.65.202\\IPC$"

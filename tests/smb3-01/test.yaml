@@ -1,0 +1,36 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+    - RUST
+  files:
+    - rust/src/smb/smb.rs
+args:
+- --set stream.reassembly.depth=0
+- --set stream.midstream=true
+- -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.command: SMB2_COMMAND_NEGOTIATE_PROTOCOL
+        smb.status: STATUS_SUCCESS
+        smb.dialect: "3.00"
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.command: SMB2_COMMAND_TREE_CONNECT
+        smb.status: STATUS_SUCCESS
+        smb.dialect: "3.00"
+        smb.share: "\\\\WS2016\\encrypted"
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.command: SMB2_COMMAND_TREE_CONNECT
+        smb.status: STATUS_SUCCESS
+        smb.dialect: "3.00"
+        smb.named_pipe: "\\\\10.160.65.202\\IPC$"
+

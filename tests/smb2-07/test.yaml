@@ -1,0 +1,64 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+    - RUST
+  files:
+    - rust/src/smb/smb.rs
+args:
+- --set stream.reassembly.depth=0
+- --set stream.midstream=true
+- -k none
+
+checks:
+  - filter:
+      count: 58
+      match:
+        event_type: smb
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.command: SMB2_COMMAND_CREATE
+        smb.filename: "PSEXESVC.exe"
+        smb.disposition: "FILE_OVERWRITE_IF"
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.command: SMB2_COMMAND_CREATE
+        smb.filename: "PSEXESVC-VICTIM-PC-2412-stderr"
+        smb.disposition: "FILE_OPEN"
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.command: SMB2_COMMAND_CREATE
+        smb.filename: "PSEXESVC-VICTIM-PC-2412-stdout"
+        smb.disposition: "FILE_OPEN"
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.command: SMB2_COMMAND_CREATE
+        smb.filename: "PSEXESVC-VICTIM-PC-2412-stdin"
+        smb.disposition: "FILE_OPEN"
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.command: SMB2_COMMAND_TREE_CONNECT
+        smb.named_pipe: "\\\\dc1\\IPC$"
+  - filter:
+      count: 2
+      match:
+        event_type: smb
+        smb.command: SMB2_COMMAND_TREE_CONNECT
+        smb.share: "\\\\dc1\\ADMIN$"
+  - filter:
+      count: 4
+      match:
+        event_type: flow
+        app_proto: smb
+        tcp.state: closed
+        flow.state: closed
+

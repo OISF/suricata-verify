@@ -1,0 +1,57 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+    - RUST
+  files:
+    - rust/src/smb/smb.rs
+args:
+- --set stream.reassembly.depth=0
+
+checks:
+  - filter:
+      count: 3
+      match:
+        event_type: smb
+        smb.id: 1
+        smb.dialect: "NT LM 0.12"
+        smb.command: "SMB1_COMMAND_NEGOTIATE_PROTOCOL"
+        smb.status: "STATUS_SUCCESS"
+        smb.status_code: "0x0"
+#        smb.session_id: 0
+#        smb.tree_id: 0,
+        smb.client_dialects[0]: "NT LM 0.12"
+        smb.server_guid: "31347374-0032-0000-0000-000000000000"
+  - filter:
+      count: 3
+      match:
+        event_type: smb
+        smb.id: 2
+        smb.dialect: "NT LM 0.12"
+        smb.command: "SMB1_COMMAND_SESSION_SETUP_ANDX"
+        smb.status: "STATUS_MORE_PROCESSING_REQUIRED"
+        smb.status_code: "0xc0000016"
+#        smb.session_id: 35909
+        smb.tree_id: 65535
+        smb.request.native_os: "Mac OS X 10.10"
+        smb.request.native_lm: "SMBFS 3.0.0"
+        smb.response.native_os: "QTS"
+        smb.response.native_lm: "Samba 4.4.16"
+  - filter:
+      count: 3
+      match:
+        event_type: smb
+        smb.id: 3
+        smb.dialect: "NT LM 0.12"
+        smb.command: "SMB1_COMMAND_LOGOFF_ANDX"
+        smb.status: "SRV_BADUID"
+        smb.status_code: "0x005b"
+#        smb.session_id: 35909
+        smb.tree_id: 65535
+  - filter:
+      count: 3
+      match:
+        event_type: flow
+        app_proto: smb
+        tcp.state: closed
+        flow.state: closed
+

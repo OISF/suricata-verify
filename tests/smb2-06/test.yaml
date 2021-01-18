@@ -1,0 +1,52 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+    - RUST
+  files:
+    - rust/src/smb/smb.rs
+args:
+- --set stream.reassembly.depth=0
+- --set stream.midstream=true
+
+checks:
+  - filter:
+      count: 65
+      match:
+        event_type: smb
+  - filter:
+      count: 5
+      match:
+        event_type: smb
+        smb.dcerpc.request: BIND
+  - filter:
+      count: 46
+      match:
+        event_type: smb
+        smb.dcerpc.request: REQUEST
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.dialect: "2.10"
+        smb.command: "SMB2_COMMAND_CREATE"
+        smb.status: "STATUS_SUCCESS"
+        smb.status_code: "0x0"
+        smb.session_id: 35184439197745
+        smb.tree_id: 1
+        smb.filename: "lsarpc"
+        smb.disposition: "FILE_OPEN"
+        smb.access: "normal"
+        smb.created: 0
+        smb.accessed: 0
+        smb.modified: 0
+        smb.changed: 0
+        smb.size: 0
+        smb.fuid: "0000002a-0008-0000-0009-000000000008"
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: smb
+        tcp.state: established
+        flow.state: established
+
