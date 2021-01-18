@@ -1,0 +1,79 @@
+# *** Add configuration here ***
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      app_proto: nfs
+      dest_ip: 192.168.0.61
+      dest_port: 2049
+      event_type: fileinfo
+      fileinfo.gaps: false
+      fileinfo.size: 5
+      fileinfo.state: CLOSED
+      fileinfo.stored: false
+      fileinfo.tx_id: 0
+      nfs.file_tx: true
+      nfs.filename: ''
+      nfs.hhash: a4c60877
+      nfs.id: 1
+      nfs.procedure: WRITE
+      nfs.status: OK
+      nfs.type: response
+      nfs.version: 4
+      proto: TCP
+      rpc.auth_type: 'NULL'
+      rpc.status: ACCEPTED
+      rpc.xid: 2731791399
+      src_ip: 192.168.0.26
+      src_port: 880
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.0.61
+      dest_port: 2049
+      event_type: nfs
+      nfs.file_tx: true
+      nfs.filename: ''
+      nfs.hhash: a4c60877
+      nfs.id: 1
+      nfs.procedure: WRITE
+      nfs.status: OK
+      nfs.type: response
+      nfs.version: 4
+      pcap_cnt: 81
+      proto: TCP
+      rpc.auth_type: 'NULL'
+      rpc.status: ACCEPTED
+      rpc.xid: 2731791399
+      src_ip: 192.168.0.26
+      src_port: 880
+- filter:
+    count: 1
+    match:
+      app_proto: nfs
+      dest_ip: 192.168.0.61
+      dest_port: 2049
+      event_type: flow
+      flow.age: 4
+      flow.alerted: false
+      flow.bytes_toclient: 8392
+      flow.bytes_toserver: 8742
+      flow.pkts_toclient: 38
+      flow.pkts_toserver: 43
+      flow.reason: shutdown
+      flow.state: closed
+      proto: TCP
+      src_ip: 192.168.0.26
+      src_port: 880
+      tcp.ack: true
+      tcp.fin: true
+      tcp.psh: true
+      tcp.state: closed
+      tcp.syn: true
+      tcp.tcp_flags: 1b
+      tcp.tcp_flags_tc: 1b
+      tcp.tcp_flags_ts: 1b

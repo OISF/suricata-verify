@@ -1,0 +1,83 @@
+# *** Add configuration here ***
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      dest_ip: 139.25.22.2
+      dest_port: 1022
+      event_type: nfs
+      nfs.file_tx: false
+      nfs.filename: ''
+      nfs.id: 2
+      nfs.procedure: FSINFO
+      nfs.status: OK
+      nfs.type: response
+      nfs.version: 3
+      proto: UDP
+      rpc.auth_type: UNIX
+      rpc.creds.gid: 0
+      rpc.creds.machine_name: werrmsche
+      rpc.creds.uid: 0
+      rpc.status: ACCEPTED
+      rpc.xid: 1578961885
+      src_ip: 139.25.22.102
+      src_port: 2049
+- filter:
+    count: 1
+    match:
+      app_proto: nfs
+      dest_ip: 139.25.22.2
+      dest_port: 1022
+      event_type: fileinfo
+      fileinfo.filename: bln
+      fileinfo.gaps: false
+      fileinfo.md5: 3a8614dc01881ca20e07e1b9cbc03dc0
+      fileinfo.sha1: 7035ba04df3785719585929f63ed36f8ba347b62
+      fileinfo.sha256: cb39bdb9ce305c91be125134205144c2d5fbf458291711f90f4d2276c69821d8
+      fileinfo.size: 11
+      fileinfo.state: CLOSED
+      fileinfo.stored: false
+      fileinfo.tx_id: 38
+      nfs.file_tx: true
+      nfs.filename: bln
+      nfs.hhash: a5fcf973
+      nfs.id: 39
+      nfs.procedure: READ
+      nfs.read.chunks: 1
+      nfs.read.first: true
+      nfs.read.last: true
+      nfs.read.last_xid: 1578961922
+      nfs.status: OK
+      nfs.type: response
+      nfs.version: 3
+      proto: UDP
+      rpc.auth_type: UNIX
+      rpc.creds.gid: 0
+      rpc.creds.machine_name: werrmsche
+      rpc.creds.uid: 0
+      rpc.status: ACCEPTED
+      rpc.xid: 1578961922
+      src_ip: 139.25.22.102
+      src_port: 2049
+- filter:
+    count: 1
+    match:
+      app_proto: nfs
+      dest_ip: 139.25.22.102
+      dest_port: 2049
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 11038
+      flow.bytes_toserver: 10398
+      flow.pkts_toclient: 57
+      flow.pkts_toserver: 57
+      flow.reason: shutdown
+      flow.state: established
+      proto: UDP
+      src_ip: 139.25.22.2
+      src_port: 1022
