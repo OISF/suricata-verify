@@ -1,0 +1,13 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+args:
+- --set stream.async-oneside=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.url: secure-assets.rubiconproject.com:443
+

@@ -1,0 +1,51 @@
+# *** Add configuration here ***
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      dest_ip: 151.101.36.133
+      dest_port: 443
+      event_type: tls
+      pcap_cnt: 12
+      proto: TCP
+      src_ip: 192.168.0.253
+      src_port: 49584
+      tls.fingerprint: cc:aa:48:48:66:46:0e:91:53:2c:9c:7c:23:2a:b1:74:4d:29:9d:33
+      tls.issuerdn: C=US, O=DigiCert Inc, OU=www.digicert.com, CN=DigiCert SHA2 High
+        Assurance Server CA
+      tls.notafter: '2020-05-13T12:00:00'
+      tls.notbefore: '2017-03-23T00:00:00'
+      tls.serial: 08:3A:84:59:2F:77:F2:E7:95:1B:F8:87:CE:DE:C9:66
+      tls.sni: raw.githubusercontent.com
+      tls.subject: C=US, ST=California, L=San Francisco, O=GitHub, Inc., CN=www.github.com
+      tls.version: TLS 1.2
+- filter:
+    count: 1
+    match:
+      app_proto: tls
+      dest_ip: 151.101.36.133
+      dest_port: 443
+      event_type: flow
+      flow.age: 57
+      flow.alerted: false
+      flow.bytes_toclient: 6151
+      flow.bytes_toserver: 1584
+      flow.pkts_toclient: 19
+      flow.pkts_toserver: 10
+      flow.reason: shutdown
+      flow.state: closed
+      proto: TCP
+      src_ip: 192.168.0.253
+      src_port: 49584
+      tcp.ack: true
+      tcp.fin: true
+      tcp.psh: true
+      tcp.state: last_ack
+      tcp.syn: true
+      tcp.tcp_flags: 1b
+      tcp.tcp_flags_tc: 1b
+      tcp.tcp_flags_ts: 1b

@@ -1,0 +1,31 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 4.1.0
+
+args:
+- -k none
+- --set vars.address-groups.EXTERNAL_NET=any
+
+checks:
+  - filter:
+      count: 124
+      match:
+        event_type: alert
+        alert.signature_id: 2013933
+        http.http_method: "CONNECT"
+  - filter:
+      version: 4.1
+      count: 172
+      match:
+        event_type: tls
+  - filter:
+      version: 5
+      count: 170
+      match:
+        event_type: tls
+  - filter:
+      version: 6
+      count: 172
+      match:
+        event_type: tls
