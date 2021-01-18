@@ -1,0 +1,6 @@
+alert dns any any -> any 53 ( \
+msg:"DNS - Transaction ID problem, DDNS"; \
+content:"|04|ddns|03|net|00|"; \
+classtype:trojan-activity; \
+sid:1; rev:1;)
+

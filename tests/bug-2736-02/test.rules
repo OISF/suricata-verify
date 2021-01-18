@@ -1,0 +1,5 @@
+alert dns any any -> any 53 ( \
+msg:"DNS - Transaction ID problem, suricata"; \
+content:"suricata"; \
+classtype:trojan-activity; \
+sid:2; rev:1;)
