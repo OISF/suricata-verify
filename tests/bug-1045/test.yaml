@@ -1,0 +1,30 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+checks:
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        src_ip: "88.191.140.111"
+        src_port: 51906
+        dest_ip: "188.125.69.79"
+        dest_port: 25
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+
+

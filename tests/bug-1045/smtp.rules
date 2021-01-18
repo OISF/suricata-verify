@@ -1,0 +1,5 @@
+# by rmkml
+alert tcp any any -> any 25 (msg:"SMTP EHLO"; flow:to_server,established; content:"EHLO "; flowbits:set,smtp.helo.found; classtype:attempted-user; sid:1; rev:1;)
+alert tcp any any -> any 25 (msg:"SMTP DATA"; flow:to_server,established; flowbits:isset,smtp.helo.found; content:"DATA"; flowbits:unset,smtp.helo.found; flowbits:set,smtp.data.found; classtype:attempted-admin; sid:2; rev:1;)
+alert tcp any any -> any 25 (msg:"SMTP Subject"; flow:to_server,established; flowbits:isset,smtp.data.found; content:"Subject|3A| test email"; classtype:attempted-admin; sid:3; rev:1;)
+
