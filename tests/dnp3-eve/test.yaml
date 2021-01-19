@@ -1,4 +1,7 @@
-# *** Add configuration here ***
+requires:
+  min-version: 5
+  features:
+    - HAVE_LIBJANSSON
 
 checks:
 - filter:

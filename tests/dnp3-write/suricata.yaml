@@ -1,0 +1,25 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular #regular|syslog|unix_dgram|unix_stream|redis
+      filename: eve.json
+      # enable/disable the community id feature.
+      community-id: true
+      # Seed value for the ID output. Valid values are 0-65535.
+      community-id-seed: 0
+
+      types:
+        - alert
+        - anomaly
+        - dnp3
+        - flow
+
+app-layer:
+  protocols:
+    dnp3:
+      enabled: yes
+      detection-ports:
+        dp: 20000

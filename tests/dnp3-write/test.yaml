@@ -1,0 +1,96 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 5.0.0
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      dest_ip: 130.126.140.229
+      dest_port: 20000
+      dnp3.application.complete: true
+      dnp3.application.control.con: false
+      dnp3.application.control.fin: true
+      dnp3.application.control.fir: true
+      dnp3.application.control.sequence: 0
+      dnp3.application.control.uns: false
+      dnp3.application.function_code: 2
+      dnp3.application.objects[0].count: 1
+      dnp3.application.objects[0].group: 50
+      dnp3.application.objects[0].points[0].index: 0
+      dnp3.application.objects[0].points[0].prefix: 0
+      dnp3.application.objects[0].points[0].timestamp: 1324332393859
+      dnp3.application.objects[0].prefix_code: 0
+      dnp3.application.objects[0].qualifier: 7
+      dnp3.application.objects[0].range_code: 7
+      dnp3.application.objects[0].start: 0
+      dnp3.application.objects[0].stop: 0
+      dnp3.application.objects[0].variation: 1
+      dnp3.control.dir: true
+      dnp3.control.fcb: false
+      dnp3.control.fcv: false
+      dnp3.control.function_code: 4
+      dnp3.control.pri: true
+      dnp3.dst: 2
+      dnp3.src: 3
+      dnp3.type: request
+      event_type: dnp3
+      pcap_cnt: 5
+      proto: TCP
+      src_ip: 130.126.142.250
+      src_port: 49411
+- filter:
+    count: 1
+    match:
+      dest_ip: 130.126.140.229
+      dest_port: 20000
+      dnp3.application.complete: true
+      dnp3.application.control.con: false
+      dnp3.application.control.fin: true
+      dnp3.application.control.fir: true
+      dnp3.application.control.sequence: 0
+      dnp3.application.control.uns: false
+      dnp3.application.function_code: 129
+      dnp3.control.dir: false
+      dnp3.control.fcb: false
+      dnp3.control.fcv: false
+      dnp3.control.function_code: 4
+      dnp3.control.pri: true
+      dnp3.dst: 3
+      dnp3.src: 2
+      dnp3.type: response
+      event_type: dnp3
+      pcap_cnt: 9
+      proto: TCP
+      src_ip: 130.126.142.250
+      src_port: 49411
+- filter:
+    count: 1
+    match:
+      app_proto: dnp3
+      dest_ip: 130.126.140.229
+      dest_port: 20000
+      event_type: flow
+      flow.age: 4
+      flow.alerted: false
+      flow.bytes_toclient: 299
+      flow.bytes_toserver: 325
+      flow.pkts_toclient: 5
+      flow.pkts_toserver: 5
+      flow.reason: shutdown
+      flow.state: closed
+      proto: TCP
+      src_ip: 130.126.142.250
+      src_port: 49411
+      tcp.ack: true
+      tcp.fin: true
+      tcp.psh: true
+      tcp.state: closed
+      tcp.syn: true
+      tcp.tcp_flags: 1b
+      tcp.tcp_flags_tc: 1b
+      tcp.tcp_flags_ts: 1b
