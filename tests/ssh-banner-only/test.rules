@@ -1,0 +1,4 @@
+alert ssh any any -> any any (ssh.software; content:"OpenSSH"; sid:1;)
+# broken?
+#alert ssh any any -> any any (ssh.softwareversion:OpenSSH_7.4; sid:2;)
+alert ssh any any -> any any (ssh.proto; content:"2"; sid:3;)

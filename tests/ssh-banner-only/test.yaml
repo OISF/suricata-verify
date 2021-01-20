@@ -16,3 +16,8 @@ checks:
         ssh.server.proto_version: "2.0"
         ssh.client.software_version: "OpenSSH_for_Windows_7.7"
         ssh.server.software_version: "OpenSSH_7.4"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
