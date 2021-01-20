@@ -1,0 +1,9 @@
+alert nfs any any -> any any (nfs_version:<3; sid:1;)
+alert nfs any any -> any any (nfs_version:>3; sid:2;)
+alert nfs any any -> any any (nfs_version:3; sid:3;)
+alert nfs any any -> any any (nfs_version:2<>4; sid:6;)
+
+alert nfs any any -> any any (nfs_procedure:<3; sid:10;)
+alert nfs any any -> any any (nfs_procedure:>3; sid:11;)
+alert nfs any any -> any any (nfs_procedure:3; sid:12;)
+alert nfs any any -> any any (nfs_procedure:2<>4; sid:15;)
