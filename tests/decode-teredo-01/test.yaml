@@ -333,7 +333,7 @@ checks:
 - filter:
     count: 1
     match:
-      app_proto: failed
+      app_proto_ts: failed
       dest_ip: 192.168.2.16
       dest_port: 3797
       event_type: flow
@@ -389,7 +389,7 @@ checks:
 - filter:
     count: 1
     match:
-      app_proto: failed
+      app_proto_ts: failed
       dest_ip: 192.168.2.255
       dest_port: 137
       event_type: flow
@@ -407,7 +407,7 @@ checks:
 - filter:
     count: 1
     match:
-      app_proto: failed
+      app_proto_ts: failed
       dest_ip: 192.168.2.255
       dest_port: 138
       event_type: flow

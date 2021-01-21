@@ -4206,7 +4206,7 @@ checks:
 - filter:
     count: 1
     match:
-      app_proto: failed
+      app_proto_ts: failed
       dest_ip: 10.30.28.255
       dest_port: 137
       event_type: flow
