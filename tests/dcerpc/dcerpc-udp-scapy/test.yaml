@@ -1,0 +1,125 @@
+requires:
+  min-version: 6.0
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      dcerpc.activityuuid: dddc324e-03d8-af4e-86ee-7650df599e40
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 0
+      dcerpc.req.stub_data_size: 0
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 0
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '4.0'
+      dcerpc.seqnum: 0
+      dest_ip: 255.255.255.255
+      dest_port: 8000
+      event_type: dcerpc
+      pcap_cnt: 2
+      proto: UDP
+      src_ip: 192.168.0.1
+      src_port: 80
+- filter:
+    count: 1
+    match:
+      dcerpc.activityuuid: 83d81b49-4532-1e4b-9e9d-b3264564992e
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 0
+      dcerpc.req.stub_data_size: 0
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 0
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '4.0'
+      dcerpc.seqnum: 2
+      dest_ip: 255.255.255.255
+      dest_port: 8000
+      event_type: dcerpc
+      pcap_cnt: 4
+      proto: UDP
+      src_ip: 192.168.0.1
+      src_port: 80
+- filter:
+    count: 1
+    match:
+      dcerpc.activityuuid: 34c2dfa9-aaa5-3b4a-a899-1ff934073dcb
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 0
+      dcerpc.req.stub_data_size: 0
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 0
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '4.0'
+      dcerpc.seqnum: 4
+      dest_ip: 255.255.255.255
+      dest_port: 8000
+      event_type: dcerpc
+      pcap_cnt: 6
+      proto: UDP
+      src_ip: 192.168.0.1
+      src_port: 80
+- filter:
+    count: 1
+    match:
+      dcerpc.activityuuid: 45c10d80-5695-384c-b710-0d51f16d9406
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 0
+      dcerpc.req.stub_data_size: 0
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 0
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '4.0'
+      dcerpc.seqnum: 6
+      dest_ip: 255.255.255.255
+      dest_port: 8000
+      event_type: dcerpc
+      pcap_cnt: 8
+      proto: UDP
+      src_ip: 192.168.0.1
+      src_port: 80
+- filter:
+    count: 1
+    match:
+      dcerpc.activityuuid: de28b15f-be84-f74c-8d6d-47b041bfba76
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 0
+      dcerpc.req.stub_data_size: 0
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 0
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '4.0'
+      dcerpc.seqnum: 8
+      dest_ip: 255.255.255.255
+      dest_port: 8000
+      event_type: dcerpc
+      pcap_cnt: 10
+      proto: UDP
+      src_ip: 192.168.0.1
+      src_port: 80
+- filter:
+    count: 1
+    match:
+      app_proto: dcerpc
+      dest_ip: 255.255.255.255
+      dest_port: 8000
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 0
+      flow.bytes_toserver: 1220
+      flow.pkts_toclient: 0
+      flow.pkts_toserver: 10
+      flow.reason: shutdown
+      flow.state: new
+      proto: UDP
+      src_ip: 192.168.0.1
+      src_port: 80
