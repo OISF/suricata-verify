@@ -1,0 +1,280 @@
+requires:
+  min-version: 7.0.0
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      bittorrent-dht.request.id: abcdefghij0123456789
+      bittorrent-dht.request_type: ping
+      bittorrent-dht.transaction_id: aa
+      dest_ip: 190.0.0.3
+      dest_port: 30000
+      event_type: bittorrent-dht
+      pcap_cnt: 3
+      proto: UDP
+      src_ip: 190.0.0.1
+      src_port: 20000
+- filter:
+    count: 1
+    match:
+      bittorrent-dht.error.msg: A Generic Error Ocurred
+      bittorrent-dht.error.num: 201
+      bittorrent-dht.transaction_id: aa
+      dest_ip: 190.0.0.1
+      dest_port: 20000
+      event_type: bittorrent-dht
+      pcap_cnt: 4
+      proto: UDP
+      src_ip: 190.0.0.3
+      src_port: 30000
+- filter:
+    count: 1
+    match:
+      bittorrent-dht.client_version: UT01
+      bittorrent-dht.request.id: abcdefghij0123456789
+      bittorrent-dht.request.target: mnopqrstuvwxyz123456
+      bittorrent-dht.request_type: find_node
+      bittorrent-dht.transaction_id: aa
+      dest_ip: 190.0.0.3
+      dest_port: 30000
+      event_type: bittorrent-dht
+      pcap_cnt: 5
+      proto: UDP
+      src_ip: 190.0.0.1
+      src_port: 20000
+- filter:
+    count: 1
+    match:
+      bittorrent-dht.client_version: UT01
+      bittorrent-dht.response.id: 0123456789abcdefghij
+      bittorrent-dht.response.nodes: def456...
+      bittorrent-dht.transaction_id: aa
+      dest_ip: 190.0.0.1
+      dest_port: 20000
+      event_type: bittorrent-dht
+      pcap_cnt: 6
+      proto: UDP
+      src_ip: 190.0.0.3
+      src_port: 30000
+- filter:
+    count: 1
+    match:
+      bittorrent-dht.client_version: UT02
+      bittorrent-dht.request.id: abcdefghij0123456789
+      bittorrent-dht.request.info_hash: mnopqrstuvwxyz123456
+      bittorrent-dht.request_type: get_peers
+      bittorrent-dht.transaction_id: aa
+      dest_ip: 190.0.0.3
+      dest_port: 30000
+      event_type: bittorrent-dht
+      pcap_cnt: 7
+      proto: UDP
+      src_ip: 190.0.0.1
+      src_port: 20000
+- filter:
+    count: 1
+    match:
+      bittorrent-dht.client_version: UT12
+      bittorrent-dht.response.id: abcdefghij0123456789
+      bittorrent-dht.response.token: aoeusnth
+      bittorrent-dht.response.values[0]: axje.u
+      bittorrent-dht.response.values[1]: idhtnm
+      bittorrent-dht.transaction_id: aa
+      dest_ip: 190.0.0.1
+      dest_port: 20000
+      event_type: bittorrent-dht
+      pcap_cnt: 8
+      proto: UDP
+      src_ip: 190.0.0.3
+      src_port: 30000
+- filter:
+    count: 1
+    match:
+      bittorrent-dht.request.id: abcdefghij0123456789
+      bittorrent-dht.request.info_hash: mnopqrstuvwxyz123456
+      bittorrent-dht.request_type: get_peers
+      bittorrent-dht.transaction_id: aa
+      dest_ip: 190.0.0.3
+      dest_port: 30000
+      event_type: bittorrent-dht
+      pcap_cnt: 9
+      proto: UDP
+      src_ip: 190.0.0.1
+      src_port: 20000
+- filter:
+    count: 1
+    match:
+      bittorrent-dht.response.id: abcdefghij0123456789
+      bittorrent-dht.response.nodes: def456...
+      bittorrent-dht.response.token: aoeusnth
+      bittorrent-dht.transaction_id: aa
+      dest_ip: 190.0.0.1
+      dest_port: 20000
+      event_type: bittorrent-dht
+      pcap_cnt: 10
+      proto: UDP
+      src_ip: 190.0.0.3
+      src_port: 30000
+- filter:
+    count: 1
+    match:
+      bittorrent-dht.request.id: abcdefghij0123456789
+      bittorrent-dht.request.info_hash: mnopqrstuvwxyz123456
+      bittorrent-dht.request.port: 6881
+      bittorrent-dht.request.token: aoeusnth
+      bittorrent-dht.request_type: announce_peer
+      bittorrent-dht.transaction_id: aa
+      dest_ip: 190.0.0.3
+      dest_port: 30000
+      event_type: bittorrent-dht
+      pcap_cnt: 11
+      proto: UDP
+      src_ip: 190.0.0.1
+      src_port: 20000
+- filter:
+    count: 1
+    match:
+      bittorrent-dht.response.id: mnopqrstuvwxyz123456
+      bittorrent-dht.transaction_id: aa
+      dest_ip: 190.0.0.1
+      dest_port: 20000
+      event_type: bittorrent-dht
+      pcap_cnt: 12
+      proto: UDP
+      src_ip: 190.0.0.3
+      src_port: 30000
+- filter:
+    count: 1
+    match:
+      bittorrent-dht.request.id: abcdefghij0123456789
+      bittorrent-dht.request.implied_port: 1
+      bittorrent-dht.request.info_hash: mnopqrstuvwxyz123456
+      bittorrent-dht.request.port: 6881
+      bittorrent-dht.request.token: aoeusnth
+      bittorrent-dht.request_type: announce_peer
+      bittorrent-dht.transaction_id: aa
+      dest_ip: 190.0.0.3
+      dest_port: 30000
+      event_type: bittorrent-dht
+      pcap_cnt: 13
+      proto: UDP
+      src_ip: 190.0.0.1
+      src_port: 20000
+- filter:
+    count: 1
+    match:
+      bittorrent-dht.response.id: mnopqrstuvwxyz123456
+      bittorrent-dht.transaction_id: aa
+      dest_ip: 190.0.0.1
+      dest_port: 20000
+      event_type: bittorrent-dht
+      pcap_cnt: 14
+      proto: UDP
+      src_ip: 190.0.0.3
+      src_port: 30000
+- filter:
+    count: 1
+    match:
+      anomaly.app_proto: bittorrent-dht
+      anomaly.event: MALFORMED_PACKET
+      anomaly.layer: proto_parser
+      anomaly.type: applayer
+      dest_ip: 190.0.0.3
+      dest_port: 30000
+      event_type: anomaly
+      pcap_cnt: 15
+      proto: UDP
+      src_ip: 190.0.0.1
+      src_port: 20000
+      tx_id: 12
+- filter:
+    count: 1
+    match:
+      bittorrent-dht.request.id: abcdefghij0123456789
+      bittorrent-dht.request_type: ping
+      bittorrent-dht.transaction_id: ''
+      dest_ip: 190.0.0.3
+      dest_port: 30000
+      event_type: bittorrent-dht
+      pcap_cnt: 15
+      proto: UDP
+      src_ip: 190.0.0.1
+      src_port: 20000
+- filter:
+    count: 1
+    match:
+      bittorrent-dht.error.msg: Malformed Packet
+      bittorrent-dht.error.num: 203
+      bittorrent-dht.transaction_id: aa
+      dest_ip: 190.0.0.1
+      dest_port: 20000
+      event_type: bittorrent-dht
+      pcap_cnt: 16
+      proto: UDP
+      src_ip: 190.0.0.3
+      src_port: 30000
+- filter:
+    count: 1
+    match:
+      bittorrent-dht.request.id: abcdefghij0123456789
+      bittorrent-dht.request_type: ping
+      bittorrent-dht.transaction_id: aa
+      dest_ip: 190.0.0.2
+      dest_port: 50000
+      event_type: bittorrent-dht
+      pcap_cnt: 1
+      proto: UDP
+      src_ip: 190.0.0.1
+      src_port: 40000
+- filter:
+    count: 1
+    match:
+      bittorrent-dht.response.id: mnopqrstuvwxyz123456
+      bittorrent-dht.transaction_id: aa
+      dest_ip: 190.0.0.1
+      dest_port: 40000
+      event_type: bittorrent-dht
+      pcap_cnt: 2
+      proto: UDP
+      src_ip: 190.0.0.2
+      src_port: 50000
+- filter:
+    count: 1
+    match:
+      app_proto: bittorrent-dht
+      dest_ip: 190.0.0.3
+      dest_port: 30000
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 738
+      flow.bytes_toserver: 975
+      flow.pkts_toclient: 7
+      flow.pkts_toserver: 7
+      flow.reason: shutdown
+      flow.state: established
+      proto: UDP
+      src_ip: 190.0.0.1
+      src_port: 20000
+- filter:
+    count: 1
+    match:
+      app_proto: bittorrent-dht
+      dest_ip: 190.0.0.2
+      dest_port: 50000
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 89
+      flow.bytes_toserver: 98
+      flow.pkts_toclient: 1
+      flow.pkts_toserver: 1
+      flow.reason: shutdown
+      flow.state: established
+      proto: UDP
+      src_ip: 190.0.0.1
+      src_port: 40000
