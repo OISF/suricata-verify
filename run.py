@@ -1,4 +1,4 @@
-#! /usr/bin/env python2
+#! /usr/bin/env python3
 #
 # Copyright (C) 2017-2020 Open Information Security Foundation
 #
@@ -37,13 +37,26 @@ import glob
 import re
 import json
 import unittest
+import multiprocessing as mp
 from collections import namedtuple
 
 import yaml
 
 WIN32 = sys.platform == "win32"
+LINUX = sys.platform.startswith("linux")
 suricata_bin = "src\suricata.exe" if WIN32 else "./src/suricata"
 suricata_yaml = "suricata.yaml" if WIN32 else "./suricata.yaml"
+
+manager = mp.Manager()
+lock = mp.Lock()
+failedLogs = manager.list()
+count_dict = manager.dict()
+check_args = manager.dict()
+
+count_dict['passed'] = 0
+count_dict['failed'] = 0
+count_dict['skipped'] = 0
+check_args['fail'] = 0
 
 class SelfTest(unittest.TestCase):
 
@@ -87,6 +100,9 @@ class TestError(Exception):
 class UnsatisfiedRequirementError(Exception):
     pass
 
+class TerminatePoolError(Exception):
+    pass
+
 SuricataVersion = namedtuple(
     "SuricataVersion", ["major", "minor", "patch"])
 
@@ -123,17 +139,17 @@ def handle_exceptions(func):
         try:
             result = func(*args,**kwargs)
         except TestError as te:
-            print("Sub test #{}: FAIL : {}".format(kwargs["test_num"], te))
+            print("===> {}: Sub test #{}: FAIL : {}".format(kwargs["test_name"], kwargs["test_num"], te))
             check_args_fail()
             kwargs["count"]["failure"] += 1
         except UnsatisfiedRequirementError as ue:
-            print("Sub test #{}: SKIPPED : {}".format(kwargs["test_num"], ue))
+            print("===> {}: Sub test #{}: SKIPPED : {}".format(kwargs["test_name"], kwargs["test_num"], ue))
             kwargs["count"]["skipped"] += 1
         else:
             if result:
               kwargs["count"]["success"] += 1
             else:
-              print("\nSub test #{}: FAIL : {}".format(kwargs["test_num"], kwargs["check"]["args"]))
+              print("\n===> {}: Sub test #{}: FAIL : {}".format(kwargs["test_name"], kwargs["test_num"], kwargs["check"]["args"]))
               kwargs["count"]["failure"] += 1
         return kwargs["count"]
     return applicator
@@ -541,9 +557,6 @@ class TestRunner:
 
     def run(self):
 
-        sys.stdout.write("===> %s: " % os.path.basename(self.directory))
-        sys.stdout.flush()
-
         if not self.force:
             self.check_requires()
             self.check_skip()
@@ -626,9 +639,9 @@ class TestRunner:
                 return check_value
 
         if not check_value["failure"] and not check_value["skipped"]:
-            print("OK%s" % (" (%dx)" % count if count > 1 else ""))
+            print("===> %s: OK%s" % (os.path.basename(self.directory), " (%dx)" % count if count > 1 else ""))
         elif not check_value["failure"]:
-            print("OK (checks: {}, skipped: {})".format(sum(check_value.values()), check_value["skipped"]))
+            print("===> {}: OK (checks: {}, skipped: {})".format(os.path.basename(self.directory), sum(check_value.values()), check_value["skipped"]))
         return check_value
 
     def pre_check(self):
@@ -636,18 +649,18 @@ class TestRunner:
             subprocess.call(self.config["pre-check"], shell=True)
 
     @handle_exceptions
-    def perform_filter_checks(self, check, count, test_num):
+    def perform_filter_checks(self, check, count, test_num, test_name):
         count = FilterCheck(check, self.output,
                 self.suricata_config).run()
         return count
 
     @handle_exceptions
-    def perform_shell_checks(self, check, count, test_num):
+    def perform_shell_checks(self, check, count, test_num, test_name):
         count = ShellCheck(check).run()
         return count
 
     @handle_exceptions
-    def perform_stats_checks(self, check, count, test_num):
+    def perform_stats_checks(self, check, count, test_num, test_name):
         count = StatsCheck(check, self.output).run()
         return count
 
@@ -673,7 +686,7 @@ class TestRunner:
                         if key in ["filter", "shell", "stats"]:
                             func = getattr(self, "perform_{}_checks".format(key))
                             count = func(check=check[key], count=count,
-                                    test_num=check_count + 1)
+                                    test_num=check_count + 1, test_name=os.path.basename(self.directory))
                         else:
                             print("FAIL: Unknown check type: {}".format(key))
         finally:
@@ -805,7 +818,8 @@ class TestRunner:
 
 def check_args_fail():
     if args.fail:
-        sys.exit(1)
+        with lock:
+            check_args['fail'] = 1
 
 
 def check_deps():
@@ -824,6 +838,59 @@ def check_deps():
         return False
 
     return True
+
+def run_test(dirpath, args, cwd, suricata_config):
+    with lock:
+        if check_args['fail'] == 1:
+            raise TerminatePoolError()
+
+    name = os.path.basename(dirpath)
+
+    outdir = os.path.join(dirpath, "output")
+    if args.outdir:
+        outdir = os.path.join(os.path.realpath(args.outdir), name, "output")
+
+    test_runner = TestRunner(
+        cwd, dirpath, outdir, suricata_config, args.verbose, args.force)
+    try:
+        results = test_runner.run()
+        if results["failure"] > 0:
+            with lock:
+                count_dict["failed"] += 1
+                failedLogs.append(dirpath)
+        elif results["skipped"] > 0 and results["success"] == 0:
+            with lock:
+                count_dict["skipped"] += 1
+        elif results["success"] > 0:
+            with lock:
+                count_dict["passed"] += 1
+    except UnsatisfiedRequirementError as ue:
+        print("===> {}: SKIPPED: {}".format(os.path.basename(dirpath), ue))
+        with lock:
+            count_dict["skipped"] += 1
+    except TestError as te:
+        print("===> {}: FAILED: {}".format(os.path.basename(dirpath), te))
+        check_args_fail()
+        with lock:
+            count_dict["failed"] += 1
+
+def run_mp(jobs, tests, dirpath, args, cwd, suricata_config):
+    print("Number of concurrent jobs: %d" % jobs)
+    pool = mp.Pool(jobs)  
+    try:
+        for dirpath in tests:
+            pool.apply_async(run_test, args=(dirpath, args, cwd, suricata_config))
+    except TerminatePoolError:
+        pool.terminate()
+    pool.close()
+    pool.join()
+
+def run_single(tests, dirpath, args, cwd, suricata_config):
+    try:
+        for dirpath in tests:
+            run_test(dirpath, args, cwd, suricata_config)
+    except TerminatePoolError:
+        sys.exit(1)
 
 def main():
     global TOPDIR
@@ -853,6 +920,9 @@ def main():
     parser.add_argument("--debug-failed", dest="debugfailed", action="store_true",
                         help="Prints debug output for failed tests")
     parser.add_argument("patterns", nargs="*", default=[])
+    if LINUX:
+        parser.add_argument("-j", type=int, default=min(8, mp.cpu_count()),
+                        help="Number of jobs to run")
     args = parser.parse_args()
 
     if args.self_test:
@@ -921,33 +991,15 @@ def main():
 
     # Sort alphabetically.
     tests.sort()
-    failedLogs = []
 
-    for dirpath in tests:
-        name = os.path.basename(dirpath)
+    if LINUX:
+        run_mp(args.j, tests, dirpath, args, cwd, suricata_config)
+    else:
+        run_single(tests, dirpath, args, cwd, suricata_config)
 
-        outdir = os.path.join(dirpath, "output")
-        if args.outdir:
-            outdir = os.path.join(os.path.realpath(args.outdir), name, "output")
-
-        test_runner = TestRunner(
-            cwd, dirpath, outdir, suricata_config, args.verbose, args.force)
-        try:
-            results = test_runner.run()
-            if results["failure"] > 0:
-                failed += 1
-                failedLogs.append(dirpath)
-            elif results["skipped"] > 0 and results["success"] == 0:
-                skipped += 1
-            elif results["success"] > 0:
-                passed += 1
-        except UnsatisfiedRequirementError as ue:
-            print("SKIPPED: {}".format(ue))
-            skipped += 1
-        except TestError as te:
-            print("FAILED: {}".format(te))
-            check_args_fail()
-            failed += 1
+    passed = count_dict["passed"]
+    failed = count_dict["failed"]
+    skipped = count_dict["skipped"]
 
     print("")
     print("PASSED:  %d" % (passed))
