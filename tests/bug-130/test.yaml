@@ -165,6 +165,8 @@ checks:
         psh: true
         state: closed
         syn: true
-        tcp_flags: 1b
-        tcp_flags_tc: 1b
-        tcp_flags_ts: 1b
+        tcp_flags: '1b'
+        tcp_flags_tc: '1b'
+        tcp_flags_ts: '1b'
+        tcp_init_flags_ts: '02'
+        tcp_init_flags_tc: '12'
