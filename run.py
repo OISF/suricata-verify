@@ -39,6 +39,7 @@ import json
 import unittest
 import multiprocessing as mp
 from collections import namedtuple
+import threading
 
 import yaml
 
@@ -47,11 +48,18 @@ LINUX = sys.platform.startswith("linux")
 suricata_bin = "src\suricata.exe" if WIN32 else "./src/suricata"
 suricata_yaml = "suricata.yaml" if WIN32 else "./suricata.yaml"
 
-manager = mp.Manager()
-lock = mp.Lock()
-failedLogs = manager.list()
-count_dict = manager.dict()
-check_args = manager.dict()
+if LINUX:
+    manager = mp.Manager()
+    lock = mp.Lock()
+    failedLogs = manager.list()
+    count_dict = manager.dict()
+    check_args = manager.dict()
+else:
+    count_dict = {}
+    check_args = {}
+    # Bring in a lock from threading to satisfy the MP semantics when
+    # not using MP.
+    lock = threading.Lock()
 
 count_dict['passed'] = 0
 count_dict['failed'] = 0
