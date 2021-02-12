@@ -7,53 +7,29 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.16.1.10
-      dest_port: 40816
-      event_type: postgresql
-      pcap_cnt: 23
-      postgresql.request: 'PgsqlGenericStartupMessage { message_type: SslRequest,
-        length: 8, proto_major: 1234, proto_minor: 5679 }'
-      proto: TCP
-      src_ip: 10.16.1.11
-      src_port: 5432
-- filter:
-    count: 1
-    match:
-      dest_ip: 10.16.1.10
-      dest_port: 40784
-      event_type: postgresql
-      pcap_cnt: 9
-      postgresql.request: 'PgsqlGenericStartupMessage { message_type: SslRequest,
-        length: 8, proto_major: 1234, proto_minor: 5679 }'
-      proto: TCP
-      src_ip: 10.16.1.11
-      src_port: 5432
-- filter:
-    count: 1
-    match:
-      app_proto: postgresql
       dest_ip: 10.16.1.11
       dest_port: 5432
-      event_type: flow
-      flow.age: 9
-      flow.alerted: false
-      flow.bytes_toclient: 2717
-      flow.bytes_toserver: 1180
-      flow.pkts_toclient: 12
-      flow.pkts_toserver: 15
-      flow.reason: shutdown
-      flow.state: closed
+      event_type: postgresql
+      pcap_cnt: 21
+      postgresql.request: 'PgsqlGenericStartupMessage { message_type: SslRequest,
+        length: 8, proto_major: 1234, proto_minor: 5679 }'
+      postgresql.response: 'PgsqlSslResponse { message_type: SslRejected }'
       proto: TCP
       src_ip: 10.16.1.10
       src_port: 40816
-      tcp.ack: true
-      tcp.fin: true
-      tcp.psh: true
-      tcp.state: closed
-      tcp.syn: true
-      tcp.tcp_flags: 1b
-      tcp.tcp_flags_tc: 1b
-      tcp.tcp_flags_ts: 1b
+- filter:
+    count: 1
+    match:
+      dest_ip: 10.16.1.11
+      dest_port: 5432
+      event_type: postgresql
+      pcap_cnt: 7
+      postgresql.request: 'PgsqlGenericStartupMessage { message_type: SslRequest,
+        length: 8, proto_major: 1234, proto_minor: 5679 }'
+      postgresql.response: 'PgsqlSslResponse { message_type: SslRejected }'
+      proto: TCP
+      src_ip: 10.16.1.10
+      src_port: 40784
 - filter:
     count: 1
     match:
@@ -72,6 +48,32 @@ checks:
       proto: TCP
       src_ip: 10.16.1.10
       src_port: 40784
+      tcp.ack: true
+      tcp.fin: true
+      tcp.psh: true
+      tcp.state: closed
+      tcp.syn: true
+      tcp.tcp_flags: 1b
+      tcp.tcp_flags_tc: 1b
+      tcp.tcp_flags_ts: 1b
+- filter:
+    count: 1
+    match:
+      app_proto: postgresql
+      dest_ip: 10.16.1.11
+      dest_port: 5432
+      event_type: flow
+      flow.age: 9
+      flow.alerted: false
+      flow.bytes_toclient: 2717
+      flow.bytes_toserver: 1180
+      flow.pkts_toclient: 12
+      flow.pkts_toserver: 15
+      flow.reason: shutdown
+      flow.state: closed
+      proto: TCP
+      src_ip: 10.16.1.10
+      src_port: 40816
       tcp.ack: true
       tcp.fin: true
       tcp.psh: true
