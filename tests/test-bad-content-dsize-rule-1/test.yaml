@@ -1,5 +1,6 @@
 requires:
   min-version: 5.0.0
+  lt-version: 7
 
   features:
     - HAVE_LIBJANSSON
