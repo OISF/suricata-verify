@@ -1,0 +1,5 @@
+alert udp any any -> any any (msg:"dsize/distance INVALID combination #1"; dsize:10; content:"boom"; content:"loom"; distance:10; sid:1; rev:1;)
+alert udp any any -> any any (msg:"dsize/distance INVALID combination #2"; dsize:6; content:"boom"; content:"loom"; distance:3; sid:2; rev:1;)
+alert udp any any -> any any (msg:"dsize/distance INVALID combination #3"; dsize:6; content:"boom"; content:"loom"; distance:2; sid:3; rev:1;)
+alert udp any any -> any any (msg:"dsize/distance VALID combination #1"; dsize:10; content:"boom"; content:"loom"; distance:-10; sid:4; rev:1;)
+alert udp any any -> any any (msg:"dsize/distance VALID combination #2"; dsize:10; content:"boom"; content:"loom"; distance:-15; sid:5; rev:1;)
