@@ -1,0 +1,17 @@
+requires:
+  min-version: 7
+
+checks:
+    - shell:
+        args: grep "signature can't match" suricata.log | wc -l | xargs
+        expect: 3
+
+    - shell:
+        args: grep SC_ERR_INVALID_SIGNATURE suricata.log | wc -l | xargs
+        expect: 6
+
+    - shell:
+        args: grep "1 rule files processed. 2 rules successfully loaded, 3 rules failed" suricata.log | wc -l | xargs
+        expect: 1
+
+exit-code: 1
