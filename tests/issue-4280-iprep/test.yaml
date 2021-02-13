@@ -1,0 +1,18 @@
+requires:
+  min-version: 5.0.0
+  features:
+    - HAVE_LIBJANSSON
+
+command: |
+  ${SRCDIR}/src/suricata --set classification-file="${SRCDIR}/classification.config"    \
+      --set reference-config-file="${SRCDIR}/reference.config" -l ${OUTPUT_DIR}         \
+      -c suricata.yaml -r ${TEST_DIR}/input.pcap -S ${TEST_DIR}/iprep.rules             \
+      --data-dir="${OUTPUT_DIR}"                                                        \
+      --set default-reputation-path=${TEST_DIR}                                         \
+      --set reputation-categories-file=${TEST_DIR}/scirius-categories.txt
+
+checks:
+  - filter:
+      count: 3
+      match:
+        alert.signature_id: 2402000
