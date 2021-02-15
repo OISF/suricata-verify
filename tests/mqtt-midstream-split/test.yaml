@@ -1,0 +1,42 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 6.0.0
+
+# disables checksum verification, and uses midstream
+args:
+- -k none --set stream.midstream=true --set app-layer.protocols.mqtt.enabled=yes
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: mqtt
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.connack.qos: 0
+        mqtt.connack.retain: false
+        mqtt.connack.dup: false
+        mqtt.connack.session_present: false
+        mqtt.connack.return_code: 0
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.publish.qos: 0
+        mqtt.publish.retain: false
+        mqtt.publish.dup: false
+        mqtt.publish.topic: topicX
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.disconnect.qos: 0
+        mqtt.disconnect.retain: false
+        mqtt.disconnect.dup: false
