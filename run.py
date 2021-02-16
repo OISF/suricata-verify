@@ -55,6 +55,7 @@ if LINUX:
     count_dict = manager.dict()
     check_args = manager.dict()
 else:
+    failedLogs = []
     count_dict = {}
     check_args = {}
     # Bring in a lock from threading to satisfy the MP semantics when
