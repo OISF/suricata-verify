@@ -17,6 +17,7 @@ checks:
         event_type: flow
         app_proto: smb
         dest_port: 445
+        flow.midstream: true
   - filter:
       count: 1
       match:
@@ -25,3 +26,4 @@ checks:
         smb.command: SMB2_COMMAND_TREE_CONNECT
         smb.status: STATUS_SUCCESS
         smb.named_pipe: "\\\\10.160.65.202\\IPC$"
+
