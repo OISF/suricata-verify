@@ -2,6 +2,9 @@ requires:
   features:
     - HAVE_LIBJANSSON
   min-version: 5.0.0
+# use up to one second for decompression time limit 
+args:
+- --set app-layer.protocols.http.libhtp.default-config.decompression-time-limit=1000000
 
 checks:
   - filter:
