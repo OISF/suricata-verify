@@ -1,0 +1,21 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 7.0.0
+
+# disables checksum verification
+args:
+  - -k none
+# we want to check every packet in pcap order
+  - --set runmode=single
+# make one alloc fail and the test fail if we limit memcap
+#  - --set containers.urlrange.memcap=195000
+
+checks:
+
+  # Check that there is one file event with content range.
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.size: 37323
