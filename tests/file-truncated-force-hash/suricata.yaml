@@ -1,0 +1,12 @@
+%YAML 1.1
+---
+
+stream:
+  reassembly:
+    depth: 50000
+outputs:
+  - eve-log:
+      enabled: yes
+      types:
+        - files:
+            force-hash: [md5,sha1,sha256]

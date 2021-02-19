@@ -1,0 +1,21 @@
+requires:
+  min-version: 5
+  features:
+    - HAVE_NSS
+
+args:
+  - -k none --runmode=single
+
+pcap: input.pcap
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.state: "TRUNCATED"
+        fileinfo.md5: "ab2f69c5aa32dfdf22cbedceb814606b"
+        fileinfo.sha1: "2f13f1a4db46c68739ca226cd33da0d34026ff85"
+        fileinfo.sha256: "ca05cb5abd61c0e7a8c1ec80c4ed04129237375aa19f64d5aeeed134e2e4987a"
+        fileinfo.bytes_hashed: 25000
