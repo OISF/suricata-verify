@@ -21,7 +21,6 @@ checks:
       count: 1
       match:
         event_type: flow
-        app_proto: dcerpc
         app_proto_orig: http
   - filter:
       count: 0
