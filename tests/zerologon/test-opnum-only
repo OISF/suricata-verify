@@ -1,0 +1,2 @@
+alert dcerpc any any -> any ![139,445] (msg:"Possible Zerologon Attempt"; flow:established,to_server; dce_opnum:26; reference:url,https://github.com/corelight/zerologon; classtype:attempted-admin; sid:20166330; rev:2;)
+alert dcerpc any any -> any ![139,445] (msg:"Possible Zerologon Password Reset"; flow:established,to_server; dce_opnum:30; reference:url,https://github.com/corelight/zerologon; classtype:attempted-admin; sid:20166331; rev:2;)
