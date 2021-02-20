@@ -1,0 +1,33 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 6.0.0
+
+args:
+ - -k none
+
+checks:
+  - filter:
+      count: 21
+      match:
+        event_type: alert
+        alert:
+          gid: 1
+          signature_id: 20166330
+          rev: 2
+          signature: "Possible Zerologon Attempt"
+          category: Attempted Administrator Privilege Gain
+          severity: 1
+          action: "allowed"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert:
+          gid: 1
+          signature_id: 20166331
+          rev: 2
+          signature: "Possible Zerologon Password Reset"
+          category: Attempted Administrator Privilege Gain
+          severity: 1
+          action: "allowed"
