@@ -1,0 +1,36 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 7.0.0
+
+# disables checksum verification
+args:
+  - -k none
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 10
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 11
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 12
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 13
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 14
