@@ -1,0 +1,12 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 7
+
+# disables checksum verification
+args:
+- -k none
+
+checks:
+    - stats:
+        decoder.too_many_layers: 1
