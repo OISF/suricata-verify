@@ -1,0 +1,37 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 7.0.0
+
+# disables checksum verification
+args:
+  - -k none --set stream.midstream=true
+
+checks:
+
+# checks for http.uri keyword : 1 for HTTP1, 1 for mimicked HTTP2 response, so 2 for whole HTTP
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 10
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 11
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 12
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 20
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 21

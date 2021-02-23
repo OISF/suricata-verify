@@ -1,0 +1,6 @@
+
+alert http any any -> any any (http.uri; content:"/doc/manual/html/index.html"; sid:10;)
+alert http1 any any -> any any (http.uri; content:"/doc/manual/html/index.html"; sid:11;)
+alert http2 any any -> any any (http.uri; content:"/doc/manual/html/index.html"; sid:12;)
+alert tcp any any -> any any (http.uri; content:"/doc/manual/html/index.html"; sid:13;)
+alert ip any any -> any any (http.uri; content:"/doc/manual/html/index.html"; sid:14;)
