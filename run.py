@@ -1015,25 +1015,24 @@ def main():
     print("FAILED:  %d" % (failed))
     print("SKIPPED: %d" % (skipped))
 
-    if args.debugfailed:
-        if len(failedLogs) > 0:
-            print("")
-            print("Failed tests debug output:")
-        for dirpath in failedLogs:
-            print("- Test %s:" % os.path.basename(dirpath))
-            for r, d, f in os.walk(dirpath+"/output"):
-                for fname in f:
-                    path = os.path.join(r, fname)
-                    print("  - %s" % path)
-                    try:
-                        with open(path, "r") as fcontents:
-                            try:
-                                buf = fcontents.read()
-                                print(buf)
-                            except:
-                                print("    - [Not dumping file that won't utf-8 decode]")
-                    except Exception as err:
-                        print("Failed to open %s: %s" % (path, str(err)))
+    if len(failedLogs) > 0:
+        print("")
+        print("Failed tests debug output:")
+    for dirpath in failedLogs:
+        print("- Test %s:" % os.path.basename(dirpath))
+        for r, d, f in os.walk(dirpath+"/output"):
+            for fname in f:
+                path = os.path.join(r, fname)
+                print("  - %s" % path)
+                try:
+                    with open(path, "r") as fcontents:
+                        try:
+                            buf = fcontents.read()
+                            print(buf)
+                        except:
+                            print("    - [Not dumping file that won't utf-8 decode]")
+                except Exception as err:
+                    print("Failed to open %s: %s" % (path, str(err)))
 
     if failed > 0:
         return 1
