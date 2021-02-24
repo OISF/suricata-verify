@@ -40,7 +40,7 @@ import unittest
 import multiprocessing as mp
 from collections import namedtuple
 import threading
-
+import subprocess
 import yaml
 
 WIN32 = sys.platform == "win32"
@@ -872,6 +872,9 @@ def run_test(dirpath, args, cwd, suricata_config):
         elif results["success"] > 0:
             with lock:
                 count_dict["passed"] += 1
+        check_output = subprocess.call(["../suricata-verify/check-eve.py", outdir, "-q"])
+        if check_output == 0:
+            raise TestError("Invalid JSON schema")
     except UnsatisfiedRequirementError as ue:
         print("===> {}: SKIPPED: {}".format(os.path.basename(dirpath), ue))
         with lock:
