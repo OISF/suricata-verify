@@ -1,0 +1,8 @@
+requires:
+  min-version: 7.0.0
+
+checks:
+    - shell:
+        args: grep "All worker threads in running state" suricata.log | wc -l | xargs
+        expect: 0
+
