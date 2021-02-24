@@ -41,6 +41,7 @@ import multiprocessing as mp
 from collections import namedtuple
 import threading
 import filecmp
+import subprocess
 import yaml
 
 WIN32 = sys.platform == "win32"
@@ -568,7 +569,7 @@ class TestRunner:
                    glob.glob(os.path.join(self.directory, "*.pcapng")):
                     raise UnsatisfiedRequirementError("No pcap file found")
 
-    def run(self):
+    def run(self, outdir):
 
         if not self.force:
             self.check_requires()
@@ -646,6 +647,10 @@ class TestRunner:
                     r, expected_exit_code));
 
             check_value = self.check()
+        
+        check_output = subprocess.call(["{}/check-eve.py".format(TOPDIR), outdir, "-q"])
+        if check_output != 0:
+            raise TestError("Invalid JSON schema")
 
         if not check_value["failure"] and not check_value["skipped"]:
             if not self.quiet:
@@ -840,7 +845,7 @@ def run_test(dirpath, args, cwd, suricata_config):
         cwd, dirpath, outdir, suricata_config, args.verbose, args.force,
         args.quiet)
     try:
-        results = test_runner.run()
+        results = test_runner.run(outdir)
         if results["failure"] > 0:
             with lock:
                 count_dict["failed"] += 1
@@ -850,7 +855,7 @@ def run_test(dirpath, args, cwd, suricata_config):
                 count_dict["skipped"] += 1
         elif results["success"] > 0:
             with lock:
-                count_dict["passed"] += 1
+                count_dict["passed"] += 1  
     except UnsatisfiedRequirementError as ue:
         if not args.quiet:
             print("===> {}: SKIPPED: {}".format(os.path.basename(dirpath), ue))
