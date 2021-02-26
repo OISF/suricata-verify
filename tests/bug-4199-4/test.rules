@@ -1,0 +1,17 @@
+# no xforms, should match
+alert http any any -> $HOME_NET any (msg: "detect (/etc/passwd) no transform"; flow:to_server,established; http.request_body; content:"id=cat"; nocase; sid:1;)
+alert http any any -> $HOME_NET any (msg: "detect (/etc/passwd) no transform"; flow:to_server,established; http.uri; content:"exec"; http.request_body; content:"id=cat"; nocase; sid:2;)
+
+# no xforms, should not match
+alert http any any -> $HOME_NET any (msg: "detect (/etc/passwd) no transform"; flow:to_server,established; http.request_body; content:"/etc/passwd"; nocase; sid:11;)
+alert http any any -> $HOME_NET any (msg: "detect (/etc/passwd) no transform"; flow:to_server,established; http.uri; content:"exec"; http.request_body; content:"/etc/passwd"; nocase; sid:12;)
+
+# xforms should match
+alert http any any -> $HOME_NET any (msg: "detect (/etc/passwd) with transform"; flow:to_server,established; http.request_body; url_decode; content:"/etc/passwd"; nocase; sid:3;)
+alert http any any -> $HOME_NET any (msg: "detect (/etc/passwd) with transform"; flow:to_server,established; http.uri; content:"exec"; fast_pattern; http.request_body; url_decode; content:"/etc/passwd"; nocase; sid:4;)
+alert http any any -> $HOME_NET any (msg: "detect (/etc/passwd) with transform"; flow:to_server,established; http.uri; content:"exec"; http.request_body; url_decode; content:"/etc/passwd"; nocase; fast_pattern; sid:5;)
+
+# xforms should not match
+alert http any any -> $HOME_NET any (msg: "detect (/etc/passwd) with transform"; flow:to_server,established; http.request_body; url_decode; content:"/passwd/etc"; nocase; sid:13;)
+alert http any any -> $HOME_NET any (msg: "detect (/etc/passwd) with transform"; flow:to_server,established; http.uri; content:"exec"; fast_pattern; http.request_body; url_decode; content:"/passwd/etc"; nocase; sid:14;)
+alert http any any -> $HOME_NET any (msg: "detect (/etc/passwd) with transform"; flow:to_server,established; http.uri; content:"exec"; http.request_body; url_decode; content:"/passwd/etc"; nocase; fast_pattern; sid:15;)
