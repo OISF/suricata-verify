@@ -1,0 +1,15 @@
+requires:
+    min-version: 7
+
+command: |
+  ${SRCDIR}/src/suricata -v --set threshold-file="${TEST_DIR}/threshold.config" -l ${OUTPUT_DIR} -c ${SRCDIR}/suricata.yaml -S ${TEST_DIR}/test.rules -r ${TEST_DIR}/input.pcap
+
+checks:
+
+    - shell:
+        args: grep -e "pcre_exec parse error, ret -1, string this is not correct" suricata.log | wc -l | xargs
+        expect: 1
+
+    - shell:
+        args: grep -e "Threshold config parsed.*0 rule.*found" suricata.log | wc -l | xargs
+        expect: 1
