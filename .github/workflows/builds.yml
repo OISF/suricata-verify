@@ -62,6 +62,7 @@ jobs:
                 make \
                 parallel \
                 python3-distutils \
+                python3-jsonschema \
                 python3-yaml \
                 rustc \
                 software-properties-common \
