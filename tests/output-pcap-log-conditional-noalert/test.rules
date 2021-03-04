@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"not matching wget"; http.user_agent; content:"wget"; sid:1; rev:1;)
