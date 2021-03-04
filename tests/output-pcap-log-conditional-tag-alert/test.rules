@@ -1,0 +1,2 @@
+alert http any any -> any any (msg:"curl"; http.user_agent; content:"curl"; tag:session; sid:1; rev:1;)
+
