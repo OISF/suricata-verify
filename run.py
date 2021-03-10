@@ -309,12 +309,14 @@ class ShellCheck:
         try:
             if WIN32:
                 print("skipping shell check on windows")
-                return True;
+                return False;
             output = subprocess.check_output(self.config["args"], shell=True)
             if "expect" in self.config:
                 return str(self.config["expect"]) == output.decode().strip()
             return True
         except subprocess.CalledProcessError as err:
+            raise TestError(err)
+        else:
             raise TestError(err)
 
 class StatsCheck:
