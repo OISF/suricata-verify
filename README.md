@@ -134,6 +134,11 @@ checks:
       # A shell check that also tests the output of the command.
       args: cat fast.log | wc -l | xargs
       expect: 1
+
+  - file-compare:
+      # A check that compares two files
+      filename: datasets.csv
+      expected: expected/datasets.csv
 ```		
 
 ## Adding a new test the automated way: createst

@@ -7,3 +7,8 @@ command: |
       --set reference-config-file="${SRCDIR}/reference.config" -l ${OUTPUT_DIR}         \
       -c "${SRCDIR}/suricata.yaml" -r ${TEST_DIR}/input.pcap -S ${TEST_DIR}/test.rules  \
       --data-dir="${OUTPUT_DIR}"
+
+checks:
+  - file-compare:
+      filename: datasets.csv
+      expected: expected/datasets.csv
