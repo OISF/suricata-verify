@@ -1,0 +1,20 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+    - RUST
+  min-version: 7
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+  - filter:
+      count: 1
+      match:
+        event_type: krb5
+        krb5.msg_type: KRB_ERROR
+        krb5.failed_request: KRB_AS_REQ
