@@ -1,0 +1,13 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+    
+checks:
+  - filter:
+      count: 20
+      match:
+        dns.type: query
+  - filter:
+      count: 20
+      match:
+        dns.type: answer

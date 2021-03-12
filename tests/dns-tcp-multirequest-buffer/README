@@ -1,0 +1,5 @@
+Test a TCP DNS request that contains multiple DNS requests in a single
+buffer.
+
+This test includes its own verification script instead of using the
+default file compare.
