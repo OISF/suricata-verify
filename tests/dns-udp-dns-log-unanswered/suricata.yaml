@@ -1,9 +1,0 @@
-%YAML 1.1
----
-
-include: ../../etc/suricata-3.1.2.yaml
-
-outputs:
-  - dns-log:
-      enabled: yes
-      filename: dns.log
