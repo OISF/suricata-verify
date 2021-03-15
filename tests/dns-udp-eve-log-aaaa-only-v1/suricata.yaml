@@ -8,4 +8,5 @@ outputs:
       filename: eve.json
       types:
         - dns:
-            types: [aaaa]
+            version: 1
+            custom: [aaaa]
