@@ -11,7 +11,8 @@ checks:
         event_type: dns
         dns.type: query
   - filter:
-      count: 36
+      count: 3
       match:
         event_type: dns
         dns.type: answer
+        dns.answers.__len: 12

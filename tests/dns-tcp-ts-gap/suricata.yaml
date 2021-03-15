@@ -7,4 +7,3 @@ outputs:
       filename: eve.json
       types:
         - dns:
-            version: 1
