@@ -1,6 +1,7 @@
 requires:
   features:
     - HAVE_LIBJANSSON
+  lt-version: 7
 
 checks:
   - filter:
@@ -9,7 +10,7 @@ checks:
         event_type: dns
         dns.type: query
   - filter:
-      count: 2
+      count: 9
       match:
         event_type: dns
         dns.type: answer
