@@ -1,6 +1,5 @@
 requires:
-  script:
-    - grep -q parse_rdata_null rust/src/dns/parser.rs
+  min-version: 7
 
 checks:
   - filter:
@@ -16,4 +15,4 @@ checks:
         dns.type: answer
         dns.rcode: NOERROR
         dns.rrtype: "NULL"
-        dns.rdata: "VACKD\u0003\\xc5\\xe9\u0001"
+        dns.answers[0].rdata: "VACKD\u0003\\xc5\\xe9\u0001"
