@@ -1,3 +1,23 @@
 requires:
   features:
     - HAVE_LIBJANSSON
+
+checks:
+  - filter:
+      count: 1
+      match:
+        dns.type: query
+        dns.rrtype: "MX"
+  - filter:
+      count: 1
+      match:
+        dns.type: query
+  - filter:
+      count: 1
+      match:
+        dns.type: answer
+        dns.answers[0].rrtype: "MX"
+  - filter:
+      count: 1
+      match:
+        dns.type: answer
