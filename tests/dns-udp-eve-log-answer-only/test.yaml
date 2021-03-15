@@ -1,3 +1,14 @@
 requires:
   features:
     - HAVE_LIBJANSSON
+
+checks:
+  - filter:
+      count: 0
+      match:
+        dns.type: query
+  - filter:
+      count: 3
+      match:
+        dns.type: answer
+        
