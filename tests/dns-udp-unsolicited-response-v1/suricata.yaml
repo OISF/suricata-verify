@@ -8,3 +8,4 @@ outputs:
       types:
         - alert
         - dns:
+            version: 1
