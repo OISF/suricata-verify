@@ -10,3 +10,4 @@ outputs:
       enabled: yes
       types:
         - dns:
+            version: 1

@@ -1,6 +1,8 @@
 requires:
   features:
     - HAVE_LIBJANSSON
+    - RUST
+  lt-version: 7
 
 checks:
   - filter:
@@ -11,7 +13,7 @@ checks:
         event_type: dns
         dns.type: query
   - filter:
-      count: 1
+      count: 12
       match:
         src_ip: "10.16.1.11"
         dest_ip: "8.8.4.4"
