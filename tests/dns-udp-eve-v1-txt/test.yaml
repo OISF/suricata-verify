@@ -1,3 +1,6 @@
+requires:
+  lt-version: 7
+
 pcap: ../dns-udp-eve-v2-txt/input.pcap
 
 checks:
