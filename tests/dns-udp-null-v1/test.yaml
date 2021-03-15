@@ -1,3 +1,8 @@
+requires:
+  script:
+    - grep -q parse_rdata_null rust/src/dns/parser.rs
+  lt-version: 7
+
 checks:
   - filter:
       count: 1
@@ -12,4 +17,4 @@ checks:
         dns.type: answer
         dns.rcode: NOERROR
         dns.rrtype: "NULL"
-        dns.answers[0].rdata: "VACKD\u0003\\xc5\\xe9\u0001"
+        dns.rdata: "VACKD\u0003\\xc5\\xe9\u0001"
