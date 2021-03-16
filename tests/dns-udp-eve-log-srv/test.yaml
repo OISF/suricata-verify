@@ -1,6 +1,5 @@
 requires:
-  script:
-    - grep -q parse_rdata_srv rust/src/dns/parser.rs
+  min-version: 7
 
 args:
   - -k none
