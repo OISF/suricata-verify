@@ -13,3 +13,6 @@ outputs:
         - files
         - http
         - flow
+  - file-store:
+      enabled: yes
+      version: 2
