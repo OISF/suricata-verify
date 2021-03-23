@@ -11,6 +11,17 @@ pcap: input.pcap
 checks:
 
   - filter:
+      requires:
+        version: 7
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.state: "CLOSED"
+        fileinfo.stored: true
+        fileinfo.size: 99400
+  - filter:
+      requires:
+        lt-version: 7
       count: 1
       match:
         event_type: fileinfo
