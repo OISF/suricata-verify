@@ -112,7 +112,6 @@ checks:
       http.length: 0
       http.protocol: HTTP/1.0
       http.url: /cgi-bin/iavs4stats.cgi
-      #pcap_cnt: 19
       proto: TCP
       src_ip: 192.168.2.16
       src_port: 1578

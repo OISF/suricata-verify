@@ -25,6 +25,6 @@ checks:
       count: 1
       match:
         event_type: fileinfo
-        fileinfo.state: "TRUNCATED"
+        fileinfo.state: "CLOSED"
         fileinfo.stored: true
         fileinfo.size: 99400
