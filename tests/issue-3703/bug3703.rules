@@ -1,0 +1,1 @@
+alert http any any -> any any (msg: "FILEMAGIC PDF document"; filemagic:"PDF document"; filestore:both,file; noalert; sid:1100008; rev:1;)
