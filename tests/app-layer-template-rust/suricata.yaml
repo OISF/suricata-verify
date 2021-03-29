@@ -1,0 +1,17 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      types:
+        - template-rust
+        - alert
+        - flow
+
+app-layer:
+  protocols:
+    template-rust:
+      enabled: yes
+      detection-ports:
+        dp: 7000
