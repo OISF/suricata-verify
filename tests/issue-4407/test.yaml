@@ -1,0 +1,7 @@
+requires:
+  min-version: 7
+
+command: |
+  ${SRCDIR}/src/suricata --set threshold-file="${TEST_DIR}/threshold.config" -l ${OUTPUT_DIR} -c ${TEST_DIR}/suricata.yaml -S ${TEST_DIR}/input.rules -T
+
+exit-code: 0
