@@ -1,0 +1,18 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      types:
+        - files
+        - stats
+  - file-store:
+      version: 2
+      enabled: yes
+      stream-depth: 0
+      write-fileinfo: true
+      force-hash:
+      - sha256
+      hash-byte-limit: 500
+
