@@ -27,10 +27,15 @@ checks:
         alert.signature_id: 2
         pcap_cnt: 103
   - filter:
-      count: 8
+      count: 3
       match:
         event_type: drop
-        flow_id: 746850855319537
+        src_port: 35824
+  - filter:
+      count: 4
+      match:
+        event_type: drop
+        dest_port: 35824
   - filter:
       count: 1
       match:
@@ -44,7 +49,12 @@ checks:
         alert.signature_id: 3
         pcap_cnt: 135
   - filter:
+      count: 1
+      match:
+        event_type: drop
+        src_port: 35820
+  - filter:
       count: 7
       match:
         event_type: drop
-        flow_id: 948787333709074
+        dest_port: 35820
