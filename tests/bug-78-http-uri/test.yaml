@@ -22,6 +22,10 @@ checks:
         pkts_toclient: 2
         pkts_toserver: 4
         start: 2009-10-16T16:44:16.083524+0000
+        src_ip: 192.168.2.3
+        src_port: 37010
+        dest_ip: 208.69.36.231
+        dest_port: 80
       http:
         hostname: www.google.com
         http_content_type: text/html
