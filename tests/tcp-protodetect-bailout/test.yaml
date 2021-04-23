@@ -1,0 +1,10 @@
+# disables checksum verification
+args:
+- -k none
+- --set stream.reassembly.depth=0
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
