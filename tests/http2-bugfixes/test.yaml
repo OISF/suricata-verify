@@ -28,3 +28,8 @@ checks:
       match:
         event_type: fileinfo
         fileinfo.size: 880
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 10
