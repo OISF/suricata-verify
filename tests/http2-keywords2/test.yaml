@@ -35,3 +35,8 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 21
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 30
