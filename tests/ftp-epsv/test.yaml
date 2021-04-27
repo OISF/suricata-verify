@@ -1,0 +1,13 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 6.0.0
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: "EPSV"
+        ftp.dynamic_port: 58612
