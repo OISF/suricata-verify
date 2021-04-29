@@ -1,0 +1,66 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+    - LIBNET1.1
+
+args:
+- --simulate-ips
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.action: blocked
+        alert.signature_id: 1
+        pcap_cnt: 4
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.action: blocked
+        alert.signature_id: 2
+        pcap_cnt: 4
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 3
+
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        alert.action: blocked
+        alert.signature_id: 1
+        pcap_cnt: 4
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        pcap_cnt: 5
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        pcap_cnt: 6
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        pcap_cnt: 7
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        pcap_cnt: 8
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        pcap_cnt: 9
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        pcap_cnt: 10
