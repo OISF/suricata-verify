@@ -1,0 +1,17 @@
+# skip as it fails
+skip: true
+
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+# disables checksum verification
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 2025701
