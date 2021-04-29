@@ -47,4 +47,5 @@ checks:
         app_proto: smb
         tcp.state: closed
         flow.state: closed
+        flow.midstream: true
 

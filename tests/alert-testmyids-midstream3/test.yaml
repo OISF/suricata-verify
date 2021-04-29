@@ -13,11 +13,13 @@ checks:
       match:
         event_type: alert
         src_port: 80
+        flow.midstream: true
   - filter:
       count: 1
       match:
         event_type: flow
         dest_port: 80
+        flow.midstream: true
   - filter:
       count: 1
       match:
