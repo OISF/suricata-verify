@@ -1,0 +1,5 @@
+# Silly rule to set the flowbit "traffic/label/cli-http" on
+# the curl user-agent.
+alert http any any -> any any (msg:"TEST"; \
+      http.user_agent; content:"curl"; \
+      sid:1; rev:1;)
