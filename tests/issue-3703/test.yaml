@@ -1,0 +1,18 @@
+
+
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.magic: "PDF document, version 1.5"
+        fileinfo.gaps: false
+        fileinfo.state: "CLOSED"
+        fileinfo.sha256: "02f43016d07812f881dc1ccee724f95682016ff00c7ee6b2c856d4d693ce3fa5"
+        fileinfo.stored: true
+        fileinfo.file_id: 1
+        fileinfo.size: 9952
+        fileinfo.tx_id: 0
+
