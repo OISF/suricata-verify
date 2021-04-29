@@ -1,0 +1,40 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+checks:
+
+  - filter:
+      count: 2
+      match:
+        event_type: tls
+        tls.serial: 01:A7:8A:7F:5E:BB:B7:BA:02:00:00:00:00:42:FF:ED
+        tls.issuerdn: C=US, O=Google Trust Services, CN=GTS CA 1O1
+
+  - filter:
+      count: 3
+      match:
+        event_type: tls
+        tls.session_resumed: true
+        
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1003924
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1003926
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1003929
+
+  - stats:
+      app_layer.flow.tls: 4
+      app_layer.tx.tls: 0
