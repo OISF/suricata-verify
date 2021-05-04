@@ -1,0 +1,16 @@
+
+# disables checksum verification
+args:
+  - -k none --set stream.midstream=true
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: dcerpc
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
