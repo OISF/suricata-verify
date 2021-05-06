@@ -1,0 +1,10 @@
+requires:
+
+  min-version: 7
+
+checks:
+
+    - stats:
+        decoder.ipv4: 5
+        decoder.vlan: 5
+        decoder.vntag: 5
