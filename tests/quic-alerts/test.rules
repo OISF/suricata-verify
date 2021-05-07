@@ -1,0 +1,3 @@
+alert quic any any -> any any (msg:"QUIC CYU HASH"; quic.cyu.hash; content:"7b3ceb1adc974ad360cfa634e8d0a730"; sid:1;)
+alert quic any any -> any any (msg:"QUIC CYU STRING"; quic.cyu.string; content:"46,PAD-SNI-VER-CCS-UAID-TCID-PDMD-SMHL-ICSL-NONP-MIDS-SCLS-CSCT-COPT-IRTT-CFCW-SFCW"; sid:2;)
+alert quic any any -> any any (msg:"QUIC VERSION"; quic.version:1362113590; sid:3;)
