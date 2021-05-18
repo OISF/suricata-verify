@@ -1,0 +1,13 @@
+requires:
+
+  min-version: 6.0.3
+
+args:
+  - --set decoder.vntag.enabled=true
+
+checks:
+
+    - stats:
+        decoder.ipv4: 5
+        decoder.vlan: 5
+        decoder.vntag: 5
