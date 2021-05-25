@@ -7,7 +7,7 @@ command: |
 checks:
 
     - shell:
-        args: grep -e "pcre_exec parse error, ret -1, string this is not correct" suricata.log | wc -l | xargs
+        args: grep -e "SC_ERR_PCRE_MATCH" suricata.log | wc -l | xargs
         expect: 1
 
     - shell:
