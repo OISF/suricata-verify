@@ -1,11 +1,11 @@
 requires:
   features:
     - HAVE_LIBJANSSON
-  min-version: 7.0.0
+  min-version: 6.0.0
 
 # disables checksum verification
 args:
-  - -k none
+  - -k none --set app-layer.protocols.http2.http1-rules=true
 
 checks:
 
