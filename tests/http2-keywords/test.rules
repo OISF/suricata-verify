@@ -3,4 +3,4 @@ alert http any any -> any any (http.uri; content:"/doc/manual/html/index.html"; 
 alert http1 any any -> any any (http.uri; content:"/doc/manual/html/index.html"; sid:11;)
 alert http2 any any -> any any (http.uri; content:"/doc/manual/html/index.html"; sid:12;)
 alert tcp any any -> any any (http.uri; content:"/doc/manual/html/index.html"; sid:13;)
-alert ip any any -> any any (http.uri; content:"/doc/manual/html/index.html"; sid:14;)
+alert ip any any -> any any (http.uri; content:"/doc/manual/html/index.html"; http.host; content:"localhost"; endswith; sid:14;)
