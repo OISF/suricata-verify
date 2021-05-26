@@ -38,7 +38,7 @@ checks:
         http.version: "2"
         http.http_method: "GET"
         http.url: "/robots.txt"
-        http.request_headers[2].name: "Host"
+        http.request_headers[2].name: ":authority"
         http.request_headers[2].value: "nghttp2.org"
         http.status: 200
   - filter:
