@@ -1,0 +1,4 @@
+alert ip any any -> 8.8.8.8 any (msg:"The first rule"; threshold: type limit, track by_rule, count 5, seconds 300; sid:1;)
+alert ip any any -> 4.3.2.1 any (msg:"The second rule"; priority:1; sid:2;)
+alert ip any any -> 1.2.3.4 any (msg:"The third rule"; priority:2; sid:3;)
+alert ip any any -> 5.6.7.8 any (msg:"The fourth rule"; priority:2; sid:4;)
