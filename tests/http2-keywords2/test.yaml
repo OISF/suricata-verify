@@ -50,3 +50,8 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 32
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 33

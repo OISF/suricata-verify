@@ -8,3 +8,5 @@ alert http2 any any -> any any (http.stat_code; content:"404"; sid:21;)
 alert http2 any any -> any any (http.server; content:"nghttpx"; sid:30;)
 alert http2 any any -> any any (http.method; content:"GET"; sid:31;)
 alert http2 any any -> any any (http.host.raw; content:"nghttp2.org"; sid:32;)
+
+alert http2 any any -> any any (http.header_names; content:"|0d 0a|user-agent|0d 0a|accept|0d 0a|"; sid:33;)
