@@ -1,0 +1,13 @@
+# disables checksum verification
+args:
+  - -k none
+
+checks:
+
+  # Check that there is one fileinfo/SMTP event with specific parameters.
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        app_proto: smtp
+        fileinfo.filename: smtptest-2021-02-25T13-54-22Z-aefb2fc1308d62f4b6c74769f69b13ddf80e995fd98ae442f3be499ea928c67f..zip
