@@ -1,0 +1,1 @@
+alert smb any any -> any any (msg:"SMB fingerprinted"; flow:established; smb.fingerprint:6f79c15aff96867dfd6002d1e06fe991; sid:1; rev:1;)
