@@ -1,0 +1,22 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 6.0.0
+
+# disables checksum verification
+args:
+  - -k none --set app-layer.protocols.http2.enabled=true
+
+checks:
+
+  # Check that there is one file event with decompressed length.
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        http2.length: 30
+        fileinfo.size: 20
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
