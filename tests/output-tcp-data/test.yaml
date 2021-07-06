@@ -1,0 +1,4 @@
+checks:
+  - file-compare:
+      filename: tcp-data.log
+      expected: expected/tcp-data.log
