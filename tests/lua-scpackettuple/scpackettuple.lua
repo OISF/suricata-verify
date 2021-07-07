@@ -12,6 +12,7 @@ function setup(args)
     file = assert(io.open(filename, "a"))
     SCLogInfo("Lua SCPacketTuple Log Filename " .. filename)
     packets = 0
+    version = _VERSION
 end
 
 function log(args)
@@ -24,6 +25,7 @@ function log(args)
 end
 
 function deinit(args)
+    SCLogInfo("Lua version is: " .. version);
     SCLogInfo ("Packets logged: " .. packets);
     file:close(file)
 end

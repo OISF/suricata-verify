@@ -12,6 +12,7 @@ function setup(args)
     file = assert(io.open(filename, "a"))
     SCLogInfo("Lua SCFlowTuple Log Filename " .. filename)
     flow = 0
+    version = _VERSION
 end
 
 function log(args)
@@ -25,6 +26,7 @@ function log(args)
 end
 
 function deinit(args)
+    SCLogInfo ("Lua version is " .. version);
     SCLogInfo ("Flow tuples logged: " .. flow);
     file:close(file)
 end
