@@ -313,6 +313,9 @@ class FileCompareCheck:
         self.directory = directory
 
     def run(self):
+        if WIN32:
+            print("skipping shell check on windows")
+            return True;
         expected = os.path.join(self.directory, self.config["expected"])
         filename = self.config["filename"]
         if filecmp.cmp(expected, filename):
