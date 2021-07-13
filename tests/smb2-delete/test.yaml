@@ -1,0 +1,14 @@
+requires:
+  min-version: 7
+
+# disables checksum verification
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.access: "delete on close"
+        smb.filename: "test"
