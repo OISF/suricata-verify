@@ -11,9 +11,22 @@ args:
 
 checks:
   - filter:
+      version: 6
       count: 58
       match:
         event_type: smb
+  - filter:
+      min-version: 7
+      count: 59
+      match:
+        event_type: smb
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: smb
+        smb.access: "delete on close"
+        smb.filename: "PSEXESVC.exe"
   - filter:
       count: 1
       match:
