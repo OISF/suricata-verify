@@ -1,0 +1,2 @@
+alert icmpv6 any any -> any any (itype:4; icode:1; sid:1;)
+

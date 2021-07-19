@@ -1,0 +1,11 @@
+
+requires:
+    features:
+        - HAVE_LIBJANSSON
+
+checks:
+    - filter:
+        count: 15
+        match:
+            event_type: alert
+            alert.signature_id: 1
