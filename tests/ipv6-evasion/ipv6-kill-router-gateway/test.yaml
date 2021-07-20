@@ -1,6 +1,7 @@
 requires:
     features:
         - HAVE_LIBJANSSON
+    min-version: 6
 
 checks:
     - filter:
