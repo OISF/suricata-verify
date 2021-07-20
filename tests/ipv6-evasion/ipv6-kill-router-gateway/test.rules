@@ -1,0 +1,2 @@
+# It detects Router Advertisement messages (ie itype:134) that are send with a lifetime of zero (ie content:"|00 00|") and can be misused to signal to hosts that a particular router is going down and it should be removed from routing tables.
+alert icmpv6 any any -> any any (itype:134; icmpv6.hdr; content:"|00 00|"; offset:6; depth:2; sid:1;)
