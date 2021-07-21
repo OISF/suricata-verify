@@ -1,0 +1,18 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+# disables checksum verification
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+  # no false positive
+  - filter:
+      count: 0
+      match:
+        event_type: alert
