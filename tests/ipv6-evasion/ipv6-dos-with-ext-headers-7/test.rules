@@ -1,0 +1,1 @@
+alert pkthdr any any -> any any (msg:"SURICATA IPv6 HOPOPTS unknown option"; decode-event:ipv6.hopopts_unknown_opt; classtype:protocol-command-decode; sid:2200086; rev:2;)
