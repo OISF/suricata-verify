@@ -1,0 +1,2 @@
+# It detects pings to multicast addresses
+alert icmpv6 any any -> ff00::/8 any (itype:128; sid:1;)
