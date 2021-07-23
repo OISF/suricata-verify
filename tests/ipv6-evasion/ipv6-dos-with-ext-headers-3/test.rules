@@ -1,0 +1,2 @@
+alert pkthdr any any -> any any (msg:"SURICATA IPv6 duplicated Destination Options extension header"; decode-event:ipv6.exthdr_dupl_dh; classtype:protocol-command-decode; sid:2200018; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA IPv6 DSTOPTS only padding"; decode-event:ipv6.dstopts_only_padding; classtype:protocol-command-decode; sid:2200089; rev:2;)
