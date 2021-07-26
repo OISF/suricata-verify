@@ -1,0 +1,10 @@
+%YAML 1.1
+---
+
+outputs:
+  - lua:
+      enabled: yes
+      scripts-dir: .
+      scripts:
+         - lua-scflowstats.lua
+
