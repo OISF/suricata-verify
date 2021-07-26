@@ -1,0 +1,10 @@
+requires:
+  features:
+    - HAVE_LUA
+
+checks:
+   - filter:
+       count: 1
+       match:
+         event_type: alert
+
