@@ -3,8 +3,12 @@ requires:
     - HAVE_LUA
 
 checks:
-   - filter:
-       count: 1
-       match:
-         event_type: alert
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+  - file-compare:
+      # A check that compares two files
+      filename: lua-scrule-ids.log
+      expected: expected/lua-scrule-ids.log
 
