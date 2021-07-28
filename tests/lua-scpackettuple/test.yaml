@@ -1,3 +1,9 @@
 requires:
   features:
     - HAVE_LUA
+
+checks:
+  - file-compare:
+      # A check that compares two files
+      filename: scpacket-tuple.log 
+      expected: expected/scpacket-tuple.log
