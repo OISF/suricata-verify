@@ -1,0 +1,1 @@
+alert dns any any -> any any (dns.query; dataset:set,dns-seen, type string, memcap 100mb, hashsize 2048, state state.csv; sid:1;)
