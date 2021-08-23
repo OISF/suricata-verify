@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 #
-# Copyright (C) 2017-2020 Open Information Security Foundation
+# Copyright (C) 2017-2021 Open Information Security Foundation
 #
 # Permission is hereby granted, free of charge, to any person
 # obtaining a copy of this software and associated documentation files
@@ -554,21 +554,6 @@ class TestRunner:
                     except:
                         raise UnsatisfiedRequirementError(
                             "requires script returned false")
-
-            elif key == "config":
-                for pattern, need_val in requires["config"].items():
-                    found = False
-                    for key, val in self.suricata_config.config.items():
-                        if re.match(pattern, key):
-                            print("%s -> %s" % (pattern, key))
-                            if str(need_val) != str(val):
-                                raise UnsatisfiedRequirementError(
-                                    "requires %s = %s" % (
-                                        key, need_val))
-                    print(found)
-                    if not found:
-                        raise UnsatisfiedRequirementError(
-                            "requires %s = %s" % (pattern, need_val))
 
             elif key == "pcap":
                 # Handle below...
