@@ -101,8 +101,12 @@ checks:
   # A verification filter that is run over the eve.json. Multiple
   # filters may exist and all must pass for the test to pass.
   - filter:
-      # Additional feature needed to run this specific filter
-      feature: HTTP2_DECOMPRESSION
+
+      # Requires that apply just to this check. Has all the same options
+      # as the test level requires above.
+      requires:
+        features:
+          - HTTP2_DECOMPRESSION
 
       # The number of records this filter should match.
       count: 1
