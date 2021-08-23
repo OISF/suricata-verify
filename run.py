@@ -257,6 +257,71 @@ class SuricataConfig:
     def has_feature(self, feature):
         return feature in self.features
 
+
+def check_requires(requires, suricata_config: SuricataConfig):
+    suri_version = suricata_config.version
+    for key in requires:
+        if key == "min-version":
+            min_version = requires["min-version"]
+            if not is_version_compatible(version=min_version,
+                    suri_version=suri_version, expr="gte"):
+                raise UnsatisfiedRequirementError(
+                        "requires at least version {}".format(min_version))
+        elif key == "lt-version":
+            lt_version = requires["lt-version"]
+            if not is_version_compatible(version=lt_version,
+                    suri_version=suri_version, expr="lt"):
+                raise UnsatisfiedRequirementError(
+                        "for version less than {}".format(lt_version))
+        elif key == "version":
+            req_version = requires["version"]
+            if not is_version_compatible(version=req_version,
+                    suri_version=suri_version, expr="equal"):
+                raise UnsatisfiedRequirementError(
+                        "only for version {}".format(req_version))
+        elif key == "features":
+            for feature in requires["features"]:
+                if not suricata_config.has_feature(feature):
+                    raise UnsatisfiedRequirementError(
+                        "requires feature %s" % (feature))
+        elif key == "env":
+            for env in requires["env"]:
+                if not env in os.environ:
+                    raise UnsatisfiedRequirementError(
+                        "requires env var %s" % (env))
+        elif key == "files":
+            for filename in requires["files"]:
+                if not os.path.exists(filename):
+                    raise UnsatisfiedRequirementError(
+                        "requires file %s" % (filename))
+        elif key == "script":
+            for script in requires["script"]:
+                try:
+                    subprocess.check_call("%s" % script, shell=True)
+                except:
+                    raise UnsatisfiedRequirementError(
+                        "requires script returned false")
+        elif key == "config":
+            for pattern, need_val in requires["config"].items():
+                found = False
+                for key, val in suricata_config.config.items():
+                    if re.match(pattern, key):
+                        print("%s -> %s" % (pattern, key))
+                        if str(need_val) != str(val):
+                            raise UnsatisfiedRequirementError(
+                                "requires %s = %s" % (
+                                    key, need_val))
+                print(found)
+                if not found:
+                    raise UnsatisfiedRequirementError(
+                        "requires %s = %s" % (pattern, need_val))
+        elif key == "pcap":
+            # Handle below...
+            pass
+        else:
+            raise Exception("unknown requires types: %s" % (key))
+
+
 def find_value(name, obj):
     """Find the value in an object for a field specified by name.
 
@@ -371,22 +436,18 @@ class FilterCheck:
         self.suri_version = suricata_config.version
 
     def run(self):
+        requires = self.config.get("requires", {})
         req_version = self.config.get("version")
         min_version = self.config.get("min-version")
-        expr = "equal" if req_version else "gte"
-        if (req_version == None) ^ (min_version == None):
-            version = req_version or min_version
-            if not is_version_compatible(version=version,
-                    suri_version=self.suri_version, expr=expr):
-                raise UnsatisfiedRequirementError(
-                        "Suricata v{} not found".format(version))
-        elif req_version and min_version:
-            raise TestError("Specify either min-version or version")
+        if req_version is not None:
+            requires["version"] = req_version
+        if min_version is not None:
+            requires["min-version"] = min_version
         feature = self.config.get("feature")
-        if feature != None:
-            if not self.suricata_config.has_feature(feature):
-                raise UnsatisfiedRequirementError(
-                                                  "Suricata feature {} not present".format(feature))
+        if feature is not None:
+            requires["features"] = [feature]
+        check_requires(requires, self.suricata_config)
+
         if "filename" in self.config:
             json_filename = self.config["filename"]
         else:
@@ -503,64 +564,8 @@ class TestRunner:
                                         key, need_val))
 
     def check_requires(self):
-        if "requires" in self.config:
-            requires = self.config["requires"]
-            if not requires:
-                return True
-        else:
-            requires = {}
-        suri_version = self.suricata_config.version
-        for key in requires:
-            if key == "min-version":
-                min_version = requires["min-version"]
-                if not is_version_compatible(version=min_version,
-                        suri_version=suri_version, expr="gte"):
-                    raise UnsatisfiedRequirementError(
-                            "requires at least version {}".format(min_version))
-            elif key == "lt-version":
-                lt_version = requires["lt-version"]
-                if not is_version_compatible(version=lt_version,
-                        suri_version=suri_version, expr="lt"):
-                    raise UnsatisfiedRequirementError(
-                            "for version less than {}".format(lt_version))
-            elif key == "version":
-                req_version = requires["version"]
-                if not is_version_compatible(version=req_version,
-                        suri_version=suri_version, expr="equal"):
-                    raise UnsatisfiedRequirementError(
-                            "only for version {}".format(req_version))
-            elif key == "features":
-                for feature in requires["features"]:
-                    if not self.suricata_config.has_feature(feature):
-                        raise UnsatisfiedRequirementError(
-                            "requires feature %s" % (feature))
-
-            elif key == "env":
-                for env in requires["env"]:
-                    if not env in os.environ:
-                        raise UnsatisfiedRequirementError(
-                            "requires env var %s" % (env))
-
-            elif key == "files":
-                for filename in requires["files"]:
-                    if not os.path.exists(filename):
-                        raise UnsatisfiedRequirementError(
-                            "requires file %s" % (filename))
-
-            elif key == "script":
-                for script in requires["script"]:
-                    try:
-                        subprocess.check_call("%s" % script, shell=True)
-                    except:
-                        raise UnsatisfiedRequirementError(
-                            "requires script returned false")
-
-            elif key == "pcap":
-                # Handle below...
-                pass
-
-            else:
-                raise Exception("unknown requires types: %s" % (key))
+        requires = self.config.get("requires", {})
+        check_requires(requires, self.suricata_config)
 
         # Check if a pcap is required or not. By default a pcap is
         # required unless a "command" has been provided.
