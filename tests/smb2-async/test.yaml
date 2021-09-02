@@ -1,0 +1,13 @@
+requires:
+  min-version: 7
+
+# disables checksum verification
+args:
+- -k none --set stream.midstream=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.rename.from: "UsuarioA\\Desktop\\directorioCompartido\\11\\148\\1538\\F9768.pdf"
