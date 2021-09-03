@@ -1,0 +1,1 @@
+drop tcp any any -> any any (noalert; sid:1; rev:1;)

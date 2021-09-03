@@ -1,0 +1,25 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+    - HAVE_NSS
+  min-version: 7
+
+args:
+  - --simulate-ips
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        pcap_cnt: 1
+        alert.signature_id: 1
+  - filter:
+      count: 969
+      match:
+        event_type: drop
