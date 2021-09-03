@@ -1,0 +1,3 @@
+drop icmp any any -> 8.8.8.8 any (msg:"Drop ICMP"; sid:10002;)
+pass ip any any -> any any (msg:"Pass IP"; sid:1004;)
+pass tcp any any -> any 22 (sid:1;)
