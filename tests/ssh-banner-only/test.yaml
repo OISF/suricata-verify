@@ -1,5 +1,5 @@
 requires:
-  min-version: 6.0.0
+  lt-version: 7
 features:
     - RUST
 
@@ -17,7 +17,7 @@ checks:
         ssh.client.software_version: "OpenSSH_for_Windows_7.7"
         ssh.server.software_version: "OpenSSH_7.4"
   - filter:
-      count: 1
+      count: 2
       match:
         event_type: alert
         alert.signature_id: 1
