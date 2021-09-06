@@ -1,6 +1,7 @@
 requires:
   features:
     - HAVE_LIBJANSSON
+    - HTTP2_DECOMPRESSION
   min-version: 6.0.0
 
 # disables checksum verification
