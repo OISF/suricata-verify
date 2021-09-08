@@ -152,7 +152,8 @@ def handle_exceptions(func):
             check_args_fail()
             kwargs["count"]["failure"] += 1
         except UnsatisfiedRequirementError as ue:
-            print("===> {}: Sub test #{}: SKIPPED : {}".format(kwargs["test_name"], kwargs["test_num"], ue))
+            if args and not args[0].quiet:
+                print("===> {}: Sub test #{}: SKIPPED : {}".format(kwargs["test_name"], kwargs["test_num"], ue))
             kwargs["count"]["skipped"] += 1
         else:
             if result:
@@ -476,13 +477,15 @@ class FilterCheck:
 
 class TestRunner:
 
-    def __init__(self, cwd, directory, outdir, suricata_config, verbose=False, force=False):
+    def __init__(self, cwd, directory, outdir, suricata_config, verbose=False,
+                 force=False, quiet=False):
         self.cwd = cwd
         self.directory = directory
         self.suricata_config = suricata_config
         self.verbose = verbose
         self.force = force
         self.output = outdir
+        self.quiet = quiet
 
         # The name is just the directory name.
         self.name = os.path.basename(self.directory)
@@ -649,9 +652,11 @@ class TestRunner:
                 return check_value
 
         if not check_value["failure"] and not check_value["skipped"]:
-            print("===> %s: OK%s" % (os.path.basename(self.directory), " (%dx)" % count if count > 1 else ""))
+            if not self.quiet:
+                print("===> %s: OK%s" % (os.path.basename(self.directory), " (%dx)" % count if count > 1 else ""))
         elif not check_value["failure"]:
-            print("===> {}: OK (checks: {}, skipped: {})".format(os.path.basename(self.directory), sum(check_value.values()), check_value["skipped"]))
+            if not self.quiet:
+                print("===> {}: OK (checks: {}, skipped: {})".format(os.path.basename(self.directory), sum(check_value.values()), check_value["skipped"]))
         return check_value
 
     def pre_check(self):
@@ -866,7 +871,8 @@ def run_test(dirpath, args, cwd, suricata_config):
         outdir = os.path.join(os.path.realpath(args.outdir), name, "output")
 
     test_runner = TestRunner(
-        cwd, dirpath, outdir, suricata_config, args.verbose, args.force)
+        cwd, dirpath, outdir, suricata_config, args.verbose, args.force,
+        args.quiet)
     try:
         results = test_runner.run()
         if results["failure"] > 0:
@@ -880,7 +886,8 @@ def run_test(dirpath, args, cwd, suricata_config):
             with lock:
                 count_dict["passed"] += 1
     except UnsatisfiedRequirementError as ue:
-        print("===> {}: SKIPPED: {}".format(os.path.basename(dirpath), ue))
+        if not args.quiet:
+            print("===> {}: SKIPPED: {}".format(os.path.basename(dirpath), ue))
         with lock:
             count_dict["skipped"] += 1
     except TestError as te:
@@ -934,6 +941,8 @@ def main():
                         help="Run self tests")
     parser.add_argument("--debug-failed", dest="debugfailed", action="store_true",
                         help="Prints debug output for failed tests")
+    parser.add_argument("-q", "--quiet", dest="quiet", action="store_true",
+                        help="Only show failures and end summary")
     parser.add_argument("patterns", nargs="*", default=[])
     if LINUX:
         parser.add_argument("-j", type=int, default=min(8, mp.cpu_count()),
