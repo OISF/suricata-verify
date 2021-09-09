@@ -31,6 +31,7 @@ outputs:
       filetype: regular #regular|syslog|unix_dgram|unix_stream|redis
       filename: eve.json
       types:
+        - frame
         - alert:
             payload: yes
             payload-buffer-size: 4kb

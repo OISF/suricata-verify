@@ -42,3 +42,15 @@ checks:
         fileinfo.size: 70
         fileinfo.state: "TRUNCATED"
         fileinfo.gaps: true
+
+  - filter:
+      count: 1
+      match:
+        event_type: frame
+        app_proto: http
+        frame.id: 1
+        frame.stream_offset: 0
+        frame.type: request
+        frame.length: 40
+        frame.direction: toserver
+        frame.tx_id: 0
