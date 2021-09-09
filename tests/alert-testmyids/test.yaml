@@ -6,11 +6,11 @@ checks:
 
   # Check that we only have one alert event type in eve.
   - filter:
-      count: 1
+      count: 4
       match:
         event_type: alert
 
   # Check how many lines were logged to fast.log.
   - shell:
       args: cat fast.log | wc -l | xargs
-      expect: 1
+      expect: 4
