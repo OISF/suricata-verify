@@ -1,0 +1,22 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      types:
+        - alert:
+            tagged-packets: yes
+        # app layer frames
+        - frame:
+            enabled: yes
+        - anomaly:
+            enabled: yes
+            types:
+              # decode: no
+              # stream: no
+              # applayer: yes
+            #packethdr: no
+        - http:
+            extended: yes
+        - files

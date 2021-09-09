@@ -22,3 +22,12 @@ checks:
       match:
         event_type: alert
         files[0].filename: "\\eicar"
+  - filter:
+      count: 1
+      match:
+        event_type: frame
+        frame.direction: toserver
+        frame.type: "smb1.data"
+        frame.stream_offset: 853
+        frame.length: 100
+        frame.payload: "Dv8AAAAAQAAAAAAAAAAAAAAAAAAARABAAAAAAABFAABYNU8hUCVAQVBbNFxQWlg1NChQXik3Q0MpN30kRUlDQVItU1RBTkRBUkQtQU5USVZJUlVTLVRFU1QtRklMRSEkSCtIKg=="

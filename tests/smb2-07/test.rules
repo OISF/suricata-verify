@@ -1,0 +1,13 @@
+alert smb any any -> any any (flow:to_server; frame:smb2.pdu; content:"This program cannot be run in DOS mode.|0d 0d 0a|"; sid:1;)
+alert smb any any -> any any (flow:to_server; frame:smb2.pdu; content:"|C0 40 88 41|"; endswith; sid:2;)
+alert smb any any -> any any (flow:to_server; frame:smb2.data; content:"|C0 40 88 41|"; endswith; sid:11;)
+
+alert smb any any -> any any (flow:to_server; frame:smb2.pdu; content:"|FE|SMB"; startswith; sid:3;)
+alert smb any any -> any any (flow:to_server; frame:smb2.hdr; content:"|FE|SMB"; startswith; sid:4;)
+alert smb any any -> any any (flow:to_server; frame:smb2.data; content:"|FE|SMB"; startswith; sid:5;)
+alert smb any any -> any any (flow:to_server; frame:smb2.data; content:!"|FE|SMB"; startswith; sid:6;)
+
+alert smb any any -> any any (flow:to_client; frame:smb2.pdu; content:"|FE|SMB"; startswith; sid:7;)
+alert smb any any -> any any (flow:to_client; frame:smb2.hdr; content:"|FE|SMB"; startswith; sid:8;)
+alert smb any any -> any any (flow:to_client; frame:smb2.data; content:"|FE|SMB"; startswith; sid:9;)
+alert smb any any -> any any (flow:to_client; frame:smb2.data; content:!"|FE|SMB"; startswith; sid:10;)
