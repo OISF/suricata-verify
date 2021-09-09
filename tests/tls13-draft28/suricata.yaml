@@ -7,6 +7,8 @@ outputs:
       filetype: regular #regular|syslog|unix_dgram|unix_stream|redis
       filename: eve.json
       types:
+        - alert
+        - record
         - tls:
             extended: yes     # enable this for extended logging information
 

@@ -22,3 +22,11 @@ checks:
       match:
         event_type: alert
         files[0].filename: "\\eicar"
+  - filter:
+      count: 1
+      match:
+        event_type: record
+        record.type: "smb1.data"
+        record.offset: 853
+        record.length: 68
+        record.payload: "Dv8AAAAAQAAAAAAAAAAAAAAAAAAARABAAAAAAABFAABYNU8hUCVAQVBbNFxQWlg1NChQXik3Q0MpN30kRUlDQVItU1Q="
