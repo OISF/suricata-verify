@@ -1,0 +1,1 @@
+alert pkthdr any any -> any any (msg:"SURICATA FRAG IPv6 Fragment invalid length"; decode-event:ipv6.frag_invalid_length; classtype:protocol-command-decode; sid:2200119; rev:1;)
