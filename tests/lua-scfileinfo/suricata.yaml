@@ -1,0 +1,16 @@
+%YAML 1.1
+---
+
+outputs:
+  - lua:
+      enabled: yes
+      scripts-dir: .
+      scripts:
+          - scfileinfo.lua
+
+  - file-store:
+      version: 2
+      enabled: yes
+      force-filestore: yes
+      force-hash: [sha256, sha1, md5]
+
