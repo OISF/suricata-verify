@@ -1,0 +1,9 @@
+requires:
+  features:
+      - HAVE_LUA
+
+checks:
+  - file-compare:
+      # Two files should be identical
+      filename: scfileinfo.log
+      expected: expected/scfileinfo.log
