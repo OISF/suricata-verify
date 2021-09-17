@@ -45,6 +45,7 @@ jobs:
                 libyaml-dev \
                 libcap-ng-dev \
                 libcap-ng0 \
+                liblua5.1-dev \
                 libmagic-dev \
                 libnetfilter-queue-dev \
                 libnetfilter-queue1 \
@@ -75,7 +76,7 @@ jobs:
         working-directory: suricata
         run: |
           ./autogen.sh
-          ./configure
+          ./configure --enable-lua
           make -j2
       - name: Running suricata-verify
         working-directory: suricata
