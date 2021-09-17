@@ -15,8 +15,8 @@ jobs:
       - run: sudo apt -y install tshark
       - run: ./pcapng-check.sh
 
-  suricata:
-    name: suricata
+  ubuntu-18-04:
+    name: Ubuntu 18.04
     runs-on: ubuntu-18.04
     container: ubuntu:18.04
     strategy:
@@ -83,7 +83,7 @@ jobs:
         run: python3 ../run.py
 
   almalinux:
-    name: almalinux
+    name: AlmaLinux 8
     runs-on: ubuntu-latest
     container: almalinux:latest
     strategy:
