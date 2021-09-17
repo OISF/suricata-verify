@@ -12,7 +12,7 @@ checks:
 
   - filter:
       requires:
-        version: 7
+        min-version: 6
       count: 1
       match:
         event_type: fileinfo
@@ -21,7 +21,7 @@ checks:
         fileinfo.size: 99400
   - filter:
       requires:
-        lt-version: 7
+        lt-version: 6
       count: 1
       match:
         event_type: fileinfo
