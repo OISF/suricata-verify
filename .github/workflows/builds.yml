@@ -80,3 +80,69 @@ jobs:
       - name: Running suricata-verify
         working-directory: suricata
         run: python3 ../run.py
+
+  almalinux:
+    name: almalinux
+    runs-on: ubuntu-latest
+    container: almalinux:latest
+    strategy:
+      fail-fast: false
+      matrix:
+        branch:
+          - master
+          - master-5.0.x
+          - master-6.0.x
+    steps:
+      - name: Install dependencies
+        run: |
+          yum -y install dnf-plugins-core
+          yum config-manager --set-enabled powertools
+          yum -y install \
+                autoconf \
+                automake \
+                cargo-vendor \
+                diffutils \
+                file-devel \
+                gcc \
+                gcc-c++ \
+                git \
+                jansson-devel \
+                jq \
+                lua-devel \
+                libtool \
+                libyaml-devel \
+                libnfnetlink-devel \
+                libnetfilter_queue-devel \
+                libnet-devel \
+                libcap-ng-devel \
+                libevent-devel \
+                libmaxminddb-devel \
+                libpcap-devel \
+                libtool \
+                lz4-devel \
+                make \
+                nss-devel \
+                pcre-devel \
+                pkgconfig \
+                python3-devel \
+                python3-sphinx \
+                python3-yaml \
+                rust-toolset \
+                sudo \
+                which \
+                zlib-devel
+      - run: cargo install --force --debug cbindgen
+      - run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+      - uses: actions/checkout@v2
+      - run: python3 ./run.py --self-test
+      - run: git clone https://github.com/OISF/suricata -b ${{ matrix.branch }}
+      - run: git clone https://github.com/OISF/libhtp suricata/libhtp
+      - name: Build Suricata
+        working-directory: suricata
+        run: |
+          ./autogen.sh
+          ./configure --enable-lua
+          make -j2
+      - name: Running suricata-verify
+        working-directory: suricata
+        run: python3 ../run.py --quiet
