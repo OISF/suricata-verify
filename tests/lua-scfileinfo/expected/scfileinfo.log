@@ -4,7 +4,6 @@ size: 1054 [**] magic: nomagic
 md5: c0b818de79d068db0a989ed35044cd62
 sha1: afb4fb1ad18223825cfb7ce5bf506e0f9dc47d5c
 sha256: 57b43ee07432cf8a8b8a17d9d712138194e4564e4b36963a34c495b576b404fe
-
 ** SCFileInfo is: [**] fileid: 2 [**] txid: 1
 name: /en-US/static/@95063/js/contrib/lowpro_for_jquery.js
 size: 4096 [**] magic: nomagic

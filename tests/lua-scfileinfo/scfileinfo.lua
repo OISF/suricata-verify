@@ -19,7 +19,7 @@ function log(args)
         magic = "nomagic"
     end
 
-    file:write ("** SCFileInfo is: [**] fileid: " .. fileid .. " [**] txid: " .. txid .. "\nname: " .. name .. "\nsize: " .. size .. " [**] magic: " .. magic .. "\nmd5: " .. md5 .. " \nsha1: " .. sha1 .. "\nsha256: " .. sha256 .. "\n\n")
+    file:write ("** SCFileInfo is: [**] fileid: " .. fileid .. " [**] txid: " .. txid .. "\nname: " .. name .. "\nsize: " .. size .. " [**] magic: " .. magic .. "\nmd5: " .. md5 .. "\nsha1: " .. sha1 .. "\nsha256: " .. sha256 .. "\n")
     file:flush()
 end
 
