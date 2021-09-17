@@ -1,0 +1,28 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 7.0.0
+
+# disables checksum verification
+args:
+  - -k none --set stream.midstream=true
+
+checks:
+
+  # Check that there is one file event with content range.
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.url: /robots.txt
+        http.status: 101
+  - filter:
+      count: 0
+      match:
+        event_type: http
+        http.http2.stream_id: 0
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
