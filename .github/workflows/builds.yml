@@ -80,7 +80,7 @@ jobs:
           make -j2
       - name: Running suricata-verify
         working-directory: suricata
-        run: python3 ../run.py
+        run: python3 ../run.py --quiet
 
   almalinux:
     name: AlmaLinux 8
