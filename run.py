@@ -574,8 +574,6 @@ class TestRunner:
             self.check_requires()
             self.check_skip()
 
-        if WIN32 and os.path.exists(os.path.join(self.directory, "check.sh")):
-            raise UnsatisfiedRequirementError("check.sh tests are not supported on Windows")
         if WIN32 and "setup" in self.config:
             raise UnsatisfiedRequirementError("test \"setup\" not supported on Windows")
 
@@ -648,8 +646,7 @@ class TestRunner:
                     r, expected_exit_code));
 
             check_value = self.check()
-            if check_value["check_sh"]:
-                return check_value
+            return check_value
 
         if not check_value["failure"] and not check_value["skipped"]:
             if not self.quiet:
@@ -695,7 +692,6 @@ class TestRunner:
             "success": 0,
             "failure": 0,
             "skipped": 0,
-            "check_sh": 0,
                 }
         try:
             self.pre_check()
@@ -715,39 +711,13 @@ class TestRunner:
         if count["failure"] or count["skipped"]:
             return count
 
-        # Old style check script.
-        pdir = os.getcwd()
-        os.chdir(self.output)
-        try:
-            if not os.path.exists(os.path.join(self.directory, "check.sh")):
-                success_c = count["success"]
-                # Covering cases like "tests/show-help" which do not have
-                # check.sh and/or no checks in test.yaml should be counted
-                # successful
-                count["success"] = 1 if not success_c else success_c
-                return count
-            extraenv = {
-                # The suricata source directory.
-                "SRCDIR": self.cwd,
-                "TZ": "UTC",
-                "TEST_DIR": self.directory,
-                "OUTPUT_DIR": self.output,
-                "TOPDIR": TOPDIR,
-            }
-            env = os.environ.copy()
-            env.update(extraenv)
-            r = subprocess.call(
-                [os.path.join(self.directory, "check.sh")], env=env)
-            if r != 0:
-                print("FAILED: verification failed")
-                count["failure"] = 1
-                count["check_sh"] = 1
-                return count
-            else:
-                count["success"] = 1
-            return count
-        finally:
-            os.chdir(pdir)
+        # Covering cases like "tests/show-help" which do not have
+        # check.sh and/or no checks in test.yaml should be counted
+        # successful
+        success_c = count["success"]
+        count["success"] = 1 if not success_c else success_c
+
+        return count
 
     def default_args(self):
         args = []
@@ -997,7 +967,7 @@ def main():
                 continue
 
         # Check if there are sub-test directories
-        if "test.yaml" in filenames or "check.sh" in filenames:
+        if "test.yaml" in filenames:
             # gets used by os.walk in this for loop
             dirnames[0:] = []
         else:
