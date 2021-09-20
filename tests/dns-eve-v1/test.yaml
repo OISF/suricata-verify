@@ -2,3 +2,13 @@ requires:
   features:
     - HAVE_LIBJANSSON
   lt-version: 7
+
+checks:
+  - filter:
+      count: 4
+      match:
+        dns.type: query
+  - filter:
+      count: 5
+      match:
+        dns.type: answer
