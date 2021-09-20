@@ -2,3 +2,15 @@ requires:
   features:
     - HAVE_LIBJANSSON
   lt-version: 7
+
+checks:
+  - filter:
+      count: 1
+      match:
+        dns.type: query
+        dns.rrname: suricon.net
+  - filter:
+      count: 1
+      match:
+        dns.type: answer
+        dns.rdata: "181.224.138.142"

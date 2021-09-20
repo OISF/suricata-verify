@@ -3,3 +3,10 @@ requires:
   min-version: 4.1.0
   features:
     - HAVE_LIBJANSSON
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.decoder.tcp: 7

@@ -1,3 +1,15 @@
 requires:
   features:
     - HAVE_LIBJANSSON
+
+checks:
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 2260000
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: http
+        app_proto_tc: ssh
