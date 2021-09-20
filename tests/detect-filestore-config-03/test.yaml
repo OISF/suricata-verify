@@ -2,3 +2,8 @@ requires:
   min-version: 5.0.1
   features:
     - HAVE_NSS
+
+checks:
+  - shell:
+      args: |
+        grep -v '\[ERRCODE: SC_WARN_ALERT_CONFIG(324)\] - One or more rule(s) depends on the file-store output log which is not enabled. Enable the output "file-store"' stdout

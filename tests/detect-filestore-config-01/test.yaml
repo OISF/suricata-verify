@@ -7,3 +7,8 @@ command: |
   ${SRCDIR}/src/suricata --set classification-file="${SRCDIR}/classification.config"    \
       --set reference-config-file="${SRCDIR}/reference.config" -l ${OUTPUT_DIR}         \
       -c "${TEST_DIR}/suricata.yaml" -S ${TEST_DIR}/test.rules --engine-analysis
+
+checks:
+  - shell:
+      args: |
+        grep -v -q "Warning: Rule requires file-store but the output file-store is not enabled." rules_analysis.txt
