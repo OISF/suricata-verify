@@ -1,0 +1,183 @@
+requires:
+# Pgsql was released on version 7.0
+  min-version: 7.0 
+
+args:
+- -k none
+
+checks:
+# subtest 1
+- filter:
+    count: 1
+    match:
+      dest_ip: 10.16.1.11
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 7
+      pgsql.request.message: SSL Request
+      pgsql.response.ssl_accepted: false
+      pgsql.tx_id: 1
+      proto: TCP
+      src_ip: 10.16.1.10
+      src_port: 40784
+# subtest 2
+- filter:
+    count: 1
+    match:
+      dest_ip: 10.16.1.11
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 11
+      pgsql.request.protocol_version: '3.0'
+      pgsql.request.startup_parameters.database: indexer
+      pgsql.request.startup_parameters.optional_parameters[0].application_name: psql
+      pgsql.request.startup_parameters.optional_parameters[1].client_encoding: UTF8
+      pgsql.request.startup_parameters.user: indexer
+      pgsql.response.authentication_md5_password: \x88'N5
+      pgsql.tx_id: 2
+      proto: TCP
+      src_ip: 10.16.1.10
+      src_port: 40784
+# subtest 3
+- filter:
+    count: 1
+    match:
+      dest_ip: 10.16.1.11
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 21
+      pgsql.request.message: SSL Request
+      pgsql.response.ssl_accepted: false
+      pgsql.tx_id: 1
+      proto: TCP
+      src_ip: 10.16.1.10
+      src_port: 40816
+# subtest 4
+- filter:
+    count: 1
+    match:
+      dest_ip: 10.16.1.11
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 25
+      pgsql.request.protocol_version: '3.0'
+      pgsql.request.startup_parameters.database: indexer
+      pgsql.request.startup_parameters.optional_parameters[0].application_name: psql
+      pgsql.request.startup_parameters.optional_parameters[1].client_encoding: UTF8
+      pgsql.request.startup_parameters.user: indexer
+      pgsql.response.authentication_md5_password: "\\x9fi\x1A\\x8e"
+      pgsql.tx_id: 2
+      proto: TCP
+      src_ip: 10.16.1.10
+      src_port: 40816
+# subtest 5
+- filter:
+    count: 1
+    match:
+      dest_ip: 10.16.1.11
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 29
+      pgsql.request.password: md5e4cfa9552468cae5d48ca2822ca36e22 
+      pgsql.response.message: authentication_ok
+      pgsql.response.parameter_status[0].application_name: psql
+      pgsql.response.parameter_status[10].time_zone: Etc/UTC
+      pgsql.response.parameter_status[1].client_encoding: UTF8
+      pgsql.response.parameter_status[2].date_style: ISO, MDY
+      pgsql.response.parameter_status[3].integer_datetimes: 'on'
+      pgsql.response.parameter_status[4].interval_style: postgres
+      pgsql.response.parameter_status[5].is_superuser: 'on'
+      pgsql.response.parameter_status[6].server_encoding: UTF8
+      pgsql.response.parameter_status[7].server_version: 13.0 (Debian 13.0-1.pgdg100+1)
+      pgsql.response.parameter_status[8].session_authorization: indexer
+      pgsql.response.parameter_status[9].standard_conforming_strings: 'on'
+      pgsql.response.process_id: 61
+      pgsql.response.secret_key: 3152142766
+      pgsql.tx_id: 3
+      proto: TCP
+      src_ip: 10.16.1.10
+      src_port: 40816
+# subtest 6
+- filter:
+    count: 1
+    match:
+      dest_ip: 10.16.1.11
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 35
+      pgsql.request.simple_query: select * from rules where sid = 2021701;
+      pgsql.response.command_completed: SELECT 3
+      pgsql.response.data_rows: 3
+      pgsql.response.data_size: 1104
+      pgsql.response.field_count: 10
+      pgsql.tx_id: 4
+      proto: TCP
+      src_ip: 10.16.1.10
+      src_port: 40816
+# subtest 7
+- filter:
+    count: 1
+    match:
+      dest_ip: 10.16.1.11
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 41
+      pgsql.request.message: termination_message
+      pgsql.tx_id: 5
+      proto: TCP
+      src_ip: 10.16.1.10
+      src_port: 40816
+# subtest 8
+- filter:
+    count: 1
+    match:
+      app_proto: pgsql
+      dest_ip: 10.16.1.11
+      dest_port: 5432
+      event_type: flow
+      flow.age: 9
+      flow.alerted: false
+      flow.bytes_toclient: 2717
+      flow.bytes_toserver: 1180
+      flow.pkts_toclient: 12
+      flow.pkts_toserver: 15
+      flow.reason: shutdown
+      flow.state: closed
+      proto: TCP
+      src_ip: 10.16.1.10
+      src_port: 40816
+      tcp.ack: true
+      tcp.fin: true
+      tcp.psh: true
+      tcp.state: closed
+      tcp.syn: true
+      tcp.tcp_flags: 1b
+      tcp.tcp_flags_tc: 1b
+      tcp.tcp_flags_ts: 1b
+# subtest 9
+- filter:
+    count: 1
+    match:
+      app_proto: pgsql
+      dest_ip: 10.16.1.11
+      dest_port: 5432
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 418
+      flow.bytes_toserver: 626
+      flow.pkts_toclient: 6
+      flow.pkts_toserver: 8
+      flow.reason: shutdown
+      flow.state: closed
+      proto: TCP
+      src_ip: 10.16.1.10
+      src_port: 40784
+      tcp.ack: true
+      tcp.fin: true
+      tcp.psh: true
+      tcp.state: closed
+      tcp.syn: true
+      tcp.tcp_flags: 1b
+      tcp.tcp_flags_tc: 1b
+      tcp.tcp_flags_ts: 1b

@@ -1,0 +1,103 @@
+requires:
+# Pgsql was released on version 7.0
+  min-version: 7.0 
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 6
+      pgsql.request.message: SSL Request
+      pgsql.response.ssl_accepted: false
+      pgsql.tx_id: 1
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 41662
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 9
+      pgsql.request.protocol_version: '3.0'
+      pgsql.request.startup_parameters.database: Test
+      pgsql.request.startup_parameters.optional_parameters[0].application_name: psql
+      pgsql.request.startup_parameters.optional_parameters[1].client_encoding: UTF8
+      pgsql.request.startup_parameters.user: ju-Test
+      pgsql.response.message: authentication_cleartext_password
+      pgsql.tx_id: 2
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 41662
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 12
+      pgsql.request.password_message: password log disabled
+      pgsql.response.message: authentication_ok
+      pgsql.response.parameter_status[0].application_name: psql
+      pgsql.response.parameter_status[10].time_zone: Europe/London
+      pgsql.response.parameter_status[1].client_encoding: UTF8
+      pgsql.response.parameter_status[2].date_style: ISO, DMY
+      pgsql.response.parameter_status[3].integer_datetimes: 'on'
+      pgsql.response.parameter_status[4].interval_style: postgres
+      pgsql.response.parameter_status[5].is_superuser: 'on'
+      pgsql.response.parameter_status[6].server_encoding: UTF8
+      pgsql.response.parameter_status[7].server_version: '13.4'
+      pgsql.response.parameter_status[8].session_authorization: ju-Test
+      pgsql.response.parameter_status[9].standard_conforming_strings: 'on'
+      pgsql.response.process_id: 11828
+      pgsql.response.secret_key: 3666668912
+      pgsql.tx_id: 3
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 41662
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.102
+      dest_port: 41662
+      event_type: pgsql
+      pcap_cnt: 15
+      pgsql.request.message: termination_message
+      pgsql.tx_id: 4
+      proto: TCP
+      src_ip: 192.168.1.74
+      src_port: 5432
+- filter:
+    count: 1
+    match:
+      app_proto: pgsql
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: flow
+      flow.age: 24
+      flow.alerted: false
+      flow.bytes_toclient: 693
+      flow.bytes_toserver: 668
+      flow.pkts_toclient: 6
+      flow.pkts_toserver: 10
+      flow.reason: shutdown
+      flow.state: closed
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 41662
+      tcp.ack: true
+      tcp.fin: true
+      tcp.psh: true
+      tcp.rst: true
+      tcp.state: closed
+      tcp.syn: true
+      tcp.tcp_flags: 1f
+      tcp.tcp_flags_tc: 1e
+      tcp.tcp_flags_ts: 1b
