@@ -1,0 +1,113 @@
+requires:
+# Pgsql was released on version 7.0
+  min-version: 7.0
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 6
+      pgsql.request.message: SSL Request
+      pgsql.response.message: SSL Rejected
+      pgsql.tx_id: 1
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 41662
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 9
+      pgsql.request.startup_message.protocol_version: '3.0'
+      pgsql.request.startup_message.startup_parameters.database: Test
+      pgsql.request.startup_message.startup_parameters.user: ju-Test
+      pgsql.response.message: authentication_cleartext_password
+      pgsql.tx_id: 2
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 41662
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 12
+      pgsql.request.password_message: password log disabled
+      pgsql.responses[0].message: authentication_ok
+      pgsql.responses[10].parameter_status.name: standard_conforming_strings
+      pgsql.responses[10].parameter_status.value: 'on'
+      pgsql.responses[11].parameter_status.name: TimeZone
+      pgsql.responses[11].parameter_status.value: Europe/London
+      pgsql.responses[12].backend_key_data.process_id: 11828
+      pgsql.responses[12].backend_key_data.secret_key: 3666668912
+      pgsql.responses[13].ready_for_query.transaction_status: I
+      pgsql.responses[1].parameter_status.name: application_name
+      pgsql.responses[1].parameter_status.value: psql
+      pgsql.responses[2].parameter_status.name: client_encoding
+      pgsql.responses[2].parameter_status.value: UTF8
+      pgsql.responses[3].parameter_status.name: DateStyle
+      pgsql.responses[3].parameter_status.value: ISO, DMY
+      pgsql.responses[4].parameter_status.name: integer_datetimes
+      pgsql.responses[4].parameter_status.value: 'on'
+      pgsql.responses[5].parameter_status.name: IntervalStyle
+      pgsql.responses[5].parameter_status.value: postgres
+      pgsql.responses[6].parameter_status.name: is_superuser
+      pgsql.responses[6].parameter_status.value: 'on'
+      pgsql.responses[7].parameter_status.name: server_encoding
+      pgsql.responses[7].parameter_status.value: UTF8
+      pgsql.responses[8].parameter_status.name: server_version
+      pgsql.responses[8].parameter_status.value: '13.4'
+      pgsql.responses[9].parameter_status.name: session_authorization
+      pgsql.responses[9].parameter_status.value: ju-Test
+      pgsql.tx_id: 3
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 41662
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.102
+      dest_port: 41662
+      event_type: pgsql
+      pcap_cnt: 15
+      pgsql.request.message: termination_message
+      pgsql.tx_id: 4
+      proto: TCP
+      src_ip: 192.168.1.74
+      src_port: 5432
+- filter:
+    count: 1
+    match:
+      app_proto: pgsql
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: flow
+      flow.age: 24
+      flow.alerted: false
+      flow.bytes_toclient: 693
+      flow.bytes_toserver: 668
+      flow.pkts_toclient: 6
+      flow.pkts_toserver: 10
+      flow.reason: shutdown
+      flow.state: closed
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 41662
+      tcp.ack: true
+      tcp.fin: true
+      tcp.psh: true
+      tcp.rst: true
+      tcp.state: closed
+      tcp.syn: true
+      tcp.tcp_flags: 1f
+      tcp.tcp_flags_tc: 1e
+      tcp.tcp_flags_ts: 1b

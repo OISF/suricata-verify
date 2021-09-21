@@ -1,0 +1,20 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - tls:
+            extended: no            
+        - pgsql
+        - flow
+
+app-layer:
+  protocols:
+    tls:
+      enabled: yes
+    pgsql:
+      enabled: yes
