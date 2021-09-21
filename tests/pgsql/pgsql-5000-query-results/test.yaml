@@ -1,0 +1,115 @@
+requires:
+# Pgsql was released on version 7.0
+  min-version: 7.0 
+
+args:
+- -k none
+
+checks:
+# subtest 1
+- filter:
+    count: 1
+    match:
+      dest_ip: 172.18.0.2
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 21
+      pgsql.request.message: SSL Request
+      pgsql.response.ssl_accepted: false
+      pgsql.tx_id: 1
+      proto: TCP
+      src_ip: 172.18.0.1
+      src_port: 54408
+# subtest 2
+- filter:
+    count: 1
+    match:
+      dest_ip: 172.18.0.2
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 25
+      pgsql.request.protocol_version: '3.0'
+      pgsql.request.startup_parameters.database: rules
+      pgsql.request.startup_parameters.optional_parameters[0].application_name: psql
+      pgsql.request.startup_parameters.optional_parameters[1].client_encoding: UTF8
+      pgsql.request.startup_parameters.user: rules
+      pgsql.response.authentication_md5_password: Z\xdc\xfdf
+      pgsql.tx_id: 2
+      proto: TCP
+      src_ip: 172.18.0.1
+      src_port: 54408
+# subtest 3
+- filter:
+    count: 1
+    match:
+      dest_ip: 172.18.0.2
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 11
+      pgsql.request.protocol_version: '3.0'
+      pgsql.request.startup_parameters.database: rules
+      pgsql.request.startup_parameters.optional_parameters[0].application_name: psql
+      pgsql.request.startup_parameters.optional_parameters[1].client_encoding: UTF8
+      pgsql.request.startup_parameters.user: rules
+      pgsql.response.authentication_md5_password: "\\xcaT\r'"
+      pgsql.tx_id: 2
+      proto: TCP
+      src_ip: 172.18.0.1
+      src_port: 54406
+# subtest 4
+- filter:
+    count: 1
+    match:
+      dest_ip: 172.18.0.2
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 29
+      pgsql.request.password_message: password log disabled
+      pgsql.response.message: authentication_ok
+      pgsql.response.parameter_status[0].application_name: psql
+      pgsql.response.parameter_status[10].time_zone: Etc/UTC
+      pgsql.response.parameter_status[1].client_encoding: UTF8
+      pgsql.response.parameter_status[2].date_style: ISO, MDY
+      pgsql.response.parameter_status[3].integer_datetimes: 'on'
+      pgsql.response.parameter_status[4].interval_style: postgres
+      pgsql.response.parameter_status[5].is_superuser: 'on'
+      pgsql.response.parameter_status[6].server_encoding: UTF8
+      pgsql.response.parameter_status[7].server_version: 13.4 (Debian 13.4-1.pgdg100+1)
+      pgsql.response.parameter_status[8].session_authorization: rules
+      pgsql.response.parameter_status[9].standard_conforming_strings: 'on'
+      pgsql.response.process_id: 781
+      pgsql.response.secret_key: 2527955820
+      pgsql.tx_id: 3
+      proto: TCP
+      src_ip: 172.18.0.1
+      src_port: 54408
+# subtest 5
+- filter:
+    count: 1
+    match:
+      dest_ip: 172.18.0.2
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 780
+      pgsql.request.simple_query: select * from rule limit 5000;
+      pgsql.response.command_completed: SELECT 5000
+      pgsql.response.data_rows: 5000
+      pgsql.response.data_size: 3035751
+      pgsql.response.field_count: 7
+      pgsql.tx_id: 4
+      proto: TCP
+      src_ip: 172.18.0.1
+      src_port: 54408
+# subtest 6
+- filter:
+    count: 1
+    match:
+      dest_ip: 172.18.0.1
+      dest_port: 54408
+      event_type: pgsql
+      pcap_cnt: 782
+      pgsql.request.message: termination_message
+      pgsql.tx_id: 5
+      proto: TCP
+      src_ip: 172.18.0.2
+      src_port: 5432
