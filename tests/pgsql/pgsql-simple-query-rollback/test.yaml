@@ -1,0 +1,440 @@
+requires:
+# Pgsql was released on version 7.0
+  min-version: 7.0 
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 6
+      pgsql.request.message: SSL Request
+      pgsql.response.ssl_accepted: false
+      pgsql.tx_id: 1
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 44848
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 9
+      pgsql.request.protocol_version: '3.0'
+      pgsql.request.startup_parameters.database: Test
+      pgsql.request.startup_parameters.optional_parameters[0].application_name: psql
+      pgsql.request.startup_parameters.optional_parameters[1].client_encoding: UTF8
+      pgsql.request.startup_parameters.user: ju-Test
+      pgsql.response.message: authentication_sasl
+      pgsql.tx_id: 2
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 44848
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 12
+      pgsql.request.sasl_authentication_mechanism: scram_SHA256
+      pgsql.request.sasl_param: n,,n=,r=ROtF8e2Fme8+eORLNHTwkZaK
+      pgsql.response.message: authentication_sasl_continue
+      pgsql.tx_id: 3
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 44848
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 15
+      pgsql.request.sasl_response: c=biws,r=ROtF8e2Fme8+eORLNHTwkZaKtpbEaXYJOnd3qt6QNCsAv0wj,p=I4V0zdtQqrxum6B+QzprHHC0nBD+mVtBWpc+arfXa+c=
+      pgsql.response.authentication_sasl_final: v=axxpTzISTb0T/QA08F6tEsu25y8Ka0QVR/FOgvF5l78=
+      pgsql.response.message: authentication_ok
+      pgsql.response.parameter_status[0].application_name: psql
+      pgsql.response.parameter_status[10].time_zone: Europe/London
+      pgsql.response.parameter_status[1].client_encoding: UTF8
+      pgsql.response.parameter_status[2].date_style: ISO, DMY
+      pgsql.response.parameter_status[3].integer_datetimes: 'on'
+      pgsql.response.parameter_status[4].interval_style: postgres
+      pgsql.response.parameter_status[5].is_superuser: 'on'
+      pgsql.response.parameter_status[6].server_encoding: UTF8
+      pgsql.response.parameter_status[7].server_version: '13.4'
+      pgsql.response.parameter_status[8].session_authorization: ju-Test
+      pgsql.response.parameter_status[9].standard_conforming_strings: 'on'
+      pgsql.response.process_id: 5008
+      pgsql.response.secret_key: 2050730518
+      pgsql.tx_id: 4
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 44848
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 18
+      pgsql.request.simple_query: BEGIN;
+      pgsql.response.command_completed: BEGIN
+      pgsql.tx_id: 5
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 44848
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 21
+      pgsql.request.simple_query: DELETE FROM new_table WHERE NAME='Remus';
+      pgsql.response.command_completed: DELETE 1
+      pgsql.tx_id: 6
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 44848
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 24
+      pgsql.request.simple_query: DELETE FROM new_table WHERE NAME='Londubat';
+      pgsql.response.command_completed: DELETE 1
+      pgsql.tx_id: 7
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 44848
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 26
+      pgsql.request.simple_query: DELETE FROM new_table WHERE NAME='Hermione';
+      pgsql.response.command_completed: DELETE 1
+      pgsql.tx_id: 8
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 44848
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 28
+      pgsql.request.simple_query: DELETE FROM new_table WHERE NAME='Maugre';
+      pgsql.response.command_completed: DELETE 1
+      pgsql.tx_id: 9
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 44848
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 30
+      pgsql.request.simple_query: COMMIT;
+      pgsql.response.command_completed: COMMIT
+      pgsql.tx_id: 10
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 44848
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 33
+      pgsql.request.simple_query: BEGIN;
+      pgsql.response.command_completed: BEGIN
+      pgsql.tx_id: 11
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 44848
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 36
+      pgsql.request.simple_query: INSERT INTO new_table VALUES('Hermione', 'prof_gramger@gmail.com');
+      pgsql.response.command_completed: INSERT 0 1
+      pgsql.tx_id: 12
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 44848
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 39
+      pgsql.request.simple_query: INSERT INTO new_table VALUES('Remus', 'prof_lupin@gmail.com');
+      pgsql.response.command_completed: INSERT 0 1
+      pgsql.tx_id: 13
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 44848
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 44
+      pgsql.request.simple_query: SELECT 1/0;
+      pgsql.response.code: '22012'
+      pgsql.response.file: d:\pginstaller_13.auto\postgres.windows-x64\src\backend\utils\adt\int.c
+      pgsql.response.line: '824'
+      pgsql.response.message: division by zero
+      pgsql.response.routine: int4div
+      pgsql.response.severity_localizable: ERROR
+      pgsql.response.severity_non_localizable: ERROR
+      pgsql.tx_id: 14
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 44848
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 49
+      pgsql.request.simple_query: INSERT INTO new_table VALUES('Maugre', 'prof_folloy@gmail.com');
+      pgsql.response.code: 25P02
+      pgsql.response.file: d:\pginstaller_13.auto\postgres.windows-x64\src\backend\tcop\postgres.c
+      pgsql.response.line: '1105'
+      pgsql.response.message: current transaction is aborted, commands ignored until
+        end of transaction block
+      pgsql.response.routine: exec_simple_query
+      pgsql.response.severity_localizable: ERROR
+      pgsql.response.severity_non_localizable: ERROR
+      pgsql.tx_id: 15
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 44848
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 53
+      pgsql.request.simple_query: INSERT INTO new_table VALUES('Londubat', 'prof_londubat@gmail.com');
+      pgsql.response.code: 25P02
+      pgsql.response.file: d:\pginstaller_13.auto\postgres.windows-x64\src\backend\tcop\postgres.c
+      pgsql.response.line: '1105'
+      pgsql.response.message: current transaction is aborted, commands ignored until
+        end of transaction block
+      pgsql.response.routine: exec_simple_query
+      pgsql.response.severity_localizable: ERROR
+      pgsql.response.severity_non_localizable: ERROR
+      pgsql.tx_id: 16
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 44848
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 57
+      pgsql.request.simple_query: SELECT * FROM new_table;
+      pgsql.response.code: 25P02
+      pgsql.response.file: d:\pginstaller_13.auto\postgres.windows-x64\src\backend\tcop\postgres.c
+      pgsql.response.line: '1105'
+      pgsql.response.message: current transaction is aborted, commands ignored until
+        end of transaction block
+      pgsql.response.routine: exec_simple_query
+      pgsql.response.severity_localizable: ERROR
+      pgsql.response.severity_non_localizable: ERROR
+      pgsql.tx_id: 17
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 44848
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 60
+      pgsql.request.simple_query: COMMIT;
+      pgsql.response.command_completed: ROLLBACK
+      pgsql.tx_id: 18
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 44848
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 63
+      pgsql.request.simple_query: BEGIN;
+      pgsql.response.command_completed: BEGIN
+      pgsql.tx_id: 19
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 44848
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 66
+      pgsql.request.simple_query: INSERT INTO new_table VALUES('Hermione', 'prof_gramger@gmail.com');
+      pgsql.response.command_completed: INSERT 0 1
+      pgsql.tx_id: 20
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 44848
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 69
+      pgsql.request.simple_query: COMMIT;
+      pgsql.response.command_completed: COMMIT
+      pgsql.tx_id: 21
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 44848
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 72
+      pgsql.request.simple_query: INSERT INTO new_table VALUES('Remus', 'prof_lupin@gmail.com');
+      pgsql.response.command_completed: INSERT 0 1
+      pgsql.tx_id: 22
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 44848
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 77
+      pgsql.request.simple_query: SELECT 1/0;
+      pgsql.response.code: '22012'
+      pgsql.response.file: d:\pginstaller_13.auto\postgres.windows-x64\src\backend\utils\adt\int.c
+      pgsql.response.line: '824'
+      pgsql.response.message: division by zero
+      pgsql.response.routine: int4div
+      pgsql.response.severity_localizable: ERROR
+      pgsql.response.severity_non_localizable: ERROR
+      pgsql.tx_id: 23
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 44848
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 80
+      pgsql.request.simple_query: INSERT INTO new_table VALUES('Maugre', 'prof_folloy@gmail.com');
+      pgsql.response.command_completed: INSERT 0 1
+      pgsql.tx_id: 24
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 44848
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 82
+      pgsql.request.simple_query: INSERT INTO new_table VALUES('Londubat', 'prof_londubat@gmail.com');
+      pgsql.response.command_completed: INSERT 0 1
+      pgsql.tx_id: 25
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 44848
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 84
+      pgsql.request.simple_query: SELECT * FROM new_table;
+      pgsql.response.command_completed: SELECT 8
+      pgsql.response.data_rows: 8
+      pgsql.response.data_size: 236
+      pgsql.response.field_count: 2
+      pgsql.tx_id: 26
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 44848
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.102
+      dest_port: 44848
+      event_type: pgsql
+      pcap_cnt: 87
+      pgsql.request.message: termination_message
+      pgsql.tx_id: 27
+      proto: TCP
+      src_ip: 192.168.1.74
+      src_port: 5432
+- filter:
+    count: 1
+    match:
+      app_proto: pgsql
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: flow
+      flow.age: 93
+      flow.alerted: false
+      flow.bytes_toclient: 4029
+      flow.bytes_toserver: 4126
+      flow.pkts_toclient: 34
+      flow.pkts_toserver: 54
+      flow.reason: shutdown
+      flow.state: closed
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 44848
+      tcp.ack: true
+      tcp.fin: true
+      tcp.psh: true
+      tcp.rst: true
+      tcp.state: closed
+      tcp.syn: true
+      tcp.tcp_flags: 1f
+      tcp.tcp_flags_tc: 1e
+      tcp.tcp_flags_ts: 1b

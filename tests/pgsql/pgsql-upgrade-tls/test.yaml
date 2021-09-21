@@ -1,0 +1,112 @@
+requires:
+# Pgsql was released on version 7.0
+  min-version: 7.0 
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.50.11
+      dest_port: 60358
+      event_type: pgsql
+      pgsql.request.message: SSL Request
+      pgsql.response.ssl_accepted: true
+      pgsql.tx_id: 1
+      proto: TCP
+      src_ip: 192.168.50.12
+      src_port: 5432
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.50.12
+      dest_port: 5432
+      event_type: tls
+      pcap_cnt: 10
+      proto: TCP
+      src_ip: 192.168.50.11
+      src_port: 60358
+      tls.fingerprint: e4:9d:12:c5:f9:f3:40:41:06:c7:14:42:2c:d8:82:41:e9:6b:94:cd
+      tls.from_proto: pgsql
+      tls.issuerdn: CN=ubuntu
+      tls.notafter: '2027-02-21T05:13:52'
+      tls.notbefore: '2017-02-23T05:13:52'
+      tls.serial: 00:82:64:66:C3:07:A1:8F:80
+      tls.subject: CN=ubuntu
+      tls.version: TLS 1.2
+- filter:
+    count: 1
+    match:
+      app_proto: tls
+      app_proto_orig: pgsql
+      dest_ip: 192.168.50.12
+      dest_port: 5432
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 2220
+      flow.bytes_toserver: 1250
+      flow.pkts_toclient: 7
+      flow.pkts_toserver: 9
+      flow.reason: shutdown
+      flow.state: closed
+      proto: TCP
+      src_ip: 192.168.50.11
+      src_port: 60358
+      tcp.ack: true
+      tcp.psh: true
+      tcp.rst: true
+      tcp.state: closed
+      tcp.syn: true
+      tcp.tcp_flags: 1e
+      tcp.tcp_flags_tc: 1a
+      tcp.tcp_flags_ts: 1e
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.50.11
+      dest_port: 60359
+      event_type: pgsql
+      pgsql.request.protocol_version: '3.0'
+      pgsql.request.startup_parameters.database: replication
+      pgsql.request.startup_parameters.optional_parameters[0].replication: 'true'
+      pgsql.request.startup_parameters.optional_parameters[1].application_name: walreceiver
+      pgsql.request.startup_parameters.user: rep
+      pgsql.response.code: '28000'
+      pgsql.response.file: auth.c
+      pgsql.response.line: '481'
+      pgsql.response.message: no pg_hba.conf entry for replication connection from
+        host "192.168.50.11", user "rep", SSL off
+      pgsql.response.routine: ClientAuthentication
+      pgsql.response.severity_localizable: FATAL
+      pgsql.tx_id: 1
+      proto: TCP
+      src_ip: 192.168.50.12
+      src_port: 5432
+- filter:
+    count: 1
+    match:
+      app_proto: pgsql
+      dest_ip: 192.168.50.12
+      dest_port: 5432
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 357
+      flow.bytes_toserver: 291
+      flow.pkts_toclient: 3
+      flow.pkts_toserver: 3
+      flow.reason: shutdown
+      flow.state: established
+      proto: TCP
+      src_ip: 192.168.50.11
+      src_port: 60359
+      tcp.ack: true
+      tcp.psh: true
+      tcp.state: established
+      tcp.syn: true
+      tcp.tcp_flags: 1a
+      tcp.tcp_flags_tc: 1a
+      tcp.tcp_flags_ts: 1a
