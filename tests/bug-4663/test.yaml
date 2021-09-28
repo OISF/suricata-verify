@@ -2,7 +2,7 @@ requires:
   features:
     - HAVE_LIBJANSSON
     - HAVE_NSS
-  min-version: 7
+  min-version: 5
 
 args:
   - --simulate-ips
@@ -24,6 +24,7 @@ checks:
       match:
         event_type: drop
   - filter:
+      min-version: 7
       count: 1
       match:
         event_type: flow
