@@ -1,4 +1,6 @@
-# *** Add configuration here ***
+requires:
+  # Requires minimum version 7.0
+  min-version: 7.0
 
 args:
 - -k none
