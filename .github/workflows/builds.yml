@@ -38,6 +38,7 @@ jobs:
                 jq \
                 libpcre3 \
                 libpcre3-dev \
+                libpcre2-dev \
                 libtool \
                 libpcap-dev \
                 libnet1-dev \
@@ -124,6 +125,7 @@ jobs:
                 make \
                 nss-devel \
                 pcre-devel \
+                pcre2-devel \
                 pkgconfig \
                 python3-devel \
                 python3-sphinx \
