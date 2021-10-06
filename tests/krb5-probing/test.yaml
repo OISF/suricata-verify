@@ -2,7 +2,7 @@ requires:
   features:
     - HAVE_LIBJANSSON
     - RUST
-  min-version: 7
+  min-version: 6
 
 args:
   - -k none
