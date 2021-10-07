@@ -7,3 +7,8 @@ outputs:
       types:
         - modbus
         - alert
+
+app-layer:
+  protocols:
+    modbus:
+      enabled: true
