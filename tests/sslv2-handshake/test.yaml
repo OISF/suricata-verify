@@ -1,0 +1,22 @@
+
+requires:
+  features:
+    - HAVE_LIBJANSSON
+    - HAVE_NSS
+  min-version: 4.1.0
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: "tls"
+#  - filter:
+#      count: 1
+#      match:
+#        event_type: tls
+#        tls.serial: 01:A3:B2:E2:6F:04:5B:78:B9:C6:95:C0:1D:87:96:3B:01:61:F4:EA
+#        tls.issuerdn: C=XX, L=Default City, O=Default Company Ltd
