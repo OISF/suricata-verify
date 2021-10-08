@@ -1,0 +1,23 @@
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2210058
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.url: /ultrasurf.html

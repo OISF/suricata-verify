@@ -1,0 +1,2 @@
+reject tcp any any -> any any (content: "/"; http_uri; startswith; endswith; sid: 1;)
+alert tcp any any -> any any (msg:"SURICATA STREAM suspected RST injection"; stream-event:suspected_rst_inject; classtype:protocol-command-decode; sid:2210058; rev:1;)
