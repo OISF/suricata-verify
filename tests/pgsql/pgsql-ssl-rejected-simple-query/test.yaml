@@ -113,7 +113,7 @@ checks:
       pgsql.responses[1].data_row.backend_response: Response Ok
       pgsql.responses[2].data_row.backend_response: Response Ok
       pgsql.responses[3].data_row.backend_response: Response Ok
-      pgsql.responses[4].command_completed.payload: "SELECT 3\0"
+      pgsql.responses[4].command_completed.payload: "SELECT 3"
       pgsql.responses[5].ready_for_query.transaction_status: I
       pgsql.tx_id: 4
       proto: TCP
