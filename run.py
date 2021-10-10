@@ -646,7 +646,6 @@ class TestRunner:
                     r, expected_exit_code));
 
             check_value = self.check()
-            return check_value
 
         if not check_value["failure"] and not check_value["skipped"]:
             if not self.quiet:
@@ -711,9 +710,6 @@ class TestRunner:
         if count["failure"] or count["skipped"]:
             return count
 
-        # Covering cases like "tests/show-help" which do not have
-        # check.sh and/or no checks in test.yaml should be counted
-        # successful
         success_c = count["success"]
         count["success"] = 1 if not success_c else success_c
 
