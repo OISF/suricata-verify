@@ -1,5 +1,10 @@
 # Rule should only fire in the to client direction, with the server address
 # being the source address in the event.
 alert tls any any -> any any (msg:"TLS FINGERPRINT TEST"; \
-tls.fingerprint:"90:86:a4:3b:f5:cf:1b:2e:4e:f7:97:96:f9:de:ba:b9:66:35:86:3f"; \
-sid:1; rev:1;)
+	tls.fingerprint:"90:86:a4:3b:f5:cf:1b:2e:4e:f7:97:96:f9:de:ba:b9:66:35:86:3f"; \
+	sid:1; rev:1;)
+
+# Equivalent rule by using a sticky buffer.
+alert tls any any -> any any (msg:"TLS FINGERPRINT STICKY BUFFER TEST"; \
+	tls.cert_fingerprint; content:"90:86:a4:3b:f5:cf:1b:2e:4e:f7:97:96:f9:de:ba:b9:66:35:86:3f"; \
+	sid:2; rev:1;)
