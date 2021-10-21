@@ -1,0 +1,14 @@
+requires:
+  min-version: 7.0.0
+  features:
+    - HAVE_LUA
+
+args:
+ - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        metadata.flowvars[0].TestVar: "/zib100/zib100.json?origin=orf.at HTTP/1.1"
