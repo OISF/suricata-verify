@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"HTTP unique first parameter"; http.uri; content: "?"; pcrexform:"/[^\?]+\?([^&=]+)"; dataset:set,uri-param-seen, type string, state uri-param-seen.csv; sid:8000001;)
