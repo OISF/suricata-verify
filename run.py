@@ -626,6 +626,8 @@ class TestRunner:
                 cmdline = template.substitute(env)
             else:
                 cmdline = " ".join(args) + "\n"
+                template = string.Template(cmdline)
+                cmdline = template.substitute(env)
 
             open(os.path.join(self.output, "cmdline"), "w").write(cmdline)
 
