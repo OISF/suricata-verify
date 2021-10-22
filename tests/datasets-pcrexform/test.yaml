@@ -6,7 +6,7 @@ requires:
     - src/datasets.c
 
 args:
- - -k none --data-dir=output
+ - -k none --data-dir=${OUTPUT_DIR}
 
 checks:
   - file-compare:
