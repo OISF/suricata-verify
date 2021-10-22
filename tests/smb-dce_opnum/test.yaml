@@ -1,0 +1,18 @@
+requires:
+  features:
+    - RUST
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 4
+    match:
+      event_type: alert
+      alert.signature_id: 10
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 89

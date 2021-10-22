@@ -1,0 +1,2 @@
+alert smb any any -> any any (msg: "smb dce_opnum 10"; dce_opnum: 10; sid: 10;)
+alert smb any any -> any any (msg: "smb dce_opnum 89"; dce_opnum: 89; sid: 89;)
