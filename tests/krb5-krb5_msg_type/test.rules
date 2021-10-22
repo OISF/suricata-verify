@@ -1,0 +1,5 @@
+alert krb5 any any -> any any (msg:"AS-REQ"; krb5_msg_type:10; sid:10;)
+alert krb5 any any -> any any (msg:"AS-REP"; krb5_msg_type:11; sid:11;)
+alert krb5 any any -> any any (msg:"TGS-REQ"; krb5_msg_type:12; sid:12;)
+alert krb5 any any -> any any (msg:"TGS-REP"; krb5_msg_type:13; sid:13;)
+alert krb5 any any -> any any (msg:"KRB-ERROR"; krb5_msg_type:30; sid:30;)

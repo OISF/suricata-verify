@@ -1,0 +1,42 @@
+# *** Add configuration here ***
+requires:
+  min-version: 7
+  features:
+    - RUST
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 10
+
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 11
+
+- filter:
+    count: 3
+    match:
+      event_type: alert
+      alert.signature_id: 12
+
+- filter:
+    count: 3
+    match:
+      event_type: alert
+      alert.signature_id: 13
+
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 30
+
+
+
