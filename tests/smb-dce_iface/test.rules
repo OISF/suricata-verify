@@ -1,0 +1,1 @@
+alert smb any any -> any any (msg: "smb dce_iface spoolss"; dce_iface: 12345678-1234-abcd-ef00-0123456789ab; sid: 1;)
