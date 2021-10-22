@@ -1,0 +1,1 @@
+alert dcerpc any any -> any any (msg: "DCE Netlogon"; dcerpc.iface: 12345678-1234-abcd-ef00-01234567cffb; sid: 1;)
