@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"HTTP with xor"; http.uri; content: "/get?data="; startswith; http.uri; pcrexform:"/get\?data=(.*)"; xor:"0d0ac8ff"; content:"password="; sid:1;)
