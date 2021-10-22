@@ -1,0 +1,13 @@
+requires:
+  features:
+    - RUST
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 12
+    match:
+      event_type: alert
+      alert.signature_id: 1
