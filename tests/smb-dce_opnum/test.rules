@@ -1,0 +1,2 @@
+alert smb any any -> any any (msg: "smb dcerpc.opnum 10"; dcerpc.opnum: 10; sid: 10;)
+alert smb any any -> any any (msg: "smb dcerpc.opnum 89"; dcerpc.opnum: 89; sid: 89;)
