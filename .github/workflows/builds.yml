@@ -83,6 +83,8 @@ jobs:
       - name: Running suricata-verify
         working-directory: suricata
         run: python3 ../run.py --quiet
+      - name: Running check-eve
+        run: python3 ./check-eve.py
 
   almalinux:
     name: AlmaLinux 8
@@ -129,6 +131,7 @@ jobs:
                 pcre2-devel \
                 pkgconfig \
                 python3-devel \
+                python3-jsonschema \
                 python3-sphinx \
                 python3-yaml \
                 rust-toolset \
@@ -150,3 +153,5 @@ jobs:
       - name: Running suricata-verify
         working-directory: suricata
         run: python3 ../run.py --quiet
+      - name: Running check-eve
+        run: python3 ./check-eve.py
