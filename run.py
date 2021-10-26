@@ -44,6 +44,13 @@ import filecmp
 import subprocess
 import yaml
 
+# Check if we can validate EVE files against the schema.
+try:
+    import jsonschema
+    VALIDATE_EVE = True
+except:
+    VALIDATE_EVE = False
+
 WIN32 = sys.platform == "win32"
 LINUX = sys.platform.startswith("linux")
 suricata_bin = "src\suricata.exe" if WIN32 else "./src/suricata"
@@ -648,9 +655,10 @@ class TestRunner:
 
             check_value = self.check()
         
-        check_output = subprocess.call(["{}/check-eve.py".format(TOPDIR), outdir, "-q"])
-        if check_output != 0:
-            raise TestError("Invalid JSON schema")
+        if VALIDATE_EVE:
+            check_output = subprocess.call(["{}/check-eve.py".format(TOPDIR), outdir, "-q"])
+            if check_output != 0:
+                raise TestError("Invalid JSON schema")
 
         if not check_value["failure"] and not check_value["skipped"]:
             if not self.quiet:
@@ -922,6 +930,8 @@ def main():
 
     if args.self_test:
         return unittest.main(argv=[sys.argv[0]])
+
+    print("Warning: EVE files will not be valided: jsonschema module not found.")
 
     TOPDIR = os.path.abspath(os.path.dirname(sys.argv[0]))
 
