@@ -35,10 +35,6 @@ def validate_json(args, dirpath, schema, isDirectory):
     if isDirectory:
         json_filename = os.path.join(dirpath, 'eve.json')
         
-    testname = dirpath
-    if "suricata-verify" in dirpath:
-        testname = os.path.basename(os.path.dirname(dirpath))
-
     status = "OK"
     errors = []
 
@@ -53,12 +49,12 @@ def validate_json(args, dirpath, schema, isDirectory):
     
     if not args.quiet:
         if status == "FAIL":
-            print("===> %s: FAIL " % testname)
+            print("===> %s: FAIL " % json_filename)
 
             for err in errors:
                 print(err)
         elif args.verbose:
-            print("===> %s: OK " % testname)
+            print("===> %s: OK " % json_filename)
 
     return status
         
