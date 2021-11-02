@@ -1,0 +1,8 @@
+alert ip any any -> any any (msg:"GPL ATTACK_RESPONSE id check returned root"; content:"uid=0|28|root|29|"; classtype:bad-unknown; lua:lua-scrule-ids.lua; sid:1; rev:7;)
+alert ip any any -> any any (msg:"GPL ATTACK_RESPONSE id check returned root"; content:"uid=0|28|root|29|"; classtype:bad-unknown; lua:lua-scrule-ids.lua; sid:2; rev:7;)
+alert ip any any -> any any (msg:"GPL ATTACK_RESPONSE id check returned root"; content:"uid=0|28|root|29|"; classtype:bad-unknown; lua:lua-scrule-action.lua; sid:3; rev:7;)
+drop ip any any -> any any (msg:"GPL ATTACK_RESPONSE id check returned root"; content:"uid=0|28|root|29|"; classtype:bad-unknown; lua:lua-scrule-action.lua; sid:4; rev:7;)
+alert ip any any -> any any (msg:"FOO"; content:"uid=0|28|root|29|"; classtype:bad-unknown; lua:lua-scrule-msg.lua; sid:5; rev:7;)
+alert ip any any -> any any (msg:"BAR"; content:"uid=0|28|root|29|"; classtype:bad-unknown; lua:lua-scrule-msg.lua; sid:6; rev:7;)
+alert ip any any -> any any (msg:"GPL ATTACK_RESPONSE id check returned root"; content:"uid=0|28|root|29|"; classtype:bad-unknown; lua:lua-scrule-class.lua; sid:7; rev:7;)
+alert ip any any -> any any (msg:"GPL ATTACK_RESPONSE id check returned root"; content:"uid=0|28|root|29|"; classtype:not-suspicious; lua:lua-scrule-class.lua; sid:8; rev:7;)
