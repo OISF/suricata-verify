@@ -1,5 +1,3 @@
-requires:
-  lt-version: 7
 features:
     - RUST
 
