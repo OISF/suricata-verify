@@ -1,0 +1,2 @@
+alert ip any any -> any any (msg:"GPL ATTACK_RESPONSE id check returned root"; content:"uid=0|28|root|29|"; classtype:bad-unknown; byte_extract:4,0,var1; byte_extract:4,4,var2; lua:lua-byte-extract.lua; sid:1; rev:7;)
+alert ip any any -> any any (msg:"GPL ATTACK_RESPONSE id check returned root"; content:"uid=0|28|root|29|"; classtype:bad-unknown; byte_math: bytes 4, offset 0, oper +, rvalue 0, result var2; lua:lua-byte-math.lua; sid:2; rev:7;)
