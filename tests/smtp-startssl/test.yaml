@@ -1,0 +1,16 @@
+requires:
+  min-version: 7
+
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+  - filter:
+      count: 1
+      match:
+        smtp.helo: "desktop.unx.ca"
+        not-has-key: "email"
