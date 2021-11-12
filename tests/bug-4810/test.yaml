@@ -1,0 +1,12 @@
+requires:
+  min-version: 5.0.0
+
+checks:
+ 
+  # Correctly identify the http header in the pppoe payload with a 
+  # 8 bit ppp protocol field
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.request_headers[0].value: www.google.nl
