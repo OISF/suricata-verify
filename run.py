@@ -933,7 +933,7 @@ def main():
     if args.self_test:
         return unittest.main(argv=[sys.argv[0]])
 
-    print("Warning: EVE files will not be valided: jsonschema module not found.")
+    print("Warning: EVE files will not be validated: jsonschema module not found.")
 
     TOPDIR = os.path.abspath(os.path.dirname(sys.argv[0]))
 
