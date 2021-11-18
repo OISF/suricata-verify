@@ -44,6 +44,87 @@
             "type": "string",
             "optional": true
         },
+        "tx_id": {
+            "type": "integer",
+            "optional": true
+        },
+        "flow": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "pkts_toserver": {
+                    "type": "integer"
+                },
+                "pkts_toclient": {
+                    "type": "integer"
+                },
+                "alerted": {
+                    "type": "boolean"
+                },
+                "bytes_toserver": {
+                    "type": "integer"
+                },
+                "bytes_toclient": {
+                    "type": "integer"
+                },
+                "age": {
+                    "type": "integer"
+                },
+                "end": {
+                    "type": "string"
+                },
+                "state": {
+                    "type": "string"
+                },
+                "start": {
+                    "type": "string"
+                },
+                "reason": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "tcp": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "tcp_flags": {
+                    "type": "string"
+                },
+                "tcp_flags_ts": {
+                    "type": "string"
+                },
+                "syn": {
+                    "type": "boolean"
+                },
+                "psh": {
+                    "type": "boolean"
+                },
+                "state": {
+                    "type": "string"
+                },
+                "tcp_flags_tc": {
+                    "type": "string"
+                },
+                "fin": {
+                    "type": "boolean"
+                },
+                "ack": {
+                    "type": "boolean"
+                }
+            },
+            "additionalProperties": false
+        },
+        "stats": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "uptime": {
+                    "type": "integer"
+                }
+            }
+        },
         "http": {
             "type": "object",
             "optional": true,
@@ -71,8 +152,27 @@
                 },
                 "length": {
                     "type": "integer"
+                },
+                "content_range": {
+                    "type": "object",
+                    "properties": {
+                        "raw": {
+                            "type": "string"
+                        },
+                        "start": {
+                            "type": "integer"
+                        },
+                        "end": {
+                            "type": "integer"
+                        },
+                        "size": {
+                            "type": "integer"
+                        }
+                    },
+                    "additionalProperties": false
                 }
-            }
+            },
+            "additionalProperties": false
         },
         "app_proto": {
             "type": "string",
@@ -96,8 +196,24 @@
                 },
                 "tx_id": {
                     "type": "integer"
+                },
+                "gaps": {
+                    "type": "boolean"
+                },
+                "start": {
+                    "type": "integer"
+                },
+                "end": {
+                    "type": "integer"
+                },
+                "sid": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 }
-            }
+            },
+            "additionalProperties": false
         }
     },
     "additionalProperties": false
