@@ -83,7 +83,7 @@
                     "type": "string"
                 }
             },
-            "additionalProperties": false
+            "additionalProperties": true
         },
         "tcp": {
             "type": "object",
@@ -114,7 +114,7 @@
                     "type": "boolean"
                 }
             },
-            "additionalProperties": false
+            "additionalProperties": true
         },
         "stats": {
             "type": "object",
@@ -122,8 +122,1112 @@
             "properties": {
                 "uptime": {
                     "type": "integer"
+                },
+                "decoder": {
+                    "type": "object",
+                    "properties": {
+                        "pkts": {
+                            "type": "integer"
+                        },
+                        "bytes": {
+                            "type": "integer"
+                        },
+                        "invalid": {
+                            "type": "integer"
+                        },
+                        "ipv4": {
+                            "type": "integer"
+                        },
+                        "ipv6": {
+                            "type": "integer"
+                        },
+                        "ethernet": {
+                            "type": "integer"
+                        },
+                        "chdlc": {
+                            "type": "integer"
+                        },
+                        "raw": {
+                            "type": "integer"
+                        },
+                        "null": {
+                            "type": "integer"
+                        },
+                        "sll": {
+                            "type": "integer"
+                        },
+                        "tcp": {
+                            "type": "integer"
+                        },
+                        "udp": {
+                            "type": "integer"
+                        },
+                        "sctp": {
+                            "type": "integer"
+                        },
+                        "esp": {
+                            "type": "integer"
+                        },
+                        "icmpv4": {
+                            "type": "integer"
+                        },
+                        "icmpv6": {
+                            "type": "integer"
+                        },
+                        "ppp": {
+                            "type": "integer"
+                        },
+                        "pppoe": {
+                            "type": "integer"
+                        },
+                        "geneve": {
+                            "type": "integer"
+                        },
+                        "gre": {
+                            "type": "integer"
+                        },
+                        "vlan": {
+                            "type": "integer"
+                        },
+                        "vlan_qinq": {
+                            "type": "integer"
+                        },
+                        "vxlan": {
+                            "type": "integer"
+                        },
+                        "vntag": {
+                            "type": "integer"
+                        },
+                        "ieee8021ah": {
+                            "type": "integer"
+                        },
+                        "teredo": {
+                            "type": "integer"
+                        },
+                        "ipv4_in_ipv6": {
+                            "type": "integer"
+                        },
+                        "ipv6_in_ipv6": {
+                            "type": "integer"
+                        },
+                        "mpls": {
+                            "type": "integer"
+                        },
+                        "avg_pkt_size": {
+                            "type": "integer"
+                        },
+                        "max_pkt_size": {
+                            "type": "integer"
+                        },
+                        "max_mac_addrs_src": {
+                            "type": "integer"
+                        },
+                        "max_mac_addrs_dst": {
+                            "type": "integer"
+                        },
+                        "erspan": {
+                            "type": "integer"
+                        },
+                        "nsh": {
+                            "type": "integer"
+                        },
+                        "event": {
+                            "type": "object",
+                            "properties": {
+                                "ipv4": {
+                                    "type": "object",
+                                    "properties": {
+                                        "pkt_too_small": {
+                                            "type": "integer"
+                                        },
+                                        "hlen_too_small": {
+                                            "type": "integer"
+                                        },
+                                        "iplen_smaller_than_hlen": {
+                                            "type": "integer"
+                                        },
+                                        "trunc_pkt": {
+                                            "type": "integer"
+                                        },
+                                        "opt_invalid": {
+                                            "type": "integer"
+                                        },
+                                        "opt_invalid_len": {
+                                            "type": "integer"
+                                        },
+                                        "opt_malformed": {
+                                            "type": "integer"
+                                        },
+                                        "opt_pad_required": {
+                                            "type": "integer"
+                                        },
+                                        "opt_eol_required": {
+                                            "type": "integer"
+                                        },
+                                        "opt_duplicate": {
+                                            "type": "integer"
+                                        },
+                                        "opt_unknown": {
+                                            "type": "integer"
+                                        },
+                                        "wrong_ip_version": {
+                                            "type": "integer"
+                                        },
+                                        "icmpv6": {
+                                            "type": "integer"
+                                        },
+                                        "frag_pkt_too_large": {
+                                            "type": "integer"
+                                        },
+                                        "frag_overlap": {
+                                            "type": "integer"
+                                        },
+                                        "frag_ignored": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "icmpv4": {
+                                    "type": "object",
+                                    "properties": {
+                                        "pkt_too_small": {
+                                            "type": "integer"
+                                        },
+                                        "unknown_type": {
+                                            "type": "integer"
+                                        },
+                                        "unknown_code": {
+                                            "type": "integer"
+                                        },
+                                        "ipv4_trunc_pkt": {
+                                            "type": "integer"
+                                        },
+                                        "ipv4_unknown_ver": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "icmpv6": {
+                                    "type": "object",
+                                    "properties": {
+                                        "unknown_type": {
+                                            "type": "integer"
+                                        },
+                                        "unknown_code": {
+                                            "type": "integer"
+                                        },
+                                        "pkt_too_small": {
+                                            "type": "integer"
+                                        },
+                                        "ipv6_unknown_version": {
+                                            "type": "integer"
+                                        },
+                                        "ipv6_trunc_pkt": {
+                                            "type": "integer"
+                                        },
+                                        "mld_message_with_invalid_hl": {
+                                            "type": "integer"
+                                        },
+                                        "unassigned_type": {
+                                            "type": "integer"
+                                        },
+                                        "experimentation_type": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "ipv6": {
+                                    "type": "object",
+                                    "properties": {
+                                        "pkt_too_small": {
+                                            "type": "integer"
+                                        },
+                                        "trunc_pkt": {
+                                            "type": "integer"
+                                        },
+                                        "trunc_exthdr": {
+                                            "type": "integer"
+                                        },
+                                        "exthdr_dupl_fh": {
+                                            "type": "integer"
+                                        },
+                                        "exthdr_useless_fh": {
+                                            "type": "integer"
+                                        },
+                                        "exthdr_dupl_rh": {
+                                            "type": "integer"
+                                        },
+                                        "exthdr_dupl_hh": {
+                                            "type": "integer"
+                                        },
+                                        "exthdr_dupl_dh": {
+                                            "type": "integer"
+                                        },
+                                        "exthdr_dupl_ah": {
+                                            "type": "integer"
+                                        },
+                                        "exthdr_dupl_eh": {
+                                            "type": "integer"
+                                        },
+                                        "exthdr_invalid_optlen": {
+                                            "type": "integer"
+                                        },
+                                        "wrong_ip_version": {
+                                            "type": "integer"
+                                        },
+                                        "exthdr_ah_res_not_null": {
+                                            "type": "integer"
+                                        },
+                                        "hopopts_unknown_opt": {
+                                            "type": "integer"
+                                        },
+                                        "hopopts_only_padding": {
+                                            "type": "integer"
+                                        },
+                                        "dstopts_unknown_opt": {
+                                            "type": "integer"
+                                        },
+                                        "dstopts_only_padding": {
+                                            "type": "integer"
+                                        },
+                                        "rh_type_0": {
+                                            "type": "integer"
+                                        },
+                                        "zero_len_padn": {
+                                            "type": "integer"
+                                        },
+                                        "fh_non_zero_reserved_field": {
+                                            "type": "integer"
+                                        },
+                                        "data_after_none_header": {
+                                            "type": "integer"
+                                        },
+                                        "unknown_next_header": {
+                                            "type": "integer"
+                                        },
+                                        "icmpv4": {
+                                            "type": "integer"
+                                        },
+                                        "frag_pkt_too_large": {
+                                            "type": "integer"
+                                        },
+                                        "frag_overlap": {
+                                            "type": "integer"
+                                        },
+                                        "frag_invalid_length": {
+                                            "type": "integer"
+                                        },
+                                        "frag_ignored": {
+                                            "type": "integer"
+                                        },
+                                        "ipv4_in_ipv6_too_small": {
+                                            "type": "integer"
+                                        },
+                                        "ipv4_in_ipv6_wrong_version": {
+                                            "type": "integer"
+                                        },
+                                        "ipv6_in_ipv6_too_small": {
+                                            "type": "integer"
+                                        },
+                                        "ipv6_in_ipv6_wrong_version": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "tcp": {
+                                    "type": "object",
+                                    "properties": {
+                                        "pkt_too_small": {
+                                            "type": "integer"
+                                        },
+                                        "hlen_too_small": {
+                                            "type": "integer"
+                                        },
+                                        "invalid_optlen": {
+                                            "type": "integer"
+                                        },
+                                        "opt_invalid_len": {
+                                            "type": "integer"
+                                        },
+                                        "opt_duplicate": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "udp": {
+                                    "type": "object",
+                                    "properties": {
+                                        "pkt_too_small": {
+                                            "type": "integer"
+                                        },
+                                        "hlen_too_small": {
+                                            "type": "integer"
+                                        },
+                                        "hlen_invalid": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "sll": {
+                                    "type": "object",
+                                    "properties": {
+                                        "pkt_too_small": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "ethernet": {
+                                    "type": "object",
+                                    "properties": {
+                                        "pkt_too_small": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "ppp": {
+                                    "type": "object",
+                                    "properties": {
+                                        "pkt_too_small": {
+                                            "type": "integer"
+                                        },
+                                        "vju_pkt_too_small": {
+                                            "type": "integer"
+                                        },
+                                        "ip4_pkt_too_small": {
+                                            "type": "integer"
+                                        },
+                                        "ip6_pkt_too_small": {
+                                            "type": "integer"
+                                        },
+                                        "wrong_type": {
+                                            "type": "integer"
+                                        },
+                                        "unsup_proto": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "pppoe": {
+                                    "type": "object",
+                                    "properties": {
+                                        "pkt_too_small": {
+                                            "type": "integer"
+                                        },
+                                        "wrong_code": {
+                                            "type": "integer"
+                                        },
+                                        "malformed_tags": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "gre": {
+                                    "type": "object",
+                                    "properties": {
+                                        "pkt_too_small": {
+                                            "type": "integer"
+                                        },
+                                        "wrong_version": {
+                                            "type": "integer"
+                                        },
+                                        "version0_recur": {
+                                            "type": "integer"
+                                        },
+                                        "version0_flags": {
+                                            "type": "integer"
+                                        },
+                                        "version0_hdr_too_big": {
+                                            "type": "integer"
+                                        },
+                                        "version0_malformed_sre_hdr": {
+                                            "type": "integer"
+                                        },
+                                        "version1_chksum": {
+                                            "type": "integer"
+                                        },
+                                        "version1_route": {
+                                            "type": "integer"
+                                        },
+                                        "version1_ssr": {
+                                            "type": "integer"
+                                        },
+                                        "version1_recur": {
+                                            "type": "integer"
+                                        },
+                                        "version1_flags": {
+                                            "type": "integer"
+                                        },
+                                        "version1_no_key": {
+                                            "type": "integer"
+                                        },
+                                        "version1_wrong_protocol": {
+                                            "type": "integer"
+                                        },
+                                        "version1_malformed_sre_hdr": {
+                                            "type": "integer"
+                                        },
+                                        "version1_hdr_too_big": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "vlan": {
+                                    "type": "object",
+                                    "properties": {
+                                        "header_too_small": {
+                                            "type": "integer"
+                                        },
+                                        "unknown_type": {
+                                            "type": "integer"
+                                        },
+                                        "too_many_layers": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "ieee8021ah": {
+                                    "type": "object",
+                                    "properties": {
+                                        "header_too_small": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "vntag": {
+                                    "type": "object",
+                                    "properties": {
+                                        "header_too_small": {
+                                            "type": "integer"
+                                        },
+                                        "unknown_type": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "ipraw": {
+                                    "type": "object",
+                                    "properties": {
+                                        "invalid_ip_version": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "ltnull": {
+                                    "type": "object",
+                                    "properties": {
+                                        "pkt_too_small": {
+                                            "type": "integer"
+                                        },
+                                        "unsupported_type": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "sctp": {
+                                    "type": "object",
+                                    "properties": {
+                                        "pkt_too_small": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "esp": {
+                                    "type": "object",
+                                    "properties": {
+                                        "pkt_too_small": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "mpls": {
+                                    "type": "object",
+                                    "properties": {
+                                        "header_too_small": {
+                                            "type": "integer"
+                                        },
+                                        "pkt_too_small": {
+                                            "type": "integer"
+                                        },
+                                        "bad_label_router_alert": {
+                                            "type": "integer"
+                                        },
+                                        "bad_label_implicit_null": {
+                                            "type": "integer"
+                                        },
+                                        "bad_label_reserved": {
+                                            "type": "integer"
+                                        },
+                                        "unknown_payload_type": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "vxlan": {
+                                    "type": "object",
+                                    "properties": {
+                                        "unknown_payload_type": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "geneve": {
+                                    "type": "object",
+                                    "properties": {
+                                        "unknown_payload_type": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "erspan": {
+                                    "type": "object",
+                                    "properties": {
+                                        "header_too_small": {
+                                            "type": "integer"
+                                        },
+                                        "unsupported_version": {
+                                            "type": "integer"
+                                        },
+                                        "too_many_vlan_layers": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "dce": {
+                                    "type": "object",
+                                    "properties": {
+                                        "pkt_too_small": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "chdlc": {
+                                    "type": "object",
+                                    "properties": {
+                                        "pkt_too_small": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "nsh": {
+                                    "type": "object",
+                                    "properties": {
+                                        "header_too_small": {
+                                            "type": "integer"
+                                        },
+                                        "unsupported_version": {
+                                            "type": "integer"
+                                        },
+                                        "bad_header_length": {
+                                            "type": "integer"
+                                        },
+                                        "reserved_type": {
+                                            "type": "integer"
+                                        },
+                                        "unsupported_type": {
+                                            "type": "integer"
+                                        },
+                                        "unknown_payload": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "too_many_layers": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "flow": {
+                    "type": "object",
+                    "properties": {
+                        "memcap": {
+                            "type": "integer"
+                        },
+                        "tcp": {
+                            "type": "integer"
+                        },
+                        "udp": {
+                            "type": "integer"
+                        },
+                        "icmpv4": {
+                            "type": "integer"
+                        },
+                        "icmpv6": {
+                            "type": "integer"
+                        },
+                        "tcp_reuse": {
+                            "type": "integer"
+                        },
+                        "get_used": {
+                            "type": "integer"
+                        },
+                        "get_used_eval": {
+                            "type": "integer"
+                        },
+                        "get_used_eval_reject": {
+                            "type": "integer"
+                        },
+                        "get_used_eval_busy": {
+                            "type": "integer"
+                        },
+                        "get_used_failed": {
+                            "type": "integer"
+                        },
+                        "wrk": {
+                            "type": "object",
+                            "properties": {
+                                "spare_sync_avg": {
+                                    "type": "integer"
+                                },
+                                "spare_sync": {
+                                    "type": "integer"
+                                },
+                                "spare_sync_incomplete": {
+                                    "type": "integer"
+                                },
+                                "spare_sync_empty": {
+                                    "type": "integer"
+                                },
+                                "flows_evicted_needs_work": {
+                                    "type": "integer"
+                                },
+                                "flows_evicted_pkt_inject": {
+                                    "type": "integer"
+                                },
+                                "flows_evicted": {
+                                    "type": "integer"
+                                },
+                                "flows_injected": {
+                                    "type": "integer"
+                                }
+                            }
+                        },
+                        "mgr": {
+                            "type": "object",
+                            "properties": {
+                                "full_hash_pass": {
+                                    "type": "integer"
+                                },
+                                "closed_pruned": {
+                                    "type": "integer"
+                                },
+                                "new_pruned": {
+                                    "type": "integer"
+                                },
+                                "est_pruned": {
+                                    "type": "integer"
+                                },
+                                "bypassed_pruned": {
+                                    "type": "integer"
+                                },
+                                "rows_maxlen": {
+                                    "type": "integer"
+                                },
+                                "flows_checked": {
+                                    "type": "integer"
+                                },
+                                "flows_notimeout": {
+                                    "type": "integer"
+                                },
+                                "flows_timeout": {
+                                    "type": "integer"
+                                },
+                                "flows_timeout_inuse": {
+                                    "type": "integer"
+                                },
+                                "flows_evicted": {
+                                    "type": "integer"
+                                },
+                                "flows_evicted_needs_work": {
+                                    "type": "integer"
+                                }
+                            }
+                        },
+                        "spare": {
+                            "type": "integer"
+                        },
+                        "emerg_mode_entered": {
+                            "type": "integer"
+                        },
+                        "emerg_mode_over": {
+                            "type": "integer"
+                        },
+                        "memuse": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "defrag": {
+                    "type": "object",
+                    "properties": {
+                        "ipv4": {
+                            "type": "object",
+                            "properties": {
+                                "fragments": {
+                                    "type": "integer"
+                                },
+                                "reassembled": {
+                                    "type": "integer"
+                                },
+                                "timeouts": {
+                                    "type": "integer"
+                                }
+                            }
+                        },
+                        "ipv6": {
+                            "type": "object",
+                            "properties": {
+                                "fragments": {
+                                    "type": "integer"
+                                },
+                                "reassembled": {
+                                    "type": "integer"
+                                },
+                                "timeouts": {
+                                    "type": "integer"
+                                }
+                            }
+                        },
+                        "max_frag_hits": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "flow_bypassed": {
+                    "type": "object",
+                    "properties": {
+                        "local_pkts": {
+                            "type": "integer"
+                        },
+                        "local_bytes": {
+                            "type": "integer"
+                        },
+                        "local_capture_pkts": {
+                            "type": "integer"
+                        },
+                        "local_capture_bytes": {
+                            "type": "integer"
+                        },
+                        "closed": {
+                            "type": "integer"
+                        },
+                        "pkts": {
+                            "type": "integer"
+                        },
+                        "bytes": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "tcp": {
+                    "type": "object",
+                    "properties": {
+                        "sessions": {
+                            "type": "integer"
+                        },
+                        "ssn_memcap_drop": {
+                            "type": "integer"
+                        },
+                        "pseudo": {
+                            "type": "integer"
+                        },
+                        "pseudo_failed": {
+                            "type": "integer"
+                        },
+                        "invalid_checksum": {
+                            "type": "integer"
+                        },
+                        "no_flow": {
+                            "type": "integer"
+                        },
+                        "syn": {
+                            "type": "integer"
+                        },
+                        "synack": {
+                            "type": "integer"
+                        },
+                        "rst": {
+                            "type": "integer"
+                        },
+                        "midstream_pickups": {
+                            "type": "integer"
+                        },
+                        "pkt_on_wrong_thread": {
+                            "type": "integer"
+                        },
+                        "segment_memcap_drop": {
+                            "type": "integer"
+                        },
+                        "stream_depth_reached": {
+                            "type": "integer"
+                        },
+                        "reassembly_gap": {
+                            "type": "integer"
+                        },
+                        "overlap": {
+                            "type": "integer"
+                        },
+                        "overlap_diff_data": {
+                            "type": "integer"
+                        },
+                        "insert_data_normal_fail": {
+                            "type": "integer"
+                        },
+                        "insert_data_overlap_fail": {
+                            "type": "integer"
+                        },
+                        "insert_list_fail": {
+                            "type": "integer"
+                        },
+                        "memuse": {
+                            "type": "integer"
+                        },
+                        "reassembly_memuse": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "detect": {
+                    "type": "object",
+                    "properties": {
+                        "engines": {
+                            "type": "array",
+                            "items": [{
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "integer"
+                                    },
+                                    "last_reload": {
+                                        "type": "string"
+                                    },
+                                    "rules_loaded": {
+                                        "type": "integer"
+                                    },
+                                    "rules_failed": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }]
+                        },
+                        "alert": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "app_layer": {
+                    "type": "object",
+                    "properties": {
+                        "flow": {
+                            "type": "object",
+                            "properties": {
+                                "http": {
+                                    "type": "integer"
+                                },
+                                "ftp": {
+                                    "type": "integer"
+                                },
+                                "smtp": {
+                                    "type": "integer"
+                                },
+                                "tls": {
+                                    "type": "integer"
+                                },
+                                "ssh": {
+                                    "type": "integer"
+                                },
+                                "imap": {
+                                    "type": "integer"
+                                },
+                                "smb": {
+                                    "type": "integer"
+                                },
+                                "dcerpc_tcp": {
+                                    "type": "integer"
+                                },
+                                "dns_tcp": {
+                                    "type": "integer"
+                                },
+                                "nfs_tcp": {
+                                    "type": "integer"
+                                },
+                                "ntp": {
+                                    "type": "integer"
+                                },
+                                "ftp-data": {
+                                    "type": "integer"
+                                },
+                                "tftp": {
+                                    "type": "integer"
+                                },
+                                "ike": {
+                                    "type": "integer"
+                                },
+                                "krb5_tcp": {
+                                    "type": "integer"
+                                },
+                                "dhcp": {
+                                    "type": "integer"
+                                },
+                                "snmp": {
+                                    "type": "integer"
+                                },
+                                "sip": {
+                                    "type": "integer"
+                                },
+                                "rfb": {
+                                    "type": "integer"
+                                },
+                                "mqtt": {
+                                    "type": "integer"
+                                },
+                                "rdp": {
+                                    "type": "integer"
+                                },
+                                "http2": {
+                                    "type": "integer"
+                                },
+                                "failed_tcp": {
+                                    "type": "integer"
+                                },
+                                "dcerpc_udp": {
+                                    "type": "integer"
+                                },
+                                "dns_udp": {
+                                    "type": "integer"
+                                },
+                                "nfs_udp": {
+                                    "type": "integer"
+                                },
+                                "krb5_udp": {
+                                    "type": "integer"
+                                },
+                                "failed_udp": {
+                                    "type": "integer"
+                                }
+                            }
+                        },
+                        "tx": {
+                            "type": "object",
+                            "properties": {
+                                "http": {
+                                    "type": "integer"
+                                },
+                                "ftp": {
+                                    "type": "integer"
+                                },
+                                "smtp": {
+                                    "type": "integer"
+                                },
+                                "tls": {
+                                    "type": "integer"
+                                },
+                                "ssh": {
+                                    "type": "integer"
+                                },
+                                "imap": {
+                                    "type": "integer"
+                                },
+                                "smb": {
+                                    "type": "integer"
+                                },
+                                "dcerpc_tcp": {
+                                    "type": "integer"
+                                },
+                                "dns_tcp": {
+                                    "type": "integer"
+                                },
+                                "nfs_tcp": {
+                                    "type": "integer"
+                                },
+                                "ntp": {
+                                    "type": "integer"
+                                },
+                                "ftp-data": {
+                                    "type": "integer"
+                                },
+                                "tftp": {
+                                    "type": "integer"
+                                },
+                                "ike": {
+                                    "type": "integer"
+                                },
+                                "krb5_tcp": {
+                                    "type": "integer"
+                                },
+                                "dhcp": {
+                                    "type": "integer"
+                                },
+                                "snmp": {
+                                    "type": "integer"
+                                },
+                                "sip": {
+                                    "type": "integer"
+                                },
+                                "rfb": {
+                                    "type": "integer"
+                                },
+                                "mqtt": {
+                                    "type": "integer"
+                                },
+                                "rdp": {
+                                    "type": "integer"
+                                },
+                                "http2": {
+                                    "type": "integer"
+                                },
+                                "dcerpc_udp": {
+                                    "type": "integer"
+                                },
+                                "dns_udp": {
+                                    "type": "integer"
+                                },
+                                "nfs_udp": {
+                                    "type": "integer"
+                                },
+                                "krb5_udp": {
+                                    "type": "integer"
+                                }
+                            }
+                        },
+                        "expectations": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "http": {
+                    "type": "object",
+                    "properties": {
+                        "memuse": {
+                            "type": "integer"
+                        },
+                        "memcap": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "ftp": {
+                    "type": "object",
+                    "properties": {
+                        "memuse": {
+                            "type": "integer"
+                        },
+                        "memcap": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "file_store": {
+                    "type": "object",
+                    "properties": {
+                        "open_files": {
+                            "type": "integer"
+                        }
+                    }
                 }
-            }
+            },
+            "additionalProperties": true
         },
         "http": {
             "type": "object",
@@ -169,10 +1273,10 @@
                             "type": "integer"
                         }
                     },
-                    "additionalProperties": false
+                    "additionalProperties": true
                 }
             },
-            "additionalProperties": false
+            "additionalProperties": true
         },
         "app_proto": {
             "type": "string",
@@ -213,8 +1317,8 @@
                     }
                 }
             },
-            "additionalProperties": false
+            "additionalProperties": true
         }
     },
-    "additionalProperties": false
+    "additionalProperties": true
 }
