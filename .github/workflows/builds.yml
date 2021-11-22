@@ -59,6 +59,7 @@ jobs:
                 libjansson-dev \
                 libpython2.7 \
                 libnss3-dev \
+                libssl-dev \
                 make \
                 parallel \
                 python3-distutils \
@@ -71,6 +72,10 @@ jobs:
       - run: cargo install --force --debug cbindgen
       - run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
       - uses: actions/checkout@v2
+      - name: Build eve-validator
+        working-directory: eve-validator
+        run: |
+          cargo install --path .
       - run: python3 ./run.py --self-test
       - run: git clone https://github.com/OISF/suricata -b ${{ matrix.branch }}
       - run: git clone https://github.com/OISF/libhtp suricata/libhtp
@@ -126,6 +131,7 @@ jobs:
                 libevent-devel \
                 libmaxminddb-devel \
                 libpcap-devel \
+                openssl-devel \
                 libtool \
                 lz4-devel \
                 make \
@@ -144,6 +150,10 @@ jobs:
       - run: cargo install --force --debug cbindgen
       - run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
       - uses: actions/checkout@v2
+      - name: Build eve-validator
+        working-directory: eve-validator
+        run: |
+          cargo install --path .
       - run: python3 ./run.py --self-test
       - run: git clone https://github.com/OISF/suricata -b ${{ matrix.branch }}
       - run: git clone https://github.com/OISF/libhtp suricata/libhtp
