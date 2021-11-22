@@ -69,6 +69,11 @@ jobs:
                 zlib1g \
                 zlib1g-dev
       - run: cargo install --force --debug cbindgen
+      - run: git clone --depth 1 https://github.com/catenacyber/jsonschema-rs-iter.git
+      - name: Build jsonschema-rs-iter
+        working-directory: jsonschema-rs-iter
+        run: |
+          cargo install --path .
       - run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
       - uses: actions/checkout@v2
       - run: python3 ./run.py --self-test
@@ -139,6 +144,11 @@ jobs:
                 which \
                 zlib-devel
       - run: cargo install --force --debug cbindgen
+      - run: git clone --depth 1 https://github.com/catenacyber/jsonschema-rs-iter.git
+      - name: Build jsonschema-rs-iter
+        working-directory: jsonschema-rs-iter
+        run: |
+          cargo install --path .
       - run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
       - uses: actions/checkout@v2
       - run: python3 ./run.py --self-test
