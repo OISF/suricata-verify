@@ -1,5 +1,5 @@
 requires:
-  # Requires minimum version 7.0
+# Pgsql was released on version 7.0
   min-version: 7.0
 
 args:
@@ -28,36 +28,14 @@ checks:
       proto: TCP
       src_ip: 192.168.50.11
       src_port: 60358
+      tls.fingerprint: e4:9d:12:c5:f9:f3:40:41:06:c7:14:42:2c:d8:82:41:e9:6b:94:cd
       tls.from_proto: pgsql
       tls.issuerdn: CN=ubuntu
+      tls.notafter: '2027-02-21T05:13:52'
+      tls.notbefore: '2017-02-23T05:13:52'
+      tls.serial: 00:82:64:66:C3:07:A1:8F:80
       tls.subject: CN=ubuntu
-- filter:
-    count: 1
-    match:
-      app_proto: tls
-      app_proto_orig: pgsql
-      dest_ip: 192.168.50.12
-      dest_port: 5432
-      event_type: flow
-      flow.age: 0
-      flow.alerted: false
-      flow.bytes_toclient: 2220
-      flow.bytes_toserver: 1250
-      flow.pkts_toclient: 7
-      flow.pkts_toserver: 9
-      flow.reason: shutdown
-      flow.state: closed
-      proto: TCP
-      src_ip: 192.168.50.11
-      src_port: 60358
-      tcp.ack: true
-      tcp.psh: true
-      tcp.rst: true
-      tcp.state: closed
-      tcp.syn: true
-      tcp.tcp_flags: 1e
-      tcp.tcp_flags_tc: 1a
-      tcp.tcp_flags_ts: 1e
+      tls.version: TLS 1.2
 - filter:
     count: 1
     match:
@@ -73,7 +51,7 @@ checks:
       pgsql.response.error_response.message_body.message: no pg_hba.conf entry for
         replication connection from host "192.168.50.11", user "rep", SSL off
       pgsql.response.error_response.message_body.routine: ClientAuthentication
-      pgsql.response.error_response.message_body.severity: FATAL
+      pgsql.response.error_response.message_body.severity_localizable: FATAL
       pgsql.tx_id: 1
       proto: TCP
       src_ip: 192.168.50.12
@@ -103,3 +81,30 @@ checks:
       tcp.tcp_flags: 1a
       tcp.tcp_flags_tc: 1a
       tcp.tcp_flags_ts: 1a
+- filter:
+    count: 1
+    match:
+      app_proto: tls
+      app_proto_orig: pgsql
+      dest_ip: 192.168.50.12
+      dest_port: 5432
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 2220
+      flow.bytes_toserver: 1250
+      flow.pkts_toclient: 7
+      flow.pkts_toserver: 9
+      flow.reason: shutdown
+      flow.state: closed
+      proto: TCP
+      src_ip: 192.168.50.11
+      src_port: 60358
+      tcp.ack: true
+      tcp.psh: true
+      tcp.rst: true
+      tcp.state: closed
+      tcp.syn: true
+      tcp.tcp_flags: 1e
+      tcp.tcp_flags_tc: 1a
+      tcp.tcp_flags_ts: 1e

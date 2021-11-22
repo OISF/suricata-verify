@@ -1,5 +1,5 @@
 requires:
-  # Requires minimum version 7.0
+# Pgsql was released on version 7.0
   min-version: 7.0
 
 args:
@@ -12,67 +12,61 @@ checks:
       dest_ip: 192.168.1.74
       dest_port: 5432
       event_type: pgsql
+      pcap_cnt: 6
       pgsql.request.message: SSL Request
       pgsql.response.message: SSL Rejected
       pgsql.tx_id: 1
       proto: TCP
       src_ip: 192.168.1.102
-      src_port: 46338
+      src_port: 41678
 - filter:
     count: 1
     match:
       dest_ip: 192.168.1.74
       dest_port: 5432
       event_type: pgsql
+      pcap_cnt: 9
       pgsql.request.startup_message.protocol_version: '3.0'
       pgsql.request.startup_message.startup_parameters.database: Test
       pgsql.request.startup_message.startup_parameters.user: ju-Test
-      pgsql.response.authentication_sasl.authentication_SASL: authentication_sasl
+      pgsql.response.message: authentication_sasl
       pgsql.tx_id: 2
       proto: TCP
       src_ip: 192.168.1.102
-      src_port: 46338
+      src_port: 41678
 - filter:
     count: 1
     match:
       dest_ip: 192.168.1.74
       dest_port: 5432
       event_type: pgsql
+      pcap_cnt: 12
       pgsql.request.sasl_initial_response.authentication_mechanism: scram_SHA256
-      pgsql.request.sasl_initial_response.sasl_param: n,,n=,r=WWm+MmsCzMHe7f34mhlWbHy1
+      pgsql.request.sasl_initial_response.sasl_param: n,,n=,r=CW740WBxLZZB5YJevR4r9gOK
+      pgsql.response.message: authentication_sasl_continue
       pgsql.tx_id: 3
       proto: TCP
       src_ip: 192.168.1.102
-      src_port: 46338
+      src_port: 41678
 - filter:
     count: 1
     match:
       dest_ip: 192.168.1.74
       dest_port: 5432
       event_type: pgsql
-      pgsql.response[0].authentication_sasl_continue.authentication_SASL_continue: authentication_sasl_continue
-      pgsql.tx_id: 4
-      proto: TCP
-      src_ip: 192.168.1.102
-      src_port: 46338
-- filter:
-    count: 1
-    match:
-      dest_ip: 192.168.1.74
-      dest_port: 5432
-      event_type: pgsql
-      pgsql.request.sasl_response.payload: c=biws,r=WWm+MmsCzMHe7f34mhlWbHy1V+D4A9n71qramYQH8Y0ZE++m,p=rKh3azwp/KGSiZG/KZi530KgZfMSSr4VfLXjqTZZ2lI=
-      pgsql.responses[0].authentication_sasl_final.payload: v=01sFzu8lJrVs5KFwjqJEROq9YVBFY6RYgIU0jOlCVmI=
+      pcap_cnt: 15
+      pgsql.request.sasl_response.payload: c=biws,r=CW740WBxLZZB5YJevR4r9gOKZZKXrTf56ImeOAD0wW/PBe/u,p=vv0eiWYw+MiL3GdM8/y6NWyTTXTk1FSNCW9aSlfHkiE=
+      pgsql.responses[0].authentication_sasl_final: v=PcOGJHfx1UfVwvtWa3Faz/dRqWUeUJazljwi6oeapl4=
       pgsql.responses[10].parameter_status.name: session_authorization
       pgsql.responses[10].parameter_status.value: ju-Test
       pgsql.responses[11].parameter_status.name: standard_conforming_strings
       pgsql.responses[11].parameter_status.value: 'on'
       pgsql.responses[12].parameter_status.name: TimeZone
       pgsql.responses[12].parameter_status.value: Europe/London
-      pgsql.responses[13].backend_key_data.process_id: 9040
-      pgsql.responses[13].backend_key_data.secret_key: 41611923
+      pgsql.responses[13].backend_key_data.process_id: 10804
+      pgsql.responses[13].backend_key_data.secret_key: 1115740663
       pgsql.responses[14].ready_for_query.transaction_status: I
-      pgsql.responses[1].authentication_ok.payload: ''
+      pgsql.responses[1].message: authentication_ok
       pgsql.responses[2].parameter_status.name: application_name
       pgsql.responses[2].parameter_status.value: psql
       pgsql.responses[3].parameter_status.name: client_encoding
@@ -89,200 +83,195 @@ checks:
       pgsql.responses[8].parameter_status.value: UTF8
       pgsql.responses[9].parameter_status.name: server_version
       pgsql.responses[9].parameter_status.value: '13.4'
-      pgsql.tx_id: 5
+      pgsql.tx_id: 4
       proto: TCP
       src_ip: 192.168.1.102
-      src_port: 46338
+      src_port: 41678
 - filter:
     count: 1
     match:
       dest_ip: 192.168.1.74
       dest_port: 5432
       event_type: pgsql
-      pgsql.request.simple_query.payload: select * from dummy_table;
+      pcap_cnt: 18
+      pgsql.request.simple_query: create table dummy_table(name varchar(20), address
+        text, age int);
+      pgsql.responses[0].command_completed: CREATE TABLE
+      pgsql.responses[1].ready_for_query.transaction_status: I
+      pgsql.tx_id: 5
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 41678
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 23
+      pgsql.request.simple_query: insert into dummy_table("Juliana", "location-A",
+        25);
+      pgsql.responses[0].error_response.message_body.code: '42601'
+      pgsql.responses[0].error_response.message_body.file: scan.l
+      pgsql.responses[0].error_response.message_body.line: '1180'
+      pgsql.responses[0].error_response.message_body.message: syntax error at or near
+        "25"
+      pgsql.responses[0].error_response.message_body.position: '50'
+      pgsql.responses[0].error_response.message_body.routine: scanner_yyerror
+      pgsql.responses[0].error_response.message_body.severity_localizable: ERROR
+      pgsql.responses[0].error_response.message_body.severity_non_localizable: ERROR
+      pgsql.responses[1].ready_for_query.transaction_status: I
+      pgsql.tx_id: 6
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 41678
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 28
+      pgsql.request.simple_query: insert into dummy_table('Juliana','location-A',25);
+      pgsql.responses[0].error_response.message_body.code: '42601'
+      pgsql.responses[0].error_response.message_body.file: scan.l
+      pgsql.responses[0].error_response.message_body.line: '1180'
+      pgsql.responses[0].error_response.message_body.message: syntax error at or near
+        "'Juliana'"
+      pgsql.responses[0].error_response.message_body.position: '25'
+      pgsql.responses[0].error_response.message_body.routine: scanner_yyerror
+      pgsql.responses[0].error_response.message_body.severity_localizable: ERROR
+      pgsql.responses[0].error_response.message_body.severity_non_localizable: ERROR
+      pgsql.responses[1].ready_for_query.transaction_status: I
+      pgsql.tx_id: 7
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 41678
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 33
+      pgsql.request.simple_query: insert into dummy_table values("Juliana", "location-A",
+        25);
+      pgsql.responses[0].error_response.message_body.code: '42703'
+      pgsql.responses[0].error_response.message_body.file: d:\pginstaller_13.auto\postgres.windows-x64\src\backend\parser\parse_relation.c
+      pgsql.responses[0].error_response.message_body.line: '3514'
+      pgsql.responses[0].error_response.message_body.message: column "Juliana" does
+        not exist
+      pgsql.responses[0].error_response.message_body.position: '32'
+      pgsql.responses[0].error_response.message_body.routine: errorMissingColumn
+      pgsql.responses[0].error_response.message_body.severity_localizable: ERROR
+      pgsql.responses[0].error_response.message_body.severity_non_localizable: ERROR
+      pgsql.responses[1].ready_for_query.transaction_status: I
+      pgsql.tx_id: 8
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 41678
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 36
+      pgsql.request.simple_query: insert into dummy_table values('Juliana', 'location-A',
+        25);
+      pgsql.responses[0].command_completed: INSERT 0 1
+      pgsql.responses[1].ready_for_query.transaction_status: I
+      pgsql.tx_id: 9
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 41678
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 39
+      pgsql.request.simple_query: insert into dummy_table values('Harry', 'location-B',
+        12);
+      pgsql.responses[0].command_completed: INSERT 0 1
+      pgsql.responses[1].ready_for_query.transaction_status: I
+      pgsql.tx_id: 10
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 41678
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 42
+      pgsql.request.simple_query: insert into dummy_table values('Hermione', 'location-C',
+        12);
+      pgsql.responses[0].command_completed: INSERT 0 1
+      pgsql.responses[1].ready_for_query.transaction_status: I
+      pgsql.tx_id: 11
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 41678
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 47
+      pgsql.request.simple_query: update dummy_table set name='Ron', age=12 where
+        name='Juliana');
+      pgsql.responses[0].error_response.message_body.code: '42601'
+      pgsql.responses[0].error_response.message_body.file: scan.l
+      pgsql.responses[0].error_response.message_body.line: '1180'
+      pgsql.responses[0].error_response.message_body.message: syntax error at or near
+        ")"
+      pgsql.responses[0].error_response.message_body.position: '63'
+      pgsql.responses[0].error_response.message_body.routine: scanner_yyerror
+      pgsql.responses[0].error_response.message_body.severity_localizable: ERROR
+      pgsql.responses[0].error_response.message_body.severity_non_localizable: ERROR
+      pgsql.responses[1].ready_for_query.transaction_status: I
+      pgsql.tx_id: 12
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 41678
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 50
+      pgsql.request.simple_query: update dummy_table set name='Ron', age=12 where
+        name='Juliana';
+      pgsql.responses[0].command_completed: UPDATE 1
+      pgsql.responses[1].ready_for_query.transaction_status: I
+      pgsql.tx_id: 13
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 41678
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 53
+      pgsql.request.simple_query: select * from dummy_table;
       pgsql.responses[0].row_description.backend_response: Response Ok
       pgsql.responses[0].row_description.field_count: 3
       pgsql.responses[1].data_row.backend_response: Response Ok
       pgsql.responses[2].data_row.backend_response: Response Ok
       pgsql.responses[3].data_row.backend_response: Response Ok
-      pgsql.responses[4].command_completed.payload: "SELECT 3"
+      pgsql.responses[4].command_completed: SELECT 3
       pgsql.responses[5].ready_for_query.transaction_status: I
-      pgsql.tx_id: 6
-      proto: TCP
-      src_ip: 192.168.1.102
-      src_port: 46338
-- filter:
-    count: 1
-    match:
-      dest_ip: 192.168.1.74
-      dest_port: 5432
-      event_type: pgsql
-      pgsql.request.simple_query.payload: create table new_table(name varchar(20),
-        email varchar(30));
-      pgsql.responses[0].command_completed.payload: "CREATE TABLE"
-      pgsql.responses[1].ready_for_query.transaction_status: I
-      pgsql.tx_id: 7
-      proto: TCP
-      src_ip: 192.168.1.102
-      src_port: 46338
-- filter:
-    count: 1
-    match:
-      dest_ip: 192.168.1.74
-      dest_port: 5432
-      event_type: pgsql
-      pgsql.request.simple_query.payload: select * from new_table;
-      pgsql.responses[0].row_description.backend_response: Response Ok
-      pgsql.responses[0].row_description.field_count: 2
-      pgsql.responses[1].command_completed.payload: "SELECT 0"
-      pgsql.responses[2].ready_for_query.transaction_status: I
-      pgsql.tx_id: 8
-      proto: TCP
-      src_ip: 192.168.1.102
-      src_port: 46338
-- filter:
-    count: 1
-    match:
-      dest_ip: 192.168.1.74
-      dest_port: 5432
-      event_type: pgsql
-      pgsql.request.simple_query.payload: insert into new_table values('Dumbledore',
-        'prof_dumbledore@gmail.com');
-      pgsql.responses[0].command_completed.payload: "INSERT 0 1"
-      pgsql.responses[1].ready_for_query.transaction_status: I
-      pgsql.tx_id: 9
-      proto: TCP
-      src_ip: 192.168.1.102
-      src_port: 46338
-- filter:
-    count: 1
-    match:
-      dest_ip: 192.168.1.74
-      dest_port: 5432
-      event_type: pgsql
-      pgsql.request.simple_query.payload: insert into new_table values('McGonagall',
-        'prof_mc.gonagall@gmail.com');
-      pgsql.responses[0].command_completed.payload: "INSERT 0 1"
-      pgsql.responses[1].ready_for_query.transaction_status: I
-      pgsql.tx_id: 10
-      proto: TCP
-      src_ip: 192.168.1.102
-      src_port: 46338
-- filter:
-    count: 1
-    match:
-      dest_ip: 192.168.1.74
-      dest_port: 5432
-      event_type: pgsql
-      pgsql.request.simple_query.payload: insert into new_table values('Rogue', 'prof_rogue@yahoo.com');
-      pgsql.responses[0].command_completed.payload: "INSERT 0 1"
-      pgsql.responses[1].ready_for_query.transaction_status: I
-      pgsql.tx_id: 11
-      proto: TCP
-      src_ip: 192.168.1.102
-      src_port: 46338
-- filter:
-    count: 1
-    match:
-      dest_ip: 192.168.1.74
-      dest_port: 5432
-      event_type: pgsql
-      pgsql.request.simple_query.payload: select * from new_table;
-      pgsql.responses[0].row_description.backend_response: Response Ok
-      pgsql.responses[0].row_description.field_count: 2
-      pgsql.responses[1].data_row.backend_response: Response Ok
-      pgsql.responses[2].data_row.backend_response: Response Ok
-      pgsql.responses[3].data_row.backend_response: Response Ok
-      pgsql.responses[4].command_completed.payload: "SELECT 3"
-      pgsql.responses[5].ready_for_query.transaction_status: I
-      pgsql.tx_id: 12
-      proto: TCP
-      src_ip: 192.168.1.102
-      src_port: 46338
-- filter:
-    count: 1
-    match:
-      dest_ip: 192.168.1.74
-      dest_port: 5432
-      event_type: pgsql
-      pgsql.request.simple_query.payload: insert into new_table values('Lockhart',
-        'prof_lockhart@hotmail.com');
-      pgsql.responses[0].command_completed.payload: "INSERT 0 1"
-      pgsql.responses[1].ready_for_query.transaction_status: I
-      pgsql.tx_id: 13
-      proto: TCP
-      src_ip: 192.168.1.102
-      src_port: 46338
-- filter:
-    count: 1
-    match:
-      dest_ip: 192.168.1.74
-      dest_port: 5432
-      event_type: pgsql
-      pgsql.request.simple_query.payload: delete from new_table where name='Lockhart';
-      pgsql.responses[0].command_completed.payload: "DELETE 1"
-      pgsql.responses[1].ready_for_query.transaction_status: I
       pgsql.tx_id: 14
       proto: TCP
       src_ip: 192.168.1.102
-      src_port: 46338
-- filter:
-    count: 1
-    match:
-      dest_ip: 192.168.1.74
-      dest_port: 5432
-      event_type: pgsql
-      pgsql.request.simple_query.payload: insert into new_table values('Hagrid', 'prof_hagrid@hotmail.com');
-      pgsql.responses[0].command_completed.payload: "INSERT 0 1"
-      pgsql.responses[1].ready_for_query.transaction_status: I
-      pgsql.tx_id: 15
-      proto: TCP
-      src_ip: 192.168.1.102
-      src_port: 46338
-- filter:
-    count: 1
-    match:
-      dest_ip: 192.168.1.74
-      dest_port: 5432
-      event_type: pgsql
-      pgsql.request.simple_query.payload: update new_table set email='prof_hagrid@gmail.com'
-        where name='Hagrid';
-      pgsql.responses[0].command_completed.payload: "UPDATE 1"
-      pgsql.responses[1].ready_for_query.transaction_status: I
-      pgsql.tx_id: 16
-      proto: TCP
-      src_ip: 192.168.1.102
-      src_port: 46338
-- filter:
-    count: 1
-    match:
-      dest_ip: 192.168.1.74
-      dest_port: 5432
-      event_type: pgsql
-      pgsql.request.simple_query.payload: select * from new_table;
-      pgsql.responses[0].row_description.backend_response: Response Ok
-      pgsql.responses[0].row_description.field_count: 2
-      pgsql.responses[1].data_row.backend_response: Response Ok
-      pgsql.responses[2].data_row.backend_response: Response Ok
-      pgsql.responses[3].data_row.backend_response: Response Ok
-      pgsql.responses[4].data_row.backend_response: Response Ok
-      pgsql.responses[5].command_completed.payload: "SELECT 4"
-      pgsql.responses[6].ready_for_query.transaction_status: I
-      pgsql.tx_id: 17
-      proto: TCP
-      src_ip: 192.168.1.102
-      src_port: 46338
-- filter:
-    count: 1
-    match:
-      dest_ip: 192.168.1.74
-      dest_port: 5432
-      event_type: pgsql
-      pgsql.request.message: termination_message
-      pgsql.tx_id: 18
-      proto: TCP
-      src_ip: 192.168.1.102
-      src_port: 46338
+      src_port: 41678
 - filter:
     count: 1
     match:
@@ -290,23 +279,21 @@ checks:
       dest_ip: 192.168.1.74
       dest_port: 5432
       event_type: flow
-      flow.age: 1357
+      flow.age: 679
       flow.alerted: false
-      flow.bytes_toclient: 2485
-      flow.bytes_toserver: 2854
+      flow.bytes_toclient: 2340
+      flow.bytes_toserver: 2729
       flow.pkts_toclient: 19
-      flow.pkts_toserver: 35
+      flow.pkts_toserver: 34
       flow.reason: shutdown
-      flow.state: closed
+      flow.state: established
       proto: TCP
       src_ip: 192.168.1.102
-      src_port: 46338
+      src_port: 41678
       tcp.ack: true
-      tcp.fin: true
       tcp.psh: true
-      tcp.rst: true
-      tcp.state: closed
+      tcp.state: established
       tcp.syn: true
-      tcp.tcp_flags: 1f
-      tcp.tcp_flags_tc: 1e
-      tcp.tcp_flags_ts: 1b
+      tcp.tcp_flags: 1a
+      tcp.tcp_flags_tc: 1a
+      tcp.tcp_flags_ts: 1a

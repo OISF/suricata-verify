@@ -1,5 +1,5 @@
 requires:
-  # Requires minimum version 7.0
+# Pgsql was released on version 7.0
   min-version: 7.0
 
 args:
@@ -12,35 +12,7 @@ checks:
       dest_ip: 10.16.1.11
       dest_port: 5432
       event_type: pgsql
-      pcap_cnt: 14
-      pgsql.request.message: SSL Request
-      pgsql.response.message: SSL Rejected
-      pgsql.tx_id: 1
-      proto: TCP
-      src_ip: 10.16.1.10
-      src_port: 40784
-- filter:
-    count: 1
-    match:
-      dest_ip: 10.16.1.11
-      dest_port: 5432
-      event_type: pgsql
-      pcap_cnt: 14
-      pgsql.request.startup_message.protocol_version: '3.0'
-      pgsql.request.startup_message.startup_parameters.database: indexer
-      pgsql.request.startup_message.startup_parameters.user: indexer
-      pgsql.response.authentication_md5_password.payload: \x88'N5
-      pgsql.tx_id: 2
-      proto: TCP
-      src_ip: 10.16.1.10
-      src_port: 40784
-- filter:
-    count: 1
-    match:
-      dest_ip: 10.16.1.11
-      dest_port: 5432
-      event_type: pgsql
-      pcap_cnt: 41
+      pcap_cnt: 21
       pgsql.request.message: SSL Request
       pgsql.response.message: SSL Rejected
       pgsql.tx_id: 1
@@ -53,11 +25,39 @@ checks:
       dest_ip: 10.16.1.11
       dest_port: 5432
       event_type: pgsql
-      pcap_cnt: 41
+      pcap_cnt: 7
+      pgsql.request.message: SSL Request
+      pgsql.response.message: SSL Rejected
+      pgsql.tx_id: 1
+      proto: TCP
+      src_ip: 10.16.1.10
+      src_port: 40784
+- filter:
+    count: 1
+    match:
+      dest_ip: 10.16.1.11
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 11
       pgsql.request.startup_message.protocol_version: '3.0'
       pgsql.request.startup_message.startup_parameters.database: indexer
       pgsql.request.startup_message.startup_parameters.user: indexer
-      pgsql.response.authentication_md5_password.payload: "\\x9fi\x1A\\x8e"
+      pgsql.response.authentication_md5_password: \x88'N5
+      pgsql.tx_id: 2
+      proto: TCP
+      src_ip: 10.16.1.10
+      src_port: 40784
+- filter:
+    count: 1
+    match:
+      dest_ip: 10.16.1.11
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 25
+      pgsql.request.startup_message.protocol_version: '3.0'
+      pgsql.request.startup_message.startup_parameters.database: indexer
+      pgsql.request.startup_message.startup_parameters.user: indexer
+      pgsql.response.authentication_md5_password: "\\x9fi\x1A\\x8e"
       pgsql.tx_id: 2
       proto: TCP
       src_ip: 10.16.1.10
@@ -68,9 +68,9 @@ checks:
       dest_ip: 10.16.1.11
       dest_port: 5432
       event_type: pgsql
-      pcap_cnt: 41
-      pgsql.request.password_message.payload: md5e4cfa9552468cae5d48ca2822ca36e22
-      pgsql.responses[0].authentication_ok.payload: ''
+      pcap_cnt: 29
+      pgsql.request.password_message.password: md5e4cfa9552468cae5d48ca2822ca36e22
+      pgsql.responses[0].message: authentication_ok
       pgsql.responses[10].parameter_status.name: standard_conforming_strings
       pgsql.responses[10].parameter_status.value: 'on'
       pgsql.responses[11].parameter_status.name: TimeZone
@@ -106,14 +106,14 @@ checks:
       dest_ip: 10.16.1.11
       dest_port: 5432
       event_type: pgsql
-      pcap_cnt: 41
-      pgsql.request.simple_query.payload: select * from rules where sid = 2021701;
+      pcap_cnt: 35
+      pgsql.request.simple_query: select * from rules where sid = 2021701;
       pgsql.responses[0].row_description.backend_response: Response Ok
       pgsql.responses[0].row_description.field_count: 10
       pgsql.responses[1].data_row.backend_response: Response Ok
       pgsql.responses[2].data_row.backend_response: Response Ok
       pgsql.responses[3].data_row.backend_response: Response Ok
-      pgsql.responses[4].command_completed.payload: "SELECT 3"
+      pgsql.responses[4].command_completed: SELECT 3
       pgsql.responses[5].ready_for_query.transaction_status: I
       pgsql.tx_id: 4
       proto: TCP

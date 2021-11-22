@@ -1,5 +1,5 @@
 requires:
-  # Requires minimum version 7.0
+# Pgsql was released on version 7.0
   min-version: 7.0
 
 args:
@@ -12,6 +12,7 @@ checks:
       dest_ip: 192.168.1.74
       dest_port: 5432
       event_type: pgsql
+      pcap_cnt: 6
       pgsql.request.message: SSL Request
       pgsql.response.message: SSL Rejected
       pgsql.tx_id: 1
@@ -24,10 +25,11 @@ checks:
       dest_ip: 192.168.1.74
       dest_port: 5432
       event_type: pgsql
+      pcap_cnt: 9
       pgsql.request.startup_message.protocol_version: '3.0'
       pgsql.request.startup_message.startup_parameters.database: Test
       pgsql.request.startup_message.startup_parameters.user: ju-Test
-      pgsql.response.authentication_cleartext_password.payload: ''
+      pgsql.response.message: authentication_cleartext_password
       pgsql.tx_id: 2
       proto: TCP
       src_ip: 192.168.1.102
@@ -38,8 +40,9 @@ checks:
       dest_ip: 192.168.1.74
       dest_port: 5432
       event_type: pgsql
-      pgsql.request.password_message.payload: TestTest!2
-      pgsql.responses[0].authentication_ok.payload: ''
+      pcap_cnt: 12
+      pgsql.request.password_message.password: TestTest!2
+      pgsql.responses[0].message: authentication_ok
       pgsql.responses[10].parameter_status.name: standard_conforming_strings
       pgsql.responses[10].parameter_status.value: 'on'
       pgsql.responses[11].parameter_status.name: TimeZone
@@ -72,14 +75,15 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 192.168.1.74
-      dest_port: 5432
+      dest_ip: 192.168.1.102
+      dest_port: 41662
       event_type: pgsql
+      pcap_cnt: 15
       pgsql.request.message: termination_message
       pgsql.tx_id: 4
       proto: TCP
-      src_ip: 192.168.1.102
-      src_port: 41662
+      src_ip: 192.168.1.74
+      src_port: 5432
 - filter:
     count: 1
     match:
