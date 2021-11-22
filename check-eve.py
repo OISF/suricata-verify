@@ -27,26 +27,29 @@ import os
 import os.path
 import argparse
 import json
+import subprocess
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError
 
-def validate_json(args, dirpath, schema, isDirectory):
-    json_filename = dirpath
-    if isDirectory:
-        json_filename = os.path.join(dirpath, 'eve.json')
-        
+def validate_json(args, json_filename, schema):
     status = "OK"
     errors = []
 
-    with open(json_filename) as f:
-        for line in f:
-            obj = json.loads(line)
-            try:
-                validate(instance = obj, schema=schema)
-            except ValidationError as err:
-                status = "FAIL"
-                errors.append(err.message)
-    
+    if not args.python_validator:
+        cp = subprocess.run(["jsonschema-rs-iter", schema, "-i", json_filename])
+        if cp.returncode != 0:
+            status = "FAIL"
+            errors.append(cp.stdout)
+    else:
+        with open(json_filename) as f:
+            for line in f:
+                obj = json.loads(line)
+                try:
+                    validate(instance = obj, schema=schema)
+                except ValidationError as err:
+                    status = "FAIL"
+                    errors.append(err.message)
+
     if not args.quiet:
         if status == "FAIL":
             print("===> %s: FAIL " % json_filename)
@@ -63,6 +66,7 @@ def main():
 
     parser = argparse.ArgumentParser(description="Validation schema")
     parser.add_argument("-v", dest="verbose", action="store_true")
+    parser.add_argument("-p", dest="python_validator", action="store_true", help="use python validator")
     parser.add_argument("file", nargs="?", default=[])
     parser.add_argument("-q", dest="quiet", action="store_true")
     args = parser.parse_args()
@@ -70,7 +74,11 @@ def main():
     tdir = os.path.join(TOPDIR, "tests")
 
     json_path = "{}/schema.json".format(TOPDIR)
-    schema = json.load(open(json_path))
+
+    if args.python_validator:
+        schema = json.load(open(json_path))
+    else:
+        schema = json_path
 
     checked = 0
     passed = 0
@@ -78,12 +86,12 @@ def main():
 
     isDirectory = True
     argfile = args.file
-    
+
     if argfile:
         # if the argument is a single file
         if os.path.isfile(argfile):
             isDirectory = False
-            status = validate_json(args, argfile, schema, isDirectory)
+            status = validate_json(args, argfile, schema)
             checked += 1
             if status == "OK":
                 passed += 1
@@ -93,12 +101,12 @@ def main():
         # if the argument is a directory
         elif os.path.isdir(argfile):
             tdir = argfile
-           
+
     if isDirectory:
         # os.walk for eve.json files and validate each one
         for dirpath, dirnames, filenames in os.walk(tdir):
             if 'eve.json' in filenames:
-                status = validate_json(args, dirpath, schema, isDirectory)
+                status = validate_json(args, os.path.join(dirpath, 'eve.json'), schema)
                 checked += 1
                 if status == "OK":
                     passed += 1
