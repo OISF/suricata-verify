@@ -46,8 +46,10 @@ import yaml
 
 # Check if we can validate EVE files against the schema.
 try:
-    import jsonschema
     VALIDATE_EVE = True
+    check_output = subprocess.run(["jsonschema-rs-iter", "-V"], capture_output=True)
+    if check_output.returncode != 0:
+        VALIDATE_EVE = False
 except:
     VALIDATE_EVE = False
 
@@ -946,7 +948,7 @@ def main():
         return unittest.main(argv=[sys.argv[0]])
 
     if not VALIDATE_EVE:
-        print("Warning: EVE files will not be valided: jsonschema module not found.")
+        print("Warning: EVE files will not be valided: jsonschema-rs-iter program not found.")
 
     TOPDIR = os.path.abspath(os.path.dirname(sys.argv[0]))
 
