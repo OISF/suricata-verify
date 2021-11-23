@@ -1272,6 +1272,57 @@
                 "status": {
                     "type": "integer"
                 },
+                "http_refer": {
+                    "type": "string"
+                },
+                "redirect": {
+                    "type": "string"
+                },
+                "xff": {
+                    "type": "string"
+                },
+                "http_port": {
+                    "type": "integer"
+                },
+                "version": {
+                    "type": "string"
+                },
+                "request_headers": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "value": {
+                                "type": "string"
+                            },
+                            "table_size_update": {
+                                "type": "integer"
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                },
+                "response_headers": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "value": {
+                                "type": "string"
+                            },
+                            "table_size_update": {
+                                "type": "integer"
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                },
                 "length": {
                     "type": "integer"
                 },
@@ -1291,10 +1342,70 @@
                             "type": "integer"
                         }
                     },
-                    "additionalProperties": true
+                    "additionalProperties": false
+                },
+                "http2": {
+                    "type": "object",
+                    "properties": {
+                        "stream_id": {
+                            "type": "integer"
+                        },
+                        "request": {
+                            "type": "object",
+                            "properties": {
+                                "settings": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "settings_id": {
+                                                "type": "string"
+                                            },
+                                            "settings_value": {
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "additionalProperties": false
+                                    }
+                                },
+                                "priority": {
+                                    "type": "integer"
+                                },
+                                "error_code": {
+                                    "type": "string"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "response": {
+                            "type": "object",
+                            "properties": {
+                                "settings": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "settings_id": {
+                                                "type": "string"
+                                            },
+                                            "settings_value": {
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "additionalProperties": false
+                                    }
+                                },
+                                "error_code": {
+                                    "type": "string"
+                                }
+                            },
+                            "additionalProperties": false
+                        }
+                    },
+                    "additionalProperties": false
                 }
             },
-            "additionalProperties": true
+            "additionalProperties": false
         },
         "app_proto": {
             "type": "string",
