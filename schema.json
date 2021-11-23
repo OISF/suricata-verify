@@ -1421,6 +1421,18 @@
                 "state": {
                     "type": "string"
                 },
+                "magic": {
+                    "type": "string"
+                },
+                "md5": {
+                    "type": "string"
+                },
+                "sha1": {
+                    "type": "string"
+                },
+                "sha256": {
+                    "type": "string"
+                },
                 "stored": {
                     "type": "boolean"
                 },
@@ -1428,6 +1440,9 @@
                     "type": "integer"
                 },
                 "tx_id": {
+                    "type": "integer"
+                },
+                "file_id": {
                     "type": "integer"
                 },
                 "gaps": {
@@ -1446,7 +1461,7 @@
                     }
                 }
             },
-            "additionalProperties": true
+            "additionalProperties": false
         }
     },
     "additionalProperties": true
