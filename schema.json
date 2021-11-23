@@ -79,11 +79,17 @@
                 "start": {
                     "type": "string"
                 },
+                "action": {
+                    "type": "string"
+                },
+                "bypass": {
+                    "type": "string"
+                },
                 "reason": {
                     "type": "string"
                 }
             },
-            "additionalProperties": true
+            "additionalProperties": false
         },
         "tcp": {
             "type": "object",
@@ -110,11 +116,23 @@
                 "fin": {
                     "type": "boolean"
                 },
+                "cwr": {
+                    "type": "boolean"
+                },
+                "ecn": {
+                    "type": "boolean"
+                },
+                "rst": {
+                    "type": "boolean"
+                },
+                "urg": {
+                    "type": "boolean"
+                },
                 "ack": {
                     "type": "boolean"
                 }
             },
-            "additionalProperties": true
+            "additionalProperties": false
         },
         "stats": {
             "type": "object",
