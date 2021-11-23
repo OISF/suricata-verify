@@ -303,7 +303,8 @@
                                         "frag_ignored": {
                                             "type": "integer"
                                         }
-                                    }
+                                    },
+                                    "additionalProperties": false
                                 },
                                 "icmpv4": {
                                     "type": "object",
@@ -323,7 +324,8 @@
                                         "ipv4_unknown_ver": {
                                             "type": "integer"
                                         }
-                                    }
+                                    },
+                                    "additionalProperties": false
                                 },
                                 "icmpv6": {
                                     "type": "object",
@@ -352,7 +354,8 @@
                                         "experimentation_type": {
                                             "type": "integer"
                                         }
-                                    }
+                                    },
+                                    "additionalProperties": false
                                 },
                                 "ipv6": {
                                     "type": "object",
@@ -450,7 +453,8 @@
                                         "ipv6_in_ipv6_wrong_version": {
                                             "type": "integer"
                                         }
-                                    }
+                                    },
+                                    "additionalProperties": false
                                 },
                                 "tcp": {
                                     "type": "object",
@@ -470,7 +474,8 @@
                                         "opt_duplicate": {
                                             "type": "integer"
                                         }
-                                    }
+                                    },
+                                    "additionalProperties": false
                                 },
                                 "udp": {
                                     "type": "object",
@@ -484,7 +489,8 @@
                                         "hlen_invalid": {
                                             "type": "integer"
                                         }
-                                    }
+                                    },
+                                    "additionalProperties": false
                                 },
                                 "sll": {
                                     "type": "object",
@@ -492,7 +498,8 @@
                                         "pkt_too_small": {
                                             "type": "integer"
                                         }
-                                    }
+                                    },
+                                    "additionalProperties": false
                                 },
                                 "ethernet": {
                                     "type": "object",
@@ -500,7 +507,8 @@
                                         "pkt_too_small": {
                                             "type": "integer"
                                         }
-                                    }
+                                    },
+                                    "additionalProperties": false
                                 },
                                 "ppp": {
                                     "type": "object",
@@ -523,7 +531,8 @@
                                         "unsup_proto": {
                                             "type": "integer"
                                         }
-                                    }
+                                    },
+                                    "additionalProperties": false
                                 },
                                 "pppoe": {
                                     "type": "object",
@@ -537,7 +546,8 @@
                                         "malformed_tags": {
                                             "type": "integer"
                                         }
-                                    }
+                                    },
+                                    "additionalProperties": false
                                 },
                                 "gre": {
                                     "type": "object",
@@ -587,7 +597,8 @@
                                         "version1_hdr_too_big": {
                                             "type": "integer"
                                         }
-                                    }
+                                    },
+                                    "additionalProperties": false
                                 },
                                 "vlan": {
                                     "type": "object",
@@ -601,7 +612,8 @@
                                         "too_many_layers": {
                                             "type": "integer"
                                         }
-                                    }
+                                    },
+                                    "additionalProperties": false
                                 },
                                 "ieee8021ah": {
                                     "type": "object",
@@ -609,7 +621,8 @@
                                         "header_too_small": {
                                             "type": "integer"
                                         }
-                                    }
+                                    },
+                                    "additionalProperties": false
                                 },
                                 "vntag": {
                                     "type": "object",
@@ -620,7 +633,8 @@
                                         "unknown_type": {
                                             "type": "integer"
                                         }
-                                    }
+                                    },
+                                    "additionalProperties": false
                                 },
                                 "ipraw": {
                                     "type": "object",
@@ -628,7 +642,8 @@
                                         "invalid_ip_version": {
                                             "type": "integer"
                                         }
-                                    }
+                                    },
+                                    "additionalProperties": false
                                 },
                                 "ltnull": {
                                     "type": "object",
@@ -639,7 +654,8 @@
                                         "unsupported_type": {
                                             "type": "integer"
                                         }
-                                    }
+                                    },
+                                    "additionalProperties": false
                                 },
                                 "sctp": {
                                     "type": "object",
@@ -647,7 +663,8 @@
                                         "pkt_too_small": {
                                             "type": "integer"
                                         }
-                                    }
+                                    },
+                                    "additionalProperties": false
                                 },
                                 "esp": {
                                     "type": "object",
@@ -655,7 +672,8 @@
                                         "pkt_too_small": {
                                             "type": "integer"
                                         }
-                                    }
+                                    },
+                                    "additionalProperties": false
                                 },
                                 "mpls": {
                                     "type": "object",
@@ -678,7 +696,8 @@
                                         "unknown_payload_type": {
                                             "type": "integer"
                                         }
-                                    }
+                                    },
+                                    "additionalProperties": false
                                 },
                                 "vxlan": {
                                     "type": "object",
@@ -686,7 +705,8 @@
                                         "unknown_payload_type": {
                                             "type": "integer"
                                         }
-                                    }
+                                    },
+                                    "additionalProperties": false
                                 },
                                 "geneve": {
                                     "type": "object",
@@ -694,7 +714,8 @@
                                         "unknown_payload_type": {
                                             "type": "integer"
                                         }
-                                    }
+                                    },
+                                    "additionalProperties": false
                                 },
                                 "erspan": {
                                     "type": "object",
@@ -708,7 +729,8 @@
                                         "too_many_vlan_layers": {
                                             "type": "integer"
                                         }
-                                    }
+                                    },
+                                    "additionalProperties": false
                                 },
                                 "dce": {
                                     "type": "object",
@@ -716,7 +738,8 @@
                                         "pkt_too_small": {
                                             "type": "integer"
                                         }
-                                    }
+                                    },
+                                    "additionalProperties": false
                                 },
                                 "chdlc": {
                                     "type": "object",
@@ -724,7 +747,8 @@
                                         "pkt_too_small": {
                                             "type": "integer"
                                         }
-                                    }
+                                    },
+                                    "additionalProperties": false
                                 },
                                 "nsh": {
                                     "type": "object",
@@ -747,14 +771,17 @@
                                         "unknown_payload": {
                                             "type": "integer"
                                         }
-                                    }
+                                    },
+                                    "additionalProperties": false
                                 }
-                            }
+                            },
+                            "additionalProperties": false
                         },
                         "too_many_layers": {
                             "type": "integer"
                         }
-                    }
+                    },
+                    "additionalProperties": false
                 },
                 "flow": {
                     "type": "object",
@@ -819,7 +846,8 @@
                                 "flows_injected": {
                                     "type": "integer"
                                 }
-                            }
+                            },
+                            "additionalProperties": false
                         },
                         "mgr": {
                             "type": "object",
@@ -860,7 +888,8 @@
                                 "flows_evicted_needs_work": {
                                     "type": "integer"
                                 }
-                            }
+                            },
+                            "additionalProperties": false
                         },
                         "spare": {
                             "type": "integer"
@@ -874,7 +903,8 @@
                         "memuse": {
                             "type": "integer"
                         }
-                    }
+                    },
+                    "additionalProperties": false
                 },
                 "defrag": {
                     "type": "object",
@@ -891,7 +921,8 @@
                                 "timeouts": {
                                     "type": "integer"
                                 }
-                            }
+                            },
+                            "additionalProperties": false
                         },
                         "ipv6": {
                             "type": "object",
@@ -905,12 +936,14 @@
                                 "timeouts": {
                                     "type": "integer"
                                 }
-                            }
+                            },
+                            "additionalProperties": false
                         },
                         "max_frag_hits": {
                             "type": "integer"
                         }
-                    }
+                    },
+                    "additionalProperties": false
                 },
                 "flow_bypassed": {
                     "type": "object",
@@ -936,7 +969,8 @@
                         "bytes": {
                             "type": "integer"
                         }
-                    }
+                    },
+                    "additionalProperties": false
                 },
                 "tcp": {
                     "type": "object",
@@ -1004,7 +1038,8 @@
                         "reassembly_memuse": {
                             "type": "integer"
                         }
-                    }
+                    },
+                    "additionalProperties": false
                 },
                 "detect": {
                     "type": "object",
@@ -1026,13 +1061,15 @@
                                     "rules_failed": {
                                         "type": "integer"
                                     }
-                                }
+                                },
+                                "additionalProperties": false
                             }]
                         },
                         "alert": {
                             "type": "integer"
                         }
-                    }
+                    },
+                    "additionalProperties": false
                 },
                 "app_layer": {
                     "type": "object",
@@ -1082,6 +1119,18 @@
                                 "ike": {
                                     "type": "integer"
                                 },
+                                "ikev2": {
+                                    "type": "integer"
+                                },
+                                "dnp3": {
+                                    "type": "integer"
+                                },
+                                "enip": {
+                                    "type": "integer"
+                                },
+                                "modbus": {
+                                    "type": "integer"
+                                },
                                 "krb5_tcp": {
                                     "type": "integer"
                                 },
@@ -1124,7 +1173,8 @@
                                 "failed_udp": {
                                     "type": "integer"
                                 }
-                            }
+                            },
+                            "additionalProperties": false
                         },
                         "tx": {
                             "type": "object",
@@ -1171,6 +1221,18 @@
                                 "ike": {
                                     "type": "integer"
                                 },
+                                "ikev2": {
+                                    "type": "integer"
+                                },
+                                "dnp3": {
+                                    "type": "integer"
+                                },
+                                "enip": {
+                                    "type": "integer"
+                                },
+                                "modbus": {
+                                    "type": "integer"
+                                },
                                 "krb5_tcp": {
                                     "type": "integer"
                                 },
@@ -1207,12 +1269,14 @@
                                 "krb5_udp": {
                                     "type": "integer"
                                 }
-                            }
+                            },
+                            "additionalProperties": false
                         },
                         "expectations": {
                             "type": "integer"
                         }
-                    }
+                    },
+                    "additionalProperties": false
                 },
                 "http": {
                     "type": "object",
@@ -1223,7 +1287,8 @@
                         "memcap": {
                             "type": "integer"
                         }
-                    }
+                    },
+                    "additionalProperties": false
                 },
                 "ftp": {
                     "type": "object",
@@ -1234,18 +1299,74 @@
                         "memcap": {
                             "type": "integer"
                         }
-                    }
+                    },
+                    "additionalProperties": false
                 },
                 "file_store": {
                     "type": "object",
                     "properties": {
                         "open_files": {
                             "type": "integer"
+                        },
+                        "fs_errors": {
+                            "type": "integer"
+                        },
+                        "open_files_max_hit": {
+                            "type": "integer"
                         }
-                    }
+                    },
+                    "additionalProperties": false
+                },
+                "flow_mgr": {
+                    "type": "object",
+                    "properties": {
+                        "closed_pruned": {
+                            "type": "integer"
+                        },
+                        "new_pruned": {
+                            "type": "integer"
+                        },
+                        "est_pruned": {
+                            "type": "integer"
+                        },
+                        "bypassed_pruned": {
+                            "type": "integer"
+                        },
+                        "flows_checked": {
+                            "type": "integer"
+                        },
+                        "flows_notimeout": {
+                            "type": "integer"
+                        },
+                        "flows_timeout": {
+                            "type": "integer"
+                        },
+                        "flows_timeout_inuse": {
+                            "type": "integer"
+                        },
+                        "flows_removed": {
+                            "type": "integer"
+                        },
+                        "rows_checked": {
+                            "type": "integer"
+                        },
+                        "rows_skipped": {
+                            "type": "integer"
+                        },
+                        "rows_empty": {
+                            "type": "integer"
+                        },
+                        "rows_busy": {
+                            "type": "integer"
+                        },
+                        "rows_maxlen": {
+                            "type": "integer"
+                        }
+                    },
+                    "additionalProperties": false
                 }
             },
-            "additionalProperties": true
+            "additionalProperties": false
         },
         "http": {
             "type": "object",
