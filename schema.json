@@ -48,6 +48,18 @@
             "type": "integer",
             "optional": true
         },
+        "icmp_code": {
+            "type": "integer"
+        },
+        "icmp_type": {
+            "type": "integer"
+        },
+        "response_icmp_code": {
+            "type": "integer"
+        },
+        "response_icmp_type": {
+            "type": "integer"
+        },
         "flow": {
             "type": "object",
             "optional": true,
@@ -1583,7 +1595,2880 @@
                 }
             },
             "additionalProperties": false
+        },
+        "dns": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "rrname": {
+                    "type": "string"
+                },
+                "rrtype": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "answer": {
+                    "type": "object",
+                    "properties": {
+                        "version": {
+                            "type": "integer"
+                        },
+                        "id": {
+                            "type": "integer"
+                        },
+                        "flags": {
+                            "type": "string"
+                        },
+                        "qr": {
+                            "type": "boolean"
+                        },
+                        "rd": {
+                            "type": "boolean"
+                        },
+                        "ra": {
+                            "type": "boolean"
+                        },
+                        "rrname": {
+                            "type": "string"
+                        },
+                        "rrtype": {
+                            "type": "string"
+                        },
+                        "rcode": {
+                            "type": "string"
+                        },
+                        "type": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "authorities": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "optional": true,
+                        "properties": {
+                            "rrname": {
+                                "type": "string"
+                            },
+                            "rrtype": {
+                                "type": "string"
+                            },
+                            "ttl": {
+                                "type": "integer"
+                            },
+                            "soa": {
+                                "type": "object",
+                                "optional": true,
+                                "properties": {
+                                    "minimum": {
+                                        "type": "integer"
+                                    },
+                                    "mname": {
+                                        "type": "string"
+                                    },
+                                    "refresh": {
+                                        "type": "integer"
+                                    },
+                                    "retry": {
+                                        "type": "integer"
+                                    },
+                                    "rname": {
+                                        "type": "string"
+                                    },
+                                    "serial": {
+                                        "type": "integer"
+                                    },
+                                    "expire": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "additionalProperties": false
+                            },
+                            "rdata": {
+                                "type": "string"
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                },
+                "ra": {
+                    "type": "boolean"
+                },
+                "rd": {
+                    "type": "boolean"
+                },
+                "aa": {
+                    "type": "boolean"
+                },
+                "answers": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "optional": true,
+                        "properties": {
+                            "rrname": {
+                                "type": "string"
+                            },
+                            "rrtype": {
+                                "type": "string"
+                            },
+                            "ttl": {
+                                "type": "integer"
+                            },
+                            "srv": {
+                                "type": "object",
+                                "optional": true,
+                                "properties": {
+                                    "port": {
+                                        "type": "integer"
+                                    },
+                                    "priority": {
+                                        "type": "integer"
+                                    },
+                                    "weight": {
+                                        "type": "integer"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    }
+                                },
+                                "additionalProperties": false
+                            },
+                            "rdata": {
+                                "type": "string"
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                },
+                "flags": {
+                    "type": "string"
+                },
+                "grouped": {
+                    "type": "object",
+                    "optional": true,
+                    "properties": {
+                        "PTR": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "TXT": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "CNAME": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "MX": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "NULL": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "AAAA": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "SRV": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "optional": true,
+                                "properties": {
+                                    "port": {
+                                        "type": "integer"
+                                    },
+                                    "priority": {
+                                        "type": "integer"
+                                    },
+                                    "weight": {
+                                        "type": "integer"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    }
+                                },
+                                "additionalProperties": false
+                            }
+                        },
+                        "A": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "qr": {
+                    "type": "boolean"
+                },
+                "rcode": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "integer"
+                },
+                "query": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "optional": true,
+                        "properties": {
+                            "rrname": {
+                                "type": "string"
+                            },
+                            "rrtype": {
+                                "type": "string"
+                            },
+                            "type": {
+                                "type": "string"
+                            },
+                            "id": {
+                                "type": "integer"
+                            },
+                            "tx_id": {
+                                "type": "integer"
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                },
+                "tx_id": {
+                    "type": "integer"
+                }
+            },
+            "additionalProperties": false
+        },
+        "drop": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "ack": {
+                    "type": "boolean"
+                },
+                "icmp_id": {
+                    "type": "integer"
+                },
+                "icmp_seq": {
+                    "type": "integer"
+                },
+                "ipid": {
+                    "type": "integer"
+                },
+                "len": {
+                    "type": "integer"
+                },
+                "tos": {
+                    "type": "integer"
+                },
+                "ttl": {
+                    "type": "integer"
+                },
+                "psh": {
+                    "type": "boolean"
+                },
+                "rst": {
+                    "type": "boolean"
+                },
+                "urg": {
+                    "type": "boolean"
+                },
+                "syn": {
+                    "type": "boolean"
+                },
+                "tcpack": {
+                    "type": "integer"
+                },
+                "tcpres": {
+                    "type": "integer"
+                },
+                "tcpseq": {
+                    "type": "integer"
+                },
+                "tcpurgp": {
+                    "type": "integer"
+                },
+                "tcpwin": {
+                    "type": "integer"
+                },
+                "fin": {
+                    "type": "boolean"
+                }
+            },
+            "additionalProperties": false
+        },
+        "alert": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "action": {
+                    "type": "string"
+                },
+                "severity": {
+                    "type": "integer"
+                },
+                "signature": {
+                    "type": "string"
+                },
+                "signature_id": {
+                    "type": "integer"
+                },
+                "gid": {
+                    "type": "integer"
+                },
+                "rev": {
+                    "type": "integer"
+                },
+                "source": {
+                    "type": "object",
+                    "properties": {
+                        "ip": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "rule": {
+                    "type": "string"
+                },
+                "target": {
+                    "type": "object",
+                    "properties": {
+                        "ip": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "metadata": {
+                    "type": "object",
+                    "properties": {
+                        "created_at": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "tag": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "affected_product": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "attack_target": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "deployment": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "signature_severity": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "updated_at": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "category": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "anomaly": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "event": {
+                    "type": "string"
+                },
+                "layer": {
+                    "type": "string"
+                },
+                "app_proto": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "app_proto_orig": {
+            "type": "string"
+        },
+        "log_level": {
+            "type": "string"
+        },
+        "app_proto_tc": {
+            "type": "string"
+        },
+        "app_proto_ts": {
+            "type": "string"
+        },
+        "app_proto_expected": {
+            "type": "string"
+        },
+        "community_id": {
+            "type": "string"
+        },
+        "engine": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "error_code": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "ether": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "dest_mac": {
+                    "type": "string"
+                },
+                "src_mac": {
+                    "type": "string"
+                },
+                "dest_macs": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "src_macs": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "metadata": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "flowbits": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "flowvars": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "key": {
+                                "type": "string"
+                            },
+                            "value": {
+                                "type": "string"
+                            },
+                            "gid": {
+                                "type": "string"
+                            }
+                        },
+                        "additionalProperties": true
+                    }
+                },
+                "pktvars": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "username": {
+                                "type": "string"
+                            },
+                            "uid": {
+                                "type": "string"
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                },
+                "flowints": {
+                    "type": "object",
+                    "additionalProperties": true
+                }
+            },
+            "additionalProperties": false
+        },
+        "mqtt": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "publish": {
+                    "type": "object",
+                    "properties": {
+                        "dup": {
+                            "type": "boolean"
+                        },
+                        "retain": {
+                            "type": "boolean"
+                        },
+                        "qos": {
+                            "type": "integer"
+                        },
+                        "message_id": {
+                            "type": "integer"
+                        },
+                        "skipped_length": {
+                            "type": "integer"
+                        },
+                        "truncated": {
+                            "type": "boolean"
+                        },
+                        "message": {
+                            "type": "string"
+                        },
+                        "topic": {
+                            "type": "string"
+                        },
+                        "properties": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "connect": {
+                    "type": "object",
+                    "properties": {
+                        "dup": {
+                            "type": "boolean"
+                        },
+                        "retain": {
+                            "type": "boolean"
+                        },
+                        "qos": {
+                            "type": "integer"
+                        },
+                        "password": {
+                            "type": "string"
+                        },
+                        "protocol_string": {
+                            "type": "string"
+                        },
+                        "username": {
+                            "type": "string"
+                        },
+                        "client_id": {
+                            "type": "string"
+                        },
+                        "flags": {
+                            "type": "object",
+                            "properties": {
+                                "clean_session": {
+                                    "type": "boolean"
+                                },
+                                "password": {
+                                    "type": "boolean"
+                                },
+                                "username": {
+                                    "type": "boolean"
+                                },
+                                "will": {
+                                    "type": "boolean"
+                                },
+                                "will_retain": {
+                                    "type": "boolean"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "protocol_version": {
+                            "type": "integer"
+                        },
+                        "will": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                },
+                                "topic": {
+                                    "type": "string"
+                                },
+                                "properties": {
+                                    "type": "object",
+                                    "additionalProperties": true
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "properties": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "pingreq": {
+                    "type": "object",
+                    "properties": {
+                        "dup": {
+                            "type": "boolean"
+                        },
+                        "retain": {
+                            "type": "boolean"
+                        },
+                        "qos": {
+                            "type": "integer"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "pingresp": {
+                    "type": "object",
+                    "properties": {
+                        "dup": {
+                            "type": "boolean"
+                        },
+                        "retain": {
+                            "type": "boolean"
+                        },
+                        "qos": {
+                            "type": "integer"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "connack": {
+                    "type": "object",
+                    "properties": {
+                        "dup": {
+                            "type": "boolean"
+                        },
+                        "retain": {
+                            "type": "boolean"
+                        },
+                        "qos": {
+                            "type": "integer"
+                        },
+                        "return_code": {
+                            "type": "integer"
+                        },
+                        "session_present": {
+                            "type": "boolean"
+                        },
+                        "properties": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "unsuback": {
+                    "type": "object",
+                    "properties": {
+                        "dup": {
+                            "type": "boolean"
+                        },
+                        "retain": {
+                            "type": "boolean"
+                        },
+                        "qos": {
+                            "type": "integer"
+                        },
+                        "message_id": {
+                            "type": "integer"
+                        },
+                        "reason_codes": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "unsubscribe": {
+                    "type": "object",
+                    "properties": {
+                        "dup": {
+                            "type": "boolean"
+                        },
+                        "retain": {
+                            "type": "boolean"
+                        },
+                        "qos": {
+                            "type": "integer"
+                        },
+                        "message_id": {
+                            "type": "integer"
+                        },
+                        "topics": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "suback": {
+                    "type": "object",
+                    "properties": {
+                        "dup": {
+                            "type": "boolean"
+                        },
+                        "retain": {
+                            "type": "boolean"
+                        },
+                        "qos": {
+                            "type": "integer"
+                        },
+                        "message_id": {
+                            "type": "integer"
+                        },
+                        "qos_granted": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "subscribe": {
+                    "type": "object",
+                    "properties": {
+                        "dup": {
+                            "type": "boolean"
+                        },
+                        "retain": {
+                            "type": "boolean"
+                        },
+                        "qos": {
+                            "type": "integer"
+                        },
+                        "message_id": {
+                            "type": "integer"
+                        },
+                        "topics": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "qos": {
+                                        "type": "integer"
+                                    },
+                                    "topic": {
+                                        "type": "string"
+                                    }
+                                },
+                                "additionalProperties": false
+                            }
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "puback": {
+                    "type": "object",
+                    "properties": {
+                        "dup": {
+                            "type": "boolean"
+                        },
+                        "retain": {
+                            "type": "boolean"
+                        },
+                        "qos": {
+                            "type": "integer"
+                        },
+                        "message_id": {
+                            "type": "integer"
+                        },
+                        "reason_code": {
+                            "type": "integer"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "pubcomp": {
+                    "type": "object",
+                    "properties": {
+                        "dup": {
+                            "type": "boolean"
+                        },
+                        "retain": {
+                            "type": "boolean"
+                        },
+                        "qos": {
+                            "type": "integer"
+                        },
+                        "message_id": {
+                            "type": "integer"
+                        },
+                        "reason_code": {
+                            "type": "integer"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "pubrec": {
+                    "type": "object",
+                    "properties": {
+                        "dup": {
+                            "type": "boolean"
+                        },
+                        "retain": {
+                            "type": "boolean"
+                        },
+                        "qos": {
+                            "type": "integer"
+                        },
+                        "message_id": {
+                            "type": "integer"
+                        },
+                        "reason_code": {
+                            "type": "integer"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "pubrel": {
+                    "type": "object",
+                    "properties": {
+                        "dup": {
+                            "type": "boolean"
+                        },
+                        "retain": {
+                            "type": "boolean"
+                        },
+                        "qos": {
+                            "type": "integer"
+                        },
+                        "message_id": {
+                            "type": "integer"
+                        },
+                        "reason_code": {
+                            "type": "integer"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "disconnect": {
+                    "type": "object",
+                    "properties": {
+                        "reason_code": {
+                            "type": "integer"
+                        },
+                        "dup": {
+                            "type": "boolean"
+                        },
+                        "retain": {
+                            "type": "boolean"
+                        },
+                        "qos": {
+                            "type": "integer"
+                        },
+                        "properties": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            },
+            "additionalProperties": false
+        },
+        "ftp_data": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "command": {
+                    "type": "string"
+                },
+                "filename": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "xff": {
+            "type": "string"
+        },
+        "command": {
+            "type": "string"
+        },
+        "filename": {
+            "type": "string"
+        },
+        "parent_id": {
+            "type": "integer"
+        },
+        "packet": {
+            "type": "string"
+        },
+        "spi": {
+            "type": "integer"
+        },
+        "files": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "optional": true,
+                "properties": {
+                    "filename": {
+                        "type": "string"
+                    },
+                    "md5": {
+                        "type": "string"
+                    },
+                    "sha1": {
+                        "type": "string"
+                    },
+                    "sha256": {
+                        "type": "string"
+                    },
+                    "start": {
+                        "type": "integer"
+                    },
+                    "end": {
+                        "type": "integer"
+                    },
+                    "gaps": {
+                        "type": "boolean"
+                    },
+                    "sid": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    "size": {
+                        "type": "integer"
+                    },
+                    "stored": {
+                        "type": "boolean"
+                    },
+                    "tx_id": {
+                        "type": "integer"
+                    },
+                    "state": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            }
+        },
+        "netflow": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "age": {
+                    "type": "integer"
+                },
+                "bytes": {
+                    "type": "integer"
+                },
+                "end": {
+                    "type": "string"
+                },
+                "max_ttl": {
+                    "type": "integer"
+                },
+                "min_ttl": {
+                    "type": "integer"
+                },
+                "pkts": {
+                    "type": "integer"
+                },
+                "start": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "packet_info": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "linktype": {
+                    "type": "integer"
+                }
+            },
+            "additionalProperties": false
+        },
+        "tunnel": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "src_ip": {
+                    "type": "string"
+                },
+                "src_port": {
+                    "type": "integer"
+                },
+                "dest_ip": {
+                    "type": "string"
+                },
+                "dest_port": {
+                    "type": "integer"
+                },
+                "proto": {
+                    "type": "string"
+                },
+                "depth": {
+                    "type": "integer"
+                }
+            },
+            "additionalProperties": false
+        },
+        "traffic": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "id": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "label": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "dcerpc": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "request": {
+                    "type": "string"
+                },
+                "interfaces": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "uuid": {
+                                "type": "string"
+                            },
+                            "version": {
+                                "type": "string"
+                            },
+                            "ack_result": {
+                                "type": "integer"
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                },
+                "response": {
+                    "type": "string"
+                },
+                "call_id": {
+                    "type": "integer"
+                },
+                "req": {
+                    "type": "object",
+                    "optional": true,
+                    "properties": {
+                        "frag_cnt": {
+                            "type": "integer"
+                        },
+                        "opnum": {
+                            "type": "integer"
+                        },
+                        "stub_data_size": {
+                            "type": "integer"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "res": {
+                    "type": "object",
+                    "optional": true,
+                    "properties": {
+                        "frag_cnt": {
+                            "type": "integer"
+                        },
+                        "stub_data_size": {
+                            "type": "integer"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "rpc_version": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "krb5": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "msg_type": {
+                    "type": "string"
+                },
+                "failed_request": {
+                    "type": "string"
+                },
+                "error_code": {
+                    "type": "string"
+                },
+                "cname": {
+                    "type": "string"
+                },
+                "realm": {
+                    "type": "string"
+                },
+                "sname": {
+                    "type": "string"
+                },
+                "encryption": {
+                    "type": "string"
+                },
+                "weak_encryption": {
+                    "type": "boolean"
+                }
+            },
+            "additionalProperties": false
+        },
+        "rfb": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "screen_shared": {
+                    "type": "boolean"
+                },
+                "authentication": {
+                    "type": "object",
+                    "properties": {
+                        "security_type": {
+                            "type": "integer"
+                        },
+                        "vnc": {
+                            "type": "object",
+                            "properties": {
+                                "challenge": {
+                                    "type": "string"
+                                },
+                                "response": {
+                                    "type": "string"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+
+                        "security_result": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "framebuffer": {
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        },
+                        "pixel_format": {
+                            "type": "object",
+                            "properties": {
+                                "bits_per_pixel": {
+                                    "type": "integer"
+                                },
+                                "depth": {
+                                    "type": "integer"
+                                },
+                                "big_endian": {
+                                    "type": "boolean"
+                                },
+                                "true_color": {
+                                    "type": "boolean"
+                                },
+                                "red_max": {
+                                    "type": "integer"
+                                },
+                                "green_max": {
+                                    "type": "integer"
+                                },
+                                "blue_max": {
+                                    "type": "integer"
+                                },
+                                "red_shift": {
+                                    "type": "integer"
+                                },
+                                "green_shift": {
+                                    "type": "integer"
+                                },
+                                "blue_shift": {
+                                    "type": "integer"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "width": {
+                            "type": "integer"
+                        },
+                        "height": {
+                            "type": "integer"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "server_protocol_version": {
+                    "type": "object",
+                    "properties": {
+                        "major": {
+                            "type": "string"
+                        },
+                        "minor": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "client_protocol_version": {
+                    "type": "object",
+                    "properties": {
+                        "major": {
+                            "type": "string"
+                        },
+                        "minor": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            },
+            "additionalProperties": false
+        },
+        "rdp": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "tx_id": {
+                    "type": "integer"
+                },
+                "cookie": {
+                    "type": "string"
+                },
+                "channels": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "client": {
+                    "type": "object",
+                    "properties": {
+                        "version": {
+                            "type": "string"
+                        },
+                        "desktop_width": {
+                            "type": "integer"
+                        },
+                        "desktop_height": {
+                            "type": "integer"
+                        },
+                        "color_depth": {
+                            "type": "integer"
+                        },
+                        "keyboard_layout": {
+                            "type": "string"
+                        },
+                        "build": {
+                            "type": "string"
+                        },
+                        "client_name": {
+                            "type": "string"
+                        },
+                        "keyboard_type": {
+                            "type": "string"
+                        },
+                        "function_keys": {
+                            "type": "integer"
+                        },
+                        "product_id": {
+                            "type": "integer"
+                        },
+                        "capabilities": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "id": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "event_type": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "email": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "status": {
+                    "type": "string"
+                },
+                "subject_md5": {
+                    "type": "string"
+                },
+                "body_md5": {
+                    "type": "string"
+                },
+                "attachment": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "to": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "from": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "dhcp": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "client_mac": {
+                    "type": "string"
+                },
+                "assigned_ip": {
+                    "type": "string"
+                },
+                "client_id": {
+                    "type": "string"
+                },
+                "client_ip": {
+                    "type": "string"
+                },
+                "dhcp_type": {
+                    "type": "string"
+                },
+                "lease_time": {
+                    "type": "integer"
+                },
+                "next_server_ip": {
+                    "type": "string"
+                },
+                "rebinding_time": {
+                    "type": "integer"
+                },
+                "relay_ip": {
+                    "type": "string"
+                },
+                "renewal_time": {
+                    "type": "integer"
+                },
+                "routers": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "subnet_mask": {
+                    "type": "string"
+                },
+                "params": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "dns_servers": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "hostname": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "http2": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "http_method": {
+                    "type": "string"
+                },
+                "http_user_agent": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
+                },
+                "length": {
+                    "type": "integer"
+                },
+                "request_headers": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "value": {
+                                "type": "string"
+                            },
+                            "table_size_update": {
+                                "type": "integer"
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                },
+                "response_headers": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "value": {
+                                "type": "string"
+                            },
+                            "table_size_update": {
+                                "type": "integer"
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                },
+                "http2": {
+                    "type": "object",
+                    "properties": {
+                        "stream_id": {
+                            "type": "integer"
+                        },
+                        "request": {
+                            "type": "object",
+                            "properties": {
+                                "priority": {
+                                    "type": "integer"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "response": {
+                            "type": "object",
+                            "properties": {
+                                "error_code": {
+                                    "type": "string"
+                                }
+                            },
+                            "additionalProperties": false
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "status": {
+                    "type": "integer"
+                }
+            },
+            "additionalProperties": false
+        },
+        "modbus": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "request": {
+                    "type": "object",
+                    "properties": {
+                        "transaction_id": {
+                            "type": "integer"
+                        },
+                        "protocol_id": {
+                            "type": "integer"
+                        },
+                        "unit_id": {
+                            "type": "integer"
+                        },
+                        "function_raw": {
+                            "type": "integer"
+                        },
+                        "function_code": {
+                            "type": "string"
+                        },
+                        "error_flags": {
+                            "type": "string"
+                        },
+                        "access_type": {
+                            "type": "string"
+                        },
+                        "data": {
+                            "type": "string"
+                        },
+                        "read": {
+                            "type": "object",
+                            "properties": {
+                                "address": {
+                                    "type": "integer"
+                                },
+                                "quantity": {
+                                    "type": "integer"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "write": {
+                            "type": "object",
+                            "properties": {
+                                "address": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "integer"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "diagnostic": {
+                            "type": "object",
+                            "properties": {
+                                "raw": {
+                                    "type": "integer"
+                                },
+                                "code": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "string"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "mei": {
+                            "type": "object",
+                            "properties": {
+                                "raw": {
+                                    "type": "integer"
+                                },
+                                "code": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "string"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "category": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "response": {
+                    "type": "object",
+                    "properties": {
+                        "transaction_id": {
+                            "type": "integer"
+                        },
+                        "protocol_id": {
+                            "type": "integer"
+                        },
+                        "unit_id": {
+                            "type": "integer"
+                        },
+                        "access_type": {
+                            "type": "string"
+                        },
+                        "category": {
+                            "type": "string"
+                        },
+                        "error_flags": {
+                            "type": "string"
+                        },
+                        "function_raw": {
+                            "type": "integer"
+                        },
+                        "function_code": {
+                            "type": "string"
+                        },
+                        "read": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "string"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "write": {
+                            "type": "object",
+                            "properties": {
+                                "address": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "integer"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "diagnostic": {
+                            "type": "object",
+                            "properties": {
+                                "raw": {
+                                    "type": "integer"
+                                },
+                                "code": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "string"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "exception": {
+                            "type": "object",
+                            "properties": {
+                                "raw": {
+                                    "type": "integer"
+                                },
+                                "code": {
+                                    "type": "string"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "data": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            },
+            "additionalProperties": false
+        },
+        "ike": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "init_spi": {
+                    "type": "string"
+                },
+                "resp_spi": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "payload": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "alg_auth_raw": {
+                    "type": "integer"
+                },
+                "alg_auth": {
+                    "type": "string"
+                },
+                "alg_dh_raw": {
+                    "type": "integer"
+                },
+                "alg_dh": {
+                    "type": "string"
+                },
+                "alg_enc_raw": {
+                    "type": "integer"
+                },
+                "alg_enc": {
+                    "type": "string"
+                },
+                "alg_hash_raw": {
+                    "type": "integer"
+                },
+                "alg_hash": {
+                    "type": "string"
+                },
+                "sa_key_length_raw": {
+                    "type": "integer"
+                },
+                "sa_key_length": {
+                    "type": "string"
+                },
+                "sa_life_duration_raw": {
+                    "type": "integer"
+                },
+                "sa_life_duration": {
+                    "type": "string"
+                },
+                "sa_life_type_raw": {
+                    "type": "integer"
+                },
+                "sa_life_type": {
+                    "type": "string"
+                },
+                "exchange_type_verbose": {
+                    "type": "string"
+                },
+                "message_id": {
+                    "type": "integer"
+                },
+                "exchange_type": {
+                    "type": "integer"
+                },
+                "ikev1": {
+                    "type": "object",
+                    "properties": {
+                        "doi": {
+                            "type": "integer"
+                        },
+                        "client": {
+                            "type": "object",
+                            "properties": {
+                                "proposals": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "alg_auth_raw": {
+                                                "type": "integer"
+                                            },
+                                            "alg_auth": {
+                                                "type": "string"
+                                            },
+                                            "alg_dh_raw": {
+                                                "type": "integer"
+                                            },
+                                            "alg_dh": {
+                                                "type": "string"
+                                            },
+                                            "alg_enc_raw": {
+                                                "type": "integer"
+                                            },
+                                            "alg_enc": {
+                                                "type": "string"
+                                            },
+                                            "alg_hash_raw": {
+                                                "type": "integer"
+                                            },
+                                            "alg_hash": {
+                                                "type": "string"
+                                            },
+                                            "sa_key_length_raw": {
+                                                "type": "integer"
+                                            },
+                                            "sa_key_length": {
+                                                "type": "string"
+                                            },
+                                            "sa_life_duration_raw": {
+                                                "type": "integer"
+                                            },
+                                            "sa_life_duration": {
+                                                "type": "string"
+                                            },
+                                            "sa_life_type_raw": {
+                                                "type": "integer"
+                                            },
+                                            "sa_life_type": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "additionalProperties": false
+                                    }
+                                },
+                                "nonce_payload": {
+                                    "type": "string"
+                                },
+                                "nonce_payload_length": {
+                                    "type": "integer"
+                                },
+                                "key_exchange_payload": {
+                                    "type": "string"
+                                },
+                                "key_exchange_payload_length": {
+                                    "type": "integer"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "server": {
+                            "type": "object",
+                            "properties": {
+                                "nonce_payload": {
+                                    "type": "string"
+                                },
+                                "nonce_payload_length": {
+                                    "type": "integer"
+                                },
+                                "key_exchange_payload": {
+                                    "type": "string"
+                                },
+                                "key_exchange_payload_length": {
+                                    "type": "integer"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "vendor_ids": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "encrypted_payloads": {
+                            "type": "boolean"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "ikev2": {
+                    "type": "object",
+                    "properties": {
+                        "notify": {
+                            "type": "array"
+                        },
+                        "errors": {
+                            "type": "integer"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "version_major": {
+                    "type": "integer"
+                },
+                "version_minor": {
+                    "type": "integer"
+                }
+            },
+            "additionalProperties": false
+        },
+        "dnp3": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "application": {
+                    "type": "object",
+                    "properties": {
+                        "complete": {
+                            "type": "boolean"
+                        },
+                        "objects": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "count": {
+                                        "type": "integer"
+                                    },
+                                    "group": {
+                                        "type": "integer"
+                                    },
+                                    "prefix_code": {
+                                        "type": "integer"
+                                    },
+                                    "qualifier": {
+                                        "type": "integer"
+                                    },
+                                    "range_code": {
+                                        "type": "integer"
+                                    },
+                                    "start": {
+                                        "type": "integer"
+                                    },
+                                    "stop": {
+                                        "type": "integer"
+                                    },
+                                    "variation": {
+                                        "type": "integer"
+                                    },
+                                    "points": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "additionalProperties": true
+                                        }
+                                    }
+                                },
+                                "additionalProperties": false
+                            }
+                        },
+                        "control": {
+                            "type": "object",
+                            "properties": {
+                                "fir": {
+                                    "type": "boolean"
+                                },
+                                "fin": {
+                                    "type": "boolean"
+                                },
+                                "con": {
+                                    "type": "boolean"
+                                },
+                                "uns": {
+                                    "type": "boolean"
+                                },
+                                "sequence": {
+                                    "type": "integer"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "function_code": {
+                            "type": "integer"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "control": {
+                    "type": "object",
+                    "properties": {
+                        "dir": {
+                            "type": "boolean"
+                        },
+                        "pri": {
+                            "type": "boolean"
+                        },
+                        "fcb": {
+                            "type": "boolean"
+                        },
+                        "fcv": {
+                            "type": "boolean"
+                        },
+                        "function_code": {
+                            "type": "integer"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "src": {
+                    "type": "integer"
+                },
+                "dst": {
+                    "type": "integer"
+                },
+                "iin": {
+                    "type": "object",
+                    "properties": {
+                        "indicators": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "request": {
+                    "type": "object",
+                    "properties": {
+                        "application": {
+                            "type": "object",
+                            "properties": {
+                                "complete": {
+                                    "type": "boolean"
+                                },
+                                "objects": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "count": {
+                                                "type": "integer"
+                                            },
+                                            "group": {
+                                                "type": "integer"
+                                            },
+                                            "prefix_code": {
+                                                "type": "integer"
+                                            },
+                                            "qualifier": {
+                                                "type": "integer"
+                                            },
+                                            "range_code": {
+                                                "type": "integer"
+                                            },
+                                            "start": {
+                                                "type": "integer"
+                                            },
+                                            "stop": {
+                                                "type": "integer"
+                                            },
+                                            "variation": {
+                                                "type": "integer"
+                                            },
+                                            "points": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object",
+                                                    "additionalProperties": true
+                                                }
+                                            }
+                                        },
+                                        "additionalProperties": false
+                                    }
+                                },
+                                "control": {
+                                    "type": "object",
+                                    "properties": {
+                                        "fir": {
+                                            "type": "boolean"
+                                        },
+                                        "fin": {
+                                            "type": "boolean"
+                                        },
+                                        "con": {
+                                            "type": "boolean"
+                                        },
+                                        "uns": {
+                                            "type": "boolean"
+                                        },
+                                        "sequence": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "additionalProperties": false
+                                },
+                                "function_code": {
+                                    "type": "integer"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "control": {
+                            "type": "object",
+                            "properties": {
+                                "dir": {
+                                    "type": "boolean"
+                                },
+                                "pri": {
+                                    "type": "boolean"
+                                },
+                                "fcb": {
+                                    "type": "boolean"
+                                },
+                                "fcv": {
+                                    "type": "boolean"
+                                },
+                                "function_code": {
+                                    "type": "integer"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "type": {
+                            "type": "string"
+                        },
+                        "src": {
+                            "type": "integer"
+                        },
+                        "dst": {
+                            "type": "integer"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "response": {
+                    "properties": {
+                        "iin": {
+                            "type": "object",
+                            "properties": {
+                                "indicators": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "application": {
+                            "type": "object",
+                            "properties": {
+                                "complete": {
+                                    "type": "boolean"
+                                },
+                                "objects": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "count": {
+                                                "type": "integer"
+                                            },
+                                            "group": {
+                                                "type": "integer"
+                                            },
+                                            "prefix_code": {
+                                                "type": "integer"
+                                            },
+                                            "qualifier": {
+                                                "type": "integer"
+                                            },
+                                            "range_code": {
+                                                "type": "integer"
+                                            },
+                                            "start": {
+                                                "type": "integer"
+                                            },
+                                            "stop": {
+                                                "type": "integer"
+                                            },
+                                            "variation": {
+                                                "type": "integer"
+                                            },
+                                            "points": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object",
+                                                    "additionalProperties": true
+                                                }
+                                            }
+                                        },
+                                        "additionalProperties": false
+                                    }
+                                },
+                                "control": {
+                                    "type": "object",
+                                    "properties": {
+                                        "fir": {
+                                            "type": "boolean"
+                                        },
+                                        "fin": {
+                                            "type": "boolean"
+                                        },
+                                        "con": {
+                                            "type": "boolean"
+                                        },
+                                        "uns": {
+                                            "type": "boolean"
+                                        },
+                                        "sequence": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "additionalProperties": false
+                                },
+                                "function_code": {
+                                    "type": "integer"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "control": {
+                            "type": "object",
+                            "properties": {
+                                "dir": {
+                                    "type": "boolean"
+                                },
+                                "pri": {
+                                    "type": "boolean"
+                                },
+                                "fcb": {
+                                    "type": "boolean"
+                                },
+                                "fcv": {
+                                    "type": "boolean"
+                                },
+                                "function_code": {
+                                    "type": "integer"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "type": {
+                            "type": "string"
+                        },
+                        "src": {
+                            "type": "integer"
+                        },
+                        "dst": {
+                            "type": "integer"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "type": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "nfs": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "filename": {
+                    "type": "string"
+                },
+                "procedure": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "version": {
+                    "type": "integer"
+                },
+                "hhash": {
+                    "type": "string"
+                },
+                "rename": {
+                    "type": "object",
+                    "optional": true,
+                    "properties": {
+                        "from": {
+                            "type": "string"
+                        },
+                        "to": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "read": {
+                    "type": "object",
+                    "optional": true,
+                    "properties": {
+                        "first": {
+                            "type": "boolean"
+                        },
+                        "chunks": {
+                            "type": "integer"
+                        },
+                        "last_xid": {
+                            "type": "integer"
+                        },
+                        "last": {
+                            "type": "boolean"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "write": {
+                    "type": "object",
+                    "optional": true,
+                    "properties": {
+                        "first": {
+                            "type": "boolean"
+                        },
+                        "chunks": {
+                            "type": "integer"
+                        },
+                        "last_xid": {
+                            "type": "integer"
+                        },
+                        "last": {
+                            "type": "boolean"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "file_tx": {
+                    "type": "boolean"
+                }
+            },
+            "additionalProperties": false
+        },
+        "ftp": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "command": {
+                    "type": "string"
+                },
+                "completion_code": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "reply": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "reply_received": {
+                    "type": "string"
+                },
+                "mode": {
+                    "type": "string"
+                },
+                "dynamic_port": {
+                    "type": "integer"
+                },
+                "command_data": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "payload": {
+            "type": "string"
+        },
+        "payload_printable": {
+            "type": "string"
+        },
+        "stream": {
+            "type": "integer"
+        },
+        "rpc": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "auth_type": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "creds": {
+                    "type": "object",
+                    "optional": true,
+                    "properties": {
+                        "gid": {
+                            "type": "integer"
+                        },
+                        "machine_name": {
+                            "type": "string"
+                        },
+                        "uid": {
+                            "type": "integer"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "xid": {
+                    "type": "integer"
+                }
+            },
+            "additionalProperties": false
+        },
+        "sip": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "method": {
+                    "type": "string"
+                },
+                "uri": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
+                },
+                "code": {
+                    "type": "string"
+                },
+                "reason": {
+                    "type": "string"
+                },
+                "response_line": {
+                    "type": "string"
+                },
+                "request_line": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "smb": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "command": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "status_code": {
+                    "type": "string"
+                },
+                "tree_id": {
+                    "type": "integer"
+                },
+                "session_id": {
+                    "type": "integer"
+                },
+                "filename": {
+                    "type": "string"
+                },
+                "fuid": {
+                    "type": "string"
+                },
+                "share": {
+                    "type": "string"
+                },
+                "access": {
+                    "type": "string"
+                },
+                "function": {
+                    "type": "string"
+                },
+                "function": {
+                    "type": "string"
+                },
+                "ntlmssp": {
+                    "type": "object",
+                    "optional": true,
+                    "properties": {
+                        "domain": {
+                            "type": "string"
+                        },
+                        "user": {
+                            "type": "string"
+                        },
+                        "host": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "kerberos": {
+                    "type": "object",
+                    "optional": true,
+                    "properties": {
+                        "realm": {
+                            "type": "string"
+                        },
+                        "snames": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "share_type": {
+                    "type": "string"
+                },
+                "service": {
+                    "type": "object",
+                    "optional": true,
+                    "properties": {
+                        "request": {
+                            "type": "string"
+                        },
+                        "response": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "named_pipe": {
+                    "type": "string"
+                },
+                "accessed": {
+                    "type": "integer"
+                },
+                "changed": {
+                    "type": "integer"
+                },
+                "created": {
+                    "type": "integer"
+                },
+                "modified": {
+                    "type": "integer"
+                },
+                "size": {
+                    "type": "integer"
+                },
+                "disposition": {
+                    "type": "string"
+                },
+                "directory": {
+                    "type": "string"
+                },
+                "client_dialects": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "client_guid": {
+                    "type": "string"
+                },
+                "server_guid": {
+                    "type": "string"
+                },
+                "request": {
+                    "type": "object",
+                    "optional": true,
+                    "properties": {
+                        "native_lm": {
+                            "type": "string"
+                        },
+                        "native_os": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "response": {
+                    "type": "object",
+                    "optional": true,
+                    "properties": {
+                        "native_lm": {
+                            "type": "string"
+                        },
+                        "native_os": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "dcerpc": {
+                    "type": "object",
+                    "optional": true,
+                    "properties": {
+                        "opnum": {
+                            "type": "integer"
+                        },
+                        "interfaces": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "optional": true,
+                                "properties": {
+                                    "ack_reason": {
+                                        "type": "integer"
+                                    },
+                                    "ack_result": {
+                                        "type": "integer"
+                                    },
+                                    "uuid": {
+                                        "type": "string"
+                                    },
+                                    "version": {
+                                        "type": "string"
+                                    }
+                                },
+                                "additionalProperties": false
+                            }
+                        },
+                        "req": {
+                            "type": "object",
+                            "optional": true,
+                            "properties": {
+                                "frag_cnt": {
+                                    "type": "integer"
+                                },
+                                "stub_data_size": {
+                                    "type": "integer"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "res": {
+                            "type": "object",
+                            "optional": true,
+                            "properties": {
+                                "frag_cnt": {
+                                    "type": "integer"
+                                },
+                                "stub_data_size": {
+                                    "type": "integer"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "request": {
+                            "type": "string"
+                        },
+                        "response": {
+                            "type": "string"
+                        },
+                        "call_id": {
+                            "type": "integer"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "dialect": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "smtp": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "helo": {
+                    "type": "string"
+                },
+                "mail_from": {
+                    "type": "string"
+                },
+                "rcpt_to": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "snmp": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "community": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "integer"
+                },
+                "pdu_type": {
+                    "type": "string"
+                },
+                "usm": {
+                    "type": "string"
+                },
+                "vars": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "template": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "request": {
+                    "type": "string"
+                },
+                "response": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "tftp": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "file": {
+                    "type": "string"
+                },
+                "mode": {
+                    "type": "string"
+                },
+                "packet": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "tls": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "session_resumed": {
+                    "type": "boolean"
+                },
+                "sni": {
+                    "type": "string"
+                },
+                "issuerdn": {
+                    "type": "string"
+                },
+                "subject": {
+                    "type": "string"
+                },
+                "fingerprint": {
+                    "type": "string"
+                },
+                "notafter": {
+                    "type": "string"
+                },
+                "notbefore": {
+                    "type": "string"
+                },
+                "serial": {
+                    "type": "string"
+                },
+                "from_proto": {
+                    "type": "string"
+                },
+                "ja3": {
+                    "type": "object",
+                    "optional": true,
+                    "properties": {
+                        "hash": {
+                            "type": "string"
+                        },
+                        "string": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "ja3s": {
+                    "type": "object",
+                    "optional": true,
+                    "properties": {
+                        "hash": {
+                            "type": "string"
+                        },
+                        "string": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "version": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "ssh": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "client": {
+                    "type": "object",
+                    "properties": {
+                        "proto_version": {
+                            "type": "string"
+                        },
+                        "software_version": {
+                            "type": "string"
+                        },
+                        "hassh": {
+                            "type": "object",
+                            "properties": {
+                                "hash": {
+                                    "type": "string"
+                                },
+                                "string": {
+                                    "type": "string"
+                                }
+                            },
+                            "additionalProperties": false
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "server": {
+                    "type": "object",
+                    "properties": {
+                        "proto_version": {
+                            "type": "string"
+                        },
+                        "software_version": {
+                            "type": "string"
+                        },
+                        "hassh": {
+                            "type": "object",
+                            "properties": {
+                                "hash": {
+                                    "type": "string"
+                                },
+                                "string": {
+                                    "type": "string"
+                                }
+                            },
+                            "additionalProperties": false
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            },
+            "additionalProperties": false
         }
     },
-    "additionalProperties": true
+    "additionalProperties": false
 }
