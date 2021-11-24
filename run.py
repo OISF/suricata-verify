@@ -45,6 +45,7 @@ import subprocess
 import yaml
 
 # Check if we can validate EVE files against the schema.
+global VALIDATE_EVE
 try:
     VALIDATE_EVE = True
     check_output = subprocess.run(["eve-validator", "-V"], capture_output=True)
@@ -950,6 +951,7 @@ def main():
     if args.self_test:
         return unittest.main(argv=[sys.argv[0]])
 
+    global VALIDATE_EVE
     if not VALIDATE_EVE:
         print("Warning: EVE files will not be valided: eve-validator program not found.")
 
@@ -970,6 +972,9 @@ def main():
 
     # Create a SuricataConfig object that is passed to all tests.
     suricata_config = SuricataConfig(get_suricata_version())
+    # only validate eve since version 7
+    if not is_version_compatible(version="7", suri_version=suricata_config.version, expr="gte"):
+        VALIDATE_EVE = False
     suricata_config.valgrind = args.valgrind
     tdir = os.path.join(TOPDIR, "tests")
     if args.testdir:
