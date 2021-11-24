@@ -2689,6 +2689,12 @@
             "type": "object",
             "optional": true,
             "properties": {
+                "activityuuid": {
+                    "type": "string"
+                },
+                "seqnum": {
+                    "type": "integer"
+                },
                 "request": {
                     "type": "string"
                 },
