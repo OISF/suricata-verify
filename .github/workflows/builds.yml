@@ -89,6 +89,7 @@ jobs:
         working-directory: suricata
         run: python3 ../run.py --quiet
       - name: Running check-eve
+        if: github.ref == 'refs/heads/master'
         run: python3 ./check-eve.py
 
   almalinux:
@@ -164,4 +165,5 @@ jobs:
         working-directory: suricata
         run: python3 ../run.py --quiet
       - name: Running check-eve
+        if: github.ref == 'refs/heads/master'
         run: python3 ./check-eve.py
