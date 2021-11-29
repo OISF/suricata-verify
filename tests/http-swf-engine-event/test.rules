@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"SWF Decode Engine Event Set"; file_data; content:"Any Conent"; sid:1;)

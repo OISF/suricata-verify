@@ -1,0 +1,13 @@
+requires:
+  min-version: 7
+
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: FILE_DECODER_EVENT_INVALID_SWF_VERSION
+        anomaly.type: applayer
