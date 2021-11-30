@@ -5,5 +5,5 @@ checks:
   - filter:
       count: 1
       match:
-        xff: 10.2.2.2
+        http.xff: 10.2.2.2
 
