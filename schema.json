@@ -94,9 +94,6 @@
             "type": "integer",
             "optional": true
         },
-        "xff": {
-            "type": "string"
-        },
         "files": {
             "type": "array",
             "items": {
