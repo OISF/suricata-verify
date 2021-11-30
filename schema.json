@@ -17,9 +17,6 @@
         "app_proto_ts": {
             "type": "string"
         },
-        "command": {
-            "type": "string"
-        },
         "community_id": {
             "type": "string"
         },
@@ -34,9 +31,6 @@
         "event_type": {
             "type": "string",
             "optional": false
-        },
-        "filename": {
-            "type": "string"
         },
         "flow_id": {
             "type": "integer",
