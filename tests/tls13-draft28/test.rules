@@ -1,2 +1,2 @@
-alert tls any any -> any any (flow:to_client; record:tls.pdu; content:"|17 03 03|"; startswith; sid:1;)
-alert tls any any -> any any (flow:to_server; record:tls.pdu; content:"|17 03 03|"; startswith; sid:2;)
+alert tls any any -> any any (flow:to_client; frame:tls.pdu; content:"|17 03 03|"; startswith; sid:1;)
+alert tls any any -> any any (flow:to_server; frame:tls.pdu; content:"|17 03 03|"; startswith; sid:2;)

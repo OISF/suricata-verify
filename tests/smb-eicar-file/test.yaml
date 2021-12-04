@@ -25,8 +25,8 @@ checks:
   - filter:
       count: 1
       match:
-        event_type: record
-        record.type: "smb1.data"
-        record.offset: 853
-        record.length: 68
-        record.payload: "Dv8AAAAAQAAAAAAAAAAAAAAAAAAARABAAAAAAABFAABYNU8hUCVAQVBbNFxQWlg1NChQXik3Q0MpN30kRUlDQVItU1Q="
+        event_type: frame
+        frame.type: "smb1.data"
+        frame.offset: 853
+        frame.length: 68
+        frame.payload: "Dv8AAAAAQAAAAAAAAAAAAAAAAAAARABAAAAAAABFAABYNU8hUCVAQVBbNFxQWlg1NChQXik3Q0MpN30kRUlDQVItU1Q="

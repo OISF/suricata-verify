@@ -8,7 +8,7 @@ outputs:
       filename: eve.json
       types:
         - alert
-        - record
+        - frame
         - tls:
             extended: yes     # enable this for extended logging information
 

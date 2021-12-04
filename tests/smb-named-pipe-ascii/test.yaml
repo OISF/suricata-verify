@@ -17,21 +17,21 @@ checks:
   - filter:
       count: 6 # TS only right now
       match:
-        event_type: record
-        record.type: "smb1.hdr"
+        event_type: frame
+        frame.type: "smb1.hdr"
   - filter:
       count: 1
       match:
-        event_type: record
-        record.type: "smb1.hdr"
-        record.offset: 4
-        record.length: 32
-        record.payload: "/1NNQnIAAAAAGEPIAAAAAAAAAAAAAAAAAAD+/wAAAAA="
+        event_type: frame
+        frame.type: "smb1.hdr"
+        frame.offset: 4
+        frame.length: 32
+        frame.payload: "/1NNQnIAAAAAGEPIAAAAAAAAAAAAAAAAAAD+/wAAAAA="
   - filter:
       count: 1
       match:
-        event_type: record
-        record.type: "smb1.hdr"
-        record.offset: 1098
-        record.length: 32
-        record.payload: "/1NNQnEAAAAAGEPIAAAAAAAAAAAAAAAAAQhkBgAQBQA="
+        event_type: frame
+        frame.type: "smb1.hdr"
+        frame.offset: 1098
+        frame.length: 32
+        frame.payload: "/1NNQnEAAAAAGEPIAAAAAAAAAAAAAAAAAQhkBgAQBQA="

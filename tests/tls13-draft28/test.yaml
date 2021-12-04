@@ -30,14 +30,14 @@ checks:
   - filter:
       count: 1
       match:
-        event_type: record
-        record.type: "pdu"
-        record.offset: 737
-        record.length: 37
-        record.payload: "FwMDACBUkdn1rkU9Kp35Pqj6bpO9i0a20Tj7PKooNVCpa+3I0A=="
+        event_type: frame
+        frame.type: "pdu"
+        frame.offset: 737
+        frame.length: 37
+        frame.payload: "FwMDACBUkdn1rkU9Kp35Pqj6bpO9i0a20Tj7PKooNVCpa+3I0A=="
 
   - filter:
       count: 11
       match:
         event_type: alert
-        record.type: "pdu"
+        frame.type: "pdu"
