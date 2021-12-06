@@ -603,7 +603,7 @@ class TestRunner:
             "TZ": "UTC",
             "TEST_DIR": self.directory,
             "OUTPUT_DIR": self.output,
-            "ASAN_OPTIONS": "detect_leaks=0",
+            "ASAN_OPTIONS": "detect_leaks=1",
         }
         env = os.environ.copy()
         env.update(extraenv)
