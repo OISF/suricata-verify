@@ -1,0 +1,2 @@
+alert ftp-data any any -> any any (msg:"FILE FTP signature: windows executable"; flow:established; content: "MZ"; within:2; filestore; noalert; sid:1; rev:1;)
+alert ftp-data any any -> any any (msg:"FILE FTP signature: pdf document"; flow:established; content: "%PDF-"; within:1024; filestore; noalert; sid:2; rev:1;)
