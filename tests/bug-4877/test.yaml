@@ -1,0 +1,78 @@
+# *** Add configuration here ***
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      app_proto: ftp-data
+      dest_ip: 192.168.100.16
+      dest_port: 42987
+      event_type: fileinfo
+      fileinfo.filename: test.pdf
+      fileinfo.gaps: false
+      fileinfo.sha256: 7d400735ff3054837da5d92a10ad2faa8b6825f100dc167a6b008e753015b382
+      fileinfo.size: 118196
+      fileinfo.state: CLOSED
+      fileinfo.stored: false
+      fileinfo.tx_id: 0
+      parent_id: 1906723194431280
+      proto: TCP
+      src_ip: 192.168.100.230
+      src_port: 20
+- filter:
+    count: 1
+    match:
+      app_proto: ftp-data
+      dest_ip: 192.168.100.230
+      dest_port: 20
+      event_type: fileinfo
+      fileinfo.filename: test.pdf
+      fileinfo.gaps: false
+      fileinfo.sha256: 7d400735ff3054837da5d92a10ad2faa8b6825f100dc167a6b008e753015b382
+      fileinfo.size: 118196
+      fileinfo.state: CLOSED
+      fileinfo.stored: false
+      fileinfo.tx_id: 0
+      parent_id: 1906723194431280
+      proto: TCP
+      src_ip: 192.168.100.16
+      src_port: 52407
+- filter:
+    count: 1
+    match:
+      app_proto: ftp-data
+      dest_ip: 192.168.100.230
+      dest_port: 20
+      event_type: fileinfo
+      fileinfo.filename: notepad.exe
+      fileinfo.gaps: false
+      fileinfo.sha256: fefeac4c10bbe237cc6c861229ecaacbd2a366ac4fbd04a3862b62bd7a778093
+      fileinfo.size: 69120
+      fileinfo.state: CLOSED
+      fileinfo.stored: false
+      fileinfo.tx_id: 0
+      parent_id: 1906723194431280
+      proto: TCP
+      src_ip: 192.168.100.16
+      src_port: 48902
+- filter:
+    count: 1
+    match:
+      app_proto: ftp-data
+      dest_ip: 192.168.100.16
+      dest_port: 57829
+      event_type: fileinfo
+      fileinfo.filename: notepad.exe
+      fileinfo.gaps: false
+      fileinfo.sha256: fefeac4c10bbe237cc6c861229ecaacbd2a366ac4fbd04a3862b62bd7a778093
+      fileinfo.size: 69120
+      fileinfo.state: CLOSED
+      fileinfo.stored: false
+      fileinfo.tx_id: 0
+      parent_id: 1906723194431280
+      proto: TCP
+      src_ip: 192.168.100.230
+      src_port: 20
