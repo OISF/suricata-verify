@@ -1,0 +1,2 @@
+alert ip any any -> any any (cip_service: 10; sid:1; )
+alert ip any any -> any any (enip_command: 112; sid:2; )
