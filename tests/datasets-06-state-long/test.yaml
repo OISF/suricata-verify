@@ -12,6 +12,6 @@ command: |
 
 checks:
   - shell:
-     args: cat state.csv | sort > state-sorted.csv
-  - shell:
-     args: cmp state-sorted.csv ../expected/state.csv
+      args: |
+        cat ../expected/state.csv | sort > expected.csv
+        cat state.csv | sort | cmp - expected.csv
