@@ -400,7 +400,8 @@ class ShellCheck:
                 return str(self.config["expect"]) == output.decode().strip()
             return True
         except subprocess.CalledProcessError as err:
-            raise TestError(err)
+            raise TestError("Shell command failed: {} -> {}".format(
+                self.config, err.output))
 
 class StatsCheck:
 
