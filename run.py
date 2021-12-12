@@ -610,6 +610,10 @@ class TestRunner:
 
         env = self.build_env()
 
+        safe_env = {}
+        for key in env:
+            safe_env[key] = str(env[key])
+
         if "count" in self.config:
             count = self.config["count"]
         else:
@@ -633,10 +637,10 @@ class TestRunner:
 
             if shell:
                 template = string.Template(args)
-                cmdline = template.substitute(env)
+                cmdline = template.substitute(safe_env)
             else:
                 for a in range(len(args)):
-                    args[a] = string.Template(args[a]).substitute(env)
+                    args[a] = string.Template(args[a]).substitute(safe_env)
                 cmdline = " ".join(args) + "\n"
 
             open(os.path.join(self.output, "cmdline"), "w").write(cmdline)
