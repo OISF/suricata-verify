@@ -432,6 +432,7 @@ class FilterCheck:
         self.suri_version = suricata_config.version
 
     def run(self):
+        this_should_cause_a_runtime_error()
         requires = self.config.get("requires", {})
         req_version = self.config.get("version")
         min_version = self.config.get("min-version")
