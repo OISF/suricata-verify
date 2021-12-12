@@ -1,6 +1,7 @@
 requires:
   features:
     - HAVE_LIBJANSSON
+    - NEEDS_PATH_FIXES
   files:
     - src/datasets.c
 
