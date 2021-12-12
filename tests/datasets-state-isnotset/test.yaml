@@ -4,7 +4,7 @@ requires:
     - HAVE_NSS
     - HAVE_LIBJANSSON
 
-pcap: false
+pcap: ../datasets-05-state/input.pcap
 
 args:
   - --data-dir=${OUTPUT_DIR}
