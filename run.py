@@ -385,8 +385,9 @@ class FileCompareCheck:
 
 class ShellCheck:
 
-    def __init__(self, config):
+    def __init__(self, config, env):
         self.config = config
+        self.env = env
 
     def run(self):
         if not self.config or "args" not in self.config:
@@ -395,7 +396,7 @@ class ShellCheck:
             if WIN32:
                 print("skipping shell check on windows")
                 return True;
-            output = subprocess.check_output(self.config["args"], shell=True)
+            output = subprocess.check_output(self.config["args"], shell=True, env=self.env)
             if "expect" in self.config:
                 return str(self.config["expect"]) == output.decode().strip()
             return True
@@ -577,6 +578,15 @@ class TestRunner:
                    glob.glob(os.path.join(self.directory, "*.pcapng")):
                     raise UnsatisfiedRequirementError("No pcap file found")
 
+    def build_env(self):
+        env = os.environ.copy()
+        env["SRCDIR"] = self.cwd
+        env["TZ"] = "UTC"
+        env["TEST_DIR"] = self.directory
+        env["OUTPUT_DIR"] = self.output
+        env["ASAN_OPTIONS"] = "detect_leaks=1"
+        return env
+
     def run(self, outdir):
 
         if not self.force:
@@ -598,16 +608,7 @@ class TestRunner:
         else:
             args = self.default_args()
 
-        extraenv = {
-            # The suricata source directory.
-            "SRCDIR": self.cwd,
-            "TZ": "UTC",
-            "TEST_DIR": self.directory,
-            "OUTPUT_DIR": self.output,
-            "ASAN_OPTIONS": "detect_leaks=1",
-        }
-        env = os.environ.copy()
-        env.update(extraenv)
+        env = self.build_env()
 
         if "count" in self.config:
             count = self.config["count"]
@@ -683,7 +684,7 @@ class TestRunner:
 
     @handle_exceptions
     def perform_shell_checks(self, check, count, test_num, test_name):
-        count = ShellCheck(check).run()
+        count = ShellCheck(check, self.build_env()).run()
         return count
 
     @handle_exceptions

@@ -11,5 +11,5 @@ args:
 checks:
   - shell:
       args: |
-        cat ../expected/state.csv | sort > expected.csv
+        cat ${TEST_DIR}/expected/state.csv | sort > expected.csv
         cat state.csv | sort | cmp - expected.csv
