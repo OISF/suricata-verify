@@ -15,7 +15,7 @@ checks:
         alert.signature_id: 1
 
   - filter:
-      count: 6 # TS only right now
+      count: 12
       match:
         event_type: frame
         frame.type: "smb1.hdr"

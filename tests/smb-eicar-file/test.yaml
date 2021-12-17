@@ -26,7 +26,8 @@ checks:
       count: 1
       match:
         event_type: frame
+        frame.direction: toserver
         frame.type: "smb1.data"
         frame.offset: 853
-        frame.length: 68
-        frame.payload: "Dv8AAAAAQAAAAAAAAAAAAAAAAAAARABAAAAAAABFAABYNU8hUCVAQVBbNFxQWlg1NChQXik3Q0MpN30kRUlDQVItU1Q="
+        frame.length: 100
+        frame.payload: "Dv8AAAAAQAAAAAAAAAAAAAAAAAAARABAAAAAAABFAABYNU8hUCVAQVBbNFxQWlg1NChQXik3Q0MpN30kRUlDQVItU1RBTkRBUkQtQU5USVZJUlVTLVRFU1QtRklMRSEkSCtIKg=="
