@@ -662,7 +662,7 @@ class TestRunner:
                     r, expected_exit_code));
 
             check_value = self.check()
-        
+
         if VALIDATE_EVE:
             check_output = subprocess.call(["{}/check-eve.py".format(TOPDIR), outdir, "-q"])
             if check_output != 0:
@@ -939,7 +939,7 @@ def main():
     if args.self_test:
         return unittest.main(argv=[sys.argv[0]])
 
-    print("Warning: EVE files will not be valided: jsonschema module not found.")
+    print("Warning: EVE files will not be validated: jsonschema module not found.")
 
     TOPDIR = os.path.abspath(os.path.dirname(sys.argv[0]))
 
