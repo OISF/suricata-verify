@@ -1,0 +1,66 @@
+# *** Add configuration here ***
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Potentially Bad Traffic
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 2
+      alert.signature: Bad SSH proto 2 detected !!!
+      alert.signature_id: 2
+      app_proto: ssh
+      dest_ip: 192.168.100.1
+      dest_port: 10001
+      event_type: alert
+      flow.bytes_toclient: 258
+      flow.bytes_toserver: 216
+      flow.pkts_toclient: 2
+      flow.pkts_toserver: 4
+      proto: TCP
+      src_ip: 192.168.200.1
+      src_port: 22
+      ssh.server.proto_version: '1.99'
+      ssh.server.software_version: Cisco_server-1.24
+      tx_id: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Potentially Bad Traffic
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 2
+      alert.signature: Bad SSH software server detected !!!
+      alert.signature_id: 4
+      app_proto: ssh
+      dest_ip: 192.168.100.1
+      dest_port: 10001
+      event_type: alert
+      flow.bytes_toclient: 258
+      flow.bytes_toserver: 216
+      flow.pkts_toclient: 2
+      flow.pkts_toserver: 4
+      proto: TCP
+      src_ip: 192.168.200.1
+      src_port: 22
+      ssh.server.proto_version: '1.99'
+      ssh.server.software_version: Cisco_server-1.24
+      tx_id: 0
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.200.1
+      dest_port: 22
+      event_type: ssh
+      proto: TCP
+      src_ip: 192.168.100.1
+      src_port: 10001
+      ssh.server.proto_version: '1.99'
+      ssh.server.software_version: Cisco_server-1.24
+      tx_id: 0
