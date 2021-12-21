@@ -1,0 +1,2 @@
+alert tcp any any -> any [80,443] (msg:"non-HTTP traffic over HTTP/S standard port"; flow:to_server; app-layer-protocol:!http,final; app-layer-protocol:!tls,final; sid:1; )
+alert tcp any [80,443] -> any any (msg:"non-HTTP traffic over HTTP/S standard port"; flow:to_client; app-layer-protocol:!http,final; app-layer-protocol:!tls,final; sid:2; )
