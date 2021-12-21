@@ -378,10 +378,13 @@ class FileCompareCheck:
             return True;
         expected = os.path.join(self.directory, self.config["expected"])
         filename = self.config["filename"]
-        if filecmp.cmp(expected, filename):
-            return True
-        else:
-            raise TestError("%s %s \nFAILED: verification failed" % (expected, filename))
+        try:
+            if filecmp.cmp(expected, filename):
+                return True
+            else:
+                raise TestError("%s %s \nFAILED: verification failed" % (expected, filename))
+        except Exception as err:
+            raise TestError("file-compare check failed with exception: %s" % (err))
 
 class ShellCheck:
 
