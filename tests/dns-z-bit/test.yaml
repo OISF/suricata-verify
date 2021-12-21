@@ -1,0 +1,62 @@
+requires:
+  min-version: 7.0
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: dns
+      dns.type: query
+      dns.z: true
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2240006
+      dns.query[0].z: true
+- filter:
+    count: 1
+    match:
+      dest_ip: 8.8.8.8
+      dest_port: 53
+      dns.answers[0].rdata: 142.251.32.68
+      dns.answers[0].rrname: www.google.com
+      dns.answers[0].rrtype: A
+      dns.answers[0].ttl: 58
+      dns.flags: '8180'
+      dns.grouped.A[0]: 142.251.32.68
+      dns.id: 1
+      dns.qr: true
+      dns.ra: true
+      dns.rcode: NOERROR
+      dns.rd: true
+      dns.rrname: www.google.com
+      dns.rrtype: A
+      dns.type: answer
+      dns.version: 2
+      event_type: dns
+      pcap_cnt: 2
+      proto: UDP
+      src_ip: 10.16.1.11
+      src_port: 42150
+- filter:
+    count: 1
+    match:
+      app_proto: dns
+      dest_ip: 8.8.8.8
+      dest_port: 53
+      event_type: flow
+      flow.age: 0
+      flow.alerted: true
+      flow.bytes_toclient: 90
+      flow.bytes_toserver: 74
+      flow.pkts_toclient: 1
+      flow.pkts_toserver: 1
+      flow.reason: shutdown
+      flow.state: established
+      proto: UDP
+      src_ip: 10.16.1.11
+      src_port: 42150
