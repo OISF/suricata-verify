@@ -1,0 +1,3 @@
+alert tcp any any -> any any (msg:"Test uricontent"; content:"foo"; http_uri; sid:1;)
+alert tcp any any -> any any (msg:"Test uricontent"; content:"one"; http_uri; sid:2;)
+alert tcp any any -> any any (msg:"Test uricontent"; content:"oisf"; http_uri; sid:3;)
