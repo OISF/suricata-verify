@@ -163,6 +163,8 @@ def handle_exceptions(func):
             if args and not args[0].quiet:
                 print("===> {}: Sub test #{}: SKIPPED : {}".format(kwargs["test_name"], kwargs["test_num"], ue))
             kwargs["count"]["skipped"] += 1
+        except Exception:
+            raise
         else:
             if result:
               kwargs["count"]["success"] += 1
@@ -725,6 +727,8 @@ class TestRunner:
                                     test_num=check_count + 1, test_name=os.path.basename(self.directory))
                         else:
                             print("FAIL: Unknown check type: {}".format(key))
+        except Exception:
+            raise
         finally:
             os.chdir(pdir)
 
@@ -882,13 +886,16 @@ def run_test(dirpath, args, cwd, suricata_config):
         check_args_fail()
         with lock:
             count_dict["failed"] += 1
+    except Exception:
+        raise
 
 def run_mp(jobs, tests, dirpath, args, cwd, suricata_config):
     print("Number of concurrent jobs: %d" % jobs)
     pool = mp.Pool(jobs)
     try:
         for dirpath in tests:
-            pool.apply_async(run_test, args=(dirpath, args, cwd, suricata_config))
+            res = pool.apply_async(run_test, args=(dirpath, args, cwd, suricata_config))
+            res.get()
     except TerminatePoolError:
         pool.terminate()
     pool.close()
