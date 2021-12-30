@@ -1,0 +1,18 @@
+# *** Add configuration here ***
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: dns
+- filter:
+    count: 2
+    match:
+      event_type: flow
+- filter:
+    count: 1
+    match:
+      event_type: stats

@@ -1,0 +1,2 @@
+alert udp any any -> any any (msg:"test"; content:"|af|af|af|"; http_uri; sid:238012;)
+alert tcp any any -> any any (msg:"test"; content:"boo"; http_uri; sid:1;)
