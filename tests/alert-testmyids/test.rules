@@ -1,6 +1,5 @@
 alert ip any any -> any any (msg:"GPL ATTACK_RESPONSE id check returned root"; content:"uid=0|28|root|29|"; classtype:bad-unknown; sid:2100498; rev:7;)
 
 alert http any any -> any any (flow:to_server; frame:http1.request; content:"GET / HTTP/1.1|0d 0a|Host: www.testmyids.com"; startswith; bsize:81; sid:1;)
-alert http any any -> any any (flow:to_client; frame:http1.response; content:"uid=0|28|root|29|"; sid:2;)
-
-alert http any any -> any any (flow:to_server; frame:http1.request; strip_whitespace; content:"GET/HTTP/1.1Host:www.testmyids.com"; startswith; bsize:66; sid:3;)
+alert http1 any any -> any any (flow:to_client; frame:response; content:"uid=0|28|root|29|"; sid:2;)
+alert http1 any any -> any any (flow:to_server; frame:request; strip_whitespace; content:"GET/HTTP/1.1Host:www.testmyids.com"; startswith; bsize:66; sid:3;)

@@ -80,5 +80,5 @@ checks:
         event_type: alert
         app_proto: smb
         alert.signature_id: 2
-        frame.type: smb2
+        frame.type: smb2.pdu
 

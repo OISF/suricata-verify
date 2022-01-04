@@ -1,2 +1,2 @@
-alert smb any any -> any any (frame:smb.smb2; flow:to_server; content:"This program cannot be run in DOS mode.|0d 0d 0a|"; sid:1;)
-alert smb any any -> any any (frame:smb.smb2; flow:to_server; content:"|C0 40 88 41|"; endswith; sid:2;)
+alert smb any any -> any any (frame:smb2.pdu; flow:to_server; content:"This program cannot be run in DOS mode.|0d 0d 0a|"; sid:1;)
+alert smb any any -> any any (frame:smb2.pdu; flow:to_server; content:"|C0 40 88 41|"; endswith; sid:2;)
