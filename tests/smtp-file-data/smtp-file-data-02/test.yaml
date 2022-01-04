@@ -1,0 +1,25 @@
+args:
+- -k none
+
+checks:
+- filter:
+    count: 2
+    match:
+      event_type: dns
+- filter:
+    count: 1
+    match:
+      event_type: anomaly
+- filter:
+    count: 2
+    match:
+      event_type: smtp
+- filter:
+    count: 1
+    match:
+      event_type: fileinfo
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
