@@ -1,0 +1,12 @@
+requires:
+    min-version: 7
+
+command: |
+  ${SRCDIR}/src/suricata --set reference-config-file="${TEST_DIR}/reference.config" -l ${OUTPUT_DIR} -c ${SRCDIR}/suricata.yaml -S ${TEST_DIR}/test.rules -T
+
+exit-code: 1
+
+checks:
+    - shell:
+        args: grep "SC_ERR_REFERENCE_CONFIG" suricata.log | wc -l | xargs
+        expect: 1
