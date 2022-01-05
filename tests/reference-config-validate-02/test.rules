@@ -1,0 +1,4 @@
+alert tcp any any -> any 25 (msg:"ET POLICY Inbound Frequent Emails - Possible Spambot Inbound"; \
+     flow:established; content:"mail from|3a|"; nocase;                                          \
+          threshold: type threshold, track by_src, count 10, seconds 60;                              \
+               reference:url,doc.emergingthreats.net/2002087; classtype:misc-activity; sid:2002087; rev:10;)
