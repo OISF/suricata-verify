@@ -1,0 +1,15 @@
+requires:
+    min-version: 7
+
+command: |
+  ${SRCDIR}/src/suricata -v --set reference-config-file="${TEST_DIR}/reference.config" -l ${OUTPUT_DIR} -c ${SRCDIR}/suricata.yaml -S ${TEST_DIR}/test.rules -r ${TEST_DIR}/input.pcap
+
+checks:
+
+    - shell:
+        args: grep -e "SC_ERR_REFERENCE_CONFIG" suricata.log | wc -l | xargs
+        expect: 1
+
+    - shell:
+        args: grep -e "SC_ERR_REFERENCE_UNKNOWN" suricata.log | wc -l | xargs
+        expect: 1
