@@ -163,6 +163,8 @@ def handle_exceptions(func):
             if args and not args[0].quiet:
                 print("===> {}: Sub test #{}: SKIPPED : {}".format(kwargs["test_name"], kwargs["test_num"], ue))
             kwargs["count"]["skipped"] += 1
+        except Exception as err:
+            raise TestError("Internal runtime error: {}".format(err))
         else:
             if result:
               kwargs["count"]["success"] += 1
