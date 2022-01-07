@@ -1,0 +1,31 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+args:
+ - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        app_proto: telnet
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: telnet
+  - filter:
+      count: 32
+      match:
+        event_type: frame
+        app_proto: telnet
+        frame.type: data
+  - filter:
+      count: 68
+      match:
+        event_type: frame
+        app_proto: telnet
+        frame.type: ctl
