@@ -1,0 +1,1 @@
+Check the signature working to alert when method or cookie modifier is passed to pcre

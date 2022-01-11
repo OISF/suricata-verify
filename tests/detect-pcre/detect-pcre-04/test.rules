@@ -1,0 +1,3 @@
+alert http any any -> any any (msg:"HTTP cookie"; pcre:"/dummy/C"; sid:1;)
+alert http any any -> any any (msg:"HTTP cookie"; pcre:!"/dummy/C"; sid:2;)
+alert http any any -> any any (msg:"HTTP method"; pcre:"/POST/M"; sid:3;)
