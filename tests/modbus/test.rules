@@ -1,3 +1,5 @@
+alert modbus any any -> any any (msg:"Testing modbus code function"; modbus: access write; sid:6;)
+alert modbus any any -> any any (msg:"Testing modbus code function"; modbus: function 8; sid:7;)
 alert modbus any any -> any any (msg:"Modbus function number test"; modbus: function 1; sid:1; rev:1;)
 alert modbus any any -> any any (msg:"Modbus function word test"; modbus: function assigned; sid:2; rev:1;)
 alert modbus any any -> any any (msg:"Modbus access test"; modbus: access read; sid:3; rev:1;)
