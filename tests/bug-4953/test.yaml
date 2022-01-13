@@ -1,0 +1,32 @@
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 3
+      match:
+        event_type: fileinfo
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: "/IEyF/EN3GUkgHakZ3iVe/YBqssWlF8iWaHTr/"
+        fileinfo.gaps: true
+        fileinfo.state: TRUNCATED
+        fileinfo.size: 137708
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: "LVejnvdxqMoIu"
+        fileinfo.gaps: false
+        fileinfo.state: CLOSED
+        fileinfo.size: 676
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: "BEemDNNWAKeCH"
+        fileinfo.gaps: false
+        fileinfo.state: CLOSED
+        fileinfo.size: 692
