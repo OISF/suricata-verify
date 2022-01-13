@@ -1,0 +1,45 @@
+args:
+- -k none
+
+checks:
+  - filter:
+      min-version: 6
+      count: 3
+      match:
+        event_type: fileinfo
+  - filter:
+      min-version: 6
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: "/IEyF/EN3GUkgHakZ3iVe/YBqssWlF8iWaHTr/"
+        fileinfo.gaps: true
+        fileinfo.state: TRUNCATED
+        fileinfo.size: 137708
+  - filter:
+      requires:
+        lt-version: 6
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: "/IEyF/EN3GUkgHakZ3iVe/YBqssWlF8iWaHTr/"
+        fileinfo.gaps: false
+        fileinfo.state: TRUNCATED
+        fileinfo.size: 1176
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: "LVejnvdxqMoIu"
+        fileinfo.gaps: false
+        fileinfo.state: CLOSED
+        fileinfo.size: 676
+  - filter:
+      min-version: 6
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: "BEemDNNWAKeCH"
+        fileinfo.gaps: false
+        fileinfo.state: CLOSED
+        fileinfo.size: 692
