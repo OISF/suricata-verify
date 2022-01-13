@@ -298,7 +298,7 @@ checks:
       http.protocol: HTTP/1.1
       http.status: 200
       http.url: /
-      pcap_cnt: 75
+      pcap_cnt: 74
       proto: TCP
       src_ip: 192.168.2.16
       src_port: 1580
