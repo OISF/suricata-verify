@@ -1,0 +1,71 @@
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      dest_ip: 74.53.140.153
+      dest_port: 25
+      email.attachment[0]: NEWS.txt
+      email.from: '"Gurpartap Singh" <gurpartap@patriots.in>'
+      email.status: PARSE_DONE
+      email.to[0]: <raj_deol2002in@yahoo.co.in>
+      event_type: smtp
+      pcap_cnt: 51
+      proto: TCP
+      smtp.helo: GP
+      smtp.mail_from: <gurpartap@patriots.in>
+      smtp.rcpt_to[0]: <raj_deol2002in@yahoo.co.in>
+      src_ip: 10.10.1.4
+      src_port: 1470
+      tx_id: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: file_data smtp test
+      alert.signature_id: 1
+      app_proto: smtp
+      app_proto_tc: failed
+      dest_ip: 74.53.140.153
+      dest_port: 25
+      email.attachment[0]: NEWS.txt
+      email.from: '"Gurpartap Singh" <gurpartap@patriots.in>'
+      email.status: PARSE_DONE
+      email.to[0]: <raj_deol2002in@yahoo.co.in>
+      event_type: alert
+      files[0].filename: NEWS.txt
+      files[0].gaps: false
+      files[0].size: 10735
+      files[0].state: CLOSED
+      files[0].stored: false
+      files[0].tx_id: 0
+      flow.bytes_toclient: 4118
+      flow.bytes_toserver: 21897
+      flow.pkts_toclient: 26
+      flow.pkts_toserver: 25
+      pcap_cnt: 53
+      proto: TCP
+      smtp.helo: GP
+      smtp.mail_from: <gurpartap@patriots.in>
+      smtp.rcpt_to[0]: <raj_deol2002in@yahoo.co.in>
+      src_ip: 10.10.1.4
+      src_port: 1470
+      tx_id: 0
+- filter:
+    count: 1
+    match:
+      dest_ip: 74.53.140.153
+      dest_port: 25
+      event_type: smtp
+      pcap_cnt: 58
+      proto: TCP
+      smtp.helo: GP
+      src_ip: 10.10.1.4
+      src_port: 1470
+      tx_id: 1

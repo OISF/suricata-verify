@@ -1,0 +1,71 @@
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      dest_ip: 1.2.190.250
+      dest_port: 25
+      email.attachment[0]: J.txt
+      email.from: <sender@example.com>
+      email.status: PARSE_DONE
+      email.to[0]: <recipient@example.com>
+      event_type: smtp
+      pcap_cnt: 89
+      proto: TCP
+      smtp.helo: client-1016363.example.int
+      smtp.mail_from: <sender@example.com>
+      smtp.rcpt_to[0]: <recipient@example.com>
+      src_ip: 1.1.205.22
+      src_port: 4053
+      tx_id: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: file_data smtp test
+      alert.signature_id: 1
+      app_proto: smtp
+      app_proto_tc: failed
+      dest_ip: 1.2.190.250
+      dest_port: 25
+      email.attachment[0]: J.txt
+      email.from: <sender@example.com>
+      email.status: PARSE_DONE
+      email.to[0]: <recipient@example.com>
+      event_type: alert
+      files[0].filename: J.txt
+      files[0].gaps: false
+      files[0].size: 16386
+      files[0].state: CLOSED
+      files[0].stored: false
+      files[0].tx_id: 0
+      flow.bytes_toclient: 2928
+      flow.bytes_toserver: 21322
+      flow.pkts_toclient: 34
+      flow.pkts_toserver: 57
+      pcap_cnt: 91
+      proto: TCP
+      smtp.helo: client-1016363.example.int
+      smtp.mail_from: <sender@example.com>
+      smtp.rcpt_to[0]: <recipient@example.com>
+      src_ip: 1.1.205.22
+      src_port: 4053
+      tx_id: 0
+- filter:
+    count: 1
+    match:
+      dest_ip: 1.2.190.250
+      dest_port: 25
+      event_type: smtp
+      pcap_cnt: 98
+      proto: TCP
+      smtp.helo: client-1016363.example.int
+      src_ip: 1.1.205.22
+      src_port: 4053
+      tx_id: 1
