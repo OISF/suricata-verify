@@ -37,3 +37,9 @@ checks:
       match:
         event_type: alert
         alert.signature: QUIC VERSION
+
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature: QUIC SNI
