@@ -1,5 +1,6 @@
 # *** Add configuration here ***
 requires:
+  min-version: 7
   features:
     - RUST
 
