@@ -1,0 +1,3 @@
+alert ip any any -> any any (hostbits:noalert; content:"GET "; sid:1;)
+alert ip any any -> any any (msg:"isset option"; hostbits:isset,fbt; content:"GET "; sid:2;)
+alert ip any any -> any any (hostbits:set,abc; content:"GET "; sid:3;)
