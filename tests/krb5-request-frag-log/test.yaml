@@ -11,12 +11,12 @@ args:
 
 checks:
   - filter:
-      count: 2
+      count: 4
       match:
         event_type: alert
         alert.signature_id: 1
   - filter:
-      count: 2
+      count: 4
       match:
         event_type: alert
         alert.signature_id: 2
