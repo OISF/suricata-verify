@@ -1,0 +1,46 @@
+# *** Add configuration here ***
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.20
+      dest_port: 2049
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 302
+      flow.bytes_toserver: 774
+      flow.pkts_toclient: 1
+      flow.pkts_toserver: 1
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 192.168.1.43
+      src_port: 45794
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.1.20
+      dest_port: 2049
+      event_type: flow
+      flow.age: 6
+      flow.alerted: false
+      flow.bytes_toclient: 3112
+      flow.bytes_toserver: 2384
+      flow.pkts_toclient: 12
+      flow.pkts_toserver: 12
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 192.168.1.43
+      src_port: 766
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
