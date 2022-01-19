@@ -1,20 +1,12 @@
 requires:
-  features:
-    - HAVE_LIBJANSSON
-    - RUST
-  files:
-    - rust/src/smb/smb.rs
+  min-version: 7
+
 args:
 - --set stream.reassembly.depth=0
 - --set stream.midstream=true
 - -k none
 
 checks:
-  - filter:
-      version: 6
-      count: 58
-      match:
-        event_type: smb
   - filter:
       min-version: 7
       count: 59
@@ -74,4 +66,60 @@ checks:
         app_proto: smb
         tcp.state: closed
         flow.state: closed
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        app_proto: smb
+        alert.signature_id: 2
+        frame.type: smb2.pdu
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        app_proto: smb
+        alert.signature_id: 11
+        frame.type: smb2.data
+  - filter:
+      count: 88
+      match:
+        event_type: alert
+        app_proto: smb
+        alert.signature_id: 8
+        frame.type: smb2.hdr
+  - filter:
+      count: 88
+      match:
+        event_type: alert
+        app_proto: smb
+        alert.signature_id: 7
+        frame.type: smb2.pdu
+  - filter:
+      count: 88
+      match:
+        event_type: alert
+        app_proto: smb
+        alert.signature_id: 10
+        frame.type: smb2.data
+  - filter:
+      count: 85
+      match:
+        event_type: alert
+        app_proto: smb
+        alert.signature_id: 4
+        frame.type: smb2.hdr
+  - filter:
+      count: 85
+      match:
+        event_type: alert
+        app_proto: smb
+        alert.signature_id: 3
+        frame.type: smb2.pdu
+  - filter:
+      count: 85
+      match:
+        event_type: alert
+        app_proto: smb
+        alert.signature_id: 6
+        frame.type: smb2.data
 
