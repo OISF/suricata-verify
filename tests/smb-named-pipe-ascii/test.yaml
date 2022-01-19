@@ -13,25 +13,3 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 1
-
-  - filter:
-      count: 12
-      match:
-        event_type: frame
-        frame.type: "smb1.hdr"
-  - filter:
-      count: 1
-      match:
-        event_type: frame
-        frame.type: "smb1.hdr"
-        frame.stream_offset: 4
-        frame.length: 32
-        frame.payload: "/1NNQnIAAAAAGEPIAAAAAAAAAAAAAAAAAAD+/wAAAAA="
-  - filter:
-      count: 1
-      match:
-        event_type: frame
-        frame.type: "smb1.hdr"
-        frame.stream_offset: 1098
-        frame.length: 32
-        frame.payload: "/1NNQnEAAAAAGEPIAAAAAAAAAAAAAAAAAQhkBgAQBQA="
