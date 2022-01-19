@@ -1,0 +1,15 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular #regular|syslog|unix_dgram|unix_stream|redis
+      filename: eve.json
+      types:
+        - alert:
+
+# Define maximum number of possible alerts that can be triggered for the same
+# packet. Default is 15
+packet-alert-max: 20
+
