@@ -1,0 +1,5 @@
+alert ip any any -> any any (hostbits:isset,abc,src; content:"GET "; sid:1;)
+alert ip any any -> any any (hostbits:isnotset,abc,dst; content:"GET "; sid:2;)
+alert ip any any -> any any (hostbits:unset,abc,src; content:"GET "; sid:4;)
+alert ip any any -> any any (hostbits:set,myflow2; sid:10;)
+alert ip any any -> any any (hostbits:isset,myflow2; sid:11;)
