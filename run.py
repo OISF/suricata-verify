@@ -589,7 +589,8 @@ class TestRunner:
         env["TZ"] = "UTC"
         env["TEST_DIR"] = self.directory
         env["OUTPUT_DIR"] = self.output
-        env["ASAN_OPTIONS"] = "detect_leaks=1"
+        if not "ASAN_OPTIONS" in env:
+            env["ASAN_OPTIONS"] = "detect_leaks=1"
         return env
 
     def run(self, outdir):
