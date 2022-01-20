@@ -92,7 +92,7 @@ checks:
       dnp3.src: 4
       dnp3.type: response
       event_type: dnp3
-      pcap_cnt: 9
+      pcap_cnt: 7
       proto: TCP
       src_ip: 130.126.142.250
       src_port: 50301
