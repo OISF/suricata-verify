@@ -179,7 +179,7 @@ checks:
       dnp3.src: 2
       dnp3.type: response
       event_type: dnp3
-      pcap_cnt: 12
+      pcap_cnt: 10
       proto: TCP
       src_ip: 130.126.142.250
       src_port: 49404
