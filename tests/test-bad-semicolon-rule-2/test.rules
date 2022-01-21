@@ -1,1 +1,1 @@
-alert udp any any -> any any (msg:"TEST SUCCESFULL - Too Many Semicolons INVALID combination "; content:"AA"; content:"BB";; within:5; sid:6666668; rev:1;)
+alert udp any any -> any any (msg:"TEST SUCCESSFUL - Too Many Semicolons INVALID combination "; content:"AA"; content:"BB";; within:5; sid:6666668; rev:1;)
