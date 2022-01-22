@@ -1,0 +1,1 @@
+alert ip any any -> any  any (msg:"dsize -- negated content requires more content";dsize:16; content:"abcdef"; startswith; content:!"a"; distance:0; content:"789"; distance:0; content:!"c"; distance:1; within:10;sid:5;)
