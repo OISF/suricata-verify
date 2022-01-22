@@ -1,0 +1,20 @@
+requires:
+  min-version: 7
+
+command: |
+  ${SRCDIR}/src/suricata --set classification-file="${SRCDIR}/classification.config" --set reference-config-file="${SRCDIR}/reference.config" -l ${OUTPUT_DIR} -c ${TEST_DIR}/suricata.yaml -r ${TEST_DIR}/ -S ${TEST_DIR}/test.rules
+
+checks:
+  # check that we have the following entries in eve.json
+  # match 1 specific rule load failure reason
+  - filter:
+      count: 1
+      match:
+        event_type: engine
+        engine.message: "signature can't match as content length 4 with offset 8 (=12) is bigger than dsize 10."
+
+  - filter:
+      count: 1
+      match:
+        event_type: engine
+        engine.error: "SC_ERR_NO_RULES_LOADED"
