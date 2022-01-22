@@ -1,0 +1,35 @@
+requires:
+  min-version: 6.0
+  features:
+    - RUST
+  files:
+    - rust/src/nfs/nfs3.rs
+
+args:
+- -k none
+- --set stream.midstream=true
+- --set app-layer.protocols.nfs.enabled=yes
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        dest_ip: 192.168.1.6
+        dest_port: 939
+        nfs.version: 3
+        nfs.status: OK
+        nfs.procedure: READDIRPLUS
+        nfs.type: response
+        nfs.filename: ""
+        nfs.hhash: 23ea69b6
+        nfs.id: 1
+        nfs.file_tx: false
+        proto: TCP
+        src_ip: 192.168.1.2
+        src_port: 2049
+        rpc.xid: 3391488638
+        rpc.status: ACCEPTED
+        rpc.auth_type: UNIX
+        rpc.creds.uid: 1000
+        rpc.creds.gid: 1000
