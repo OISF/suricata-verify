@@ -1,0 +1,14 @@
+%YAML 1.1
+---
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - nfs
+
+app-layer:
+  protocols:
+    nfs:
+      enabled: yes
