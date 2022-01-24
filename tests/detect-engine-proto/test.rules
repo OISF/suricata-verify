@@ -1,0 +1,4 @@
+alert udp any any -> any any (msg:"Not tcp"; flow:to_server; sid:1;)
+alert ip any any -> any any (msg:"IP"; flow:to_server; sid:2;)
+alert tcp any any -> any any (msg:"TCP"; flow:to_server; sid:3;)
+alert http any any -> any any (msg:"http"; flow:to_server; sid:4;)
