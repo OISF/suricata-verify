@@ -1,0 +1,18 @@
+requires:
+  min-version: 7
+
+# disables checksum verification
+args:
+- -k none --set app-layer.protocols.enip.enabled=yes
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: dns 
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: enip 
