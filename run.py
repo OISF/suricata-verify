@@ -520,8 +520,11 @@ class TestRunner:
 
     def load_config(self):
         if os.path.exists(os.path.join(self.directory, "test.yaml")):
-            self.config = yaml.safe_load(
-                open(os.path.join(self.directory, "test.yaml"), "rb"))
+            try:
+                self.config = yaml.safe_load(
+                    open(os.path.join(self.directory, "test.yaml"), "rb"))
+            except yaml.scanner.ScannerError as e:
+                print(str(e))
         if self.config is None:
             self.config = {}
 
