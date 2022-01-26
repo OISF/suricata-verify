@@ -2,7 +2,7 @@ requires:
     min-version: 7
 
 command: |
-  ${SRCDIR}/src/suricata --set threshold-file="${TEST_DIR}/threshold.config" -l ${OUTPUT_DIR} -c ${SRCDIR}/suricata.yaml -S ${TEST_DIR}/test.rules -T
+  ${SRCDIR}/src/suricata --set reference-config-file="${SRCDIR}/etc/reference.config" --set threshold-file="${TEST_DIR}/threshold.config" -l ${OUTPUT_DIR} -c ${SRCDIR}/suricata.yaml -S ${TEST_DIR}/test.rules -T
 
 exit-code: 1
 
