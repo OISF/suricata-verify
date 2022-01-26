@@ -1,0 +1,2 @@
+alert http any any -> any any (http_response_line; content:"HTTP/1.0 200 OK"; sid:1;)
+alert tcp any any -> any any (http_response_line; content:"200 OK"; sid:2;)
