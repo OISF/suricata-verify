@@ -2,6 +2,6 @@ requires:
   min-version: 7
 
 command: |
-  ${SRCDIR}/src/suricata --set reference-config-file="${SRCDIR}/etc/reference.config" --set threshold-file="${TEST_DIR}/threshold.config" -l ${OUTPUT_DIR} -c ${TEST_DIR}/suricata.yaml -S ${TEST_DIR}/input.rules -T
+  ${SRCDIR}/src/suricata --set classification-file="${SRCDIR}/etc/classification.config" --set reference-config-file="${SRCDIR}/etc/reference.config" --set threshold-file="${TEST_DIR}/threshold.config" -l ${OUTPUT_DIR} -c ${TEST_DIR}/suricata.yaml -S ${TEST_DIR}/input.rules -T
 
 exit-code: 0
