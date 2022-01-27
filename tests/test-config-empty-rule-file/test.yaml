@@ -6,5 +6,5 @@ requires:
 command: |
   ${SRCDIR}/src/suricata -T -c ${TEST_DIR}/suricata.yaml -vvv \
       -l ${OUTPUT_DIR} --set default-rule-path="${TEST_DIR}" \
-      --set reference-config-file="${SRCDIR}/etc/reference.config"
-  
+      --set reference-config-file="${SRCDIR}/etc/reference.config" \
+      --set classification-file="${SRCDIR}/etc/classification.config"
