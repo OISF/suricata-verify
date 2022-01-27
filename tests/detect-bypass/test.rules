@@ -1,0 +1,3 @@
+alert tcp any any -> any any (bypass; content:"GET"; sid:1;)
+alert http any any -> any any (http.response_body; bypass; content:"message"; sid:2;)
+alert http any any -> any any (http.host; bypass; content:"message"; sid:3;)
