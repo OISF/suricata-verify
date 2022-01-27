@@ -6,4 +6,3 @@ requires:
 command: |
   ${SRCDIR}/src/suricata -T -c ${TEST_DIR}/suricata.yaml -vvv \
       -l ${OUTPUT_DIR} --set default-rule-path="${TEST_DIR}"
-  
