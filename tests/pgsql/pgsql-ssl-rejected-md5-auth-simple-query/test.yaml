@@ -121,7 +121,7 @@ checks:
       dest_ip: 10.16.1.11
       dest_port: 5432
       event_type: pgsql
-      pcap_cnt: 41
+      pcap_cnt: 39
       pgsql.request.message: termination_message
       pgsql.tx_id: 5
       proto: TCP

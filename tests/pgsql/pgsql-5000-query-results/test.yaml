@@ -104,12 +104,12 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 172.18.0.1
-      dest_port: 54408
+      src_ip: 172.18.0.1
+      src_port: 54408
       event_type: pgsql
       pcap_cnt: 782
       pgsql.request.message: termination_message
       pgsql.tx_id: 5
       proto: TCP
-      src_ip: 172.18.0.2
-      src_port: 5432
+      dest_ip: 172.18.0.2
+      dest_port: 5432

@@ -402,15 +402,15 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 192.168.1.102
-      dest_port: 44848
+      src_ip: 192.168.1.102
+      src_port: 44848
       event_type: pgsql
       pcap_cnt: 87
       pgsql.request.message: termination_message
       pgsql.tx_id: 27
       proto: TCP
-      src_ip: 192.168.1.74
-      src_port: 5432
+      dest_ip: 192.168.1.74
+      dest_port: 5432
 - filter:
     count: 1
     match:

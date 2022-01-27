@@ -9,15 +9,15 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 192.168.50.11
-      dest_port: 60358
+      src_ip: 192.168.50.11
+      src_port: 60358
       event_type: pgsql
       pgsql.request.message: SSL Request
       pgsql.response.ssl_accepted: true
       pgsql.tx_id: 1
       proto: TCP
-      src_ip: 192.168.50.12
-      src_port: 5432
+      dest_ip: 192.168.50.12
+      dest_port: 5432
 - filter:
     count: 1
     match:
@@ -66,8 +66,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 192.168.50.11
-      dest_port: 60359
+      src_ip: 192.168.50.11
+      src_port: 60359
       event_type: pgsql
       pgsql.request.protocol_version: '3.0'
       pgsql.request.startup_parameters.database: replication
@@ -83,8 +83,8 @@ checks:
       pgsql.response.severity_localizable: FATAL
       pgsql.tx_id: 1
       proto: TCP
-      src_ip: 192.168.50.12
-      src_port: 5432
+      dest_ip: 192.168.50.12
+      dest_port: 5432
 - filter:
     count: 1
     match:
