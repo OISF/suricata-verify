@@ -1,0 +1,21 @@
+requires:
+  features:
+    - HAVE_LUA
+
+args:
+- --set stream.midstream=true
+
+checks:
+- filter:
+    count: 2
+    match:
+      event_type: flow
+- filter:
+    count: 1
+    match:
+      event_type: stats
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 6677001

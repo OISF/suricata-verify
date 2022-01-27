@@ -1,0 +1,3 @@
+alert http any any -> any any (msg: "Test"; http.request_line; pcre: "^/POST/, flow:cnt"; flowbits: set, flowtestvar; noalert; sid:6677000; rev:1;)
+alert http any any -> any any (msg: "Test2"; flow:to_server; lua:unittest.lua; flowbits:isset, flowtestvar; sid:6677001; rev:1;)
+alert http any any -> any any (flow:to_server; lua:unittest.lua; flowbits: set, flowtestvar; sid:1;)
