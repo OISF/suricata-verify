@@ -1,6 +1,7 @@
 requires:
   features:
     - HAVE_NSS
+  min-version: 6
 
 args:
 - -k none --runmode=single
