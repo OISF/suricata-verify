@@ -1,0 +1,47 @@
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 5
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 6
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 8
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 9
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 10
+- filter:
+    count: 1
+    match:
+      event_type: flow
+- filter:
+    count: 1
+    match:
+      event_type: stats
