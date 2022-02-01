@@ -1,0 +1,50 @@
+requires:
+  min-version: 7
+
+checks:
+ - filter:
+    count: 8
+    match:
+      event_type: sip
+ - filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 2
+ - filter:
+    count: 3
+    match:
+      event_type: alert
+      alert.signature_id: 22
+ - filter:
+    count: 3
+    match:
+      event_type: alert
+      alert.signature_id: 31
+ - filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 32
+      frame.type: "request.headers"
+      frame.complete: true
+      frame.length: 420
+      frame.direction: toserver
+ - filter:
+    count: 5
+    match:
+      event_type: alert
+      alert.signature_id: 41
+ - filter:
+    count: 4
+    match:
+      event_type: alert
+      alert.signature_id: 42
+ - filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 51
+      frame.type: "request.body"
+      frame.complete: true
+      frame.direction: toserver
