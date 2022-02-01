@@ -1,2 +1,3 @@
 alert ip any any -> any any (cip_service: 10; sid:1; )
 alert ip any any -> any any (enip_command: 112; sid:2; )
+alert enip any any -> any any (msg:"Testing enip command"; enip_command:99 ; sid:3;)
