@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"DCERPC"; dce_opnum:4; sid:1;)
