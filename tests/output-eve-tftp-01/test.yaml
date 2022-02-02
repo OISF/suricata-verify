@@ -10,4 +10,8 @@ checks:
 - filter:
     count: 1
     match:
-      has-key: community_id
+      event_type: tftp
+- filter:
+    count: 1
+    match:
+      event_type: alert
