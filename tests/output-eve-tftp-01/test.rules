@@ -1,0 +1,1 @@
+alert tftp any any -> any any (msg:"TFTP Test Rule"; pkt_data; content:"rfc1350"; sid:1; rev:1;)

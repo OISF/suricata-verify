@@ -6,5 +6,6 @@ outputs:
       enabled: true
       filename: eve.json
       types:
+        - alert
         - tftp:
       community-id: true
