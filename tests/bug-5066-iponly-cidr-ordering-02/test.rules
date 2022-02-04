@@ -1,0 +1,4 @@
+pass tcp [100.117.241.128/27,100.117.241.64/26,100.117.241.0/26] any -> 100.64.4.0/23 443 (msg:"Will allow connect to shared endpoints"; sid:221001; rev:1;)
+#pass tcp [100.117.241.128/27,100.117.241.0/26,100.117.241.64/26] any -> 100.64.4.0/23 443 (msg:"Will allow connect to shared endpoints"; sid:221001; rev:1;)
+pass IP [100.117.241.0/25,100.117.241.128/27] any -> [10.68.242.211,10.68.242.242] [4433,8143] (msg:"c5b0ff9d-defb-4f60-a02e-64974161076d"; ip_proto:TCP; sid:2410020; rev:1;)
+drop tcp [100.117.241.0/26,100.117.241.128/27,100.117.241.64/26] any -> any any (msg:"Will drop established tcp-flow ACK from client to server if it turns out to be non HTTP/TLS or not in the allowed Domains or not allowed by some other TCP rule."; flow: from_client, established; sid:261000; rev:1;)

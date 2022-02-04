@@ -1,0 +1,11 @@
+requirements:
+  min-version: 5
+
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
