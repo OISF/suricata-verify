@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"NFS support";file.data;content:" ";nfs_procedure: < 14900000;sid:2;)
