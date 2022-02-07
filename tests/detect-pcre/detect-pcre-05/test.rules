@@ -1,0 +1,6 @@
+alert http any any -> any any (msg:"pcre relative HTTP cookie"; content:"dummy"; http_cookie; pcre:"/1234/RC"; sid:1;)
+alert http any any -> any any (msg:"pcre relative HTTP method"; content:"PO"; http_method; pcre:"/ST/RM"; sid:2;)
+alert http any any -> any any (content:"User-Agent: "; http_header; pcre:"/(?P<flow_ua>.*)\r\n/HR"; priority:1; sid:3;)
+alert http any any -> any any (content:"Server: "; http_header; pcre:"/(?P<flow_ua>.*)\r\n/HR"; priority:3; sid:4;)
+alert http any any -> any any (content:"User-Agent: "; http_header; pcre:"/(?P<flow_ua>.*)\r\n/HR"; content:"xyz"; http_header; priority:1; sid:5;)
+alert http any any -> any any (content:"Server: "; http_header; pcre:"/(?P<flow_ua>.*)\r\n/HR"; content:"xyz"; http_header; priority:3; sid:6;)
