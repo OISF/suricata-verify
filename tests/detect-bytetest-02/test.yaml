@@ -1,0 +1,38 @@
+args:
+- --set stream.midstream=true
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: flow
+- filter:
+    count: 1
+    match:
+      event_type: stats
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 125
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 124
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 126
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 777
+      

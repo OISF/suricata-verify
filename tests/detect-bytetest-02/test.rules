@@ -1,0 +1,5 @@
+alert tcp any any -> any any (msg:"pcre + byte_test + relative"; pcre:"/AllWorkAndNoPlayMakesWillADullBoy/"; byte_test:1,=,1,6,relative,string,dec; sid:126; rev:1;)
+alert tcp any any -> any any (msg:"content + byte_test + relative"; byte_jump:1,44,string,dec; byte_test:1,=,0,0,relative,string,dec; sid:777; rev:1;)
+alert tcp any any -> any any (msg:"content + byte_test"; byte_test:1,=,65,214748364; sid:1; rev:1;)
+alert tcp any any -> any any (msg:"content + byte_test + relative"; content:"GET "; depth:4; content:"HTTP/1."; byte_test:1,<=,0,0,relative,string,dec; sid:124; rev:1;)
+alert tcp any any -> any any (msg:"content + byte_test + relative"; content:"GET "; depth:4; content:"HTTP/1."; byte_test:1,>=,0,0,relative,string,dec; sid:125; rev:1;)
