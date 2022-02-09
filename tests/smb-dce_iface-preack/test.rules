@@ -1,0 +1,2 @@
+alert tcp any any -> any any (msg:"SAMR"; flow:to_server;dcerpc.iface:12345778-1234-abcd-ef00-0123456789ac;sid:1;)
+alert tcp any any -> any any (msg:"SAMR Preack"; flow:to_server;dcerpc.iface:12345778-1234-abcd-ef00-0123456789ac,preack;sid:2;)
