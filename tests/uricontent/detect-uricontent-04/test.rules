@@ -1,0 +1,2 @@
+alert tcp any any -> any any (msg:"test"; http.host; content:"www.example.com"; sid:1;)
+alert tcp any any -> any any (msg:"test"; content:"/images.gif"; http_uri; sid:2;)
