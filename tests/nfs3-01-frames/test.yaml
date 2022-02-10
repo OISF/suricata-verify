@@ -1,0 +1,61 @@
+requires:
+  min-version: 7.0
+
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 45
+      match:
+        event_type: frame
+        app_proto: nfs
+        frame.type: nfs.status
+        frame.length: 4
+        frame.payload: "AAAAAA=="
+
+  - filter:
+      count: 55
+      match:
+        event_type: frame
+        app_proto: nfs
+        frame.type: rpc.creds
+        frame.length: 60
+        frame.payload: "AAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAAR"
+
+  - filter:
+      count: 2
+      match:
+        event_type: frame
+        app_proto: nfs
+        frame.type: rpc.creds
+        frame.length: 60
+        frame.payload: "AAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZW9tZQAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAAR"
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        app_proto: nfs
+        frame.type: rpc.creds
+  - filter:
+      count: 9
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        app_proto: nfs
+        frame.type: nfs.pdu
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 3
+        app_proto: nfs
+        frame.type: nfs.pdu
+  - filter:
+      count: 12
+      match:
+        event_type: alert
+        alert.signature_id: 4
+        app_proto: nfs
+        frame.type: nfs.status
