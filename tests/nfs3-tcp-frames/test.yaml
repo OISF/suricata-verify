@@ -1,0 +1,55 @@
+requires:
+  min-version: 7.0
+
+args:
+- -k none
+- --set stream.midstream=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: frame
+        frame.type: nfs.pdu
+        frame.length: 64
+        frame.payload: "AAAAJAEABwEBANQJAAAAAF6F82YancNjAAAAAAAAAAADAGYMTP9rmQAAAAAAAAAAAAAAAAAAAAAAAAIAAAAQAA=="
+  - filter:
+      count: 1
+      match:
+        event_type: frame
+        frame.type: nfs.status
+        frame.length: 4
+        frame.payload: "AAAAAA=="
+  - filter:
+      count: 1
+      match:
+        event_type: frame
+        frame.type: rpc.creds
+        frame.payload: "AAAAAQAAAEABBnBdAAAABHo0NDAAAAPoAAAD6AAAAAoAAAAEAAAAGAAAABsAAAAeAAAALgAAAGwAAAB9AAAAgAAAAIEAAAPo"
+  - filter:
+      count: 1
+      match:
+        event_type: frame
+        frame.type: nfs.pdu
+        frame.length: 428
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        app_proto: nfs
+        alert.signature_id: 2
+        frame.type: rpc.creds
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        app_proto: nfs
+        alert.signature_id: 3
+        frame.type: nfs.pdu
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        app_proto: nfs
+        alert.signature_id: 4
+        frame.type: rpc.creds
