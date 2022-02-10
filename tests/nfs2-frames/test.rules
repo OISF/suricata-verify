@@ -1,0 +1,4 @@
+alert nfs any any -> any any (flow:to_server; frame:rpc.creds; content:"|00 00 00 09|werrmsche|00 00 00|"; offset:12; depth:16; sid:1;)
+alert nfs any any -> any any (flow:to_client; frame:nfs.status; content:"|00 00 00 00|"; startswith; sid:3;)
+alert nfs any any -> any any (flow:to_server; frame:nfs.pdu; content:"|00 00 00 04|blns"; endswith; sid:4;)
+alert nfs any any -> any any (flow:to_server; frame:rpc.creds; content:"|00 00 00 01|"; startswith; sid:5;)
