@@ -1,0 +1,3 @@
+alert nfs any any -> any any (flow:to_server; frame:rpc.creds; content:"netapp-26"; sid:1;)
+alert nfs any any -> any any (flow:to_server; frame:nfs4.ops; content:"vol1"; sid:2;)
+alert nfs any any -> any any (flow:to_client; frame:nfs4.ops; content:"|00 00 00 24|NetApp Release Voodooranger__9.6.0"; sid:3;)

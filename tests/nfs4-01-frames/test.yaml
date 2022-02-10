@@ -1,0 +1,72 @@
+requires:
+  min-version: 6.0
+  files:
+      - rust/src/nfs/nfs4.rs
+
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 31
+      match:
+        event_type: frame
+        app_proto: nfs
+        frame.type: nfs4.status
+        frame.length: 4
+  - filter:
+      count: 3
+      match:
+        event_type: frame
+        app_proto: nfs
+        frame.type: rpc.creds
+        frame.payload: "AAAAAQAAACAARwj+AAAACW5ldGFwcC0yNgAAAAAAAAAAAAAAAAAAAA=="
+  - filter:
+      count: 17
+      match:
+        event_type: frame
+        app_proto: nfs
+        frame.type: rpc.creds
+        frame.payload: "AAAAAQAAACQARwj+AAAACW5ldGFwcC0yNgAAAAAAAAAAAAAAAAAAAQAAAAA="
+  - filter:
+      count: 1
+      match:
+        event_type: frame
+        app_proto: nfs
+        frame.type: rpc.creds
+        frame.payload: "AAAAAAAAAAA="
+  - filter:
+        count: 1
+        match:
+          event_type: frame
+          app_proto: nfs
+          frame.type: nfs4.ops
+          frame.payload: "AAAAAQAAACpcipv+DAlekgAAABdMaW51eCBORlN2NC4xIG5ldGFwcC0yNgAAAAEBAAAAAAAAAAEAAAAKa2VybmVsLm9yZwAAAAAARUxpbnV4IDMuMTAuMC05NTcuZWw3Lng4Nl82NCAjMSBTTVAgVGh1IE9jdCA0IDIwOjQ4OjUxIFVUQyAyMDE4IHg4Nl82NAAAAAAAAAAAAAAAAAAAAA=="
+  - filter:
+        count: 1
+        match:
+          event_type: frame
+          app_proto: nfs
+          frame.type: nfs4.ops
+          frame.payload: "AAAAAQAAACoAAAAA4BSCAAAAAtIAAAABAAYBAAAAAACYO6Me16kR6AAAABCYO6Me16kR6LwMAAwp6ROTAAAAEISLkxLXqRHovAwADCnpE5MAAAABAAAADG5ldGFwcC5jb20AAAAAACROZXRBcHAgUmVsZWFzZSBWb29kb29yYW5nZXJfXzkuNi4wAAAmDc9bAAAAAAAAAAA="
+  - filter:
+        count: 31
+        match:
+          event_type: alert
+          app_proto: nfs
+          alert.signature_id: 1
+          frame.type: rpc.creds
+  - filter:
+        count: 2
+        match:
+          event_type: alert
+          app_proto: nfs
+          alert.signature_id: 2
+          frame.type: nfs4.ops
+  - filter:
+        count: 1
+        match:
+          event_type: alert
+          app_proto: nfs
+          alert.signature_id: 3
+          frame.type: nfs4.ops
