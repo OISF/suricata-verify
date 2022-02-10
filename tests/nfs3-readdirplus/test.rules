@@ -1,0 +1,2 @@
+alert nfs any any -> any any (nfs_version:3; flow:to_server; nfs_procedure:17; sid:1;)
+alert nfs any any -> any any (flow:to_client; content:"|2e 2e|"; sid:2;)

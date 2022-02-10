@@ -31,3 +31,15 @@ checks:
         rpc.auth_type: UNIX
         rpc.creds.uid: 1000
         rpc.creds.gid: 1000
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        app_proto: nfs
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        app_proto: nfs
+        alert.signature_id: 2
