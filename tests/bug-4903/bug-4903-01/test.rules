@@ -1,0 +1,4 @@
+alert ssh any any -> any any (msg:"Bad SSH proto 2 detected !!!"; ssh.proto; content:"2.0"; classtype:bad-unknown; sid:1;)
+alert ssh any any -> any any (msg:"Bad SSH proto 2 detected !!!"; ssh.proto; content:"1.99"; classtype:bad-unknown; sid:2;)
+alert ssh any any -> any any (msg:"Bad SSH software client detected !!!"; ssh.software; content:"Cisco_client"; classtype:bad-unknown; sid:3;)
+alert ssh any any -> any any (msg:"Bad SSH software server detected !!!"; ssh.software; content:"Cisco_server"; classtype:bad-unknown; sid:4;)
