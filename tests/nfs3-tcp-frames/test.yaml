@@ -1,0 +1,52 @@
+requires:
+  min-version: 6.0
+  files:
+    - rust/src/nfs/nfs3.rs
+
+args:
+- -k none
+- --set stream.midstream=true
+- --set app-layer.protocols.nfs.enabled=yes
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: frame
+        frame.type: nfs.pdu
+        frame.length: 64
+        frame.payload: "AAAAJAEABwEBANQJAAAAAF6F82YancNjAAAAAAAAAAADAGYMTP9rmQAAAAAAAAAAAAAAAAAAAAAAAAIAAAAQAA=="
+  - filter:
+      count: 1
+      match:
+        event_type: frame
+        frame.type: nfs.status
+        frame.length: 4
+        frame.payload: "AAAAAA=="
+  - filter:
+      count: 1
+      match:
+        event_type: frame
+        frame.type: rpc.creds
+        frame.payload: "AAAAAQAAAEABBnBdAAAABHo0NDAAAAPoAAAD6AAAAAoAAAAEAAAAGAAAABsAAAAeAAAALgAAAGwAAAB9AAAAgAAAAIEAAAPo"
+  - filter:
+      count: 1
+      match:
+        event_type: frame
+        frame.type: nfs.pdu
+        frame.length: 428
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        app_proto: nfs
+        alert.signature_id: 2
+        frame.type: rpc.creds
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        app_proto: nfs
+        alert.signature_id: 3
+        frame.type: nfs.pdu
+
