@@ -20,3 +20,8 @@ checks:
     match:
       event_type: alert
       alert.signature_id: 3
+- filter:
+    count: 5
+    match:
+      event_type: alert
+      alert.signature_id: 4

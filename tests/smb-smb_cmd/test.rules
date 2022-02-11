@@ -1,4 +1,5 @@
 
 alert tcp any any -> any any (msg:"SMB2 Negotiate Protocol Request";flow:to_server;smb.cmd:0;sid:1;)
-alert tcp any any -> any any (msg:"SMB2 Session Setup Request";flow:to_server;smb.cmd:1;sid:2;)
-alert tcp any any -> any any (msg:"SMB2 Tree Connect Request";flow:to_server;smb.cmd:3;sid:3;)
+alert tcp any any -> any any (msg:"SMB2 Session Setup Request";flow:to_server;smb.cmd:session_setup;sid:2;)
+alert tcp any any -> any any (msg:"SMB2 Tree Connect Request";flow:to_server;smb.cmd:0x3;sid:3;)
+alert tcp any any -> any any (msg:"SMB2 Negotiate Protocol Request";flow:to_server;smb.cmd:0, session_setup, 0x3;sid:4;)
