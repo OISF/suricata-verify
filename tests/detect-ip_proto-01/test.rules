@@ -1,0 +1,13 @@
+# Valid protocol names/numbers
+alert ip any any -> any any (msg:"Valid protoccol number"; ip_proto:2; sid:1;)
+alert ip any any -> any any (msg:"Valid protoccol name"; ip_proto:tcp; sid:2;)
+alert ip any any -> any any (msg:"Valid protoccol number"; ip_proto:0; sid:3;)
+alert ip any any -> any any (msg:"Valid protoccol number"; ip_proto:144; sid:4;)
+alert ip any any -> any any (msg:"Valid protoccol name"; ip_proto:TCP; sid:5;)
+
+# Invalid protocol names and/or numbers
+alert ip any any -> any any (msg:"Invalid protoccol number"; ip_proto:TcP; sid:20;)
+alert ip any any -> any any (msg:"Invalid protoccol number"; ip_proto:295; sid:22;)
+alert ip any any -> any any (msg:"Invalid protoccol name"; ip_proto:"not-a-protocol"; sid:23;)
+alert ip any any -> any any (msg:"Invalid protoccol number"; ip_proto:70000; sid:24;)
+alert ip any any -> any any (msg:"Invalid protoccol number"; ip_proto:-1; sid:25;)

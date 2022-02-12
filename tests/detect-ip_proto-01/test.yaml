@@ -1,0 +1,17 @@
+requires:
+    min-version: 7
+    pcap: false
+
+args:
+    - --engine-analysis
+
+exit-code: 1
+
+checks:
+    - shell:
+        args: grep "SC_ERR_INVALID_SIGNATURE" suricata.log | wc -l | xargs
+        expect: 5
+
+    - shell:
+        args: grep "SC_ERR_INVALID_VALUE" suricata.log | wc -l | xargs
+        expect: 5
