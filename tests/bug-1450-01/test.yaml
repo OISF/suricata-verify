@@ -6,17 +6,17 @@ args:
 
 checks:
   - filter:
-      count: 2
+      count: 1
       match:
         event_type: alert
         alert.signature_id: 2230003
   - filter:
-      count: 2
+      count: 1
       match:
         event_type: alert
         alert.signature_id: 2230007
   - filter:
-      count: 2
+      count: 1
       match:
         event_type: alert
         alert.signature_id: 2230010
