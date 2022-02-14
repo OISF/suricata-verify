@@ -1,0 +1,8 @@
+# These 2 rules are trying to verify that the TCP and UDP PDU
+# frame are showing the same data for similar requests.
+alert tcp any any -> any any (msg:"DNS UDP Frame"; flow:to_server; \
+    frame:dns.pdu; content:"|01 20 00 01|"; offset:2; \
+    content:"suricata"; offset:13; sid:1; rev:1;)
+alert udp any any -> any any (msg:"DNS UDP Frame"; flow:to_server; \
+    frame:dns.pdu; content:"|01 20 00 01|"; offset:2;  \
+    content:"suricata"; offset:13; sid:2; rev:1;)
