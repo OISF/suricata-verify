@@ -10,6 +10,12 @@ args:
 
 checks:
 
+  # Check that the output order is always the same (we want to ensure that
+  # alerts are stored in the same order, and this check should cover that)
+  - file-compare:
+      filename: fast.log
+      expected: expected/fast.log
+
   # Check that there is one file event with content range.
   - filter:
       count: 1
