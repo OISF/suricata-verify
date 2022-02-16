@@ -1,0 +1,42 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+    - RUST
+  lt-version: 7
+  min-version: 4.1.0-dev
+  script:
+    - grep "record_mark > 16384" rust/src/krb/krb5.rs > /dev/null 2>&1
+
+args:
+  - --set pcap-file.checksum-checks=no
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      comment: authentication service (AS) response
+      count: 1
+      match:
+        event_type: krb5
+        krb5.msg_type: KRB_AS_REP
+        krb5.cname: user01
+        krb5.realm: dom.test.lo.com
+        krb5.sname: krbtgt/dom.test.lo.com
+
+  - filter:
+      comment: ticket granting service (TGS) reponse
+      count: 1
+      match:
+        event_type: krb5
+        krb5.msg_type: KRB_TGS_REP
+        krb5.cname: user01
+        krb5.realm: dom.test.lo.com
+        krb5.sname: HTTP/epgidvwman1088.epga.dom.lo.com

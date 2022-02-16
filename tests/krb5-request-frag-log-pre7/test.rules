@@ -1,0 +1,2 @@
+alert krb5 any any -> any any (krb5.sname; content:"test"; sid:1;)
+alert krb5 any any -> any any (krb5.cname; content:"user01"; sid:2;)
