@@ -10,3 +10,37 @@ checks:
       count: 1
       match:
         event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 10
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        pcap_cnt: 10
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+        pcap_cnt: 10
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
+        pcap_cnt: 10
+  - filter:
+      count: 1
+      match:
+        dcerpc.response: RESPONSE
+        dcerpc.res.stub_data_size: 68
+        dcerpc.res.frag_cnt: 1
+        dcerpc.rpc_version: '5.0'
+        pcap_cnt: 10
+        dcerpc.request: REQUEST
+        dcerpc.req.stub_data_size: 24
+        dcerpc.req.frag_cnt: 1
+        dcerpc.call_id: 27
+        event_type: dcerpc
+

@@ -1,0 +1,5 @@
+alert tcp any any -> any any (msg:"DCE Iface test";flow:established,to_server;dcerpc.iface:afa8bd80-7d8a-11c9-bef4-08002b102989;sid:1;)
+alert tcp any any -> any any (msg:"DCE stub data";flow:established,to_server; dcerpc.stub_data; content:"|09 00 00 00 00 01 00 00|"; sid:2;)
+
+
+
