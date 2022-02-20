@@ -1,4 +1,5 @@
 requires:
+  lt-version: 7.0.0
   features:
     - HAVE_LIBJANSSON
 args:
