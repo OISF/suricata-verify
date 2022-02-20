@@ -1,0 +1,24 @@
+requires:
+  min-version: 7.0.0
+  features:
+    - HAVE_LIBJANSSON
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2230003
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2230007
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2230010
+
