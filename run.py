@@ -1011,6 +1011,14 @@ def main():
     # Sort alphabetically.
     tests.sort()
 
+    # If we don't find any tests, let's let the user know and exit
+    if not tests:
+        if args.testdir:
+            print("Warning: Couldn't find any directory to match the pattern %s" % args.testdir)
+        else:
+            print("Warning: Couldn't find any tests to match the pattern %s" % args.patterns)
+        return 1
+
     if LINUX:
         run_mp(args.j, tests, dirpath, args, cwd, suricata_config)
     else:
