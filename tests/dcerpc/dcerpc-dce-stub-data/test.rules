@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"DCE stub data";flow:established,to_server; dcerpc.stub_data; content:"|09 00 00 00 00 01 00 00|"; sid:1;)
