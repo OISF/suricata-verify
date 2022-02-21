@@ -1011,6 +1011,16 @@ def main():
     # Sort alphabetically.
     tests.sort()
 
+    # If we don't find any tests, let's let the user know and exit
+    if not tests:
+        if args.exact:
+            print("Couldn't find any tests to match the pattern %s" % args.patterns)
+        elif args.testdir:
+            print("Couldn't find any tests to match the pattern %s" % args.testdir)
+        else:
+            print("Couldn't find any tests to match given pattern %s" % sys.argv[1])
+        return 1
+
     if LINUX:
         run_mp(args.j, tests, dirpath, args, cwd, suricata_config)
     else:
