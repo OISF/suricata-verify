@@ -1,0 +1,12 @@
+requires:
+  min-version: 7.0.0
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: quic
+        quic.extensions[1].type: "ServerName"
+        quic.extensions[1].values[0]: "msquic.net"
+        quic.extensions[2].type: "ApplicationLayerProtocolNegotiation"
+        quic.extensions[2].values[0]: "h3-29"
