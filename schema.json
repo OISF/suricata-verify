@@ -1337,7 +1337,7 @@
                 "version": {
                     "type": "string"
                 },
-                "xff": {
+                "xff_header": {
                     "type": "string"
                 },
                 "request_headers": {
