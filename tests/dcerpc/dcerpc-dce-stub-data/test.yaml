@@ -1,0 +1,38 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+args:
+- -k none
+
+checks:
+- filter:
+    min-version: 6.0.0  
+    count: 2
+    match:
+      event_type: dcerpc
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+      pcap_cnt: 10
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2
+      pcap_cnt: 10
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 3
+- filter:
+    count: 1
+    match:
+      event_type: flow
+- filter:
+    count: 1
+    match:
+      event_type: stats
