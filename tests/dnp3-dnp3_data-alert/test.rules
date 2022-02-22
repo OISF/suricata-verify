@@ -1,5 +1,7 @@
-# Trivial dnp3_data match rule.
-alert dnp3 any any -> any any (msg:"DNP3 Data match"; \
-      flow:established,to_client; dnp3_data; content:"|02 01 28 01 00|"; \
-      dnp3_func:unsolicited_response; \
-      sid:4; rev:1;)
+alert dnp3 any any -> any any (msg:"DNP3 Data match"; flow:established,to_client; dnp3_data; content:"|02 01 28 01 00|"; dnp3_func:unsolicited_response; sid:1; rev:1;)
+alert dnp3 any any -> any any (msg:"DetectDNP3DataTest"; dnp3_data; content:"|02 01 28 01 00|"; sid:2; rev:1;)
+alert dnp3 any any -> any any (msg:"DetectDNP3DataTest"; flow:established,to_server; dnp3_data; content:"|02 01 28 01 00|"; sid:3; rev:1;)
+alert dnp3 any any -> any any (msg:"DetectDNP3DataTest"; flow:established,to_client; dnp3_data; content:"|02 01 28 01 00|"; sid:4; rev:1;)
+alert dnp3 any any -> any any (msg:"DetectDNP3DataTest"; flow:established,to_server; dnp3_data; content:"|3c 04 06 3c|"; sid:5; rev:1;)
+alert dnp3 any any -> any any (msg:"DetectDNP3DataTest"; flow:established,to_client; dnp3_data; content:"|3c 04 06 3c|"; sid:6; rev:1;)
+alert dnp3 any any -> any any (msg:"DetectDNP3DataTest"; dnp3_data; content:"|15 ab|"; sid:7; rev:1;)

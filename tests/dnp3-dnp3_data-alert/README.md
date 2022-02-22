@@ -1,6 +1,6 @@
 # Description
 
-Test dnp3_func rule keyword.
+Test dnp3_data rule keyword.
 
 # PCAP
 
