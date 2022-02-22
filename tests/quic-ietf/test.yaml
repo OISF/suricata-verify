@@ -1,0 +1,22 @@
+requires:
+  min-version: 7.0.0
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: quic
+        quic.extensions[1].name: "server_name"
+        quic.extensions[1].values[0]: "msquic.net"
+        quic.extensions[2].name: "alpn"
+        quic.extensions[2].values[0]: "h3-29"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
