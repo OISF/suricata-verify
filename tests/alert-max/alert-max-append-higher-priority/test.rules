@@ -1,0 +1,17 @@
+# internal id 0 -- should not trigger
+alert http any any -> any any (msg:"No match rule 1"; http.request_line; bsize:<10; priority:1; sid:1;)
+# internal id 1 -- should not trigger
+alert http any any -> any any (msg:"No match rule 2"; http.request_line; bsize:>150; priority: 1; sid:2; rev:1;)
+# internal id 2 -- should not trigger
+alert tcp any any -> any any (msg:"No match rule 3"; dsize:>130; sid:3; rev:1;)
+# internal id 3
+alert tcp any any -> any any (msg:"Match rule - internal id 3"; dsize:<140; sid:4; rev:1;)
+# internal id 4 -- sould not trigger
+alert tcp any any -> any any (msg:"No match rule 4"; dsize:>140; sid:5; rev:1;)
+
+# internal id 5
+alert http any any -> any any (msg:"Match rule internal id 5"; uricontent:"/index.html"; sid:6; rev:1;)
+# internal id 6
+alert http any any -> any any (msg:"Match rule internal id 6"; http.request_line; bsize:10<>100; sid:7; rev:1;)
+# Internal id 7
+alert http any any -> any any (msg:"Match rule internal id 7"; http.request_line; content:"GET /index.html HTTP/1.0"; sid:8;)
