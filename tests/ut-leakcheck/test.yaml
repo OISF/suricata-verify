@@ -1,0 +1,9 @@
+requires:
+    min-version: 5
+
+exit-code: 0
+
+command: |
+  ASAN_OPTIONS=detect_leaks=1 ${SRCDIR}/src/suricata -u -l ${OUTPUT_DIR} \
+        -U"^(B|Bloom|C|Decode|Defrag|Flags|FlowTest|G|Hash|IpOpt|Log|MacSetTest|MD5|Mem|Mime|MQTT|Pool|PortTestParse|Proto|Q|SCAt|SCL|SCRadix|SHA|SNMP|Spm|SSL|StreamingBufferTest|StreamTcpSack|T|UDP|Update|UTH|UtilS|XFF)"
+

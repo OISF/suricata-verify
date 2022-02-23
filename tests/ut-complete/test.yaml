@@ -1,0 +1,8 @@
+requires:
+    min-version: 5
+
+exit-code: 0
+
+command: |
+  ASAN_OPTIONS=detect_leaks=0 ${SRCDIR}/src/suricata -u -l ${OUTPUT_DIR}
+
