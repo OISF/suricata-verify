@@ -1,0 +1,54 @@
+args:
+- -k none
+- --runmode=single
+- --set stream.midstream=true
+
+checks:
+# Subtest 1
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 1
+# Subtest 2
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 2
+# Subtest 3
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 3
+# Subtest 4
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 4
+# Subtest 5
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 5
+# Subtest 6
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 6
+# Subtest 7
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 7
+# Subtest 8
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 8
