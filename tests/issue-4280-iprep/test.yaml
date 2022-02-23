@@ -16,3 +16,8 @@ checks:
       count: 3
       match:
         alert.signature_id: 2402000
+checks:
+  - filter:
+      count: 0
+      match:
+        alert.signature_id: 2402001
