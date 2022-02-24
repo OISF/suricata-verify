@@ -1,0 +1,88 @@
+requires:
+  min-version: 5
+
+args:
+- -k none
+- --set stream.midstream=true
+
+checks:
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 131.203.98.243
+      event_type: alert
+      packet: AAAAAAAADND4jED9CABFAAFWF2kAAB0vKhqYbKNKg8ti8xAAiL4AAAAAEAMAAgAAAAMACQ8JAAAAIFL/AwAIAEUAASRsdEAANQadGberZIHVJ82y6iIAUKoaSgMEPOhHgBkER7YBAAABAQgKAP/ayT0n7nNHRVQgL3NoZWxsP2NkKy90bXA7cm0rLXJmKyo7d2dldCsgaHR0cDovLzIzLjk0LjcuMTc1Ly5zNHkvYXJtO3NoKy90bXAvYXJtIEhUVFAvMS4xDQpVc2VyLUFnZW50OiBIZWxsbywgd29ybGQNCkhvc3Q6IDEyNy4wLjAuMTo4MA0KQWNjZXB0OiB0ZXh0L2h0bWwsYXBwbGljYXRpb24veGh0bWwreG1sLGFwcGxpY2F0aW9uL3htbDtxPTAuOSxpbWFnZS93ZWJwLCovKjtxPTAuOA0KQ29ubmVjdGlvbjoga2VlcC1hbGl2ZQ0KDQo=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 2
+      proto: GRE
+      src_ip: 152.108.163.74
+      stream: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 131.203.98.243
+      event_type: alert
+      packet: AAAAAAAADND4jGd9CABFAAFWjbQAAP4v0sl6UI8ug8ti8xAAiL4AAAAAEAYABgAAABQAIFL/AwNsMQ4qASMIAEUAASRsdEAANga/c7erZIEBEwjV6iIAUKoaSgMEPOhHgBkER9lbAAABAQgKAP/ayT0n7nNHRVQgL3NoZWxsP2NkKy90bXA7cm0rLXJmKyo7d2dldCsgaHR0cDovLzIzLjk0LjcuMTc1Ly5zNHkvYXJtO3NoKy90bXAvYXJtIEhUVFAvMS4xDQpVc2VyLUFnZW50OiBIZWxsbywgd29ybGQNCkhvc3Q6IDEyNy4wLjAuMTo4MA0KQWNjZXB0OiB0ZXh0L2h0bWwsYXBwbGljYXRpb24veGh0bWwreG1sLGFwcGxpY2F0aW9uL3htbDtxPTAuOSxpbWFnZS93ZWJwLCovKjtxPTAuOA0KQ29ubmVjdGlvbjoga2VlcC1hbGl2ZQ0KDQo=
+      packet_info.linktype: 1
+      payload_printable: ''
+      pcap_cnt: 1
+      proto: GRE
+      src_ip: 122.80.143.46
+      stream: 0
+- filter:
+    count: 1
+    match:
+      dest_ip: 1.19.8.213
+      dest_port: 80
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 0
+      flow.bytes_toserver: 314
+      flow.pkts_toclient: 0
+      flow.pkts_toserver: 1
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 183.171.100.129
+      src_port: 59938
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+      vlan[0]: 6
+- filter:
+    count: 1
+    match:
+      dest_ip: 213.39.205.178
+      dest_port: 80
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 0
+      flow.bytes_toserver: 314
+      flow.pkts_toclient: 0
+      flow.pkts_toserver: 1
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 183.171.100.129
+      src_port: 59938
+      tcp.tcp_flags: '00'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '00'
+      vlan[0]: 3
