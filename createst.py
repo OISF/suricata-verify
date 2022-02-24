@@ -1,6 +1,6 @@
 #! /bin/python
 #
-# Copyright (C) 2019 Open Information Security Foundation
+# Copyright (C) 2019-2022 Open Information Security Foundation
 #
 # You can copy, redistribute or modify this Program under the terms of
 # the GNU General Public License version 2 as published by the Free
@@ -353,7 +353,7 @@ def parse_args():
     parser.add_argument("--allow-events", nargs="?", default=None,
                         help="Create filter blocks for the specified events")
     parser.add_argument("--strictcsums", default=None, action="store_true",
-                        help="Stricly validate checksum")
+                        help="Strictly validate checksum")
     parser.add_argument("--midstream", default=False, action="store_true",
                         help="Allow midstream session pickups")
 
