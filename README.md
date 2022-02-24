@@ -158,6 +158,7 @@ needs to be run from a valid Suricata source directory.
 ```
 usage: createst.py [-h] [--output-path <output-path>] [--eventtype-only]
                    [--allow-events [ALLOW_EVENTS]]
+                   [--midstream]
                    <test-name> <pcap-file>
 
 Create tests with a given PCAP. Execute the script from a valid Suricata source
@@ -175,4 +176,5 @@ optional arguments:
   --eventtype-only      Create filter blocks based on event types only
   --allow-events [ALLOW_EVENTS]
                         Create filter blocks for the specified events
+  --midstream           Allow midstream session pickups
 ```
