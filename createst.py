@@ -141,14 +141,21 @@ def write_to_file(data):
         sys.exit(1)
     with open(test_yaml_path, "w+") as fp:
         fp.write("# *** Add configuration here ***\n\n")
-        if not args["strictcsums"]:
-            fp.write("args:\n- -k none\n\n")
         if check_requires():
             fp.write("requires:\n")
         if args["min_version"]:
             fp.write("   min-version: %s\n\n" % args["min_version"])
         if args["add_version"]:
             fp.write("   version: %s\n\n" % args["add_version"])
+        suricata_args = []
+        if not args["strictcsums"]:
+            suricata_args.append("-k none")
+        if args["midstream"]:
+            suricata_args.append("--set stream.midstream=true")
+        if suricata_args:
+            fp.write("args:\n")
+            fp.write("\n".join(["- {}".format(a) for a in suricata_args]))
+            fp.write("\n\n")
         fp.write(data)
 
 def check_requires():
@@ -357,6 +364,8 @@ def parse_args():
                         help="Create filter blocks for the specified events")
     parser.add_argument("--strictcsums", default=None, action="store_true",
                         help="Strictly validate checksum")
+    parser.add_argument("--midstream", default=False, action="store_true",
+                        help="Allow midstream session pickups")
     parser.add_argument("--min-version", default=None, metavar="<min-version>",
                         help="Adds a global minimum required version")
     parser.add_argument("--add-version", default=None, metavar="<add-version>",
@@ -404,6 +413,8 @@ def generate_eve():
 
     if not args["strictcsums"]:
         largs += ["-k", "none"]
+    if args["midstream"]:
+        largs += ["--set", "stream.midstream=true"]
     p = subprocess.Popen(
         largs, cwd=cwd, env=env,
         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
