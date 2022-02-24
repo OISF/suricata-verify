@@ -171,4 +171,6 @@ optional arguments:
   --eventtype-only      Create filter blocks based on event types only
   --allow-events [ALLOW_EVENTS]
                         Create filter blocks for the specified events
+  --strictcsums         Strictly validate checksum
+  --midstream           Allow midstream session pickups
 ```
