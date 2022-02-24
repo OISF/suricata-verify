@@ -1,0 +1,44 @@
+args:
+- -k none
+- --set stream.midstream=true
+
+checks:
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 131.203.98.243
+      dest_port: 0
+      event_type: alert
+      pcap_cnt: 2
+      proto: GRE
+      src_ip: 152.108.163.74
+      src_port: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 2
+      alert.severity: 3
+      alert.signature: SURICATA IPv4 invalid checksum
+      alert.signature_id: 2200073
+      dest_ip: 131.203.98.243
+      dest_port: 0
+      event_type: alert
+      pcap_cnt: 1
+      proto: GRE
+      src_ip: 122.80.143.46
+      src_port: 0
+- filter:
+     count: 2
+     match:
+       event_type: flow
+       proto: TCP 
