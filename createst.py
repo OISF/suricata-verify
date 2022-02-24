@@ -141,10 +141,20 @@ def write_to_file(data):
         sys.exit(1)
     with open(test_yaml_path, "w+") as fp:
         fp.write("# *** Add configuration here ***\n\n")
-        if not args["strictcsums"]:
-            fp.write("args:\n- -k none\n\n")
+        if check_set_args():
+            fp.write("args:\n")
+            if not args["strictcsums"]:
+                fp.write("- -k none\n")
+            if args["midstream"]:
+                fp.write("- --set stream.midstream=true\n")
+            fp.write("\n")
         fp.write(data)
 
+def check_set_args():
+    features = ["midstream"]
+    for item in features:
+        if args[item]:
+            return True
 
 def test_yaml_format(func):
     """
@@ -344,6 +354,8 @@ def parse_args():
                         help="Create filter blocks for the specified events")
     parser.add_argument("--strictcsums", default=None, action="store_true",
                         help="Stricly validate checksum")
+    parser.add_argument("--midstream", default=False, action="store_true",
+                        help="Allow midstream session pickups")
 
     # add arg to allow stdout only
     args = parser.parse_args()
@@ -385,6 +397,8 @@ def generate_eve():
 
     if not args["strictcsums"]:
         largs += ["-k", "none"]
+    if args["midstream"]:
+        largs += ["--set", "stream.midstream=true"]
     p = subprocess.Popen(
         largs, cwd=cwd, env=env,
         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
