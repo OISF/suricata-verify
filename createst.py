@@ -356,7 +356,7 @@ def parse_args():
     parser.add_argument("--allow-events", nargs="?", default=None,
                         help="Create filter blocks for the specified events")
     parser.add_argument("--strictcsums", default=None, action="store_true",
-                        help="Stricly validate checksum")
+                        help="Strictly validate checksum")
     parser.add_argument("--min-version", default=None, metavar="<min-version>",
                         help="Adds a global minimum required version")
     parser.add_argument("--add-version", default=None, metavar="<add-version>",
