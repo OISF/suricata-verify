@@ -141,18 +141,38 @@ def write_to_file(data):
         sys.exit(1)
     with open(test_yaml_path, "w+") as fp:
         fp.write("# *** Add configuration here ***\n\n")
-        if not args["strictcsums"]:
-            fp.write("args:\n- -k none\n\n")
         if check_requires():
             fp.write("requires:\n")
         if args["min_version"]:
             fp.write("   min-version: %s\n\n" % args["min_version"])
+        if check_set_args():
+            fp.write("args:\n")
+            if not args["strictcsums"]:
+                fp.write("- -k none\n")
+            if args["midstream"]:
+                fp.write("- --set stream.midstream=true\n")
+            fp.write("\n")
         fp.write(data)
 
 def check_requires():
     features = ["min_version"]
     for item in features:
         if args[item]:
+            return True
+
+def check_set_args():
+    """
+    Check if the user wants midstream set to true and/or to have strict
+    checksums
+    """
+    user_args = ["strictcsums", "midstream"]
+    no_user_args = True
+    for item in user_args:
+        if args[item]:
+            if item != "strictcsums":
+                return True
+            no_user_args = False
+        elif no_user_args:
             return True
 
 def test_yaml_format(func):
@@ -353,6 +373,8 @@ def parse_args():
                         help="Create filter blocks for the specified events")
     parser.add_argument("--strictcsums", default=None, action="store_true",
                         help="Stricly validate checksum")
+    parser.add_argument("--midstream", default=False, action="store_true",
+                        help="Allow midstream session pickups")
     parser.add_argument("--min-version", default=None, metavar="<min-version>",
                         help="Adds a global minimum required version")
 
@@ -396,6 +418,8 @@ def generate_eve():
 
     if not args["strictcsums"]:
         largs += ["-k", "none"]
+    if args["midstream"]:
+        largs += ["--set", "stream.midstream=true"]
     p = subprocess.Popen(
         largs, cwd=cwd, env=env,
         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
