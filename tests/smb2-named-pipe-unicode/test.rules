@@ -1,0 +1,1 @@
+alert smb any any -> any any (msg:"named_pipe"; flow:established; smb_named_pipe; content:"IPC$"; sid:1; rev:1;)
