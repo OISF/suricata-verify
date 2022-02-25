@@ -1,0 +1,15 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+    - RUST
+
+# disables checksum verification
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
