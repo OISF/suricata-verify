@@ -1,0 +1,8 @@
+alert http any any -> any any (msg:"HTTP cookie"; pcre:"/dummy/C"; sid:1;)
+alert http any any -> any any (msg:"HTTP method"; pcre:"/POST/M"; sid:2;)
+alert http any any -> any any (msg:"HTTP method"; pcre:!"/POST/M"; sid:3;)
+alert http any any -> any any (msg:"pcre relative HTTP cookie"; content:"dummy"; http_cookie; pcre:"/1234/RC"; sid:4;)
+alert http any any -> any any (msg:"pcre relative HTTP method"; content:"PO"; http_method; pcre:"/ST/RM"; sid:5;)
+alert http any any -> any any (msg:"HTTP header"; pcre:"/User[-_]Agent[:]?\sMozilla/H"; sid:6;)
+alert http any any -> any any (msg:"HTTP header"; pcre:!"/User[-_]Agent[:]?\sIEXPLORER/H"; sid:7;)
+alert http any any -> any any (msg:"HTTP header"; pcre:!"/User[-_]Agent[:]?\sMozil/H"; sid:8;)
