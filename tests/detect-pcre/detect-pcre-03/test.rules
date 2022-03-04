@@ -1,0 +1,3 @@
+alert tcp any any -> any any (msg:"HTTP TEST"; pcre:"/^gEt/i"; pcre:"/\/two\//U"; pcre:"/GET \/two\//"; pcre:"/\s+HTTP/R"; sid:1;)
+alert tcp any any -> any any (msg:"HTTP TEST"; pcre:"/two/O"; sid:2;)
+alert tcp any any -> any any (msg:"HTTP TEST. Negated pcre - no match"; content:"GET"; pcre:!"/two/"; sid:3;)
