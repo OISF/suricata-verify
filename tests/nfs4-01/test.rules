@@ -1,0 +1,1 @@
+alert nfs any any -> any any (nfs_version:4; flow:to_server; sid:1;)

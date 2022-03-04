@@ -1,5 +1,3 @@
-# *** Add configuration here ***
-
 args:
 - -k none
 
@@ -54,26 +52,5 @@ checks:
 - filter:
     count: 1
     match:
+      event_type: alert
       app_proto: nfs
-      dest_ip: 192.168.0.61
-      dest_port: 2049
-      event_type: flow
-      flow.age: 4
-      flow.alerted: false
-      flow.bytes_toclient: 8392
-      flow.bytes_toserver: 8742
-      flow.pkts_toclient: 38
-      flow.pkts_toserver: 43
-      flow.reason: shutdown
-      flow.state: closed
-      proto: TCP
-      src_ip: 192.168.0.26
-      src_port: 880
-      tcp.ack: true
-      tcp.fin: true
-      tcp.psh: true
-      tcp.state: closed
-      tcp.syn: true
-      tcp.tcp_flags: 1b
-      tcp.tcp_flags_tc: 1b
-      tcp.tcp_flags_ts: 1b
