@@ -1,0 +1,3 @@
+alert tcp any any -> any any (content:"POST"; http_method; content:"dummy"; http_cookie; sid:1; rev:1;)
+alert tcp any any -> any any (flow:to_server; content:"POST"; http_method; content:"/"; http_uri; content:"Mozilla"; http_header; content:"dummy"; http_cookie; content:"body"; nocase; http_client_body; sid:2; rev:1;)
+alert tcp any any -> any any (flow:to_server; content:"GET"; http_method; content:"Firefox"; http_header; content:"dummy2"; http_cookie; sid:3; rev:1;)
