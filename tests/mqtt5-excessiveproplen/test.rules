@@ -1,0 +1,1 @@
+alert mqtt any any -> any any (msg:"SURICATA MQTT Malformed Traffic"; app-layer-event:mqtt.malformed_traffic; classtype:protocol-command-decode; sid:1234; rev:1;)
