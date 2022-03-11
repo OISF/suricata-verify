@@ -1,0 +1,25 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  files:
+    - rust/src/mqtt/parser.rs
+
+args:
+  - -k none
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: mqtt
+        anomaly.type: applayer
+        anomaly.event: malformed_traffic
+        anomaly.layer: proto_parser
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1234
