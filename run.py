@@ -441,10 +441,13 @@ class FilterCheck:
         requires = self.config.get("requires", {})
         req_version = self.config.get("version")
         min_version = self.config.get("min-version")
+        lt_version = self.config.get("lt-version")
         if req_version is not None:
             requires["version"] = req_version
         if min_version is not None:
             requires["min-version"] = min_version
+        if lt_version is not None:
+            requires["lt-version"] = lt_version
         feature = self.config.get("feature")
         if feature is not None:
             requires["features"] = [feature]
