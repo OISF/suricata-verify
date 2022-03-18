@@ -94,9 +94,6 @@
             "type": "integer",
             "optional": true
         },
-        "xff": {
-            "type": "string"
-        },
         "files": {
             "type": "array",
             "items": {
@@ -179,6 +176,9 @@
                 },
                 "signature_id": {
                     "type": "integer"
+                },
+                "xff": {
+                    "type": "string"
                 },
                 "metadata": {
                     "type": "object",
