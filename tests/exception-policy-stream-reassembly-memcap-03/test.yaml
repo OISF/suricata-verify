@@ -1,0 +1,34 @@
+requires:
+  features:
+    - DEBUG
+  files:
+    - src/util-exception-policy.c
+pcap: ../tls-ja3s/input.pcap
+args:
+- --simulate-ips
+- -k none
+- --simulate-packet-tcp-reassembly-memcap=4
+- --set stream.reassembly.memcap-policy=bypass
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+  - filter:
+      count: 0
+      match:
+        event_type: tls
+        tls.sni: example.com
+  - filter:
+      count: 0
+      match:
+        event_type: tls
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.state: bypassed

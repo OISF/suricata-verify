@@ -1,0 +1,50 @@
+requires:
+  features:
+    - DEBUG
+  files:
+    - src/util-exception-policy.c
+pcap: ../tls-ja3s/input.pcap
+args:
+- --simulate-ips
+- -k none
+# pretend pretend error in the first data
+- --simulate-applayer-error-at-offset-ts=0
+- --set app-layer.error-policy=drop-flow
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+  - filter:
+      count: 29
+      match:
+        event_type: drop
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        drop.reason: "applayer error"
+  - filter:
+      count: 28
+      match:
+        event_type: drop
+        drop.reason: "flow drop"
+  - filter:
+      count: 0
+      match:
+        event_type: tls
+        tls.sni: example.com
+  - filter:
+      count: 0
+      match:
+        event_type: tls
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: tls
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.action: drop
