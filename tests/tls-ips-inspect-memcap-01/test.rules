@@ -1,0 +1,2 @@
+pass tls any any -> any any (tls.sni; content:"example.com"; startswith; nocase; endswith; msg:"matching TLS allowlisted"; flow:to_server,established; sid:1;)
+drop tls any any -> any any (msg:"not matching any TLS allowlisted Domain"; flow:to_server,established; sid:2; rev:1;)
