@@ -910,6 +910,9 @@
                             },
                             "type": {
                                 "type": "string"
+                            },
+                            "z": {
+                                "type": "boolean"
                             }
                         },
                         "additionalProperties": false
@@ -1021,6 +1024,9 @@
                         }
                     },
                     "additionalProperties": false
+                },
+                "z": {
+                    "type": "boolean"
                 }
             },
             "additionalProperties": false
@@ -1096,8 +1102,17 @@
                 "status": {
                     "type": "string"
                 },
+                "subject": {
+                    "type": "string"
+                },
                 "subject_md5": {
                     "type": "string"
+                },
+                "url": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "attachment": {
                     "type": "array",
@@ -1246,6 +1261,39 @@
                 },
                 "state": {
                     "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "frame": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "direction": {
+                    "type": "string"
+                },
+                "stream_offset": {
+                    "type": "integer"
+                },
+                "length": {
+                    "type": "integer"
+                },
+                "complete": {
+                    "type": "boolean"
+                },
+                "payload": {
+                    "type": "string"
+                },
+                "payload_printable": {
+                    "type": "string"
+                },
+                "tx_id": {
+                    "type": "integer"
                 }
             },
             "additionalProperties": false
@@ -2498,6 +2546,203 @@
             },
             "additionalProperties": false
         },
+        "pgsql": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "request": {
+                    "type": "object",
+                    "properties": {
+                        "message": {
+                            "type": "string"
+                        },
+                        "password": {
+                            "type": "string"
+                        },
+                        "password_message": {
+                            "type": "string"
+                        },
+                        "protocol_version": {
+                            "type": "string"
+                        },
+                        "sasl_authentication_mechanism": {
+                            "type": "string"
+                        },
+                        "sasl_param": {
+                            "type": "string"
+                        },
+                        "sasl_response": {
+                            "type": "string"
+                        },
+                        "simple_query": {
+                            "type": "string"
+                        },
+                        "startup_parameters": {
+                            "type": "object",
+                            "properties": {
+                                "database": {
+                                    "type": "string"
+                                },
+                                "optional_parameters": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "application_name": {
+                                                "type": "string"
+                                            },
+                                            "client_encoding": {
+                                                "type": "string"
+                                            },
+                                            "replication": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "additionalProperties": false
+                                    }
+                                },
+                                "user": {
+                                    "type": "string"
+                                }
+                            },
+                            "additionalProperties": false
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "response": {
+                    "type": "object",
+                    "properties": {
+                        "authentication_md5_password": {
+                            "type": "string"
+                        },
+                        "authentication_sasl_final": {
+                            "type": "string"
+                        },
+                        "code": {
+                            "type": "string"
+                        },
+                        "command_completed": {
+                            "type": "string"
+                        },
+                        "data_rows": {
+                            "type": "integer"
+                        },
+                        "data_size": {
+                            "type": "integer"
+                        },
+                        "field_count": {
+                            "type": "integer"
+                        },
+                        "file": {
+                            "type": "string"
+                        },
+                        "line": {
+                            "type": "string"
+                        },
+                        "message": {
+                            "type": "string"
+                        },
+                        "parameter_status": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "application_name": {
+                                        "type": "string"
+                                    },
+                                    "client_encoding": {
+                                        "type": "string"
+                                    },
+                                    "date_style": {
+                                        "type": "string"
+                                    },
+                                    "integer_datetimes": {
+                                        "type": "string"
+                                    },
+                                    "interval_style": {
+                                        "type": "string"
+                                    },
+                                    "is_superuser": {
+                                        "type": "string"
+                                    },
+                                    "server_encoding": {
+                                        "type": "string"
+                                    },
+                                    "server_version": {
+                                        "type": "string"
+                                    },
+                                    "session_authorization": {
+                                        "type": "string"
+                                    },
+                                    "standard_conforming_strings": {
+                                        "type": "string"
+                                    },
+                                    "time_zone": {
+                                        "type": "string"
+                                    }
+                                },
+                                "additionalProperties": false
+                            }
+                        },
+                        "process_id": {
+                            "type": "integer"
+                        },
+                        "routine": {
+                            "type": "string"
+                        },
+                        "secret_key": {
+                            "type": "integer"
+                        },
+                        "severity_localizable": {
+                            "type": "string"
+                        },
+                        "severity_non_localizable": {
+                            "type": "string"
+                        },
+                        "ssl_accepted": {
+                            "type": "boolean"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "tx_id": {
+                    "type": "integer"
+                }
+            },
+            "additionalProperties": false
+        },
+        "quic": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "cyu": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "hash": {
+                                "type": "string"
+                            },
+                            "string": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "sni": {
+                    "type": "string"
+                },
+                "ua": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
         "rdp": {
             "type": "object",
             "optional": true,
@@ -3066,6 +3311,45 @@
                         "expectations": {
                             "type": "integer"
                         },
+                        "error": {
+                            "type": "object",
+                            "properties": {
+                                "dcerpc_tcp": { "$ref": "#/$defs/stats_applayer_error" },
+                                "dcerpc_udp": { "$ref": "#/$defs/stats_applayer_error" },
+                                "dhcp": { "$ref": "#/$defs/stats_applayer_error" },
+                                "dnp3": { "$ref": "#/$defs/stats_applayer_error" },
+                                "dns_tcp": { "$ref": "#/$defs/stats_applayer_error" },
+                                "dns_udp": { "$ref": "#/$defs/stats_applayer_error" },
+                                "enip_tcp": { "$ref": "#/$defs/stats_applayer_error" },
+                                "enip_udp": { "$ref": "#/$defs/stats_applayer_error" },
+                                "failed_tcp": { "$ref": "#/$defs/stats_applayer_error" },
+                                "ftp": { "$ref": "#/$defs/stats_applayer_error" },
+                                "ftp-data": { "$ref": "#/$defs/stats_applayer_error" },
+                                "http": { "$ref": "#/$defs/stats_applayer_error" },
+                                "http2": { "$ref": "#/$defs/stats_applayer_error" },
+                                "ike": { "$ref": "#/$defs/stats_applayer_error" },
+                                "imap": { "$ref": "#/$defs/stats_applayer_error" },
+                                "krb5_tcp": { "$ref": "#/$defs/stats_applayer_error" },
+                                "krb5_udp": { "$ref": "#/$defs/stats_applayer_error" },
+                                "mqtt": { "$ref": "#/$defs/stats_applayer_error" },
+                                "nfs_tcp": { "$ref": "#/$defs/stats_applayer_error" },
+                                "nfs_udp": { "$ref": "#/$defs/stats_applayer_error" },
+                                "ntp": { "$ref": "#/$defs/stats_applayer_error" },
+                                "pgsql": { "$ref": "#/$defs/stats_applayer_error" },
+                                "quic": { "$ref": "#/$defs/stats_applayer_error" },
+                                "rdp": { "$ref": "#/$defs/stats_applayer_error" },
+                                "rfb": { "$ref": "#/$defs/stats_applayer_error" },
+                                "sip": { "$ref": "#/$defs/stats_applayer_error" },
+                                "smb": { "$ref": "#/$defs/stats_applayer_error" },
+                                "smtp": { "$ref": "#/$defs/stats_applayer_error" },
+                                "snmp": { "$ref": "#/$defs/stats_applayer_error" },
+                                "ssh": { "$ref": "#/$defs/stats_applayer_error" },
+                                "telnet": { "$ref": "#/$defs/stats_applayer_error" },
+                                "tftp": { "$ref": "#/$defs/stats_applayer_error" },
+                                "tls": { "$ref": "#/$defs/stats_applayer_error" }
+                            },
+                            "additionalProperties": false
+                        },
                         "flow": {
                             "type": "object",
                             "properties": {
@@ -3087,7 +3371,10 @@
                                 "dns_udp": {
                                     "type": "integer"
                                 },
-                                "enip": {
+                                "enip_tcp": {
+                                    "type": "integer"
+                                },
+                                "enip_udp": {
                                     "type": "integer"
                                 },
                                 "failed_tcp": {
@@ -3138,6 +3425,12 @@
                                 "ntp": {
                                     "type": "integer"
                                 },
+                                "pgsql": {
+                                    "type": "integer"
+                                },
+                                "quic": {
+                                    "type": "integer"
+                                },
                                 "rdp": {
                                     "type": "integer"
                                 },
@@ -3157,6 +3450,9 @@
                                     "type": "integer"
                                 },
                                 "ssh": {
+                                    "type": "integer"
+                                },
+                                "telnet": {
                                     "type": "integer"
                                 },
                                 "tftp": {
@@ -3189,7 +3485,10 @@
                                 "dns_udp": {
                                     "type": "integer"
                                 },
-                                "enip": {
+                                "enip_tcp": {
+                                    "type": "integer"
+                                },
+                                "enip_udp": {
                                     "type": "integer"
                                 },
                                 "ftp": {
@@ -3234,6 +3533,12 @@
                                 "ntp": {
                                     "type": "integer"
                                 },
+                                "pgsql": {
+                                    "type": "integer"
+                                },
+                                "quic": {
+                                    "type": "integer"
+                                },
                                 "rdp": {
                                     "type": "integer"
                                 },
@@ -3253,6 +3558,9 @@
                                     "type": "integer"
                                 },
                                 "ssh": {
+                                    "type": "integer"
+                                },
+                                "telnet": {
                                     "type": "integer"
                                 },
                                 "tftp": {
@@ -4469,5 +4777,25 @@
             "additionalProperties": false
         }
     },
-    "additionalProperties": false
+    "additionalProperties": false,
+    "$defs": {
+        "stats_applayer_error": {
+            "type": "object",
+            "properties": {
+                "gap": {
+                    "type": "integer"
+                },
+                "alloc": {
+                    "type": "integer"
+                },
+                "parser": {
+                    "type": "integer"
+                },
+                "internal": {
+                    "type": "integer"
+                }
+            },
+            "additionalProperties": false
+        }
+    }
 }
