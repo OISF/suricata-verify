@@ -1,0 +1,48 @@
+requires:
+  features:
+    - DEBUG
+pcap: ../tls-ja3s/input.pcap
+args:
+- --simulate-ips
+- -k none
+# pretend tcp memcap was hit in packet 4, the client hello containing the sni
+- --simulate-packet-tcp-reassembly-memcap=4
+- --set stream.reassembly.memcap-policy=drop-packet
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        drop.reason: "stream memcap"
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+        drop.reason: "flow drop"
+  - filter:
+      count: 0
+      match:
+        event_type: tls
+        tls.sni: example.com
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: tls
+  - filter:
+      count: 0
+      match:
+        event_type: flow
+        flow.action: drop

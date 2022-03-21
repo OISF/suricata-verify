@@ -1,0 +1,47 @@
+requires:
+  features:
+    - DEBUG
+pcap: ../tls-ja3s/input.pcap
+args:
+- --simulate-ips
+- -k none
+- --simulate-packet-tcp-ssn-memcap=1
+- --set stream.memcap-policy=drop-flow
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+  - filter:
+      count: 32
+      match:
+        event_type: drop
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        drop.reason: "stream memcap"
+  - filter:
+      count: 31
+      match:
+        event_type: drop
+        drop.reason: "flow drop"
+  - filter:
+      count: 0
+      match:
+        event_type: tls
+        tls.sni: example.com
+  - filter:
+      count: 0
+      match:
+        event_type: tls
+  - filter:
+      count: 0
+      match:
+        event_type: flow
+        app_proto: tls
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.action: drop

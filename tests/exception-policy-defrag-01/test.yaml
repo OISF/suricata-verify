@@ -1,0 +1,34 @@
+requires:
+  features:
+    - DEBUG
+args:
+- --simulate-ips
+- -k none
+# pretend pretend error in the first fragment
+- --simulate-packet-defrag-memcap=1
+- --set defrag.memcap-policy=drop-packet
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        drop.reason: "defrag memcap"
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        proto: ICMP
+  - filter:
+      count: 0
+      match:
+        event_type: flow
+        flow.action: drop
+        proto: ICMP
