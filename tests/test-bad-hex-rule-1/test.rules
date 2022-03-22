@@ -1,1 +1,2 @@
 alert tcp any any -> any any (msg:"invalid hex test rule"; content:"|l0 01 01|"; sid:12345; rev:1;)
+alert tcp any any -> any any (msg:"invalid hex test rule"; content:"|22 2 22|"; sid:12346; rev:1;)
