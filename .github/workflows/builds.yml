@@ -78,7 +78,7 @@ jobs:
         working-directory: suricata
         run: |
           ./autogen.sh
-          ./configure --enable-lua
+          ./configure --enable-lua --enable-debug-validation
           make -j2
       - name: Running suricata-verify
         working-directory: suricata
@@ -151,7 +151,7 @@ jobs:
         working-directory: suricata
         run: |
           ./autogen.sh
-          ./configure --enable-lua
+          ./configure --enable-lua --enable-debug-validation
           make -j2
       - name: Running suricata-verify
         working-directory: suricata
