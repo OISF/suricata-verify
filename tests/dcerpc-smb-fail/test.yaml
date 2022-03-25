@@ -1,0 +1,30 @@
+# *** Add configuration here ***
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1445
+    match:
+      event_type: dcerpc
+- filter:
+    count: 22
+    match:
+      event_type: smb
+- filter:
+    count: 4
+    match:
+      event_type: dns
+- filter:
+    count: 4
+    match:
+      event_type: alert
+- filter:
+    count: 11
+    match:
+      event_type: flow
+- filter:
+    count: 1
+    match:
+      event_type: stats
