@@ -1,0 +1,39 @@
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1445
+    match:
+      event_type: dcerpc
+- filter:
+    count: 22
+    match:
+      event_type: smb
+- filter:
+    count: 4
+    match:
+      event_type: dns
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 2
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 3
+- filter:
+    count: 11
+    match:
+      event_type: flow
+- filter:
+    count: 1
+    match:
+      event_type: stats
