@@ -1,0 +1,12 @@
+exit-code: 0
+
+command: |
+  ${SRCDIR}/src/suricata --set classification-file="${SRCDIR}/etc/classification.config"    \
+      --set reference-config-file="${SRCDIR}/etc/reference.config" -l ${OUTPUT_DIR}         \
+      --set threshold-file="${TEST_DIR}/threshold.config"                                   \
+      -c "${SRCDIR}/suricata.yaml" -r ${TEST_DIR}/input.pcap -S ${TEST_DIR}/test.rules
+
+checks:
+    - shell:
+        args: grep "dataset action \"\" is not supported" suricata.log | wc -l | xargs
+        expect: 0
