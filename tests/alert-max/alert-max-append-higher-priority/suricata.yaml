@@ -15,6 +15,7 @@ outputs:
       types:
         - alert
         - http
+        - stats
 
 # Define maximum number of possible alerts that can be triggered for the same
 # packet. Default is 15
