@@ -52,3 +52,9 @@ checks:
     match:
       event_type: alert
       alert.signature_id: 8
+# Subtest 9
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.detect.alert_queue_overflow: 4
