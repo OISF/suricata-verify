@@ -1,0 +1,10 @@
+checks:
+  # The RETR that is longer than the default limit should not be truncated. So
+  # we should have 2 RETR requests that are not truncated.
+  - filter:
+      count: 2
+      match:
+        event_type: ftp
+        ftp.command: RETR
+        ftp.command_truncated: false
+        ftp.reply_truncated: false
