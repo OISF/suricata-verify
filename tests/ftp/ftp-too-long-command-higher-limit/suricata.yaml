@@ -1,0 +1,13 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: true
+      types:
+        - ftp
+
+app-layer:
+  protocols:
+    ftp:
+      max-line-length: 5kb

@@ -1,0 +1,4 @@
+# Purpose
+
+Test that an FTP command, that comes in over multiple segments and exceeds the
+maximum line length is marked as truncated.

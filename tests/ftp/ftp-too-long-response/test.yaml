@@ -1,0 +1,15 @@
+checks:
+  # Make sure there are no truncated commands
+  - filter:
+      count: 0
+      match:
+        event_type: ftp
+        ftp.command_truncated: true
+
+  # And there should be a truncated PASV response.
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: PASV
+        ftp.reply_truncated: true
