@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"from_base64 transform"; flow:established,from_server; http.response_body; from_base64; content: "This is Suricata"; sid: 1;)
