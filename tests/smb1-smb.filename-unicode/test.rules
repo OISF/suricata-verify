@@ -1,0 +1,1 @@
+alert smb any any -> any any (msg: "SMB file a.txt";smb.filename; content:"a.txt";sid:1;)
