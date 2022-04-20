@@ -1,0 +1,3 @@
+alert tcp any any -> any any (msg:"Alert sig"; sid:1; gid:10000003;)
+drop tcp any any -> any any (msg:"Drop signature!"; sid:2; rev:1;)
+alert tcp any any -> any any (msg:"Sig that won't alert"; sid:3;)
