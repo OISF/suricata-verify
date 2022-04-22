@@ -1,0 +1,20 @@
+checks:
+  # Look for the truncated command.
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: RETR
+        ftp.command_data.__len: 4091
+        ftp.command_truncated: true
+        ftp.reply_truncated: false
+
+  # Now look for the command after the truncated command.
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: RETR
+        ftp.command_data: index.html
+        ftp.command_truncated: false
+        ftp.reply_truncated: false
