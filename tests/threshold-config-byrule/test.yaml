@@ -1,0 +1,12 @@
+requires:
+  min-version: 5.0.0
+
+args:
+-  --set threshold-file=${TEST_DIR}/threshold.config
+
+checks:
+  - filter:
+      count: 3 
+      match:
+        event_type: alert
+        alert.signature_id: 1000001
