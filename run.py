@@ -798,7 +798,7 @@ class TestRunner:
 
         # Find pcaps.
         if "pcap" in self.config:
-            args += ["-r", self.config["pcap"]]
+            args += ["-r", os.path.realpath(os.path.join(self.directory, self.config["pcap"]))]
         else:
             pcaps = glob.glob(os.path.join(self.directory, "*.pcap"))
             pcaps += glob.glob(os.path.join(self.directory, "*.pcapng"))
