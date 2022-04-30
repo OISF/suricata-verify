@@ -325,7 +325,7 @@ checks:
       http.protocol: HTTP/1.1
       http.status: 200
       http.url: /
-      pcap_cnt: 75
+#      pcap_cnt: 74
       proto: TCP
       src_ip: 67.228.110.120
       src_port: 80

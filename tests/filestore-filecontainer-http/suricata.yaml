@@ -5,6 +5,7 @@ outputs:
   - eve-log:
       enabled: yes
       types:
+        - alert
         - http
         - files
         - stats
