@@ -4,27 +4,19 @@ requires:
     - HAVE_NSS
 
 args:
-  - -k none --runmode=single
+- -k none
+- --runmode=single
 
 pcap: input.pcap
 
 checks:
-
   - filter:
-      requires:
-        min-version: 6
       count: 1
       match:
         event_type: fileinfo
-        fileinfo.state: "CLOSED"
-        fileinfo.stored: true
-        fileinfo.size: 99400
-  - filter:
-      requires:
-        lt-version: 6
-      count: 1
-      match:
-        event_type: fileinfo
+        # TRUNCATED: fize is ~150k, we limit to 100k with stream depth
         fileinfo.state: "TRUNCATED"
         fileinfo.stored: true
         fileinfo.size: 99400
+        src_ip: 35.209.241.59
+        src_port: 20

@@ -11,8 +11,8 @@ checks:
     count: 1
     match:
       app_proto: ftp-data
-      dest_ip: 192.168.100.16
-      dest_port: 42987
+      src_ip: 192.168.100.16
+      src_port: 42987
       event_type: fileinfo
       fileinfo.filename: test.pdf
       fileinfo.gaps: false
@@ -22,14 +22,14 @@ checks:
       fileinfo.stored: true
       fileinfo.tx_id: 0
       proto: TCP
-      src_ip: 192.168.100.230
-      src_port: 20
+      dest_ip: 192.168.100.230
+      dest_port: 20
 - filter:
     count: 1
     match:
       app_proto: ftp-data
-      dest_ip: 192.168.100.230
-      dest_port: 20
+      src_ip: 192.168.100.230
+      src_port: 20
       event_type: fileinfo
       fileinfo.filename: test.pdf
       fileinfo.gaps: false
@@ -39,39 +39,39 @@ checks:
       fileinfo.stored: true
       fileinfo.tx_id: 0
       proto: TCP
-      src_ip: 192.168.100.16
-      src_port: 52407
-- filter:
-    count: 1
-    match:
-      app_proto: ftp-data
-      dest_ip: 192.168.100.230
-      dest_port: 20
-      event_type: fileinfo
-      fileinfo.filename: notepad.exe
-      fileinfo.gaps: false
-      fileinfo.sha256: fefeac4c10bbe237cc6c861229ecaacbd2a366ac4fbd04a3862b62bd7a778093
-      fileinfo.size: 69120
-      fileinfo.state: CLOSED
-      fileinfo.stored: true
-      fileinfo.tx_id: 0
-      proto: TCP
-      src_ip: 192.168.100.16
-      src_port: 48902
-- filter:
-    count: 1
-    match:
-      app_proto: ftp-data
       dest_ip: 192.168.100.16
-      dest_port: 57829
-      event_type: fileinfo
-      fileinfo.filename: notepad.exe
-      fileinfo.gaps: false
-      fileinfo.sha256: fefeac4c10bbe237cc6c861229ecaacbd2a366ac4fbd04a3862b62bd7a778093
-      fileinfo.size: 69120
-      fileinfo.state: CLOSED
-      fileinfo.stored: true
-      fileinfo.tx_id: 0
-      proto: TCP
+      dest_port: 52407
+- filter:
+    count: 1
+    match:
+      app_proto: ftp-data
       src_ip: 192.168.100.230
       src_port: 20
+      event_type: fileinfo
+      fileinfo.filename: notepad.exe
+      fileinfo.gaps: false
+      fileinfo.sha256: fefeac4c10bbe237cc6c861229ecaacbd2a366ac4fbd04a3862b62bd7a778093
+      fileinfo.size: 69120
+      fileinfo.state: CLOSED
+      fileinfo.stored: true
+      fileinfo.tx_id: 0
+      proto: TCP
+      dest_ip: 192.168.100.16
+      dest_port: 48902
+- filter:
+    count: 1
+    match:
+      app_proto: ftp-data
+      src_ip: 192.168.100.16
+      src_port: 57829
+      event_type: fileinfo
+      fileinfo.filename: notepad.exe
+      fileinfo.gaps: false
+      fileinfo.sha256: fefeac4c10bbe237cc6c861229ecaacbd2a366ac4fbd04a3862b62bd7a778093
+      fileinfo.size: 69120
+      fileinfo.state: CLOSED
+      fileinfo.stored: true
+      fileinfo.tx_id: 0
+      proto: TCP
+      dest_ip: 192.168.100.230
+      dest_port: 20
