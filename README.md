@@ -51,7 +51,7 @@ requires:
   # Require that the Suricata version be less than a version.
   lt-version: 6
 
-  # Test is only for this version. For example, 4.0 would match any 4.0 
+  # Test is only for this version. For example, 4.0 would match any 4.0
   # release, but 4.0.3 would only match 4.0.3.
   version: 4.0
 
@@ -173,4 +173,6 @@ optional arguments:
                         Create filter blocks for the specified events
   --strictcsums         Strictly validate checksum
   --midstream           Allow midstream session pickups
+  --min-version <min-version>
+                        Adds a global minimum required version
 ```
