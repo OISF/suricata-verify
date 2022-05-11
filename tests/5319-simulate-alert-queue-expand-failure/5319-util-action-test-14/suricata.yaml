@@ -1,0 +1,20 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert
+        - flow
+        - stats
+
+packet-alert-max: 1
+
+action-order:
+  - alert
+  - drop
+  - reject
+  - pass
