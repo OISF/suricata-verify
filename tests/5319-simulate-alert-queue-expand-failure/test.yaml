@@ -1,0 +1,30 @@
+requires:
+  features:
+    - HAVE_NSS
+  min-version: 7
+
+args:
+  - --simulate-ips
+  - --disable-alert-queue-expand
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.alert_queue_overflow: 2
