@@ -1,0 +1,38 @@
+args:
+- -k none
+- --simulate-ips
+- --simulate-alert-queue-realloc-failure
+
+checks:
+- filter:
+    min-version: 7
+    count: 1
+    match:
+      event_type: flow
+      flow.alerted: true
+      flow.action: drop
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.alerted: true
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 2
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 3
+- filter:
+    count: 1
+    match:
+        event_type: stats
+        stats.detect.alert_queue_overflow: 2
