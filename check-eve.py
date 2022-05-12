@@ -69,16 +69,15 @@ def main():
     parser.add_argument("-p", dest="python_validator", action="store_true", help="use python validator")
     parser.add_argument("file", nargs="?", default=[])
     parser.add_argument("-q", dest="quiet", action="store_true")
+    parser.add_argument("-s", dest="schema", action="store")
     args = parser.parse_args()
     TOPDIR = os.path.abspath(os.path.dirname(sys.argv[0]))
     tdir = os.path.join(TOPDIR, "tests")
 
-    json_path = "{}/schema.json".format(TOPDIR)
-
     if args.python_validator:
-        schema = json.load(open(json_path))
+        schema = json.load(open(args.schema))
     else:
-        schema = json_path
+        schema = args.schema
 
     checked = 0
     passed = 0

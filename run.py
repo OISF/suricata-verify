@@ -676,7 +676,7 @@ class TestRunner:
             check_value = self.check()
 
         if VALIDATE_EVE:
-            check_output = subprocess.call(["{}/check-eve.py".format(TOPDIR), outdir, "-q"])
+            check_output = subprocess.call(["{}/check-eve.py".format(TOPDIR), outdir, "-q", "-s", os.path.join(self.cwd, "schema.json")])
             if check_output != 0:
                 raise TestError("Invalid JSON schema")
 
@@ -975,6 +975,10 @@ def main():
     # only validate eve since version 7
     if not is_version_compatible(version="7", suri_version=suricata_config.version, expr="gte"):
         VALIDATE_EVE = False
+    if VALIDATE_EVE:
+        if not os.path.exists(os.path.join(cwd, "schema.json")):
+            print("Warning: No schema.json to validate eve.")
+            VALIDATE_EVE = False
     suricata_config.valgrind = args.valgrind
     tdir = os.path.join(TOPDIR, "tests")
     if args.testdir:
