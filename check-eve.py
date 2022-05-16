@@ -71,7 +71,7 @@ def main():
     parser.add_argument("-p", dest="python_validator", action="store_true", help="use python validator")
     parser.add_argument("file", nargs="?", default=[])
     parser.add_argument("-q", dest="quiet", action="store_true")
-    parser.add_argument("-s", dest="schema", action="store")
+    parser.add_argument("-s", dest="schema", action="store", required=True)
     args = parser.parse_args()
     TOPDIR = os.path.abspath(os.path.dirname(sys.argv[0]))
     tdir = os.path.join(TOPDIR, "tests")
