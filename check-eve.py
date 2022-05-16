@@ -36,7 +36,8 @@ def validate_json(args, json_filename, schema):
     errors = []
 
     if not args.python_validator:
-        cp = subprocess.run(["eve-validator", "-q", "-s", schema, "--", json_filename])
+        progname = os.path.join(TOPDIR, "eve-validator", "target", "release", "eve-validator")
+        cp = subprocess.run([progname, "-q", "-s", schema, "--", json_filename])
         if cp.returncode != 0:
             status = "FAIL"
             errors.append(cp.stdout)
@@ -63,6 +64,7 @@ def validate_json(args, json_filename, schema):
         
 def main():
     global args
+    global TOPDIR
 
     parser = argparse.ArgumentParser(description="Validation schema")
     parser.add_argument("-v", dest="verbose", action="store_true")

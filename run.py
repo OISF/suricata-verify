@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 #
-# Copyright (C) 2017-2021 Open Information Security Foundation
+# Copyright (C) 2017-2022 Open Information Security Foundation
 #
 # Permission is hereby granted, free of charge, to any person
 # obtaining a copy of this software and associated documentation files
@@ -44,16 +44,7 @@ import filecmp
 import subprocess
 import yaml
 
-# Check if we can validate EVE files against the schema.
-global VALIDATE_EVE
-try:
-    VALIDATE_EVE = True
-    check_output = subprocess.run(["eve-validator", "-V"], capture_output=True)
-    if check_output.returncode != 0:
-        VALIDATE_EVE = False
-except:
-    VALIDATE_EVE = False
-
+VALIDATE_EVE = False
 WIN32 = sys.platform == "win32"
 LINUX = sys.platform.startswith("linux")
 suricata_bin = "src\suricata.exe" if WIN32 else "./src/suricata"
@@ -676,7 +667,7 @@ class TestRunner:
             check_value = self.check()
 
         if VALIDATE_EVE:
-            check_output = subprocess.call(["{}/check-eve.py".format(TOPDIR), outdir, "-q", "-s", os.path.join(self.cwd, "schema.json")])
+            check_output = subprocess.call(["{}/check-eve.py".format(TOPDIR), outdir, "-q", "-s", os.path.join(self.cwd, "etc", "schema.json")])
             if check_output != 0:
                 raise TestError("Invalid JSON schema")
 
@@ -913,6 +904,9 @@ def run_single(tests, dirpath, args, cwd, suricata_config):
     except TerminatePoolError:
         sys.exit(1)
 
+def build_eve_validator():
+    subprocess.check_call("cargo build --release", cwd=os.path.join(TOPDIR, "eve-validator"), shell=True)
+
 def main():
     global TOPDIR
     global args
@@ -942,6 +936,7 @@ def main():
                         help="Prints debug output for failed tests")
     parser.add_argument("-q", "--quiet", dest="quiet", action="store_true",
                         help="Only show failures and end summary")
+    parser.add_argument("--no-validation", action="store_true", help="Disable EVE validation")
     parser.add_argument("patterns", nargs="*", default=[])
     if LINUX:
         parser.add_argument("-j", type=int, default=min(8, mp.cpu_count()),
@@ -951,11 +946,17 @@ def main():
     if args.self_test:
         return unittest.main(argv=[sys.argv[0]])
 
-    global VALIDATE_EVE
-    if not VALIDATE_EVE:
-        print("Warning: EVE files will not be valided: eve-validator program not found.")
-
     TOPDIR = os.path.abspath(os.path.dirname(sys.argv[0]))
+
+    global VALIDATE_EVE
+    if not args.no_validation:
+        try:
+            build_eve_validator()
+            VALIDATE_EVE = True
+        except:
+            print("error: Failed to build EVE validator, validation will be disabled")
+    else:
+        VALIDATE_EVE = False
 
     skipped = 0
     passed = 0
@@ -976,7 +977,7 @@ def main():
     if not is_version_compatible(version="7", suri_version=suricata_config.version, expr="gte"):
         VALIDATE_EVE = False
     if VALIDATE_EVE:
-        if not os.path.exists(os.path.join(cwd, "schema.json")):
+        if not os.path.exists(os.path.join(cwd, "etc", "schema.json")):
             print("Warning: No schema.json to validate eve.")
             VALIDATE_EVE = False
     suricata_config.valgrind = args.valgrind
