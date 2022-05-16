@@ -90,7 +90,7 @@ jobs:
         run: python3 ../run.py --quiet
       - name: Running check-eve
         if: ${{ matrix.branch == 'master' }}
-        run: python3 ./check-eve.py
+        run: python3 ./check-eve.py -q -s suricata/etc/schema.json
       - name: Running suricata-verify with different output dir
         working-directory: suricata
         run: python3 ../run.py --quiet --fail --outdir /tmp/sv-output
@@ -169,4 +169,4 @@ jobs:
         run: python3 ../run.py --quiet
       - name: Running check-eve
         if: ${{ matrix.branch == 'master' }}
-        run: python3 ./check-eve.py
+        run: python3 ./check-eve.py -q -s suricata/etc/schema.json

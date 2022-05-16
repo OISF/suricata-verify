@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 #
-# Copyright (C) 2021 Open Information Security Foundation
+# Copyright (C) 2021-2022 Open Information Security Foundation
 #
 # Permission is hereby granted, free of charge, to any person
 # obtaining a copy of this software and associated documentation files
@@ -28,15 +28,21 @@ import os.path
 import argparse
 import json
 import subprocess
-from jsonschema import validate
-from jsonschema.exceptions import ValidationError
+
+try:
+    from jsonschema import validate
+    from jsonschema.exceptions import ValidationError
+    HAVE_PY = True
+except:
+    HAVE_PY = False
 
 def validate_json(args, json_filename, schema):
     status = "OK"
     errors = []
 
     if not args.python_validator:
-        cp = subprocess.run(["eve-validator", "-q", "-s", schema, "--", json_filename])
+        progname = os.path.join(TOPDIR, "eve-validator", "target", "release", "eve-validator")
+        cp = subprocess.run([progname, "-q", "-s", schema, "--", json_filename])
         if cp.returncode != 0:
             status = "FAIL"
             errors.append(cp.stdout)
@@ -63,18 +69,22 @@ def validate_json(args, json_filename, schema):
         
 def main():
     global args
+    global TOPDIR
 
     parser = argparse.ArgumentParser(description="Validation schema")
     parser.add_argument("-v", dest="verbose", action="store_true")
     parser.add_argument("-p", dest="python_validator", action="store_true", help="use python validator")
     parser.add_argument("file", nargs="?", default=[])
     parser.add_argument("-q", dest="quiet", action="store_true")
-    parser.add_argument("-s", dest="schema", action="store")
+    parser.add_argument("-s", dest="schema", action="store", required=True)
     args = parser.parse_args()
     TOPDIR = os.path.abspath(os.path.dirname(sys.argv[0]))
     tdir = os.path.join(TOPDIR, "tests")
 
     if args.python_validator:
+        if not HAVE_PY:
+            print("error: python validation not enabled: install python-jsonschema")
+            sys.exit(1)
         schema = json.load(open(args.schema))
     else:
         schema = args.schema
