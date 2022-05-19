@@ -667,7 +667,7 @@ class TestRunner:
             check_value = self.check()
 
         if VALIDATE_EVE:
-            check_output = subprocess.call(["{}/check-eve.py".format(TOPDIR), outdir, "-q", "-s", os.path.join(self.cwd, "etc", "schema.json")])
+            check_output = subprocess.call([os.path.join(TOPDIR, "check-eve.py"), outdir, "-q", "-s", os.path.join(self.cwd, "etc", "schema.json")])
             if check_output != 0:
                 raise TestError("Invalid JSON schema")
 
