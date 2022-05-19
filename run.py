@@ -949,7 +949,7 @@ def main():
     TOPDIR = os.path.abspath(os.path.dirname(sys.argv[0]))
 
     global VALIDATE_EVE
-    if not args.no_validation:
+    if not WIN32 and not args.no_validation:
         try:
             build_eve_validator()
             VALIDATE_EVE = True
