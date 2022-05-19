@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 #
-# Copyright (C) 2021 Open Information Security Foundation
+# Copyright (C) 2021-2022 Open Information Security Foundation
 #
 # Permission is hereby granted, free of charge, to any person
 # obtaining a copy of this software and associated documentation files
@@ -28,8 +28,13 @@ import os.path
 import argparse
 import json
 import subprocess
-from jsonschema import validate
-from jsonschema.exceptions import ValidationError
+
+try:
+    from jsonschema import validate
+    from jsonschema.exceptions import ValidationError
+    HAVE_PY = True
+except:
+    HAVE_PY = False
 
 def validate_json(args, json_filename, schema):
     status = "OK"
@@ -77,6 +82,9 @@ def main():
     tdir = os.path.join(TOPDIR, "tests")
 
     if args.python_validator:
+        if not HAVE_PY:
+            print("error: python validation not enabled: install python-jsonschema")
+            sys.exit(1)
         schema = json.load(open(args.schema))
     else:
         schema = args.schema
