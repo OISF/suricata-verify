@@ -1,0 +1,15 @@
+requires:
+  min-version: 6.0.5
+
+checks:
+    - shell: 
+        args: grep SC_ERR_INVALID_SIGNATURE suricata.log | wc -l | xargs
+        expect: 2
+    - shell:
+        args: grep "1 rule files processed. 2 rules successfully loaded, 2 rules failed" suricata.log | wc -l | xargs
+        expect: 1
+    - filter:
+        count: 0
+        match:
+          event_type: alert
+exit-code: 1

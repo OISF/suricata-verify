@@ -1,0 +1,4 @@
+alert http any [30:50,              !45] -> any [30:50,!45] (msg:"sid 2 version 0"; content:"dummy2"; sid:1;)
+alert http any [45:50,             !45] -> any any (msg:"sid 2 version 0"; content:"dummy2"; sid:1;)
+alert http any [65530:65535,         !65535] -> any any (msg:"sid 2 version 0"; content:"dummy2"; sid:1;)
+alert http any any -> any any (msg:"sid 2 version 0"; content:"dummy2"; sid:5;)
