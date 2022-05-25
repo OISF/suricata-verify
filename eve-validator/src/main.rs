@@ -39,8 +39,12 @@ pub fn main() -> BoxErrorResult<()> {
 fn validate_instances(instances: &[PathBuf], schema: PathBuf, quiet: bool) -> BoxErrorResult<bool> {
     let mut success = true;
 
-    let schema_json = fs::read_to_string(schema)?;
-    let schema_json = serde_json::from_str(&schema_json)?;
+    let schema_json = fs::read_to_string(&schema).map_err(|err| {
+        format!("Failed to read {}: {:?}", schema.display(), err)
+    })?;
+    let schema_json = serde_json::from_str(&schema_json).map_err(|err| {
+        format!("Failed to parse {}: {:?}", schema.display(), err)
+    })?;
     match JSONSchema::compile(&schema_json) {
         Ok(schema) => {
             for instance in instances {
