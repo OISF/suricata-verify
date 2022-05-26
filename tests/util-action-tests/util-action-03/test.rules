@@ -1,0 +1,3 @@
+alert ip any any -> any any (msg:"sig 1"; content:"Hi all"; sid:1;)
+pass ip any any -> any any (msg:"sig 2"; content:"wo"; sid:2;)
+alert ip any any -> any any (msg:"sig 3"; content:"Hi all"; sid:3;)

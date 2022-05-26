@@ -1,0 +1,3 @@
+drop tcp any any -> any any (msg:"sig 1"; sid:1;)
+alert tcp any any -> any any (msg:"sig 2"; content:"Hi all"; sid:2;)
+pass tcp any any -> any any (msg:"sig 3"; sid:3;)
