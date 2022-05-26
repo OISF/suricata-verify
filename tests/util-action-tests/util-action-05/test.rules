@@ -1,0 +1,3 @@
+alert ip any any -> any any (msg:"sig 1"; sid:1;)
+pass ip any any -> any any (msg:"Testing normal 2"; sid:2;)
+alert ip any any -> any any (msg:"sig 3"; sid:3;)
