@@ -1,0 +1,2 @@
+alert tcp any any -> any any (filesize:<70; sid:1234;)
+alert tcp any any -> any any (filesize:>50; sid:1235;)
