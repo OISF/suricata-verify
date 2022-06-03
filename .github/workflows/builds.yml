@@ -72,10 +72,6 @@ jobs:
       - run: cargo install --force --debug cbindgen
       - run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
       - uses: actions/checkout@v2
-      - name: Build eve-validator
-        working-directory: eve-validator
-        run: |
-          cargo install --path .
       - run: python3 ./run.py --self-test
       - run: git clone https://github.com/OISF/suricata -b ${{ matrix.branch }}
       - run: git clone https://github.com/OISF/libhtp suricata/libhtp
@@ -88,9 +84,6 @@ jobs:
       - name: Running suricata-verify
         working-directory: suricata
         run: python3 ../run.py --quiet
-      - name: Running check-eve
-        if: ${{ matrix.branch == 'master' }}
-        run: python3 ./check-eve.py -q -s suricata/etc/schema.json
       - name: Running suricata-verify with different output dir
         working-directory: suricata
         run: python3 ../run.py --quiet --fail --outdir /tmp/sv-output
@@ -151,10 +144,6 @@ jobs:
       - run: cargo install --force --debug cbindgen
       - run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
       - uses: actions/checkout@v2
-      - name: Build eve-validator
-        working-directory: eve-validator
-        run: |
-          cargo install --path .
       - run: python3 ./run.py --self-test
       - run: git clone https://github.com/OISF/suricata -b ${{ matrix.branch }}
       - run: git clone https://github.com/OISF/libhtp suricata/libhtp
@@ -167,6 +156,3 @@ jobs:
       - name: Running suricata-verify
         working-directory: suricata
         run: python3 ../run.py --quiet
-      - name: Running check-eve
-        if: ${{ matrix.branch == 'master' }}
-        run: python3 ./check-eve.py -q -s suricata/etc/schema.json
