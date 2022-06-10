@@ -1,0 +1,36 @@
+args:
+- -k none
+- --set vlan.use-for-tracking=false
+- --set app-layer.protocols.http.libhtp.default-config.response-body-limit=200kb
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        vlan[0]: 3136
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: "/malware/ppt/mal/51f14eb6c874686e5f593132cf0f742d.ppt"
+        fileinfo.state: CLOSED
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.hostname: "nx2500-242-4-server"
+        http.status: 200
+        vlan[0]: 3136
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        tcp.state: closed
+        vlan[0]: 3136
