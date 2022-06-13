@@ -1,0 +1,73 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular #regular|syslog|unix_dgram|unix_stream|redis
+      pcap-file: true
+      types:
+        - http:
+            enabled: yes
+            extended: yes     # enable this for extended logging information
+            # custom allows additional HTTP fields to be included in eve-log.
+            # the example below adds three additional fields when uncommented
+            #custom: [Accept-Encoding, Accept-Language, Authorization]
+            # set this value to one and only one from {both, request, response}
+            # to dump all HTTP headers for every HTTP request and/or response
+            # dump-all-headers: none
+        - files:
+            force-magic: no   # force logging magic on all logged files
+            # force logging of checksums, available hash functions are md5,
+            # sha1 and sha256
+            #force-hash: [md5]
+
+  - file-store:
+      version: 2
+      enabled: yes
+      dir: filestore
+      write-fileinfo: yes
+      force-filestore: yes
+
+# Logging configuration.  This is not about logging IDS alerts/events, but
+# output about what Suricata is doing, like startup messages, errors, etc.
+logging:
+  default-log-level: notice
+  outputs:
+  - console:
+      enabled: yes
+      # type: json
+  - file:
+      enabled: yes
+      level: info
+      filename: suricata.json
+      type: json
+  - syslog:
+      enabled: no
+      facility: local5
+      format: "[%i] <%d> -- "
+      # type: json
+
+
+app-layer:
+  protocols:
+    http:
+      enabled: yes
+      libhtp:
+         default-config:
+           personality: IDS
+           request-body-limit: 100kb
+           response-body-limit: 100kb
+           request-body-minimal-inspect-size: 32kb
+           request-body-inspect-window: 4kb
+           response-body-minimal-inspect-size: 40kb
+           response-body-inspect-window: 16kb
+           response-body-decompress-layer-limit: 2
+           http-body-inline: auto
+           swf-decompression:
+             enabled: yes
+             type: both
+             compress-depth: 100kb
+             decompress-depth: 100kb
+           double-decode-path: no
+           double-decode-query: no

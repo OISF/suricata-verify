@@ -1,0 +1,19 @@
+requires:
+  min-version: 7
+
+args:
+- -k none
+- --no-random
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: http
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.size: 59466
+        fileinfo.state: "TRUNCATED"
+        fileinfo.gaps: true
