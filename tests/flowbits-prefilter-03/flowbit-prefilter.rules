@@ -1,0 +1,2 @@
+alert tcp any any -> any any (flow:to_server; content:"GET"; flowbits:set,abc; sid:1;)
+alert tcp any any -> any any (flow:to_client; content:"HTTP"; flowbits:isset,abc; prefilter; sid:2;)

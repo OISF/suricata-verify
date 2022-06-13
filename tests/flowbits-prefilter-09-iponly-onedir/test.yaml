@@ -1,0 +1,19 @@
+pcap: ../flowbit-oring/input.pcap
+
+args:
+  - -k none
+  - --simulate-ips
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      pcap_cnt: 2
+      alert.signature_id: 1
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      pcap_cnt: 6
+      alert.signature_id: 2
