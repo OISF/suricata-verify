@@ -1,0 +1,23 @@
+requires:
+  min-version: 8
+
+pcap: ../flowbit-oring/input.pcap
+
+args:
+  - -k none
+  - --simulate-ips
+  - --set detect.prefilter.default=auto
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      pcap_cnt: 6
+      alert.signature_id: 11
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      pcap_cnt: 6
+      alert.signature_id: 22
