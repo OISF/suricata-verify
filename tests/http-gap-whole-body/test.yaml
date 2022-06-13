@@ -39,7 +39,7 @@ checks:
       count: 1
       match:
         event_type: fileinfo
-        fileinfo.size: 0
+        fileinfo.size: 12
         fileinfo.state: "TRUNCATED"
         fileinfo.gaps: true
   - filter:
