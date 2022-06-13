@@ -1,0 +1,2 @@
+alert tcp any any -> any any (flow:to_client; dsize:259; flowbits:set,size; sid:1;)
+alert tcp any any -> any any (flowbits:isset,size; prefilter; sid:2;)
