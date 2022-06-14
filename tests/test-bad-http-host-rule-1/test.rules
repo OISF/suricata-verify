@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"TEST SUCCESFULL - http host capitalizaed "; http.host; content:"ALLCAPS.COM"; sid:1111; rev:1;)
