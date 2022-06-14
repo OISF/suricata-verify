@@ -1,3 +1,7 @@
 alert tcp any any -> any any (msg:"DCE stub data";flow:established,to_server; dcerpc.stub_data; content:"|09 00 00 00 00 01 00 00|"; sid:1;)
 alert tcp any any -> any any (msg:"DCE stub data";flow:established,to_server; dcerpc.stub_data; content:"|09 00|"; sid:2;)
 alert tcp any any -> any any (msg:"DCE stub data";flow:established,to_server; dcerpc.stub_data; content:"|01 09 00|"; sid:3;)
+
+alert dcerpc any any -> any any (msg:"DCE stub data";flow:established,to_server; dcerpc.stub_data; content:"|09 00 00 00 00 01 00 00|"; sid:11;)
+alert dcerpc any any -> any any (msg:"DCE stub data";flow:established,to_server; dcerpc.stub_data; content:"|09 00|"; sid:12;)
+alert dcerpc any any -> any any (msg:"DCE stub data";flow:established,to_server; dcerpc.stub_data; content:"|01 09 00|"; sid:13;)

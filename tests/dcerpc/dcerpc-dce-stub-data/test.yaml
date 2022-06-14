@@ -31,6 +31,23 @@ checks:
 - filter:
     count: 1
     match:
+      event_type: alert
+      alert.signature_id: 11
+      pcap_cnt: 10
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 12
+      pcap_cnt: 10
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 13
+- filter:
+    count: 1
+    match:
       event_type: flow
 - filter:
     count: 1
