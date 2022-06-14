@@ -1,0 +1,20 @@
+requires:
+  min-version: 7.0.0
+
+  features:
+    - HAVE_LIBJANSSON
+
+checks:
+  # check that we have the following entres in eve.json
+  # match 1 specific rule load failure reason
+  - filter:
+      count: 1
+      match:
+        event_type: engine
+        engine.message: "rule 1111: A pattern with uppercase chararacters detected for http.host. The hostname buffer is normalized to lowercase, please specify a lowercase pattern."
+
+  - filter:
+      count: 1
+      match:
+        event_type: engine
+        engine.error: "SC_ERR_NO_RULES_LOADED"
