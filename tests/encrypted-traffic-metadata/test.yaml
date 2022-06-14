@@ -1,0 +1,18 @@
+
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.metadata.etm.entropy: 7.61721134185791
+        flow.metadata.etm.delta.__len: 7
+        has-key: flow.metadata.etm
+
+# Add additional arguments to Suricata.
+args:
+  - --set encrypted-traffic-metadata.enabled=1
