@@ -34,6 +34,7 @@ jobs:
                 autoconf \
                 automake \
                 build-essential \
+                cargo \
                 git \
                 jq \
                 libpcre3 \
