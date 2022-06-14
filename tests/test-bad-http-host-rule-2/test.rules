@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"TEST SUCCESFULL - http host nocase"; http.host; content:"somehost.com"; nocase; sid:123; rev:1;)
