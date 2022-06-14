@@ -1,0 +1,3 @@
+alert tcp any any -> any any (flow:to_server; dcerpc.iface:367abb81-9844-35f1-ad32-98f038001003; dcerpc.opnum:15; sid:1;)
+alert smb any any -> any any (flow:to_server; dcerpc.iface:367abb81-9844-35f1-ad32-98f038001003; dcerpc.opnum:15; sid:2;)
+alert dcerpc any any -> any any (flow:to_server; dcerpc.iface:367abb81-9844-35f1-ad32-98f038001003; dcerpc.opnum:15; sid:3;)
