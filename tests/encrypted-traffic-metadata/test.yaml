@@ -1,18 +1,20 @@
-
 requires:
   features:
     - HAVE_LIBJANSSON
 
 checks:
-
   - filter:
+      # The number of records this filter should match.
       count: 1
+      # The fields to match on.
       match:
+        # Example match on event_type:
         event_type: flow
-        flow.metadata.etm.entropy: 7.61721134185791
-        flow.metadata.etm.delta.__len: 7
-        has-key: flow.metadata.etm
+        # Example match on array item:
+        flow.etm.entropy: 7.945903301239014
+        # Check that a field exists:
+        has-key: flow.etm
 
 # Add additional arguments to Suricata.
 args:
-  - --set encrypted-traffic-metadata.enabled=1
+  - --set encrypted-traffic-metadata.enabled=yes

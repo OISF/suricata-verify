@@ -1,5 +1,11 @@
 %YAML 1.1
 ---
 
-encrypted-traffic-metadata:
-    enabled: yes
+outputs:
+  # Extensible Event Format (nicknamed EVE) event log in JSON format
+  - eve-log:
+      enabled: yes
+      filetype: regular 
+      filename: eve.json
+      types:
+        - flow
