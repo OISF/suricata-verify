@@ -8,11 +8,13 @@ checks:
       count: 1
       # The fields to match on.
       match:
-        # Example match on event_type:
         event_type: flow
-        # Example match on array item:
+        flow.etm.pcr: -0
+        flow.etm.bd_mean: 121.11382293701172
+        flow.etm.bd_variance: 76.15888977050781
         flow.etm.entropy: 7.945903301239014
-        # Check that a field exists:
+        flow.etm.dir.__len: 32
+        flow.etm.len.__len: 32
         has-key: flow.etm
 
 # Add additional arguments to Suricata.
