@@ -1,0 +1,15 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      types:
+        - alert:
+            tagged-packets: yes
+        - tls:
+            extended: no     # enable this for extended logging information
+        - drop:
+            alerts: yes      # log alerts that caused drops
+            flows: start     # start or all: 'start' logs only a single drop
+        - flow

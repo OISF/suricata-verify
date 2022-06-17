@@ -1,0 +1,35 @@
+requirements:
+  min-version: 6
+
+args:
+- -k none
+- --simulate-ips
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        alert.action: blocked
+        pcap_cnt: 1
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        alert.signature_id: 1
+        alert.action: blocked
+        pcap_cnt: 1
+        drop.reason: rules
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        pcap_cnt: 2
+        drop.reason: flow drop
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.action: drop
+        tcp.state: syn_sent

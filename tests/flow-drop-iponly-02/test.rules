@@ -1,0 +1,2 @@
+drop ip 192.168.10.31 any -> any any (sid:1;)
+drop ip 192.168.10.10 any -> any any (sid:2;)

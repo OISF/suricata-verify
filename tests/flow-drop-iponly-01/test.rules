@@ -1,0 +1,2 @@
+drop ip 100.117.241.123 any -> any any (sid:1;)
+drop ip 100.64.4.146 any -> any any (sid:2;)
