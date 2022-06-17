@@ -1,0 +1,23 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+checks:
+  - filter:
+      # The number of records this filter should match.
+      count: 1
+      # The fields to match on.
+      match:
+        event_type: flow
+        flow.etm.pcr: 1
+        flow.etm.bd_mean: 105.18196105957031
+        flow.etm.bd_variance: 80.62933349609375
+        flow.etm.entropy: 7.5949788093566895
+        flow.etm.dir.__len: 32
+        flow.etm.delta.__len: 32
+        flow.etm.len.__len: 32
+        has-key: flow.etm
+
+# Add additional arguments to Suricata.
+args:
+  - --set encrypted-traffic-metadata.enabled=yes
