@@ -9,7 +9,7 @@ args:
 
 checks:
   - filter:
-      count: 1
+      count: 4
       match:
         event_type: alert
   - filter:
@@ -22,3 +22,8 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 2
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 3
