@@ -1,0 +1,13 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  files:
+    - src/datasets.c
+
+args:
+  - --data-dir=${OUTPUT_DIR}
+
+checks:
+  - file-compare:
+      filename: state.csv
+      expected: expected/state.csv
