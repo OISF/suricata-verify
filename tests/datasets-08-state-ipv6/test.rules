@@ -1,0 +1,1 @@
+alert dns any any -> any any (ip.src; dataset:set,dns-client, type ipv6, state state.csv; sid:1;)
