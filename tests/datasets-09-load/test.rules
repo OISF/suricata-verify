@@ -1,0 +1,2 @@
+alert http any any -> any any (ip.dst; dataset:isset,ip-list,type ipv4,load datasets-ipv4.csv; flow:established,to_server; sid:1;)
+alert http any any -> any any (ip.src; dataset:isset,ip-list,type ipv4,load datasets-ipv4.csv; flow:established,to_server; sid:2;)
