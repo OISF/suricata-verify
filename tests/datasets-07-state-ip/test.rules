@@ -1,0 +1,1 @@
+alert dns any any -> any any (ip.dst; dataset:set,dns-srv, type ipv4, state state.csv; sid:1;)
