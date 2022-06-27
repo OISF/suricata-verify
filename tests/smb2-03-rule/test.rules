@@ -1,0 +1,5 @@
+alert smb any any -> any any (file_data; content:"%PDF-1.5"; startswith; sid:1;)
+alert smb any any -> any any (smb.share; content:"|5C 5C|10.0.0.12|5C|smb2"; sid:2;)
+alert smb any any -> any any (msg:"user"; smb.ntlmssp_user; content:"Administrator"; sid:3;)
+alert smb any any -> any any (msg:"user"; smb.ntlmssp_domain; content:"CONTOSO"; sid:4;)
+alert smb any any -> any any (msg:"user"; smb.ntlmssp_user; content:"root"; sid:5;)
