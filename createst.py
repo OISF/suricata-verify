@@ -1,6 +1,6 @@
 #! /bin/python
 #
-# Copyright (C) 2019 Open Information Security Foundation
+# Copyright (C) 2019-2022 Open Information Security Foundation
 #
 # You can copy, redistribute or modify this Program under the terms of
 # the GNU General Public License version 2 as published by the Free
@@ -256,7 +256,7 @@ def get_suricata_yaml_path():
     """
     Return the path to the suricata.yaml particular to the current test.
     """
-    if os.path.exists(os.path.join(cwd, "suricata.yaml")):
+    if not args["cfg"] and os.path.exists(os.path.join(cwd, "suricata.yaml")):
         return os.path.join(cwd, "suricata.yaml")
     return os.path.join(test_dir, "suricata.yaml")
 
@@ -271,6 +271,8 @@ def create_local_args():
     # Copy PCAP to the test directory
     copyfile(args["pcap"], pcap_path)
 
+    if args["cfg"]:
+        copyfile(args["cfg"], os.path.join(test_dir, "suricata.yaml"))
     largs = [
         os.path.join(cwd, "src/suricata"),
         '-r', pcap_path,
@@ -355,6 +357,8 @@ def parse_args():
                         help="Stricly validate checksum")
     parser.add_argument("--min-version", default=None, metavar="<min-version>",
                         help="Adds a global minimum required version")
+    parser.add_argument("--cfg", metavar="<path-to-suricata.yaml>",
+                        help="Adds a suricata.yaml to the test")
 
     # add arg to allow stdout only
     args = parser.parse_args()
