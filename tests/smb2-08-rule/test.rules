@@ -1,0 +1,3 @@
+alert smb any any -> any any (msg:"user"; smb.ntlmssp_user; content:"Administrator"; sid:1;)
+alert smb any any -> any any (msg:"user"; smb.ntlmssp_domain; content:"CONTOSO"; sid:2;)
+alert smb any any -> any any (msg:"user"; smb.ntlmssp_user; content:"root"; sid:3;)
