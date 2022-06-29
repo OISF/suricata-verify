@@ -99,7 +99,6 @@ checks:
       alert.signature: SMTP WILDCARD
       alert.signature_id: 1
       app_proto: smtp
-      app_proto_tc: failed
       dest_ip: 74.53.140.153
       dest_port: 25
       event_type: alert
@@ -115,7 +114,6 @@ checks:
     count: 1
     match:
       app_proto: smtp
-      app_proto_tc: failed
       dest_ip: 74.53.140.153
       dest_port: 25
       event_type: flow

@@ -34,7 +34,6 @@ checks:
       alert.signature: file_data smtp test
       alert.signature_id: 1
       app_proto: smtp
-      app_proto_tc: failed
       dest_ip: 74.53.140.153
       dest_port: 25
       email.attachment[0]: NEWS.txt
