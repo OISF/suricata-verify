@@ -29,3 +29,8 @@ checks:
        event_type: snmp
        snmp.pdu_type: encrypted
        snmp.version: 3
+ - filter:
+     count: 8
+     match:
+       event_type: alert
+       alert.signature_id: 1

@@ -1,0 +1,2 @@
+
+alert snmp any any -> any any (snmp.usm; content:"admin"; sid:1;)
