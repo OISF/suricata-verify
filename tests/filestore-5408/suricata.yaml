@@ -1,0 +1,13 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      types:
+        - files
+        - stats
+  - file-store:
+      version: 2
+      enabled: yes
+      force-filestore: yes
