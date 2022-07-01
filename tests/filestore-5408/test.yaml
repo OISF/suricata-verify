@@ -1,0 +1,8 @@
+requires:
+  min-version: 6
+
+checks:
+  - filter:
+      count: 5
+      match:
+        event_type: fileinfo
