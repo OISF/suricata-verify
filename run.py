@@ -362,6 +362,13 @@ def is_version_compatible(version, suri_version, expr):
         return False
     return True
 
+def rule_is_version_compatible(rulefile, suri_version):
+    if rulefile.startswith("min"):
+        # strip prefix min and suffix .rules
+        return is_version_compatible(rulefile[3:-6], suri_version, "gte")
+    # default is true
+    return True
+
 class FileCompareCheck:
 
     def __init__(self, config, directory):
@@ -806,7 +813,11 @@ class TestRunner:
         if not rules:
             args.append("--disable-detection")
         elif len(rules) == 1:
-            args += ["-S", rules[0]]
+            rulefile = rules[0]
+            if rule_is_version_compatible(os.path.basename(rulefile), self.suricata_config.version):
+                args += ["-S", rulefile]
+            else:
+                args.append("--disable-detection")
         else:
             raise TestError("More than 1 rule file found")
 
