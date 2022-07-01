@@ -129,7 +129,6 @@ checks:
       fileinfo:
         filename: /publication/pub.home/home.html
         gaps: false
-        sid: []
         size: 1483
         state: CLOSED
         stored: false
