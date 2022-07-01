@@ -40,6 +40,12 @@ def validate_json(args, json_filename, schema):
     status = "OK"
     errors = []
 
+    cp = subprocess.run(["jq", "-e", 'path(.. | select(type == "array" and length == 0)) | join(".")', json_filename])
+    if cp.returncode != 4 and cp.stdout is not None:
+        status = "FAIL"
+        errors.append("jq returned %d" % cp.returncode)
+        errors.append(cp.stdout)
+
     if not args.python_validator:
         progname = os.path.join(TOPDIR, "eve-validator", "target", "release", "eve-validator")
         cp = subprocess.run([progname, "-q", "-s", schema, "--", json_filename])
