@@ -1,0 +1,1 @@
+alert dhcp any any -> any any (msg:"small DHCP lease time (<2hours)"; dhcp.leasetime:<7200; sid:1; rev:1;)
