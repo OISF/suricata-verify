@@ -6,6 +6,7 @@ outputs:
       enabled: true
       filename: eve.json
       types:
+        - alert
         - dhcp:
             extended: true
         - flow

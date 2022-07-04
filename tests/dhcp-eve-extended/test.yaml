@@ -57,7 +57,6 @@ checks:
       dest_port: 67
       event_type: flow
       flow.age: 0
-      flow.alerted: false
       flow.bytes_toclient: 350
       flow.bytes_toserver: 342
       flow.pkts_toclient: 1
@@ -67,3 +66,9 @@ checks:
       proto: UDP
       src_ip: 10.16.1.4
       src_port: 68
+- filter:
+    min-version: 7
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
