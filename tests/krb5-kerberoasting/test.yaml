@@ -1,0 +1,33 @@
+requires:
+  min-version: 7
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+  - filter:
+      count: 1
+      match:
+        event_type: krb5
+        krb5.msg_type: KRB_TGS_REP
+        krb5.ticket_encryption: rc4-hmac
+        krb5.ticket_weak_encryption: true
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
