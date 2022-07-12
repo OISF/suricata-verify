@@ -1,0 +1,18 @@
+requires:
+    min-version: 7
+
+args:
+- --set stream.reassembly.depth=50 --set outputs.1.eve-log.types.2.anomaly.types.stream=yes
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: anomaly
+        anomaly.event: stream.reassembly_depth_reached
+
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 2210062
