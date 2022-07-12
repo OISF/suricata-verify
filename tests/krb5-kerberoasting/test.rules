@@ -1,0 +1,3 @@
+alert krb5 any any -> any any (krb5.ticket_encryption: weak; sid:1;)
+alert krb5 any any -> any any (krb5.ticket_encryption: 23; sid:2;)
+alert krb5 any any -> any any (krb5.ticket_encryption: rc4-hmac; sid:3;)
