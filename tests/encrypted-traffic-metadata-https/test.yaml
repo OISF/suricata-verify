@@ -13,9 +13,9 @@ checks:
         flow.etm.bd_mean: 121.11382293701172
         flow.etm.bd_variance: 76.15888977050781
         flow.etm.entropy: 7.945903301239014
-        flow.etm.dir.__len: 32
-        flow.etm.delta.__len: 32
-        flow.etm.len.__len: 32
+        flow.etm.dir.__len: 17
+        flow.etm.delta.__len: 17
+        flow.etm.len.__len: 17
         has-key: flow.etm
 
 # Add additional arguments to Suricata.

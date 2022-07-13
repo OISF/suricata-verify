@@ -10,12 +10,12 @@ checks:
       match:
         event_type: flow
         flow.etm.pcr: 0
-        flow.etm.bd_mean: 45.97979736328125
-        flow.etm.bd_variance: 483503.90625
+        flow.etm.bd_mean: 48.447757720947266
+        flow.etm.bd_variance: 613926.9375
         flow.etm.entropy: 0
-        flow.etm.dir.__len: 1
-        flow.etm.delta.__len: 1
-        flow.etm.len.__len: 1
+        flow.etm.dir.__len: 2
+        flow.etm.delta.__len: 2
+        flow.etm.len.__len: 2
         has-key: flow.etm
 
 # Add additional arguments to Suricata.
