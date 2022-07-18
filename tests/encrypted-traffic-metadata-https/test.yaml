@@ -17,7 +17,20 @@ checks:
         flow.etm.delta.__len: 17
         flow.etm.len.__len: 17
         has-key: flow.etm
-
+  - filter:
+      # The number of records this filter should match.
+      count: 1
+      # The fields to match on.
+      match:
+        event_type: flow
+        flow.etm.pcr: 0
+        flow.etm.bd_mean: 108.28038787841797
+        flow.etm.bd_variance: 79131272
+        flow.etm.entropy: 0
+        flow.etm.dir.__len: 32
+        flow.etm.delta.__len: 32
+        flow.etm.len.__len: 32
+        has-key: flow.etm
 # Add additional arguments to Suricata.
 args:
-  - --set encrypted-traffic-metadata.enabled=yes
+  - --set encrypted-traffic-metadata.enabled=yes -k none
