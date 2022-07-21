@@ -1,0 +1,3 @@
+alert http any any -> any any (msg:"digicert.com bypass"; http.host; content:".digicert.com"; endswith; flow:established,to_server; flowbits: set, stamus.pass; sid:1; rev:1; priority:3;)
+alert http any any -> $HOME_NET any (msg:"HTTP learning"; flow:established,to_client; http.server; flowbits:isnotset, stamus.pass; dataset:set,http,type string,state output/http.intel; sid:2; rev:1; priority:2;)
+#alert http any any -> $HOME_NET any (msg:"HTTP learning"; flow:established,to_client; http.server; flowbits:isnotset, stamus.pass, data; dataset:set,http,type string,state output/http.intel; sid:2; rev:1; priority:2;)
