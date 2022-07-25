@@ -1,0 +1,23 @@
+args:
+- -k none
+
+requires:
+   min-version: 6.0.0
+
+checks:
+- filter:
+    count: 1
+    match:
+      alert.signature: bsize exact buffer size
+- filter:
+    count: 1
+    match:
+      alert.signature: bsize less than value
+- filter:
+    count: 1
+    match:
+      alert.signature: bsize buffer greater than value
+- filter:
+    count: 1
+    match:
+      alert.signature: bsize buffer range value
