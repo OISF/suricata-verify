@@ -13,7 +13,7 @@ pcap: ../filestore-v2.7-stream-depth/input.pcap
 checks:
 
   - shell:
-      args: grep "SC_WARN_FILESTORE_CONFIG(331)] - file-store.stream-depth value 10000 has no effect since it's less than stream.reassembly.depth value" stdout | wc -l | xargs
+      args: grep "SC_WARN_FILESTORE_CONFIG([0-9]\+)] - file-store.stream-depth value 10000 has no effect since it's less than stream.reassembly.depth value" stdout | wc -l | xargs
       expect: 1
 
   - filter:
