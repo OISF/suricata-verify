@@ -1,0 +1,2 @@
+alert tls any any -> any any (msg:"Test tls.random option CLIENT HELLO"; tls.random; content:"|94 2d 1f ef|"; sid:1;)
+alert tls any any -> any any (msg:"Test tls.random option SERVER HELLO"; tls.random; content:"|54 f9 fc 15|"; sid:2;)

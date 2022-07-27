@@ -1,0 +1,95 @@
+requires:
+  min-version: 7
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      alert.severity: 3
+      alert.signature: Test tls.random option CLIENT HELLO
+      alert.signature_id: 1
+      app_proto: tls
+      dest_ip: 192.168.56.1
+      dest_port: 49365
+      event_type: alert
+      flow.bytes_toclient: 140
+      flow.bytes_toserver: 386
+      flow.pkts_toclient: 2
+      flow.pkts_toserver: 3
+      proto: TCP
+      src_ip: 192.168.56.101
+      src_port: 443
+      tls.version: UNDETERMINED
+      tx_id: 0
+- filter:
+    count: 1
+    match:
+      alert.severity: 3
+      alert.signature: Test tls.random option SERVER HELLO
+      alert.signature_id: 2
+      app_proto: tls
+      dest_ip: 192.168.56.101
+      dest_port: 443
+      event_type: alert
+      flow.bytes_toclient: 1513
+      flow.bytes_toserver: 452
+      flow.pkts_toclient: 3
+      flow.pkts_toserver: 4
+      proto: TCP
+      src_ip: 192.168.56.1
+      src_port: 49365
+      tls.fingerprint: 3a:0b:3b:23:15:2c:44:5c:27:ac:6a:0c:41:d6:fa:74:af:b4:09:5b
+      tls.issuerdn: C=FR, ST=IDF, L=Paris, O=Stamus, CN=SELKS
+      tls.notafter: '2025-02-09T18:07:27'
+      tls.notbefore: '2015-02-12T18:07:27'
+      tls.serial: 00:97:E6:47:09:8E:EA:C9:B4
+      tls.subject: C=FR, ST=IDF, L=Paris, O=Stamus, CN=SELKS
+      tls.version: TLS 1.2
+      tx_id: 0
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.56.101
+      dest_port: 443
+      event_type: tls
+      pcap_cnt: 7
+      pkt_src: wire/pcap
+      proto: TCP
+      src_ip: 192.168.56.1
+      src_port: 49365
+      tls.fingerprint: 3a:0b:3b:23:15:2c:44:5c:27:ac:6a:0c:41:d6:fa:74:af:b4:09:5b
+      tls.issuerdn: C=FR, ST=IDF, L=Paris, O=Stamus, CN=SELKS
+      tls.notafter: '2025-02-09T18:07:27'
+      tls.notbefore: '2015-02-12T18:07:27'
+      tls.serial: 00:97:E6:47:09:8E:EA:C9:B4
+      tls.subject: C=FR, ST=IDF, L=Paris, O=Stamus, CN=SELKS
+      tls.version: TLS 1.2
+- filter:
+    count: 1
+    match:
+      app_proto: tls
+      dest_ip: 192.168.56.101
+      dest_port: 443
+      event_type: flow
+      flow.age: 0
+      flow.alerted: true
+      flow.bytes_toclient: 1953
+      flow.bytes_toserver: 776
+      flow.pkts_toclient: 6
+      flow.pkts_toserver: 7
+      flow.reason: shutdown
+      flow.state: closed
+      proto: TCP
+      src_ip: 192.168.56.1
+      src_port: 49365
+      tcp.ack: true
+      tcp.fin: true
+      tcp.psh: true
+      tcp.state: closed
+      tcp.syn: true
+      tcp.tcp_flags: 1b
+      tcp.tcp_flags_tc: 1b
+      tcp.tcp_flags_ts: 1b
