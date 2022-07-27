@@ -1,0 +1,16 @@
+Description
+===========
+Add a `tls.random` keyword which is a sticky buffer and matches on 32 bytes TLS `random` field.
+Add a `tls.random_time` keyword which is a sticky buffer and matches on the first 4 bytes of
+the TLS `random` field.
+Add a `tls.random_bytes` keyword which is a sticky buffer and matches on the last 28 bytes of
+the TLS `random` field.
+
+
+PCAP
+====
+PCAP comes from an [existing TLS test](https://github.com/OISF/suricata-verify/blob/master/tests/tls/tls.pcap)
+
+Redmine ticket
+==============
+https://redmine.openinfosecfoundation.org/issues/5190
