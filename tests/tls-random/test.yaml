@@ -1,0 +1,37 @@
+requires:
+  min-version: 7
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      alert.signature_id: 1
+      event_type: alert
+- filter:
+    count: 1
+    match:
+      alert.signature_id: 2
+      event_type: alert
+- filter:
+    count: 1
+    match:
+      alert.signature_id: 3
+      event_type: alert
+- filter:
+    count: 1
+    match:
+      alert.signature_id: 4
+      event_type: alert
+- filter:
+    count: 1
+    match:
+      alert.signature_id: 5
+      event_type: alert
+- filter:
+    count: 1
+    match:
+      alert.signature_id: 6
+      event_type: alert
