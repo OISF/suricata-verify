@@ -126,13 +126,12 @@ checks:
       dest_ip: 10.100.0.8
       dest_port: 44270
       event_type: fileinfo
-      fileinfo:
-        filename: /publication/pub.home/home.html
-        gaps: false
-        size: 1483
-        state: CLOSED
-        stored: false
-        tx_id: 0
+      fileinfo.filename: /publication/pub.home/home.html
+      fileinfo.gaps: false
+      fileinfo.size: 1483
+      fileinfo.state: CLOSED
+      fileinfo.stored: false
+      fileinfo.tx_id: 0
       http:
         hostname: www.abcdefghij.com
         http_content_type: text/html
