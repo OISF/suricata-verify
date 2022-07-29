@@ -40,11 +40,12 @@ def validate_json(args, json_filename, schema):
     status = "OK"
     errors = []
 
-    cp = subprocess.run(["jq", "-e", 'path(.. | select(type == "array" and length == 0)) | join(".")', json_filename])
-    if cp.returncode != 4 and cp.stdout is not None:
-        status = "FAIL"
-        errors.append("jq returned %d" % cp.returncode)
-        errors.append(cp.stdout)
+    if args.minseven:
+        cp = subprocess.run(["jq", "-e", 'path(.. | select(type == "array" and length == 0)) | join(".")', json_filename])
+        if cp.returncode != 4 and cp.stdout is not None:
+            status = "FAIL"
+            errors.append("jq returned %d" % cp.returncode)
+            errors.append(cp.stdout)
 
     if not args.python_validator:
         progname = os.path.join(TOPDIR, "eve-validator", "target", "release", "eve-validator")
@@ -83,6 +84,7 @@ def main():
     parser.add_argument("file", nargs="?", default=[])
     parser.add_argument("-q", dest="quiet", action="store_true")
     parser.add_argument("-s", dest="schema", action="store", required=True)
+    parser.add_argument("--min-seven", dest="minseven", action="store_true")
     args = parser.parse_args()
     TOPDIR = os.path.abspath(os.path.dirname(sys.argv[0]))
     tdir = os.path.join(TOPDIR, "tests")
