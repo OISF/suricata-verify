@@ -7,9 +7,9 @@ end
 function match(args)
     local var2 = SCByteVarGet(0)
 
-    if string.pack(">i4", var2) == "HTTP" then
+    if var2 and var2 == 0x48545450 then
         return 1
-    else
-        return 0
     end
+
+    return 0
 end
