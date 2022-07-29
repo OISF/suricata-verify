@@ -1,6 +1,11 @@
 requires:
+  min-version: 7
+
   features:
     - HAVE_LUA
+
+args:
+   - --set default-rule-path=${TEST_DIR}
 
 checks:
   - filter:
@@ -11,4 +16,3 @@ checks:
       count: 1
       match:
         alert.signature_id: 2
-
