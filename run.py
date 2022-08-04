@@ -308,7 +308,7 @@ def check_requires(requires, suricata_config: SuricataConfig):
                     raise UnsatisfiedRequirementError(
                         "requires script returned false")
         elif key == "pcap":
-            # Handle below...
+            # A valid requires argument, but not verified here.
             pass
         else:
             raise Exception("unknown requires types: %s" % (key))
@@ -583,6 +583,13 @@ class TestRunner:
                 pcap_required = requires["pcap"]
             else:
                 pcap_required = True
+
+            # As a pcap filename can be specified outside of the requires block, let
+            # setting this to false disable the requirement of a pcap as well.
+            if "pcap" in self.config and not self.config["pcap"]:
+                pcap_required = False
+                del(self.config["pcap"])
+
             if pcap_required and not "pcap" in self.config:
                 if not glob.glob(os.path.join(self.directory, "*.pcap")) + \
                    glob.glob(os.path.join(self.directory, "*.pcapng")):
