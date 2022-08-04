@@ -43,6 +43,7 @@ import threading
 import filecmp
 import subprocess
 import yaml
+import traceback
 
 VALIDATE_EVE = False
 WIN32 = sys.platform == "win32"
@@ -896,6 +897,15 @@ def run_test(dirpath, args, cwd, suricata_config):
         check_args_fail()
         with lock:
             count_dict["failed"] += 1
+    except Exception as err:
+        print("===> {}: FAILED: Unexpected exception: {}".format(os.path.basename(dirpath), err))
+        traceback.print_exc()
+
+        # Always terminate the runner on this type of error, as its an error in the framework.
+        with lock:
+            check_args['fail'] = 1
+            count_dict["failed"] += 1
+            raise TerminatePoolError()
 
 def run_mp(jobs, tests, dirpath, args, cwd, suricata_config):
     print("Number of concurrent jobs: %d" % jobs)
