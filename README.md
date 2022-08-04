@@ -96,6 +96,10 @@ pre-check: |
   # Some script to run before running checks.
   cp eve.json eve.json.bak
 
+# Provide a pcap filename. A falsey value like false or empty is equivalent to setting
+# "pcap: false" in the requires section.
+pcap: input.pcap
+
 checks:
 
   # A verification filter that is run over the eve.json. Multiple
