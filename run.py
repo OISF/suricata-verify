@@ -663,6 +663,9 @@ class TestRunner:
 
             open(os.path.join(self.output, "cmdline"), "w").write(cmdline)
 
+            if self.verbose:
+                print("Executing: {}".format(cmdline.strip()))
+
             p = subprocess.Popen(
                 args, shell=shell, cwd=self.directory, env=env,
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
