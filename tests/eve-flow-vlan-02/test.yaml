@@ -1,0 +1,24 @@
+requires:
+  min-version: 7
+
+checks:
+  - filter:
+      comment: single vlan
+      count: 1
+      match:
+        event_type: flow
+        vlan: [6]
+
+  - filter:
+      comment: double-tagged vlan
+      count: 1
+      match:
+        event_type: flow
+        vlan: [1, 10]
+
+  - filter:
+      comment: triple-tagged vlan
+      count: 1
+      match:
+        event_type: flow
+        vlan: [1, 10, 100]
