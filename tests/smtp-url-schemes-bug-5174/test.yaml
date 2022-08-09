@@ -1,0 +1,7 @@
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        email.url[0]: "test-site.org/blah/123/"
+        email.url[1]: "google.com"
