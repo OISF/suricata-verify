@@ -12,11 +12,19 @@ checks:
         event_type: alert
         alert.signature_id: 2230003
   - filter:
+      min-version: 7.0.0
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 2230004
+  - filter:
+      lt-version: 7.0.0
       count: 2
       match:
         event_type: alert
         alert.signature_id: 2230007
   - filter:
+      lt-version: 7.0.0
       count: 2
       match:
         event_type: alert
