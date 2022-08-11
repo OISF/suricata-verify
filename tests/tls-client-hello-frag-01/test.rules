@@ -1,0 +1,1 @@
+alert tls any any -> any any (tls.sni; content:"google"; sid:1;)
