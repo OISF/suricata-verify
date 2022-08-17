@@ -1,0 +1,19 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      types:
+        - alert:
+        - anomaly:
+            enabled: yes
+            types:
+              decode: no
+              stream: yes
+              applayer: yes
+        - drop:
+            alerts: yes      # log alerts that caused drops
+            flows: start     # start or all: 'start' logs only a single drop
+                             # per flow direction. All logs each dropped pkt.
+        - flow
