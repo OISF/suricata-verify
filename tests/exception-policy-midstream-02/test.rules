@@ -1,0 +1,2 @@
+# look for a content match crossing packet payload boundaries
+alert tcp any 143 -> any any (content:"C6 OK ID completed|0d 0a|* 21 EXISTS|0d 0a|* 6 RECENT"; flow:to_client; sid:1;)
