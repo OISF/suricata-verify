@@ -24,7 +24,6 @@ jobs:
       matrix:
         branch:
           - master
-          - master-5.0.x
           - master-6.0.x
     steps:
       - name: Install dependencies
@@ -98,7 +97,6 @@ jobs:
       matrix:
         branch:
           - master
-          - master-5.0.x
           - master-6.0.x
     steps:
       - name: Install dependencies
