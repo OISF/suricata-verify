@@ -8,9 +8,9 @@ checks:
 - filter:
     count: 1
     match:
-      bittorrent_dht.request.id: abcdefghij0123456789
+      bittorrent_dht.request.id: "6162636465666768696a30313233343536373839"
       bittorrent_dht.request_type: ping
-      bittorrent_dht.transaction_id: aa
+      bittorrent_dht.transaction_id: "6161"
       dest_ip: 190.0.0.3
       dest_port: 30000
       event_type: bittorrent_dht
@@ -23,7 +23,7 @@ checks:
     match:
       bittorrent_dht.error.msg: A Generic Error Ocurred
       bittorrent_dht.error.num: 201
-      bittorrent_dht.transaction_id: aa
+      bittorrent_dht.transaction_id: "6161"
       dest_ip: 190.0.0.1
       dest_port: 20000
       event_type: bittorrent_dht
@@ -34,11 +34,11 @@ checks:
 - filter:
     count: 1
     match:
-      bittorrent_dht.client_version: UT01
-      bittorrent_dht.request.id: abcdefghij0123456789
+      bittorrent_dht.client_version: "55543031"
+      bittorrent_dht.request.id: "6162636465666768696a30313233343536373839"
       bittorrent_dht.request.target: mnopqrstuvwxyz123456
       bittorrent_dht.request_type: find_node
-      bittorrent_dht.transaction_id: aa
+      bittorrent_dht.transaction_id: "6161"
       dest_ip: 190.0.0.3
       dest_port: 30000
       event_type: bittorrent_dht
@@ -49,10 +49,10 @@ checks:
 - filter:
     count: 1
     match:
-      bittorrent_dht.client_version: UT01
-      bittorrent_dht.response.id: 0123456789abcdefghij
-      bittorrent_dht.response.nodes: def456...
-      bittorrent_dht.transaction_id: aa
+      bittorrent_dht.client_version: "55543031"
+      bittorrent_dht.response.id: "303132333435363738396162636465666768696a"
+      bittorrent_dht.response.nodes: "6465663435362e2e2e"
+      bittorrent_dht.transaction_id: "6161"
       dest_ip: 190.0.0.1
       dest_port: 20000
       event_type: bittorrent_dht
@@ -63,11 +63,11 @@ checks:
 - filter:
     count: 1
     match:
-      bittorrent_dht.client_version: UT02
-      bittorrent_dht.request.id: abcdefghij0123456789
-      bittorrent_dht.request.info_hash: mnopqrstuvwxyz123456
+      bittorrent_dht.client_version: "55543032"
+      bittorrent_dht.request.id: "6162636465666768696a30313233343536373839"
+      bittorrent_dht.request.info_hash: "6d6e6f707172737475767778797a313233343536"
       bittorrent_dht.request_type: get_peers
-      bittorrent_dht.transaction_id: aa
+      bittorrent_dht.transaction_id: "6161"
       dest_ip: 190.0.0.3
       dest_port: 30000
       event_type: bittorrent_dht
@@ -78,12 +78,12 @@ checks:
 - filter:
     count: 1
     match:
-      bittorrent_dht.client_version: UT12
-      bittorrent_dht.response.id: abcdefghij0123456789
-      bittorrent_dht.response.token: aoeusnth
+      bittorrent_dht.client_version: "55543132"
+      bittorrent_dht.response.id: "6162636465666768696a30313233343536373839"
+      bittorrent_dht.response.token: "616f6575736e7468"
       bittorrent_dht.response.values[0]: axje.u
       bittorrent_dht.response.values[1]: idhtnm
-      bittorrent_dht.transaction_id: aa
+      bittorrent_dht.transaction_id: "6161"
       dest_ip: 190.0.0.1
       dest_port: 20000
       event_type: bittorrent_dht
@@ -94,10 +94,10 @@ checks:
 - filter:
     count: 1
     match:
-      bittorrent_dht.request.id: abcdefghij0123456789
-      bittorrent_dht.request.info_hash: mnopqrstuvwxyz123456
+      bittorrent_dht.request.id: "6162636465666768696a30313233343536373839"
+      bittorrent_dht.request.info_hash: "6d6e6f707172737475767778797a313233343536"
       bittorrent_dht.request_type: get_peers
-      bittorrent_dht.transaction_id: aa
+      bittorrent_dht.transaction_id: "6161"
       dest_ip: 190.0.0.3
       dest_port: 30000
       event_type: bittorrent_dht
@@ -108,10 +108,10 @@ checks:
 - filter:
     count: 1
     match:
-      bittorrent_dht.response.id: abcdefghij0123456789
-      bittorrent_dht.response.nodes: def456...
-      bittorrent_dht.response.token: aoeusnth
-      bittorrent_dht.transaction_id: aa
+      bittorrent_dht.response.id: "6162636465666768696a30313233343536373839"
+      bittorrent_dht.response.nodes: "6465663435362e2e2e"
+      bittorrent_dht.response.token: "616f6575736e7468"
+      bittorrent_dht.transaction_id: "6161"
       dest_ip: 190.0.0.1
       dest_port: 20000
       event_type: bittorrent_dht
@@ -122,12 +122,12 @@ checks:
 - filter:
     count: 1
     match:
-      bittorrent_dht.request.id: abcdefghij0123456789
-      bittorrent_dht.request.info_hash: mnopqrstuvwxyz123456
+      bittorrent_dht.request.id: "6162636465666768696a30313233343536373839"
+      bittorrent_dht.request.info_hash: "6d6e6f707172737475767778797a313233343536"
       bittorrent_dht.request.port: 6881
       bittorrent_dht.request.token: aoeusnth
       bittorrent_dht.request_type: announce_peer
-      bittorrent_dht.transaction_id: aa
+      bittorrent_dht.transaction_id: "6161"
       dest_ip: 190.0.0.3
       dest_port: 30000
       event_type: bittorrent_dht
@@ -138,8 +138,8 @@ checks:
 - filter:
     count: 1
     match:
-      bittorrent_dht.response.id: mnopqrstuvwxyz123456
-      bittorrent_dht.transaction_id: aa
+      bittorrent_dht.response.id: "6d6e6f707172737475767778797a313233343536"
+      bittorrent_dht.transaction_id: "6161"
       dest_ip: 190.0.0.1
       dest_port: 20000
       event_type: bittorrent_dht
@@ -150,13 +150,13 @@ checks:
 - filter:
     count: 1
     match:
-      bittorrent_dht.request.id: abcdefghij0123456789
+      bittorrent_dht.request.id: "6162636465666768696a30313233343536373839"
       bittorrent_dht.request.implied_port: 1
-      bittorrent_dht.request.info_hash: mnopqrstuvwxyz123456
+      bittorrent_dht.request.info_hash: "6d6e6f707172737475767778797a313233343536"
       bittorrent_dht.request.port: 6881
       bittorrent_dht.request.token: aoeusnth
       bittorrent_dht.request_type: announce_peer
-      bittorrent_dht.transaction_id: aa
+      bittorrent_dht.transaction_id: "6161"
       dest_ip: 190.0.0.3
       dest_port: 30000
       event_type: bittorrent_dht
@@ -167,8 +167,8 @@ checks:
 - filter:
     count: 1
     match:
-      bittorrent_dht.response.id: mnopqrstuvwxyz123456
-      bittorrent_dht.transaction_id: aa
+      bittorrent_dht.response.id: "6d6e6f707172737475767778797a313233343536"
+      bittorrent_dht.transaction_id: "6161"
       dest_ip: 190.0.0.1
       dest_port: 20000
       event_type: bittorrent_dht
@@ -194,7 +194,7 @@ checks:
 - filter:
     count: 1
     match:
-      bittorrent_dht.request.id: abcdefghij0123456789
+      bittorrent_dht.request.id: "6162636465666768696a30313233343536373839"
       bittorrent_dht.request_type: ping
       bittorrent_dht.transaction_id: ''
       dest_ip: 190.0.0.3
@@ -209,7 +209,7 @@ checks:
     match:
       bittorrent_dht.error.msg: Malformed Packet
       bittorrent_dht.error.num: 203
-      bittorrent_dht.transaction_id: aa
+      bittorrent_dht.transaction_id: "6161"
       dest_ip: 190.0.0.1
       dest_port: 20000
       event_type: bittorrent_dht
@@ -220,9 +220,9 @@ checks:
 - filter:
     count: 1
     match:
-      bittorrent_dht.request.id: abcdefghij0123456789
+      bittorrent_dht.request.id: "6162636465666768696a30313233343536373839"
       bittorrent_dht.request_type: ping
-      bittorrent_dht.transaction_id: aa
+      bittorrent_dht.transaction_id: "6161"
       dest_ip: 190.0.0.2
       dest_port: 50000
       event_type: bittorrent_dht
@@ -233,8 +233,8 @@ checks:
 - filter:
     count: 1
     match:
-      bittorrent_dht.response.id: mnopqrstuvwxyz123456
-      bittorrent_dht.transaction_id: aa
+      bittorrent_dht.response.id: "6d6e6f707172737475767778797a313233343536"
+      bittorrent_dht.transaction_id: "6161"
       dest_ip: 190.0.0.1
       dest_port: 40000
       event_type: bittorrent_dht
