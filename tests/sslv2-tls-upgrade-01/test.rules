@@ -1,0 +1,1 @@
+alert tls any any -> any any (tls.cert_serial; content:"55"; sid:1;)

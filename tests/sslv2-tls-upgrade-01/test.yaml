@@ -1,0 +1,19 @@
+args:
+- -k none
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+        tls.subject: "C=US, ST=California, L=Sunnyvale, O=NetScreen Technologies, Inc., OU=Security Team, CN=sigdb.secteam.netscreen.com, Email=aturner@netscreen.com"
+        tls.issuerdn: "C=US, ST=California, L=Sunnyvale, O=OneSecure, Inc., OU=Fulfillment, CN=jumper.sv-staging.onesecure.com, Email=fulfillment@onesecure.com"
+        tls.serial: "55"
+        tls.fingerprint: "8c:90:bd:2a:b3:ae:e6:0b:d0:ea:b7:86:b0:1a:e4:b1:cc:57:ef:22"
+        tls.version: "TLSv1"
+        tls.notbefore: "2003-03-29T00:57:44"
+        tls.notafter: "2008-03-27T00:57:44"
