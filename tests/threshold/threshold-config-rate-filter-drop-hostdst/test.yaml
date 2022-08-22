@@ -1,5 +1,5 @@
 requires:
-  min-version: 7 
+  min-version: 7
 
 args:
 - --set threshold-file=${TEST_DIR}/threshold.config
@@ -16,3 +16,8 @@ checks:
       match:
         event_type: drop
         drop.reason: threshold detection_filter
+# due to the drops, we don't expect to see any http event
+  - filter:
+      count: 0
+      match:
+        event_type: http

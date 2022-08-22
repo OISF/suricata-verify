@@ -1,0 +1,22 @@
+args:
+- --simulate-ips
+- --set stream.reassembly.depth=0
+- --set stream.midstream-policy=drop-flow
+- -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        pcap_cnt: 2
+  - filter:
+      count: 53
+      match:
+        event_type: drop
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.action: drop
+
