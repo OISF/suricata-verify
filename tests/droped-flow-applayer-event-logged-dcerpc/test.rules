@@ -1,0 +1,1 @@
+drop dcerpc any any -> any any (msg:"dcerpc rule"; sid:1;)

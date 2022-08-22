@@ -1,0 +1,21 @@
+args:
+- --simulate-ips
+- --set stream.midstream=true
+- -k none
+
+checks:
+  - filter:
+      count: 0
+      match:
+        pcap_cnt: 2
+        event_type: http
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.action: drop
+

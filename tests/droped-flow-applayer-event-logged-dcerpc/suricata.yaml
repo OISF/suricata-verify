@@ -1,0 +1,14 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      types:
+        - alert:
+        - flow
+        - dcerpc
+        - smb
+        - drop:
+            alerts: yes
+            flows: all

@@ -1,0 +1,1 @@
+drop smb any any -> any any (msg:"smb rule"; sid:2;)
