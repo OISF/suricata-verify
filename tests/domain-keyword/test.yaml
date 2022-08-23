@@ -1,0 +1,8 @@
+requires:
+  min-version: 8.0.0
+
+checks:
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 1
