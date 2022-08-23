@@ -1,0 +1,2 @@
+alert dns any any -> any any (msg:"dns suricata"; dns.query; domain; content:"suricata.io"; startswith; endswith; sid:1; rev:1;)
+alert dns any any -> any any (msg:"dns bbc"; dns.query; domain; content:"bbc.co.uk"; startswith; endswith; sid:2; rev:1;)
