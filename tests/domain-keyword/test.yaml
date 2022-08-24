@@ -6,3 +6,15 @@ checks:
       count: 1
       match:
         alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 3
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 4
