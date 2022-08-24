@@ -1,0 +1,35 @@
+args:
+- -k none
+
+requires:
+   min-version: 7.0.0
+
+checks:
+- filter:
+    count: 4
+    match:
+      alert.signature: dsize less than value
+- filter:
+    count: 5
+    match:
+      alert.signature: dsize less than or equal value
+- filter:
+    count: 1
+    match:
+      alert.signature: dsize exact size
+- filter:
+    count: 1
+    match:
+      alert.signature: dsize greater than value
+- filter:
+    count: 1
+    match:
+      alert.signature: dsize greater than or equal value
+- filter:
+    count: 1
+    match:
+      alert.signature: dsize range value
+- filter:
+    count: 1
+    match:
+      alert.signature: dsize not equal value
