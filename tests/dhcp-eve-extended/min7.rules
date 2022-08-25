@@ -1,1 +1,2 @@
 alert dhcp any any -> any any (msg:"small DHCP lease time (<2hours)"; dhcp.leasetime:<7200; sid:1; rev:1;)
+alert dhcp any any -> any any (msg:"big DHCP rebinding time (>3000seconds)"; dhcp.rebinding_time:>3000; sid:2; rev:1;)
