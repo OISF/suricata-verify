@@ -1,0 +1,14 @@
+requires:
+  min-version: 7
+
+setup:
+  # Create a log directory without write permission
+  - script: |
+      rm -rf ./noperms
+      mkdir -p ./noperms
+      chmod 555 ./noperms
+
+args:
+    - --set outputs.1.eve-log.filename=noperms/eve.json --set outputs.1.eve-log.threaded=true
+
+exit-code: 0
