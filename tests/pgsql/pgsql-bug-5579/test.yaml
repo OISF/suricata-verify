@@ -1,0 +1,56 @@
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      dest_ip: 127.0.0.1
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 8
+      pgsql.request.protocol_version: '3.0'
+      pgsql.request.startup_parameters.optional_parameters[0].datestyle: ISO, MDY
+      pgsql.request.startup_parameters.optional_parameters[1].extra_float_digits: '2'
+      pgsql.request.startup_parameters.optional_parameters[2].client_encoding: UTF8
+      pgsql.request.startup_parameters.optional_parameters[3].database: ctfbase
+      pgsql.request.startup_parameters.user: ctfpost
+      pgsql.response.message: authentication_ok
+      pgsql.response.parameter_status[0].application_name: ''
+      pgsql.response.parameter_status[10].session_authorization: ctfpost
+      pgsql.response.parameter_status[11].standard_conforming_strings: 'on'
+      pgsql.response.parameter_status[12].time_zone: Europe/Paris
+      pgsql.response.parameter_status[1].client_encoding: UTF8
+      pgsql.response.parameter_status[2].date_style: ISO, MDY
+      pgsql.response.parameter_status[3].default_transaction_read_only: 'off'
+      pgsql.response.parameter_status[4].in_hot_standby: 'off'
+      pgsql.response.parameter_status[5].integer_datetimes: 'on'
+      pgsql.response.parameter_status[6].interval_style: postgres
+      pgsql.response.parameter_status[7].is_superuser: 'off'
+      pgsql.response.parameter_status[8].server_encoding: UTF8
+      pgsql.response.parameter_status[9].server_version: '14.5'
+      pgsql.response.process_id: 2957
+      pgsql.response.secret_key: 3478107855
+      pgsql.tx_id: 1
+      pkt_src: wire/pcap
+      proto: TCP
+      src_ip: 127.0.0.1
+      src_port: 55824
+- filter:
+    count: 1
+    match:
+      dest_ip: 127.0.0.1
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 12
+      pgsql.request.simple_query: SELECT password FROM accounts WHERE username = 'test'
+        OR 1 = '1' UNION SELECT username FROM accounts
+      pgsql.response.command_completed: SELECT 4
+      pgsql.response.data_rows: 4
+      pgsql.response.data_size: 73
+      pgsql.response.field_count: 1
+      pgsql.tx_id: 2
+      pkt_src: wire/pcap
+      proto: TCP
+      src_ip: 127.0.0.1
+      src_port: 55824
