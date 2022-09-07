@@ -27,9 +27,9 @@ checks:
       event_type: pgsql
       pcap_cnt: 9
       pgsql.request.protocol_version: '3.0'
-      pgsql.request.startup_parameters.database: Test
-      pgsql.request.startup_parameters.optional_parameters[0].application_name: psql
-      pgsql.request.startup_parameters.optional_parameters[1].client_encoding: UTF8
+      pgsql.request.startup_parameters.optional_parameters[0].database: Test
+      pgsql.request.startup_parameters.optional_parameters[1].application_name: psql
+      pgsql.request.startup_parameters.optional_parameters[2].client_encoding: UTF8
       pgsql.request.startup_parameters.user: ju-Test
       pgsql.response.message: authentication_sasl
       pgsql.tx_id: 2

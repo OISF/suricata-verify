@@ -70,9 +70,9 @@ checks:
       src_port: 60359
       event_type: pgsql
       pgsql.request.protocol_version: '3.0'
-      pgsql.request.startup_parameters.database: replication
-      pgsql.request.startup_parameters.optional_parameters[0].replication: 'true'
-      pgsql.request.startup_parameters.optional_parameters[1].application_name: walreceiver
+      pgsql.request.startup_parameters.optional_parameters[0].database: replication
+      pgsql.request.startup_parameters.optional_parameters[1].replication: 'true'
+      pgsql.request.startup_parameters.optional_parameters[2].application_name: walreceiver
       pgsql.request.startup_parameters.user: rep
       pgsql.response.code: '28000'
       pgsql.response.file: auth.c
