@@ -1,1 +1,3 @@
 alert sip any any -> any any (flow:to_server; sip.method; content:"REGISTER"; sid:1;)
+
+alert udp any any -> any any (msg:"Flow longer than one hour"; flow.age:>100; flowbits: isnotset, onehourflow; flowbits: set, onehourflow; sid:2;)
