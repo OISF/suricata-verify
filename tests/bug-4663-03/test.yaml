@@ -28,3 +28,8 @@ checks:
       match:
         event_type: flow
         flow.action: pass
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3

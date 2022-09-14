@@ -1,2 +1,4 @@
 pass tcp any any -> any 22 (sid:2; gid:10000003; msg:"PASS SSH";)
 drop tcp any any -> any any (noalert; sid:1; rev:1; msg:"DROP all TCP";)
+
+alert icmp any any -> any any (msg:"Flow longer than 10 seconds"; flow.age:>10; flowbits: isnotset, longflow; flowbits: set, longflow; sid:3;)
