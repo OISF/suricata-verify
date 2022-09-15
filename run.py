@@ -137,12 +137,15 @@ def get_suricata_version():
 
 def pipe_reader(fileobj, output=None, verbose=False):
     for line in fileobj:
-        line = line.decode()
         if output:
             output.write(line)
             output.flush()
         if verbose:
-            print(line.strip())
+            try:
+                line = line.decode().strip()
+            except:
+                pass
+            print(line)
 
 
 def handle_exceptions(func):
@@ -650,8 +653,8 @@ class TestRunner:
             os.makedirs(self.output)
             self.setup()
 
-            stdout = open(os.path.join(self.output, "stdout"), "w")
-            stderr = open(os.path.join(self.output, "stderr"), "w")
+            stdout = open(os.path.join(self.output, "stdout"), "wb")
+            stderr = open(os.path.join(self.output, "stderr"), "wb")
 
             if shell:
                 template = string.Template(args)
