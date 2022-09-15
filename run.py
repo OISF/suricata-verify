@@ -51,6 +51,8 @@ LINUX = sys.platform.startswith("linux")
 suricata_bin = "src\suricata.exe" if WIN32 else "./src/suricata"
 suricata_yaml = "suricata.yaml" if WIN32 else "./suricata.yaml"
 
+PROC_TIMEOUT=60
+
 if LINUX:
     manager = mp.Manager()
     lock = mp.Lock()
@@ -674,9 +676,9 @@ class TestRunner:
             self.start_reader(p.stderr, stderr)
 
             for r in self.readers:
-                r.join()
+                r.join(timeout=PROC_TIMEOUT)
 
-            r = p.wait()
+            r = p.wait(timeout=PROC_TIMEOUT)
 
             if r != expected_exit_code:
                 raise TestError("got exit code %d, expected %d" % (
