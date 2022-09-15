@@ -51,6 +51,8 @@ LINUX = sys.platform.startswith("linux")
 suricata_bin = "src\suricata.exe" if WIN32 else "./src/suricata"
 suricata_yaml = "suricata.yaml" if WIN32 else "./suricata.yaml"
 
+PROC_TIMEOUT=300
+
 if LINUX:
     manager = mp.Manager()
     lock = mp.Lock()
@@ -135,14 +137,19 @@ def get_suricata_version():
     return parse_suricata_version(output)
 
 
-def pipe_reader(fileobj, output=None, verbose=False):
+def pipe_reader(fileobj, output=None, verbose=False, io_errors=[]):
     for line in fileobj:
-        line = line.decode()
-        if output:
-            output.write(line)
-            output.flush()
-        if verbose:
-            print(line.strip())
+        try:
+            line = line.decode()
+            if output:
+                output.write(line)
+                output.flush()
+            if verbose:
+                print(line.strip())
+        except:
+            print("Invalid IO line:")
+            print(line)
+            io_errors.append("Invalid line")
 
 
 def handle_exceptions(func):
@@ -503,6 +510,7 @@ class TestRunner:
         self.directory = directory
         self.suricata_config = suricata_config
         self.verbose = verbose
+        self.io_errors = []
         self.force = force
         self.output = outdir
         self.quiet = quiet
@@ -670,13 +678,27 @@ class TestRunner:
                 args, shell=shell, cwd=self.directory, env=env,
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
+            # used to get a return value from the threads
+            self.io_errors=[]
             self.start_reader(p.stdout, stdout)
             self.start_reader(p.stderr, stderr)
-
             for r in self.readers:
-                r.join()
+                try:
+                    r.join(timeout=PROC_TIMEOUT)
+                except:
+                    print("stdout/stderr reader timed out, terminating")
+                    r.terminate()
 
-            r = p.wait()
+            try:
+                r = p.wait(timeout=PROC_TIMEOUT)
+            except:
+                print("Suricata timed out, terminating")
+                p.terminate()
+                raise TestError("timed out when expected exit code %d" % (
+                    expected_exit_code));
+
+            if len(self.io_errors) > 0:
+                raise TestError("got io errors %s" % self.io_errors);
 
             if r != expected_exit_code:
                 raise TestError("got exit code %d, expected %d" % (
@@ -843,7 +865,7 @@ class TestRunner:
 
     def start_reader(self, input, output):
         t = threading.Thread(
-            target=pipe_reader, args=(input, output, self.verbose))
+            target=pipe_reader, args=(input, output, self.verbose, self.io_errors))
         t.start()
         self.readers.append(t)
 
