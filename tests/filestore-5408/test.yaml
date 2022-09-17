@@ -5,6 +5,6 @@ requires:
 
 checks:
   - filter:
-      count: 5
+      count: 8
       match:
         event_type: fileinfo
