@@ -5,6 +5,12 @@ requires:
 
 checks:
   - filter:
+      lt-version: 7.0.0
       count: 5
+      match:
+        event_type: fileinfo
+  - filter:
+      min-version: 7.0.0
+      count: 8
       match:
         event_type: fileinfo
