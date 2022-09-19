@@ -2,6 +2,7 @@ requires:
     min-version: 5
     features:
       - UNITTESTS
+      - DISABLED
 
 exit-code: 0
 
