@@ -1,0 +1,23 @@
+requires:
+  min-version: 6
+  features:
+    - HAVE_NSS
+
+checks:
+  - filter:
+      count: 3
+      match:
+        event_type: fileinfo
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.gaps: true
+        fileinfo.size: 733
+        fileinfo.state: TRUNCATED
+        fileinfo.sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.file_store.fs_errors: 0
