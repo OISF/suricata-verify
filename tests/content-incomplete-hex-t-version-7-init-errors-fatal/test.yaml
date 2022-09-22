@@ -1,0 +1,7 @@
+requires:
+  min-version: 7
+
+args:
+  - --init-errors-fatal
+
+exit-code: 1
