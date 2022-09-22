@@ -1,0 +1,6 @@
+args:
+  - -T --strict-rule-keywords=content
+
+pcap: false
+
+exit-code: 1
