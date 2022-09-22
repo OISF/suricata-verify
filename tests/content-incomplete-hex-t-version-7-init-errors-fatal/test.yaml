@@ -1,0 +1,9 @@
+requires:
+  min-version: 7
+
+args:
+  - --init-errors-fatal
+
+pcap: /dev/null
+
+exit-code: 1
