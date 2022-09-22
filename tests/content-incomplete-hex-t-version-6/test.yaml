@@ -1,0 +1,10 @@
+requires:
+  min-version: 6
+  lt-version: 7
+
+args:
+  - -T
+
+pcap: false
+
+exit-code: 0
