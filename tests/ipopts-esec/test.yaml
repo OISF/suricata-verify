@@ -1,0 +1,21 @@
+requires:
+  script:
+    - grep IPV4_OPT_ESEC src/decode-ipv4.h > /dev/null
+
+args:
+  - --set stream.midstream=true -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 42
+        alert.signature: "ESEC option set"
+
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_ip: "1.2.3.4"
+        dest_ip: "4.5.6.7"
