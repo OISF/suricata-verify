@@ -137,7 +137,7 @@ def get_suricata_version():
     return parse_suricata_version(output)
 
 
-def pipe_reader(fileobj, output=None, verbose=False):
+def pipe_reader(fileobj, output=None, verbose=False, utf8_errors=[]):
     for line in fileobj:
         if output:
             output.write(line)
@@ -146,7 +146,7 @@ def pipe_reader(fileobj, output=None, verbose=False):
             try:
                 line = line.decode().strip()
             except:
-                pass
+                self.utf8_errors.append("Invalid line")
             print(line)
 
 
@@ -508,6 +508,7 @@ class TestRunner:
         self.directory = directory
         self.suricata_config = suricata_config
         self.verbose = verbose
+        self.utf8_errors = []
         self.force = force
         self.output = outdir
         self.quiet = quiet
@@ -675,6 +676,8 @@ class TestRunner:
                 args, shell=shell, cwd=self.directory, env=env,
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
+            # used to get a return value from the threads
+            self.utf8_errors=[]
             self.start_reader(p.stdout, stdout)
             self.start_reader(p.stderr, stderr)
             for r in self.readers:
@@ -691,6 +694,9 @@ class TestRunner:
                 p.terminate()
                 raise TestError("timed out when expected exit code %d" % (
                     expected_exit_code));
+
+            if len(self.utf8_errors) > 0:
+                 raise TestError("got utf8 decode errors %s" % self.utf8_errors);
 
             if r != expected_exit_code:
                 raise TestError("got exit code %d, expected %d" % (
@@ -857,7 +863,7 @@ class TestRunner:
 
     def start_reader(self, input, output):
         t = threading.Thread(
-            target=pipe_reader, args=(input, output, self.verbose))
+            target=pipe_reader, args=(input, output, self.verbose, self.utf8_errors))
         t.start()
         self.readers.append(t)
 
