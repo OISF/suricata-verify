@@ -16,12 +16,11 @@ checks:
       dest_ip: 208.69.36.231
       dest_port: 80
       event_type: alert
-      flow:
-        bytes_toclient: 1588
-        bytes_toserver: 379
-        pkts_toclient: 2
-        pkts_toserver: 4
-        start: 2009-10-16T16:44:16.083524+0000
+      flow.bytes_toclient: 1588
+      flow.bytes_toserver: 379
+      flow.pkts_toclient: 2
+      flow.pkts_toserver: 4
+      flow.start: 2009-10-16T16:44:16.083524+0000
       http:
         hostname: www.google.com
         http_content_type: text/html
@@ -43,17 +42,16 @@ checks:
       dest_ip: 208.69.36.231
       dest_port: 80
       event_type: flow
-      flow:
-        age: 0
-        alerted: true
-        bytes_toclient: 5453
-        bytes_toserver: 607
-        end: 2009-10-16T16:44:16.185868+0000
-        pkts_toclient: 5
-        pkts_toserver: 8
-        reason: shutdown
-        start: 2009-10-16T16:44:16.083524+0000
-        state: closed
+      flow.age: 0
+      flow.alerted: true
+      flow.bytes_toclient: 5453
+      flow.bytes_toserver: 607
+      flow.end: 2009-10-16T16:44:16.185868+0000
+      flow.pkts_toclient: 5
+      flow.pkts_toserver: 8
+      flow.reason: shutdown
+      flow.start: 2009-10-16T16:44:16.083524+0000
+      flow.state: closed
       proto: TCP
       src_ip: 192.168.2.3
       src_port: 37010
