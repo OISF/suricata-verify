@@ -1,0 +1,8 @@
+requires:
+  lt-version: 7
+
+args:
+  - --init-errors-fatal
+  - --strict-rule-keywords=all
+
+exit-code: 1

@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"BAD rule"; flowbits:isset,abc,noalert; sid:1;)
