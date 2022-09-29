@@ -15,4 +15,4 @@ checks:
       count: 1
       match:
         event_type: alert
-        alert.signature_id: 2230007
+        alert.signature_id: 2230004
