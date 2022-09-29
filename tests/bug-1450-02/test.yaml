@@ -11,7 +11,14 @@ checks:
         event_type: alert
         alert.signature_id: 2230003
   - filter:
+      lt-version: 7
       count: 1
       match:
         event_type: alert
         alert.signature_id: 2230007
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2230004
