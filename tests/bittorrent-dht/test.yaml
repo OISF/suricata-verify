@@ -1,0 +1,297 @@
+requires:
+  min-version: 7
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      bittorrent_dht.request.id: 6162636465666768696a30313233343536373839
+      bittorrent_dht.request_type: ping
+      bittorrent_dht.transaction_id: '6161'
+      dest_ip: 190.0.0.3
+      dest_port: 30000
+      event_type: bittorrent_dht
+      pcap_cnt: 3
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 190.0.0.1
+      src_port: 20000
+- filter:
+    count: 1
+    match:
+      bittorrent_dht.request.id: 6162636465666768696a30313233343536373839
+      bittorrent_dht.request_type: ping
+      bittorrent_dht.transaction_id: '6161'
+      dest_ip: 190.0.0.2
+      dest_port: 50000
+      event_type: bittorrent_dht
+      pcap_cnt: 1
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 190.0.0.1
+      src_port: 40000
+- filter:
+    count: 1
+    match:
+      bittorrent_dht.error.msg: A Generic Error Ocurred
+      bittorrent_dht.error.num: 201
+      bittorrent_dht.transaction_id: '6161'
+      dest_ip: 190.0.0.1
+      dest_port: 20000
+      event_type: bittorrent_dht
+      pcap_cnt: 4
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 190.0.0.3
+      src_port: 30000
+- filter:
+    count: 1
+    match:
+      bittorrent_dht.response.id: 6d6e6f707172737475767778797a313233343536
+      bittorrent_dht.transaction_id: '6161'
+      dest_ip: 190.0.0.1
+      dest_port: 40000
+      event_type: bittorrent_dht
+      pcap_cnt: 2
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 190.0.0.2
+      src_port: 50000
+- filter:
+    count: 1
+    match:
+      bittorrent_dht.client_version: '55543031'
+      bittorrent_dht.request.id: 6162636465666768696a30313233343536373839
+      bittorrent_dht.request.target: 6d6e6f707172737475767778797a313233343536
+      bittorrent_dht.request_type: find_node
+      bittorrent_dht.transaction_id: '6161'
+      dest_ip: 190.0.0.3
+      dest_port: 30000
+      event_type: bittorrent_dht
+      pcap_cnt: 5
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 190.0.0.1
+      src_port: 20000
+- filter:
+    count: 1
+    match:
+      bittorrent_dht.client_version: '55543031'
+      bittorrent_dht.response.id: 303132333435363738396162636465666768696a
+      bittorrent_dht.transaction_id: '6161'
+      dest_ip: 190.0.0.1
+      dest_port: 20000
+      event_type: bittorrent_dht
+      pcap_cnt: 6
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 190.0.0.3
+      src_port: 30000
+- filter:
+    count: 1
+    match:
+      bittorrent_dht.client_version: '55543032'
+      bittorrent_dht.request.id: 6162636465666768696a30313233343536373839
+      bittorrent_dht.request.info_hash: 6d6e6f707172737475767778797a313233343536
+      bittorrent_dht.request_type: get_peers
+      bittorrent_dht.transaction_id: '6161'
+      dest_ip: 190.0.0.3
+      dest_port: 30000
+      event_type: bittorrent_dht
+      pcap_cnt: 7
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 190.0.0.1
+      src_port: 20000
+- filter:
+    count: 1
+    match:
+      bittorrent_dht.client_version: '55543132'
+      bittorrent_dht.response.id: 6162636465666768696a30313233343536373839
+      bittorrent_dht.response.token: 616f6575736e7468
+      bittorrent_dht.response.values[0].ip: 97.120.106.101
+      bittorrent_dht.response.values[0].port: 11893
+      bittorrent_dht.response.values[1].ip: 105.100.104.116
+      bittorrent_dht.response.values[1].port: 28269
+      bittorrent_dht.transaction_id: '6161'
+      dest_ip: 190.0.0.1
+      dest_port: 20000
+      event_type: bittorrent_dht
+      pcap_cnt: 8
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 190.0.0.3
+      src_port: 30000
+- filter:
+    count: 1
+    match:
+      bittorrent_dht.request.id: 6162636465666768696a30313233343536373839
+      bittorrent_dht.request.info_hash: 6d6e6f707172737475767778797a313233343536
+      bittorrent_dht.request_type: get_peers
+      bittorrent_dht.transaction_id: '6161'
+      dest_ip: 190.0.0.3
+      dest_port: 30000
+      event_type: bittorrent_dht
+      pcap_cnt: 9
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 190.0.0.1
+      src_port: 20000
+- filter:
+    count: 1
+    match:
+      bittorrent_dht.response.id: 6162636465666768696a30313233343536373839
+      bittorrent_dht.response.token: 616f6575736e7468
+      bittorrent_dht.transaction_id: '6161'
+      dest_ip: 190.0.0.1
+      dest_port: 20000
+      event_type: bittorrent_dht
+      pcap_cnt: 10
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 190.0.0.3
+      src_port: 30000
+- filter:
+    count: 1
+    match:
+      bittorrent_dht.request.id: 6162636465666768696a30313233343536373839
+      bittorrent_dht.request.info_hash: 6d6e6f707172737475767778797a313233343536
+      bittorrent_dht.request.port: 6881
+      bittorrent_dht.request.token: 616f6575736e7468
+      bittorrent_dht.request_type: announce_peer
+      bittorrent_dht.transaction_id: '6161'
+      dest_ip: 190.0.0.3
+      dest_port: 30000
+      event_type: bittorrent_dht
+      pcap_cnt: 11
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 190.0.0.1
+      src_port: 20000
+- filter:
+    count: 1
+    match:
+      bittorrent_dht.response.id: 6d6e6f707172737475767778797a313233343536
+      bittorrent_dht.transaction_id: '6161'
+      dest_ip: 190.0.0.1
+      dest_port: 20000
+      event_type: bittorrent_dht
+      pcap_cnt: 12
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 190.0.0.3
+      src_port: 30000
+- filter:
+    count: 1
+    match:
+      bittorrent_dht.request.id: 6162636465666768696a30313233343536373839
+      bittorrent_dht.request.implied_port: 1
+      bittorrent_dht.request.info_hash: 6d6e6f707172737475767778797a313233343536
+      bittorrent_dht.request.port: 6881
+      bittorrent_dht.request.token: 616f6575736e7468
+      bittorrent_dht.request_type: announce_peer
+      bittorrent_dht.transaction_id: '6161'
+      dest_ip: 190.0.0.3
+      dest_port: 30000
+      event_type: bittorrent_dht
+      pcap_cnt: 13
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 190.0.0.1
+      src_port: 20000
+- filter:
+    count: 1
+    match:
+      bittorrent_dht.response.id: 6d6e6f707172737475767778797a313233343536
+      bittorrent_dht.transaction_id: '6161'
+      dest_ip: 190.0.0.1
+      dest_port: 20000
+      event_type: bittorrent_dht
+      pcap_cnt: 14
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 190.0.0.3
+      src_port: 30000
+- filter:
+    count: 1
+    match:
+      anomaly.app_proto: bittorrent-dht
+      anomaly.event: malformed_packet
+      anomaly.layer: proto_parser
+      anomaly.type: applayer
+      dest_ip: 190.0.0.3
+      dest_port: 30000
+      event_type: anomaly
+      pcap_cnt: 15
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 190.0.0.1
+      src_port: 20000
+      tx_id: 12
+- filter:
+    count: 1
+    match:
+      bittorrent_dht.request.id: 6162636465666768696a30313233343536373839
+      bittorrent_dht.request_type: ping
+      bittorrent_dht.transaction_id: ''
+      dest_ip: 190.0.0.3
+      dest_port: 30000
+      event_type: bittorrent_dht
+      pcap_cnt: 15
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 190.0.0.1
+      src_port: 20000
+- filter:
+    count: 1
+    match:
+      bittorrent_dht.error.msg: Malformed Packet
+      bittorrent_dht.error.num: 203
+      bittorrent_dht.transaction_id: '6161'
+      dest_ip: 190.0.0.1
+      dest_port: 20000
+      event_type: bittorrent_dht
+      pcap_cnt: 16
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 190.0.0.3
+      src_port: 30000
+- filter:
+    count: 1
+    match:
+      app_proto: bittorrent-dht
+      dest_ip: 190.0.0.3
+      dest_port: 30000
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 738
+      flow.bytes_toserver: 975
+      flow.pkts_toclient: 7
+      flow.pkts_toserver: 7
+      flow.reason: shutdown
+      flow.state: established
+      proto: UDP
+      src_ip: 190.0.0.1
+      src_port: 20000
+- filter:
+    count: 1
+    match:
+      app_proto: bittorrent-dht
+      dest_ip: 190.0.0.2
+      dest_port: 50000
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 89
+      flow.bytes_toserver: 98
+      flow.pkts_toclient: 1
+      flow.pkts_toserver: 1
+      flow.reason: shutdown
+      flow.state: established
+      proto: UDP
+      src_ip: 190.0.0.1
+      src_port: 40000
