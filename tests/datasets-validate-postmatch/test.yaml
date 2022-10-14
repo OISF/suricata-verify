@@ -1,0 +1,19 @@
+require:
+  features:
+    - HAVE_LIBJANSSON
+  files:
+    - src/datasets.c
+
+args:
+  - -k none
+
+checks:
+  # no alert should trigger
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+  # no data should be written to the datasets
+  - shell:
+      args: cat http.intel http_secondary.intel | wc -l | xargs
+      expect: 0
