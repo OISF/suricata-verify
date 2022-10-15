@@ -1,0 +1,21 @@
+%YAML 1.1
+---
+
+vars:
+  # more specific is better for alert accuracy and performance
+  address-groups:
+    SUPPRESS: "[10.0.0.0/8,20.0.0.0/16,145.0.0.0/8]"
+
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert
+        - drop:
+            flows: all
+            alerts: true
+        - http
+        - anomaly
