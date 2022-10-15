@@ -1,0 +1,1 @@
+alert http any any -> any any (sid: 1000001;)

@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"toto"; sid: 1000001;)

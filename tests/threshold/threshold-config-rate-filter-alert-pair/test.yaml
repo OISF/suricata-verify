@@ -1,0 +1,21 @@
+requires:
+  min-version: 7 
+
+args:
+- --set threshold-file=${TEST_DIR}/threshold.config
+- --simulate-ips
+
+checks:
+  - filter:
+      count: 19
+      match:
+        event_type: alert
+        alert.signature_id: 1000001
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+  - filter:
+      count: 1
+      match:
+        event_type: http
