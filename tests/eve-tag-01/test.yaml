@@ -1,0 +1,21 @@
+args:
+- --runmode=single
+- -k none
+
+pcap: ../smtp-file-data-02/input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+  - filter:
+      count: 58
+      match:
+        event_type: packet
+  - filter:
+      count: 1
+      match:
+        event_type: packet
+        src_ip: 10.10.1.1
+        dest_ip: 10.10.1.4

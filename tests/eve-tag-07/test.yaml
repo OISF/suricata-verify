@@ -1,0 +1,15 @@
+args:
+- --runmode=single
+- -k none
+
+pcap: ../ssh-banner-only/input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+  - filter:
+      count: 8
+      match:
+        event_type: packet

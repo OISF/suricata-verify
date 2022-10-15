@@ -1,0 +1,1 @@
+alert tcp any any -> any any (flags:S; tag:host,100,packets,dst; sid:1;)

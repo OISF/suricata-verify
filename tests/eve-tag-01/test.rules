@@ -1,0 +1,1 @@
+alert dns any any -> any any (dns.query; content:"mail"; tag:host,100,packets,src; tag:session; sid:1;)
