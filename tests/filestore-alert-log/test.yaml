@@ -1,0 +1,17 @@
+requires:
+  features:
+    - HAVE_NSS
+    - MAGIC
+  files:
+    - src/output-filestore.c
+
+checks:
+
+  - shell:
+        args: test -e filestore/e0/e092858d5bd66ab33085a966ee4ac0bf0edf6eab8d8b1e66432ee600e904bb4f
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        files[0].stored: true
