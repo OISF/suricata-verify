@@ -147,10 +147,12 @@ def write_to_file(data):
             fp.write("requires:\n")
         if args["min_version"]:
             fp.write("   min-version: %s\n\n" % args["min_version"])
+        if args["add_version"]:
+            fp.write("   version: %s\n\n" % args["add_version"])
         fp.write(data)
 
 def check_requires():
-    features = ["min_version"]
+    features = ["min_version", "add_version"]
     for item in features:
         if args[item]:
             return True
@@ -355,6 +357,8 @@ def parse_args():
                         help="Stricly validate checksum")
     parser.add_argument("--min-version", default=None, metavar="<min-version>",
                         help="Adds a global minimum required version")
+    parser.add_argument("--add-version", default=None, metavar="<add-version>",
+                        help="Adds a global suricata version")
 
     # add arg to allow stdout only
     args = parser.parse_args()
