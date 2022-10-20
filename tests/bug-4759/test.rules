@@ -1,0 +1,2 @@
+alert http any any -> any any (msg:"TCP"; sid:1; rev:1;)
+alert dns any any -> any any (msg:".com domain"; dns.query; content:".com"; sid:2; rev:1;)
