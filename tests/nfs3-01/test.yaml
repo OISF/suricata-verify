@@ -310,8 +310,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: ''
@@ -483,8 +483,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: ''
@@ -656,8 +656,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: ''
@@ -878,8 +878,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: a
@@ -1100,8 +1100,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: a
@@ -1276,8 +1276,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: a
@@ -1649,8 +1649,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: ''
@@ -1871,8 +1871,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: am
@@ -2093,8 +2093,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: am
@@ -2315,8 +2315,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: a
@@ -2538,8 +2538,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: am
@@ -2732,8 +2732,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: a
@@ -2957,8 +2957,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: b
@@ -3180,8 +3180,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: bln
@@ -3402,8 +3402,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: bln
@@ -3587,8 +3587,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: ''
@@ -3809,8 +3809,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: blns
@@ -4031,8 +4031,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: blns
@@ -4207,8 +4207,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: ''
@@ -4429,8 +4429,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: .
@@ -4656,8 +4656,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: .
@@ -4980,8 +4980,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: ''
@@ -5202,8 +5202,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: am
@@ -5425,8 +5425,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: bln
@@ -5599,8 +5599,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: ''
@@ -5821,8 +5821,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: d
@@ -5997,8 +5997,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: d
@@ -6220,8 +6220,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: h
@@ -6396,8 +6396,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: h
@@ -6950,8 +6950,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: h
@@ -7327,8 +7327,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: bln
@@ -7666,8 +7666,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: true
       nfs.filename: bln
@@ -7935,8 +7935,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: ''
@@ -8259,8 +8259,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: ''
@@ -8435,8 +8435,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: h
@@ -8600,8 +8600,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: d
@@ -8823,8 +8823,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: am
@@ -9054,8 +9054,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: am
@@ -9231,8 +9231,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: am
@@ -9454,8 +9454,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: bln
@@ -9661,8 +9661,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: bln
@@ -9838,8 +9838,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: bln
@@ -10061,8 +10061,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: blns
@@ -10284,8 +10284,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: blns
@@ -10458,8 +10458,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: ''
@@ -10680,8 +10680,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: b
@@ -10857,8 +10857,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: blns
@@ -11080,8 +11080,8 @@ checks:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_mac: 00:c0:95:f8:4d:d3
-      ether.src_mac: 00:c0:95:e0:19:be
+      ether.src_mac: 00:c0:95:f8:4d:d3
+      ether.dest_mac: 00:c0:95:e0:19:be
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: am
