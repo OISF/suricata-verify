@@ -144,7 +144,12 @@ def write_to_file(data):
         if check_requires():
             fp.write("requires:\n")
         if args["min_version"]:
-            fp.write("   min-version: %s\n\n" % args["min_version"])
+            fp.write("   min-version: %s\n" % args["min_version"])
+        if args["features"]:
+            feature_list = args["features"].split(",")
+            fp.write("   features:\n")
+            for item in feature_list:
+                fp.write("     - %s\n" % item)
         if args["add_version"]:
             fp.write("   version: %s\n\n" % args["add_version"])
         suricata_args = []
@@ -159,7 +164,7 @@ def write_to_file(data):
         fp.write(data)
 
 def check_requires():
-    features = ["min_version", "add_version"]
+    features = ["min_version", "add_version","features"]
     for item in features:
         if args[item]:
             return True
@@ -372,7 +377,8 @@ def parse_args():
                         help="Adds a global suricata version")
     parser.add_argument("--cfg", metavar="<path-to-suricata.yaml>",
                         help="Adds a suricata.yaml to the test")
-
+    parser.add_argument("--features", default=None, metavar="<features>",
+                        help="Adds specified features")
     # add arg to allow stdout only
     args = parser.parse_args()
 
