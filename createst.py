@@ -146,11 +146,17 @@ def write_to_file(data):
         if check_requires():
             fp.write("requires:\n")
         if args["min_version"]:
-            fp.write("   min-version: %s\n\n" % args["min_version"])
+            fp.write("   min-version: %s\n" % args["min_version"])
+        if args["features"]:
+            feature_list = args["features"].split(",")
+            fp.write("   features:\n")
+            for item in feature_list:
+                fp.write("     - %s\n" % item)
+            fp.write("\n")
         fp.write(data)
 
 def check_requires():
-    features = ["min_version"]
+    features = ["min_version","features"]
     for item in features:
         if args[item]:
             return True
@@ -355,7 +361,8 @@ def parse_args():
                         help="Stricly validate checksum")
     parser.add_argument("--min-version", default=None, metavar="<min-version>",
                         help="Adds a global minimum required version")
-
+    parser.add_argument("--features", default=None, metavar="<features>",
+                        help="Adds specified features")
     # add arg to allow stdout only
     args = parser.parse_args()
 
