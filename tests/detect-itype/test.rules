@@ -1,0 +1,5 @@
+alert icmp any any -> any any (itype:10; sid:1;)
+alert icmp any any -> any any ((itype:<15; sid:2;)
+alert icmp any any -> any any (itype:>20; sid:3;)
+alert icmp any any -> any any (itype:8<>20; sid:4;)
+
