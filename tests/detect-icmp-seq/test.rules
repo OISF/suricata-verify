@@ -1,0 +1,2 @@
+alert icmp any any -> any any (icmp_seq:2216; sid:1;)
+alert icmp any any -> any any (icmp_seq:5000; sid:2;)
