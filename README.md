@@ -159,7 +159,7 @@ This needs to be run from a valid Suricata source directory.
 usage: createst.py [-h] [--output-path <output-path>] [--eventtype-only]
                    [--allow-events [ALLOW_EVENTS]] [--rules <rules-file>]
                    [--strictcsums] [--min-version <min-version>]
-                   [--midstream]
+                   [--midstream] [--exclude-fields [EXCLUDE_FIELDS]]
                    <test-name> <pcap-file>
 
 Create tests with a given PCAP. Execute the script from a valid Suricata source
@@ -188,6 +188,9 @@ optional arguments:
   --min-version <min-version>
                         Adds a global minimum required version
   --midstream           Allow midstream session pickups
+  --exclude-fields [EXCLUDE_FIELDS]
+                        Exclude specified fields from filter block
+
 ```
 
 ### Examples
