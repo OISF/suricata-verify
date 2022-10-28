@@ -157,7 +157,7 @@ needs to be run from a valid Suricata source directory.
 ### Usage
 ```
 usage: createst.py [-h] [--output-path <output-path>] [--eventtype-only]
-                   [--allow-events [ALLOW_EVENTS]]
+                   [--allow-events [ALLOW_EVENTS]] [--exclude-fields [EXCLUDE_FIELDS]]
                    <test-name> <pcap-file>
 
 Create tests with a given PCAP. Execute the script from a valid Suricata source
@@ -175,4 +175,7 @@ optional arguments:
   --eventtype-only      Create filter blocks based on event types only
   --allow-events [ALLOW_EVENTS]
                         Create filter blocks for the specified events
+  --exclude-fields [EXCLUDE_FIELDS]
+                        Exclude specified fields from filter block
+
 ```
