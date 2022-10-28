@@ -1,2 +1,3 @@
 alert quic any any -> any any (msg:"QUIC SNI"; quic.sni; content:"msquic.net"; sid:4;)
 alert quic any any -> any any (msg:"QUIC JA3"; ja3.string; content:"771,4866,43-51-41"; sid:3;)
+alert quic any any -> any any (msg:"QUIC JA3 HASH"; ja3.hash; content:"deadbeefdeadbeefdeadbeefdeadbeef"; sid:5;)
