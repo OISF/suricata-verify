@@ -344,11 +344,9 @@ def find_value(name, obj):
             index = m.group(2)
         else:
             name = part
-
         if not name in obj:
             return None
         obj = obj[name]
-
         if index is not None:
             try:
                 obj = obj[int(index)]
@@ -492,6 +490,8 @@ class FilterCheck:
             else:
                 val = find_value(key, event)
                 if val != expected:
+                    if key == "flow.reason" and expected == "shutdown" and val == "timeout":
+                        return True
                     if str(val) == str(expected):
                         print("Different types but same string", type(val), val, type(expected), expected)
                         return False
@@ -803,6 +803,7 @@ class TestRunner:
         # Add other fixed arguments.
         args += [
             "--init-errors-fatal",
+            "--verify",             # Option for mendel.ids suricata to work with suricata-verify
             "-l", self.output,
         ]
 
@@ -824,6 +825,7 @@ class TestRunner:
 
         # Find rules.
         rules = glob.glob(os.path.join(self.directory, "*.rules"))
+        # print(rules)
         if not rules:
             args.append("--disable-detection")
         elif len(rules) == 1:
