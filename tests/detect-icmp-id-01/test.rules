@@ -1,0 +1,2 @@
+alert icmp any any -> any any (icmp_id:21781; sid:1;)
+alert icmp any any -> any any (icmp_id:21782; sid:2;)
