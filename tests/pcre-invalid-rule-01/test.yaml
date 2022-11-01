@@ -1,5 +1,5 @@
 requires:
-    min-version: 6.0
+    min-version: 7.0
 
 checks:
 
@@ -24,7 +24,7 @@ checks:
         expect: 1
 
     - shell:
-        args: grep -o "use a sticky.*\"http response body" suricata.log | wc -l | xargs
+        args: grep -o "use a sticky.*\"data from tracked files" suricata.log | wc -l | xargs
         expect: 1
 
     - shell:
