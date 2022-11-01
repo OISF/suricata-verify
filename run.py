@@ -694,7 +694,11 @@ class TestRunner:
 
         if not check_value["failure"] and not check_value["skipped"]:
             if not self.quiet:
-                print("===> %s: OK%s" % (os.path.basename(self.directory), " (%dx)" % count if count > 1 else ""))
+                if os.path.basename(os.path.dirname(self.directory)) != "tests":
+                    path_name = os.path.join(os.path.basename(os.path.dirname(self.directory)), self.name)
+                else:
+                    path_name = (os.path.basename(self.directory))
+                print("===> %s: OK%s" % (path_name, " (%dx)" % count if count > 1 else ""))
         elif not check_value["failure"]:
             if not self.quiet:
                 print("===> {}: OK (checks: {}, skipped: {})".format(os.path.basename(self.directory), sum(check_value.values()), check_value["skipped"]))
