@@ -397,13 +397,26 @@ class FileCompareCheck:
 
 class ShellCheck:
 
-    def __init__(self, config, env):
+    def __init__(self, config, env, suricata_config):
         self.config = config
         self.env = env
+        self.suricata_config = suricata_config
 
     def run(self):
+        shell_args = {}
         if not self.config or "args" not in self.config:
             raise TestError("shell check missing args")
+        req_version = self.config.get("version")
+        min_version = self.config.get("min-version")
+        lt_version = self.config.get("lt-version")
+        if req_version is not None:
+            shell_args["version"] = req_version
+        if min_version is not None:
+            shell_args["min-version"] = min_version
+        if lt_version is not None:
+            shell_args["lt-version"] = lt_version
+        check_requires(shell_args, self.suricata_config)
+
         try:
             if WIN32:
                 print("skipping shell check on windows")
@@ -732,7 +745,7 @@ class TestRunner:
 
     @handle_exceptions
     def perform_shell_checks(self, check, count, test_num, test_name):
-        count = ShellCheck(check, self.build_env()).run()
+        count = ShellCheck(check, self.build_env(), self.suricata_config).run()
         return count
 
     @handle_exceptions
