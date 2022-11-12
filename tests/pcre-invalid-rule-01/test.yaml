@@ -24,7 +24,8 @@ checks:
         expect: 1
 
     - shell:
-        args: grep -o "use a sticky.*\"data from tracked files" suricata.log | wc -l | xargs
+        min-version: 7
+        args: grep -o "use a sticky.*\"http response body" suricata.log | wc -l | xargs
         expect: 1
 
     - shell:
