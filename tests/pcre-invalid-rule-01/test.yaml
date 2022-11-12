@@ -1,5 +1,5 @@
 requires:
-    min-version: 7.0
+    min-version: 6
 
 checks:
 
@@ -24,6 +24,7 @@ checks:
         expect: 1
 
     - shell:
+        min-version: 7
         args: grep -o "use a sticky.*\"data from tracked files" suricata.log | wc -l | xargs
         expect: 1
 
