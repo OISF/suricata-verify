@@ -1,0 +1,9 @@
+args:
+- -k none
+
+checks:
+- filter:
+    count: 0
+    match:
+      alert.signature_id: 30303
+      event_type: alert

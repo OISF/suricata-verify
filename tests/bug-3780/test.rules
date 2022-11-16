@@ -1,0 +1,1 @@
+alert udp any any -> any any (msg:"Negated content with distance test"; content:"|C0 0C 00 10 00 01|"; content:!"v=spf"; distance:0; sid:30303; rev:1;)
