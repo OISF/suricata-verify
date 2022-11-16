@@ -1,0 +1,33 @@
+requires:
+  min-version: 8
+
+checks:
+- filter:
+    count: 3
+    match:
+      # 2 RESPONSE_HEADER_REPETITION for Accept-CH and 1 RESPONSE_BODY_UNEXPECTED
+      event_type: anomaly
+- filter:
+    count: 3
+    match:
+      event_type: http
+- filter:
+    count: 2
+    match:
+      event_type: fileinfo
+- filter:
+    count: 1
+    match:
+      event_type: fileinfo
+      fileinfo.filename: f.txt
+      # compressed size is 95
+      fileinfo.size: 121
+- filter:
+    count: 1
+    match:
+      event_type: fileinfo
+      fileinfo.size: 1743
+- filter:
+    count: 1
+    match:
+      event_type: flow
