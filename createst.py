@@ -23,6 +23,7 @@ import logging
 import os
 import subprocess
 import sys
+import configparser
 from collections import defaultdict
 from shutil import copyfile
 
@@ -124,6 +125,28 @@ def create_directory(path):
     except OSError as e:
         logger.error(e)
         sys.exit(1)
+
+
+def create_readme():
+    """
+    Create a README.md file and write to it.
+    """
+    readme_path = os.path.join(test_dir, "README.md")
+    config_path = os.path.join( os.path.expanduser( '~' ), '.gitconfig')
+    config = configparser.ConfigParser()
+    config.read(config_path)
+    user_name = config['user']['name']
+    user_email = config['user']['email']
+    with open(readme_path, "w+") as fp:
+        fp.write("Description\n")
+        fp.write("===========\n")
+        fp.write("<TODO>\n\n")
+        fp.write("PCAP\n")
+        fp.write("====\n")
+        fp.write("<TODO>\n\n")
+        fp.write("Reported by\n")
+        fp.write("===========\n")
+        fp.write("%s <%s>\n" % (user_name, user_email))
 
 
 def write_to_file(data):
@@ -437,6 +460,7 @@ def main():
     init_global_params()
     create_directory(path=args["test-name"])
     create_directory(path=os.path.join(args["test-name"], "output"))
+    create_readme()
     generate_eve()
 
 
