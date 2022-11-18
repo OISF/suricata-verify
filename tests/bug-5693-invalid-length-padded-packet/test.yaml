@@ -1,0 +1,9 @@
+args:
+- -k none
+
+checks:
+- filter:
+    count: 0
+    match:
+      event_type: stats
+      stats.decoder.event.udp.hlen_invalid: 1
