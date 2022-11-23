@@ -17,7 +17,7 @@ checks:
         event_type: smb
   - filter:
       min-version: 7
-      count: 59
+      count: 60
       match:
         event_type: smb
   - filter:
