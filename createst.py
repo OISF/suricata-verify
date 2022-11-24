@@ -126,6 +126,23 @@ def create_directory(path):
         sys.exit(1)
 
 
+def create_readme():
+    """
+    Create a README.md file and write to it.
+    """
+    readme_path = os.path.join(test_dir, "README.md")
+    with open(readme_path, "w+") as fp:
+        fp.write("Description\n")
+        fp.write("===========\n")
+        fp.write("<TODO>\n\n")
+        fp.write("PCAP\n")
+        fp.write("====\n")
+        fp.write("<TODO>\n\n")
+        fp.write("Reported by\n")
+        fp.write("===========\n")
+        fp.write("Your Name <yourmail@example.com>\n")
+
+
 def write_to_file(data):
     """
     Check for the output test.yaml file if it exists, else create one and write
@@ -437,6 +454,7 @@ def main():
     init_global_params()
     create_directory(path=args["test-name"])
     create_directory(path=os.path.join(args["test-name"], "output"))
+    create_readme()
     generate_eve()
 
 
