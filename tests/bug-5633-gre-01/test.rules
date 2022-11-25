@@ -1,0 +1,2 @@
+pass ip any any <> 2.2.2.2 any (msg:"GRE Tunnel Pass Test"; classtype:misc-activity; sid:60000000; rev:1;)
+alert udp any any -> any any (content:"EVIL"; sid:1;)

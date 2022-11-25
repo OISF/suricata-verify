@@ -1,0 +1,2 @@
+pass ip any any <> 172.28.2.3 any (msg:"GRE Tunnel Pass Test"; classtype:misc-activity; sid:60000000; rev:1;)
+alert icmp any any -> any any (itype:8; sid:1;)
