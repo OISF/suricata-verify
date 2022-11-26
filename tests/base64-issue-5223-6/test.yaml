@@ -1,0 +1,156 @@
+requires:
+  min-version: 6
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 1
+      alert.severity: 3
+      alert.signature: base64 decode - no url_decode
+      alert.signature_id: 1
+      app_proto: http
+      dest_ip: 172.16.188.115
+      dest_port: 80
+      event_type: alert
+      flow.bytes_toclient: 108
+      flow.bytes_toserver: 262
+      flow.pkts_toclient: 2
+      flow.pkts_toserver: 3
+      http.hostname: foo.bar
+      http.http_method: GET
+      http.length: 0
+      http.protocol: HTTP/1.1
+      http.url: /
+      proto: TCP
+      src_ip: 192.168.237.128
+      src_port: 60078
+      tx_id: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 1
+      alert.severity: 3
+      alert.signature: base64 decode - url_decode
+      alert.signature_id: 2
+      app_proto: http
+      dest_ip: 172.16.188.115
+      dest_port: 80
+      event_type: alert
+      flow.bytes_toclient: 108
+      flow.bytes_toserver: 262
+      flow.pkts_toclient: 2
+      flow.pkts_toserver: 3
+      http.hostname: foo.bar
+      http.http_method: GET
+      http.length: 0
+      http.protocol: HTTP/1.1
+      http.url: /
+      proto: TCP
+      src_ip: 192.168.237.128
+      #src_port: 60078
+      tx_id: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 1
+      alert.severity: 3
+      alert.signature: base64 decode - no url_decode, proves no base64_data buffer
+        via pcre
+      alert.signature_id: 3
+      app_proto: http
+      dest_ip: 172.16.188.115
+      dest_port: 80
+      event_type: alert
+      flow.bytes_toclient: 108
+      flow.bytes_toserver: 262
+      flow.pkts_toclient: 2
+      flow.pkts_toserver: 3
+      http.hostname: foo.bar
+      http.http_method: GET
+      http.length: 0
+      http.protocol: HTTP/1.1
+      http.url: /
+      proto: TCP
+      src_ip: 192.168.237.128
+      src_port: 60078
+      tx_id: 0
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 1
+      alert.severity: 3
+      alert.signature: base64 decode - no url_decode grab only the first two bytes
+      alert.signature_id: 4
+      app_proto: http
+      dest_ip: 172.16.188.115
+      dest_port: 80
+      event_type: alert
+      flow.bytes_toclient: 108
+      flow.bytes_toserver: 262
+      flow.pkts_toclient: 2
+      flow.pkts_toserver: 3
+      http.hostname: foo.bar
+      http.http_method: GET
+      http.length: 0
+      http.protocol: HTTP/1.1
+      http.url: /
+      proto: TCP
+      src_ip: 192.168.237.128
+      src_port: 60078
+      tx_id: 0
+- filter:
+    count: 1
+    match:
+      dest_ip: 172.16.188.115
+      dest_port: 80
+      event_type: http
+      http.hostname: foo.bar
+      http.http_method: GET
+      http.length: 0
+      http.protocol: HTTP/1.1
+      http.url: /
+      proto: TCP
+      src_ip: 192.168.237.128
+      src_port: 60078
+      tx_id: 0
+- filter:
+    count: 1
+    match:
+      app_proto: http
+      dest_ip: 172.16.188.115
+      dest_port: 80
+      event_type: flow
+      flow.age: 0
+      flow.alerted: true
+      flow.bytes_toclient: 108
+      flow.bytes_toserver: 262
+      flow.pkts_toclient: 2
+      flow.pkts_toserver: 3
+      flow.reason: shutdown
+      flow.state: established
+      proto: TCP
+      src_ip: 192.168.237.128
+      src_port: 60078
+      tcp.ack: true
+      tcp.psh: true
+      tcp.state: established
+      tcp.syn: true
+      tcp.tcp_flags: 1a
+      tcp.tcp_flags_tc: '12'
+      tcp.tcp_flags_ts: 1a
