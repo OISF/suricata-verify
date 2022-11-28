@@ -59,15 +59,3 @@ checks:
       src_ip: 1.1.205.22
       src_port: 4053
       tx_id: 0
-- filter:
-    count: 1
-    match:
-      dest_ip: 1.2.190.250
-      dest_port: 25
-      event_type: smtp
-      pcap_cnt: 98
-      proto: TCP
-      smtp.helo: client-1016363.example.int
-      src_ip: 1.1.205.22
-      src_port: 4053
-      tx_id: 1

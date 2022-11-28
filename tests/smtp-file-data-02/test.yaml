@@ -59,15 +59,3 @@ checks:
       src_ip: 10.10.1.4
       src_port: 1470
       tx_id: 0
-- filter:
-    count: 1
-    match:
-      dest_ip: 74.53.140.153
-      dest_port: 25
-      event_type: smtp
-      pcap_cnt: 58
-      proto: TCP
-      smtp.helo: GP
-      src_ip: 10.10.1.4
-      src_port: 1470
-      tx_id: 1
