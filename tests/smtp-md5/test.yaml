@@ -13,7 +13,7 @@ checks:
         smtp.mail_from: <gurpartap@patriots.in>
         smtp.rcpt_to[0]: <raj_deol2002in@yahoo.co.in>
         email.subject_md5: "c2239a92bde29f0a9f9173193cc2fe00"
-        email.body_md5: "199a623779019799f24fcf61204c55a8"
+        email.body_md5: "ed00c81b85fa455d60e19f1230977134"
 
         
   # Check the stats. A stats check is a specialization of a filter
