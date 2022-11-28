@@ -34,7 +34,7 @@ checks:
       event_type: fileinfo
       fileinfo.filename: NEWS.txt
       fileinfo.gaps: false
-      fileinfo.size: 10735
+      fileinfo.size: 10809
       fileinfo.state: CLOSED
       fileinfo.stored: false
       fileinfo.tx_id: 0
