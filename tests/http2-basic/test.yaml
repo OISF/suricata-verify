@@ -1,6 +1,4 @@
 requires:
-  features:
-    - HAVE_LIBJANSSON
   min-version: 6.0.0
 
 # disables checksum verification
@@ -11,6 +9,7 @@ checks:
 
   # Check that there is one file event with content range.
   - filter:
+      lt-version: 7
       count: 1
       match:
         event_type: http
@@ -18,11 +17,28 @@ checks:
         http.http2.response.settings[0].settings_id: "SETTINGSMAXCONCURRENTSTREAMS"
         http.http2.response.settings[0].settings_value: 100
   - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: http
+        http.http2.stream_id: 0
+        http.http2.response.settings[0].settings_id: "SETTINGS_MAX_CONCURRENT_STREAMS"
+        http.http2.response.settings[0].settings_value: 100
+  - filter:
+      lt-version: 7
       count: 1
       match:
         event_type: http
         http.http2.stream_id: 0
         http.http2.request.settings[1].settings_id: "SETTINGSINITIALWINDOWSIZE"
+        http.http2.request.settings[1].settings_value: 65535
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: http
+        http.http2.stream_id: 0
+        http.http2.request.settings[1].settings_id: "SETTINGS_INITIAL_WINDOW_SIZE"
         http.http2.request.settings[1].settings_value: 65535
   - filter:
       count: 1

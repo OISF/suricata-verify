@@ -1,6 +1,4 @@
 requires:
-  features:
-    - HAVE_LIBJANSSON
   min-version: 6.0.0
 
 # disables checksum verification
@@ -17,6 +15,7 @@ checks:
         http.url: /robots.txt
         http.status: 101
   - filter:
+      lt-version: 7
       count: 1
       match:
         event_type: http
@@ -24,11 +23,28 @@ checks:
         http.http2.response.settings[2].settings_id: "SETTINGSHEADERTABLESIZE"
         http.http2.response.settings[2].settings_value: 8192
   - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: http
+        http.http2.stream_id: 0
+        http.http2.response.settings[2].settings_id: "SETTINGS_HEADER_TABLE_SIZE"
+        http.http2.response.settings[2].settings_value: 8192
+  - filter:
+      lt-version: 7
       count: 2
       match:
         event_type: http
         http.http2.stream_id: 0
         http.http2.request.settings[2].settings_id: "SETTINGSENABLEPUSH"
+        http.http2.request.settings[2].settings_value: 0
+  - filter:
+      min-version: 7
+      count: 2
+      match:
+        event_type: http
+        http.http2.stream_id: 0
+        http.http2.request.settings[2].settings_id: "SETTINGS_ENABLE_PUSH"
         http.http2.request.settings[2].settings_value: 0
   - filter:
       min-version: 7
