@@ -16,6 +16,11 @@ checks:
         event_type: fileinfo
         fileinfo.size: 69
   - filter:
+      count: 1
+      match:
+        event_type: http
+        http.custom.content_range: "bytes 10-20/69"
+  - filter:
       count: 0
       match:
         event_type: anomaly
