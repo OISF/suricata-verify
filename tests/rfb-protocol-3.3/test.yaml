@@ -16,6 +16,12 @@ checks:
       count: 1
       match:
         event_type: rfb
+        community_id: 1:d6qHVLyvWEl4kfHAZiDmEtDyb2I=
+
+  - filter:
+      count: 1
+      match:
+        event_type: rfb
         rfb.server_protocol_version.major: "003"
         rfb.server_protocol_version.minor: "003"
         rfb.client_protocol_version.major: "003"
