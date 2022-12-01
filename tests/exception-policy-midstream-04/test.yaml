@@ -1,5 +1,6 @@
 args:
 - --simulate-ips
+- --set stream.midstream=true
 - --set stream.midstream-policy=pass-flow
 
 checks:
@@ -14,6 +15,6 @@ checks:
       event_type: flow
       flow.action: pass
 - filter:
-    count: 0
+    count: 1
     match:
       event_type: http

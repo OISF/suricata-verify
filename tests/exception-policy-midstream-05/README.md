@@ -6,8 +6,8 @@ stage.
 
 # Behavior
 
-We expect to have no alerts, but to see ``http`` events logged, as the flow will
-be inspected still.
+We expect to have no ``alert`` or ``http`` events logged, as the flow will
+be bypassed.
 
 # Pcap
 
