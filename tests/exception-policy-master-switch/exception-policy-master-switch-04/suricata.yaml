@@ -1,0 +1,31 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular #regular|syslog|unix_dgram|unix_stream|redis
+      filename: eve.json
+      types:
+        - alert:
+            payload: yes
+            payload-buffer-size: 4kb
+            payload-printable: yes
+            packet: yes
+            http: yes
+            tls: yes
+            ssh: yes
+            smtp: yes
+            xff:
+              enabled: yes
+              mode: extra-data
+              deployment: reverse
+              header: X-Forwarded-For
+        - flow
+        - http
+        - drop:
+            alerts: yes
+            flows: all
+
+exception-policy: auto
+
