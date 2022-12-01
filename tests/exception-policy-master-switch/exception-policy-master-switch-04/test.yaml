@@ -1,0 +1,23 @@
+args:
+- --simulate-ips
+- --set stream.midstream=true
+- --set stream.midstream-policy=pass-flow
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.action: pass
+  - filter:
+      count: 1
+      match:
+        event_type: http
