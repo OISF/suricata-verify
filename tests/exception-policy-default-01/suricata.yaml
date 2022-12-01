@@ -18,3 +18,5 @@ action-order:
   - drop
   - reject
   - alert
+
+exception-policy: disabled
