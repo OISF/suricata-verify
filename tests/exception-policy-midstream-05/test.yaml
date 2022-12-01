@@ -1,5 +1,6 @@
 args:
 - --simulate-ips
+- --set stream.midstrea=true
 - --set stream.midstream-policy=bypass
 
 checks:
