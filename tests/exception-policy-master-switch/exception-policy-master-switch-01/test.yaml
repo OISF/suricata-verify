@@ -1,0 +1,35 @@
+requires:
+  min-version: 7
+
+args:
+- --simulate-ips
+- --set exception-policy=auto
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        drop.reason: stream midstream
+  - filter:
+      count: 9
+      match:
+        event_type: drop
+  - filter:
+      count: 0
+      match:
+        event_type: flow
+        flow.state: bypassed
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.action: drop
+  - filter:
+      count: 0
+      match:
+        event_type: http
