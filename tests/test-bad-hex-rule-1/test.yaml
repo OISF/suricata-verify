@@ -14,10 +14,18 @@ checks:
         engine.message: "Invalid hex code in content - |l0 01 01|, hex l. Invalidating signature."
 
   - filter:
+      lt-version: 7
       count: 1
       match:
         event_type: engine
         engine.error: "SC_ERR_NO_RULES_LOADED"
+
+  - filter:
+      min-version: 7
+      count: 4
+      match:
+        event_type: engine
+        engine.module: detect
 
   - filter:
       min-version: 7.0

@@ -8,5 +8,5 @@ exit-code: 1
 
 checks:
     - shell:
-        args: grep "SC_WARN_CLASSIFICATION_CONFIG" suricata.log | wc -l | xargs
+        args: grep "Invalid Classtype in" suricata.log | wc -l | xargs
         expect: 1

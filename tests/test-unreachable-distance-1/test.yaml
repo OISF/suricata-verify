@@ -1,5 +1,5 @@
 requires:
-  min-version: 7
+  min-version: 8 # TODO
 
 checks:
     - shell:

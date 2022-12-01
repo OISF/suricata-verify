@@ -8,5 +8,5 @@ args:
 
 checks:
     - shell:
-        args: grep "SC_WARN_ERSPAN_CONFIG" suricata.log | wc -l | xargs
+        args: grep "ERSPAN Type I is no longer configurable" suricata.log | wc -l | xargs
         expect: 1

@@ -8,8 +8,8 @@ checks:
         expect: 1
 
     - shell:
-        args: grep SC_ERR_INVALID_SIGNATURE suricata.log | wc -l | xargs
-        expect: 26
+        args: grep Error suricata.log | wc -l | xargs
+        expect: 27
 
     - shell:
         args: grep "Expression seen with a sticky buffer" suricata.log | wc -l | xargs

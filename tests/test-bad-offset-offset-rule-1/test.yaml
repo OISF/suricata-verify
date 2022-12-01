@@ -17,7 +17,15 @@ checks:
         engine.message: "can't use multiple offsets for the same content."
 
   - filter:
+      lt-version: 7
       count: 1
       match:
         event_type: engine
         engine.error: "SC_ERR_NO_RULES_LOADED"
+
+  - filter:
+      min-version: 7
+      count: 3
+      match:
+        event_type: engine
+        engine.module: detect
