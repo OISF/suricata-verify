@@ -256,7 +256,9 @@ class Version:
 
     def is_lt(self, v1, v2):
         """Return True if v1 is less than v2."""
-        if v1.major < v2.major:
+        if v1.major > v2.major:
+            return False
+        elif v1.major < v2.major:
             return True
         elif v1.minor < v2.minor:
             return True
