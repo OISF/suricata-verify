@@ -1,0 +1,15 @@
+args:
+- --set stream.reassembly.depth=0
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.id: 3
+        smb.dialect: "2.02"
+        smb.command: SMB2_COMMAND_SESSION_SETUP
+        smb.status: STATUS_SUCCESS
+        smb.ntlmssp.domain: "CONTOSO"
+        smb.ntlmssp.user: "SERVER01"
+        smb.ntlmssp.host: "Administrator"
