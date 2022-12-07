@@ -1,0 +1,4 @@
+drop ip :: 0 <> :: 2 (msg:"Invalid within" ;content:" ";within:1048577;dsize:4; sid:1;)
+drop ip :: 0 <> :: 2 (msg:"Invalid within" ;content:" ";within:-1048577;dsize:4; sid:2;)
+drop ip :: 0 <> :: 2 (msg:"Invalid distance" ;content:" ";distance:1048577;dsize:4; sid:3;)
+drop ip :: 0 <> :: 2 (msg:"Invalid distance" ;content:" ";distance:-1048577;dsize:4; sid:4;)
