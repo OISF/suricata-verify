@@ -1,0 +1,50 @@
+requires:
+  min-version: 7
+
+command: |
+  ${SRCDIR}/src/suricata --set classification-file="${SRCDIR}/classification.config" --set reference-config-file="${SRCDIR}/reference.config" -l ${OUTPUT_DIR} -c ${TEST_DIR}/suricata.yaml -r ${TEST_DIR}/ -S ${TEST_DIR}/test.rules
+
+checks:
+  # check that we have the following entries in eve.json
+  # match 1 specific rule load failure reason
+  - filter:
+      count: 2
+      match:
+        event_type: engine
+        engine.module: detect-within
+
+  - filter:
+      count: 2
+      match:
+        event_type: engine
+        engine.module: detect-distance
+
+  - filter:
+      count: 1
+      match:
+        event_type: engine
+        engine.message: "invalid value for distance: 1048577"
+
+  - filter:
+      count: 1
+      match:
+        event_type: engine
+        engine.message: "invalid value for distance: -1048577"
+
+  - filter:
+      count: 1
+      match:
+        event_type: engine
+        engine.message: "invalid value for within: 1048577"
+
+  - filter:
+      count: 1
+      match:
+        event_type: engine
+        engine.message: "invalid value for within: -1048577"
+
+  - filter:
+      count: 1
+      match:
+        event_type: engine
+        engine.message: "1 rule files specified, but no rules were loaded!"
