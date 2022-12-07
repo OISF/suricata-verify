@@ -188,6 +188,7 @@ optional arguments:
   --min-version <min-version>
                         Adds a global minimum required version
   --midstream           Allow midstream session pickups
+  --features [FEATS]    Required features (comma separated list)
 ```
 
 ### Examples
@@ -215,4 +216,17 @@ newer:
 ../suricata-verify/createst.py --min-version 6 --allow-events http,alert,flow \
 --rules ../suricata-verify/tests/no-payload-output/test.rules test-02 input.pcap
 ```
+
+#### Add Required Features
+
+```
+../suricata-verify/createst.py --features HAVE_LUA
+```
+
+```
+../suricata-verify/createst.py --features HAVE_LUA,AF_PACKET
+```
+
+The features are taken from the `Features:` line in `suricata
+--build-info`.
 
