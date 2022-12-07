@@ -150,8 +150,8 @@ def write_to_file(data):
             fp.write("   features:\n")
             for item in feature_list:
                 fp.write("     - %s\n" % item)
-        if args["add_version"]:
-            fp.write("   version: %s\n\n" % args["add_version"])
+        if args["version"]:
+            fp.write("   version: %s\n\n" % args["version"])
         suricata_args = []
         if not args["strictcsums"]:
             suricata_args.append("-k none")
@@ -164,7 +164,7 @@ def write_to_file(data):
         fp.write(data)
 
 def check_requires():
-    features = ["min_version", "add_version","features"]
+    features = ["min_version", "version", "features"]
     for item in features:
         if args[item]:
             return True
@@ -373,7 +373,7 @@ def parse_args():
                         help="Allow midstream session pickups")
     parser.add_argument("--min-version", default=None, metavar="<min-version>",
                         help="Adds a global minimum required version")
-    parser.add_argument("--add-version", default=None, metavar="<add-version>",
+    parser.add_argument("--version", default=None, metavar="<add-version>",
                         help="Adds a global suricata version")
     parser.add_argument("--cfg", metavar="<path-to-suricata.yaml>",
                         help="Adds a suricata.yaml to the test")

@@ -185,9 +185,11 @@ optional arguments:
                         This means that just the events listed will be checked
                         against in the test
   --strictcsums         Strictly validate checksum
+  --midstream           Allow midstream session pickups
   --min-version <min-version>
                         Adds a global minimum required version
-  --midstream           Allow midstream session pickups
+  --version <version>   Adds a global version requirement
+  --cfg <suricata.yaml> Add a suricata.yaml to the test
   --features [FEATS]    Required features (comma separated list)
 ```
 
