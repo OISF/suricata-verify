@@ -1,17 +1,25 @@
-requires:
-  min-version: 7.0.0
+command: |
+  ${SRCDIR}/src/suricata --set classification-file="${SRCDIR}/classification.config" --set reference-config-file="${SRCDIR}/reference.config" -l ${OUTPUT_DIR} -c ${TEST_DIR}/suricata.yaml -r ${TEST_DIR}/ -S ${TEST_DIR}/test.rules
 
 checks:
-  # check that we have the following entres in eve.json
+  # check that we have the following entries in eve.json
   # match 1 specific rule load failure reason
   - filter:
-      count: 1
-      match:
-        event_type: engine
-        engine.message: "rule 123: http.host keyword specified along with \"nocase\". The hostname buffer is normalized to lowercase, specifying nocase is redundant."
-
-  - filter:
+      lt-version: 7
       count: 1
       match:
         event_type: engine
         engine.error: "SC_ERR_NO_RULES_LOADED"
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: engine
+        engine.message: "rule 123: http.host keyword specified along with \"nocase\". The hostname buffer is normalized to lowercase, specifying nocase is redundant."
+  - filter:
+      min-version: 7
+      count: 3
+      match:
+        event_type: engine
+        engine.module: detect
+
