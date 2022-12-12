@@ -1,6 +1,9 @@
 requires:
   min-version: 7.0.0
 
+command: |
+  ${SRCDIR}/src/suricata --set classification-file="${SRCDIR}/classification.config" --set reference-config-file="${SRCDIR}/reference.config" -l ${OUTPUT_DIR} -c ${TEST_DIR}/suricata.yaml -r ${TEST_DIR}/ -S ${TEST_DIR}/test.rules
+
 checks:
   # check that we have the following entres in eve.json
   # match 1 specific rule load failure reason
@@ -8,8 +11,7 @@ checks:
       count: 1
       match:
         event_type: engine
-        engine.message: "rule 1111: A pattern with uppercase chararacters detected for http.host. The hostname buffer is normalized to lowercase, please specify a lowercase pattern."
-
+        engine.message: "rule 1111: A pattern with uppercase characters detected for http.host. The hostname buffer is normalized to lowercase, please specify a lowercase pattern."
   - filter:
       count: 1
       match:
