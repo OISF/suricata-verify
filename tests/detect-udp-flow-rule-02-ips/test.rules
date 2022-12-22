@@ -1,0 +1,2 @@
+drop tcp any any -> any any (flow:to_server; sid:1;)
+drop udp any any -> any any (flow:to_server; sid:2;)
