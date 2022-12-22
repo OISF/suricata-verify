@@ -1,0 +1,30 @@
+requires:
+  min-version: 7
+
+checks:
+- filter:
+    count: 1
+    match:
+      alert.signature_id: 1
+      frame.type: "pdu"
+      frame.direction: toclient
+      frame.complete: true
+- filter:
+    count: 1
+    match:
+      alert.signature_id: 2
+      frame.type: "pdu"
+      frame.direction: toserver
+      frame.complete: true
+- filter:
+    count: 2
+    match:
+      alert.signature_id: 3
+- filter:
+    count: 0
+    match:
+      alert.signature_id: 4
+- filter:
+    count: 0
+    match:
+      alert.signature_id: 5
