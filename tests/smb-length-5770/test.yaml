@@ -1,0 +1,11 @@
+# disables checksum verification
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: "toto.txt"
+        dest_port: 445
