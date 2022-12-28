@@ -1,0 +1,9 @@
+args:
+- -k none --set app-layer.protocols.ftp.memcap=512
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: ftp
+        ftp.command: "PORT"
