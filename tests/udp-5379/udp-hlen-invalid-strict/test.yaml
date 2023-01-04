@@ -1,0 +1,20 @@
+exit-code: 0
+
+command: |
+  ${SRCDIR}/src/suricata --set classification-file="${SRCDIR}/etc/classification.config"    \
+      --set reference-config-file="${SRCDIR}/etc/reference.config" -l ${OUTPUT_DIR}         \
+      --set threshold-file="${TEST_DIR}/threshold.config"                                   \
+      -c "${SRCDIR}/suricata.yaml" -r ${TEST_DIR}/input.pcap -S ${TEST_DIR}/test.rules      \
+      --strict-rule-keywords=all
+
+checks:
+    - shell:
+        version: 7
+        args: |-
+          grep "Error: detect: decode-event keyword no longer supports event \"decoder.udp.hlen_invalid\"" suricata.log | wc -l
+        expect: 1
+    - shell:
+        lt-version: 7
+        args: |-
+          grep "\[ERRCODE: SC_WARN_DEPRECATED(203)\] - decode-event keyword no longer supports event \"decoder.udp.hlen_invalid\"" suricata.log | wc -l
+        expect: 1

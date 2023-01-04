@@ -1,0 +1,1 @@
+alert pkthdr any any -> any any (msg:"SURICATA UDP invalid length field in the header"; decode-event:udp.len_invalid; classtype:protocol-command-decode; sid:2200120; rev:2;)
