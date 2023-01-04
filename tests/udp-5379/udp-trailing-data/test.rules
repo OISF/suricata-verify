@@ -1,0 +1,1 @@
+alert udp $EXTERNAL_NET :1024 <> $HOME_NET 0 (msg:"UDP Port 0"; sid:1;)
