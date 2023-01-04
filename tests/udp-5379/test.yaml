@@ -1,0 +1,17 @@
+args:
+- -k none
+
+checks:
+- filter:
+    count: 0
+    match:
+      alert.signature: UDP Port 0
+      alert.signature_id: 1
+      dest_ip: 192.0.2.1
+      dest_port: 0
+      event_type: alert
+      pcap_cnt: 1
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 192.168.100.102
+      src_port: 0
