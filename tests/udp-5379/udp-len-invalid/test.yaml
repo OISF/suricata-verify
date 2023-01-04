@@ -1,0 +1,16 @@
+args:
+- -k none
+- --set stats.decoder-events=true
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.decoder.event.udp.len_invalid: 1
+
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2200220
