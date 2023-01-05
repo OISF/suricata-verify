@@ -13,7 +13,8 @@ outputs:
       filetype: regular #regular|syslog|unix_dgram|unix_stream|redis
       filename: eve.json
       types:
-        - alert
+        - alert:
+            action: false
         - drop:
             flows: all
             alerts: true
