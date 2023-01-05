@@ -8,6 +8,7 @@ args:
 
 checks:
   - filter:
+      lt-version: 7
       count: 1
       match:
         event_type: alert
@@ -15,11 +16,28 @@ checks:
         alert.signature_id: 1
         pcap_cnt: 4
   - filter:
+      lt-version: 7
       count: 1
       match:
         event_type: alert
         alert.action: blocked
         alert.signature_id: 2
+        pcap_cnt: 4
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        verdict: reject
+        pcap_cnt: 4
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        verdict: reject
         pcap_cnt: 4
   - filter:
       count: 0
@@ -28,11 +46,20 @@ checks:
         alert.signature_id: 3
 
   - filter:
+      lt-version: 7
       count: 1
       match:
         event_type: drop
         alert.action: blocked
         alert.signature_id: 1
+        pcap_cnt: 4
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: drop
+        alert.signature_id: 1
+        verdict: reject
         pcap_cnt: 4
   - filter:
       count: 1
