@@ -2,7 +2,9 @@ requires:
     min-version: 7
 
 args:
-- --set stream.reassembly.depth=50 --set outputs.1.eve-log.types.2.anomaly.types.stream=yes
+# 'outputs' command-line option might need to be adjusted if a new output type
+# is added to eve log.
+- --set stream.reassembly.depth=50 --set outputs.1.eve-log.types.3.anomaly.types.stream=yes
 
 checks:
   - filter:

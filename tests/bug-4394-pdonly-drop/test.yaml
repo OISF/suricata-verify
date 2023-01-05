@@ -8,6 +8,7 @@ args:
 
 checks:
   - filter:
+      lt-version: 7
       count: 1
       match:
         event_type: alert
@@ -15,6 +16,7 @@ checks:
         alert.signature_id: 1
         pcap_cnt: 4
   - filter:
+      lt-version: 7
       count: 1
       match:
         event_type: alert
@@ -22,16 +24,91 @@ checks:
         alert.signature_id: 2
         pcap_cnt: 4
   - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 4
+        verdict.action: drop
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        pcap_cnt: 4
+        verdict.action: drop
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: drop
+        pcap_cnt: 4
+        verdict.action: drop
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: drop
+        pcap_cnt: 5
+        verdict.action: drop
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: drop
+        pcap_cnt: 6
+        verdict.action: drop
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: drop
+        pcap_cnt: 7
+        verdict.action: drop
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: drop
+        pcap_cnt: 8
+        verdict.action: drop
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: drop
+        pcap_cnt: 9
+        verdict.action: drop
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: drop
+        pcap_cnt: 10
+        verdict.action: drop
+  - filter:
+      min-version: 7
       count: 0
       match:
         event_type: alert
         alert.signature_id: 3
+        verdict.action: alert
 
   - filter:
+      lt-version: 7
       count: 1
       match:
         event_type: drop
         alert.action: blocked
+        alert.signature_id: 1
+        pcap_cnt: 4
+  - filter:
+      lt-version: 7
+      count: 1
+      match:
+        event_type: drop
         alert.signature_id: 1
         pcap_cnt: 4
   - filter:

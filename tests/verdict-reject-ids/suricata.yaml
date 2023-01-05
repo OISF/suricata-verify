@@ -1,16 +1,10 @@
 %YAML 1.1
 ---
 
-action-order:
-  - drop
-  - reject
-  - alert
-  - pass
-
 outputs:
   - eve-log:
       enabled: yes
-      filetype: regular #regular|syslog|unix_dgram|unix_stream|redis
+      filetype: regular
       filename: eve.json
       types:
         - alert:
@@ -22,4 +16,3 @@ outputs:
         - http
         - anomaly
         - verdict
-

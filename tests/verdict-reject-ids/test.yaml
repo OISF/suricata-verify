@@ -1,0 +1,37 @@
+requires:
+  min-version: 7
+
+pcap: ../threshold/threshold-config-rate-filter-reject-hostdst/input.pcap
+
+args:
+- --set threshold-file=${TEST_DIR}/threshold.config
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000001
+        alert.action: allowed
+        verdict.action: alert
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000001
+        alert.action: blocked
+        verdict.action: alert
+        verdict.reject-target: source
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 5
+        event_type: verdict
+        verdict.action: alert
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 6
+        event_type: verdict
+        verdict.action: alert
+        verdict.reject-target: source
