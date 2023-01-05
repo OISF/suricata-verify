@@ -8,6 +8,7 @@ args:
 
 checks:
   - filter:
+      lt-version: 7
       count: 1
       match:
         event_type: alert
@@ -15,6 +16,7 @@ checks:
         alert.signature_id: 1
         pcap_cnt: 4
   - filter:
+      lt-version: 7
       count: 1
       match:
         event_type: alert
@@ -22,17 +24,91 @@ checks:
         alert.signature_id: 2
         pcap_cnt: 4
   - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        verdict: reject
+        pcap_cnt: 4
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        verdict: reject
+        pcap_cnt: 4
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: drop
+        verdict: reject
+        pcap_cnt: 4
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: drop
+        verdict: drop
+        pcap_cnt: 5
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: drop
+        verdict: drop
+        pcap_cnt: 6
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: drop
+        verdict: drop
+        pcap_cnt: 7
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: drop
+        verdict: drop
+        pcap_cnt: 8
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: drop
+        verdict: drop
+        pcap_cnt: 9
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: drop
+        verdict: drop
+        pcap_cnt: 10
+  - filter:
       count: 0
       match:
         event_type: alert
         alert.signature_id: 3
 
   - filter:
+      lt-version: 7
       count: 1
       match:
         event_type: drop
         alert.action: blocked
         alert.signature_id: 1
+        pcap_cnt: 4
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: drop
+        alert.signature_id: 1
+        verdict: reject
         pcap_cnt: 4
   - filter:
       count: 1
