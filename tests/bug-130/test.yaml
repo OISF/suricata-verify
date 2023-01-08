@@ -157,12 +157,11 @@ checks:
       proto: TCP
       src_ip: 10.100.0.8
       src_port: 44270
-      tcp:
-        ack: true
-        fin: true
-        psh: true
-        state: closed
-        syn: true
-        tcp_flags: 1b
-        tcp_flags_tc: 1b
-        tcp_flags_ts: 1b
+      tcp.ack: true
+      tcp.fin: true
+      tcp.psh: true
+      tcp.state: closed
+      tcp.syn: true
+      tcp.tcp_flags: 1b
+      tcp.tcp_flags_tc: 1b
+      tcp.tcp_flags_ts: 1b
