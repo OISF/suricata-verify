@@ -55,12 +55,11 @@ checks:
       proto: TCP
       src_ip: 192.168.2.3
       src_port: 37010
-      tcp:
-        ack: true
-        psh: true
-        rst: true
-        state: closed
-        syn: true
-        tcp_flags: 1e
-        tcp_flags_tc: 1a
-        tcp_flags_ts: 1e
+      tcp.ack: true
+      tcp.psh: true
+      tcp.rst: true
+      tcp.state: closed
+      tcp.syn: true
+      tcp.tcp_flags: 1e
+      tcp.tcp_flags_tc: 1a
+      tcp.tcp_flags_ts: 1e
