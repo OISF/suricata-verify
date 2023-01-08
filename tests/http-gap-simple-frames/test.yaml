@@ -48,7 +48,7 @@ checks:
       match:
         event_type: frame
         app_proto: http
-        frame.id: 1
+        frame.id: 2
         frame.stream_offset: 0
         frame.type: request
         frame.length: 40
