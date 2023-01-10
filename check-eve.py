@@ -36,10 +36,34 @@ try:
 except:
     HAVE_PY = False
 
+def validate_json_stats(json_filename):
+    errors = []
+    with open(json_filename) as f:
+        flows = {}
+        for line in f:
+            obj = json.loads(line)
+            if obj["event_type"] == "flow" and "app_proto" in obj:
+                flows[obj["app_proto"]] = flows.get(obj["app_proto"], 0) + 1
+            if "stats" in obj:
+                d = obj["stats"]["app_layer"]["flow"]
+                stats = {}
+                for proto in d:
+                    stats[proto] = d[proto]
+                for k in flows:
+                    if k not in stats:
+                        errors.append("Different values for %s : %d flows and %d in stats" % (k, flows[k], 0))
+                    elif stats[k] != flows[k]:
+                        errors.append("Different values for %s : %d flows and %d in stats" % (k, flows[k], stats[k]))
+    return errors
+
 def validate_json(args, json_filename, schema):
     status = "OK"
     errors = []
 
+    stats_err = validate_json_stats(json_filename)
+    for e in stats_err:
+        errors.append(e)
+        status = "FAIL"
     if not args.python_validator:
         progname = os.path.join(TOPDIR, "eve-validator", "target", "release", "eve-validator")
         cp = subprocess.run([progname, "-q", "-s", schema, "--", json_filename])
