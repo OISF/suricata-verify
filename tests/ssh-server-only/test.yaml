@@ -1,0 +1,15 @@
+args:
+ - -k none
+
+checks:
+  # Check that we have the ssh event in eve.json
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: "ssh"
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.app_layer.flow.ssh: 1
