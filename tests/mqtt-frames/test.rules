@@ -1,0 +1,11 @@
+alert mqtt any any -> any any (msg:"mqtt Frame 1"; frame:pdu; content:"|10 2f 00|"; startswith; sid:1;)
+alert mqtt any any -> any any (msg:"mqtt Frame 2"; frame:pdu; content:"|61 73 73|"; endswith; sid:2;)
+
+alert mqtt any any -> any any (msg:"mqtt Frame 3"; flow:to_server; frame:header; content:"|10|"; sid:3;)
+alert mqtt any any -> any any (msg:"mqtt Frame 4"; frame:header; content:"|20|"; sid:4;)
+
+alert mqtt any any -> any any (msg:"mqtt Frame 5"; frame:pdu; content:"|17 0C E2|"; sid:5;)
+alert mqtt any any -> any any (msg:"mqtt Frame 6"; frame:pdu; content:"|00 00 54 46|"; sid:6;)
+
+alert mqtt any any -> any any (msg:"mqtt Frame 7"; frame:data; content:"|00 00 03 22|"; startswith; sid:7;)
+alert mqtt any any -> any any (msg:"mqtt Frame 8"; frame:data; content:"|00 06|"; sid:8;)
