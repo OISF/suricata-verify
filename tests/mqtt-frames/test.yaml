@@ -1,0 +1,12 @@
+requires:
+  min-version: 7
+
+checks:
+- filter:
+    count: 1
+    match:
+      alert.signature_id: 1
+- filter:
+    count: 1
+    match:
+      alert.signature_id: 2
