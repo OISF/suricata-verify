@@ -3,5 +3,5 @@ requires:
 
 checks:
   - file-compare:
-      filename: log.pcap.0
+      filename: log.pcap.1444144603
       expected: expected/log.pcap.1444144603
