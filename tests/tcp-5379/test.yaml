@@ -1,0 +1,53 @@
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 1
+      alert.severity: 3
+      alert.signature: Ends with AAA
+      alert.signature_id: 1
+      dest_ip: 127.0.0.1
+      dest_port: 80
+      direction: to_server
+      event_type: alert
+      flow.bytes_toclient: 0
+      flow.bytes_toserver: 134
+      flow.dest_ip: 127.0.0.1
+      flow.dest_port: 80
+      flow.pkts_toclient: 0
+      flow.pkts_toserver: 1
+      flow.src_ip: 127.0.0.1
+      flow.src_port: 20
+      pcap_cnt: 1
+      pkt_src: wire/pcap
+      proto: TCP
+      src_ip: 127.0.0.1
+      src_port: 20
+- filter:
+    count: 1
+    match:
+      dest_ip: 127.0.0.1
+      dest_port: 80
+      event_type: flow
+      flow.age: 0
+      flow.alerted: true
+      flow.bytes_toclient: 0
+      flow.bytes_toserver: 134
+      flow.pkts_toclient: 0
+      flow.pkts_toserver: 1
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: 127.0.0.1
+      src_port: 20
+      tcp.state: syn_sent
+      tcp.syn: true
+      tcp.tcp_flags: '02'
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '02'
