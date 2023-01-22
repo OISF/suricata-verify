@@ -1,0 +1,201 @@
+%YAML 1.1
+---
+
+# Global stats configuration
+stats:
+  enabled: yes
+  # The interval field (in seconds) controls the interval at
+  # which stats are updated in the log.
+  interval: 8
+  # Add decode events to stats.
+  #decoder-events: true
+  # Decoder event prefix in stats. Has been 'decoder' before, but that leads
+  # to missing events in the eve.stats records. See issue #2225.
+  #decoder-events-prefix: "decoder.event"
+  # Add stream events as stats.
+  #stream-events: false
+
+# Configure the type of alert (and other) logging you would like.
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular #regular|syslog|unix_dgram|unix_stream|redis
+      filename: eve.json
+      types:
+        - alert:
+            # payload: yes             # enable dumping payload in Base64
+            # payload-buffer-size: 4kb # max size of payload buffer to output in eve-log
+            # payload-printable: yes   # enable dumping payload in printable (lossy) format
+            # packet: yes              # enable dumping of packet (without stream segments)
+            # metadata: no             # enable inclusion of app layer metadata with alert. Default yes
+            # http-body: yes           # Requires metadata; enable dumping of HTTP body in Base64
+            # http-body-printable: yes # Requires metadata; enable dumping of HTTP body in printable format
+
+            # Enable the logging of tagged packets for rules using the
+            # "tag" keyword.
+            tagged-packets: yes
+        # app layer frames
+        - frame:
+            # disabled by default as this is very verbose.
+            enabled: no
+        - anomaly:
+            # Anomaly log records describe unexpected conditions such
+            # as truncated packets, packets with invalid IP/UDP/TCP
+            # length values, and other events that render the packet
+            # invalid for further processing or describe unexpected
+            # behavior on an established stream. Networks which
+            # experience high occurrences of anomalies may experience
+            # packet processing degradation.
+            #
+            # Anomalies are reported for the following:
+            # 1. Decode: Values and conditions that are detected while
+            # decoding individual packets. This includes invalid or
+            # unexpected values for low-level protocol lengths as well
+            # as stream related events (TCP 3-way handshake issues,
+            # unexpected sequence number, etc).
+            # 2. Stream: This includes stream related events (TCP
+            # 3-way handshake issues, unexpected sequence number,
+            # etc).
+            # 3. Application layer: These denote application layer
+            # specific conditions that are unexpected, invalid or are
+            # unexpected given the application monitoring state.
+            #
+            # By default, anomaly logging is enabled. When anomaly
+            # logging is enabled, applayer anomaly reporting is
+            # also enabled.
+            enabled: yes
+            #
+            # Choose one or more types of anomaly logging and whether to enable
+            # logging of the packet header for packet anomalies.
+            types:
+              # decode: no
+              # stream: no
+              # applayer: yes
+            #packethdr: no
+        - files:
+            force-magic: no   # force logging magic on all logged files
+            # force logging of checksums, available hash functions are md5,
+            # sha1 and sha256
+            #force-hash: [md5]
+        #- drop:
+        #    alerts: yes      # log alerts that caused drops
+        #    flows: all       # start or all: 'start' logs only a single drop
+        #                     # per flow direction. All logs each dropped pkt.
+        - smtp:
+            #extended: yes # enable this for extended logging information
+            # this includes: bcc, message-id, subject, x_mailer, user-agent
+            # custom fields logging from the list:
+            #  reply-to, bcc, message-id, subject, x-mailer, user-agent, received,
+            #  x-originating-ip, in-reply-to, references, importance, priority,
+            #  sensitivity, organization, content-md5, date
+            #custom: [received, x-mailer, x-originating-ip, relays, reply-to, bcc]
+            # output md5 of fields: body, subject
+            # for the body you need to set app-layer.protocols.smtp.mime.body-md5
+            # to yes
+            #md5: [body, subject]
+
+        - smb
+        - stats:
+            totals: yes       # stats for all threads merged together
+            threads: no       # per thread stats
+            deltas: no        # include delta values
+        # bi-directional flows
+        - flow
+        # uni-directional flows
+        #- netflow
+
+        # Metadata event type. Triggered whenever a pktvar is saved
+        # and will include the pktvars, flowvars, flowbits and
+        # flowints.
+        #- metadata
+
+  - stats:
+      enabled: yes
+      filename: stats.log
+      append: yes       # append to file (yes) or overwrite it (no)
+      totals: yes       # stats for all threads merged together
+      threads: no       # per thread stats
+      #null-values: yes  # print counters that have value 0. Default: no
+
+  - file-store:
+      version: 2
+      enabled: yes
+
+      # Set the directory for the filestore. Relative pathnames
+      # are contained within the "default-log-dir".
+      #dir: filestore
+
+      # Write out a fileinfo record for each occurrence of a file.
+      # Disabled by default as each occurrence is already logged
+      # as a fileinfo record to the main eve-log.
+      write-fileinfo: yes
+
+      # Force storing of all files. Default: no.
+      force-filestore: yes
+
+      # Override the global stream-depth for sessions in which we want
+      # to perform file extraction. Set to 0 for unlimited; otherwise,
+      # must be greater than the global stream-depth value to be used.
+      stream-depth: 0
+
+      # Uncomment the following variable to define how many files can
+      # remain open for filestore by Suricata. Default value is 0 which
+      # means files get closed after each write to the file.
+      #max-open-files: 1000
+
+      # Force logging of checksums: available hash functions are md5,
+      # sha1 and sha256. Note that SHA256 is automatically forced by
+      # the use of this output module as it uses the SHA256 as the
+      # file naming scheme.
+      #force-hash: [sha1, md5]
+
+# Logging configuration.  This is not about logging IDS alerts/events, but
+# output about what Suricata is doing, like startup messages, errors, etc.
+logging:
+  # The default log level: can be overridden in an output section.
+  # Note that debug level logging will only be emitted if Suricata was
+  # compiled with the --enable-debug configure option.
+  #
+  # This value is overridden by the SC_LOG_LEVEL env var.
+  default-log-level: notice
+
+  # The default output format.  Optional parameter, should default to
+  # something reasonable if not provided.  Can be overridden in an
+  # output section.  You can leave this out to get the default.
+  #
+  # This console log format value can be overridden by the SC_LOG_FORMAT env var.
+  #default-log-format: "%D: %S: %M"
+  #
+  # For the pre-7.0 log format use:
+  #default-log-format: "[%i] %t [%S] - (%f:%l) <%d> (%n) -- "
+
+  # A regex to filter output.  Can be overridden in an output section.
+  # Defaults to empty (no filter).
+  #
+  # This value is overridden by the SC_LOG_OP_FILTER env var.
+  default-output-filter:
+
+  # Requires libunwind to be available when Suricata is configured and built.
+  # If a signal unexpectedly terminates Suricata, displays a brief diagnostic
+  # message with the offending stacktrace if enabled.
+  #stacktrace-on-signal: on
+
+  # Define your logging outputs.  If none are defined, or they are all
+  # disabled you will get the default: console output.
+  outputs:
+  - console:
+      enabled: yes
+      # type: json
+  - file:
+      enabled: yes
+      level: info
+      filename: suricata.log
+      # format: "[%i - %m] %z %d: %S: %M"
+      # type: json
+  - syslog:
+      enabled: no
+      facility: local5
+      format: "[%i] <%d> -- "
+      # type: json
+
+
