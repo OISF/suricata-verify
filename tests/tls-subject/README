@@ -1,0 +1,11 @@
+Description
+===========
+Tests the `tls.subject` legacy keyword which represents TLS/SSL certificate Subject field.
+
+PCAP
+====
+PCAP comes from an [existing TLS test](https://github.com/OISF/suricata-verify/blob/master/tests/tls/tls.pcap)
+
+Redmine ticket
+==============
+https://redmine.openinfosecfoundation.org/issues/5544

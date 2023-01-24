@@ -1,0 +1,1 @@
+alert tls any any -> any any (msg:"TLS subject keyword"; tls.subject:"C=FR, ST=IDF, L=Paris, O=Stamus, CN=SELKS"; sid:1; rev:1;)
