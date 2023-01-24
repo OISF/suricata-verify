@@ -1,0 +1,20 @@
+pcap: ../tls/tls.pcap
+
+checks:
+  - filter:
+      count: 4
+      match:
+        event_type: tls
+        tls.subject: C=FR, ST=IDF, L=Paris, O=Stamus, CN=SELKS
+        
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 2
