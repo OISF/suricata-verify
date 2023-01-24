@@ -1,0 +1,17 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+        tls.session_resumed: true
+        
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 1
+
