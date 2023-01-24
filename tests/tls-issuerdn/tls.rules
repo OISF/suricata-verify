@@ -1,0 +1,6 @@
+//tests tls legacy keyword tls.issuerdn
+alert tls any any -> any any (msg:"TLS issuerDN keyword"; tls.issuerdn:"C=FR, ST=IDF, L=Paris, O=Stamus, CN=SELKS"; sid:1; rev:1;)
+
+//tests new tls keyword tls.cert_issuer
+alert tls any any -> any any (msg:"TLS issuerDN keyword"; tls.cert_issuer; content:"C=FR, ST=IDF, L=Paris, O=Stamus, CN=SELKS"; sid:2; rev:1;)
+
