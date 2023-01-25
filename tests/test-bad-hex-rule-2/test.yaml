@@ -1,9 +1,3 @@
-requires:
-  min-version: 5.0.0
-
-  features:
-    - HAVE_LIBJANSSON
-
 command: |
   ${SRCDIR}/src/suricata --set classification-file="${SRCDIR}/classification.config" --set reference-config-file="${SRCDIR}/reference.config" -l ${OUTPUT_DIR} -c ${TEST_DIR}/suricata.yaml -r ${TEST_DIR}/ -S ${TEST_DIR}/test.rules
 
@@ -11,10 +5,18 @@ checks:
   # check that we have the following entries in eve.json
   # match 1 specific rule load failure reason
   - filter:
+      min-version: 7
       count: 1
       match:
         event_type: engine
         engine.message: "Invalid hex code in content - |01 10 0j|, hex j. Invalidating signature."
+
+  - filter:
+      lt-version: 7
+      count: 1
+      match:
+        event_type: engine
+        engine.message: "Invalid hex code in content - \u0001\u00101 10 0j|, hex j. Invalidating signature."
 
   - filter:
       lt-version: 7
