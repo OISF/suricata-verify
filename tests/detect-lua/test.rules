@@ -1,0 +1,6 @@
+alert http any any -> any any (flow:to_server; lua:test1.lua; sid:1;)
+alert tcp any any -> any any (flow:to_server; lua:test2.lua; sid:2;)
+alert tcp any any -> any any (flow:to_server; lua:test3.lua; sid:3;)
+alert http any any -> any any (flow:to_server; lua:test4.lua; sid:4;)
+alert http any any -> any any (flow:to_server; lua:test4.lua; sid:5;)
+alert http any any -> any any (flow:to_server; lua:test6.lua; sid:6;)
