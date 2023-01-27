@@ -13,3 +13,5 @@ alert sip any any -> any any (flow:to_client; frame:response.headers; content:"V
 alert sip any any -> any any (flow:to_client; frame:response.headers; content:"Via:"; startswith; content:"Content-Length: 0|0d 0a|"; endswith; sid:42;)
 
 alert sip any any -> any any (flow:to_server; frame:request.body; content:"v=0"; startswith; sid:51;)
+
+alert sip any any -> any any (flow:to_server; frame:request.body; strip_whitespace; content:"v=0o=Clarent1203"; startswith; sid:61;)

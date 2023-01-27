@@ -41,6 +41,11 @@ checks:
       event_type: alert
       alert.signature_id: 42
  - filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 61
+ - filter:
     count: 2
     match:
       event_type: alert
