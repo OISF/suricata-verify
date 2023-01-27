@@ -1,0 +1,13 @@
+requires:
+  min-version: 7
+
+args:
+ - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+        tls.notbefore: "1969-12-31T00:00:00"
+        tls.client.notbefore: "1969-12-31T00:00:00"
