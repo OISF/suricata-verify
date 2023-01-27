@@ -1,0 +1,27 @@
+requires:
+   min-version: 7
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      dest_ip: 18.138.183.195
+      dest_port: 443
+      event_type: tls
+      pcap_cnt: 7
+      pkt_src: wire/pcap
+      proto: TCP
+      src_ip: 192.168.0.43
+      src_port: 46135
+      tls.fingerprint: 71:cd:fe:08:7f:3d:2a:18:32:69:38:fa:bd:64:7b:c6:cf:cc:44:8e
+      tls.issuerdn: C=KR, ST=Kyunggido, L=Suwon, O=Samsung Electronics, OU=SW2 SISC,
+        CN=ROOT CA SISC FKP2_PLUS
+      tls.notafter: '2038-12-31T00:10:03'
+      tls.notbefore: '1969-12-31T00:00:00'
+      tls.serial: '32'
+      tls.sni: fkp.samsungcloudsolution.com
+      tls.subject: OU=vd, CN=fkp.samsungcloudsolution.com
+      tls.version: TLSv1
