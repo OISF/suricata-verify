@@ -1,0 +1,8 @@
+pcap: ../rfb-protocol-3.8/04-vnc-openwall-3.8.pcap
+
+checks:
+  - filter:
+      count: 3866
+      match:
+        event_type: alert
+        alert.signature_id: 1
