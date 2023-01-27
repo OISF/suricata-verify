@@ -187,16 +187,14 @@ class Version:
           - 4.0 would match 4.0.x.
           - 4.0.3 would match only 4.0.3.
         """
-        if not a.major == b.major:
+        if a.major != b.major:
             return False
 
-        if a.minor is not None and b.minor is not None:
-            if a.minor != b.minor:
-                return False
+        if a.minor >= 0 and b.minor >= 0 and a.minor != b.minor:
+            return False
 
-        if a.patch is not None and b.patch is not None:
-            if a.patch != b.patch:
-                return False
+        if a.patch >= 0 and b.patch >= 0 and a.patch != b.patch:
+            return False
 
         return True
 
