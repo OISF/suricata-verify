@@ -1,0 +1,3 @@
+drop http any any -> any any (frame:http1.response; content:"|0d 0a|AAA"; sid:1;)
+# shouldn't match
+drop http any any -> any any (frame:http1.response; content:"|0d 0a|AAA"; endswith; sid:4;)
