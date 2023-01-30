@@ -120,12 +120,15 @@ class TerminatePoolError(Exception):
 SuricataVersion = namedtuple(
     "SuricataVersion", ["major", "minor", "patch"])
 
-def parse_suricata_version(buf):
+def parse_suricata_version(buf, expr=None):
     m = re.search("(?:Suricata version |^)(\d+)\.?(\d+)?\.?(\d+)?.*", str(buf).strip())
+    default_v = 0
+    if expr is not None and expr == "equal":
+        default_v = None
     if m:
-        major = int(m.group(1)) if m.group(1) else 0
-        minor = int(m.group(2)) if m.group(2) else 0
-        patch = int(m.group(3)) if m.group(3) else 0
+        major = int(m.group(1)) if m.group(1) else default_v
+        minor = int(m.group(2)) if m.group(2) else default_v
+        patch = int(m.group(3)) if m.group(3) else default_v
 
         return SuricataVersion(
             major=major, minor=minor, patch=patch)
@@ -361,7 +364,7 @@ def find_value(name, obj):
 
 
 def is_version_compatible(version, suri_version, expr):
-    config_version = parse_suricata_version(version)
+    config_version = parse_suricata_version(version, expr)
     version_obj = Version()
     func = getattr(version_obj, "is_{}".format(expr))
     if not func(suri_version, config_version):
