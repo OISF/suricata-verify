@@ -190,10 +190,10 @@ class Version:
         if a.major != b.major:
             return False
 
-        if a.minor >= 0 and b.minor >= 0 and a.minor != b.minor:
+        if a.minor and b.minor and a.minor >= 0 and b.minor >= 0 and a.minor != b.minor:
             return False
 
-        if a.patch >= 0 and b.patch >= 0 and a.patch != b.patch:
+        if a.patch and b.patch and a.patch >= 0 and b.patch >= 0 and a.patch != b.patch:
             return False
 
         return True
