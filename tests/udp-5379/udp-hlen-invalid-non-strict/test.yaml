@@ -15,5 +15,10 @@ checks:
     - shell:
         version: 6
         args: |-
-          grep "\[ERRCODE: SC_WARN_DEPRECATED(203)\] - decode-event keyword no longer supports event \"decoder.udp.hlen_invalid\"" suricata.log | wc -l
+          grep "decode-event keyword no longer supports event \"decoder.udp.hlen_invalid\"" suricata.log | wc -l
         expect: 1
+    - shell:
+        version: 6
+        args: |-
+          grep -E "Error.*SC_WARN_DEPRECATED.*decode-event keyword no longer supports event \"decoder.udp.hlen_invalid\"" suricata.log | wc -l
+        expect: 0
