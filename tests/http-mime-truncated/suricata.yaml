@@ -1,0 +1,16 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      types:
+        - files:
+            force-hash: [sha256]
+
+app-layer:
+  protocols:
+    http:
+      libhtp:
+         default-config:
+           request-body-limit: 100kb
