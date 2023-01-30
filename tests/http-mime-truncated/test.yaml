@@ -1,0 +1,16 @@
+requires:
+  min-version: 7.0.0
+
+# disables checksum verification
+args:
+  - -k none
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        app_proto: http
+        fileinfo.sha256: "0adad78526c1b9c35f349a2cc7014c458aa87adcb9ec86f052fd8a9a80584e39"
+        fileinfo.state: TRUNCATED
+        fileinfo.size: 101422
