@@ -10,7 +10,7 @@ jobs:
     name: PCAP-NG Check
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: sudo apt update
       - run: sudo apt -y install tshark
       - run: ./pcapng-check.sh
@@ -71,7 +71,7 @@ jobs:
                 zlib1g-dev
       - run: cargo install --force --debug cbindgen
       - run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: python3 ./run.py --self-test
       - run: git clone https://github.com/OISF/suricata -b ${{ matrix.branch }}
       - run: git clone https://github.com/OISF/libhtp suricata/libhtp
@@ -142,7 +142,7 @@ jobs:
                 zlib-devel
       - run: cargo install --force --debug cbindgen
       - run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: python3 ./run.py --self-test
       - run: git clone https://github.com/OISF/suricata -b ${{ matrix.branch }}
       - run: git clone https://github.com/OISF/libhtp suricata/libhtp
