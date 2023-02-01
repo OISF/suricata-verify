@@ -1,0 +1,5 @@
+alert http any any -> any any (frame:http1.response; content:"|0d 0a|AAA"; sid:1;)
+alert http any any -> any any (frame:http1.response; content:"AAA"; endswith; sid:2;)
+alert http any any -> any any (frame:http1.stream; content:"AAA"; sid:3;)
+# shouldn't match
+alert http any any -> any any (frame:http1.response; content:"|0d 0a|AAA"; endswith; sid:4;)

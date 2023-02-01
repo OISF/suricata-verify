@@ -64,7 +64,7 @@ checks:
       src_port: 1470
       tx_id: 0
 - filter:
-    version: 6
+    version: 6.0.0 # FIXME ref: https://redmine.openinfosecfoundation.org/issues/5821
     count: 1
     match:
       app_proto: smtp

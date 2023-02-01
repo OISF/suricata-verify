@@ -120,12 +120,15 @@ class TerminatePoolError(Exception):
 SuricataVersion = namedtuple(
     "SuricataVersion", ["major", "minor", "patch"])
 
-def parse_suricata_version(buf):
+def parse_suricata_version(buf, expr=None):
     m = re.search("(?:Suricata version |^)(\d+)\.?(\d+)?\.?(\d+)?.*", str(buf).strip())
+    default_v = 0
+    if expr is not None and expr == "equal":
+        default_v = None
     if m:
-        major = int(m.group(1)) if m.group(1) else 0
-        minor = int(m.group(2)) if m.group(2) else 0
-        patch = int(m.group(3)) if m.group(3) else 0
+        major = int(m.group(1)) if m.group(1) else default_v
+        minor = int(m.group(2)) if m.group(2) else default_v
+        patch = int(m.group(3)) if m.group(3) else default_v
 
         return SuricataVersion(
             major=major, minor=minor, patch=patch)
@@ -361,7 +364,7 @@ def find_value(name, obj):
 
 
 def is_version_compatible(version, suri_version, expr):
-    config_version = parse_suricata_version(version)
+    config_version = parse_suricata_version(version, expr)
     version_obj = Version()
     func = getattr(version_obj, "is_{}".format(expr))
     if not func(suri_version, config_version):
@@ -397,13 +400,26 @@ class FileCompareCheck:
 
 class ShellCheck:
 
-    def __init__(self, config, env):
+    def __init__(self, config, env, suricata_config):
         self.config = config
         self.env = env
+        self.suricata_config = suricata_config
 
     def run(self):
+        shell_args = {}
         if not self.config or "args" not in self.config:
             raise TestError("shell check missing args")
+        req_version = self.config.get("version")
+        min_version = self.config.get("min-version")
+        lt_version = self.config.get("lt-version")
+        if req_version is not None:
+            shell_args["version"] = req_version
+        if min_version is not None:
+            shell_args["min-version"] = min_version
+        if lt_version is not None:
+            shell_args["lt-version"] = lt_version
+        check_requires(shell_args, self.suricata_config)
+
         try:
             if WIN32:
                 print("skipping shell check on windows")
@@ -732,7 +748,7 @@ class TestRunner:
 
     @handle_exceptions
     def perform_shell_checks(self, check, count, test_num, test_name):
-        count = ShellCheck(check, self.build_env()).run()
+        count = ShellCheck(check, self.build_env(), self.suricata_config).run()
         return count
 
     @handle_exceptions

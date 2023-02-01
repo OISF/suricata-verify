@@ -9,6 +9,7 @@ args:
 - -k none
 - --simulate-packet-tcp-reassembly-memcap=4
 - --set stream.reassembly.memcap-policy=pass-flow
+- --set app-layer.error-policy=ignore
 checks:
   - filter:
       count: 0

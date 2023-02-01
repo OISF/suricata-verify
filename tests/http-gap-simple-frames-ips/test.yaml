@@ -1,0 +1,69 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 7.0.0
+
+# disables checksum verification
+args:
+  - -k none
+  - --simulate-ips
+
+checks:
+
+  # Check that there is one file event with content range.
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.url: "/1"
+        http.status: 200
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.url: "/2"
+        http.status: 200
+  - filter:
+      count: 0
+      match:
+        event_type: http
+        http.url: "/3"
+        http.status: 200
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.size: 14
+        fileinfo.state: "CLOSED"
+        fileinfo.gaps: false
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.size: 14
+        fileinfo.filename: "/2"
+        fileinfo.state: "TRUNCATED"
+        fileinfo.gaps: false
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 15
+        alert.action: "blocked"
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 4
+  - filter:
+      count: 1
+      match:
+        event_type: frame
+        app_proto: http
+        frame.id: 2
+        frame.stream_offset: 0
+        frame.type: request
+        frame.length: 40
+        frame.direction: toserver
+        frame.tx_id: 0

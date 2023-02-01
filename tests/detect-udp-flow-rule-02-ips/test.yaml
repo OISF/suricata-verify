@@ -2,6 +2,7 @@ pcap: ../sip-body-frames/public-cloudshark-sip-s0.pcap
 args:
 - --simulate-ips
 - -k none
+- --set exception-policy=ignore
 checks:
   - filter:
       count: 0
