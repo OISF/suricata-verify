@@ -1,0 +1,9 @@
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 7
+      match:
+        event_type: smb
+        smb.ntlmssp.version: "10.0 build 10586 rev 15"
