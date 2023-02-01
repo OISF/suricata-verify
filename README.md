@@ -21,7 +21,7 @@ Or to run a single test:
 - Create a directory that is the name of the new test.
 
 - Copy a single pcap file into the test directory. It must end in
-  ".pcap" or ".pcapng".
+  ".pcap".
 
   This is enough for a basic test that will run Suricata over the pcap
   testing for a successful exit code.
