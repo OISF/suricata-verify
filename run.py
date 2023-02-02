@@ -484,7 +484,7 @@ class FilterCheck:
             raise TestError("%s does not exist" % (json_filename))
 
         count = 0
-        with open(json_filename, "r") as fileobj:
+        with open(json_filename, "r", encoding="utf-8") as fileobj:
             for line in fileobj:
                 event = json.loads(line)
                 if self.match(event):
