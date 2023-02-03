@@ -1,0 +1,20 @@
+pcap: ../ipv6-evasion/ipv6-covert-dstopts/covert_send6.pcap
+
+checks:
+  - filter:
+      count: 18
+      match:
+        event_type: alert
+        alert.signature_id: 1
+
+  - filter:
+      count: 18
+      match:
+        event_type: alert
+        alert.signature_id: 2
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3

@@ -1,0 +1,3 @@
+alert ip any any -> any any (ttl:254; prefilter; sid:1;)
+alert ip any any -> any any (ttl:64; prefilter; sid:2;)
+alert ip any any -> any any (ttl:255; prefilter; sid:3;)
