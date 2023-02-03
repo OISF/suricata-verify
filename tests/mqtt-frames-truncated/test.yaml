@@ -1,0 +1,55 @@
+pcap: ../mqtt-limit-1/input.pcap
+
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  files:
+    - rust/src/mqtt/parser.rs
+
+args:
+ - -k none
+checks:
+- filter:
+    count: 1
+    match:
+      alert.signature_id: 1
+      frame.type: "pdu"
+- filter:
+    count: 2
+    match:
+      alert.signature_id: 2
+      frame.type: "pdu"
+      frame.complete: true
+- filter:
+    count: 3
+    match:
+      alert.signature_id: 3
+      frame.type: "header"
+      frame.complete: true
+- filter:
+    count: 1
+    match:
+      alert.signature_id: 4
+      frame.type: "header"
+      frame.length: 2
+      frame.complete: true
+- filter:
+    count: 0
+    match:
+      alert.signature_id: 5
+- filter:
+    count: 0
+    match:
+      alert.signature_id: 6
+- filter:
+    count: 2
+    match:
+      alert.signature_id: 7
+      frame.type: "data"
+      frame.complete: true
+- filter:
+    count: 2
+    match:
+      alert.signature_id: 8
+      frame.type: "data"
+      frame.complete: true

@@ -1,0 +1,11 @@
+alert mqtt any any -> any any (msg:"mqtt truncated Frame 1"; frame:pdu; content:"|32 a7 8d|"; startswith; sid:1;)
+alert mqtt any any -> any any (msg:"mqtt truncated Frame 2"; frame:pdu; content:"|58 58 58|"; endswith; sid:2;)
+
+alert mqtt any any -> any any (msg:"mqtt truncated Frame 3"; frame:header; content:"|32|"; sid:3;)
+alert mqtt any any -> any any (msg:"mqtt truncated Frame 4"; frame:header; content:"|30|"; sid:4;)
+
+alert mqtt any any -> any any (msg:"mqtt truncated Frame 5"; frame:pdu; content:"|17 0C E2|"; sid:5;)
+alert mqtt any any -> any any (msg:"mqtt truncated Frame 6"; frame:pdu; content:"|00 00 54 46|"; sid:6;)
+
+alert mqtt any any -> any any (msg:"mqtt truncated Frame 7"; frame:data; content:"|00 03|"; startswith; sid:7;)
+alert mqtt any any -> any any (msg:"mqtt truncated Frame 8"; frame:data; content:"|58 58 58|"; sid:8;)
