@@ -1,0 +1,17 @@
+alert mqtt any any -> any any (msg:"mqtt truncated Frame 1"; frame:pdu; content:"|10 1c|"; startswith; sid:1;)
+alert mqtt any any -> any any (msg:"mqtt truncated Frame 2"; frame:pdu; content:"|14|"; endswith; sid:2;)
+
+alert mqtt any any -> any any (msg:"mqtt truncated Frame 3"; frame:header; content:"|10|"; sid:3;)
+alert mqtt any any -> any any (msg:"mqtt truncated Frame 4"; frame:header; content:"|10 1c|"; sid:4;)
+
+alert mqtt any any -> any any (msg:"mqtt truncated Frame 5"; frame:pdu; content:"|17 0C E2|"; sid:5;)
+alert mqtt any any -> any any (msg:"mqtt truncated Frame 6"; frame:pdu; content:"|00 00 54 46|"; sid:6;)
+
+# pre-boundary test for truncated data
+alert mqtt any any -> any any (msg:"mqtt truncated Frame 7"; frame:data; content:"|0a|"; sid:7;)
+
+# At boundary test for truncated data
+alert mqtt any any -> any any (msg:"mqtt truncated Frame 8"; frame:data; content:"|51|"; sid:8;)
+
+# post-boundary test for truncated data
+alert mqtt any any -> any any (msg:"mqtt truncated Frame 9"; frame:data; content:"|5b|"; sid:9;)
