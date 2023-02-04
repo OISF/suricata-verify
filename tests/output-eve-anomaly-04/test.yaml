@@ -8,3 +8,5 @@ checks:
     - shell:
         args: grep "only one 'anomaly' logger can be enabled" stderr | wc -l | xargs
         expect: 1
+
+exit-code: 1
