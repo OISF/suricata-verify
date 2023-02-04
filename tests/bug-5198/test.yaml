@@ -11,4 +11,4 @@ setup:
 args:
     - --set outputs.1.eve-log.filename=noperms/eve.json --set outputs.1.eve-log.threaded=true
 
-exit-code: 0
+exit-code: 1
