@@ -1,3 +1,7 @@
+requires:
+  features:
+    - HAVE_NSS
+
 args:
 - -k none
 
