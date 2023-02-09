@@ -1,0 +1,1 @@
+alert http any any -> any any (content:"THIS_IS_A_TEST"; nocase; sid:1;)
