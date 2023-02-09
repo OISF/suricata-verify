@@ -1,5 +1,7 @@
 requires:
   min-version: 7
+  features:
+    - FIX_FOR_BUG_5836
 
 setup:
   # Create a log directory without write permission
