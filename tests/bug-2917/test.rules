@@ -1,0 +1,13 @@
+alert http $HOME_NET any -> $EXTERNAL_NET $HTTP_PORTS (msg:"TEST 1"; flow:to_server,established; content:"GET"; http_method; flowbits:set,test; sid:1;)
+
+# does not work - based on the original rules
+alert http $EXTERNAL_NET $HTTP_PORTS -> $HOME_NET any (msg:"TEST 2"; flowbits:isset,test; pcre:"/\s200\s/"; sid:2;)
+
+# works - removing the flowbit
+#alert http $EXTERNAL_NET $HTTP_PORTS -> $HOME_NET any (msg:"TEST 2"; pcre:"/\s200\s/"; sid:2;)
+
+# works - sub pcre with content - this validates it something with the flowbit relationship? 
+#alert http $EXTERNAL_NET $HTTP_PORTS -> $HOME_NET any (msg:"TEST 2"; flowbits:isset,test; content:"|20|200|20|"; sid:2;)
+
+# works - add a buffer to the pcre
+#alert http $EXTERNAL_NET $HTTP_PORTS -> $HOME_NET any (msg:"TEST 2"; flowbits:isset,test; pcre:"/200/S"; sid:2;)
