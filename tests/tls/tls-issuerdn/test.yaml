@@ -1,4 +1,4 @@
-pcap: ../tls/tls.pcap
+pcap: ../tls-cert-issuer/tls.pcap
 
 checks:
   - filter:
