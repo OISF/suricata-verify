@@ -1,0 +1,175 @@
+requires:
+  min-version: 7
+
+pcap: false
+
+args:
+  - --engine-analysis
+
+checks:
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1
+        gid: 1
+        rev: 0
+        msg: TEST 1
+        app_proto: http
+        requirements[0]: flow
+        flags[0]: sp_any
+        flags[1]: applayer
+        flags[2]: toserver
+        flags[3]: prefilter
+        pkt_engines[0].name: packet
+        pkt_engines[0].is_mpm: false
+        engines[0].name: http_method
+        engines[0].direction: toserver
+        engines[0].is_mpm: true
+        engines[0].app_proto: http
+        engines[0].progress: 1
+        engines[0].matches[0].name: content
+        engines[0].matches[0].content.pattern: GET
+        engines[0].matches[0].content.nocase: false
+        engines[0].matches[0].content.negated: false
+        engines[0].matches[0].content.starts_with: false
+        engines[0].matches[0].content.ends_with: false
+        engines[0].matches[0].content.is_mpm: true
+        engines[0].matches[0].content.fast_pattern: false
+        lists.packet.matches[0].name: flow
+        lists.post-match.matches[0].name: flowbits
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 2
+        gid: 1
+        rev: 0
+        msg: TEST 2
+        app_proto: http
+        requirements[0]: payload
+        requirements[1]: flow
+        flags[0]: dp_any
+        flags[1]: applayer
+        flags[2]: need_stream
+        flags[3]: need_flowvar
+        flags[4]: toserver
+        flags[5]: toclient
+        pkt_engines[0].name: payload
+        pkt_engines[0].is_mpm: false
+        pkt_engines[1].name: packet
+        pkt_engines[1].is_mpm: false
+        lists.packet.matches[0].name: flowbits
+        lists.packet/stream payload.matches[0].name: pcre
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 4
+        gid: 1
+        rev: 0
+        msg: TEST 4
+        app_proto: http
+        requirements[0]: payload
+        requirements[1]: flow
+        flags[0]: dp_any
+        flags[1]: applayer
+        flags[2]: need_stream
+        flags[3]: need_flowvar
+        flags[4]: toserver
+        flags[5]: toclient
+        flags[6]: prefilter
+        pkt_engines[0].name: payload
+        pkt_engines[0].is_mpm: true
+        pkt_engines[1].name: packet
+        pkt_engines[1].is_mpm: false
+        lists.packet.matches[0].name: flowbits
+        lists.packet/stream payload.matches[0].name: content
+        lists.packet/stream payload.matches[0].content.pattern: ' 200 '
+        lists.packet/stream payload.matches[0].content.nocase: false
+        lists.packet/stream payload.matches[0].content.negated: false
+        lists.packet/stream payload.matches[0].content.starts_with: false
+        lists.packet/stream payload.matches[0].content.ends_with: false
+        lists.packet/stream payload.matches[0].content.is_mpm: true
+        lists.packet/stream payload.matches[0].content.fast_pattern: false
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 5
+        gid: 1
+        rev: 0
+        msg: TEST 5
+        app_proto: http
+        requirements[0]: flow
+        flags[0]: dp_any
+        flags[1]: applayer
+        flags[2]: need_flowvar
+        flags[3]: toclient
+        pkt_engines[0].name: packet
+        pkt_engines[0].is_mpm: false
+        engines[0].name: http_stat_code
+        engines[0].direction: toclient
+        engines[0].is_mpm: false
+        engines[0].app_proto: http
+        engines[0].progress: 1
+        engines[0].matches[0].name: pcre
+        lists.packet.matches[0].name: flowbits
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 3
+        gid: 1
+        rev: 0
+        msg: TEST 3
+        app_proto: http
+        requirements[0]: payload
+        requirements[1]: flow
+        flags[0]: dp_any
+        flags[1]: applayer
+        flags[2]: need_stream
+        flags[3]: toserver
+        flags[4]: toclient
+        pkt_engines[0].name: payload
+        pkt_engines[0].is_mpm: false
+        lists.packet/stream payload.matches[0].name: pcre
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1371257161
+        gid: 1
+        rev: 1
+        msg: DNS TEST
+        app_proto: dns
+        requirements[0]: payload
+        requirements[1]: flow
+        flags[0]: src_any
+        flags[1]: dst_any
+        flags[2]: sp_any
+        flags[3]: dp_any
+        flags[4]: applayer
+        flags[5]: need_stream
+        flags[6]: toserver
+        flags[7]: toclient
+        engines[0].name: app-layer-events
+        engines[0].direction: toserver
+        engines[0].is_mpm: false
+        engines[0].progress: 0
+        engines[0].matches[0].name: app-layer-event
+        engines[1].name: app-layer-events
+        engines[1].direction: toclient
+        engines[1].is_mpm: false
+        engines[1].progress: 0
+        engines[1].matches[0].name: app-layer-event
+        engines[2].name: stream
+        engines[2].direction: toserver
+        engines[2].is_mpm: false
+        engines[2].progress: 0
+        engines[2].matches[0].name: isdataat
+        engines[3].name: stream
+        engines[3].direction: toclient
+        engines[3].is_mpm: false
+        engines[3].progress: 0
+        engines[3].matches[0].name: isdataat
