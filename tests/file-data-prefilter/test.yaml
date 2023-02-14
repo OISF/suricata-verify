@@ -1,0 +1,8 @@
+pcap: ../file-data-depth-inspection/file-data-depth-inpsection.pcap
+
+checks:
+    - filter:
+        count: 2
+        match:
+            event_type: alert
+            alert.signature_id: 1
