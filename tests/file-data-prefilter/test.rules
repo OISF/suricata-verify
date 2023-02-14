@@ -1,0 +1,4 @@
+# test prefilter keyword for file_data
+alert tcp any any -> any 25 (msg:"VIRUS INBOUND bad file attachment"; flow:to_server,established; content:"content-disposition|3a| attachment|3b|"; nocase; content:".zip|22|"; nocase; within:128; file_data; content:".pdf.exe"; prefilter; within:64; sid:1; rev:1;)
+# test prefilter keyword for file.data
+alert tcp any any -> any 25 (msg:"VIRUS INBOUND bad file attachment"; flow:to_server,established; content:"content-disposition|3a| attachment|3b|"; nocase; content:".zip|22|"; nocase; within:128; file.data; content:".pdf.exe"; prefilter; within:64; sid:2; rev:1;)
