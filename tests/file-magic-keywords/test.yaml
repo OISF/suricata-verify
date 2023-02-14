@@ -1,0 +1,24 @@
+pcap: ../filestore-filecontainer-http/filecontainer-http.pcap
+
+requires:
+  features:
+    - MAGIC
+  files:
+    - src/output-filestore.c
+
+checks:
+
+   - shell:
+        args: test -e filestore/e0/e092858d5bd66ab33085a966ee4ac0bf0edf6eab8d8b1e66432ee600e904bb4f
+
+   - shell:
+        args: test ! -e filestore/03/031b2bbeda6fd7e877e50298d2b2ded2073ce6e15f29029b4e50dbd9e81f6be6
+
+   - filter:
+       count: 1
+       match: 
+          event_type: alert 
+          alert.signature_id: 1
+
+   - stats:
+      file_store.fs_errors: 0
