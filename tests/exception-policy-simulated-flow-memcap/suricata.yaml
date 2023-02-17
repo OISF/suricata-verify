@@ -1,6 +1,9 @@
 %YAML 1.1
 ---
 
+stats:
+  enabled: yes
+
 outputs:
   - eve-log:
       enabled: yes

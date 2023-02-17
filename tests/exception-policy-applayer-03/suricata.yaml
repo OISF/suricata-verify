@@ -1,9 +1,10 @@
 %YAML 1.1
 ---
 
-stats:
-  enabled: yes
-  interval: 8
+app-layer:
+  protocols:
+    bittorrent-dht:
+      enabled: yes
 
 outputs:
   - eve-log:
@@ -17,8 +18,7 @@ outputs:
               decode: no
               stream: yes
               applayer: yes
-        - tls:
-            extended: yes
+        - bittorrent-dht
         - drop:
             alerts: yes
             flows: all
@@ -36,3 +36,9 @@ action-order:
   - drop
   - reject
   - alert
+
+stats:
+  enabled: yes
+  interval: 8
+  exception-policy:
+    per-app-proto-errors: true

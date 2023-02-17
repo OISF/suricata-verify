@@ -1,8 +1,6 @@
 requires:
   features:
     - DEBUG
-  files:
-    - src/util-exception-policy.c
 args:
 - --simulate-ips
 - -k none
@@ -40,3 +38,11 @@ checks:
       match:
         event_type: stats
         stats.ips.drop_reason.defrag_memcap: 1
+  - filter:
+      min-version: 8
+      count: 1
+      match:
+        event_type: stats
+        stats.defrag.memcap_exception_policy.drop_packet: 1
+        stats.defrag.memcap_exception_policy.pass_packet: 0
+
