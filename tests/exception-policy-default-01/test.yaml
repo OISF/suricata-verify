@@ -1,9 +1,9 @@
 requires:
   features:
     - DEBUG
-  files:
-    - src/util-exception-policy.c
+
 pcap: ../tls/tls-certs-alert/input.pcap
+
 args:
 - --simulate-ips
 - -k none

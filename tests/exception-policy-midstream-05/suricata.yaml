@@ -22,7 +22,12 @@ outputs:
               deployment: reverse
               header: X-Forwarded-For
         - flow
+        - stats
         - http
         - drop:
             alerts: yes
             flows: all
+  - stats:
+       enabled: yes
+       filename: stats.log
+       append: yes
