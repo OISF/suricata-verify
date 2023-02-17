@@ -14,3 +14,5 @@ outputs:
             flows: all       # start or all: 'start' logs only a single drop
                              # per flow direction. All logs each dropped pkt.
         - flow
+        - stats
+

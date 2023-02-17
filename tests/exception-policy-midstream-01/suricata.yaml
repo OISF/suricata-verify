@@ -26,3 +26,4 @@ outputs:
         - drop:
             alerts: yes
             flows: all
+        - stats
