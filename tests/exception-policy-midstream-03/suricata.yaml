@@ -15,6 +15,11 @@ outputs:
             http: yes
         - flow
         - http
+        - stats
+  - stats:
+       enabled: yes
+       filename: stats.log
+       append: yes
 
 logging:
   default-log-level: notice
