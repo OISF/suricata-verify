@@ -49,3 +49,8 @@ checks:
       match:
         event_type: flow
         flow.action: drop
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.tcp.reassembly_exception_policy.pass_packet: 1

@@ -15,3 +15,4 @@ outputs:
             http: yes
         - flow
         - http
+        - stats

@@ -1,12 +1,12 @@
 requires:
   features:
     - DEBUG
-  files:
-    - src/util-exception-policy.c
+
 pcap: ../tls/tls-ja3s/input.pcap
 args:
 - --simulate-ips
 - -k none
+
 checks:
   - filter:
       count: 0
@@ -21,3 +21,25 @@ checks:
       match:
         event_type: tls
         tls.sni: example.com
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.flow.memcap_exception_policy.bypass: 0
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.tcp.reassembly_exception_policy.reject: 0
+        stats.tcp.midstream_exception_policy.pass_flow: 0
+        stats.tcp.ssn_memcap_exception_policy.drop_flow: 0
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.app_layer.error.tls.exception_policy.drop_packet: 0
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.defrag.memcap_exception_policy.ignore: 0

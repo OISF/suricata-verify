@@ -14,12 +14,19 @@ outputs:
               stream: yes
               applayer: yes
         - tls:
-            extended: yes     # enable this for extended logging information
+            extended: yes
         - drop:
-            alerts: yes      # log alerts that caused drops
-            flows: all       # start or all: 'start' logs only a single drop
-                             # per flow direction. All logs each dropped pkt.
+            alerts: yes
+            flows: all
+        - stats:
+            totals: yes
+            threads: no
+            deltas: no
         - flow
+  - stats:
+      enabled: yes
+      filename: stats.log
+
 action-order:
   - pass
   - drop

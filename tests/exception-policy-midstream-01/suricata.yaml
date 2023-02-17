@@ -26,3 +26,6 @@ outputs:
         - drop:
             alerts: yes
             flows: all
+        - stats
+
+exception-policy: ignore

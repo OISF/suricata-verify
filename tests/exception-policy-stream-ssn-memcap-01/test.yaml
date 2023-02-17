@@ -47,3 +47,8 @@ checks:
       match:
         event_type: flow
         flow.action: drop
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.tcp.ssn_memcap_exception_policy.drop_flow: 1

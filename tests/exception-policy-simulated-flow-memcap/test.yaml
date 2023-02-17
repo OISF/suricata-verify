@@ -30,3 +30,4 @@ checks:
       match:
         event_type: stats
         stats.tcp.midstream_pickups: 1
+        stats.flow.memcap_exception_policy.drop_packet: 1
