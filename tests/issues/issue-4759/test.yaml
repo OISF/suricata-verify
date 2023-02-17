@@ -1,0 +1,9 @@
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+  - filter:
+      count: 4
+      match:
+        event_type: dns
