@@ -1,0 +1,67 @@
+requires:
+  min-version: 8
+  features:
+    - DEBUG
+pcap: ../bittorrent-dht/input.pcap
+args:
+- --simulate-ips
+- -k none
+- --simulate-applayer-error-at-offset-tc=3
+- --set app-layer.error-policy=pass-packet
+
+checks:
+- filter:
+    count: 1
+    match:
+      bittorrent_dht.request.id: 6162636465666768696a30313233343536373839
+      bittorrent_dht.request_type: ping
+      bittorrent_dht.transaction_id: '6161'
+      dest_ip: 190.0.0.3
+      dest_port: 30000
+      event_type: bittorrent_dht
+      pcap_cnt: 3
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 190.0.0.1
+      src_port: 20000
+- filter:
+    count: 1
+    match:
+      bittorrent_dht.request.id: 6162636465666768696a30313233343536373839
+      bittorrent_dht.request_type: ping
+      bittorrent_dht.transaction_id: '6161'
+      dest_ip: 190.0.0.2
+      dest_port: 50000
+      event_type: bittorrent_dht
+      pcap_cnt: 1
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 190.0.0.1
+      src_port: 40000
+- filter:
+    count: 1
+    match:
+      bittorrent_dht.error.msg: A Generic Error Ocurred
+      bittorrent_dht.error.num: 201
+      bittorrent_dht.transaction_id: '6161'
+      dest_ip: 190.0.0.1
+      dest_port: 20000
+      event_type: bittorrent_dht
+      pcap_cnt: 4
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 190.0.0.3
+      src_port: 30000
+- filter:
+    count: 1
+    match:
+      bittorrent_dht.response.id: 6d6e6f707172737475767778797a313233343536
+      bittorrent_dht.transaction_id: '6161'
+      dest_ip: 190.0.0.1
+      dest_port: 40000
+      event_type: bittorrent_dht
+      pcap_cnt: 2
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 190.0.0.2
+      src_port: 50000

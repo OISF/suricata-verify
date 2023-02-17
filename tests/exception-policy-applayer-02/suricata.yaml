@@ -1,10 +1,6 @@
 %YAML 1.1
 ---
 
-stats:
-  enabled: yes
-  interval: 8
-
 outputs:
   - eve-log:
       enabled: yes
@@ -36,3 +32,9 @@ action-order:
   - drop
   - reject
   - alert
+
+stats:
+  enabled: yes
+  interval: 8
+  exception-policy:
+    per-app-proto-errors: true

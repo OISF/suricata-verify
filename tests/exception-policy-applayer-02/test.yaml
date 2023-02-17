@@ -1,31 +1,24 @@
 requires:
   features:
     - DEBUG
-  files:
-    - src/util-exception-policy.c
 pcap: ../tls/tls-certs-alert/input.pcap
 args:
 - --simulate-ips
 - -k none
 # pretend pretend error in the first data
 - --simulate-applayer-error-at-offset-ts=0
-- --set app-layer.error-policy=drop-flow
+- --set app-layer.error-policy=pass-packet
 checks:
   - filter:
       count: 0
       match:
         event_type: alert
   - filter:
-      count: 29
+      count: 0
       match:
         event_type: drop
   - filter:
-      count: 1
-      match:
-        event_type: drop
-        drop.reason: "applayer error"
-  - filter:
-      count: 28
+      count: 0
       match:
         event_type: drop
         drop.reason: "flow drop"
@@ -44,20 +37,14 @@ checks:
         event_type: flow
         app_proto: tls
   - filter:
-      count: 1
+      count: 0
       match:
         event_type: flow
         flow.action: drop
-  - filter:
-      min-version: 7
-      count: 1
-      match:
-        event_type: stats
-        stats.ips.drop_reason.applayer_error: 1
   - filter:
       min-version: 8
       count: 1
       match:
         event_type: stats
-        stats.app_layer.error.exception_policy.drop_flow: 1
-        stats.app_layer.error.exception_policy.pass_flow: 0
+        stats.app_layer.error.tls.exception_policy.pass_packet: 1
+        stats.app_layer.error.tls.exception_policy.drop_packet: 0

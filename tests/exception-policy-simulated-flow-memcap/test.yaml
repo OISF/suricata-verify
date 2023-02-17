@@ -32,3 +32,10 @@ checks:
       match:
         event_type: stats
         stats.ips.drop_reason.flow_memcap: 1
+  - filter:
+      min-version: 8
+      count: 1
+      match:
+        event_type: stats
+        stats.flow.memcap_exception_policy.drop_packet: 1
+        stats.flow.memcap_exception_policy.pass_packet: 0
