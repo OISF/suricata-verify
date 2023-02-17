@@ -26,3 +26,10 @@ outputs:
         - drop:
             alerts: yes
             flows: all
+        - stats
+  - stats:
+       enabled: yes
+       filename: stats.log
+       append: yes
+
+exception-policy: ignore

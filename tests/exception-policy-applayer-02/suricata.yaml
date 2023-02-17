@@ -20,8 +20,8 @@ outputs:
             flows: all
         - stats:
             totals: yes
-            threads: yes
-            deltas: yes
+            threads: no
+            deltas: no
         - flow
   - stats:
       enabled: yes
@@ -32,3 +32,9 @@ action-order:
   - drop
   - reject
   - alert
+
+stats:
+  enabled: yes
+  interval: 8
+  eps-zero-valued-counters: true
+  eps-per-app-proto-errors: true
