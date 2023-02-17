@@ -19,3 +19,9 @@ checks:
     count: 0
     match:
       event_type: http
+- filter:
+    min-version: 8
+    count: 1
+    match:
+      event_type: stats
+      stats.tcp.midstream_exception_policy.pass_flow: 2

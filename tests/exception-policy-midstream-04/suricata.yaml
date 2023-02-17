@@ -8,3 +8,8 @@ outputs:
         - alert
         - flow
         - http
+        - stats
+  - stats:
+       enabled: yes
+       filename: stats.log
+       append: yes
