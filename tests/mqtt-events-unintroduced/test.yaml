@@ -10,7 +10,7 @@ args:
 checks:
 
   - filter:
-      count: 2
+      count: 1
       match:
         event_type: alert
         alert.signature_id: 2226005
