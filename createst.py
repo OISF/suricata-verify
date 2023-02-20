@@ -132,15 +132,12 @@ def create_readme():
     """
     readme_path = os.path.join(test_dir, "README.md")
     with open(readme_path, "w+") as fp:
-        fp.write("Description\n")
-        fp.write("===========\n")
-        fp.write("<TODO>\n\n")
-        fp.write("PCAP\n")
-        fp.write("====\n")
-        fp.write("<TODO>\n\n")
-        fp.write("Reported by\n")
-        fp.write("===========\n")
-        fp.write("Your Name <yourmail@example.com>\n")
+        fp.write("# Test Description\n\n")
+        fp.write("TODO: Simple description of what this test is for.\n\n")
+        fp.write("## PCAP\n\n")
+        fp.write("TODO: What is the source of this PCAP.\n\n")
+        fp.write("## Related issues\n\n")
+        fp.write("TODO: Issue numbers or links to related issues.\n")
 
 
 def write_to_file(data):
