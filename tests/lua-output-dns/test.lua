@@ -1,3 +1,4 @@
+local io = require("io")
 filename = "lua-dns.log"
 
 function init (args)

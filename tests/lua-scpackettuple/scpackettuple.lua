@@ -1,3 +1,4 @@
+local io = require("io")
 -- simple SCPacketTuple log test
 name = "scpacket-tuple.log"
 

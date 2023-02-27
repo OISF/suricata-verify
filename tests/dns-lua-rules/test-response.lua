@@ -1,3 +1,4 @@
+local io = require("io")
 function init (args)
    local needs = {}
    needs["dns.response"] = tostring(true)
