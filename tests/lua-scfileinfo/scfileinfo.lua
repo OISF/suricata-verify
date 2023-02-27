@@ -1,3 +1,4 @@
+local io = require("io")
 -- Output test for SCFileInfo
 file_name = "scfileinfo.log"
 

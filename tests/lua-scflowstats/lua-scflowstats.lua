@@ -1,3 +1,4 @@
+local io = require("io")
 -- lua_pushinteger output test for SCFlowStats and ...
 name = "lua-scflowstats.log"
 

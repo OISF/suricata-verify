@@ -1,3 +1,4 @@
+local io = require("io")
 -- simple SCFlowTuple log test
 name = "scflow-tuple.log"
 

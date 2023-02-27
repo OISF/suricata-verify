@@ -1,3 +1,4 @@
+local io = require("io")
 -- simple fast-log to file lua module
 name = "http_lua.log"
 
