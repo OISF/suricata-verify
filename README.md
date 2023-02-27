@@ -51,7 +51,7 @@ requires:
   # Require that the Suricata version be less than a version.
   lt-version: 6
 
-  # Test is only for this version. For example, 4.0 would match any 4.0
+  # Test is only for this version. For example, 4.0 would match any 4.0 
   # release, but 4.0.3 would only match 4.0.3.
   version: 4.0
 
@@ -147,19 +147,17 @@ checks:
       # A check that compares two files
       filename: datasets.csv
       expected: expected/datasets.csv
-```
+```		
 
 ## Adding a new test the automated way: createst
 
-Createst is a script to create a test directory with test.yaml for a given PCAP.
-This needs to be run from a valid Suricata source directory.
+Script to create a test directory with test.yaml for a given PCAP. This
+needs to be run from a valid Suricata source directory.
 
 ### Usage
 ```
 usage: createst.py [-h] [--output-path <output-path>] [--eventtype-only]
-                   [--allow-events [ALLOW_EVENTS]] [--rules <rules-file>]
-                   [--strictcsums] [--min-version <min-version>]
-                   [--midstream]
+                   [--allow-events [ALLOW_EVENTS]]
                    <test-name> <pcap-file>
 
 Create tests with a given PCAP. Execute the script from a valid Suricata source
@@ -171,64 +169,12 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
-  --rules <rules-path>
-                        Path to rules file (optional)
   --output-path <output-path>
                         Path to the folder where generated test.yaml should be
                         put
   --eventtype-only      Create filter blocks based on event types only
-                        This means the subfields of the event in the eve log
-                        will not be added to the test.yaml file
   --allow-events [ALLOW_EVENTS]
                         Create filter blocks for the specified events
-                        Events must be comma-separated only
-                        This means that just the events listed will be checked
-                        against in the test
-  --strictcsums         Strictly validate checksum
-  --midstream           Allow midstream session pickups
-  --min-version <min-version>
-                        Adds a global minimum required version
-  --version <version>   Adds a global version requirement
-  --cfg <suricata.yaml> Add a suricata.yaml to the test
-  --features [FEATS]    Required features (comma separated list)
+  --copy-failed         Copy output files of failed tests to 'failed' directory
+  --generate-xml        Generate a JUnit XML file summarizing test results.
 ```
-
-### Examples
-
-The only mandatory arguments for ``createst.py`` are the test name and the pcap
-file. These examples show how some of the optional arguments can be used.
-
-#### Example 1
-
-Create a Suricata-verify test named ``test-01`` that runs over a pcap file called
-``input.pcap`` and that requires strict checksums, filters only on the event-types
-and uses no Suricata rules:
-```
-../suricata-verify/createst.py --strictcsums --eventtype-only test-01 input.pcap
-```
-
-#### Example 2
-
-Create a Suricata-verify test named ``test-02`` that runs over a pcap file called
-``input.pcap``, only checks for ``http``, ``alert`` and ``flow`` events, and
-uses a rules file located in another test in the same suricata-verify folder.
-It also doesn't require strict checksums and will run only for versions 6 and
-newer:
-```
-../suricata-verify/createst.py --min-version 6 --allow-events http,alert,flow \
---rules ../suricata-verify/tests/no-payload-output/test.rules test-02 input.pcap
-```
-
-#### Add Required Features
-
-```
-../suricata-verify/createst.py --features HAVE_LUA
-```
-
-```
-../suricata-verify/createst.py --features HAVE_LUA,AF_PACKET
-```
-
-The features are taken from the `Features:` line in `suricata
---build-info`.
-

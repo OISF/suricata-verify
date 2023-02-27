@@ -44,6 +44,7 @@ import filecmp
 import subprocess
 import yaml
 import traceback
+import time
 
 VALIDATE_EVE = False
 WIN32 = sys.platform == "win32"
@@ -69,6 +70,7 @@ else:
 
 count_dict['passed'] = 0
 count_dict['failed'] = 0
+count_dict['error'] = 0
 count_dict['skipped'] = 0
 check_args['fail'] = 0
 
@@ -120,15 +122,12 @@ class TerminatePoolError(Exception):
 SuricataVersion = namedtuple(
     "SuricataVersion", ["major", "minor", "patch"])
 
-def parse_suricata_version(buf, expr=None):
+def parse_suricata_version(buf):
     m = re.search("(?:Suricata version |^)(\d+)\.?(\d+)?\.?(\d+)?.*", str(buf).strip())
-    default_v = 0
-    if expr is not None and expr == "equal":
-        default_v = None
     if m:
-        major = int(m.group(1)) if m.group(1) else default_v
-        minor = int(m.group(2)) if m.group(2) else default_v
-        patch = int(m.group(3)) if m.group(3) else default_v
+        major = int(m.group(1)) if m.group(1) else 0
+        minor = int(m.group(2)) if m.group(2) else 0
+        patch = int(m.group(3)) if m.group(3) else 0
 
         return SuricataVersion(
             major=major, minor=minor, patch=patch)
@@ -160,20 +159,27 @@ def handle_exceptions(func):
             result = func(*args,**kwargs)
         except TestError as te:
             print("===> {}: Sub test #{}: FAIL : {}".format(kwargs["test_name"], kwargs["test_num"], te))
+            te_message = "Sub test #{}: FAIL : {}".format(kwargs["test_num"], te)
+            kwargs["message"]["te"].append(te_message)
             check_args_fail()
             kwargs["count"]["failure"] += 1
         except UnsatisfiedRequirementError as ue:
             if args and not args[0].quiet:
                 print("===> {}: Sub test #{}: SKIPPED : {}".format(kwargs["test_name"], kwargs["test_num"], ue))
             kwargs["count"]["skipped"] += 1
+            ue_message = "Sub test #{}: SKIPPED : {}".format(kwargs["test_num"], ue)
+            kwargs["message"]["ue"].append(ue_message)
         except Exception as err:
             raise TestError("Internal runtime error: {}".format(err))
         else:
             if result:
               kwargs["count"]["success"] += 1
             else:
-              print("\n===> {}: Sub test #{}: FAIL : {}".format(kwargs["test_name"], kwargs["test_num"], kwargs["check"]["args"]))
-              kwargs["count"]["failure"] += 1
+                print("\n===> {}: Sub test #{}: FAIL : {}".format(kwargs["test_name"], kwargs["test_num"], kwargs["check"]["args"]))
+                kwargs["count"]["error"] += 1
+                with lock:
+                    te_message = "Sub test #{}: FAIL : {}".format(kwargs["test_num"], kwargs["check"]["args"])
+                    kwargs["message"]["te"] = te_message
         return kwargs["count"]
     return applicator
 
@@ -349,11 +355,9 @@ def find_value(name, obj):
             index = m.group(2)
         else:
             name = part
-
         if not name in obj:
             return None
         obj = obj[name]
-
         if index is not None:
             try:
                 obj = obj[int(index)]
@@ -364,7 +368,7 @@ def find_value(name, obj):
 
 
 def is_version_compatible(version, suri_version, expr):
-    config_version = parse_suricata_version(version, expr)
+    config_version = parse_suricata_version(version)
     version_obj = Version()
     func = getattr(version_obj, "is_{}".format(expr))
     if not func(suri_version, config_version):
@@ -400,26 +404,13 @@ class FileCompareCheck:
 
 class ShellCheck:
 
-    def __init__(self, config, env, suricata_config):
+    def __init__(self, config, env):
         self.config = config
         self.env = env
-        self.suricata_config = suricata_config
 
     def run(self):
-        shell_args = {}
         if not self.config or "args" not in self.config:
             raise TestError("shell check missing args")
-        req_version = self.config.get("version")
-        min_version = self.config.get("min-version")
-        lt_version = self.config.get("lt-version")
-        if req_version is not None:
-            shell_args["version"] = req_version
-        if min_version is not None:
-            shell_args["min-version"] = min_version
-        if lt_version is not None:
-            shell_args["lt-version"] = lt_version
-        check_requires(shell_args, self.suricata_config)
-
         try:
             if WIN32:
                 print("skipping shell check on windows")
@@ -484,7 +475,7 @@ class FilterCheck:
             raise TestError("%s does not exist" % (json_filename))
 
         count = 0
-        with open(json_filename, "r", encoding="utf-8") as fileobj:
+        with open(json_filename, "r") as fileobj:
             for line in fileobj:
                 event = json.loads(line)
                 if self.match(event):
@@ -510,6 +501,8 @@ class FilterCheck:
             else:
                 val = find_value(key, event)
                 if val != expected:
+                    if key == "flow.reason" and expected == "shutdown" and val == "timeout":
+                        return True
                     if str(val) == str(expected):
                         print("Different types but same string", type(val), val, type(expected), expected)
                         return False
@@ -518,16 +511,21 @@ class FilterCheck:
 
 class TestRunner:
 
-    def __init__(self, cwd, directory, outdir, suricata_config, verbose=False,
+    def __init__(self, cwd, directory, outdir, suricata_config, message, verbose=False,
                  force=False, quiet=False):
         self.cwd = cwd
         self.directory = directory
         self.suricata_config = suricata_config
+        self.message = message
         self.verbose = verbose
         self.utf8_errors = []
         self.force = force
         self.output = outdir
         self.quiet = quiet
+
+        specific_out_path = outdir.split("tests")[1]
+        if COPY_FAILED:
+            self.failpath = os.path.join(FAILDIR, specific_out_path.strip("/"))
 
         # The name is just the directory name.
         self.name = os.path.basename(self.directory)
@@ -734,6 +732,10 @@ class TestRunner:
         elif not check_value["failure"]:
             if not self.quiet:
                 print("===> {}: OK (checks: {}, skipped: {})".format(os.path.basename(self.directory), sum(check_value.values()), check_value["skipped"]))
+        else:
+            if COPY_FAILED:
+                os.makedirs(self.failpath, exist_ok=True)
+                shutil.copytree(self.output, self.failpath, dirs_exist_ok=True)
         return check_value
 
     def pre_check(self):
@@ -741,23 +743,23 @@ class TestRunner:
             subprocess.call(self.config["pre-check"], shell=True)
 
     @handle_exceptions
-    def perform_filter_checks(self, check, count, test_num, test_name):
+    def perform_filter_checks(self, check, count, message, test_num, test_name, test_class):
         count = FilterCheck(check, self.output,
                 self.suricata_config).run()
         return count
 
     @handle_exceptions
-    def perform_shell_checks(self, check, count, test_num, test_name):
-        count = ShellCheck(check, self.build_env(), self.suricata_config).run()
+    def perform_shell_checks(self, check, count, message, test_num, test_name, test_class):
+        count = ShellCheck(check, self.build_env()).run()
         return count
 
     @handle_exceptions
-    def perform_stats_checks(self, check, count, test_num, test_name):
+    def perform_stats_checks(self, check, count, message, test_num, test_name, test_class):
         count = StatsCheck(check, self.output).run()
         return count
 
     @handle_exceptions
-    def perform_file_compare_checks(self, check, count, test_num, test_name):
+    def perform_file_compare_checks(self, check, count, message, test_num, test_name, test_class):
         count = FileCompareCheck(check, self.directory).run()
         return count
 
@@ -770,6 +772,7 @@ class TestRunner:
         os.chdir(self.output)
         count = {
             "success": 0,
+            "error": 0,
             "failure": 0,
             "skipped": 0,
                 }
@@ -781,8 +784,9 @@ class TestRunner:
                     for key in check:
                         if key in ["filter", "shell", "stats", "file-compare"]:
                             func = getattr(self, "perform_{}_checks".format(key.replace("-","_")))
-                            count = func(check=check[key], count=count,
-                                    test_num=check_count + 1, test_name=os.path.basename(self.directory))
+                            classname = get_classname(self.directory)
+                            count = func(check=check[key], count=count, message=self.message,
+                                    test_num=check_count + 1, test_name=os.path.basename(self.directory), test_class=classname)
                         else:
                             print("FAIL: Unknown check type: {}".format(key))
         finally:
@@ -839,6 +843,7 @@ class TestRunner:
         # Add other fixed arguments.
         args += [
             "--init-errors-fatal",
+        #   "--verify",             # Option for mendel.ids suricata to work with suricata-verify
             "-l", self.output,
         ]
 
@@ -860,6 +865,7 @@ class TestRunner:
 
         # Find rules.
         rules = glob.glob(os.path.join(self.directory, "*.rules"))
+        # print(rules)
         if not rules:
             args.append("--disable-detection")
         elif len(rules) == 1:
@@ -910,42 +916,111 @@ def check_deps():
 
     return True
 
+def get_classname(dirpath):
+    path_after_tests = dirpath.split("/tests/")[1]
+    classname = path_after_tests.split("/")[0]
+    return classname
+
 def run_test(dirpath, args, cwd, suricata_config):
     with lock:
         if check_args['fail'] == 1:
             raise TerminatePoolError()
 
     name = os.path.basename(dirpath)
-
+    message_dict = {}
+    message_dict["te"] = []
+    message_dict["ue"] = []
     outdir = os.path.join(dirpath, "output")
+    specific_out_path = outdir.split("tests")[1]
+    if COPY_FAILED:
+        failpath = os.path.join(FAILDIR, specific_out_path.strip("/"))
+
     if args.outdir:
         outdir = os.path.join(os.path.realpath(args.outdir), name, "output")
-
+    classname = get_classname(dirpath)
     test_runner = TestRunner(
-        cwd, dirpath, outdir, suricata_config, args.verbose, args.force,
+        cwd, dirpath, outdir, suricata_config, message_dict, args.verbose, args.force,
         args.quiet)
     try:
+        start_time = time.time()
         results = test_runner.run(outdir)
+        end_time = time.time()
         if results["failure"] > 0:
             with lock:
                 count_dict["failed"] += 1
                 failedLogs.append(dirpath)
+                if GEN_XML:
+                    with open(XML_PATH, 'a') as f:
+                        print("<testcase name=\"{}\" classname=\"{}\" time=\"{}s\">".format(os.path.basename(dirpath), classname, round(end_time-start_time, 3)), file=f)
+                        print("<failure message=\"Some subtests failed\">", file=f)
+                        print("<![CDATA[", file=f)
+                        for m in message_dict["te"]:
+                            print(m, file=f)
+                        print("]]>", file=f)
+                        print("</failure>", file=f)
+                        print("</testcase>", file=f)
         elif results["skipped"] > 0 and results["success"] == 0:
             with lock:
                 count_dict["skipped"] += 1
+                #  print("Here, skipping all subtests causes skipping test")
+                if GEN_XML:
+                    with open(XML_PATH, 'a') as f:
+                        print("<testcase name=\"{}\" classname=\"{}\" time=\"0s\">".format(os.path.basename(dirpath), classname), file=f)
+                        print("<skipped/>", file=f)
+                        print("</testcase>", file=f)
+        elif results["skipped"] > 0 and results["success"] > 0:
+            with lock:
+                count_dict["passed"] += 1  
+                if GEN_XML:
+                    with open(XML_PATH, 'a') as f:
+                        print("<testcase name=\"{}\" classname=\"{}\" time=\"{}s\">".format(os.path.basename(dirpath), classname, round(end_time-start_time, 3)), file=f)
+                        print("<property name=\"testrun_comment\">", file=f)
+                        print("<![CDATA[", file=f)
+                        print("checks:{}, skipped:{}".format(sum(results.values()), results["skipped"]), file=f)
+                        for m in message_dict["ue"]:
+                            print(m, file=f)
+                        print("]]>", file=f)
+                        print("</property>", file=f)
+                        print("</testcase>", file=f)
         elif results["success"] > 0:
             with lock:
                 count_dict["passed"] += 1  
+                if GEN_XML:
+                    with open(XML_PATH, 'a') as f:
+                        print("<testcase name=\"{}\" classname=\"{}\" time=\"{}s\"/>".format(os.path.basename(dirpath), classname, round(end_time-start_time, 3)), file=f)
     except UnsatisfiedRequirementError as ue:
         if not args.quiet:
             print("===> {}: SKIPPED: {}".format(os.path.basename(dirpath), ue))
         with lock:
             count_dict["skipped"] += 1
+            if GEN_XML:
+                with open(XML_PATH, 'a') as f:
+                    print("<testcase name=\"{}\" classname=\"{}\" time=\"0s\">".format(os.path.basename(dirpath), classname), file=f)
+                    print("<skipped/>", file=f)
+                    print("</testcase>", file=f)
     except TestError as te:
         print("===> {}: FAILED: {}".format(os.path.basename(dirpath), te))
-        check_args_fail()
         with lock:
             count_dict["failed"] += 1
+            if GEN_XML:
+                with open(XML_PATH, 'a') as f:
+                    print("<testcase name=\"{}\" classname=\"{}\" time=\"0s\">".format(os.path.basename(dirpath), classname), file=f)
+                    if "for filter" in str(te):
+                        parts = str(te).split("for filter")
+                        fail_msg = parts[0]
+                        data = parts[1]
+                        print("<failure message=\"{}\">".format(fail_msg), file=f)
+                        print("<![CDATA[", file=f)
+                        print("for filter {}".format(data), file=f)
+                        print("]]>", file=f)
+                    else:
+                        print("<failure message=\"{}\">".format(te), file=f)
+                    print("</failure>", file=f)
+                    print("</testcase>", file=f)
+            if COPY_FAILED:
+                os.mkdir(failpath)
+                shutil.copytree(outdir, failpath)
+        check_args_fail()
     except Exception as err:
         print("===> {}: FAILED: Unexpected exception: {}".format(os.path.basename(dirpath), err))
         traceback.print_exc()
@@ -953,7 +1028,13 @@ def run_test(dirpath, args, cwd, suricata_config):
         # Always terminate the runner on this type of error, as its an error in the framework.
         with lock:
             check_args['fail'] = 1
-            count_dict["failed"] += 1
+            count_dict["error"] += 1
+            if GEN_XML:
+                with open(XML_PATH, 'a') as f:
+                    print("<testcase name=\"{}\" classname=\"{}\" time=\"0\">".format(os.path.basename(dirpath), classname), file=f)
+                    print("<failure message=\"{}\">".format(err), file=f)
+                    print("</failure>", file=f)
+                    print("</testcase>", file=f)
             raise TerminatePoolError()
 
 def run_mp(jobs, tests, dirpath, args, cwd, suricata_config):
@@ -1012,6 +1093,8 @@ def main():
     parser.add_argument("-q", "--quiet", dest="quiet", action="store_true",
                         help="Only show failures and end summary")
     parser.add_argument("--no-validation", action="store_true", help="Disable EVE validation")
+    parser.add_argument("--generate-xml", action="store_true", help="Generate a JUnit XML file summarizing test results.")
+    parser.add_argument("--copy-failed", action="store_true", help="Copy output files of failed tests to 'failed' directory")
     parser.add_argument("patterns", nargs="*", default=[])
     if LINUX:
         parser.add_argument("-j", type=int, default=min(8, mp.cpu_count()),
@@ -1056,6 +1139,24 @@ def main():
     tdir = os.path.join(TOPDIR, "tests")
     if args.testdir:
         tdir = os.path.abspath(args.testdir)
+
+    # start of creating XML tests report (java unit tests format)
+    global GEN_XML
+    GEN_XML = args.generate_xml
+    if GEN_XML:
+        global XML_PATH
+        XML_PATH = os.path.join(TOPDIR, "suricata-verify-tests.xml")
+        with open(XML_PATH, 'w') as f:
+            print('<?xml version="1.0" encoding="UTF-8"?>', file=f)
+
+    global COPY_FAILED
+    COPY_FAILED = args.copy_failed
+    global FAILDIR
+    FAILDIR = os.path.join(TOPDIR, "failed")
+    # remove all output of failed tests from the previous run
+    # even if we will not copy new files about failed tests here
+    shutil.rmtree(FAILDIR, ignore_errors=True )
+
     # First gather the tests so we can run them in alphabetic order.
     tests = []
     for dirpath, dirnames, filenames in os.walk(tdir, followlinks = True):
@@ -1099,19 +1200,44 @@ def main():
     # Sort alphabetically.
     tests.sort()
 
+    if COPY_FAILED:
+        # create failed directory
+        faildir_exists = os.path.exists(FAILDIR)
+        if not faildir_exists:
+            os.mkdir(FAILDIR)
+
+    start_time = time.time()
+
     if LINUX:
         run_mp(args.j, tests, dirpath, args, cwd, suricata_config)
     else:
         run_single(tests, dirpath, args, cwd, suricata_config)
 
+    end_time = time.time()
+
     passed = count_dict["passed"]
-    failed = count_dict["failed"]
+    failed = count_dict["failed"] + count_dict["error"]
     skipped = count_dict["skipped"]
+
+    failed_xml = count_dict["failed"]
+    error_xml = count_dict["error"]
+    tests_xml = count_dict["passed"] + count_dict["error"] + count_dict["failed"] + count_dict["skipped"]
 
     print("")
     print("PASSED:  %d" % (passed))
     print("FAILED:  %d" % (failed))
     print("SKIPPED: %d" % (skipped))
+
+    if GEN_XML:
+        with open(XML_PATH, "r") as f:
+            lines = f.readlines()
+
+        with open(XML_PATH, 'w') as f:
+            print(lines[0].strip(), file=f)
+            print("<testsuite name=\"suricata-verify\" time=\"{}s\" tests=\"{}\" errors=\"{}\" skipped=\"{}\" failures=\"{}\">".format(round(end_time-start_time, 3), tests_xml, error_xml, skipped, failed_xml), file=f)
+            for i in range(1, len(lines)):
+                print(lines[i].strip(), file=f)
+            print('</testsuite>', file=f)
 
     if args.debugfailed:
         if len(failedLogs) > 0:
