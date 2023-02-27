@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"SURICATA STREAM 3way handshake SYN/ACK ignored TFO data"; stream-event:3whs_synack_tfo_data_ignored; classtype:protocol-command-decode; sid:2210064; rev:1;)

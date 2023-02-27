@@ -1,0 +1,56 @@
+requires:
+  files:
+    - src/output-eve-stream.c
+
+args:
+- --simulate-ips
+#- --set stream.midstream=true
+#- --set stream.midstream-policy=ignore
+- --runmode=single
+#- --set stats.stream-events=true
+- --set flow-timeouts.tcp.new=60
+- --set flow-timeouts.tcp.established=600
+# Long timeout to avoid midstream pickup at the end.
+- --set flow-timeouts.tcp.closed=60
+
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: flow
+  - filter:
+      count: 1
+      match:
+        event_type: stream_tcp
+        pcap_cnt: 1
+        direction: "to_server"
+        stream_tcp.session.state: "syn_sent"
+        stream_tcp.packet.len: 585
+  - filter:
+      count: 1
+      match:
+        event_type: stream_tcp
+        pcap_cnt: 2
+        direction: "to_client"
+        stream_tcp.session.state: "syn_recv"
+        stream_tcp.events[0]: "stream.3whs_synack_tfo_data_ignored"
+  - filter:
+      count: 1
+      match:
+        event_type: stream_tcp
+        pcap_cnt: 3
+        direction: "to_server"
+        stream_tcp.session.state: "syn_sent"
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+        tls.sni: "icloud.com"
+        tls.version: "UNDETERMINED"
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+        tls.sni: "icloud.com"
+        tls.version: "TLS 1.3"
