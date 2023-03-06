@@ -191,6 +191,8 @@ optional arguments:
   --version <version>   Adds a global version requirement
   --cfg <suricata.yaml> Add a suricata.yaml to the test
   --features [FEATS]    Required features (comma separated list)
+  --copy-failed         Copy output files of failed tests to 'failed' directory
+  --generate-xml        Generate a JUnit XML file summarizing test results
 ```
 
 ### Examples
