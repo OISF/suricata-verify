@@ -18,3 +18,19 @@ checks:
         ftp.command_data: index.html
         ftp.command_truncated: false
         ftp.reply_truncated: false
+
+  # Look for anomaly event.
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: request_command_too_long
+
+  # Look for app-layer alert.
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2232000

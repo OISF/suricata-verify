@@ -1,0 +1,16 @@
+requires:
+  features:
+    - HAVE_NSS
+
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.state: TRUNCATED
+        fileinfo.sha256: "4cac14573e271cd786fdfc02287143fd3de95cbbd84754d29bd3387ecd914669"
+        fileinfo.stored: true
+        app_proto: smb

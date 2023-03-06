@@ -1,0 +1,203 @@
+requires:
+   min-version: 7
+
+args:
+- -k none
+
+checks:
+
+# Simple check for one query.
+- filter:
+    count: 1
+    match:
+      event_type: dns
+      dns.type: query
+
+# Simple check for one answer.
+- filter:
+    count: 1
+    match:
+      event_type: dns
+      dns.type: answer
+
+# One alert in to_server direction.
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      direction: to_server
+
+# One alert in to_client direction.
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      direction: to_client
+
+# Generated checks below.
+      
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 1
+      alert.severity: 3
+      alert.signature: SURICATA DNS Invalid opcode
+      alert.signature_id: 2240007
+      app_proto: dns
+      dest_ip: 2.2.2.2
+      dest_port: 53
+      direction: to_server
+      dns.query[0].id: 1
+      dns.query[0].opcode: 9
+      dns.query[0].rrname: suricata.io
+      dns.query[0].rrtype: A
+      dns.query[0].tx_id: 0
+      dns.query[0].type: query
+      event_type: alert
+      flow.bytes_toclient: 0
+      flow.bytes_toserver: 71
+      flow.dest_ip: 2.2.2.2
+      flow.dest_port: 53
+      flow.pkts_toclient: 0
+      flow.pkts_toserver: 1
+      flow.src_ip: 1.1.1.1
+      flow.src_port: 5333
+      pcap_cnt: 1
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 1.1.1.1
+      src_port: 5333
+      tx_id: 0
+- filter:
+    count: 1
+    match:
+      anomaly.app_proto: dns
+      anomaly.event: invalid_opcode
+      anomaly.layer: proto_parser
+      anomaly.type: applayer
+      dest_ip: 2.2.2.2
+      dest_port: 53
+      event_type: anomaly
+      pcap_cnt: 1
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 1.1.1.1
+      src_port: 5333
+      tx_id: 0
+- filter:
+    count: 1
+    match:
+      dest_ip: 2.2.2.2
+      dest_port: 53
+      dns.id: 1
+      dns.opcode: 9
+      dns.rrname: suricata.io
+      dns.rrtype: A
+      dns.tx_id: 0
+      dns.type: query
+      event_type: dns
+      pcap_cnt: 1
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 1.1.1.1
+      src_port: 5333
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.rev: 1
+      alert.severity: 3
+      alert.signature: SURICATA DNS Invalid opcode
+      alert.signature_id: 2240007
+      app_proto: dns
+      dest_ip: 1.1.1.1
+      dest_port: 5333
+      direction: to_client
+      dns.answer.flags: c800
+      dns.answer.id: 1
+      dns.answer.opcode: 9
+      dns.answer.qr: true
+      dns.answer.rcode: NOERROR
+      dns.answer.rrname: suricata.io
+      dns.answer.rrtype: A
+      dns.answer.type: answer
+      dns.answer.version: 2
+      event_type: alert
+      flow.bytes_toclient: 98
+      flow.bytes_toserver: 71
+      flow.dest_ip: 2.2.2.2
+      flow.dest_port: 53
+      flow.pkts_toclient: 1
+      flow.pkts_toserver: 1
+      flow.src_ip: 1.1.1.1
+      flow.src_port: 5333
+      pcap_cnt: 2
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 2.2.2.2
+      src_port: 53
+      tx_id: 1
+- filter:
+    count: 1
+    match:
+      anomaly.app_proto: dns
+      anomaly.event: invalid_opcode
+      anomaly.layer: proto_parser
+      anomaly.type: applayer
+      dest_ip: 1.1.1.1
+      dest_port: 5333
+      event_type: anomaly
+      pcap_cnt: 2
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 2.2.2.2
+      src_port: 53
+      tx_id: 1
+- filter:
+    count: 1
+    match:
+      dest_ip: 2.2.2.2
+      dest_port: 53
+      dns.answers[0].rdata: 127.0.0.1
+      dns.answers[0].rrname: suricata.io
+      dns.answers[0].rrtype: A
+      dns.answers[0].ttl: 0
+      dns.flags: c800
+      dns.grouped.A[0]: 127.0.0.1
+      dns.id: 1
+      dns.opcode: 9
+      dns.qr: true
+      dns.rcode: NOERROR
+      dns.rrname: suricata.io
+      dns.rrtype: A
+      dns.type: answer
+      dns.version: 2
+      event_type: dns
+      pcap_cnt: 2
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 1.1.1.1
+      src_port: 5333
+- filter:
+    count: 1
+    match:
+      app_proto: dns
+      dest_ip: 2.2.2.2
+      dest_port: 53
+      event_type: flow
+      flow.age: 0
+      flow.alerted: true
+      flow.bytes_toclient: 98
+      flow.bytes_toserver: 71
+      flow.pkts_toclient: 1
+      flow.pkts_toserver: 1
+      flow.reason: shutdown
+      flow.state: established
+      proto: UDP
+      src_ip: 1.1.1.1
+      src_port: 5333

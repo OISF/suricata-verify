@@ -7,5 +7,5 @@ command: |
 checks:
 
     - shell:
-        args: grep -e "SC_WARN_CLASSIFICATION_CONFIG" suricata.log | wc -l | xargs
+        args: grep -e "Error loading classification configuration from" suricata.log | wc -l | xargs
         expect: 1

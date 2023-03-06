@@ -51,6 +51,8 @@ LINUX = sys.platform.startswith("linux")
 suricata_bin = "src\suricata.exe" if WIN32 else "./src/suricata"
 suricata_yaml = "suricata.yaml" if WIN32 else "./suricata.yaml"
 
+PROC_TIMEOUT=300
+
 if LINUX:
     manager = mp.Manager()
     lock = mp.Lock()
@@ -118,12 +120,15 @@ class TerminatePoolError(Exception):
 SuricataVersion = namedtuple(
     "SuricataVersion", ["major", "minor", "patch"])
 
-def parse_suricata_version(buf):
+def parse_suricata_version(buf, expr=None):
     m = re.search("(?:Suricata version |^)(\d+)\.?(\d+)?\.?(\d+)?.*", str(buf).strip())
+    default_v = 0
+    if expr is not None and expr == "equal":
+        default_v = None
     if m:
-        major = int(m.group(1)) if m.group(1) else 0
-        minor = int(m.group(2)) if m.group(2) else 0
-        patch = int(m.group(3)) if m.group(3) else 0
+        major = int(m.group(1)) if m.group(1) else default_v
+        minor = int(m.group(2)) if m.group(2) else default_v
+        patch = int(m.group(3)) if m.group(3) else default_v
 
         return SuricataVersion(
             major=major, minor=minor, patch=patch)
@@ -135,7 +140,7 @@ def get_suricata_version():
     return parse_suricata_version(output)
 
 
-def pipe_reader(fileobj, output=None, verbose=False):
+def pipe_reader(fileobj, output=None, verbose=False, utf8_errors=[]):
     for line in fileobj:
         if output:
             output.write(line)
@@ -144,7 +149,7 @@ def pipe_reader(fileobj, output=None, verbose=False):
             try:
                 line = line.decode().strip()
             except:
-                pass
+                self.utf8_errors.append("Invalid line")
             print(line)
 
 
@@ -357,7 +362,7 @@ def find_value(name, obj):
 
 
 def is_version_compatible(version, suri_version, expr):
-    config_version = parse_suricata_version(version)
+    config_version = parse_suricata_version(version, expr)
     version_obj = Version()
     func = getattr(version_obj, "is_{}".format(expr))
     if not func(suri_version, config_version):
@@ -393,13 +398,26 @@ class FileCompareCheck:
 
 class ShellCheck:
 
-    def __init__(self, config, env):
+    def __init__(self, config, env, suricata_config):
         self.config = config
         self.env = env
+        self.suricata_config = suricata_config
 
     def run(self):
+        shell_args = {}
         if not self.config or "args" not in self.config:
             raise TestError("shell check missing args")
+        req_version = self.config.get("version")
+        min_version = self.config.get("min-version")
+        lt_version = self.config.get("lt-version")
+        if req_version is not None:
+            shell_args["version"] = req_version
+        if min_version is not None:
+            shell_args["min-version"] = min_version
+        if lt_version is not None:
+            shell_args["lt-version"] = lt_version
+        check_requires(shell_args, self.suricata_config)
+
         try:
             if WIN32:
                 print("skipping shell check on windows")
@@ -464,7 +482,7 @@ class FilterCheck:
             raise TestError("%s does not exist" % (json_filename))
 
         count = 0
-        with open(json_filename, "r") as fileobj:
+        with open(json_filename, "r", encoding="utf-8") as fileobj:
             for line in fileobj:
                 event = json.loads(line)
                 if self.match(event):
@@ -506,6 +524,7 @@ class TestRunner:
         self.directory = directory
         self.suricata_config = suricata_config
         self.verbose = verbose
+        self.utf8_errors = []
         self.force = force
         self.output = outdir
         self.quiet = quiet
@@ -524,8 +543,11 @@ class TestRunner:
 
     def load_config(self):
         if os.path.exists(os.path.join(self.directory, "test.yaml")):
-            self.config = yaml.safe_load(
-                open(os.path.join(self.directory, "test.yaml"), "rb"))
+            try:
+                self.config = yaml.safe_load(
+                    open(os.path.join(self.directory, "test.yaml"), "rb"))
+            except yaml.scanner.ScannerError as e:
+                print(str(e))
         if self.config is None:
             self.config = {}
 
@@ -673,13 +695,27 @@ class TestRunner:
                 args, shell=shell, cwd=self.directory, env=env,
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
+            # used to get a return value from the threads
+            self.utf8_errors=[]
             self.start_reader(p.stdout, stdout)
             self.start_reader(p.stderr, stderr)
-
             for r in self.readers:
-                r.join()
+                try:
+                    r.join(timeout=PROC_TIMEOUT)
+                except:
+                    print("stdout/stderr reader timed out, terminating")
+                    r.terminate()
 
-            r = p.wait()
+            try:
+                r = p.wait(timeout=PROC_TIMEOUT)
+            except:
+                print("Suricata timed out, terminating")
+                p.terminate()
+                raise TestError("timed out when expected exit code %d" % (
+                    expected_exit_code));
+
+            if len(self.utf8_errors) > 0:
+                 raise TestError("got utf8 decode errors %s" % self.utf8_errors);
 
             if r != expected_exit_code:
                 raise TestError("got exit code %d, expected %d" % (
@@ -712,7 +748,7 @@ class TestRunner:
 
     @handle_exceptions
     def perform_shell_checks(self, check, count, test_num, test_name):
-        count = ShellCheck(check, self.build_env()).run()
+        count = ShellCheck(check, self.build_env(), self.suricata_config).run()
         return count
 
     @handle_exceptions
@@ -848,7 +884,7 @@ class TestRunner:
 
     def start_reader(self, input, output):
         t = threading.Thread(
-            target=pipe_reader, args=(input, output, self.verbose))
+            target=pipe_reader, args=(input, output, self.verbose, self.utf8_errors))
         t.start()
         self.readers.append(t)
 

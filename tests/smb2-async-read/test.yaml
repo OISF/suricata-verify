@@ -1,0 +1,12 @@
+requires:
+  min-version: 6
+
+# disables checksum verification
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo 

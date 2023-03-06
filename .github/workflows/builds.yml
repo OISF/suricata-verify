@@ -10,7 +10,7 @@ jobs:
     name: PCAP-NG Check
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: sudo apt update
       - run: sudo apt -y install tshark
       - run: ./pcapng-check.sh
@@ -71,7 +71,7 @@ jobs:
                 zlib1g-dev
       - run: cargo install --force --debug cbindgen
       - run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: python3 ./run.py --self-test
       - run: git clone https://github.com/OISF/suricata -b ${{ matrix.branch }}
       - run: git clone https://github.com/OISF/libhtp suricata/libhtp
@@ -83,10 +83,7 @@ jobs:
           make -j2
       - name: Running suricata-verify
         working-directory: suricata
-        run: python3 ../run.py --quiet
-      - name: Running suricata-verify with different output dir
-        working-directory: suricata
-        run: python3 ../run.py --quiet --fail --outdir /tmp/sv-output
+        run: python3 ../run.py --quiet --outdir /tmp/sv-output
 
   almalinux:
     name: AlmaLinux 8
@@ -142,7 +139,7 @@ jobs:
                 zlib-devel
       - run: cargo install --force --debug cbindgen
       - run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: python3 ./run.py --self-test
       - run: git clone https://github.com/OISF/suricata -b ${{ matrix.branch }}
       - run: git clone https://github.com/OISF/libhtp suricata/libhtp

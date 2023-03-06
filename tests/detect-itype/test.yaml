@@ -1,0 +1,24 @@
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 75
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 150
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 75
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      count: 75
+      match:
+        event_type: alert
+        alert.signature_id: 4

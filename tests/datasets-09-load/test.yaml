@@ -1,0 +1,29 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  files:
+    - src/detect-ipaddr.c
+
+args:
+ - -k none
+
+checks:
+  - filter:
+      count: 6
+      match:
+        event_type: alert
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 3

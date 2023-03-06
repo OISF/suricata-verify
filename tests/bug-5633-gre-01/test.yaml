@@ -1,0 +1,8 @@
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert

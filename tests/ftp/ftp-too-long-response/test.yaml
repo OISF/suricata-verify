@@ -13,3 +13,20 @@ checks:
         event_type: ftp
         ftp.command: PASV
         ftp.reply_truncated: true
+
+  # Look for anomaly event.
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: response_command_too_long
+
+  # Look for app-layer alert.
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2232001
+        

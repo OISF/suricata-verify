@@ -5,7 +5,7 @@ command: |
   ${SRCDIR}/src/suricata --set classification-file="${SRCDIR}/classification.config" --set reference-config-file="${SRCDIR}/reference.config" -l ${OUTPUT_DIR} -c ${TEST_DIR}/suricata.yaml -r ${TEST_DIR}/ -S ${TEST_DIR}/test.rules
 
 checks:
-  # check that we have the following entres in eve.json
+  # check that we have the following entries in eve.json
   # match 1 specific rule load failure reason
   - filter:
       count: 1
@@ -14,10 +14,18 @@ checks:
         engine.message: "Invalid hex code in content - |l0 01 01|, hex l. Invalidating signature."
 
   - filter:
+      lt-version: 7
       count: 1
       match:
         event_type: engine
         engine.error: "SC_ERR_NO_RULES_LOADED"
+
+  - filter:
+      min-version: 7
+      count: 4
+      match:
+        event_type: engine
+        engine.module: detect
 
   - filter:
       min-version: 7.0

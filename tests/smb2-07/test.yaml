@@ -11,13 +11,13 @@ args:
 
 checks:
   - filter:
-      version: 6
+      version: 6.0.0  # FIXME ref: https://redmine.openinfosecfoundation.org/issues/5820
       count: 58
       match:
         event_type: smb
   - filter:
       min-version: 7
-      count: 59
+      count: 60
       match:
         event_type: smb
   - filter:

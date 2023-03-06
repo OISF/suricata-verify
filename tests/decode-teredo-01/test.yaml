@@ -371,7 +371,7 @@ checks:
       dest_port: 1576
       event_type: flow
       flow.age: 27
-      flow.alerted: false
+      flow.alerted: true
       flow.bytes_toclient: 108
       flow.bytes_toserver: 108
       flow.pkts_toclient: 2
@@ -410,7 +410,7 @@ checks:
       dest_port: 138
       event_type: flow
       flow.age: 29
-      flow.alerted: false
+      flow.alerted: true
       flow.bytes_toclient: 0
       flow.bytes_toserver: 500
       flow.pkts_toclient: 0
@@ -461,7 +461,7 @@ checks:
       dest_port: 1577
       event_type: flow
       flow.age: 24
-      flow.alerted: false
+      flow.alerted: true
       flow.bytes_toclient: 108
       flow.bytes_toserver: 162
       flow.pkts_toclient: 2
@@ -562,3 +562,8 @@ checks:
       tcp.tcp_flags: 1b
       tcp.tcp_flags_tc: 1b
       tcp.tcp_flags_ts: 1b
+- filter:
+    count: 3
+    match:
+      event_type: alert
+      alert.signature_id: 3

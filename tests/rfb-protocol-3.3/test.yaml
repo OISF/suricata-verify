@@ -13,6 +13,13 @@ checks:
         app_proto: rfb
 
   - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: rfb
+        community_id: 1:d6qHVLyvWEl4kfHAZiDmEtDyb2I=
+
+  - filter:
       count: 1
       match:
         event_type: rfb

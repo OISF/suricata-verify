@@ -9,9 +9,5 @@ exit-code: 1
 
 checks:
     - shell:
-        args: grep "SC_ERR_INVALID_SIGNATURE" suricata.log | wc -l | xargs
-        expect: 5
-
-    - shell:
-        args: grep "SC_ERR_INVALID_VALUE" suricata.log | wc -l | xargs
-        expect: 5
+        args: grep "Error" suricata.log | wc -l | xargs
+        expect: 11

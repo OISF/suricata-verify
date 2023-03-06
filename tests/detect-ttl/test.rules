@@ -1,0 +1,1 @@
+alert ip any any -> any any (ttl:128; prefilter; sid:1;)

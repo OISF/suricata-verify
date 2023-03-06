@@ -1,5 +1,8 @@
 # *** Add configuration here ***
 
+requires:
+  lt-version: 7
+
 args:
 - -k none
 

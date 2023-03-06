@@ -7,9 +7,9 @@ command: |
 checks:
 
     - shell:
-        args: grep -e "SC_ERR_REFERENCE_CONFIG" suricata.log | wc -l | xargs
+        args: grep -e "unknown reference key" suricata.log | wc -l | xargs
         expect: 1
 
     - shell:
-        args: grep -e "SC_ERR_REFERENCE_UNKNOWN" suricata.log | wc -l | xargs
+        args: grep -e "Invalid Reference Config in" suricata.log | wc -l | xargs
         expect: 1

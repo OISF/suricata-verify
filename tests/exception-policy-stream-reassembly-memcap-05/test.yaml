@@ -10,6 +10,7 @@ args:
 # pretend tcp memcap was hit in packet 4, the client hello containing the sni
 - --simulate-packet-tcp-reassembly-memcap=4
 - --set stream.reassembly.memcap-policy=drop-packet
+- --set app-layer.error-policy=ignore
 checks:
   - filter:
       count: 0

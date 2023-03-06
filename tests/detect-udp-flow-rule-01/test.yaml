@@ -1,0 +1,16 @@
+pcap: ../sip-body-frames/public-cloudshark-sip-s0.pcap
+args:
+- --set app-layer.error-policy=ignore
+- --simulate-ips
+- -k none
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 2

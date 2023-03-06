@@ -1,1 +1,1 @@
-alert udp any any -> any any (msg:"TEST SUCCESFULL - Depth/Distance INVALID combination "; content:"AA"; content:"BB"; depth:50; distance:5; sid:5555557; rev:1;)
+alert udp any any -> any any (msg:"TEST SUCCESSFUL - Depth/Distance INVALID combination "; content:"AA"; content:"BB"; depth:50; distance:5; sid:5555557; rev:1;)

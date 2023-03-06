@@ -1,0 +1,14 @@
+requires:
+    min-version: 7
+
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+  - stats:
+      decoder.ethernet: 1
+      decoder.unknown_ethertype: 1

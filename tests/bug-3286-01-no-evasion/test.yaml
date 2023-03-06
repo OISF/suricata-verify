@@ -1,0 +1,25 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+args:
+- --set stats.decoder-events=true
+#- --set stats.stream-events=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.state: CLOSED
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.status: 200
+        http.length: 14

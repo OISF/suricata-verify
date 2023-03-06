@@ -6,9 +6,9 @@ command: |
 
 checks:
 
-    - shell:
-        args: grep -e "SC_ERR_PCRE_MATCH" suricata.log | wc -l | xargs
-        expect: 1
+    #- shell:
+    #    args: grep -e "SC_ERR_PCRE_MATCH" suricata.log | wc -l | xargs
+    #    expect: 1
 
     - shell:
         args: grep -e "Threshold config parsed.*0 rule.*found" suricata.log | wc -l | xargs

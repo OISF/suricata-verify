@@ -1,5 +1,5 @@
 requires:
-    min-version: 6.0
+    min-version: 6
 
 checks:
 
@@ -8,8 +8,8 @@ checks:
         expect: 1
 
     - shell:
-        args: grep SC_ERR_INVALID_SIGNATURE suricata.log | wc -l | xargs
-        expect: 26
+        args: grep Error suricata.log | wc -l | xargs
+        expect: 27
 
     - shell:
         args: grep "Expression seen with a sticky buffer" suricata.log | wc -l | xargs
@@ -24,7 +24,8 @@ checks:
         expect: 1
 
     - shell:
-        args: grep -o "use a sticky.*\"http response body" suricata.log | wc -l | xargs
+        min-version: 7
+        args: grep -o "use a sticky.*\"data from tracked files" suricata.log | wc -l | xargs
         expect: 1
 
     - shell:

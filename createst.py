@@ -1,6 +1,6 @@
 #! /bin/python
 #
-# Copyright (C) 2019 Open Information Security Foundation
+# Copyright (C) 2019-2022 Open Information Security Foundation
 #
 # You can copy, redistribute or modify this Program under the terms of
 # the GNU General Public License version 2 as published by the Free
@@ -141,16 +141,30 @@ def write_to_file(data):
         sys.exit(1)
     with open(test_yaml_path, "w+") as fp:
         fp.write("# *** Add configuration here ***\n\n")
-        if not args["strictcsums"]:
-            fp.write("args:\n- -k none\n\n")
         if check_requires():
             fp.write("requires:\n")
         if args["min_version"]:
-            fp.write("   min-version: %s\n\n" % args["min_version"])
+            fp.write("   min-version: %s\n" % args["min_version"])
+        if args["features"]:
+            feature_list = args["features"].split(",")
+            fp.write("   features:\n")
+            for item in feature_list:
+                fp.write("     - %s\n" % item)
+        if args["version"]:
+            fp.write("   version: %s\n\n" % args["version"])
+        suricata_args = []
+        if not args["strictcsums"]:
+            suricata_args.append("-k none")
+        if args["midstream"]:
+            suricata_args.append("--set stream.midstream=true")
+        if suricata_args:
+            fp.write("args:\n")
+            fp.write("\n".join(["- {}".format(a) for a in suricata_args]))
+            fp.write("\n\n")
         fp.write(data)
 
 def check_requires():
-    features = ["min_version"]
+    features = ["min_version", "version", "features"]
     for item in features:
         if args[item]:
             return True
@@ -256,7 +270,7 @@ def get_suricata_yaml_path():
     """
     Return the path to the suricata.yaml particular to the current test.
     """
-    if os.path.exists(os.path.join(cwd, "suricata.yaml")):
+    if not args["cfg"] and os.path.exists(os.path.join(cwd, "suricata.yaml")):
         return os.path.join(cwd, "suricata.yaml")
     return os.path.join(test_dir, "suricata.yaml")
 
@@ -271,6 +285,8 @@ def create_local_args():
     # Copy PCAP to the test directory
     copyfile(args["pcap"], pcap_path)
 
+    if args["cfg"]:
+        copyfile(args["cfg"], os.path.join(test_dir, "suricata.yaml"))
     largs = [
         os.path.join(cwd, "src/suricata"),
         '-r', pcap_path,
@@ -352,10 +368,17 @@ def parse_args():
     parser.add_argument("--allow-events", nargs="?", default=None,
                         help="Create filter blocks for the specified events")
     parser.add_argument("--strictcsums", default=None, action="store_true",
-                        help="Stricly validate checksum")
+                        help="Strictly validate checksum")
+    parser.add_argument("--midstream", default=False, action="store_true",
+                        help="Allow midstream session pickups")
     parser.add_argument("--min-version", default=None, metavar="<min-version>",
                         help="Adds a global minimum required version")
-
+    parser.add_argument("--version", default=None, metavar="<add-version>",
+                        help="Adds a global suricata version")
+    parser.add_argument("--cfg", metavar="<path-to-suricata.yaml>",
+                        help="Adds a suricata.yaml to the test")
+    parser.add_argument("--features", default=None, metavar="<features>",
+                        help="Adds specified features")
     # add arg to allow stdout only
     args = parser.parse_args()
 
@@ -396,6 +419,8 @@ def generate_eve():
 
     if not args["strictcsums"]:
         largs += ["-k", "none"]
+    if args["midstream"]:
+        largs += ["--set", "stream.midstream=true"]
     p = subprocess.Popen(
         largs, cwd=cwd, env=env,
         stdout=subprocess.PIPE, stderr=subprocess.PIPE)

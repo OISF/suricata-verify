@@ -1,0 +1,4 @@
+alert http any any -> any any (msg:"base64 decode - no url_decode"; flow:established,to_server; http.cookie; content:"foobar="; base64_decode:relative; base64_data; content:"|9e|"; startswith; sid:1; rev:1;)
+alert http any any -> any any (msg:"base64 decode - url_decode"; flow:established,to_server; http.cookie; url_decode; content:"foobar="; base64_decode:relative; base64_data; content:"|9e|"; sid:2; rev:1;)
+alert http any any -> any any (msg:"base64 decode - no url_decode, proves no base64_data buffer via pcre"; flow:established,to_server; http.cookie; content:"foobar="; base64_decode:relative; base64_data; pcre:"/./"; sid:3; rev:1;)
+alert http any any -> any any (msg:"base64 decode - no url_decode grab only the first two bytes"; flow:established,to_server; http.cookie; content:"foobar="; base64_decode:bytes 2,relative; base64_data; content:"|9e|"; startswith; sid:4; rev:1;)
