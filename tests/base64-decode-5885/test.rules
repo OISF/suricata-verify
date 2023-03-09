@@ -1,0 +1,2 @@
+alert tcp any any -> any any (msg:"Base64 data w/o url_decode"; http.request_body; content:"API="; startswith; base64_decode:offset 0, relative; base64_data; content:"cmVwb3J"; sid:1; rev:1;)
+alert tcp any any -> any any (msg:"Base64 data with url_decode"; http.request_body; url_decode; content:"API="; startswith; base64_decode:offset 0, relative; base64_data; content:"cmVwb3J"; sid:2; rev:1;)
