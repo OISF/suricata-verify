@@ -64,7 +64,6 @@ checks:
       src_port: 1470
       tx_id: 0
 - filter:
-    version: 6.0.0 # FIXME ref: https://redmine.openinfosecfoundation.org/issues/5821
     count: 1
     match:
       app_proto: smtp
@@ -77,11 +76,10 @@ checks:
       event_type: fileinfo
       fileinfo.filename: NEWS.txt
       fileinfo.gaps: false
-      fileinfo.size: 10735
+      fileinfo.size: 10809
       fileinfo.state: CLOSED
       fileinfo.stored: false
       fileinfo.tx_id: 0
-      pcap_cnt: 51
       proto: TCP
       smtp.helo: GP
       smtp.mail_from: <gurpartap@patriots.in>
