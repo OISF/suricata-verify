@@ -1,0 +1,1 @@
+alert http2 any any -> any any (msg:"HTTP2 - Two Headers - Authority/Method"; flow:established,to_server; http.request_header; content:"method: GET"; http.request_header; content:"authority: bugertor.com"; sid:3;)
