@@ -1,0 +1,29 @@
+%YAML 1.1
+---
+
+vars:
+  address-groups:
+    HOME_NET: "[192.168.0.0/16,10.0.0.0/8,172.16.0.0/12]"
+    EXTERNAL_NET: "!$HOME_NET"
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filename: eve-ips.json
+      types:
+        - alert
+        - drop
+
+  - eve-log:
+      enabled: yes
+      filename: eve-nsm.json
+      types:
+        - http
+        - flow
+  - eve-log:
+      enabled: yes
+      filename: eve-stats.json
+      types:
+        - stats
+
+exception-policy: ignore
