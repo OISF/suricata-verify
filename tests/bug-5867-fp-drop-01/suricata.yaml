@@ -1,0 +1,25 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filename: eve.json
+      types:
+        - alert
+        - anomaly
+        - drop:
+            alerts: yes
+            flows: start
+        - flow
+        - smtp
+
+action-order:
+  - pass
+  - drop
+  - reject
+  - alert
+
+exception-policy: ignore
+
+
