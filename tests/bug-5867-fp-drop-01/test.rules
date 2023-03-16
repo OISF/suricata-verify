@@ -1,0 +1,2 @@
+pass tcp 172.17.1.0/24 any -> any 225 (msg:"PASS LOCAL NET Port 225::no flags::flow to_server::no thresholds"; flow:to_server; classtype:misc-activity; sid:1000100; rev:1; metadata:created_at 2023_02_07, updated_at 2023_02_07;)
+drop tcp 172.17.1.0/24 any -> any 225 (msg:"DROP LOCAL NET Port 225::no flags::flow established to_server::no thresholds"; flow:to_server,established; classtype:misc-activity; sid:1000101; rev:1; metadata:created_at 2023_02_07, updated_at 2023_02_07;)
