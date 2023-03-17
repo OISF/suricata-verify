@@ -1,4 +1,4 @@
 ET Open
 =======
 
-Fetched from http://rules.emergingthreats.net/open/suricata-5.0/
+Fetched from https://rules.emergingthreats.net/open/suricata-5.0/
