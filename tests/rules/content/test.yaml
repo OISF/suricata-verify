@@ -1,0 +1,82 @@
+requires:
+    min-version: 7.0.0
+    pcap: false
+
+args:
+    - --engine-analysis
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 1
+      mpm.buffer: "payload"
+      mpm.pattern: "one"
+      lists.payload.matches[0].name: "content"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 2
+      mpm.buffer: "payload"
+      mpm.pattern: "one"
+      lists.payload.matches[0].name: "content"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 3
+      mpm.buffer: "payload"
+      mpm.pattern: "one"
+      lists.payload.matches[0].name: "content"
+      lists.payload.matches[0].content.depth: 8
+      notes[0]: "'within' option for pattern w/o previous content was converted to 'depth'"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 4
+      mpm.buffer: "payload"
+      mpm.pattern: "one"
+      lists.payload.matches[0].name: "content"
+      lists.payload.matches[0].content.offset: 8
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 5
+      mpm.buffer: "payload"
+      mpm.pattern: "in|20|pkt|20|data"
+      lists.payload.matches[0].name: "content"
+      lists.payload.matches[0].content.pattern: "in|20|pkt|20|data"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 7
+      lists.payload.matches[0].name: "pcre"
+      lists.payload.matches[0].pcre.relative: false
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 9
+      mpm.buffer: "payload"
+      mpm.pattern: "one"
+      lists.payload.matches[0].name: "content"
+      lists.payload.matches[0].content.pattern: "one"
+      lists.payload.matches[0].content.relative_next: true
+      lists.payload.matches[1].name: "pcre"
+      lists.payload.matches[1].pcre.relative: true
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 10
+      mpm.buffer: "payload"
+      mpm.pattern: "one"
+      lists.payload.matches[0].name: "content"
+      lists.payload.matches[0].content.offset: 8
+      lists.payload.matches[0].content.depth: 11
+      notes[0]: "'within' option for pattern w/o previous content was converted to 'depth'"

@@ -1,0 +1,19 @@
+requires:
+    min-version: 7.0.0
+    pcap: false
+
+args:
+    - --engine-analysis
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 1
+      mpm.buffer: "dns_query"
+      mpm.pattern: "one"
+      engines[0].name: "dns_query"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[0].content.relative_next: true
+      engines[0].matches[1].name: "isdataat"

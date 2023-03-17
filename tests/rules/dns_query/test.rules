@@ -1,0 +1,1 @@
+alert dns any any -> any any (dns_query; content:"one"; isdataat:!4,relative; sid:1;)

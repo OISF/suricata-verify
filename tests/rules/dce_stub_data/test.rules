@@ -1,0 +1,23 @@
+alert tcp any any -> any any (dce_stub_data; content:"one"; sid:1;)
+alert tcp any any -> any any (dcerpc.stub_data; content:"one"; content:"two"; within:8; sid:2;)
+alert tcp any any -> any any (dce_stub_data; content:"1"; fast_pattern; content:"two"; sid:3;)
+alert tcp any any -> any any (dcerpc.stub_data; content:"one"; pcre:/two/R; sid:4;)
+
+alert tcp any any -> any any (dce_iface:3919286a-b10c-11d0-9ba8-00c04fd92ef5; dce_stub_data; content:"one"; fast_pattern; distance:0; isdataat:4,relative; sid:5;)
+# TODO check if rawbytes makes sense here. Was in unittest.
+alert tcp any any -> any any (dce_iface:3919286a-b10c-11d0-9ba8-00c04fd92ef5; dce_stub_data; content:"one"; distance:0; isdataat:4,relative,rawbytes; sid:6;)
+
+alert dcerpc any any -> any any (flow:to_server; dce_iface:3919286a-b10c-11d0-9ba8-00c04fd92ef5; dce_stub_data; pcre:/one/R; sid:7;)
+
+
+alert smb any any -> any any (flow:to_server; dce_stub_data; content:"one"; distance:10; within:5; content:"two"; within:5; pkt_data; content:"three"; content:"four"; sid:8;)
+
+alert tcp any any -> any any (pcre:/one/; content:"two"; distance:10; within:5; content:"three"; within:5;content:"four";content:"five"; sid:9;)
+alert tcp any any -> any any (byte_jump:2,5; pcre:/one/; content:"two"; distance:10; within:5; content:"three"; within:5;content:"four";content:"five"; sid:10;)
+alert tcp any any -> any any (byte_jump:2,5,relative; pcre:/one/; content:"two"; distance:10; within:5; content:"three"; within:5;content:"four";content:"five"; sid:11;)
+
+alert tcp any any -> any any (content:"one"; byte_jump:1,2,relative,align,dce; content:"two"; within:4; sid:12;)
+
+alert smb any any -> any any (flow:to_server; dce_stub_data; byte_test:1,=,0,0,relative,dce; sid:13;)
+
+alert tcp any any -> any any (dce_iface:3919286a-b10c-11d0-9ba8-00c04fd92ef5; dce_stub_data; content:"one"; distance:0; isdataat:4,relative; sid:14;)

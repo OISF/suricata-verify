@@ -1,0 +1,195 @@
+requires:
+    min-version: 7.0.0
+    pcap: false
+
+args:
+    - --engine-analysis
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 1
+      mpm.buffer: "dce_stub_data"
+      mpm.pattern: "one"
+      engines[0].name: "dce_stub_data"
+      engines[0].matches[0].name: "content"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 2
+      mpm.buffer: "dce_stub_data"
+      mpm.pattern: "one"
+      engines[0].name: "dce_stub_data"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[0].content.relative_next: true
+      engines[0].name: "dce_stub_data"
+      engines[0].matches[1].name: "content"
+      engines[0].matches[1].content.within: 8
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 3
+      mpm.buffer: "dce_stub_data"
+      mpm.pattern: "1"
+      engines[0].name: "dce_stub_data"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[0].content.pattern: "1"
+      engines[0].matches[1].name: "content"
+      engines[0].matches[1].content.pattern: "two"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 4
+      mpm.buffer: "dce_stub_data"
+      mpm.pattern: "one"
+      engines[0].name: "dce_stub_data"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[0].content.relative_next: true
+      engines[0].matches[1].name: "pcre"
+      engines[0].matches[1].pcre.relative: true
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 5
+      mpm.buffer: "dce_stub_data"
+      mpm.pattern: "one"
+      engines[0].name: "dce_stub_data"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[0].content.pattern: "one"
+      engines[0].matches[0].content.relative_next: true
+      engines[0].matches[1].name: "isdataat"
+      engines[1].name: "dce_stub_data"
+      engines[2].name: "dce_stub_data"
+      engines[3].name: "dce_stub_data"
+      engines[4].name: "dce_generic"
+      engines[4].matches[0].name: "dcerpc.iface"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 7
+      engines[0].name: "dce_generic"
+      engines[0].app_proto: "dcerpc"
+      engines[0].matches[0].name: "dcerpc.iface"
+      engines[1].name: "dce_generic"
+      engines[1].app_proto: "smb"
+      engines[1].matches[0].name: "dcerpc.iface"
+      # bug 5902: we get smb engines despite "alert dcerpc"
+      engines[2].name: "dce_stub_data"
+      engines[2].matches[0].name: "pcre"
+      engines[2].matches[0].pcre.relative: true
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 8
+      mpm.buffer: "dce_stub_data"
+      mpm.pattern: "one"
+      engines[0].name: "dce_stub_data"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[0].content.pattern: "one"
+      engines[0].matches[0].content.relative_next: true
+      engines[0].matches[1].name: "content"
+      engines[0].matches[1].content.pattern: "two"
+      engines[0].matches[1].content.relative_next: false
+      engines[1].name: "stream"
+      engines[1].matches[0].name: "content"
+      engines[1].matches[0].content.pattern: "three"
+      engines[1].matches[0].content.relative_next: false
+      engines[1].matches[1].name: "content"
+      engines[1].matches[1].content.pattern: "four"
+      engines[1].matches[1].content.relative_next: false
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 9
+      mpm.buffer: "payload"
+      mpm.pattern: "three"
+      lists.payload.matches[0].name: "pcre"
+      lists.payload.matches[1].name: "content"
+      lists.payload.matches[2].name: "content"
+      lists.payload.matches[3].name: "content"
+      lists.payload.matches[4].name: "content"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 10
+      mpm.buffer: "payload"
+      mpm.pattern: "three"
+      lists.payload.matches[0].name: "byte_jump"
+      lists.payload.matches[0].byte_jump.nbytes: 2
+      lists.payload.matches[0].byte_jump.offset: 5
+      lists.payload.matches[1].name: "pcre"
+      lists.payload.matches[1].pcre.relative: false
+      lists.payload.matches[2].name: "content"
+      lists.payload.matches[3].name: "content"
+      lists.payload.matches[4].name: "content"
+      lists.payload.matches[5].name: "content"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 11
+      mpm.buffer: "payload"
+      mpm.pattern: "three"
+      lists.payload.matches[0].name: "byte_jump"
+      lists.payload.matches[0].byte_jump.nbytes: 2
+      lists.payload.matches[0].byte_jump.offset: 5
+      lists.payload.matches[0].byte_jump.flags[0]: "relative"
+      lists.payload.matches[1].name: "pcre"
+      lists.payload.matches[1].pcre.relative: false
+      lists.payload.matches[2].name: "content"
+      lists.payload.matches[3].name: "content"
+      lists.payload.matches[4].name: "content"
+      lists.payload.matches[5].name: "content"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 12
+      mpm.buffer: "payload"
+      mpm.pattern: "one"
+      lists.payload.matches[0].name: "content"
+      lists.payload.matches[1].name: "byte_jump"
+      lists.payload.matches[1].byte_jump.nbytes: 1
+      lists.payload.matches[1].byte_jump.offset: 2
+      lists.payload.matches[1].byte_jump.flags[0]: "relative"
+      lists.payload.matches[1].byte_jump.flags[1]: "align"
+      lists.payload.matches[1].byte_jump.flags[2]: "dce"
+      lists.payload.matches[2].name: "content"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 13
+      engines[0].name: "dce_stub_data"
+      engines[0].matches[0].name: "byte_test"
+      engines[0].matches[0].byte_test.nbytes: 1
+      engines[0].matches[0].byte_test.offset: 0
+      engines[0].matches[0].byte_test.flags[0]: "relative"
+      engines[0].matches[0].byte_test.flags[1]: "dce"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 14
+      mpm.buffer: "dce_stub_data"
+      mpm.pattern: "one"
+      engines[0].name: "dce_stub_data"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[0].content.pattern: "one"
+      engines[0].matches[0].content.relative_next: true
+      engines[0].matches[1].name: "isdataat"
+      engines[1].name: "dce_stub_data"
+      engines[2].name: "dce_stub_data"
+      engines[3].name: "dce_stub_data"
+      engines[4].name: "dce_generic"
+      engines[4].matches[0].name: "dcerpc.iface"

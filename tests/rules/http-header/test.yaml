@@ -1,0 +1,189 @@
+requires:
+    min-version: 7.0.0
+    pcap: false
+
+args:
+    - --engine-analysis
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 1
+      mpm.buffer: "http_header"
+      mpm.pattern: "one"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 2
+      mpm.buffer: "http_header"
+      mpm.pattern: "two"
+      engines[0].name: "http_header"
+      engines[0].matches[0].name: "pcre"
+      engines[0].matches[0].pcre.relative_next: true
+      engines[0].matches[1].name: "content"
+      engines[0].matches[1].content.within: 5
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 3
+      mpm.buffer: "http_header"
+      mpm.pattern: "one"
+      engines[0].name: "http_header"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[0].content.relative_next: true
+      engines[0].matches[1].name: "content"
+      engines[0].matches[1].content.distance: 0
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 4
+      mpm.buffer: "http_header"
+      mpm.pattern: "one"
+      engines[0].name: "http_header"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[0].content.relative_next: true
+      engines[0].matches[1].name: "content"
+      engines[0].matches[1].content.distance: 0
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 5
+      mpm.buffer: "http_header"
+      mpm.pattern: "one"
+      engines[0].name: "http_header"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[0].content.depth: 5
+      notes[0]: "'within' option for pattern w/o previous content was converted to 'depth'"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 6
+      mpm.buffer: "http_header"
+      mpm.pattern: "one"
+      engines[0].name: "http_header"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[0].content.depth: 5
+      notes[0]: "'within' option for pattern w/o previous content was converted to 'depth'"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 7
+      mpm.buffer: "http_header"
+      mpm.pattern: "one"
+      engines[0].name: "http_header"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[0].content.relative_next: true
+      engines[0].matches[1].name: "pcre"
+      engines[0].matches[1].pcre.relative: true
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 8
+      mpm.buffer: "http_header"
+      mpm.pattern: "two"
+      engines[0].name: "http_header"
+      engines[0].matches[0].name: "pcre"
+      engines[0].matches[0].pcre.relative_next: true
+      engines[0].matches[1].name: "content"
+      engines[0].matches[1].content.distance: 5
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 9
+      mpm.buffer: "http_header"
+      mpm.pattern: "three"
+      engines[0].name: "http_header"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[0].content.relative_next: true
+      engines[0].matches[1].name: "content"
+      engines[0].matches[1].content.distance: 0
+      engines[0].matches[1].content.relative_next: true
+      engines[0].matches[2].name: "content"
+      engines[0].matches[2].content.distance: 0
+      engines[0].matches[2].content.relative_next: true
+      engines[0].matches[3].name: "content"
+      engines[0].matches[3].content.distance: 0
+      engines[0].matches[3].content.relative_next: false
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 10
+      mpm.buffer: "http_header"
+      mpm.pattern: "one"
+      engines[0].name: "http_header"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[0].content.relative_next: false
+      engines[0].matches[0].content.ends_with: true
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 11
+      mpm.buffer: "http_header"
+      mpm.pattern: "one"
+      engines[0].name: "http_header"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[0].content.relative_next: false
+      engines[2].name: "stream"
+      engines[2].matches[0].name: "content"
+      engines[2].matches[0].content.relative_next: false
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 12
+      mpm.buffer: "http_header"
+      mpm.pattern: "one"
+      engines[0].name: "http_header"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[0].content.relative_next: false
+      engines[1].name: "stream"
+      engines[1].matches[0].name: "content"
+      engines[1].matches[0].content.relative_next: false
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 13
+      mpm.buffer: "http_header"
+      mpm.pattern: "1"
+      engines[0].name: "http_header"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[0].content.relative_next: false
+      engines[0].matches[1].name: "content"
+      engines[0].matches[1].content.relative_next: false
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 14
+      mpm.buffer: "http_header"
+      mpm.pattern: "1"
+      engines[0].name: "http_header"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[0].content.relative_next: false
+      engines[0].matches[1].name: "base64_decode"
+      lists.base64_data.matches[0].name: "content"
+      lists.base64_data.matches[0].content.pattern: "two"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 16
+      mpm.buffer: "http_header"
+      mpm.pattern: "one"
+      engines[0].name: "http_header"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[0].content.relative_next: true
+      engines[0].matches[1].name: "isdataat"

@@ -1,0 +1,1 @@
+alert tcp any any -> any any (uricontent:"one"; sid:1;)
