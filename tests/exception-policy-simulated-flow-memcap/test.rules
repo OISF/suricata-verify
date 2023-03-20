@@ -1,0 +1,1 @@
+alert tls any any -> any any (msg:"tls app-proto"; sid:1000001; rev:1;)

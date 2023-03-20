@@ -1,0 +1,29 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      types:
+        - alert:
+            tagged-packets: yes
+        - anomaly:
+            enabled: yes
+            types:
+              decode: no
+              stream: yes
+              applayer: yes
+        - drop:
+            alerts: yes      # log alerts that caused drops
+            flows: all       # start or all: 'start' logs only a single drop
+        - http
+        - flow
+        - stats
+
+
+flow:
+  memcap: 20kb
+  memcap-policy: drop-packet
+  hash-size: 20
+  prealloc: 2
+  emergency-recovery: 4
