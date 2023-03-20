@@ -1,0 +1,15 @@
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.size: 34293
+
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.status: 200
