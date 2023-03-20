@@ -1,0 +1,10 @@
+requires:
+  files:
+    - src/datasets.c
+
+pcap: ../datasets-02-load/input.pcap
+
+args:
+ - -k none
+
+exit-code: 1
