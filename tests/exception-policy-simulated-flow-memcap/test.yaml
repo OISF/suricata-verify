@@ -1,0 +1,32 @@
+requires:
+  features:
+    - DEBUG
+
+pcap: ../tls/tls-cert-issuer/tls.pcap
+
+args:
+- --simulate-ips
+- -k none
+- --set stream.midstream=true
+- --simulate-packet-flow-memcap=6
+- --set flow.memcap-policy=drop-flow
+
+checks:
+  - filter:
+      count: 97
+      match:
+        event_type: alert
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        drop.reason: "flow memcap"
+  - filter:
+      count: 5
+      match:
+        event_type: tls
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.tcp.midstream_pickups: 1
