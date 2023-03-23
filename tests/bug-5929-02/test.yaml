@@ -1,0 +1,11 @@
+args:
+- --set app-layer.protocols.http2.enabled=true
+- --set app-layer.protocols.http2.http1-rules=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+
