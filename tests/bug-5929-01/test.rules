@@ -1,0 +1,4 @@
+alert http any any -> any any (flow:established,to_server; urilen:<70; http.uri; content:".php?"; content:"=01&"; distance:4; within:4; fast_pattern; sid:1;)
+alert http any any -> any any (flow:established,to_server; http.uri; bsize:<70; content:".php?"; content:"=01&"; distance:4; within:4; fast_pattern; sid:2;)
+alert http any any -> any any (flow:established,to_server; urilen:<70; http.uri; content:".php?"; content:"=01&"; distance:4; within:4; sid:3;)
+alert http any any -> any any (flow:established,to_server; http.uri; content:".php?"; content:"=01&"; distance:4; within:4; fast_pattern; sid:4;)
