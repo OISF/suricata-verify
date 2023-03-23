@@ -8,7 +8,7 @@ args:
 - -k none
 # pretend pretend error in the first fragment
 - --simulate-packet-defrag-memcap=1
-- --set defrag.memcap-policy=drop-packet
+- --set defrag.memcap-policy=drop-flow
 checks:
   - filter:
       count: 0
