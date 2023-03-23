@@ -50,11 +50,6 @@ checks:
         http.response_headers[0].name: ":status"
         http.response_headers[0].value: "200"
   - filter:
-      count: 6
-      match:
-        event_type: alert
-        alert.signature_id: 1
-  - filter:
       count: 1
       match:
         event_type: alert

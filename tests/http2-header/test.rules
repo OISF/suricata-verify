@@ -1,0 +1,1 @@
+alert http2 any any -> any any (http.request_header; content:"agent: nghttp2"; sid:1; rev:2;)
