@@ -1,4 +1,4 @@
-alert http2 any any -> any any (http2.header; content:"agent: nghttp2"; sid:1; rev:1;)
+alert http2 any any -> any any (http.request_header; content:"agent: nghttp2"; sid:1; rev:2;)
 alert http2 any any -> any any (http2.frametype:GOAWAY; sid:2; rev:1;)
 alert http2 any any -> any any (http2.settings:SETTINGS_HEADER_TABLE_SIZE>1000; sid:3; rev:1;)
 alert http2 any any -> any any (http2.window:34634; sid:4; rev:1;)
