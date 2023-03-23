@@ -1,0 +1,17 @@
+requires:
+  min-version: 7
+
+pcap: ../http2-basic/input.pcap
+
+# disables checksum verification
+args:
+  - -k none
+
+checks:
+
+  # Check that there is one file event with content range.
+  - filter:
+      count: 6
+      match:
+        event_type: alert
+        alert.signature_id: 1
