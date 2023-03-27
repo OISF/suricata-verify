@@ -1,0 +1,87 @@
+requires:
+    min-version: 7.0.0
+    pcap: false
+
+args:
+    - --engine-analysis
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 1
+      mpm.buffer: "http_uri"
+      mpm.pattern: "=01&"
+      engines[0].name: "http_uri"
+      engines[0].app_proto: "http2"
+      engines[0].matches[0].name: "urilen"
+      engines[0].matches[1].name: "content"
+      engines[0].matches[2].name: "content"
+      engines[1].name: "http_uri"
+      engines[1].app_proto: "http"
+      engines[1].matches[0].name: "urilen"
+      engines[1].matches[1].name: "content"
+      engines[1].matches[2].name: "content"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 2
+      mpm.buffer: "http_uri"
+      mpm.pattern: "=01&"
+      engines[0].name: "http_uri"
+      engines[0].app_proto: "http2"
+      engines[0].matches[0].name: "bsize"
+      engines[0].matches[1].name: "content"
+      engines[0].matches[2].name: "content"
+      engines[1].name: "http_uri"
+      engines[1].app_proto: "http"
+      engines[1].matches[0].name: "bsize"
+      engines[1].matches[1].name: "content"
+      engines[1].matches[2].name: "content"
+- filter:
+    filename: rules.json
+    filename: rules.json
+    count: 1
+    match:
+      id: 3
+      mpm.buffer: "http_uri"
+      mpm.pattern: ".php?"
+      engines[0].name: "http_uri"
+      engines[0].app_proto: "http2"
+      engines[0].matches[0].name: "urilen"
+      engines[0].matches[1].name: "content"
+      engines[0].matches[2].name: "content"
+      engines[1].name: "http_uri"
+      engines[1].app_proto: "http"
+      engines[1].matches[0].name: "urilen"
+      engines[1].matches[1].name: "content"
+      engines[1].matches[2].name: "content"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 4
+      mpm.buffer: "http_uri"
+      mpm.pattern: "=01&"
+      engines[0].name: "http_uri"
+      engines[0].app_proto: "http2"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[1].name: "content"
+      engines[1].name: "http_uri"
+      engines[1].app_proto: "http"
+      engines[1].matches[0].name: "content"
+      engines[1].matches[1].name: "content"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 5
+      mpm.buffer: "payload"
+      mpm.pattern: "abc"
+      engines[0].name: "stream"
+      engines[0].matches[0].name: "content"
+      engines[1].name: "http_uri"
+      engines[1].app_proto: "http"
+      engines[1].matches[0].name: "urilen"
