@@ -1,0 +1,1 @@
+alert http $HOME_NET any -> any any (msg:"Test"; flow:established,to_server; http.method; content:"GET"; http.uri; content:".exe"; endswith; http.host; content:!".google.com"; endswith; sid:1;)
