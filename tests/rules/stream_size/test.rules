@@ -1,0 +1,1 @@
+alert tcp 1.2.3.4 5678 -> 8.7.6.5 4321 (flow:established,to_server; stream_size:server,<,1111; content: "EICAR"; sid:1;)
