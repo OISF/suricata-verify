@@ -1,0 +1,3 @@
+alert tcp any any -> any any (ipv4.hdr; byte_extract: 1, 2, extracted_val, relative;byte_math: bytes 1, offset 0, oper /, rvalue extracted_val, result var;msg:\
+"Byte extract and byte math with 0 devide\
+";sid:1;)
