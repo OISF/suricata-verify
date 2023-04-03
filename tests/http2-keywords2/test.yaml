@@ -60,3 +60,18 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 34
+  - filter:
+      count: 12
+      match:
+        event_type: alert
+        alert.signature_id: 35
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 36
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 37

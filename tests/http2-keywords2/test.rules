@@ -11,3 +11,7 @@ alert http2 any any -> any any (http.host.raw; content:"nghttp2.org"; sid:32;)
 
 alert http2 any any -> any any (http.header_names; content:"|0d 0a|user-agent|0d 0a|accept|0d 0a|"; sid:33;)
 alert http2 any any -> any any (http.header; content:"user-agent: curl/7.61.0|0d 0a|accept: */*|0d 0a|"; sid:34;)
+
+alert http2 any any -> any any (http.protocol; content:"HTTP/2"; sid:35;)
+alert http2 any any -> any any (http.response_body; content:"not found"; sid:36;)
+alert http2 any any -> any any (http_request_line; content:"GET /humans.txt HTTP/2"; sid:37;)
