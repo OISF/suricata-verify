@@ -1,0 +1,12 @@
+args:
+- --set stream.midstream=true
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+- filter:
+    count: 1
+    match:
+      event_type: http
