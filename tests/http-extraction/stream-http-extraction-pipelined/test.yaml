@@ -1,0 +1,82 @@
+requires:
+  features:
+    - LIBRARY
+
+args:
+ - --set outputs.file-store.enabled=yes
+ - --set stream.reassembly.depth=100mb
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        src_ip: 192.150.187.29
+        dest_ip: 8.26.197.254
+        src_port: 55618
+        dest_port: 80
+        http.url: /cnn/.e/img/3.0/global/header/hdr-main.png
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        src_ip: 192.150.187.29
+        dest_ip: 8.26.197.254
+        src_port: 55618
+        dest_port: 80
+        http.url: /cnn/.e/img/3.0/global/icons/gallery_icon2.png
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        src_ip: 192.150.187.29
+        dest_ip: 8.26.197.254
+        src_port: 55618
+        dest_port: 80
+        http.url: /cnn/.element/widget/hp_footer_dom/images/tsr.jpg
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        src_ip: 192.150.187.29
+        dest_ip: 8.26.197.254
+        src_port: 55618
+        dest_port: 80
+        http.url: /cnn/.e/img/3.0/global/footer/pngs/footer_google.png
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        src_ip: 192.150.187.29
+        dest_ip: 8.26.197.254
+        src_port: 55618
+        dest_port: 80
+        http.url: /cnn/.e/img/3.0/global/header/bg-nav.c.gif
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        src_ip: 192.150.187.29
+        dest_ip: 8.26.197.254
+        src_port: 55618
+        dest_port: 80
+        http.url: /cnn/.e/img/3.0/global/video/btn_play_mini.png
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        src_ip: 192.150.187.29
+        dest_ip: 8.26.197.254
+        src_port: 55618
+        dest_port: 80
+        http.url: /cnn/.e/img/3.0/search/search_btn_footer.gif
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_ip: 8.26.197.254
+        dest_ip: 192.150.187.29
+        src_port: 80
+        dest_port: 55618
+        fileinfo.filename: /cnn/.element/widget/hp_footer_dom/images/tsr.jpg
+        fileinfo.sha256: 575771e92e5727a007317abe3bc4733d39a34029857ddf0b805ed29828827ca2

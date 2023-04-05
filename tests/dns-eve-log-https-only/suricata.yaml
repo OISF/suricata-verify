@@ -9,3 +9,7 @@ outputs:
       types:
         - dns:
             types: [https]
+  - callback:
+      nta:
+        dns:
+          enabled: yes

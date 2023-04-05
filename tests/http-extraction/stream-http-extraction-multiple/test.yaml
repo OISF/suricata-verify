@@ -1,0 +1,171 @@
+requires:
+  features:
+    - LIBRARY
+
+args:
+ - --set outputs.file-store.enabled=yes
+ - --set stream.reassembly.depth=100mb
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /christian/tmp/files/poc.cve-2006-2492.doc
+        fileinfo.sha256: dbc0a1bfbddceba2afd48e6f30bf2fe0f70707dae1a4f8ae6a0bcdcc27ded36b
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /christian/tmp/files/poc.cve-2009-0556.pps
+        fileinfo.sha256: c73f01790f1b4353a1df823c50ce23233e54fc3535ce921587d194d02bc778c9
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /christian/tmp/files/poc.cve-2009-0556.ppt
+        fileinfo.sha256: 5c77bc181277f05ac7a91f7c59c2fe9705ddc865432efcab0130575ed040c254
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /christian/tmp/files/poc.cve-2012-0158.rtf
+        fileinfo.sha256: 05f748eb72404a099354643e2522844c79adf9a9c67eb6c3fa6ba142bb848451
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /christian/tmp/files/poc.cve-2013-0640.pdf
+        fileinfo.sha256: 59b62e650a437032886e1cc74dd7cdf0abab5ee6bc85fb4aa18568733aa89370
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /christian/tmp/files/poc.encryptedxls.xls
+        fileinfo.sha256: c9aacd55e27b38fbdc2ec1dca87f00ea7e965eed7e9be2ff8e581aa0d2bd0763
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /christian/tmp/files/poc.iphone5battery.doc
+        fileinfo.sha256: 742db588c3cfa416215619db34e168be58846058f7528adee8358bb8b8b68fe3
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /christian/tmp/files/poc.malware.java.jar
+        fileinfo.sha256: 0693bb697dbc8b3b0abe195623317f36817e9360273e9519bc4e413bd6932dd8
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /christian/tmp/files/poc.macho_osx.o
+        fileinfo.sha256: 2e5f58e79fa3009de084370c6a1ae666ef2dcb337ce9fa6cd653c6d2903cef25
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /christian/tmp/files/virus01.exe
+        fileinfo.sha256: 5792f078c5bc86663545b0be778cf5040da92893098d1d5044284fbb6e9c6659
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /christian/tmp/files/virus01.zip
+        fileinfo.sha256: 6651c3161c27a9f2961a1de341ad3d9d2155a8a61e9ef5317d8c4320e65a92c5
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /christian/tmp/files/virus02.pdf
+        fileinfo.sha256: 5350540182b7529b01f0c5cdada6f4750af7476dfc273b11ec6e038aaaa95227
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /christian/tmp/files/virus03.pdf.exe
+        fileinfo.sha256: 7b06e28babfe3bcf3c36818bc550f8e67e3bf6022a93705ec91688685eaef199
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /christian/tmp/files/virus04.pdf
+        fileinfo.sha256: 40c94967cb791bc47fbbc78a9c9540e5d0d4950a46e13aa0e8fa0ab608910641
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /christian/tmp/files/virus05.gz
+        fileinfo.sha256: cc6d882a8ae051b3a7eeae825c5b02b68182efd138466e1efb23edebecfdd90a
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /christian/tmp/files/virus06
+        fileinfo.sha256: 7b06e28babfe3bcf3c36818bc550f8e67e3bf6022a93705ec91688685eaef199
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /christian/tmp/files/virus06.doc
+        fileinfo.sha256: 7b06e28babfe3bcf3c36818bc550f8e67e3bf6022a93705ec91688685eaef199
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /christian/tmp/files/virus06.zip
+        fileinfo.sha256: b1841a3ef3048c9667926998ed72df27fe79864edc3317a11241da071d626aff
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /christian/tmp/files/virus07.doc
+        fileinfo.sha256: cd461c878d7be45e8f290ebc38dfc4cc2697a0b208a7caa121c67085a07cecad
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /christian/tmp/files/virus08.pdf
+        fileinfo.sha256: 2145b917cc81ec2c6b6bc822666510742eb08a306ea4ee6bdd8eca443f390f8e
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /christian/tmp/files/virus10.xls
+        fileinfo.sha256: ff3c276542db16a0b5485f1ed3e5d2e143a2bb36b222e1407e4c14c7de757e57
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /christian/tmp/files/virus11.docx
+        fileinfo.sha256: b66995a5c679d96d1f0904bca6a3058c8765479a2aacf5ca75be17b24846580b
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /christian/tmp/files/virus12.ppt
+        fileinfo.sha256: 0c3cd629048a34594529d401f4043eb17023a3ea29e8df6bb868084da0adfdbd
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /christian/tmp/files/virus17.xlb
+        fileinfo.sha256: cbf5f7c9f4b66fed17f9a5d3ae2794685f8962f8217ede0d0c0de3b2e297e8db
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /christian/tmp/files/virus18.doc
+        fileinfo.sha256: 5475e2398e3b1bc1b34633d99bf2d79242dd6d990ddc9dbb8d38586fdf860a29
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /test.o.macho
+        fileinfo.sha256: 99e4ee305b32c70884d3198c0951ff59254f24ccc1740fb878a423df4f8883ec
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /test.cab.01
+        fileinfo.sha256: 8628206fe43ea15798037adf5ae380d7f695466bc579cad9b94be053c14d38c9

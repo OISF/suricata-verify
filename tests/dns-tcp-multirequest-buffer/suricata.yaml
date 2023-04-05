@@ -6,3 +6,7 @@ outputs:
       enabled: yes
       types:
         - dns:
+  - callback:
+      nta:
+        dns:
+          enabled: yes

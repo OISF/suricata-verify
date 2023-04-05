@@ -9,3 +9,8 @@ outputs:
         - dhcp:
             extended: true
       community-id: true
+  - callback:
+      nta:
+        dhcp:
+          enabled: true
+          extended: true

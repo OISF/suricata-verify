@@ -1,0 +1,25 @@
+requires:
+  features:
+    - LIBRARY
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1102993
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1102994
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1100189
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1100190

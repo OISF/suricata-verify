@@ -10,3 +10,8 @@ outputs:
       types:
         - dns
         - flow
+  - callback:
+      ethernet: yes
+      nta:
+        dns:
+          enabled:  yes

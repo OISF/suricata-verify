@@ -9,3 +9,8 @@ outputs:
       types:
         - dns:
             types: [aaaa]
+  - callback:
+      nta:
+        dns:
+          enabled: yes
+          types: [aaaa]

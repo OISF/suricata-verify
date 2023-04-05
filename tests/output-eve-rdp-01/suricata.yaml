@@ -9,7 +9,10 @@ outputs:
       types:
         - rdp
       community-id: true
-
+  - callback:
+      nta:
+        rdp:
+          enabled: yes
 app-layer:
   protocols:
     rdp:
