@@ -617,7 +617,8 @@ class TestRunner:
 
             if pcap_required and not "pcap" in self.config:
                 if not glob.glob(os.path.join(self.directory, "*.pcap")) + \
-                   glob.glob(os.path.join(self.directory, "*.pcapng")):
+                   glob.glob(os.path.join(self.directory, "*.pcapng")) + \
+                   glob.glob(os.path.join(self.directory, "*.stream")):
                     raise UnsatisfiedRequirementError("No pcap file found")
 
     def build_env(self):
@@ -935,7 +936,7 @@ def run_test(dirpath, args, cwd, suricata_config):
                 count_dict["skipped"] += 1
         elif results["success"] > 0:
             with lock:
-                count_dict["passed"] += 1  
+                count_dict["passed"] += 1
     except UnsatisfiedRequirementError as ue:
         if not args.quiet:
             print("===> {}: SKIPPED: {}".format(os.path.basename(dirpath), ue))
