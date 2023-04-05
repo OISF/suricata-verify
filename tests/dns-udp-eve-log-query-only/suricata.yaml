@@ -10,4 +10,9 @@ outputs:
         - dns:
             requests: yes
             responses: no
-        
+  - callback:
+      nta:
+        dns:
+          enabled: yes
+          requests: yes
+          responses: no

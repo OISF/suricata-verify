@@ -8,3 +8,7 @@ outputs:
         - dns:
             enabled: true
             version: 2
+  - callback:
+      nta:
+        dns:
+          enabled: yes

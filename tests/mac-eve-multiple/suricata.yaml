@@ -9,3 +9,5 @@ outputs:
       ethernet: yes
       types:
         - flow
+  - callback:
+      ethernet: yes

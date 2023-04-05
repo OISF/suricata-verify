@@ -9,7 +9,10 @@ outputs:
       types:
         - tls:
             extended: yes     # enable this for extended logging information
-
+  - callback:
+      nta:
+        tls:
+          extended: yes
 app-layer:
   protocols:
     tls:

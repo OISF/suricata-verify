@@ -9,3 +9,6 @@ outputs:
       types:
         - http:
             dump-all-headers: both
+  - callback:
+      http:
+        dump-all-headers: both

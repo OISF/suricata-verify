@@ -7,3 +7,7 @@ outputs:
       filename: eve.json
       types:
         - dns:
+  - callback:
+      nta:
+        dns:
+          enabled: yes

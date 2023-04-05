@@ -77,3 +77,7 @@ outputs:
         # uni-directional flows
         #- netflow
 
+  - callback:
+      nta:
+        dns:
+          enabled: yes

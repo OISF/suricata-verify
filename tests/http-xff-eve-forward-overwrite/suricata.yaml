@@ -13,3 +13,9 @@ outputs:
               enabled: yes
               mode: overwrite
               deployment: forward
+  - callback:
+      alert:
+        xff:
+          enabled: yes
+          mode: overwrite
+          deployment: forward

@@ -10,7 +10,10 @@ outputs:
         - alert
         - rdp
         - flow
-
+  - callback:
+      nta:
+        rdp:
+          enabled: yes
 app-layer:
   protocols:
     rdp:

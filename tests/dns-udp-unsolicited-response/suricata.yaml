@@ -8,3 +8,7 @@ outputs:
       types:
         - alert
         - dns:
+  - callback:
+      nta:
+        dns:
+          enabled: yes

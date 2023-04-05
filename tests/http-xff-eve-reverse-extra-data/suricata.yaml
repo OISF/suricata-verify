@@ -13,3 +13,9 @@ outputs:
               enabled: yes
               mode: extra-data
               deployment: reverse
+  - callback:
+      alert:
+        xff:
+          enabled: yes
+          mode: extra-data
+          deployment: reverse

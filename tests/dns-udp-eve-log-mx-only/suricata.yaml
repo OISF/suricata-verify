@@ -9,3 +9,8 @@ outputs:
       types:
         - dns:
             types: [mx]
+  - callback:
+      nta:
+        dns:
+          enabled: yes
+          types: [mx]

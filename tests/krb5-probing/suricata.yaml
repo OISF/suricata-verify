@@ -7,4 +7,8 @@ outputs:
       types:
         - krb5
         - alert
-        - anomaly 
+        - anomaly
+  - callback:
+      nta:
+        krb5:
+          enabled: yes

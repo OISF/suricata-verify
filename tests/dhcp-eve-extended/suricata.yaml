@@ -10,3 +10,7 @@ outputs:
         - dhcp:
             extended: true
         - flow
+  - callback:
+      nta:
+        dhcp:
+          extended: true

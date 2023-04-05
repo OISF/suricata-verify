@@ -9,3 +9,7 @@ outputs:
       types:
         - smb
       community-id: true
+  - callback:
+      nta:
+        smb:
+          enabled: yes
