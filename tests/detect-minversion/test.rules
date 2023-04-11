@@ -1,0 +1,2 @@
+alert ip any any -> any any (min_version: 123;sid:1;)
+alert ip any any -> any any (min_version: 7;sid:2;)
