@@ -1,0 +1,16 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  min-version: 5.0.0
+
+args:
+  - -k none
+  - --set app-layer.protocols.sip.enabled=yes
+
+pcap: sip-tcp.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
