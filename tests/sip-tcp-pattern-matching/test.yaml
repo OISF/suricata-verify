@@ -1,0 +1,34 @@
+requires:
+  min-version: 6
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      min-version: 8
+      count: 1
+      match:
+        proto: TCP
+        event_type: sip
+        sip.method: "REGISTER"
+        sip.uri: "sip:sip.cybercity.dk"
+        sip.version: "SIP/2.0"
+        sip.request_line: "REGISTER sip:sip.cybercity.dk SIP/2.0"
+  - filter:
+      min-version: 8
+      count: 1
+      match:
+        proto: TCP
+        event_type: sip
+        sip.version: "SIP/2.0"
+        sip.code: "401"
+        sip.reason: "Unauthorized"
+        sip.response_line: "SIP/2.0 401 Unauthorized"
+  - filter:
+      min-version: 8
+      count: 1
+      match:
+        event_type: stats
+        stats.app_layer.tx.sip_tcp: 2
+        stats.app_layer.flow.sip_tcp: 1
