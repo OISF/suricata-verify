@@ -1,0 +1,24 @@
+requires:
+  min-version: 7.0
+
+args:
+  - -k none
+  - --set app-layer.protocols.sip.enabled=yes
+
+pcap: ../sip-tcp-method/sip-tcp.pcap
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
