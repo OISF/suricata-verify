@@ -1,0 +1,11 @@
+alert sip any any -> any any (flow:to_server; frame:pdu; content:"REGISTER"; startswith; sid:2;)
+alert sip any any -> any any (flow:to_client; frame:pdu; content:"SIP/2.0 200 OK|0D 0A|"; startswith; sid:11;)
+
+alert sip any any -> any any (flow:to_server; frame:request.line; content:"REGISTER"; startswith; sid:21;)
+alert sip any any -> any any (flow:to_server; frame:request.line; content:"SIP/2.0|0D 0A|"; endswith; sid:22;)
+
+alert sip any any -> any any (flow:to_server; frame:request.headers; content:"Via:"; startswith; sid:31;)
+alert sip any any -> any any (flow:to_server; frame:request.headers; content:"Via:"; startswith; content:"0|0d 0a|"; endswith; sid:32;)
+
+alert sip any any -> any any (flow:to_client; frame:response.headers; content:"Via:"; startswith; sid:41;)
+alert sip any any -> any any (flow:to_client; frame:response.headers; content:"Via:"; startswith; content:"Content-Length: 0|0d 0a|"; endswith; sid:42;)
