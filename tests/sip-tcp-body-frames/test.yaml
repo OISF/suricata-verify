@@ -1,0 +1,54 @@
+requires:
+  min-version: 8
+
+args:
+  - -k none
+
+pcap: ../sip-tcp-method/sip-tcp.pcap
+
+checks:
+  - filter:
+      count: 2
+      match:
+        proto: TCP
+        event_type: sip
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 22
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 31
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 32
+        frame.type: "request.headers"
+        frame.complete: true
+        frame.length: 532
+        frame.direction: toserver
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 41
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 42
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.app_layer.tx.sip_tcp: 2
+        stats.app_layer.flow.sip_tcp: 1

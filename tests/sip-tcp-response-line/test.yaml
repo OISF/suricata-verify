@@ -1,0 +1,25 @@
+requires:
+  min-version: 8
+
+args:
+  - -k none
+  - --set app-layer.protocols.sip.enabled=yes
+
+pcap: ../sip-tcp-method/sip-tcp.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+  - filter:
+      count: 2
+      match:
+        proto: TCP
+        event_type: sip
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.app_layer.tx.sip_tcp: 2
+        stats.app_layer.flow.sip_tcp: 1
