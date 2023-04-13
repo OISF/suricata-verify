@@ -1,0 +1,21 @@
+flow default tcp 1.1.1.1:5555 > 2.2.2.2:5062 (tcp.initialize; mss:9000;);
+default > (content:"REGISTER sip:sip.cybercity.dk SIP/2.0\x0d
+Via: SIP/2.0/UDP 192.168.1.2;branch=z9hG4bKnp151248737-46ea715e192.168.1.2;rport\x0d
+From: <sip:voi18063@sip.cybercity.dk>;tag=903df0a\x0d
+To: <sip:voi18063@sip.cybercity.dk>\x0d
+Call-ID: 578222729-4665d775@578222732-4665d772\x0d
+Contact:  <sip:voi18063@192.168.1.2:5060;line=9c7d2dbd8822013c>;expires=1200;q=0.500\x0d
+Expires: 1200\x0d
+CSeq: 68 REGISTER\x0d
+Content-Length: 0\x0d
+Max-Forwards: 70\x0d
+User-Agent: Nero SIPPS IP Phone Version 2.0.51.16\x0d\x0a\x0d\x0a";);
+default < (content:"SIP/2.0 401 Unauthorized\x0d
+Call-ID: 578222729-4665d775@578222732-4665d772\x0d
+CSeq: 68 REGISTER\x0d
+From: <sip:voi18063@sip.cybercity.dk>;tag=903df0a\x0d
+To: <sip:voi18063@sip.cybercity.dk>;tag=00-04092-1701af62-120c67172\x0d
+Via: SIP/2.0/UDP 192.168.1.2;received=80.230.219.70;rport=5060;branch=z9hG4bKnp151248737-46ea715e192.168.1.2\x0d
+WWW-Authenticate: Digest realm=\"sip.cybercity.dk\",nonce=\"1701af566be182070084c6f740706bb\",opaque=\"1701a1351f70795\",stale=false,algorithm=MD5\x0d
+Content-Length: 0\x0d\x0a\x0d\x0a";);
+
