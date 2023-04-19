@@ -1,0 +1,17 @@
+pcap: ../../exception-policy-midstream-03/input.pcap
+
+requires:
+  min-version: 6
+
+exit-code: 1
+
+args:
+- --set stream.midstream=true
+- --set stream.midstream-policy=reject
+
+
+checks:
+    - shell:
+        args: grep "Exception Policy \"reject\" is not an accepted value for stream.midstream_exception_policy when stream.midstream=true." eve.json | wc -l | xargs
+        expect: 1
+

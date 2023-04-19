@@ -1,0 +1,9 @@
+pcap: ../../exception-policy-midstream-03/input.pcap
+requires:
+  min-version: 6
+
+exit-code: 1
+
+args:
+- --set stream.midstream=false
+- --set stream.midstream-policy=drop-packet
