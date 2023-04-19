@@ -100,6 +100,21 @@ class SelfTest(unittest.TestCase):
         self.assertTrue(Version().is_equal(SuricataVersion(5, 1, 0), SuricataVersion(5, None, None)))
         self.assertFalse(Version().is_equal(SuricataVersion(4, 1, 0), SuricataVersion(5, None, None)))
 
+    def test_version_gt(self):
+        comp = Version()
+        self.assertTrue(comp.is_gt(SuricataVersion(6, None, None), SuricataVersion(5, None, None)))
+        self.assertTrue(comp.is_gt(SuricataVersion(6, None, None), SuricataVersion(5, 0, 3)))
+        self.assertTrue(comp.is_gt(SuricataVersion(6, 0, 1), SuricataVersion(6, 0, 0)))
+        self.assertFalse(comp.is_gt(SuricataVersion(6, 0, 1), SuricataVersion(6, 0, 1)))
+        self.assertTrue(comp.is_gt(SuricataVersion(6, 1, 0), SuricataVersion(6, 0, 1)))
+
+    def test_version_gte(self):
+        comp = Version()
+        self.assertTrue(comp.is_gte(SuricataVersion(6, None, None), SuricataVersion(5, None, None)))
+        self.assertTrue(comp.is_gte(SuricataVersion(6, 0, 1), SuricataVersion(6, 0, 0)))
+        self.assertTrue(comp.is_gte(SuricataVersion(6, 0, 1), SuricataVersion(6, 0, 1)))
+        self.assertTrue(comp.is_gte(SuricataVersion(6, 1, 0), SuricataVersion(6, 0, 1)))
+
     def test_version_lt(self):
         comp = Version()
         self.assertTrue(comp.is_lt(SuricataVersion(5, 0, 3), SuricataVersion(6, None, None)))
@@ -204,7 +219,7 @@ class Version:
         return True
 
     def is_gte(self, v1, v2):
-        """Return True if v1 is great than or equal to v2."""
+        """Return True if v1 is greater than or equal to v2."""
         if v1.major < v2.major:
             return False
         elif v1.major > v2.major:
@@ -216,6 +231,25 @@ class Version:
             return True
 
         if v1.patch < v2.patch:
+            return False
+
+        return True
+
+    def is_gt(self, v1, v2):
+        """Return True if v1 is greater than v2."""
+        if v1.major < v2.major:
+            return False
+        elif v1.major > v2.major:
+            return True
+
+        if v1.minor < v2.minor:
+            return False
+        elif v1.minor > v2.minor:
+            return True
+
+        if v1.patch < v2.patch:
+            return False
+        elif v1.patch == v2.patch:
             return False
 
         return True
@@ -287,6 +321,12 @@ def check_requires(requires, suricata_config: SuricataConfig):
                     suri_version=suri_version, expr="lt"):
                 raise UnsatisfiedRequirementError(
                         "for version less than {}".format(lt_version))
+        elif key == "gt-version":
+            gt_version = requires["gt-version"]
+            if not is_version_compatible(version=gt_version,
+                    suri_version=suri_version, expr="gt"):
+                raise UnsatisfiedRequirementError(
+                        "for version great than {}".format(gt_version))
         elif key == "version":
             req_version = requires["version"]
             if not is_version_compatible(version=req_version,
