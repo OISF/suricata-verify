@@ -1,0 +1,15 @@
+pcap: ../../exception-policy-midstream-03/input.pcap
+
+args:
+- --set stream.midstream=true
+- --set stream.midstream-policy=ignore
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+  - filter:
+      count: 1
+      match:
+        event_type: http
