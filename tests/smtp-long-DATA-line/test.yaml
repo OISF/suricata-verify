@@ -1,0 +1,102 @@
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      anomaly.app_proto: smtp
+      anomaly.event: APPLAYER_DETECT_PROTOCOL_ONLY_ONE_DIRECTION
+      anomaly.layer: proto_detect
+      anomaly.type: applayer
+      dest_ip: 192.168.1.4
+      dest_port: 3326
+      event_type: anomaly
+      pcap_cnt: 6
+      proto: TCP
+      src_ip: 217.12.11.66
+      src_port: 587
+- filter:
+    count: 1
+    match:
+      anomaly.app_proto: smtp
+      anomaly.event: MIME_LONG_LINE
+      anomaly.layer: proto_parser
+      anomaly.type: applayer
+      dest_ip: 192.168.1.4
+      dest_port: 3326
+      event_type: anomaly
+      pcap_cnt: 40
+      proto: TCP
+      src_ip: 217.12.11.66
+      src_port: 587
+      tx_id: 0
+- filter:
+    count: 1
+    match:
+      anomaly.app_proto: smtp
+      anomaly.event: MIME_LONG_ENC_LINE
+      anomaly.layer: proto_parser
+      anomaly.type: applayer
+      dest_ip: 192.168.1.4
+      dest_port: 3326
+      event_type: anomaly
+      pcap_cnt: 40
+      proto: TCP
+      src_ip: 217.12.11.66
+      src_port: 587
+      tx_id: 0
+- filter:
+    count: 1
+    match:
+      dest_ip: 217.12.11.66
+      dest_port: 587
+      email.attachment[0]: winmail.dat
+      email.from: '"Xxxxxx xxxx" <xxxxxx@xxxxx.co.uk>'
+      email.status: PARSE_DONE
+      email.to[0]: <xxxxxx@xxxxx.co.uk>
+      event_type: smtp
+      pcap_cnt: 40
+      proto: TCP
+      smtp.helo: Percival
+      smtp.mail_from: <xxxxxx@xxxxx.co.uk>
+      smtp.rcpt_to[0]: <xxxxxx@xxxxx.co.uk>
+      src_ip: 192.168.1.4
+      src_port: 3326
+      tx_id: 0
+- filter:
+    count: 1
+    match:
+      app_proto: smtp
+      dest_ip: 217.12.11.66
+      dest_port: 587
+      email.attachment[0]: winmail.dat
+      email.from: '"Xxxxxx xxxx" <xxxxxx@xxxxx.co.uk>'
+      email.status: PARSE_DONE
+      email.to[0]: <xxxxxx@xxxxx.co.uk>
+      event_type: fileinfo
+      fileinfo.filename: winmail.dat
+      fileinfo.gaps: false
+      fileinfo.size: 10383
+      fileinfo.state: CLOSED
+      fileinfo.stored: true
+      fileinfo.sha256: "81d7ff46d57b5e79df686a72c160225d644e43c47c219f6bbdc5a6699df702d5"
+      fileinfo.tx_id: 0
+      pcap_cnt: 42
+      proto: TCP
+      smtp.helo: Percival
+      smtp.mail_from: <xxxxxx@xxxxx.co.uk>
+      smtp.rcpt_to[0]: <xxxxxx@xxxxx.co.uk>
+      src_ip: 192.168.1.4
+      src_port: 3326
+- filter:
+    count: 1
+    match:
+      dest_ip: 217.12.11.66
+      dest_port: 587
+      event_type: smtp
+      proto: TCP
+      smtp.helo: Percival
+      src_ip: 192.168.1.4
+      src_port: 3326
+      tx_id: 1
