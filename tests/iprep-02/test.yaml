@@ -1,0 +1,22 @@
+requires:
+  min-version: 7
+
+command: |
+  ${SRCDIR}/src/suricata  -l ${OUTPUT_DIR}                                              \
+      -c ${TEST_DIR}/suricata.yaml                                                      \
+      -r ${TEST_DIR}/input.pcap -S ${TEST_DIR}/iprep.rules                              \
+      --data-dir="${OUTPUT_DIR}"                                                        \
+      --set default-reputation-path=${TEST_DIR}                                         \
+      --set reputation-categories-file=${TEST_DIR}/scirius-categories.txt               \
+      --set reputation-files=${TEST_DIR}/scirius-iprep.list
+
+checks:
+  - filter:
+      count: 3
+      match:
+        alert.signature_id: 2402000
+
+  - filter:
+      count: 0
+      match:
+        alert.signature_id: 2402001
