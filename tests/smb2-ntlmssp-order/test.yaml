@@ -2,17 +2,17 @@ requires:
   min-version: 6
 
 args:
-- --set stream.reassembly.depth=0
+- --set stream.reassembly.depth=0 -k none
 
 checks:
   - filter:
       count: 1
       match:
         event_type: smb
-        smb.id: 3
         smb.dialect: "2.02"
         smb.command: SMB2_COMMAND_SESSION_SETUP
         smb.status: STATUS_SUCCESS
         smb.ntlmssp.domain: "CONTOSO"
         smb.ntlmssp.user: "SERVER01"
         smb.ntlmssp.host: "Administrator"
+        smb.ntlmssp.version: "6.0 build 6001 rev 15"
