@@ -1,0 +1,68 @@
+requires:
+  features:
+    - HAVE_NSS
+  min-version: 7
+
+args:
+- -k none
+- --simulate-ips
+
+checks:
+- filter:
+    count: 0
+    match:
+      event_type: anomaly
+      src_ip: 192.168.1.4
+      src_port: 3326
+      dest_ip: 217.12.11.66
+      dest_port: 587
+      proto: TCP
+      pkt_src: wire/pcap
+      tx_id: 0
+      anomaly.app_proto: smtp
+      anomaly.type: applayer
+      anomaly.event: TRUNCATED_LINE
+      anomaly.layer: proto_parser
+
+- filter:
+    count: 1
+    match:
+      event_type: fileinfo
+      fileinfo.filename: winmail.dat
+      fileinfo.sha256: 5f41c213e35d8421647181cc9b8925a5b2ab34c23102907581214fd574157fff
+      fileinfo.size: 10451
+
+- filter:
+    count: 1
+    match:
+      event_type: smtp
+      src_ip: 192.168.1.4
+      src_port: 3326
+      dest_ip: 217.12.11.66
+      dest_port: 587
+      proto: TCP
+      pkt_src: wire/pcap
+      tx_id: 0
+      smtp.helo: Percival
+      smtp.mail_from: <xxxxxx@xxxxx.co.uk>
+      smtp.rcpt_to[0]: <xxxxxx@xxxxx.co.uk>
+      email.status: PARSE_DONE
+      email.from: '"Xxxxxx xxxx" <xxxxxx@xxxxx.co.uk>'
+      email.to[0]: <xxxxxx@xxxxx.co.uk>
+      email.subject: Testing testing 1 2 3 (Multiple attachments)
+      email.x_mailer: Microsoft Office Outlook, Build 11.0.5510
+      email.date: Sat, 14 Jul 2007 10:31:37 +0200
+      email.subject_md5: 3b37c0a6fd82b99b144a7be7274f03f5
+
+- filter:
+    count: 1
+    match:
+      event_type: smtp
+      src_ip: 192.168.1.4
+      src_port: 3326
+      dest_ip: 217.12.11.66
+      dest_port: 587
+      proto: TCP
+      pkt_src: stream (flow timeout)
+      tx_id: 1
+      smtp.helo: Percival
