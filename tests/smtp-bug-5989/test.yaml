@@ -1,0 +1,12 @@
+min-version: 7
+
+args:
+- -k none
+- --simulate-ips
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: smtp
+      smtp.helo: "Percival"
