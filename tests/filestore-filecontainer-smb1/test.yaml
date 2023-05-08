@@ -1,0 +1,20 @@
+requires:
+  features:
+    - HAVE_NSS
+    - MAGIC
+    - RUST
+  files:
+    - src/output-filestore.c
+
+checks:
+  - shell:
+        args: test ! -e filestore/c3/c316094ec8dbd563eca686058c40b83e1e04bbe7d8dfbc836196db9a1b6cc574
+  - shell:
+        args: test ! -e filestore/f8/f8d177dc2bebfd8df6240a7d916974b2606bd431eee5a3debaa62f93d5616dab
+  - shell:
+        args: test -e filestore/36/367964b64b83363362805824fae6732858f74f0e9fe527d6e9e05fe2f9e46645
+
+  - shell:
+        args: test -e filestore/cf/cf99990bee6c378cbf56239b3cc88276eec348d82740f84e9d5c343751f82560
+  - stats:
+      file_store.fs_errors: 0
