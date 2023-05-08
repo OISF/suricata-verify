@@ -1,0 +1,29 @@
+requires:
+  features:
+    - HAVE_NSS
+    - MAGIC
+    - RUST
+  files:
+    - src/output-filestore.c
+
+checks:
+  - filter:
+      count: 1
+      match:
+        fileinfo.sha256: 367964b64b83363362805824fae6732858f74f0e9fe527d6e9e05fe2f9e46645
+  - filter:
+      filename: "filestore/36/367964b64b83363362805824fae6732858f74f0e9fe527d6e9e05fe2f9e46645.1525123869.1.json"
+      count: 1
+      match:
+        fileinfo.sha256: 367964b64b83363362805824fae6732858f74f0e9fe527d6e9e05fe2f9e46645
+  - filter:
+      count: 1
+      match:
+        fileinfo.sha256: cf99990bee6c378cbf56239b3cc88276eec348d82740f84e9d5c343751f82560
+  - filter:
+      filename: "filestore/cf/cf99990bee6c378cbf56239b3cc88276eec348d82740f84e9d5c343751f82560.1525123869.2.json"
+      count: 1
+      match:
+        fileinfo.sha256: cf99990bee6c378cbf56239b3cc88276eec348d82740f84e9d5c343751f82560
+  - stats:
+      file_store.fs_errors: 0
