@@ -34,3 +34,4 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 2232000
+        ftp.command: "RETR"
