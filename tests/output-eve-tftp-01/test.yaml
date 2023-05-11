@@ -15,3 +15,9 @@ checks:
     count: 1
     match:
       event_type: alert
+- filter:
+    min-version: 7
+    count: 1
+    match:
+      event_type: alert
+      tftp.packet: "read"
