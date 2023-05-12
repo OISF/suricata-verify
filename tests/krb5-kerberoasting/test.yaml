@@ -21,6 +21,7 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 1
+        krb5.msg_type: KRB_TGS_REP
   - filter:
       count: 1
       match:
