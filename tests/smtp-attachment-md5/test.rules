@@ -1,0 +1,1 @@
+alert smtp any any -> any any (msg:"test"; filemd5: target.md5; classtype: bad-unknown; sid:1530024;)
