@@ -88,7 +88,7 @@ jobs:
   almalinux:
     name: AlmaLinux 8
     runs-on: ubuntu-latest
-    container: almalinux:latest
+    container: almalinux:8
     strategy:
       fail-fast: false
       matrix:
