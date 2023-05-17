@@ -31,7 +31,6 @@ checks:
       ssh.client.software_version: Cisco_client-1.25
       ssh.server.proto_version: '1.99'
       ssh.server.software_version: Cisco_server-1.24
-      tx_id: 0
 - filter:
     count: 1
     match:
@@ -58,7 +57,6 @@ checks:
       ssh.client.software_version: Cisco_client-1.25
       ssh.server.proto_version: '1.99'
       ssh.server.software_version: Cisco_server-1.24
-      tx_id: 0
 - filter:
     count: 1
     match:
@@ -73,7 +71,6 @@ checks:
       ssh.client.software_version: Cisco_client-1.25
       ssh.server.proto_version: '1.99'
       ssh.server.software_version: Cisco_server-1.24
-      tx_id: 0
 - filter:
     count: 1
     match:
@@ -100,7 +97,6 @@ checks:
       ssh.client.software_version: Cisco_client-1.25
       ssh.server.proto_version: '1.99'
       ssh.server.software_version: Cisco_server-1.24
-      tx_id: 0
 - filter:
     count: 1
     match:
@@ -127,4 +123,3 @@ checks:
       ssh.client.software_version: Cisco_client-1.25
       ssh.server.proto_version: '1.99'
       ssh.server.software_version: Cisco_server-1.24
-      tx_id: 0
