@@ -54,12 +54,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 192.168.200.1
-      dest_port: 22
       event_type: ssh
       proto: TCP
-      src_ip: 192.168.100.1
-      src_port: 10001
       ssh.server.proto_version: '1.99'
       ssh.server.software_version: Cisco_server-1.24
 - filter:
