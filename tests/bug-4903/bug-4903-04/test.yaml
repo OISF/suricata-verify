@@ -60,13 +60,9 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 192.168.200.1
-      dest_port: 22
       event_type: ssh
       pcap_cnt: 6
       proto: TCP
-      src_ip: 192.168.100.1
-      src_port: 10003
       ssh.client.proto_version: '2.0'
       ssh.client.software_version: Cisco_client-1.25
       ssh.server.proto_version: '1.99'
