@@ -1,0 +1,20 @@
+requires:
+  features:
+    - HAVE_NSS
+    - MAGIC
+    - RUST
+  files:
+    - src/output-filestore.c
+  min-version: 7
+
+args:
+  - --set pcap-file.checksum-checks=no
+checks:
+  - filter:
+      count: 1
+      match:
+        fileinfo.sha256: 04f93fbae50680991af90eb8a5a447d7b353d9c09097b3a905745d285d7ba634
+  - filter:
+      count: 1
+      match:
+        fileinfo.sha256: 81ef17f513f4959ba2a8243fa1412fa11b7d8f2c064da1f7ae98429188b6229c

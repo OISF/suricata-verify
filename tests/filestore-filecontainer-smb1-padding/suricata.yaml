@@ -1,0 +1,22 @@
+%YAML 1.1
+---
+pcap-file:
+  # Possible values are:
+  #  - yes: checksum validation is forced
+  #  - no: checksum validation is disabled
+  #  - auto: Suricata uses a statistical approach to detect when
+  #  checksum off-loading is used. (default)
+  # Warning: 'checksum-validation' must be set to yes to have checksum tested
+  checksum-checks: no
+outputs:
+  - eve-log:
+      enabled: yes
+      types:
+        - files
+        - stats
+  - file-store:
+      version: 2
+      enabled: yes
+      stream-depth: 0
+      write-fileinfo: true
+      force-filestore: yes
