@@ -1,0 +1,173 @@
+requires:
+  features:
+    - RULE_TYPES
+  pcap: false
+args:
+- --engine-analysis
+checks:
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 101
+        type: "ip_only"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 102
+        type: "stream"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 201
+        type: "ip_only"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 202
+        type: "pkt"
+        policy.scope: "packet"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 203
+        type: "pkt"
+        policy.scope: "packet"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 301
+        type: "ip_only"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 302
+        type: "stream"
+        policy.scope: "flow_if_stateful"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 303
+        type: "pkt_stream"
+        policy.scope: "flow_if_stateful"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 401
+        type: "pd_only"
+        policy.scope: "flow"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 402
+        type: "pd_only"
+        policy.scope: "flow"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 501
+        type: "app_tx"
+        policy.scope: "flow"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 601
+        type: "app_layer"
+        policy.scope: "flow"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 602
+        type: "stream"
+        policy.scope: "flow_if_stateful"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 603
+        type: "pkt_stream"
+        policy.scope: "flow_if_stateful"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 701
+        type: "pkt"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 702
+        type: "pkt"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 703
+        type: "pkt"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 704
+        type: "pkt"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 705
+        type: "pkt"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 706
+        type: "pkt"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 801
+        type: "app_tx"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 802
+        type: "app_tx"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 803
+        type: "app_tx"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 901
+        type: "stream"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 902
+        type: "app_tx"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1001
+        type: "pkt"
