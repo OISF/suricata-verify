@@ -1,0 +1,40 @@
+alert tcp-stream any any -> any any (msg:"tcp-stream, no content"; sid:101;)
+alert tcp-stream any any -> any any (msg:"tcp-stream, simple content"; content:"abc"; sid:102;)
+alert tcp-stream any any -> any any (msg:"tcp-stream, anchored content"; content:"abc"; startswith; sid:103;)
+
+alert tcp-pkt any any -> any any (msg:"tcp-pkt, no content"; sid:201;)
+alert tcp-pkt any any -> any any (msg:"tcp-pkt, simple content"; content:"abc"; sid:202;)
+alert tcp-pkt any any -> any any (msg:"tcp-pkt, anchored content"; content:"abc"; startswith; sid:203;)
+
+alert tcp any any -> any any (msg:"tcp, no content"; sid:301;)
+alert tcp any any -> any any (msg:"tcp, simple content"; content:"abc"; sid:302;)
+alert tcp any any -> any any (msg:"tcp, anchored content"; content:"abc"; startswith; sid:303;)
+
+alert tcp any any -> any any (msg:"tcp, pd negated"; app-layer-protocol:!http; sid:401;)
+alert tcp any any -> any any (msg:"tcp, pd positive"; app-layer-protocol:http; sid:402;)
+
+alert tcp any any -> any any (msg:"http, pos event"; app-layer-event:http.file_name_too_long; sid:501;)
+#alert tcp any any -> any any (msg:"http, neg event"; app-layer-event:!http.file_name_too_long; sid:502;)
+# TODO fix
+#alert tcp any any -> any any (msg:"http, unknown event"; app-layer-event:http.non_existing_event; sid:503;)
+
+alert http any any -> any any (msg:"http, no content"; sid:601;)
+alert http any any -> any any (msg:"http, simple content"; content:"abc"; sid:602;)
+alert http any any -> any any (msg:"http, anchored content"; content:"abc"; startswith; sid:603;)
+
+alert tcp any any -> any any (msg:"ttl"; ttl:123; sid:701;)
+alert tcp any any -> any any (msg:"ttl"; ttl:123; flow:established; sid:702;)
+alert tcp any any -> any any (msg:"ttl"; ttl:123; flow:not_established; sid:703;)
+alert tcp any any -> any any (msg:"ttl"; ttl:123; flow:stateless; sid:704;)
+alert tcp any any -> any any (msg:"ttl"; ttl:123; prefilter; flow:stateless; sid:705;)
+alert tcp any any -> any any (msg:"ttl"; ttl:123; flow:stateless; prefilter; sid:706;)
+
+alert http any any -> any any (uricontent:"abc"; sid:801;)
+alert http any any -> any any (content:"abc"; http_uri; sid:802;)
+alert http any any -> any any (http.uri; content:"abc"; sid:803;)
+
+alert tcp any any -> any any (msg:"byte_extract with dce"; byte_extract:4,0,var,dce; byte_test:4,>,var,4,little; sid:901;)
+alert tcp any any -> any any (msg:"byte_extract with dce"; dcerpc.stub_data; content:"abc"; byte_extract:4,0,var,relative; byte_test:4,>,var,4,little; sid:902;)
+
+alert udp any any -> any any (msg:"UDP with flow direction"; flow:to_server; sid:1001;)
+
