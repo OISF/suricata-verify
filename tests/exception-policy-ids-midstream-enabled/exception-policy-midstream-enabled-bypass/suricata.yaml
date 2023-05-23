@@ -32,6 +32,8 @@ outputs:
 logging:
   default-log-level: notice
   outputs:
-  - console:
+  - file:
       enabled: yes
+      level: notice
+      filename: suricata.json
       type: json

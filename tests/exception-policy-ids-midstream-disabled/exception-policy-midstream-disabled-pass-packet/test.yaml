@@ -9,3 +9,10 @@ args:
 - --set stream.midstream=false
 - --set stream.midstream-policy=pass-packet
 
+checks:
+    - filter:
+        filename: suricata.json
+        count: 1
+        match:
+          event_type: engine
+          log_level: Error
