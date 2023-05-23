@@ -10,6 +10,9 @@ args:
 - --set stream.midstream-policy=pass-packet
 
 checks:
-    - shell:
-        args: grep "Exception Policy \"pass-packet\" is not an accepted value for stream.midstream_exception_policy." eve.json | wc -l | xargs
-        expect: 1
+    - filter:
+        filename: suricata.json
+        count: 1
+        match:
+          event_type: engine
+          log_level: Error

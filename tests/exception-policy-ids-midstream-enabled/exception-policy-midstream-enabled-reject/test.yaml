@@ -11,7 +11,10 @@ args:
 
 
 checks:
-    - shell:
-        args: grep "Exception Policy \"reject\" is not an accepted value for stream.midstream_exception_policy when stream.midstream=true." eve.json | wc -l | xargs
-        expect: 1
+    - filter:
+        filename: suricata.json
+        count: 1
+        match:
+          event_type: engine
+          log_level: Error
 

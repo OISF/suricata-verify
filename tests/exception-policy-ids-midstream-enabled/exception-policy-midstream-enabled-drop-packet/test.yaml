@@ -8,3 +8,11 @@ exit-code: 1
 args:
 - --set stream.midstream=true
 - --set stream.midstream-policy=drop-packet
+
+checks:
+    - filter:
+        filename: suricata.json
+        count: 1
+        match:
+          event_type: engine
+          log_level: Error
