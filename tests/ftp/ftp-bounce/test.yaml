@@ -1,0 +1,38 @@
+checks:
+  # Match on the valid FTP connection, discern by user port 33112
+  - filter:
+      count: 1
+      match:
+        src_port: 33112
+        event_type: ftp
+        ftp.mode: active
+        ftp.command: PORT
+        ftp.dynamic_port: 59549
+        ftp.reply_received: 'yes'
+  # First FTP connect is all valid, no alerts should be generated
+  - filter:
+      count: 0
+      match:
+        src_port: 33112
+        event_type: alert
+        alert.signature_id: 1
+        app_proto: ftp
+
+  # Match on the FTP bounce connection, discern by user port 58316
+  - filter:
+      count: 1
+      match:
+        src_port: 58316
+        event_type: ftp
+        ftp.mode: active
+        ftp.command: PORT
+        ftp.dynamic_port: 80
+        ftp.reply_received: 'yes'
+  # Catch the attack
+  - filter:
+      count: 1
+      match:
+        src_port: 58316
+        event_type: alert
+        alert.signature_id: 1
+        app_proto: ftp
