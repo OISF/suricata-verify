@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"FTP bounce attack"; ftpbounce; sid:1;)

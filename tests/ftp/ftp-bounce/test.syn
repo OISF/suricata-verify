@@ -1,0 +1,19 @@
+# This is a valid FTP control transaction for active session
+flow valid tcp 1.1.1.2:33112 > 2.2.2.1:21 (tcp.initialize; mss:9000;);
+valid < (content:"220 Operation successful\x0d\x0a";);
+valid > (content:"USER anonymous\x0d\x0a";);
+valid < (content:"230 Operation successful\x0d\x0a";);
+valid > (content:"PORT 1,1,1,2,232,157\x0d\x0a";);
+valid < (content:"200 Operation successful\x0d\x0a";);
+valid > (content:"QUIT\x0d\x0a";);
+valid < (content:"221 Operation successful\x0d\x0a";);
+
+# This is a FTP control transaction attempting a bounce attack
+flow attack tcp 1.1.1.2:58316 > 2.2.2.1:21 (tcp.initialize;);
+attack < (content:"220 Operation successful\x0d\x0a";);
+attack > (content:"USER anonymous\x0d\x0a";);
+attack < (content:"230 Operation successful\x0d\x0a";);
+attack > (content:"PORT 2,2,2,3,0,80\x0d\x0a";);
+attack < (content:"200 Operation successful\x0d\x0a";);
+attack > (content:"QUIT\x0d\x0a";);
+attack < (content:"221 Operation successful\x0d\x0a";);
