@@ -1,3 +1,6 @@
+requires:
+  min-version: 6
+
 args:
 - --simulate-ips
 - --set stream.midstream=true

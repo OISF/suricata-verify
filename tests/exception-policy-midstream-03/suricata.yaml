@@ -15,3 +15,14 @@ outputs:
             http: yes
         - flow
         - http
+
+logging:
+  default-log-level: notice
+  outputs:
+  - console:
+      enabled: yes
+  - file:
+      enabled: yes
+      level: notice
+      filename: suricata.json
+      type: json
