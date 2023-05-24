@@ -1,6 +1,3 @@
-# currently failing
-skip: true
-
 requires:
   features:
     - HAVE_LIBJANSSON
