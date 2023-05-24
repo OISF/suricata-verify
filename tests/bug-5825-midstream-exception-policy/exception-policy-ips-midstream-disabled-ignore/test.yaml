@@ -1,0 +1,23 @@
+pcap: ../../exception-policy-midstream-03/input.pcap
+
+requires:
+  min-version: 7
+
+args:
+- --simulate-ips
+- --set stream.midstream=false
+- --set stream.midstream-policy=ignore
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+  - filter:
+      count: 0
+      match:
+        event_type: http
+  - filter:
+      count: 1
+      match:
+        event_type: flow
