@@ -1,0 +1,32 @@
+checks:
+  # Look for IPv4 TCP too small
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: 1.1.1.1
+        alert.signature_id: 1
+
+  # Look for IPv6 TCP too small
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: fd01:0000:0000:0000:0000:0000:0101:0101
+        alert.signature_id: 1
+
+  # Look for IPv4 UDP too small
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: 1.1.1.1
+        alert.signature_id: 2
+
+  # Look for IPv6 UDP too small
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: fd01:0000:0000:0000:0000:0000:0101:0101
+        alert.signature_id: 2

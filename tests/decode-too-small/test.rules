@@ -1,0 +1,2 @@
+alert tcp any any -> any any (msg:"TCP packet too small"; decode-event:tcp.pkt_too_small; sid:1;)
+alert udp any any -> any any (msg:"UDP packet too small"; decode-event:udp.hlen_too_small; sid:2;)
