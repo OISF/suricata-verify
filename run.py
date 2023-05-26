@@ -380,7 +380,19 @@ def find_value(name, obj):
                 return len(obj)
             except:
                 return -1
-
+        if part.startswith("__slice"):
+            # Get the slice range of the object. Return -1 if the object is
+            # not a valid range
+            m = re.match("^(.*)\[(\d+)\]$", part)
+            idx = int(m.group(2))
+            if m:
+                try:
+                    return obj[0:idx]
+                except:
+                    return -1
+            # In case slice was not given an index or for other reasons
+            # regex wasn't a match
+            return -1
         name = None
         index = None
         m = re.match("^(.*)\[(\d+)\]$", part)
