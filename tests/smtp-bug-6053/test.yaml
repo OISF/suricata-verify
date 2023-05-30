@@ -1,0 +1,10 @@
+min-version: 7
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      smtp.helo: Simone
