@@ -1,14 +1,15 @@
 # Test
 
 Check that Suricata behaves as expected with no midstream-policy set (that is,
-with default behavior), in IPS mode, in a stream first seen by Suricata in
-SYNACK stage.
+with default behavior) and midstream enabled, in IPS mode, in a stream first
+seen by Suricata in SYNACK stage.
 
 # Behavior
 
 With midstream true but no exception policy for midstream set we expect to see
 alerts and ``http`` events logged, as the portion of the flow available will be
-inspected and no exception policy for midstream will be applied.
+inspected and no exception policy for midstream will be applied, as with
+midstream enabled, "auto" is set to "ignore" in IPS mode as well.
 
 # Pcap
 
