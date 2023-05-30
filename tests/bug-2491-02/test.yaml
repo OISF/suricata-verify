@@ -4,7 +4,7 @@ requires:
 args:
 - --set stream.async-oneside=true
 - --set stream.midstream=true
-- --set stream.midstream-policy=drop-flow
+- --set stream.midstream-policy=ignore
 
 checks:
   - filter:
