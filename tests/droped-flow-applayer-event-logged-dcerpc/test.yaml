@@ -5,7 +5,16 @@ args:
 
 checks:
   - filter:
-      count: 0
+      count: 1
+      match:
+        pcap_cnt: 2
+        event_type: alert
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+  - filter:
+      count: 1
       match:
         pcap_cnt: 2
         event_type: smb

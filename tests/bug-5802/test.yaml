@@ -10,11 +10,16 @@ checks:
         event_type: alert
         alert.signature_id: 1
   - filter:
-      count: 4
+      count: 1
       match:
         event_type: alert
         alert.signature_id: 2
+        alert.action: blocked
   - filter:
-      count: 3
+      count: 1
       match:
         event_type: sip
+  - filter:
+      count: 10
+      match:
+        event_type: drop

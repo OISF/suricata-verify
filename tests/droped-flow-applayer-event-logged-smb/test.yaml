@@ -1,15 +1,23 @@
 args:
 - --simulate-ips
+- --set stream.midstream=true
 - --set stream.reassembly.depth=0
-- --set stream.midstream-policy=drop-flow
 - -k none
 
 checks:
   - filter:
       count: 1
       match:
-        event_type: smb
+        event_type: alert
+  - filter:
+      count: 1
+      match:
+        event_type: alert
         pcap_cnt: 2
+  - filter:
+      count: 1
+      match:
+        event_type: smb
   - filter:
       count: 53
       match:

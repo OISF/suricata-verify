@@ -1,2 +1,2 @@
 alert tcp any any -> any any (flow:to_server; sid:1;)
-drop udp any any -> any any (flow:to_server; sid:2;)
+drop udp 200.57.7.195 any -> any any (sid:2;)
