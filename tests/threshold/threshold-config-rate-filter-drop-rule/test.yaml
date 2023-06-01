@@ -7,12 +7,34 @@ args:
 
 checks:
   - filter:
-      count: 31
+      count: 2
       match:
         event_type: alert
         alert.signature_id: 1000001
   - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000001
+        alert.action: blocked
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000001
+        alert.action: allowed
+  - filter:
       count: 30
       match:
         event_type: drop
+        #drop.reason: threshold detection_filter
+  - filter:
+      count: 1
+      match:
+        event_type: drop
         drop.reason: threshold detection_filter
+  - filter:
+      count: 29
+      match:
+        event_type: drop
+        drop.reason: flow drop

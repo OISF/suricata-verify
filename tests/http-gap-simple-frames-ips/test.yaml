@@ -18,7 +18,7 @@ checks:
         http.url: "/1"
         http.status: 200
   - filter:
-      count: 1
+      count: 0
       match:
         event_type: http
         http.url: "/2"
@@ -37,7 +37,7 @@ checks:
         fileinfo.state: "CLOSED"
         fileinfo.gaps: false
   - filter:
-      count: 1
+      count: 0
       match:
         event_type: fileinfo
         fileinfo.size: 14

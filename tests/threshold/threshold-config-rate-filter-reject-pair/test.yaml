@@ -7,7 +7,7 @@ args:
 
 checks:
   - filter:
-      count: 31
+      count: 2
       match:
         event_type: alert
         alert.signature_id: 1000001
@@ -15,4 +15,3 @@ checks:
       count: 30
       match:
         event_type: drop
-        drop.reason: threshold detection_filter
