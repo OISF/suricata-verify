@@ -1,0 +1,23 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      types:
+        - alert:
+        - http:
+        - flow:
+        - files:
+  - file-store:
+      version: 2
+      enabled: yes
+
+app-layer:
+  protocols:
+    http:
+      enabled: yes
+      libhtp:
+         default-config:
+           request-body-limit: 100kb
+           response-body-limit: 100kb

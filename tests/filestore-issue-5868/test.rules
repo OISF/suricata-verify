@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"PDF LOGO"; flow:established,to_client; file_data; content:"PDF"; filestore; classtype:policy-violation; sid:9000000; rev:1;)
