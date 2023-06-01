@@ -1,0 +1,8 @@
+args:
+  - -k none
+
+checks:
+  - shell:
+      args: test -e filestore/c5/c59b846043b2cf6b6ac73bf67f9c5660f354a12311ce405927a8916bffc70c4f
+  - shell:
+      args: test -s filestore/c5/c59b846043b2cf6b6ac73bf67f9c5660f354a12311ce405927a8916bffc70c4f
