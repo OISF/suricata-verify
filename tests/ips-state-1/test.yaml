@@ -8,8 +8,6 @@ checks:
 - filter:
     # We should see 2 http transactions as the pass rule should allow http
     # flows.
-    #
-    # This fails.
     count: 2
     match:
       event_type: http
@@ -27,14 +25,21 @@ checks:
     match:
       event_type: flow
       app_proto: http
-      flow.alerted: false 
+      flow.alerted: false
 
 - filter:
     # We should see NO drops (or alerts) for http
     count: 0
     match:
-      event_type: alert
+      event_type: drop
       app_proto: http
+
+- filter:
+    # There should be alerts for tls
+    count: 36
+    match:
+      event_type: alert
+      app_proto: tls
 
 - filter:
     # There should be one tls flow that is alerted
@@ -43,3 +48,13 @@ checks:
       event_type: flow
       dest_port: 443
       flow.alerted: true
+      flow.action: drop
+
+- filter:
+    # We should see NO drops (or alerts) for http
+    count: 2
+    match:
+      event_type: flow
+      app_proto: http
+      flow.action: pass
+      flow.alerted: false
