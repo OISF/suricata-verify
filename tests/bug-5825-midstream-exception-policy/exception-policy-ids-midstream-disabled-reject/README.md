@@ -13,3 +13,7 @@ tracked.
 
 Pcap comes from the test ``exception-policy-midstream-03`` and is the result of a
 curl to www.testmyids.com.
+
+# Note
+
+This test triggers Bug 6109 - exception/policy: reject changes flow action in IDS mode
