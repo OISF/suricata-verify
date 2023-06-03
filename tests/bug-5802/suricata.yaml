@@ -27,3 +27,10 @@ action-order:
   - drop
   - reject
   - alert
+
+app-layer:
+  protocols:
+    sip:
+      enabled: true
+      detection-ports:
+        dp: 5060, 5061
