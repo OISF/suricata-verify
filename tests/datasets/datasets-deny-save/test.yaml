@@ -1,0 +1,7 @@
+exit-code: 1
+
+checks:
+  - filter:
+      count: 1
+      match:
+        engine.message: "Rules containing save/state datasets have been disabled"

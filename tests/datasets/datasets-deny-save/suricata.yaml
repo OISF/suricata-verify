@@ -1,0 +1,13 @@
+%YAML 1.1
+---
+
+logging:
+  outputs:
+    - file:
+        enabled: yes
+        filename: eve.json
+        type: json
+
+datasets:
+  rules:
+    allow-write: false
