@@ -100,6 +100,11 @@ pre-check: |
 # "pcap: false" in the requires section.
 pcap: input.pcap
 
+# Test for a specific exit code. By default a test will fail if the
+# exit code is anything other than 0, however sometimes we may be
+# testing for failure.
+exit-code: 1
+
 checks:
 
   # A verification filter that is run over the eve.json. Multiple
