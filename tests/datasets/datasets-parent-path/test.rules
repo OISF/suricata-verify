@@ -1,0 +1,3 @@
+alert dns any any -> any any (dns.query; dataset: isnotset, dns-seen, type string, state ../dns-seen.txt; sid:1; rev:1;)
+alert dns any any -> any any (dns.query; dataset: isnotset, dns-seen-1, type string, state namespace/../dns-seen-1.txt; sid:1; rev:2;)
+alert dns any any -> any any (dns.query; dataset: isnotset, dns-seen-save, type string, save namespace/../dns-seen-save.txt; sid:1; rev:2;)

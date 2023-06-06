@@ -1,0 +1,13 @@
+%YAML 1.1
+---
+
+datasets:
+  rules:
+    allow-absolute-filenames: true
+
+logging:
+  outputs:
+    - file:
+        enabled: yes
+        filename: eve.json
+        type: json

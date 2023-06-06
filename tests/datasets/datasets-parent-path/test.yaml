@@ -1,0 +1,15 @@
+exit-code: 1
+
+checks:
+  - filter:
+      count: 1
+      match:
+        engine.message: "Directory traversals not allowed: ../dns-seen.txt"
+  - filter:
+      count: 1
+      match:
+        engine.message: "Directory traversals not allowed: namespace/../dns-seen-1.txt"
+  - filter:
+      count: 1
+      match:
+        engine.message: "Directory traversals not allowed: namespace/../dns-seen-save.txt"

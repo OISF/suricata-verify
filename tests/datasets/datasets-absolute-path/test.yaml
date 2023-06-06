@@ -1,0 +1,11 @@
+exit-code: 1
+
+checks:
+  - filter:
+      count: 1
+      match:
+        engine.message: "Absolute paths not allowed: /dns-seen.txt"
+  - filter:
+      count: 1
+      match:
+        engine.message: "Absolute paths not allowed: /dns-seen-save.txt"
