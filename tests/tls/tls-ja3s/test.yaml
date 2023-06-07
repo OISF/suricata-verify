@@ -7,6 +7,7 @@ requires:
 
 args:
  - -k none
+ - --set security.lua.allow-rules=true
 
 checks:
   # Check that we have the following events in eve.json

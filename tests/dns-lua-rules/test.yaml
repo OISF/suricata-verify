@@ -2,9 +2,8 @@ requires:
   features:
     - HAVE_LUA
 
-# skip:
-#   - feature: RUST
-#     msg: Known issue with feature RUST
+args:
+  - --set security.lua.allow-rules=true
 
 checks:
   - filter:

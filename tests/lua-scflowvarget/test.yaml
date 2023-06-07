@@ -5,6 +5,7 @@ requires:
 
 args:
  - -k none
+ - --set security.lua.allow-rules=true
 
 checks:
   - filter:

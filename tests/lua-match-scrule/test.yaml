@@ -3,6 +3,9 @@ requires:
   features:
     - HAVE_LUA
 
+args:
+  - --set security.lua.allow-rules=true
+
 checks:
   - filter:
       count: 1
