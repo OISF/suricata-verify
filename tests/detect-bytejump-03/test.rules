@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"byte_jump invalid varname test sig"; flow:to_server,established; content:"|00 00 00|"; byte_extract:1,4,rpkt_len2,relative; byte_jump:no_var,0,relative; isdataat:1,relative; classtype:bad-unknown; sid:2;)
