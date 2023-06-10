@@ -1,0 +1,16 @@
+requires:
+    min-version: 7
+
+    # No pcap required.
+    pcap: false
+
+args:
+    - --engine-analysis
+
+checks:
+    - shell:
+        args: grep "Unknown byte_extract var seen in byte_jump - no_var" suricata.log | wc -l | xargs
+        expect: 1
+
+exit-code: 1
+
