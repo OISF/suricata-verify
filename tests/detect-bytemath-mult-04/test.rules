@@ -1,0 +1,6 @@
+alert tcp any any -> any any (msg:"byte_math multiplication operator"; \
+                    ipv4.hdr; \
+                    byte_extract: 1, 5, extracted_val, relative; \
+                    byte_math: bytes 1, offset 1, oper *,rvalue extracted_val, result var; \
+                    byte_test: 1, = , var, 1; \
+                    sid: 1;)
