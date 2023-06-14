@@ -1,0 +1,4 @@
+pass tls any any -> any any (tls.sni; content:"example.com"; startswith; nocase; endswith; msg:"matching TLS allowlisted"; flow:to_server,established; priority:2; sid:1;)
+drop tls any any -> any any (msg:"not matching any TLS allowlisted Domain"; flow:to_server,established; priority:2; sid:2; rev:1;)
+# matches packet 4, but no match due to action order
+alert tcp any any -> any any (seq:3964863680; ack:2403674603; dsize:214; priority:1; sid:3;)

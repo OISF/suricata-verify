@@ -1,0 +1,32 @@
+requires:
+  features:
+    - DEBUG
+  min-version: 7
+
+pcap: ../tls/tls-ja3s/input.pcap
+
+args:
+- -k none
+- --simulate-applayer-error-at-offset-ts=0
+- --set app-layer.error-policy=auto
+- --simulate-ips
+
+checks:
+  - filter:
+      filename: eve.json
+      count: 0
+      match:
+        event_type: alert
+  - filter:
+      filename: eve.json
+      count: 29
+      match:
+        event_type: drop
+  - filter:
+      filename: suricata.json
+      count: 1
+      match:
+        log_level: Info
+        event_type: engine
+        engine.module: exception-policy
+        engine.message: "master exception-policy set to: drop-flow"
