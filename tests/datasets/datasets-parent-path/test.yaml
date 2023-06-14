@@ -2,14 +2,20 @@ exit-code: 1
 
 checks:
   - filter:
+      requires:
+        lambda: sys.platform != "win32"
       count: 1
       match:
         engine.message: "Directory traversals not allowed: ../dns-seen.txt"
   - filter:
+      requires:
+        lambda: sys.platform != "win32"
       count: 1
       match:
         engine.message: "Directory traversals not allowed: namespace/../dns-seen-1.txt"
   - filter:
+      requires:
+        lambda: sys.platform != "win32"
       count: 1
       match:
         engine.message: "Directory traversals not allowed: namespace/../dns-seen-save.txt"
