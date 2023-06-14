@@ -48,8 +48,13 @@ import traceback
 VALIDATE_EVE = False
 WIN32 = sys.platform == "win32"
 LINUX = sys.platform.startswith("linux")
-suricata_bin = "src\suricata.exe" if WIN32 else "./src/suricata"
 suricata_yaml = "suricata.yaml" if WIN32 else "./suricata.yaml"
+
+# Determine the Suricata binary
+if os.path.exists("src\suricata.exe"):
+    suricata_bin = "src\suricata.exe"
+else:
+    suricata_bin = "./src/suricata"
 
 PROC_TIMEOUT=300
 
@@ -849,7 +854,7 @@ class TestRunner:
             args += [ "valgrind", "-v", "--error-exitcode=255", suppression_opt ]
 
         args += [
-            os.path.join(self.cwd, "src/suricata"),
+            os.path.join(self.cwd, suricata_bin),
         ]
 
         # Load args from config file.
