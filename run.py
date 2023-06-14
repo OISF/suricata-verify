@@ -365,6 +365,9 @@ def check_requires(requires, suricata_config: SuricataConfig):
         elif key == "pcap":
             # A valid requires argument, but not verified here.
             pass
+        elif key == "lambda":
+            if not eval(requires["lambda"]):
+                raise UnsatisfiedRequirementError(requires["lambda"])
         else:
             raise Exception("unknown requires types: %s" % (key))
 

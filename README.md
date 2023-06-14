@@ -72,6 +72,10 @@ requires:
     - command2
     - ...
 
+  # Require the output of a Python expression to be true. For example,
+  # this will run on all platforms other than win32.
+  lambda: "sys.platform != win32"
+
 skip:
   # Skip a test if a feature is present, with a message that is logged.
   - feature: RUST
