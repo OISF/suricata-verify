@@ -390,7 +390,10 @@ def find_value(name, obj):
                 return len(obj)
             except:
                 return -1
-
+        if part == "__find":
+            # Return full obj on __find and do a substring find in caller
+            # where the expected is also available
+            break
         name = None
         index = None
         m = re.match("^(.*)\[(\d+)\]$", part)
@@ -560,6 +563,9 @@ class FilterCheck:
             else:
                 val = find_value(key, event)
                 if val != expected:
+                    if key.endswith("__find"):
+                        if val.find(expected) != -1:
+                            return True
                     if str(val) == str(expected):
                         print("Different types but same string", type(val), val, type(expected), expected)
                         return False
