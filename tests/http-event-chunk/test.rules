@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"SURICATA HTTP request chunk extension"; flow:established,to_server; app-layer-event:http.request_chunk_extension; classtype:protocol-command-decode; sid:2221054; rev:1;)
