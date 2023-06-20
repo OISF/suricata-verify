@@ -15,7 +15,8 @@ checks:
       count: 1
       match:
         event_type: fileinfo
-        http2.length: 30
+        http.length: 30
+        http.version: "2"
         fileinfo.size: 20
   - filter:
       count: 0
