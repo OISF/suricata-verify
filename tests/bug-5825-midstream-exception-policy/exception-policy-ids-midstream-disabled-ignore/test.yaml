@@ -1,7 +1,7 @@
 pcap: ../../exception-policy-midstream-03/input.pcap
 
 requires:
-  min-version: 7
+  min-version: 6
 
 args:
 - --set stream.midstream=false
