@@ -3,6 +3,8 @@ requires:
     - HAVE_LIBJANSSON
     - GeoIP2
 
+pcap: ../alert-testmyids/input.pcap
+
 checks:
 
   # Check that we only have one alert event type in eve.

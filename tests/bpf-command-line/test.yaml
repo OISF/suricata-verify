@@ -5,7 +5,7 @@ requires:
 args:
   - -k none port 22
 
-pcap: input.pcap
+pcap: ../base64/input.pcap
 
 checks:
   - filter:
