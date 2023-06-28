@@ -133,7 +133,7 @@ checks:
 
       # The number of records this filter should match.
       count: 1
-	  
+
       # The fields to match on.
       match:
         # Example match on event_type:
@@ -144,7 +144,7 @@ checks:
 
         # Example match on the length of an array.
         alert.metadata.tag.__len: 3
-		
+
         # Check that a field exists:
         has-key: alert.rule
 
@@ -250,4 +250,3 @@ newer:
 
 The features are taken from the `Features:` line in `suricata
 --build-info`.
-
