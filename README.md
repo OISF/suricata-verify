@@ -92,6 +92,12 @@ command: |
   ${SRCDIR}/src/suricata -T -c ${TEST_DIR}/suricata.yaml -vvv \
       -l ${TEST_DIR}/output --set default-rule-path="${TEST_DIR}"
 
+# Retry a test 3 more times on failure. Some tests are subject to
+# timing errors on CI systems and this can help filter out the noise
+# of tests that fail in such environments. By default, tests are only
+# run once.
+retry: 3
+
 # Execute Suricata with the test parameters this many times. All checks will
 # done after each iteration.
 count: 10

@@ -687,7 +687,6 @@ class TestRunner:
         return env
 
     def run(self, outdir):
-
         if not self.force:
             self.check_requires()
             self.check_skip()
@@ -723,78 +722,86 @@ class TestRunner:
         else:
             expected_exit_code = 0
 
-        for _ in range(count):
+        retries = self.config.get("retry", 1)
 
-            # Cleanup the output directory.
-            if os.path.exists(self.output):
-                shutil.rmtree(self.output)
-            os.makedirs(self.output)
-            self.setup()
+        while True:
+            retries -= 1
+            for _ in range(count):
 
-            stdout = open(os.path.join(self.output, "stdout"), "wb")
-            stderr = open(os.path.join(self.output, "stderr"), "wb")
+                # Cleanup the output directory.
+                if os.path.exists(self.output):
+                    shutil.rmtree(self.output)
+                os.makedirs(self.output)
+                self.setup()
 
-            if shell:
-                template = string.Template(args)
-                cmdline = template.substitute(safe_env)
-            else:
-                for a in range(len(args)):
-                    args[a] = string.Template(args[a]).substitute(safe_env)
-                cmdline = " ".join(args) + "\n"
+                stdout = open(os.path.join(self.output, "stdout"), "wb")
+                stderr = open(os.path.join(self.output, "stderr"), "wb")
 
-            open(os.path.join(self.output, "cmdline"), "w").write(cmdline)
-
-            if self.verbose:
-                print("Executing: {}".format(cmdline.strip()))
-
-            p = subprocess.Popen(
-                args, shell=shell, cwd=self.directory, env=env,
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-            # used to get a return value from the threads
-            self.utf8_errors=[]
-            self.start_reader(p.stdout, stdout)
-            self.start_reader(p.stderr, stderr)
-            for r in self.readers:
-                try:
-                    r.join(timeout=PROC_TIMEOUT)
-                except:
-                    print("stdout/stderr reader timed out, terminating")
-                    r.terminate()
-
-            try:
-                r = p.wait(timeout=PROC_TIMEOUT)
-            except:
-                print("Suricata timed out, terminating")
-                p.terminate()
-                raise TestError("timed out when expected exit code %d" % (
-                    expected_exit_code));
-
-            if len(self.utf8_errors) > 0:
-                 raise TestError("got utf8 decode errors %s" % self.utf8_errors);
-
-            if r != expected_exit_code:
-                raise TestError("got exit code %d, expected %d" % (
-                    r, expected_exit_code));
-
-            check_value = self.check()
-
-        if VALIDATE_EVE:
-            check_output = subprocess.call([os.path.join(TOPDIR, "check-eve.py"), outdir, "-q", "-s", os.path.join(self.cwd, "etc", "schema.json")])
-            if check_output != 0:
-                raise TestError("Invalid JSON schema")
-
-        if not check_value["failure"] and not check_value["skipped"]:
-            if not self.quiet:
-                if os.path.basename(os.path.dirname(self.directory)) != "tests":
-                    path_name = os.path.join(os.path.basename(os.path.dirname(self.directory)), self.name)
+                if shell:
+                    template = string.Template(args)
+                    cmdline = template.substitute(safe_env)
                 else:
-                    path_name = (os.path.basename(self.directory))
-                print("===> %s: OK%s" % (path_name, " (%dx)" % count if count > 1 else ""))
-        elif not check_value["failure"]:
-            if not self.quiet:
-                print("===> {}: OK (checks: {}, skipped: {})".format(os.path.basename(self.directory), sum(check_value.values()), check_value["skipped"]))
-        return check_value
+                    for a in range(len(args)):
+                        args[a] = string.Template(args[a]).substitute(safe_env)
+                    cmdline = " ".join(args) + "\n"
+
+                open(os.path.join(self.output, "cmdline"), "w").write(cmdline)
+
+                if self.verbose:
+                    print("Executing: {}".format(cmdline.strip()))
+
+                p = subprocess.Popen(
+                    args, shell=shell, cwd=self.directory, env=env,
+                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+                # used to get a return value from the threads
+                self.utf8_errors=[]
+                self.start_reader(p.stdout, stdout)
+                self.start_reader(p.stderr, stderr)
+                for r in self.readers:
+                    try:
+                        r.join(timeout=PROC_TIMEOUT)
+                    except:
+                        print("stdout/stderr reader timed out, terminating")
+                        r.terminate()
+
+                try:
+                    r = p.wait(timeout=PROC_TIMEOUT)
+                except:
+                    print("Suricata timed out, terminating")
+                    p.terminate()
+                    raise TestError("timed out when expected exit code %d" % (
+                        expected_exit_code));
+
+                if len(self.utf8_errors) > 0:
+                     raise TestError("got utf8 decode errors %s" % self.utf8_errors);
+
+                if r != expected_exit_code:
+                    raise TestError("got exit code %d, expected %d" % (
+                        r, expected_exit_code));
+
+                check_value = self.check()
+
+            if check_value["failure"] and retries > 0:
+                print("===> {}: Retrying".format(os.path.basename(self.directory)))
+                continue
+
+            if VALIDATE_EVE:
+                check_output = subprocess.call([os.path.join(TOPDIR, "check-eve.py"), outdir, "-q", "-s", os.path.join(self.cwd, "etc", "schema.json")])
+                if check_output != 0:
+                    raise TestError("Invalid JSON schema")
+
+            if not check_value["failure"] and not check_value["skipped"]:
+                if not self.quiet:
+                    if os.path.basename(os.path.dirname(self.directory)) != "tests":
+                        path_name = os.path.join(os.path.basename(os.path.dirname(self.directory)), self.name)
+                    else:
+                        path_name = (os.path.basename(self.directory))
+                    print("===> %s: OK%s" % (path_name, " (%dx)" % count if count > 1 else ""))
+            elif not check_value["failure"]:
+                if not self.quiet:
+                    print("===> {}: OK (checks: {}, skipped: {})".format(os.path.basename(self.directory), sum(check_value.values()), check_value["skipped"]))
+            return check_value
 
     def pre_check(self):
         if "pre-check" in self.config:
