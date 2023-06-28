@@ -1,0 +1,22 @@
+requires:
+  features:
+    - liblz4
+
+skip:
+  - uid: 0
+    msg: "Test requires non-root user"
+
+setup:
+  # Create a pcap-log directory without write permission
+  - script: |
+      rm -rf pcap-log
+      mkdir pcap-log
+      chmod 555 pcap-log
+      
+pcap: ../alert-testmyids/input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        engine.message: "Error opening file for compressed output: Permission denied"

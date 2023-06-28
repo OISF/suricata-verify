@@ -1,0 +1,21 @@
+%YAML 1.1
+---
+
+outputs:
+  - pcap-log:
+      enabled: yes
+      filename: log.pcap
+      compression: lz4
+      mode: normal
+      dir: pcap-log
+
+# Enable enging logging to JSON so we can verify it.
+logging:
+  outputs:
+    - console:
+        enabled: yes
+    - file:
+        enabled: yes
+        level: info
+        filename: eve.json
+        type: json
