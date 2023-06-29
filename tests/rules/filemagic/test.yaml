@@ -1,0 +1,155 @@
+requires:
+  min-version: 7.0.0
+  pcap: false
+  features:
+    - MAGIC
+
+args:
+    - --engine-analysis
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 1
+      mpm.buffer: "file.magic"
+      mpm.pattern: "one"
+      engines[0].name: "file.magic"
+      engines[0].matches[0].name: "content"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 2
+      mpm.buffer: "file.magic"
+      mpm.pattern: "one"
+      engines[0].name: "file.magic"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[0].content.relative_next: true
+      engines[0].name: "file.magic"
+      engines[0].matches[1].name: "content"
+      engines[0].matches[1].content.within: 8
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 3
+      mpm.buffer: "file.magic"
+      mpm.pattern: "one"
+      engines[0].name: "file.magic"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[0].content.depth: 8
+      notes[0]: "'within' option for pattern w/o previous content was converted to 'depth'"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 4
+      mpm.buffer: "file.magic"
+      mpm.pattern: "one"
+      engines[0].name: "file.magic"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[0].content.offset: 8
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 5
+      mpm.buffer: "file.magic"
+      mpm.pattern: "in|20|file|20|magic"
+      engines[0].name: "file.magic"
+      engines[0].direction: "toserver"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[0].content.pattern: "in|20|file|20|magic"
+      engines[1].name: "stream"
+      engines[1].direction: "toserver"
+      engines[1].matches[0].name: "content"
+      engines[1].matches[0].content.pattern: "in|20|pkt|20|data"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 6
+      engines[0].name: "file.magic"
+      engines[0].direction: "toserver"
+      engines[0].matches[0].name: "pcre"
+      engines[0].matches[0].pcre.relative: true
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 7
+      engines[0].name: "file.magic"
+      engines[0].direction: "toserver"
+      engines[0].matches[0].name: "pcre"
+      engines[0].matches[0].pcre.relative: false
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 8
+      engines[0].name: "file.magic"
+      engines[0].direction: "toserver"
+      engines[0].matches[0].name: "pcre"
+      engines[0].matches[0].pcre.relative: true
+      notes[0]: "'/B' (rawbytes) option is a no-op and is silently ignored"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 9
+      mpm.buffer: "file.magic"
+      mpm.pattern: "one"
+      engines[0].name: "file.magic"
+      engines[0].direction: "toserver"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[0].content.pattern: "one"
+      engines[0].matches[1].name: "pcre"
+      engines[0].matches[1].pcre.relative: true
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 10
+      mpm.buffer: "file.magic"
+      mpm.pattern: "pdf"
+      engines[0].name: "file.magic"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[0].content.pattern: "pdf"
+      engines[0].matches[0].content.nocase: true
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 11
+      mpm.buffer: "file.magic"
+      mpm.pattern: "pdf"
+      engines[0].name: "file.magic"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[0].content.pattern: "pdf"
+      engines[0].matches[0].content.negated: true
+      engines[0].matches[0].content.nocase: true
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 12
+      mpm.buffer: "file.magic"
+      mpm.pattern: "PDF"
+      engines[0].name: "file.magic"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[0].content.pattern: "PDF"
+      engines[0].matches[0].content.nocase: true
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 13
+      mpm.buffer: "file.magic"
+      mpm.pattern: "PDF"
+      engines[0].name: "file.magic"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[0].content.pattern: "PDF"
+      engines[0].matches[0].content.negated: true
+      engines[0].matches[0].content.nocase: true
