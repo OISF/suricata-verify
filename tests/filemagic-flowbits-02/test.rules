@@ -1,0 +1,4 @@
+alert http any any -> any any (msg:"Wget useragent";content:"wget"; nocase; startswith; http_user_agent; sid:1; rev:1; flowbits:set,wgetagent;)
+alert http any any -> any any (msg:"PDF not wget"; flowbits:isnotset,wgetagent; filemagic:"PDF"; sid:3; rev:1;)
+alert http any any -> any any (msg:"PDF not wget locked to client"; flow:to_client; flowbits:isnotset,wgetagent; filemagic:"PDF"; sid:4; rev:1;)
+

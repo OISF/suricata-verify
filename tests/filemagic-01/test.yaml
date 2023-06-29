@@ -2,7 +2,8 @@ requires:
   features:
     - HAVE_LIBJANSSON
     - MAGIC
-  min-version: 7
+
+pcap: ../filemagic-flowbits/pdf-dl.pcap
 
 args:
   - -k none
@@ -11,19 +12,23 @@ checks:
   - filter:
       count: 1
       match:
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
         alert.signature_id: 2
   - filter:
-      count: 0
+      count: 1
       match:
-         alert.signature_id: 3
+        alert.signature_id: 3
   - filter:
       count: 1
       match:
         alert.signature_id: 4
   - filter:
-      count: 0
+      count: 1
       match:
-         alert.signature_id: 5
+        alert.signature_id: 5
   - filter:
       count: 1
       match:
@@ -31,4 +36,12 @@ checks:
   - filter:
       count: 0
       match:
-         alert.signature_id: 7
+        alert.signature_id: 7
+  - filter:
+      count: 0
+      match:
+        alert.signature_id: 8
+  - filter:
+      count: 0
+      match:
+        alert.signature_id: 9
