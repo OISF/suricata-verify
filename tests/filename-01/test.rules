@@ -1,0 +1,11 @@
+alert tcp any any -> any any (filename:"R.PDF"; sid:1;)
+alert tcp any any -> any any (filename:"r.pdf"; sid:2;)
+alert tcp any any -> any any (filename:"R.pDf"; sid:3;)
+
+alert tcp any any -> any any (filename:!"S.PDF"; sid:4;)
+alert tcp any any -> any any (filename:!"s.pdf"; sid:5;)
+alert tcp any any -> any any (filename:!"S.pDf"; sid:6;)
+
+alert tcp any any -> any any (filename:!"R.PDF"; sid:7;)
+alert tcp any any -> any any (filename:!"r.pdf"; sid:8;)
+alert tcp any any -> any any (filename:!"R.pDf"; sid:9;)
