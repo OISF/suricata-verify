@@ -1,0 +1,24 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+    - MAGIC
+
+pcap: ../filemagic-flowbits/pdf-dl.pcap
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 1
+        pcap_cnt: 7
+  - filter:
+      count: 0
+      match:
+         alert.signature_id: 3
+  - filter:
+      count: 0
+      match:
+         alert.signature_id: 4
