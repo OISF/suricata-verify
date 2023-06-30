@@ -1,0 +1,1 @@
+alert enip any any -> any any (msg:"SURICATA enip test ";enip_command:99 ;sid:6450008; rev:1;)
