@@ -1,0 +1,22 @@
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: rfb
+
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: unimplemented_security_type
+
+  - filter:
+      count: 1
+      match:
+        event_type: rfb
+        rfb.server_protocol_version.major: "003"
+        rfb.server_protocol_version.minor: "889"
+        rfb.client_protocol_version.major: "003"
+        rfb.client_protocol_version.minor: "008"
+        rfb.authentication.security_type: 30  # Apple authentication, which we don't support yet
