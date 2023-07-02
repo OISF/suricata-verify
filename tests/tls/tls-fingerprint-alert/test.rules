@@ -8,3 +8,13 @@ alert tls any any -> any any (msg:"TLS FINGERPRINT TEST"; \
 alert tls any any -> any any (msg:"TLS FINGERPRINT STICKY BUFFER TEST"; \
 	tls.cert_fingerprint; content:"90:86:a4:3b:f5:cf:1b:2e:4e:f7:97:96:f9:de:ba:b9:66:35:86:3f"; \
 	sid:2; rev:1;)
+
+alert tls any any -> any any (msg:"TLS FINGERPRINT TEST -- mixed case"; \
+	tls.fingerprint:"90:86:A4:3B:f5:cf:1b:2e:4e:f7:97:96:f9:de:ba:b9:66:35:86:3F"; \
+	sid:3; rev:1;)
+alert tls any any -> any any (msg:"TLS FINGERPRINT TEST -- mixed case"; \
+	tls.fingerprint:"90:86:A4:3B:F5:CF:1B:2E:4E:F7:97:96:f9:DE:BA:B9:66:35:86:3F"; \
+	sid:4; rev:1;)
+alert tls any any -> any any (msg:"TLS FINGERPRINT TEST -- mixed case - no match"; \
+	tls.fingerprint:"90:86:A4:3B:F5:CF:1B:2E:4E:F7:97:96:f9:DE:BA:B9:66:35:86:3E"; \
+	sid:5; rev:1;)
