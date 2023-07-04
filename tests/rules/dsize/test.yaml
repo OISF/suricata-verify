@@ -1,0 +1,20 @@
+requires:
+    min-version: 7.0.0
+    pcap: false
+
+args:
+    - --engine-analysis
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 1
+      app_proto: "http_any"
+      requirements[0]: "no_payload"
+      requirements[1]: "flow"
+      pkt_engines[0].name: "packet"
+      pkt_engines[0].is_mpm: false
+      type: "pkt"
+      lists.packet.matches[0].name: "dsize" 
