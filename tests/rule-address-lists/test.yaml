@@ -1,0 +1,115 @@
+checks:
+
+  # SID 1
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 1
+
+  # SID 2
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+
+  # SID 3
+
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 3
+
+  # SID 4
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
+        dest_ip: 10.16.1.10
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
+        dest_ip: 10.16.2.100
+
+  # SID 5
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 5
+        dest_ip: 10.16.1.10
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 5
+        dest_ip: 10.16.2.100
+
+  # SID 6
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 6
+        dest_ip: 10.16.2.100
+
+  # SID 7
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 7
+        dest_ip: 10.16.2.100
+
+  # SID 8
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 8
+        dest_ip: 10.16.2.100
+
+  # SID 9
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9
+        dest_ip: 10.16.1.10
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9
+        dest_ip: 10.16.1.100
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9
+        dest_ip: 35.212.0.44
+
+  # SID 10
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 10
+        dest_ip: 10.16.1.10
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 10
+        dest_ip: 10.16.1.100
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 10
+        dest_ip: 35.212.0.44

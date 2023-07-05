@@ -1,0 +1,60 @@
+# - Expectation: 3 alerts
+alert ip any any -> any any (content:"GET /suricata.html HTTP/1.1"; sid:1; rev:1;)
+
+# - Expectation: 1 alerts
+alert ip any any -> 10.16.1.10 any (content:"GET /suricata.html HTTP/1.1"; sid:2; rev:1;)
+
+# Alert on any destination address except 10.16.2.0/24.
+# - Expection: 3 alerts: 10.16.1.10, 10.16.1.100, 35.212.0.44
+# - OK
+alert ip any any -> 0.0.0.0/0,!10.16.2.0/24 any (content:"GET /suricata.html HTTP/1.1"; sid:3; rev:1;)
+
+# Match on 10.0.0.0/8, exclude 10.16.1.0/24 except 10.16.1.10.
+#
+# Expectation:
+# - Alert for 10.16.1.10
+# - Alert for 10.16.2.100
+# - No alert for 10.16.1.100
+#
+# Notes:
+# - There is an assumption this might not work due to the comment on double negations
+#   at https://github.com/OISF/suricata/blob/master/src/detect-engine-address.c#L697
+alert ip any any -> [10.0.0.0/8,![10.16.1.0/24,!10.16.1.10]] any (\
+    content:"GET /suricata.html HTTP/1.1"; sid:4; rev:1;)
+
+# Equivalent to the above, just changes the order of the nested list.
+alert ip any any -> [10.0.0.0/8,![!10.16.1.10,10.16.1.0/24]] any (\
+    content:"GET /suricata.html HTTP/1.1"; sid:5; rev:1;)
+
+# Simple negated list.
+alert ip any any -> [0.0.0.0/0,![10.16.1.10,10.16.1.100]] any (\
+    content:"GET /suricata.html HTTP/1.1"; sid:6; rev:1;)
+
+# List of negated items, should be equivalent to the above.
+alert ip any any -> [0.0.0.0/0,[!10.16.1.10,!10.16.1.100]] any (\
+    content:"GET /suricata.html HTTP/1.1"; sid:7; rev:1;)
+
+# This might look like it should alert for 10.16.1.0/24 addresses, but
+# it *correctly* does not.
+#
+# See: https://redmine.openinfosecfoundation.org/issues/608
+#
+# - The positive addresses are OR'ed: 10.0.0.0/8 | 10.16.1.10/32 = 10.0.0.0/8
+# - Remove the negative range of !10.16.1.0/24
+#
+# Result: 10.0.0.0 - 10.16.0.255, 10.16.2.0 - 10.255.255.255.
+alert ip any any -> [10.0.0.0/8,!10.16.1.0/24,10.16.1.10/32] any (\
+    content:"GET /suricata.html HTTP/1.1"; sid:8; rev:1;)
+
+# The following 2 rules should be equivalent.
+#
+# - Inner list: 10.16.0.0/16, remove 10.16.1.0/24 -> 10.16.0.0-10.16.0.255,10.16.2.0-10.16.255.255
+# - Outer list: 0.0.0.0/0, remove 10.16.0.0-10.16.0.255,10.16.2.0-10.16.255.255
+#            -> 0.0.0.0-10.15.255.255, 10.16.1.0-10.16.1.255, 10.17.0.0-255.255.255.255
+#
+# Should see alerts for 35.212.0.44, 10.16.1.10, 10.16.1.100
+#  BUT NOT 10.16.2.100
+alert ip any any -> ![10.16.0.0/16,!10.16.1.0/24] any (\
+    content:"GET /suricata.html HTTP/1.1"; sid:9; rev:1;)
+alert ip any any -> [0.0.0.0/0,![10.16.0.0/16,!10.16.1.0/24]] any (\
+    content:"GET /suricata.html HTTP/1.1"; sid:10; rev:1;)
