@@ -1,0 +1,7 @@
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+  - stats:
+      decoder.ipv6: 16
