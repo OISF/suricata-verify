@@ -1,0 +1,1 @@
+alert dns any any -> any any (msg:"byte_test varname test sig"; byte_extract:1,5,rpkt_len; byte_test:rpkt_len,=,0x01,5, bitmask 0xFF; sid:1;)

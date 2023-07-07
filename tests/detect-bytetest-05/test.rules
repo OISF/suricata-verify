@@ -1,0 +1,1 @@
+alert dns any any -> any any (msg:"byte_test invalid varname test sig"; byte_extract:1,5,rpkt_len; byte_test:no_var,=,0x01,5,bitmask 0xFF; sid:1;)
