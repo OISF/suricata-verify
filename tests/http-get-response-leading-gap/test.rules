@@ -1,0 +1,2 @@
+#alert http1 any any -> any any (file.data; content:"./exif:ExifVersion>"; sid:1;)
+alert http1 any any -> any any (file.data; content:"exif"; sid:1;)

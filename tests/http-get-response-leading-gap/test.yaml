@@ -1,0 +1,20 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+# disables checksum verification
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: "ef525a035a2e874fffb7d746d007173ad3f3899a42c87ee3bfd7e21582bde2da"
+        fileinfo.state: "TRUNCATED"
