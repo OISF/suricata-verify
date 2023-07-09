@@ -1,0 +1,14 @@
+requires:
+  min-version: 7
+
+  pcap: false
+
+args:
+  - --engine-analysis
+
+checks:
+  - shell:
+     args: grep "unknown byte_ keyword var seen in byte_math - no_var" suricata.log | wc -l | xargs
+     expect: 1
+
+exit-code: 1
