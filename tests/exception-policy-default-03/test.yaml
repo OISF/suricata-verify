@@ -1,0 +1,70 @@
+args:
+- --simulate-ips
+- --set exception-policy=auto
+
+checks:
+  - filter:
+      min-version: 7
+      count: 0
+      match:
+        event_type: alert
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: drop
+        drop.reason: stream midstream
+  - filter:
+      min-version: 7
+      count: 9
+      match:
+        event_type: drop
+  - filter:
+      count: 0
+      match:
+        event_type: flow
+        flow.state: bypassed
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: flow
+        flow.action: drop
+  - filter:
+      count: 0
+      match:
+        event_type: http
+  # checks for Suricata 6
+  - filter:
+      lt-version: 7
+      count: 1
+      match:
+        event_type: alert
+  - filter:
+      lt-version: 7
+      count: 2
+      match:
+        event_type: drop
+        drop.reason: stream error
+  - filter:
+      lt-version: 7
+      count: 0
+      match:
+        event_type: flow
+        flow.action: drop
+  - filter:
+      filename: suricata.json
+      lt-version: 7
+      count: 1
+      match:
+        log_level: Info
+        event_type: engine
+        engine.message: "master exception-policy set to: auto"
+  - filter:
+      filename: suricata.json
+      lt-version: 7
+      count: 1
+      match:
+        log_level: Config
+        event_type: engine
+        engine.message: "stream.midstream-policy: ignore (defined via 'exception-policy' master switch). Warning: this will change to drop-flow or drop-packet in Suricata 7."
