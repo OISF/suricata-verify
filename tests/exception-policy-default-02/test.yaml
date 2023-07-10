@@ -1,0 +1,42 @@
+pcap: ../exception-policy-midstream-03/input.pcap
+
+args:
+- --set stream.midstream=true
+
+checks:
+  - filter:
+      count: 6
+      match:
+        event_type: alert
+  - filter:
+      count: 1
+      match:
+        event_type: http
+  - filter:
+      lt-version: 7
+      count: 0
+      match:
+        event_type: drop
+        drop.reason: stream midstream
+  - filter:
+      lt-version: 7
+      count: 0
+      match:
+        event_type: flow
+        flow.action: drop
+  - filter:
+      lt-version: 7
+      filename: suricata.json
+      count: 1
+      match:
+        event_type: engine
+        log_level: Config
+        engine.message: "exception-policy: ignore (defined via 'built-in default' for IDS-mode). Warning: this will change to drop-flow or drop-packet in Suricata 7."
+  - filter:
+      lt-version: 7
+      filename: suricata.json
+      count: 1
+      match:
+        event_type: engine
+        log_level: Config
+        engine.message: "stream.midstream-policy: ignore (defined via 'built-in default' for IDS-mode). Warning: this will change to drop-flow or drop-packet in Suricata 7."
