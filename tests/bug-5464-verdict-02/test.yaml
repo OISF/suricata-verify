@@ -1,0 +1,44 @@
+requires:
+  min-version: 7
+
+args:
+- --simulate-ips
+
+pcap:  ../detect-app-layer-protocol-02/input.pcap
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 3
+        verdict.action: alert
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        verdict.action: pass
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        verdict.action: alert
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 4
+        verdict.action: alert
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+        alert.signature_id: 2
+        verdict.action: drop
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.action: pass

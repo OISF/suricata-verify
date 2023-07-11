@@ -1,0 +1,3 @@
+alert tls any any -> any any (msg:"matching TLS allowlisted"; flow:to_server,established; priority:2; sid:1;)
+pass tcp any any -> any 443 (priority:1; sid:2;)
+alert tcp any any -> any any (sid: 3;)

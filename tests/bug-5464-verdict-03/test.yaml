@@ -1,0 +1,49 @@
+requires:
+  min-version: 7
+  features:
+    - LIBNET1.1
+
+pcap: ../decode-teredo-01/input.pcap
+
+args:
+- --simulate-ips
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 13
+        alert.signature_id: 3
+        alert.action: blocked
+        verdict.action: drop
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 13
+        alert.signature_id: 1
+        alert.action: allowed
+        verdict.action: drop
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        pcap_cnt: 13
+        drop.reason: rules
+        verdict.action: drop
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        verdict.action: drop
+        verdict.reject_target: source
+        verdict.reject: [icmp-prohib]
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        drop.reason: rules
+        verdict.action: drop
+        verdict.reject_target: source
+        verdict.reject: [icmp-prohib]
