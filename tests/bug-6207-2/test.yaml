@@ -1,0 +1,34 @@
+requires:
+  min-version: 7
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      app_proto: smtp
+      email.attachment[0]: smtptest-2021-02-25T13-54-22Z-aefb2fc1308d62f4b6c74769f69b13ddf80e995fd98ae442f3be499ea928c67f..zip
+      event_type: fileinfo
+      fileinfo.filename: smtptest-2021-02-25T13-54-22Z-aefb2fc1308d62f4b6c74769f69b13ddf80e995fd98ae442f3be499ea928c67f..zip
+      fileinfo.size: 2
+      fileinfo.state: CLOSED
+      fileinfo.sha256: 73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049
+      smtp.helo: smtp.intra
+      smtp.mail_from: blah@smtp.lab.com
+      smtp.rcpt_to[0]: test@wut.com
+- filter:
+    count: 1
+    match:
+      email.attachment[0]: smtptest-2021-02-25T13-54-22Z-aefb2fc1308d62f4b6c74769f69b13ddf80e995fd98ae442f3be499ea928c67f..zip
+      email.status: PARSE_DONE
+      event_type: smtp
+      smtp.helo: smtp.intra
+      smtp.mail_from: blah@smtp.lab.com
+      smtp.rcpt_to[0]: test@wut.com
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1

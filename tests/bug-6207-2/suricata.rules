@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg: "Test file content"; file.data; content:"42"; sid:1;)
