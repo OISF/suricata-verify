@@ -1,0 +1,23 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      types:
+        - files
+        - smtp
+        - anomaly
+  - file-store:
+      version: 2
+      enabled: yes
+      force-filestore: yes
+app-layer:
+  protocols:
+    smtp:
+      enabled: yes
+      raw-extraction: no
+      mime:
+        decode-mime: yes
+        decode-base64: yes
+        decode-quoted-printable: yes
