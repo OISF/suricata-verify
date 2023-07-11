@@ -1,0 +1,6 @@
+alert http any any -> any any (sid:1;)
+# won't generate alert output nor a drop, as flow is passed
+drop http any any -> any any (content:"OK"; sid:2;)
+alert tcp any any -> any any (sid:3;)
+# won't generate alert output, as it's a pass rule
+pass http any any -> any any (content:"GET"; sid:4;)

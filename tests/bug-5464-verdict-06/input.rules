@@ -1,0 +1,3 @@
+alert http any any -> any any (sid: 1;)
+rejectboth icmp any any -> any any (sid:2; rev:1;)
+pass http any any -> any any (http.host; content: "www.wireshark.org"; sid:3;)
