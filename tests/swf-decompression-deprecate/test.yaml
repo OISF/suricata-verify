@@ -1,0 +1,15 @@
+requires:
+    min-version: 7
+    lt-version: 8
+    pcap: false
+
+args:
+- --set app-layer.protocols.http.libhtp.default-config.swf-decompression.enabled=yes --engine-analysis
+
+checks:
+
+    - shell:
+        args: grep "Flash decompression is deprecated" suricata.log | wc -l | xargs
+        expect: 1
+
+exit-code: 0
