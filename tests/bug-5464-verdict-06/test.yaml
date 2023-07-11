@@ -1,0 +1,36 @@
+requires:
+  min-version: 7
+
+pcap: ../decode-teredo-01/input.pcap
+
+args:
+- --set stream.midstream=true
+
+checks:
+  - filter:
+      count: 28
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        verdict.action: alert
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        verdict.action: alert
+        verdict.reject_target: both
+        verdict.reject: [icmp-prohib]
+  # match on rule `pass` for hostname www.wireshark.org
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.action: pass
+        flow.alerted: true
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        proto: IPv6-ICMP
+        flow.action: drop

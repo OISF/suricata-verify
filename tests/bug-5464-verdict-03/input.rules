@@ -1,0 +1,4 @@
+alert http any any -> any any (sid: 1;)
+reject icmp any any -> any any (sid:2; rev:1;)
+drop http any any -> any any (sid:3;)
+
