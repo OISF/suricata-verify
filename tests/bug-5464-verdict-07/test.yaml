@@ -1,0 +1,18 @@
+requires:
+  min-version: 7
+  features:
+    - LIBNET1.1
+
+pcap: ../bug-5633-gre-01/gre-udp.pcap
+
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        verdict.action: alert
+        verdict.reject-target: to_client 
+        verdict.reject: [icmp-prohib]

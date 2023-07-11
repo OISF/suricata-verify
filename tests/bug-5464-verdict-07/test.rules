@@ -1,0 +1,1 @@
+reject udp any any -> any any (content:"EVIL"; sid:1;)

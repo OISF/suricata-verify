@@ -1,0 +1,3 @@
+drop tcp any any -> any 80 (sid:1; rev:1;)
+rejectdst tcp any any -> any 80 (sid:2; rev:1;)
+pass tcp any any -> any 80 (sid:3; rev:1;)
