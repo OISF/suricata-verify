@@ -2,7 +2,7 @@ requires:
   features:
     - HAVE_NSS
     - HAVE_LIBJANSSON
-  min-version: 6.0.0
+  min-version: 7
 
 # disables checksum verification
 args:
@@ -91,6 +91,31 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 8
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9
+  - filter:
+      count: 6
+      match:
+        event_type: alert
+        alert.signature_id: 10
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 11
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 12
+  - filter:
+      count: 6
+      match:
+        event_type: alert
+        alert.signature_id: 13
   - filter:
       count: 6
       match:
