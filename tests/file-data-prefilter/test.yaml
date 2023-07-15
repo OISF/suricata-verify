@@ -1,4 +1,4 @@
-pcap: ../file-data-depth-inspection/file-data-depth-inpsection.pcap
+pcap: ../file-data-depth-inspection/file-data-depth-inspection.pcap
 
 checks:
     - filter:

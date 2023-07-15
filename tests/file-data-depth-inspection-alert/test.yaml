@@ -3,6 +3,8 @@ requires:
         - HAVE_LIBJANSSON
     min-version: 5.0.0
 
+pcap: ../file-data-depth-inspection/file-data-depth-inspection.pcap
+
 checks:
     - filter:
         count: 2
