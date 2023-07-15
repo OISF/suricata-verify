@@ -1,0 +1,7 @@
+alert http2 any any -> any any (http2.frametype:GOAWAY; sid:2; rev:1;)
+alert http2 any any -> any any (http2.settings:SETTINGS_HEADER_TABLE_SIZE>1000; sid:3; rev:1;)
+alert http2 any any -> any any (http2.window:34634; sid:4; rev:1;)
+alert http2 any any -> any any (flow:established,to_client; filemd5:test.md5; sid:5; rev:1;)
+alert http2 any any -> any any (file.data; content:"nghttp2 - HTTP/2 C Library"; sid:6; rev:1;)
+alert http2 any any -> any any (file.data; content:!"html"; startswith; sid:7; rev:1;)
+alert http2 any any -> any any (file.data; content:"|0a 0a|<!DOCTYPE"; startswith; sid:8; rev:1;)

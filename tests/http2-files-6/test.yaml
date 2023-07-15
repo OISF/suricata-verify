@@ -1,0 +1,98 @@
+requires:
+  features:
+    - HAVE_NSS
+    - HAVE_LIBJANSSON
+  min-version: 6.0.0
+
+# disables checksum verification
+args:
+  - -k none
+
+checks:
+
+  # Check that the output order is always the same (we want to ensure that
+  # alerts are stored in the same order, and this check should cover that)
+  - file-compare:
+      filename: fast.log
+      expected: expected/fast.log
+
+  # Check that there is one file event with content range.
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.http2.stream_id: 0
+        http.http2.response.settings[0].settings_id: "SETTINGSMAXCONCURRENTSTREAMS"
+        http.http2.response.settings[0].settings_value: 100
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.http2.stream_id: 0
+        http.http2.request.settings[1].settings_id: "SETTINGSINITIALWINDOWSIZE"
+        http.http2.request.settings[1].settings_value: 65535
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.http2.stream_id: 0
+        http.http2.request.error_code: "NOERROR"
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.length: 22617
+        http.status: 200
+        http.http_method: "GET"
+        http.url: "/doc/manual/html/index.html"
+        http.http_user_agent: "nghttp2/0.5.2-DEV"
+        http.version: "2"
+        http.http2.stream_id: 1
+        http.request_headers[0].name: ":authority"
+        http.request_headers[0].value: "localhost:3000"
+        http.request_headers[1].name: ":method"
+        http.request_headers[1].value: "GET"
+        http.request_headers[2].name: ":path"
+        http.request_headers[2].value: "/doc/manual/html/index.html"
+        http.response_headers[0].name: ":status"
+        http.response_headers[0].value: "200"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 4
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 5
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 6
+  - filter:
+      count: 6
+      match:
+        event_type: alert
+        alert.signature_id: 7
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 8
+  - filter:
+      count: 6
+      match:
+        event_type: fileinfo
+        fileinfo.state: CLOSED

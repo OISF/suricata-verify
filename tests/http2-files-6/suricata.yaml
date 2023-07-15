@@ -1,0 +1,19 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: true
+      types:
+        - alert
+        - http2
+        - files:
+          force-magic: true
+          force-hash: [md5, sha1, sha256]
+  - fast:
+      enabled: yes
+
+app-layer:
+  protocols:
+    http2:
+      enabled: true
