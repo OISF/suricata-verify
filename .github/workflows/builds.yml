@@ -131,7 +131,6 @@ jobs:
                 pkgconfig \
                 python3-devel \
                 python3-jsonschema \
-                python3-sphinx \
                 python3-yaml \
                 rust-toolset \
                 sudo \
