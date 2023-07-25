@@ -1,5 +1,6 @@
 requires:
-  min-version: 7
+  features:
+    - HAVE_NSS
 
 args:
 - -k none
