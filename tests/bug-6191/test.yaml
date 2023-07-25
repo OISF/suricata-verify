@@ -1,0 +1,729 @@
+args:
+- -k none
+- --set stream.midstream=true
+
+checks:
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 69
+      dcerpc.request: ALTER_CONTEXT
+      dcerpc.response: ALTER_CONTEXT_RESP
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 3
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 4
+      dcerpc.request: ALTER_CONTEXT
+      dcerpc.response: ALTER_CONTEXT_RESP
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.27
+      dest_port: 1178
+      event_type: dcerpc
+      pcap_cnt: 14
+      proto: TCP
+      src_ip: 192.168.11.15
+      src_port: 49357
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 69
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 3
+      dcerpc.req.stub_data_size: 180
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 60
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 5
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 4
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 3
+      dcerpc.req.stub_data_size: 140
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 20
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.27
+      dest_port: 1178
+      event_type: dcerpc
+      pcap_cnt: 23
+      proto: TCP
+      src_ip: 192.168.11.15
+      src_port: 49357
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 70
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 3
+      dcerpc.req.stub_data_size: 92
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 76
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 7
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 5
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 3
+      dcerpc.req.stub_data_size: 140
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 20
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.27
+      dest_port: 1178
+      event_type: dcerpc
+      pcap_cnt: 47
+      proto: TCP
+      src_ip: 192.168.11.15
+      src_port: 49357
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 71
+      dcerpc.request: ALTER_CONTEXT
+      dcerpc.response: ALTER_CONTEXT_RESP
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 9
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 6
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 3
+      dcerpc.req.stub_data_size: 140
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 20
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.27
+      dest_port: 1178
+      event_type: dcerpc
+      pcap_cnt: 50
+      proto: TCP
+      src_ip: 192.168.11.15
+      src_port: 49357
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 71
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 3
+      dcerpc.req.stub_data_size: 64
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 84
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 13
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 7
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 3
+      dcerpc.req.stub_data_size: 140
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 20
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.27
+      dest_port: 1178
+      event_type: dcerpc
+      pcap_cnt: 74
+      proto: TCP
+      src_ip: 192.168.11.15
+      src_port: 49357
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 72
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 6
+      dcerpc.req.stub_data_size: 64
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 32
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 17
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 8
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 3
+      dcerpc.req.stub_data_size: 140
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 20
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.27
+      dest_port: 1178
+      event_type: dcerpc
+      pcap_cnt: 78
+      proto: TCP
+      src_ip: 192.168.11.15
+      src_port: 49357
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 73
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 6
+      dcerpc.req.stub_data_size: 64
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 32
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 19
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 74
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 7
+      dcerpc.req.stub_data_size: 68
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 32
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 22
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 75
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 3
+      dcerpc.req.stub_data_size: 180
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 60
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 26
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 76
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 3
+      dcerpc.req.stub_data_size: 64
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 84
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 29
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 77
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 6
+      dcerpc.req.stub_data_size: 64
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 32
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 32
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 78
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 6
+      dcerpc.req.stub_data_size: 64
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 32
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 34
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 79
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 7
+      dcerpc.req.stub_data_size: 68
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 32
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 37
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 80
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 3
+      dcerpc.req.stub_data_size: 180
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 60
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 39
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 81
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 3
+      dcerpc.req.stub_data_size: 64
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 84
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 41
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 82
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 6
+      dcerpc.req.stub_data_size: 64
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 32
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 43
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 83
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 6
+      dcerpc.req.stub_data_size: 64
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 32
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 45
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 84
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 7
+      dcerpc.req.stub_data_size: 68
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 32
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 49
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 85
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 3
+      dcerpc.req.stub_data_size: 180
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 60
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 53
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 86
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 3
+      dcerpc.req.stub_data_size: 64
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 84
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 55
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 87
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 6
+      dcerpc.req.stub_data_size: 64
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 32
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 57
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 88
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 6
+      dcerpc.req.stub_data_size: 64
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 32
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 59
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 89
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 7
+      dcerpc.req.stub_data_size: 68
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 32
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 63
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 90
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 3
+      dcerpc.req.stub_data_size: 180
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 60
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 66
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 91
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 3
+      dcerpc.req.stub_data_size: 64
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 84
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 68
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 92
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 6
+      dcerpc.req.stub_data_size: 64
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 32
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 70
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 94
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 7
+      dcerpc.req.stub_data_size: 68
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 32
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 76
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 95
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 3
+      dcerpc.req.stub_data_size: 180
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 60
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 79
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 96
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 3
+      dcerpc.req.stub_data_size: 64
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 88
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 82
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 97
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 6
+      dcerpc.req.stub_data_size: 64
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 32
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 84
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 98
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 6
+      dcerpc.req.stub_data_size: 64
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 32
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      pcap_cnt: 86
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 99
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 7
+      dcerpc.req.stub_data_size: 68
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 32
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.15
+      dest_port: 49353
+      event_type: dcerpc
+      proto: TCP
+      src_ip: 192.168.11.27
+      src_port: 1369
+- filter:
+    count: 1
+    match:
+      dcerpc.call_id: 9
+      dcerpc.req.frag_cnt: 1
+      dcerpc.req.opnum: 3
+      dcerpc.req.stub_data_size: 140
+      dcerpc.request: REQUEST
+      dcerpc.res.frag_cnt: 1
+      dcerpc.res.stub_data_size: 20
+      dcerpc.response: RESPONSE
+      dcerpc.rpc_version: '5.0'
+      dest_ip: 192.168.11.27
+      dest_port: 1178
+      event_type: dcerpc
+      proto: TCP
+      src_ip: 192.168.11.15
+      src_port: 49357
