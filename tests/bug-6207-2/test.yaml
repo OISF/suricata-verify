@@ -1,6 +1,3 @@
-requires:
-  min-version: 7
-
 args:
 - -k none
 
