@@ -22,3 +22,9 @@ checks:
       count: 0
       match:
         event_type: anomaly
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: stats
+        stats.ips.drop_reason.stream_midstream: 1
