@@ -30,3 +30,9 @@ checks:
       match:
         event_type: stats
         stats.tcp.midstream_pickups: 1
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: stats
+        stats.ips.drop_reason.flow_memcap: 1
