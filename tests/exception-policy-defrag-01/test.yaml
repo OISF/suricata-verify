@@ -34,3 +34,9 @@ checks:
         event_type: flow
         flow.action: drop
         proto: ICMP
+  - filter:
+      min-version: 1
+      count: 1
+      match:
+        event_type: stats
+        stats.ips.drop_reason.defrag_memcap: 1
