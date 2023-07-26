@@ -1186,7 +1186,7 @@ def main():
                     try:
                         with open(path, "r") as fcontents:
                             try:
-                                buf = fcontents.read().decode()
+                                buf = fcontents.read()
                                 print(buf)
                             except:
                                 print("    - [Not dumping file that won't utf-8 decode]")
