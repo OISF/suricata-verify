@@ -43,7 +43,7 @@ CUR_DIR = os.path.dirname(os.path.realpath(__file__))
 DEFAULT_TEST_DIR = os.path.join(CUR_DIR, "tests")
 
 # Fields to exclude from the filter block
-skip_fields = ["timestamp", "flow_id", "last_reload"]
+skip_fields = ["timestamp", "flow_id", "last_reload", "pkt_src"]
 
 
 def init_logger():
