@@ -1006,6 +1006,7 @@ def run_test(dirpath, args, cwd, suricata_config):
         check_args_fail()
         with lock:
             count_dict["failed"] += 1
+            failedLogs.append(dirpath)
     except Exception as err:
         print("===> {}: FAILED: Unexpected exception: {}".format(os.path.basename(dirpath), err))
         traceback.print_exc()
@@ -1014,6 +1015,7 @@ def run_test(dirpath, args, cwd, suricata_config):
         with lock:
             check_args['fail'] = 1
             count_dict["failed"] += 1
+            failedLogs.append(dirpath)
             raise TerminatePoolError()
 
 def run_mp(jobs, tests, dirpath, args, cwd, suricata_config):
