@@ -8,35 +8,7 @@ args:
 pcap:  ../detect-app-layer-protocol-02/input.pcap
 
 checks:
-  # checks for Suricata 6
   - filter:
-      lt-version: 7
-      count: 1
-      match:
-        pcap_cnt: 1
-        event_type: drop
-        alert.action: blocked
-        alert.signature_id: 1
-  - filter:
-      lt-version: 7
-      count: 1
-      match:
-        pcap_cnt: 1
-        event_type: alert
-        alert.action: blocked
-        alert.signature_id: 1
-  - filter:
-      lt-version: 7
-      count: 1
-      match:
-        pcap_cnt: 1
-        event_type: alert
-        alert.action: blocked
-        alert.signature_id: 2
-
-  # checks for Suricata 7
-  - filter:
-      min-version: 7
       count: 1
       match:
         event_type: alert
@@ -46,7 +18,6 @@ checks:
         verdict.reject-target: to_server
         verdict.reject: ["tcp-reset"]
   - filter:
-      min-version: 7
       count: 1
       match:
         event_type: alert
@@ -56,65 +27,55 @@ checks:
         verdict.reject-target: to_server
         verdict.reject: ["tcp-reset"]
   - filter:
-      min-version: 7
       count: 1
       match:
         event_type: drop
         pcap_cnt: 1
         verdict.action: drop
-        verdict.reject-target: to_server 
+        verdict.reject-target: to_server
         verdict.reject: ["tcp-reset"]
   - filter:
-      min-version: 7
       count: 0
       match:
         event_type: alert
         alert.signature_id: 3
         verdict.action: alert
   - filter:
-      min-version: 7
       count: 1
       match:
         event_type: drop
         pcap_cnt: 5
         verdict.action: drop
   - filter:
-      min-version: 7
       count: 1
       match:
         event_type: drop
         pcap_cnt: 6
         verdict.action: drop
   - filter:
-      min-version: 7
       count: 1
       match:
         event_type: drop
         pcap_cnt: 7
         verdict.action: drop
   - filter:
-      min-version: 7
       count: 1
       match:
         event_type: drop
         pcap_cnt: 8
         verdict.action: drop
   - filter:
-      min-version: 7
       count: 1
       match:
         event_type: drop
         pcap_cnt: 9
         verdict.action: drop
   - filter:
-      min-version: 7
       count: 1
       match:
         event_type: drop
         pcap_cnt: 10
         verdict.action: drop
-
-  # Checks valid for both
   - filter:
       count: 1
       match:

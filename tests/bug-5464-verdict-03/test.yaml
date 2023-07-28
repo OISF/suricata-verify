@@ -1,5 +1,4 @@
 requires:
-  min-version: 7
   features:
     - LIBNET1.1
 
