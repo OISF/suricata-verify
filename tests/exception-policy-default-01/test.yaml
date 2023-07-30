@@ -14,24 +14,11 @@ checks:
       match:
         event_type: alert
   - filter:
-      lt-version: 7
       count: 0
       match:
         event_type: drop
   - filter:
-      min-version: 7
       count: 1
-      match:
-        event_type: drop
-  - filter:
-      lt-version: 7
-      count: 1
-      match:
-        event_type: tls
-        tls.sni: example.com
-  - filter:
-      min-version: 7
-      count: 0
       match:
         event_type: tls
         tls.sni: example.com

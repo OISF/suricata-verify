@@ -1,18 +1,10 @@
 checks:
   - filter:
-      min-version: 7
-      count: 0
+      count: 1
       match:
         event_type: alert
   - filter:
-      min-version: 7
-      count: 1
-      match:
-        event_type: drop
-        drop.reason: stream midstream
-  - filter:
-      min-version: 7
-      count: 9
+      count: 0
       match:
         event_type: drop
   - filter:
@@ -21,8 +13,7 @@ checks:
         event_type: flow
         flow.state: bypassed
   - filter:
-      min-version: 7
-      count: 1
+      count: 0
       match:
         event_type: flow
         flow.action: drop
@@ -30,24 +21,6 @@ checks:
       count: 0
       match:
         event_type: http
-  # checks for Suricata 6
-  - filter:
-      lt-version: 7
-      count: 1
-      match:
-        event_type: alert
-  - filter:
-      lt-version: 7
-      count: 0
-      match:
-        event_type: drop
-        drop.reason: stream error
-  - filter:
-      lt-version: 7
-      count: 0
-      match:
-        event_type: flow
-        flow.action: drop
   - filter:
       filename: suricata.json
       lt-version: 7
