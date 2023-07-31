@@ -1,0 +1,24 @@
+command: |
+  ${SRCDIR}/src/suricata -c "${SRCDIR}/suricata.yaml" -l "${OUTPUT_DIR}" \
+   --set "threshold-file=${TEST_DIR}/../threshold.config" \
+   --set "classification-file="${SRCDIR}`[ -f ${SRCDIR}/etc/classification.config ] && printf '/etc'`/classification.config \
+   --set "reference-config-file="${SRCDIR}`[ -f ${SRCDIR}/etc/reference.config ] && printf '/etc'`/reference.config \
+   -S "${TEST_DIR}/../test.rules" \
+   --set "reputation-categories-file=${TEST_DIR}/../iprep-categories.txt" \
+   --set "default-reputation-path=$TEST_DIR" \
+   --set "reputation-files.0=${TEST_DIR}/iprep-data.txt" \
+   --engine-analysis
+
+checks:
+  - shell:
+      args: grep 'Loading reputation file' suricata.log | wc -l | xargs
+      expect: 1
+  - shell:
+      args: grep '1 rule files processed. 2 rules successfully loaded, 0 rules failed' suricata.log | wc -l | xargs
+      expect: 1
+  - shell:
+      args: grep '2 signatures processed' suricata.log | wc -l | xargs
+      expect: 1
+  - shell:
+      args: grep 'Error[:]' suricata.log | wc -l | xargs
+      expect: 0
