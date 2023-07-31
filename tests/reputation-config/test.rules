@@ -1,0 +1,2 @@
+alert ip any any -> any any (msg:"BadHosts: Some bad hosts have been detected"; iprep:any,BadHosts,>,30; sid:1; rev:1;)
+alert ip any any -> any any (msg:"Google: Some google host has been detected"; iprep:any,Google,>,30; sid:2; rev:1;)
