@@ -1,0 +1,7 @@
+alert tcp-pkt any any -> any any (tcp.flags:R,A; content:"Access Denied"; startswith; endswith; sid:1;)
+# FP as RST data is not part of the stream
+alert tcp any any -> any any (flow:only_stream; content:"Access Denied"; sid:2;)
+# TODO why is this not the same as sid 2?
+#alert tcp-stream any any -> any any (content:"Access Denied"; sid:3;)
+alert tcp any any -> any any (content:"Please Let Me In!"; sid:4;)
+alert tcp any any -> any any (content:"Please Let Me In!Access Denied"; sid:5;)
