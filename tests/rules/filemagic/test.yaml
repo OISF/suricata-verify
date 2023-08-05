@@ -136,10 +136,10 @@ checks:
     match:
       id: 12
       mpm.buffer: "file.magic"
-      mpm.pattern: "PDF"
+      mpm.pattern: "pdf"
       engines[0].name: "file.magic"
       engines[0].matches[0].name: "content"
-      engines[0].matches[0].content.pattern: "PDF"
+      engines[0].matches[0].content.pattern: "pdf"
       engines[0].matches[0].content.nocase: true
 - filter:
     filename: rules.json
@@ -147,9 +147,9 @@ checks:
     match:
       id: 13
       mpm.buffer: "file.magic"
-      mpm.pattern: "PDF"
+      mpm.pattern: "pdf"
       engines[0].name: "file.magic"
       engines[0].matches[0].name: "content"
-      engines[0].matches[0].content.pattern: "PDF"
+      engines[0].matches[0].content.pattern: "pdf"
       engines[0].matches[0].content.negated: true
       engines[0].matches[0].content.nocase: true
