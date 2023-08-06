@@ -2,7 +2,6 @@ requires:
   features:
     - HAVE_LIBJANSSON
     - MAGIC
-  min-version: 7
 
 pcap: ../filemagic-flowbits/pdf-dl.pcap
 
