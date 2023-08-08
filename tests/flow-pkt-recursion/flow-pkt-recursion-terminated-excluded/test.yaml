@@ -1,0 +1,19 @@
+# Exclude recursion-level from flow matching
+# Re-use the pcap from the middleware-included test.
+command: |
+  ${SRCDIR}/src/suricata -c "${SRCDIR}/suricata.yaml" -l "${OUTPUT_DIR}" \
+   -r "${TEST_DIR}/../flow-pkt-recursion-terminated-included/test.pcap" \
+   --set "threshold-file=${SRCDIR}/threshold.config" \
+   --set "classification-file=${SRCDIR}`[ -f ${SRCDIR}/etc/classification.config ] && printf '/etc'`/classification.config" \
+   --set "reference-config-file=${SRCDIR}`[ -f ${SRCDIR}/etc/reference.config ] && printf '/etc'`/reference.config" \
+   --set 'recursion-level.use-for-tracking=false'
+
+checks:
+  # All packets should be caught as being in one flow
+  - filter:
+      count: 2
+      match:
+        event_type: flow
+        proto: ICMP
+        flow.pkts_toserver: 1
+        flow.pkts_toclient: 1
