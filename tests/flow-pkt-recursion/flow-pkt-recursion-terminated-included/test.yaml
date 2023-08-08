@@ -1,0 +1,9 @@
+checks:
+  # None of the flows are joined due to different recursion levels
+  - filter:
+      count: 4
+      match:
+        event_type: flow
+        proto: ICMP
+        flow.pkts_toserver: 1
+        flow.pkts_toclient: 0
