@@ -1,0 +1,11 @@
+requires:
+  min-version: 8
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        proto: ICMP
+        flow.pkts_toserver: 1
+        flow.pkts_toclient: 1
