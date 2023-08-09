@@ -1,0 +1,39 @@
+%YAML 1.1
+---
+
+multi-detect:
+  enabled: yes
+  selector: vlan
+  loaders: 4
+
+  tenants:
+  - tenant:
+    id: 1
+    yaml: a.yaml
+  - tenant:
+    id: 2
+    yaml: b.yaml
+  - tenant:
+    id: 3
+    yaml: c.yaml
+  - tenant:
+    id: 4
+    yaml: d.yaml
+
+  mappings:
+  - vlan:
+    vlan-id: 1000
+    tenant-id: 1
+  - vlan:
+    vlan-id: 2000
+    tenant-id: 2
+  - vlan:
+    vlan-id: 1112
+    tenant-id: 3
+  - vlan:
+    vlan-id: 1111
+    tenant-id: 4
+
+engine-analysis:
+  rules-fast-pattern: yes
+  rules: yes

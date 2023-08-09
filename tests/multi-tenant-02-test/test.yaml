@@ -1,0 +1,11 @@
+requires:
+  pcap: false
+
+args:
+- --set multi-detect.config-path=${TEST_DIR}
+- --set multi-detect.1.default-rule-path=${TEST_DIR}
+- --set multi-detect.2.default-rule-path=${TEST_DIR}
+- --set multi-detect.3.default-rule-path=${TEST_DIR}
+- --set multi-detect.4.default-rule-path=${TEST_DIR}
+- -T
+- -vv
