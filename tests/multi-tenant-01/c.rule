@@ -1,0 +1,1 @@
+alert http any any -> any any (flowbits:set,c; http.method; content:"POST"; sid:3;)
