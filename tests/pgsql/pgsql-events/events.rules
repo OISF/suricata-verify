@@ -1,0 +1,3 @@
+alert pgsql any any -> any 5432 (msg: "PGSQL event!"; app-layer-event:pgsql.malformed_data; sid: 1; rev: 1;)
+alert pgsql any any -> any 5432 (msg: "PGSQL event!"; app-layer-event:pgsql.truncated_data; sid: 2; rev: 1;)
+alert pgsql any any -> any 5432 (msg: "PGSQL event!"; app-layer-event:pgsql.invalid_length; sid: 3; rev: 1;)
