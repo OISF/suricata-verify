@@ -1,3 +1,5 @@
+pcap: ../../datasets/datasets-parent-path/one-packet.pcap
+
 args:
   - -vvv
 

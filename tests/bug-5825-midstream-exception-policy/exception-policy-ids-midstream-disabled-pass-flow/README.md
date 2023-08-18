@@ -10,5 +10,5 @@ We expect to see no alerts nor ``http`` events logged, as the flow won't be insp
 
 # Pcap
 
-Pcap comes from the test ``exception-policy-midstream-03`` and is the result of a
+Pcap comes from the test ``alert-testmyids-midstream5`` and is the result of a
 curl to www.testmyids.com.

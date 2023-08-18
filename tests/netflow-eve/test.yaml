@@ -1,3 +1,5 @@
+pcap: ../eve-metadata/testmyids.pcap
+
 checks:
 - filter:
     count: 1

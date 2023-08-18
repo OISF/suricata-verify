@@ -1,3 +1,5 @@
+pcap: ../exception-policy-midstream-06/input-http-ACK.pcap
+
 args:
 - --simulate-ips
 - --set stream.midstream=true

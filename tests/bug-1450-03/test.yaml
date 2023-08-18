@@ -1,3 +1,5 @@
+pcap: ../bug-1450-04/tls_DER-incomplete-header.pcap
+
 requires:
   features:
     - HAVE_LIBJANSSON

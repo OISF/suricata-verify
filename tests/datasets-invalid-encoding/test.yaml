@@ -2,7 +2,7 @@ requires:
   files:
     - src/datasets.c
 
-pcap: ../datasets-02-load/input.pcap
+pcap: ../flowbit-oring/input.pcap
 
 args:
  - -k none

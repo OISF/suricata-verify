@@ -1,3 +1,5 @@
+pcap: ../flowbit-oring/input.pcap
+
 requires:
   features:
     - HAVE_LUA

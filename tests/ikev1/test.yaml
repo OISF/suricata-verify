@@ -1,3 +1,5 @@
+pcap: ../ikev1-rules/ikev1-isakmp-main-mode.pcap
+
 requires:
   features:
     - HAVE_LIBJANSSON

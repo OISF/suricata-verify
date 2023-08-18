@@ -1,3 +1,5 @@
+pcap: ../lua-output-http/input.pcap
+
 requires:
   features:
     - HAVE_LUA

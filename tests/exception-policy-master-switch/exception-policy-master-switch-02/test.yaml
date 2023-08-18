@@ -1,3 +1,5 @@
+pcap: ../../alert-testmyids-midstream5/input.pcap
+
 requires:
   min-version: 7
 
