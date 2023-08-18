@@ -2,7 +2,7 @@ args:
 - --runmode=single
 - -k none
 
-pcap: ../smtp-file-data-02/input.pcap
+pcap: ../bug-3616-smtp/input.pcap
 
 checks:
   - filter:

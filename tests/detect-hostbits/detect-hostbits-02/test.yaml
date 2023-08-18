@@ -1,3 +1,5 @@
+pcap: ../../detect-flowbits/input.pcap
+
 args:
 - -k none
 

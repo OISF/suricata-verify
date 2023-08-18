@@ -11,5 +11,5 @@ Flow will be bypassed.
 
 # Pcap
 
-Pcap comes from the test ``exception-policy-midstream-03`` and is the result of a
+Pcap comes from the test ``alert-testmyids-midstream5`` and is the result of a
 curl to www.testmyids.com.

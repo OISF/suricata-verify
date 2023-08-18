@@ -1,3 +1,5 @@
+pcap: ../decode-vntag-03/input.pcap
+
 requires:
 
   min-version: 6.0.3

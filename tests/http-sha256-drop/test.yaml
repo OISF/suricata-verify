@@ -1,3 +1,5 @@
+pcap: ../bug-4663/input.pcap
+
 requires:
   features:
     - HAVE_LIBJANSSON

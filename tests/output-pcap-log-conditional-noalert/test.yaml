@@ -1,3 +1,5 @@
+pcap: ../lua-output-http/input.pcap
+
 checks:
   - shell:
       args: test ! -e log.pcap.0

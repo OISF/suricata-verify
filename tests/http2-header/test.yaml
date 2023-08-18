@@ -1,7 +1,7 @@
 requires:
   min-version: 7
 
-pcap: ../http2-basic/input.pcap
+pcap: ../http2-keywords/input.pcap
 
 # disables checksum verification
 args:

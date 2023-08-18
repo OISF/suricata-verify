@@ -1,7 +1,7 @@
 requires:
   lt-version: 7
 
-pcap: ../dns-udp-eve-v2-dig/input.pcap
+pcap: ../cond-log-dns-dig//input.pcap
 
 checks:
 - filter:

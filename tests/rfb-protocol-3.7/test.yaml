@@ -1,3 +1,5 @@
+pcap: ../rfb-rules/00-vnc-openwall-3.7.pcap
+
 requires:
   features:
     - HAVE_LIBJANSSON
