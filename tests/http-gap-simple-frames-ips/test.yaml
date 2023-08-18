@@ -1,3 +1,5 @@
+pcap: ../http-gap-simple/input.pcap
+
 requires:
   features:
     - HAVE_LIBJANSSON

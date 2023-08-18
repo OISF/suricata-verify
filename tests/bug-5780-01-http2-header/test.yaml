@@ -1,3 +1,5 @@
+pcap: ../bug-5929-02/http2_multiple_headers.pcap
+
 requires:
   min-version: 7
 

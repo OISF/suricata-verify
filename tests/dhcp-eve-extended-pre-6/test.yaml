@@ -1,3 +1,5 @@
+pcap: ../dhcp-eve-extended/input.pcap
+
 requires:
   lt-version: 6.0.0
   features:

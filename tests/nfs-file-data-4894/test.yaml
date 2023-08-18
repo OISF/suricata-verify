@@ -7,7 +7,7 @@ command: |
   ${SRCDIR}/src/suricata --set classification-file="${SRCDIR}/etc/classification.config"    \
       --set reference-config-file="${SRCDIR}/etc/reference.config" -l ${OUTPUT_DIR}         \
       --set threshold-file="${TEST_DIR}/threshold.config"                                   \
-      -c "${SRCDIR}/suricata.yaml" -r ${TEST_DIR}/input.pcap -S ${TEST_DIR}/test.rules 
+      -c "${SRCDIR}/suricata.yaml" -r ../detect-itype-prefilter/icmpv4-ping.pcap -S ${TEST_DIR}/test.rules 
 
 checks:
     - shell:

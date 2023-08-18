@@ -3,7 +3,7 @@ requires:
     - HAVE_LIBJANSSON
     - GeoIP2
 
-pcap: ../alert-testmyids/input.pcap
+pcap: ../flowbit-oring/input.pcap
 
 checks:
 

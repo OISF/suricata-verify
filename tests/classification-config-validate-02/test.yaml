@@ -1,8 +1,10 @@
+pcap: ../detect-pcrexform-01/input.pcap
+
 requires:
     min-version: 7
 
 command: |
-  ${SRCDIR}/src/suricata -v --set classification-file="${TEST_DIR}/classification.config" -l ${OUTPUT_DIR} -c ${SRCDIR}/suricata.yaml -S ${TEST_DIR}/test.rules -r ${TEST_DIR}/input.pcap
+  ${SRCDIR}/src/suricata -v --set classification-file="${TEST_DIR}/classification.config" -l ${OUTPUT_DIR} -c ${SRCDIR}/suricata.yaml -S ${TEST_DIR}/test.rules -r ../detect-pcrexform-01/input.pcap
 
 checks:
 

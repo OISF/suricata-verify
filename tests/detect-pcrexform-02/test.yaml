@@ -1,3 +1,5 @@
+pcap: ../detect-pcrexform-01/input.pcap
+
 requires:
 
   files:

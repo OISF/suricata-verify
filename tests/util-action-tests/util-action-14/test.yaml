@@ -1,3 +1,5 @@
+pcap: ../../util-action-tests/util-action-13/input.pcap
+
 args:
 - -k none
 - --simulate-ips

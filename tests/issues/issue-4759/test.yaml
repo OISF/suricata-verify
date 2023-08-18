@@ -1,3 +1,5 @@
+pcap: ../../issues/issue-4759.1/tcpdns.pcap
+
 checks:
   - filter:
       count: 2

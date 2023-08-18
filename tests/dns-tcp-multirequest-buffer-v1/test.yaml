@@ -1,3 +1,5 @@
+pcap: ../dns-tcp-multirequest-buffer/dns-tcp-multirequest-buffer.pcap
+
 requires:
   features:
     - HAVE_LIBJANSSON

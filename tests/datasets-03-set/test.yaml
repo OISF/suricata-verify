@@ -1,3 +1,5 @@
+pcap: ../datasets-05-state/input.pcap
+
 requires:
   features:
     - HAVE_LIBJANSSON
