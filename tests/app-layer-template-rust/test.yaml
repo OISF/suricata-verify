@@ -1,3 +1,5 @@
+pcap: ../app-layer-template/input.pcap
+
 # *** Add configuration here ***
 
 requires:

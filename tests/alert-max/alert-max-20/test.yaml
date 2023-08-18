@@ -1,3 +1,5 @@
+pcap: ../../alert-max/alert-max-default/input.pcap
+
 args:
 - -k none
 

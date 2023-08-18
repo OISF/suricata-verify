@@ -1,3 +1,5 @@
+pcap: ../bug-3616-ips/input.pcap
+
 requires:
     min-version: 6
     pcap: false

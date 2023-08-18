@@ -1,3 +1,5 @@
+pcap: ../tcp-fastopen-01/tfo.pcap
+
 args:
 - -k none
 

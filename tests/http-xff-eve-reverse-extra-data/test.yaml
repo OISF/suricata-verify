@@ -1,3 +1,5 @@
+pcap: ../http-xff-eve-reverse-overwrite/test.pcap
+
 args:
   - -k none
 

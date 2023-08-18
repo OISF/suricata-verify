@@ -1,3 +1,5 @@
+pcap: ../dns-udp-z-flag-fp/suricatafpdnsdecoder.pcap
+
 requires:
   min-version: 6
 

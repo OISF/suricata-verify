@@ -1,3 +1,5 @@
+pcap: ../bug-5162/input.pcap
+
 args:
 - -k none
 

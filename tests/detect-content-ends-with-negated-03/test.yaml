@@ -1,3 +1,5 @@
+pcap: ../detect-content-ends-with-negated-01/input.pcap
+
 requires:
   gt-version: 6.0.11
 

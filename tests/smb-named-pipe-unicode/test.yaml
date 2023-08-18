@@ -1,3 +1,5 @@
+pcap: ../output-eve-smb-01/input.pcap
+
 requires:
   features:
     - HAVE_LIBJANSSON
