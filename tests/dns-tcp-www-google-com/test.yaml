@@ -1,3 +1,5 @@
+pcap: ../dns-tcp-www-google-com-v1/dns.pcap
+
 requires:
   features:
     - HAVE_LIBJANSSON

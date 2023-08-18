@@ -1,3 +1,5 @@
+pcap: ../detect-bytetest-03/input.pcap
+
 requires:
   min-version: 7
 

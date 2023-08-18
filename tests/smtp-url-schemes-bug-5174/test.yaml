@@ -1,3 +1,5 @@
+pcap: ../smtp-extract-url-schemes/input.pcap
+
 checks:
   - filter:
       count: 1

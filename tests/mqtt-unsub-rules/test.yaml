@@ -1,3 +1,5 @@
+pcap: ../mqtt5-unsub-userpass/input.pcap
+
 requires:
   features:
     - HAVE_LIBJANSSON

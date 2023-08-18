@@ -1,3 +1,5 @@
+pcap: ../smb2-03-rule/smb2.pcap
+
 requires:
     min-version: 7
 

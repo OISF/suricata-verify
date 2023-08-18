@@ -1,3 +1,5 @@
+pcap: ../dcerpc/dcerpc-3109/input.pcap
+
 args:
 - --simulate-ips
 - --set stream.midstream=true

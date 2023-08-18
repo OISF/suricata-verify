@@ -1,3 +1,5 @@
+pcap: ../bug-1401-03/80000000-037-PTP_Example_IPv4_HTTP_Session-PUBLIC-tp-01.pcap
+
 requires:
   features:
     - HAVE_LIBJANSSON

@@ -1,3 +1,5 @@
+pcap: ../lua-output-http/input.pcap
+
 checks:
   - file-compare:
       filename: tcp-data.log

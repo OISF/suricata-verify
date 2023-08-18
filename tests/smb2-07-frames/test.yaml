@@ -1,3 +1,5 @@
+pcap: ../smb2-07/20171220_smb_psexec_add_user.pcap
+
 requires:
   min-version: 7
 
