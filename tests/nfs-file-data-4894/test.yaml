@@ -1,3 +1,5 @@
+pcap: ../detect-itype-prefilter/icmpv4-ping.pcap
+
 requires:
     lt-version: 7
 

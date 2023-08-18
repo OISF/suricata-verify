@@ -1,3 +1,5 @@
+pcap: ../smb3-01/input.pcap
+
 args:
 - --simulate-ips
 - --set stream.midstream=true

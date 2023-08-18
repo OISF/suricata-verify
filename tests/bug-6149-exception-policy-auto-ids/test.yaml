@@ -1,7 +1,7 @@
 requires:
   min-version: 7
 
-pcap: ../tls/tls-ja3s/input.pcap
+pcap: ../tls/tls-certs-alert/input.pcap
 
 args:
 - -k none

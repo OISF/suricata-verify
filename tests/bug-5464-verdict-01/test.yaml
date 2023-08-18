@@ -5,7 +5,7 @@ requires:
 args:
 - --simulate-ips
 
-pcap:  ../detect-app-layer-protocol-02/input.pcap
+pcap:  ../flowbit-oring/input.pcap
 
 checks:
   - filter:

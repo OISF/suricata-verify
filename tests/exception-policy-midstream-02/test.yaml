@@ -1,3 +1,5 @@
+pcap: ../tcp-async-01/input.pcap
+
 args:
 - --simulate-ips
 - --set stream.async-oneside=true

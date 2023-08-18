@@ -1,3 +1,5 @@
+pcap: ../mqtt-limit-2/input.pcap
+
 requires:
   features:
     - HAVE_LIBJANSSON
