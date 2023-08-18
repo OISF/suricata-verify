@@ -4,7 +4,7 @@ requires:
 args:
 - --set stream.midstream=true
 
-pcap: ../detect-bytetest-04/input.pcap
+pcap: ../detect-bytetest-03/input.pcap
 
 checks:
     - shell:

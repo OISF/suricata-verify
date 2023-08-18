@@ -1,3 +1,5 @@
+pcap: ../cond-log-dns-dig/input.pcap
+
 checks:
 - filter:
     count: 2

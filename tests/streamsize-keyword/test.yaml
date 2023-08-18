@@ -1,3 +1,5 @@
+pcap: ../smb-eicar-file/input.pcap
+
 # disables checksum verification
 args:
 - -k none

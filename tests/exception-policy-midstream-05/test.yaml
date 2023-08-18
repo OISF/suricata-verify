@@ -1,3 +1,5 @@
+pcap: ../alert-testmyids-midstream5/input.pcap
+
 args:
 - --simulate-ips
 - --set stream.midstream-policy=bypass

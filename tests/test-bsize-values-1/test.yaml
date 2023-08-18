@@ -1,3 +1,5 @@
+pcap: ../test-bsize-values-2/input.pcap
+
 args:
 - -k none
 

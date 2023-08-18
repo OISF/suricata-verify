@@ -1,4 +1,4 @@
-pcap: ../../exception-policy-midstream-03/input.pcap
+pcap: ../../alert-testmyids-midstream5/input.pcap
 
 args:
 - --simulate-ips

@@ -4,7 +4,7 @@ requires:
     - DEBUG
   files:
     - src/util-exception-policy.c
-pcap: ../tls/tls-ja3s/input.pcap
+pcap: ../tls/tls-certs-alert/input.pcap
 args:
 - --simulate-ips
 - -k none
