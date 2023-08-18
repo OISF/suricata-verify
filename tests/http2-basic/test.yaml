@@ -1,3 +1,5 @@
+pcap: ../http2-keywords/input.pcap
+
 requires:
   features:
     - HAVE_LIBJANSSON

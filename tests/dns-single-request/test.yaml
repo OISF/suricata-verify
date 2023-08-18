@@ -1,3 +1,5 @@
+pcap: ../dns-single-request-v1/input.pcap
+
 requires:
   features:
     - HAVE_LIBJANSSON

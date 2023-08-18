@@ -1,3 +1,5 @@
+pcap: ../bug-5066-iponly-cidr-ordering-01/test-limit.pcap
+
 requirements:
   min-version: 6
 
