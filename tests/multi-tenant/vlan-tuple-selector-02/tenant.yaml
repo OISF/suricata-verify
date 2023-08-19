@@ -1,0 +1,15 @@
+%YAML 1.1
+---
+
+multi-detect:
+    enabled: on
+    default: on
+    selector: vlan-tuple
+
+    tenants:
+    - id: 1
+      yaml: tenant-1.yaml
+
+    mappings:
+    - vlan-tuple: [1011, 1000]
+      tenant-id: 1
