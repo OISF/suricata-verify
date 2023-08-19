@@ -1,6 +1,3 @@
-requires:
-  min-version: 7
-
 checks:
   # Check that we only have requests and responses for HTTPS records.
 - filter:
