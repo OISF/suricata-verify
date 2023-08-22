@@ -24,7 +24,7 @@ checks:
       count: 1
       match:
         event_type: drop
-        drop.reason: "stream memcap"
+        drop.reason: "stream reassembly"
   - filter:
       count: 0
       match:
@@ -49,3 +49,8 @@ checks:
       match:
         event_type: flow
         flow.action: drop
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.ips.drop_reason.stream_reassembly: 1
