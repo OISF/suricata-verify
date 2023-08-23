@@ -1,0 +1,28 @@
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      community_id: 1:IwiTNfuO7aCaamMijl+7/X9uLx0=
+      dest_ip: 172.217.14.206
+      dest_port: 443
+      event_type: tls
+      pcap_cnt: 7
+      proto: TCP
+      src_ip: 172.26.0.39
+      src_port: 35958
+      tls.sni: ipv4.google.com
+      tls.version: TLS 1.3
+- filter:
+    count: 1
+    match:
+      app_proto: tls
+      community_id: 1:IwiTNfuO7aCaamMijl+7/X9uLx0=
+      dest_ip: 172.217.14.206
+      dest_port: 443
+      event_type: flow
+      proto: TCP
+      src_ip: 172.26.0.39
+      src_port: 35958
