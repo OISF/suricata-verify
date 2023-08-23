@@ -1,0 +1,17 @@
+requires:
+  min-version: 6
+
+pcap: false
+exit-code: 1
+args:
+  - --engine-analysis
+
+checks:
+  - shell:
+      args: grep -c 'user name cannot be set to an empty value' stderr
+      expect: 1
+      min-version: 7
+  - shell:
+      args: grep -c 'unable to get the user ID' stderr
+      expect: 1
+      version: 6
