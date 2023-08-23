@@ -1,0 +1,83 @@
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      community_id: 1:ptJhMvufAbB5nLDNW77cB800wFM=
+      dest_ip: 2607:f8b0:400a:0800:0000:0000:0000:200e
+      dest_port: 443
+      event_type: tls
+      pcap_cnt: 41
+      proto: TCP
+      src_ip: 2600:1f13:00f8:d400:03a6:303c:e011:18eb
+      src_port: 60202
+      tls.sni: ipv6.google.com
+      tls.version: TLS 1.3
+- filter:
+    count: 1
+    match:
+      community_id: 1:PGf+a0eBbs1OhuPtJmsF0Sm51v4=
+      dest_ip: 2001:4860:4860:0000:0000:0000:0000:8888
+      dest_port: 443
+      event_type: tls
+      pcap_cnt: 7
+      proto: TCP
+      src_ip: 2600:1f13:00f8:d400:03a6:303c:e011:18eb
+      src_port: 33892
+      tls.sni: dns.google
+      tls.version: TLS 1.3
+- filter:
+    count: 1
+    match:
+      app_proto: tls
+      community_id: 1:PGf+a0eBbs1OhuPtJmsF0Sm51v4=
+      dest_ip: 2001:4860:4860:0000:0000:0000:0000:8888
+      dest_port: 443
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 7122
+      flow.bytes_toserver: 2303
+      flow.pkts_toclient: 17
+      flow.pkts_toserver: 17
+      flow.reason: shutdown
+      flow.state: established
+      proto: TCP
+      src_ip: 2600:1f13:00f8:d400:03a6:303c:e011:18eb
+      src_port: 33892
+      tcp.ack: true
+      tcp.psh: true
+      tcp.state: established
+      tcp.syn: true
+      tcp.tcp_flags: 1a
+      tcp.tcp_flags_tc: 1a
+      tcp.tcp_flags_ts: 1a
+- filter:
+    count: 1
+    match:
+      app_proto: tls
+      community_id: 1:ptJhMvufAbB5nLDNW77cB800wFM=
+      dest_ip: 2607:f8b0:400a:0800:0000:0000:0000:200e
+      dest_port: 443
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 28862
+      flow.bytes_toserver: 2439
+      flow.pkts_toclient: 18
+      flow.pkts_toserver: 18
+      flow.reason: shutdown
+      flow.state: closed
+      proto: TCP
+      src_ip: 2600:1f13:00f8:d400:03a6:303c:e011:18eb
+      src_port: 60202
+      tcp.ack: true
+      tcp.fin: true
+      tcp.psh: true
+      tcp.state: closed
+      tcp.syn: true
+      tcp.tcp_flags: 1b
+      tcp.tcp_flags_tc: 1b
+      tcp.tcp_flags_ts: 1b
