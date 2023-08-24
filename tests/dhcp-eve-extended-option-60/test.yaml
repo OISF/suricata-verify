@@ -1,0 +1,38 @@
+requires:
+  min-version: 7
+
+checks:
+- filter:
+    count: 1
+    match:
+      dest_port: 67
+      dhcp.id: 3759982360
+      dhcp.params[0]: subnet_mask
+      dhcp.params[1]: domain
+      dhcp.params[2]: router
+      dhcp.params[3]: dns_server
+      dhcp.type: request
+      dhcp.vendor_class_identifier: MSFT 5.0
+      event_type: dhcp
+      pcap_cnt: 1
+      proto: UDP
+      src_ip: 0.0.0.0
+      src_port: 68
+- filter:
+    count: 1
+    match:
+      app_proto: dhcp
+      dest_ip: 255.255.255.255
+      dest_port: 67
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 0
+      flow.bytes_toserver: 356
+      flow.pkts_toclient: 0
+      flow.pkts_toserver: 1
+      flow.reason: shutdown
+      flow.state: new
+      proto: UDP
+      src_ip: 0.0.0.0
+      src_port: 68
