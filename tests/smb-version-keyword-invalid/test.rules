@@ -1,0 +1,1 @@
+alert smb any any -> any any (msg:"Two smb version declarations"; flow:established; smb.version:2; smb.version:1; sid:1;)
