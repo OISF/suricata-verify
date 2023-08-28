@@ -1,0 +1,14 @@
+requires:
+  min-version: 7
+
+args:
+- -k none
+
+pcap: ../smb-version-keyword/input.pcap
+
+checks:
+- shell:
+    args: grep "Can't use 2 or more smb.version declarations" suricata.log | wc -l | xargs
+    expect: 1
+
+exit-code: 1

@@ -1,3 +1,0 @@
-
-alert tcp any any -> any any (msg:"SMB1 Request"; smb.version:1;sid:1;)
-alert tcp any any -> any any (msg:"SMB2 Request"; smb.version:2;sid:2;)

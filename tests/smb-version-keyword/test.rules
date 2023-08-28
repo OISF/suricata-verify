@@ -1,0 +1,2 @@
+alert smb any any -> any any (msg:"SMBv1 Request"; smb.version:1; sid:1;)
+alert smb any any -> any any (msg:"SMBv2 Request"; smb.version:2; sid:2;)
