@@ -35,7 +35,7 @@ checks:
         flow.action: drop
         proto: ICMP
   - filter:
-      min-version: 1
+      min-version: 7
       count: 1
       match:
         event_type: stats
