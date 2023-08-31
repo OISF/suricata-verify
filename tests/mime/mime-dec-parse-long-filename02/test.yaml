@@ -1,0 +1,71 @@
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      anomaly.app_proto: smtp
+      anomaly.event: APPLAYER_DETECT_PROTOCOL_ONLY_ONE_DIRECTION
+      anomaly.layer: proto_detect
+      anomaly.type: applayer
+      dest_ip: 127.0.0.1
+      dest_port: 39202
+      event_type: anomaly
+      pcap_cnt: 6
+      proto: TCP
+      src_ip: 127.0.0.1
+      src_port: 25
+- filter:
+    count: 1
+    match:
+      dest_ip: 127.0.0.1
+      dest_port: 25
+      email.attachment[0]: 12characters12characters12characters.exe
+      email.from: toto <toto@gmail.com>
+      email.status: PARSE_DONE
+      email.to[0]: 172.16.92.2@linuxbox
+      event_type: smtp
+      pcap_cnt: 14
+      proto: TCP
+      smtp.helo: linuxbox
+      smtp.mail_from: <toto@gmail.com>
+      smtp.rcpt_to[0]: <172.16.92.2@linuxbox>
+      src_ip: 127.0.0.1
+      src_port: 39202
+      tx_id: 0
+- filter:
+    count: 1
+    match:
+      app_proto: smtp
+      dest_ip: 127.0.0.1
+      dest_port: 25
+      email.attachment[0]: 12characters12characters12characters.exe
+      email.from: toto <toto@gmail.com>
+      email.status: PARSE_DONE
+      email.to[0]: 172.16.92.2@linuxbox
+      event_type: fileinfo
+      fileinfo.filename: 12characters12characters12characters.exe
+      fileinfo.gaps: false
+      fileinfo.size: 25
+      fileinfo.state: CLOSED
+      fileinfo.stored: false
+      fileinfo.tx_id: 0
+      pcap_cnt: 15
+      proto: TCP
+      smtp.helo: linuxbox
+      smtp.mail_from: <toto@gmail.com>
+      smtp.rcpt_to[0]: <172.16.92.2@linuxbox>
+      src_ip: 127.0.0.1
+      src_port: 39202
+- filter:
+    count: 1
+    match:
+      dest_ip: 127.0.0.1
+      dest_port: 25
+      event_type: smtp
+      proto: TCP
+      smtp.helo: linuxbox
+      src_ip: 127.0.0.1
+      src_port: 39202
+      tx_id: 1
