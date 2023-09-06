@@ -1,0 +1,13 @@
+pcap: ../test.pcap
+
+args:
+- --set flow.memcap-policy=drop-flow
+- --set flow.prealloc=0
+- --set flow.memcap=3kb
+- --set flow.hash-size=32
+- --set flow.force-reuse=true
+
+checks:
+  - shell:
+      args: grep -q 'flow.get_used \|flow.get_used_eval ' stats.log && printf '1\n' || printf '0\n'
+      expect: 1
