@@ -1,0 +1,23 @@
+requires:
+  min-version: 8
+
+pcap: ../test.pcap
+
+args:
+- --set flow.memcap-policy=drop-flow
+- --set flow.prealloc=0
+- --set flow.memcap=4kb
+- --set flow.hash-size=32
+- --set flow.force-reuse=true
+
+checks:
+  - filter:
+      count: 0
+      event_type: stats
+      match:
+        stats.flow.get_used: 0
+  - filter:
+      count: 0
+      event_type: stats
+      match:
+        stats.flow.get_used_eval: 0
