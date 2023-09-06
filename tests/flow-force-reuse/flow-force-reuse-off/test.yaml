@@ -1,0 +1,16 @@
+pcap: ../test.pcap
+
+args:
+- --set flow.memcap-policy=drop-flow
+- --set flow.prealloc=0
+- --set flow.memcap=3kb
+- --set flow.hash-size=32
+- --set flow.force-reuse=false
+
+checks:
+  - shell:
+      args: grep 'flow.memcap ' stats.log | wc -l
+      expect: 1
+  - shell:
+      args: grep 'flow.get_used ' stats.log | wc -l
+      expect: 0
