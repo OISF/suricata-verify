@@ -1,0 +1,24 @@
+requires:
+  min-version: 7
+
+pcap: false
+
+args:
+  - --dump-config
+
+checks:
+  - shell:
+      args: grep '^af-packet.0 = interface' stdout | wc -l
+      expect: 1
+
+  - shell:
+      args: grep '^af-packet.0.interface = enp10s0' stdout | wc -l
+      expect: 1
+
+  - shell:
+      args: grep 'foobar.af-packet.0 = interface' stdout | wc -l
+      expect: 1
+
+  - shell:
+      args: grep 'foobar.af-packet.0.interface = enp10s0' stdout | wc -l
+      expect: 1
