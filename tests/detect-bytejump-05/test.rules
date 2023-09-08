@@ -1,0 +1,3 @@
+drop tcp any any -> any any ( msg:"neg post_offset: buffer start"; rev:1; content:"|0A 95 00 20|"; byte_jump:0,0,relative,post_offset -8; pcre:"/\x4e\x53\x4c\x4f/R"; sid:1; )
+drop tcp any any -> any any ( msg:"neg post_offset: before buffer start #1"; rev:1; content:"|0A 95 00 20|"; byte_jump:0,0,relative,post_offset -10; pcre:"/\x4e\x53\x4c\x4f/R"; sid:2; )
+drop tcp any any -> any any ( msg:"neg post_offset: before buffer start #2"; rev:1; content:"|0A 95 00 20|"; byte_jump:0,0,relative,post_offset -10; sid:3; )
