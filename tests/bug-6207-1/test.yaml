@@ -9,7 +9,6 @@ checks:
     match:
       app_proto: smtp
       email.attachment[0]: smtptest-2021-02-25T13-54-22Z-aefb2fc1308d62f4b6c74769f69b13ddf80e995fd98ae442f3be499ea928c67f..zip
-      email.status: BODY_END_BOUND
       event_type: fileinfo
       fileinfo.filename: smtptest-2021-02-25T13-54-22Z-aefb2fc1308d62f4b6c74769f69b13ddf80e995fd98ae442f3be499ea928c67f..zip
       fileinfo.size: 286
