@@ -1,0 +1,78 @@
+requires:
+    min-version: 7.0.0
+    pcap: false
+
+args:
+    - --engine-analysis
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 1
+      lists.packet.matches[0].name: "ipopts"
+      lists.packet.matches[0].ipopts.option: "rr"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 2
+      lists.packet.matches[0].name: "ipopts"
+      lists.packet.matches[0].ipopts.option: "eol"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 3
+      lists.packet.matches[0].name: "ipopts"
+      lists.packet.matches[0].ipopts.option: "nop"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 4
+      lists.packet.matches[0].name: "ipopts"
+      lists.packet.matches[0].ipopts.option: "ts"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 5
+      lists.packet.matches[0].name: "ipopts"
+      lists.packet.matches[0].ipopts.option: "sec"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 6
+      lists.packet.matches[0].name: "ipopts"
+      lists.packet.matches[0].ipopts.option: "esec"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 7
+      lists.packet.matches[0].name: "ipopts"
+      lists.packet.matches[0].ipopts.option: "lsrr"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 8
+      lists.packet.matches[0].name: "ipopts"
+      lists.packet.matches[0].ipopts.option: "ssrr"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 9
+      lists.packet.matches[0].name: "ipopts"
+      lists.packet.matches[0].ipopts.option: "satid"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 10
+      lists.packet.matches[0].name: "ipopts"
+      lists.packet.matches[0].ipopts.option: "any"
