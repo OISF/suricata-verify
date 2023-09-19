@@ -1,4 +1,5 @@
 requires:
+  min-version: 7
   features:
     - DEBUG
   files:

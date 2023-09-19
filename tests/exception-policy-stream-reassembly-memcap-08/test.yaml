@@ -1,5 +1,5 @@
 requires:
-  min-version: 7
+  lt-version: 7
   features:
     - DEBUG
   files:
@@ -49,8 +49,3 @@ checks:
       match:
         event_type: flow
         flow.action: drop
-  - filter:
-      count: 1
-      match:
-        event_type: stats
-        stats.ips.drop_reason.stream_reassembly: 1
