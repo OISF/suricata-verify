@@ -1,0 +1,15 @@
+requires:
+  min-version: 7
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: fileinfo
+        fileinfo.size: 326976
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.size: 63891
+        fileinfo.state: TRUNCATED
