@@ -1,0 +1,9 @@
+requires:
+  min-version: 7
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow 
+        app_proto: pop3
