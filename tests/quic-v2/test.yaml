@@ -1,0 +1,21 @@
+requires:
+  min-version: 7.0.0
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: quic
+        quic.extensions[0].name: "status_request"
+        quic.extensions[6].name: "alpn"
+        quic.extensions[6].values[0]: "h3"
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 4
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
