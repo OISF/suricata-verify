@@ -909,7 +909,14 @@ class TestRunner:
 
         # Find pcaps.
         if "pcap" in self.config:
-            args += ["-r", os.path.realpath(os.path.join(self.directory, self.config["pcap"]))]
+            try:
+                curdir = os.getcwd()
+                os.chdir(self.directory)
+                if not os.path.exists(self.config["pcap"]):
+                    raise TestError("PCAP filename does not exist: {}".format(self.config["pcap"]))
+                args += ["-r", os.path.realpath(os.path.join(self.directory, self.config["pcap"]))]
+            finally:
+                os.chdir(curdir)
         else:
             pcaps = glob.glob(os.path.join(self.directory, "*.pcap"))
             pcaps += glob.glob(os.path.join(self.directory, "*.pcapng"))
