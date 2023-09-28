@@ -83,7 +83,7 @@ jobs:
           make -j2
       - name: Running suricata-verify
         working-directory: suricata
-        run: python3 ../run.py --quiet --outdir /tmp/sv-output
+        run: python3 ../run.py --debug-failed --quiet --outdir /tmp/sv-output
 
   almalinux:
     name: AlmaLinux 8
@@ -150,4 +150,4 @@ jobs:
           make -j2
       - name: Running suricata-verify
         working-directory: suricata
-        run: python3 ../run.py --quiet
+        run: python3 ../run.py --quiet --debug-failed
