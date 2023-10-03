@@ -7,8 +7,8 @@ outputs:
       types:
         - files
         - smtp:
-          extended: yes
-          md5: [body, subject]
+            extended: yes
+            md5: [body, subject]
         - anomaly
   - file-store:
       version: 2
