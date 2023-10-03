@@ -1,0 +1,16 @@
+requires:
+  min-version: 7.0.0
+  files:
+    - rust/src/ja4.rs
+  features:
+    - HAVE_JA4
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 11
+      match:
+        event_type: quic
+        quic.ja4: q13d0310h3_55b375c5d22e_cd85d2d88918

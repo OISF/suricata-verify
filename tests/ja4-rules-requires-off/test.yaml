@@ -1,0 +1,19 @@
+requires:
+  min-version: 7.0.3
+  files:
+    - rust/src/ja4.rs
+  script:
+    - grep 'ProvidesFeature(FEATURE_JA4);' src/app-layer-ssl.c > /dev/null
+    - ./src/suricata --build-info | grep "JA4 support" | grep no > /dev/null
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+  - shell:
+      args: "grep -c 'missing a required feature: feature ja4' stdout"
+      expect: 2

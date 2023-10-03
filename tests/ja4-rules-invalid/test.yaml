@@ -1,0 +1,17 @@
+requires:
+  min-version: 7.0.0
+  pcap: false
+  files:
+    - rust/src/ja4.rs
+  features:
+    - HAVE_JA4
+
+args:
+    - --engine-analysis
+
+exit-code: 1
+
+checks:
+  - shell:
+        args: grep "rule contains conflicting protocols" suricata.log | wc -l | xargs
+        expect: 1

@@ -1,0 +1,23 @@
+pcap: ../../tls/tls-certs-alert/input.pcap
+
+requires:
+  min-version: 7.0.3
+  features:
+    - HAVE_LIBJANSSON
+    - HAVE_NSS
+    - HAVE_LUA
+  script:
+    - ./src/suricata --build-info | grep "JA3 support" | grep no > /dev/null
+
+args:
+ - -k none
+ - --set security.lua.allow-rules=true
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+  - shell:
+      args: "grep -c 'missing a required feature: feature ja3' stdout"
+      expect: 4
