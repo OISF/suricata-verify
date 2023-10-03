@@ -1,8 +1,7 @@
 requires:
   features:
     - HAVE_NSS
-
-min-version: 7
+  min-version: 7
 
 args:
 - -k none
