@@ -1,0 +1,19 @@
+requires:
+  min-version: 7.0.0
+  files:
+    - rust/src/ja4.rs
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+        tls.ja4: t13d1516h2_8daaf6152771_e5627efa2ab1
+  - filter:
+      count: 1
+      match:
+        event_type: quic
+        quic.ja4: q13d0310h3_55b375c5d22e_cd85d2d88918
