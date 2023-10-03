@@ -1,7 +1,8 @@
 requires:
+  min-version: 7
   features:
     - HAVE_NSS
-  min-version: 7
+    - HAVE_LIBJANSSON
 
 args:
 - -k none
