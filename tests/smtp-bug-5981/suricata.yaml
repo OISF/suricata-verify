@@ -6,7 +6,9 @@ outputs:
       enabled: yes
       types:
         - files
-        - smtp
+        - smtp:
+          extended: yes
+          md5: [body, subject]
         - anomaly
   - file-store:
       version: 2
