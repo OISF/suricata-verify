@@ -3,6 +3,9 @@ requires:
   files:
     - rust/src/quic/ja4.rs
 
+args:
+  - -k none
+
 checks:
   - filter:
       count: 11
