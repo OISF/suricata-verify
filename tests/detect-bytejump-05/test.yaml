@@ -1,6 +1,3 @@
-requires:
-    gt-version: 7.0.0
-
 args:
  - -k none
 
