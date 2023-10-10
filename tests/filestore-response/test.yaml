@@ -1,0 +1,26 @@
+requires:
+  min-version: 6
+  features:
+    - HAVE_NSS
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      app_proto: http
+      event_type: fileinfo
+      fileinfo.sha256: eb076a2ec6ced9ee2e823e098446513cf5b2bb60fbcb04e6c85dc23dedaa414a
+      fileinfo.stored: true
+    count: 1
+    match:
+      app_proto: http
+      event_type: fileinfo
+      fileinfo.sha256: a87f126892a71279399ddda2dab8bbe1fcc6681b051c506e95294e71f639af72
+      fileinfo.stored: true
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2
