@@ -1,0 +1,13 @@
+requires:
+  min-version: 8
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: fileinfo
+      fileinfo.sha256: eb076a2ec6ced9ee2e823e098446513cf5b2bb60fbcb04e6c85dc23dedaa414a
+      fileinfo.stored: false
