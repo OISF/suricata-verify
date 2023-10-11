@@ -1,0 +1,4 @@
+alert mqtt any any -> any any (msg:"MQTT CONNECT protocol string SUCCESS"; mqtt.connect.protocol_string; content:"MQTT"; sid:1;)
+alert mqtt any any -> any any (msg:"MQTT CONNECT protocol string SUCCESS2"; mqtt.connect.protocol_string; content:"M"; sid:2;)
+alert mqtt any any -> any any (msg:"MQTT CONNECT protocol string FAIL"; mqtt.connect.protocol_string; content:"Foobar"; sid:3;)
+
