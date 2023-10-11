@@ -1,0 +1,63 @@
+requires:
+  files:
+    - src/detect-mqtt-connect-protocol-string.c
+
+args:
+  - -k none
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.connect.protocol_string: MQTT
+        mqtt.connect.protocol_version: 5
+        mqtt.connect.flags.username: true
+        mqtt.connect.flags.password: true
+        mqtt.connect.flags.will: false
+        mqtt.connect.flags.will_retain: false
+        mqtt.connect.flags.clean_session: true
+        mqtt.connect.client_id: ""
+        mqtt.connect.username: user
+        mqtt.connect.password: pass
+        mqtt.connect.properties.receive_maximum: 20
+        mqtt.connack.session_present: false
+        mqtt.connack.return_code: 0
+        mqtt.connack.properties.topic_alias_maximum: 10
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.publish.qos: 0
+        mqtt.publish.retain: false
+        mqtt.publish.dup: false
+        mqtt.publish.topic: topicX
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.disconnect.qos: 0
+        mqtt.disconnect.retain: false
+        mqtt.disconnect.dup: false
+        mqtt.disconnect.reason_code: 0
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: MQTT CONNECT protocol string SUCCESS
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: MQTT CONNECT protocol string SUCCESS2
+
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature: MQTT CONNECT protocol string FAIL
