@@ -1,0 +1,42 @@
+requires:
+  min-version: 7.0.0
+  features:
+    - HAVE_LIBJANSSON
+
+args:
+ - -k none
+
+pcap: ../tls-certs-alert/input.pcap
+
+checks:
+  # Check that we can alert on all three certs in the certificate chain
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        app_proto: tls
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        app_proto: tls
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        app_proto: tls
+        alert.signature_id: 3
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        app_proto: tls
+        alert.signature_id: 4
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        app_proto: tls
+        alert.signature_id: 5
