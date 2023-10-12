@@ -4,3 +4,5 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (flow:established,to_server; urile
 alert http $HOME_NET any -> $EXTERNAL_NET any (flow:established,to_server; http.uri; content:".php?"; content:"=01&"; distance:4; within:4; fast_pattern; sid:4;)
 # urilen followed by "raw" content, make sure the urilen doesn't act as http.uri sticky buffer
 alert http1 any any -> any any (urilen:44; content:"abc"; sid:5;)
+# make sure there is a single uri list. Based on 2016816:3
+alert http $HOME_NET any -> $EXTERNAL_NET any (flow:to_server,established; content:"a"; fast_pattern:only; http_uri; content:"b"; http_uri; content:"Mozilla"; http_user_agent; pcre:"/^$/RV"; content:!"Referer|3a 20|"; http_header; pcre:"/abcdef$/Ui"; sid:6;)

@@ -85,3 +85,17 @@ checks:
       engines[1].name: "http_uri"
       engines[1].app_proto: "http"
       engines[1].matches[0].name: "urilen"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 6
+      mpm.buffer: "http_uri"
+      mpm.pattern: "a"
+      engines[0].name: "http_uri"
+      engines[0].app_proto: "http"
+      engines[0].matches[0].name: "content"
+      engines[0].matches[1].name: "content"
+      engines[0].matches[2].name: "pcre"
+      engines[1].name: "http_user_agent"
+      engines[2].name: "http_header"
