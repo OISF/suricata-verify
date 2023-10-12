@@ -1,0 +1,9 @@
+alert tls any any -> any any (msg:"cert chain exact value"; tls.cert_chain_len:3; classtype:misc-activity; sid:1; rev:1;)
+
+alert tls any any -> any any (msg:"cert chain less than value"; tls.cert_chain_len:<4; classtype:misc-activity; sid:2; rev:1;)
+
+alert tls any any -> any any (msg:"cert chain greater than value"; tls.cert_chain_len:>0; classtype:misc-activity; sid:3; rev:1;)
+
+alert tls any any -> any any (msg:"cert chain greater than less than value"; tls.cert_chain_len:0<>4; classtype:misc-activity; sid:4; rev:1;)
+
+alert tls any any -> any any (msg:"cert chain not value"; tls.cert_chain_len:!2; classtype:misc-activity; sid:5; rev:1;)
