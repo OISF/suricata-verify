@@ -1,0 +1,70 @@
+args:
+- --runmode=single
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: flow
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        proto: TCP
+        flow.alerted: true
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        proto: UDP
+        flow.alerted: false
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 666
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 5553
+  - filter:
+      count: 14
+      match:
+        event_type: alert
+        alert.signature_id: 5554
+  - filter:
+      count: 12
+      match:
+        event_type: alert
+        alert.signature_id: 5554
+        proto: GRE
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 5554
+        proto: TCP
+  - filter:
+      count: 12
+      match:
+        event_type: alert
+        alert.signature_id: 5555
+  - filter:
+      count: 12
+      match:
+        event_type: alert
+        alert.signature_id: 5556
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 5557
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.state: "CLOSED"
+        fileinfo.size: 18
+
+

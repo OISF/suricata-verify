@@ -1,0 +1,9 @@
+alert udp any any -> any 6081 (msg:"geneve udp"; sid:2;)
+pass udp any any -> any 6081 (sid:1;)
+alert ip any any -> any any (msg:"all IP"; sid:5554;)
+alert tcp any any -> any any (msg:"all TCP"; sid:5553;)
+alert ip any any -> any any (msg:"IP Packet with 47 protocol"; ip_proto:47; sid:5555;)
+alert ip any any -> any any (msg:"IP Packet with GRE protocol"; ip_proto:gre; sid:5556;)
+alert icmp any any -> any any (msg:"ICMP"; sid:5557;)
+alert http any any -> any any (http.uri; content:"/"; sid:666;)
+
