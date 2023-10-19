@@ -1,0 +1,3 @@
+alert tcp any any -> any any (msg:"Testing ack"; ack:782; sid:1;)
+alert tcp any any -> any any (msg:"Testing ack"; ack:15; sid:2;)
+alert tcp any any -> any any (msg:"Testing ack"; ack:437528; sid:3;)
