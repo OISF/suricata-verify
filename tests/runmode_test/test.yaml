@@ -1,0 +1,16 @@
+requires:
+  min-version: 7 
+  pcap: false
+
+exit-code: 1
+args:
+   - --dump-config
+
+checks:
+   - shell:
+       args: suricata -S /dev/null
+       expect: 1  
+
+         
+      
+                                           
