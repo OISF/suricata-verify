@@ -1,0 +1,10 @@
+requires:
+  min-version: 7.0.0
+  pcap: false
+
+checks:
+  - shell:
+      args: suricata
+      expect: 1  # Expect an exit code of 1, indicating an error
+      expect-output: "ERROR: Missing runmode"  # Verify that the error message is present
+
