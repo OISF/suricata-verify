@@ -1,0 +1,14 @@
+requires:
+    min-version: 7.0.0
+    pcap: false
+
+args:
+    - --engine-analysis
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+#      list.packet.matches[0].name: "tcp.mss"
+      list.packet.matches[0].mss.size: 536

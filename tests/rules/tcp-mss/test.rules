@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"Testing mss"; tcp.mss:<50; sid:1;)
