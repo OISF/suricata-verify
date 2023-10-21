@@ -1,0 +1,13 @@
+requires:
+  min-version: 7.0.3 
+  pcap: false
+
+exit-code: 1
+
+args: 
+  - -c suricata.yaml
+
+checks:
+
+  - file:
+     args: "No capture mode specified as a command-line argument, specify one from the --list-runmodes" stderr
