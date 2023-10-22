@@ -1,0 +1,2 @@
+alert tcp any any -> any any (msg:"Testing seq"; seq:624; sid:1;)
+alert tcp any any -> any any (msg:"Testing seq"; seq:723833; sid:2;)
