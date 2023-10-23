@@ -1,0 +1,4 @@
+alert tcp any any -> any any (msg:"Testing mss"; tcp.mss:50; sid:1;)
+alert tcp any any -> any any (msg:"Testing mss"; tcp.mss:>123; sid:2;)
+alert tcp any any -> any any (msg:"Testing mss"; tcp.mss:<536; sid:3;)
+alert tcp any any -> any any (msg:"Testing mss"; tcp.mss:123-456; sid:4;)

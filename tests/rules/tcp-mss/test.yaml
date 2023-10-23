@@ -1,0 +1,40 @@
+requires:
+    min-version: 7.0.0
+    pcap: false
+
+args:
+    - --engine-analysis
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 1
+      lists.packet.matches[0].name: "tcp.mss"
+      lists.packet.matches[0].tcp_mss.value1: 50
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 2
+      lists.packet.matches[0].name: "tcp.mss"
+      lists.packet.matches[0].tcp_mss.mode: "greater than"
+      lists.packet.matches[0].tcp_mss.value1: 123
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 3
+      lists.packet.matches[0].name: "tcp.mss"
+      lists.packet.matches[0].tcp_mss.mode: "less than"
+      lists.packet.matches[0].tcp_mss.value1: 536
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 4
+      lists.packet.matches[0].name: "tcp.mss"
+      lists.packet.matches[0].tcp_mss.mode: "range"
+      lists.packet.matches[0].tcp_mss.value1: 123
+      lists.packet.matches[0].tcp_mss.value2: 456
