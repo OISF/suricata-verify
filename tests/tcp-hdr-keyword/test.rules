@@ -1,1 +1,1 @@
-alert tcp any any -> any any (tcp.mss:<536; sid:1234; rev:5;)
+alert tcp any any -> any any (tcp.hdr; content:"|02 04|"; offset:20; byte_test:2,<,536,0,big,relative; sid:1234; rev:5;)
