@@ -1,0 +1,5 @@
+alert ip any any -> any any (msg:"isset rule need an option"; flowbits:isset; sid:1;)
+alert ip any any -> any any (msg:"isnotset rule need an option"; flowbits:isnotset; sid:2)
+alert ip any any -> any any (msg:"set rule need an option"; flowbits:set; sid:3;)
+alert ip any any -> any any (msg:"unset rule need an option"; flowbits:unset; sid:4;)
+alert ip any any -> any any (msg:"toggle rule need an option"; flowbits:toggle; sid:5;)
