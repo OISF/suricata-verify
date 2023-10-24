@@ -1,0 +1,4 @@
+alert http any any -> any any (msg:"Former HttpUriTest01"; http.method; content:"GET"; sid:1;)
+alert tcp any any -> any any (msg:"Check hostname"; http.host; content:"www.example.com"; sid:2;)
+alert http any any -> any any (msg:"Check http.uri"; http.uri; content:"/images.gif"; sid:3;)
+alert tcp any any -> any any (msg:"Check uricontent"; uricontent:"images.gif"; sid:4;)
