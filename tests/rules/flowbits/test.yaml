@@ -1,0 +1,64 @@
+requires:
+    min-version: 7.0.0
+    pcap: false
+
+args:
+    - --engine-analysis
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 1
+      lists.packet.matches[0].name: "flowbits"
+      lists.packet.matches[0].flowbits.cmd: "toggle"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 2
+      lists.packet.matches[0].name: "flowbits"
+      lists.packet.matches[0].flowbits.cmd: "isset"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 3
+      lists.packet.matches[0].name: "flowbits"
+      lists.packet.matches[0].flowbits.cmd: "isnotset"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 4
+      lists.packet.matches[0].name: "flowbits"
+      lists.packet.matches[0].flowbits.cmd: "set"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 5
+      lists.packet.matches[0].name: "flowbits"
+      lists.packet.matches[0].flowbits.cmd: "unset"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 6
+      lists.packet.matches[0].name: "flowbits"
+      lists.packet.matches[0].flowbits.cmd: "toggle"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 7
+      lists.packet.matches[0].name: "flowbits"
+      lists.packet.matches[0].flowbits.cmd: "isset"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 8
+      lists.packet.matches[0].name: "flowbits"
+      lists.packet.matches[0].flowbits.cmd: "isnotset"

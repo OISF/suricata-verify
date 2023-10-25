@@ -1,0 +1,8 @@
+alert ip any any -> any any (msg:"Flowbit noalert"; flowbits:noalert,fb1; sid:1;)
+alert ip any any -> any any (msg:"Flowbit isset"; flowbits:isset,fb1; sid:2;)
+alert ip any any -> any any (msg:"Flowbit isnotset"; flowbits:isnotset,fb1; sid:3;)
+alert ip any any -> any any (msg:"Flowbit set"; flowbits:set,fb1; sid:4;)
+alert ip any any -> any any (msg:"Flowbit unset"; flowbits:unset,fb1; sid:5;)
+alert ip any any -> any any (msg:"Flowbit toggle"; flowbits:toggle,fb1; sid:6;)
+alert ip any any -> any any (msg:"Flowbit isset ored flowbits"; flowbits:isset,fb1|fb2; sid:7;)
+alert ip any any -> any any (msg:"Flowbit isnotset ored flowbits"; flowbits:isnotset, fb1|fb2 ; sid:8;)
