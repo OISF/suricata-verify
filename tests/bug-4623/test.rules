@@ -1,0 +1,8 @@
+#1. (success) the following signature matches up to the second last byte in the buffer in [random_tcp.pcap]. A negative post_offset is used and the following pcre matches up to the end of the buffer.
+drop tcp any any -> any any ( msg:"Test"; rev:1; content:"|3a 01 e8 ed 0f|"; byte_jump:0,0,relative,post_offset -7; pcre:"/^\x7c\xe0\x3a\x01\xe8\xed\x0f\x54/R"; sid:1; )
+
+#2. (success) we write a signature to match and move the pointer to the last byte, and we see that content does successfully match the last byte.
+drop tcp any any -> any any ( msg:"Test"; rev:1; content:"|01 e8 ed 0f 54|"; sid:2; )
+
+#3 (success) the following signature matches up to the last byte in the buffer as in 2. The same negative post_offset is used and we try to match values immediately after where the pointer should be. This signature does not match.
+drop tcp any any -> any any ( msg:"Test"; rev:1; content:"|01 e8 ed 0f 54|"; byte_jump:0,0,relative,post_offset -7; pcre:"/^\xe0\x3a\x01\xe8\xed\x0f\x54/R"; sid:3; )
