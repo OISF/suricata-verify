@@ -1,0 +1,7 @@
+checks:
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 8
+        dns.answers[0].rrtype: A
+        dns.grouped.A[0]: "52.85.112.21"
