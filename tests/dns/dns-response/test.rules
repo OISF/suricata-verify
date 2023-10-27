@@ -1,1 +1,4 @@
 alert dns any any -> any any (msg:"DNS TEST response answer name"; dns.response.answer.name; content:"suricata.io"; sid:1; rev:1;)
+
+alert dns any any -> any any (msg:"DNS TEST request query name"; dns.query; content:"suricata.io"; sid:99; rev:1;)
+

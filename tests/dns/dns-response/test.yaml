@@ -1,5 +1,5 @@
-requires:
-  min-version: 7
+# requires:
+#   min-version: 7
 
 checks:
   - filter:
