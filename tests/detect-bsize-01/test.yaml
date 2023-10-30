@@ -1,5 +1,5 @@
 requires:
-    min-version: 7.0.0
+    min-version: 6.0.16
     pcap: false
 
 args:
