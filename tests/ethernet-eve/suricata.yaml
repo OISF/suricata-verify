@@ -1,0 +1,17 @@
+%YAML 1.1
+---
+
+include: ../../etc/suricata-4.0.3.yaml
+
+outputs:
+  - eve-log:
+      enabled: yes
+      ethernet: yes
+      types:
+        - alert
+        - dns
+        - flow
+        - netflow
+        - tls
+        - http
+        - files
