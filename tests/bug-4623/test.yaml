@@ -1,6 +1,3 @@
-requires:
-  min-version: 7.0.3
-
 checks:
   - filter:
       count: 1
