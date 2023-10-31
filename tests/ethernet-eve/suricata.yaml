@@ -13,3 +13,5 @@ outputs:
         - flow
         - netflow
         - tls
+        - http
+        - files
