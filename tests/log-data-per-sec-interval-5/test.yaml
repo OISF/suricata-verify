@@ -1,0 +1,19 @@
+requires:
+  min-version: 7.0.2
+  features:
+    - DEBUG
+
+args:
+- -k none
+
+checks: 
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.decoder.pkts_per_sec : 24
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.decoder.bytes_per_sec: 5881

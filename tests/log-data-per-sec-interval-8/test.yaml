@@ -1,0 +1,21 @@
+requires:
+  min-version: 7.0.2
+  features:
+    - DEBUG
+
+pcap: ../log-data-per-sec-interval-5/input.pcap
+
+args:
+- -k none
+
+checks: 
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.decoder.pkts_per_sec : 15
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.decoder.bytes_per_sec: 3676
