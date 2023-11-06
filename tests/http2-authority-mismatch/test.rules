@@ -1,0 +1,2 @@
+alert http2 any any -> any any (msg:"SURICATA HTTP2 authority host mismatch"; flow:established,to_server; app-layer-event:http2.authority_host_mismatch; classtype:protocol-command-decode; sid:2290013; rev:1;)
+
