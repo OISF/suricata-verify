@@ -1,0 +1,18 @@
+requires:
+  min-version: 6.0.0
+
+# disables checksum verification
+args:
+  - -k none --set app-layer.protocols.http2.enabled=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
