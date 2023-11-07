@@ -1,0 +1,2 @@
+alert http2 any any -> any any (msg:"SURICATA HTTP2 authority host mismatch"; flow:established,to_server; http.request_header; content:":authority: "; startswith; content: "@"; pcre: /:authority: ([^:]*:[^@]*)@/,flow:http2_userinfo; sid:1; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 authority host mismatch"; flow:established,to_server; app-layer-event:http2.userinfo_in_uri; sid:2; rev:1;)
