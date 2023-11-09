@@ -1,0 +1,7 @@
+alert http any any -> any any (http.header; header_lowercase; content: "accept-ranges:";sid:1; )
+alert http any any -> any any (http.header; content: "accept-ranges:";sid:2; )
+alert http any any -> any any (http.header; content: "Accept-Ranges:";sid:3; )
+alert http1 any any -> any any (http.header; content: "accept-ranges:";sid:4; )
+alert http1 any any -> any any (http.header; content: "Accept-Ranges:";sid:5; )
+alert http2 any any -> any any (http.header; content: "accept-ranges:";sid:6; )
+alert http2 any any -> any any (http.header; content: "Accept-Ranges:";sid:7; )
