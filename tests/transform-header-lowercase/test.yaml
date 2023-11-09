@@ -1,0 +1,40 @@
+requires:
+  min-version: 8.0.0
+
+pcap: ../http2-range/http2-range.pcap
+
+# disables checksum verification
+args:
+  - -k none --set app-layer.protocols.http2.enabled=true
+
+checks:
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 5
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 6
+  # we counted all alerts
+  - filter:
+      count: 15
+      match:
+        event_type: alert
