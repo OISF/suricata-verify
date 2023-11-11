@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"lower-case 1"; flow:established; file_data; to_lowercase; content:"at patpoopy, we have"; sid:1;)
