@@ -51,8 +51,8 @@ LINUX = sys.platform.startswith("linux")
 suricata_yaml = "suricata.yaml" if WIN32 else "./suricata.yaml"
 
 # Determine the Suricata binary
-if os.path.exists("src\suricata.exe"):
-    suricata_bin = "src\suricata.exe"
+if os.path.exists("src\\suricata.exe"):
+    suricata_bin = "src\\suricata.exe"
 else:
     suricata_bin = "./src/suricata"
 
@@ -141,7 +141,7 @@ SuricataVersion = namedtuple(
     "SuricataVersion", ["major", "minor", "patch"])
 
 def parse_suricata_version(buf, expr=None):
-    m = re.search("(?:Suricata version |^)(\d+)\.?(\d+)?\.?(\d+)?.*", str(buf).strip())
+    m = re.search(r"(?:Suricata version |^)(\d+)\.?(\d+)?\.?(\d+)?.*", str(buf).strip())
     default_v = 0
     if expr is not None and expr == "equal":
         default_v = None
@@ -396,7 +396,7 @@ def find_value(name, obj):
             break
         name = None
         index = None
-        m = re.match("^(.*)\[(\d+)\]$", part)
+        m = re.match(r"^(.*)\[(\d+)\]$", part)
         if m:
             name = m.group(1)
             index = m.group(2)
@@ -877,7 +877,7 @@ class TestRunner:
         if "args" in self.config:
             assert(type(self.config["args"]) == type([]))
             for arg in self.config["args"]:
-                args += re.split("\s", arg)
+                args += re.split(r"\s", arg)
 
         # In Suricata 5.0 the classification.config and
         # reference.config were moved into the etc/ directory. For now
