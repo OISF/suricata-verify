@@ -1,0 +1,54 @@
+requires:
+  min-version: 8
+
+pcap: ../smtp-long-DATA-line/input.pcap
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      alert.signature_id: 1
+- filter:
+    count: 1
+    match:
+      alert.signature_id: 2
+      frame.tx_id: 0
+      smtp.helo: Percival
+      files[0].filename: "winmail.dat"
+      frame.type: data
+- filter:
+    count: 1
+    match:
+      alert.signature_id: 3
+- filter:
+    count: 1
+    match:
+      alert.signature_id: 4
+- filter:
+    count: 1
+    match:
+      alert.signature_id: 5
+      frame.type: command_line
+      frame.tx_id: 0
+      smtp.helo: Percival
+- filter:
+    count: 1
+    match:
+      alert.signature_id: 6
+- filter:
+    count: 1
+    match:
+      alert.signature_id: 7
+      frame.type: response_line
+      frame.payload_printable: "354 go ahead\r\n"
+      frame.tx_id: 0
+      smtp.helo: Percival
+- filter:
+    count: 3
+    match:
+      alert.signature_id: 8
+      frame.type: response_line
+      frame.tx_id: 0
