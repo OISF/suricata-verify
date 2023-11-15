@@ -1,0 +1,6 @@
+alert smtp any any -> any any (frame:smtp.command_line; content:"MAIL|20|FROM:"; startswith; content:"xxxxx.co.uk"; distance:0; content:">|0d 0a|"; endswith; sid:1;)
+alert smtp any any -> any any (frame:smtp.data; content:"Reply-To:"; startswith; content:"Subject"; distance:0; content:"This is a multi-part message in MIME format."; distance:0; sid:2;)
+alert smtp any any -> any any (frame:smtp.response_line; content:"220 smtp001.mail.xxx.xxxxx.com ESMTP"; startswith; sid:3;)
+alert smtp any any -> any any (frame:smtp.stream; content:"|0d 0a|.|0d 0a|"; sid:4;)
+alert smtp any any -> any any (frame:smtp.command_line; base64_decode; base64_data; content:"galunt"; sid:5;)
+alert smtp any any -> any any (flow:only_stream; content:"|0d 0a|.|0d 0a|"; sid:6;)
