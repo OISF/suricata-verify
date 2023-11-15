@@ -1,0 +1,28 @@
+requires:
+  min-version: 8
+
+pcap: ../../cond-log-dns-dig/input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 1
+        direction: to_client
+        app_proto: dns
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 1
+        direction: to_server
+        app_proto: dns
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 2
+        direction: to_server
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 3
+        direction: to_client
