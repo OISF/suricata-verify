@@ -1,7 +1,7 @@
 pcap: ../bug-3616-ips/input.pcap
 
 requires:
-    min-version: 7.0.3
+    min-version: 8
     pcap: false
 
 exit-code: 0
