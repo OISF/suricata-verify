@@ -1,0 +1,27 @@
+requires:
+  min-version: 8
+
+pcap:  ../enip-alert/enip_test1.pcap
+
+# disables checksum verification
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        # check enip metadata in alert
+        enip.request.command: ListIdentity
+  - filter:
+      count: 1
+      match:
+        event_type: enip
+        enip.request.command: ListIdentity
+        enip.response.status: Success
+        # quote because this is a string, not a yaml float
+        enip.response.identity.revision: "4.3"
+        enip.response.identity.product_name: "1756-ENBT/A"
+        enip.response.identity.vendor_id: "Rockwell Automation/Allen-Bradley"
