@@ -1,0 +1,21 @@
+requires:
+  min-version: 8
+
+pcap:  ../enip-alert/enip_test1.pcap
+
+# disables checksum verification
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: enip
+        enip.request.command: ListIdentity
+        enip.response.status: Success
