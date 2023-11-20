@@ -2,12 +2,21 @@ requires:
   min-version: 7
 
 # disables checksum verification
+# use stream inline to match Wireshark as last packet does not get acked
 args:
-- -k none --set stream.midstream=true --set app-layer.protocols.enip.enabled=yes
+- -k none --set stream.inline=true --set stream.midstream=true --set app-layer.protocols.enip.enabled=yes
 
 checks:
   - filter:
+      lt-version: 8
       count: 41
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      # version 8 also works on responses
+      min-version: 8
+      count: 81
       match:
         event_type: alert
         alert.signature_id: 1
