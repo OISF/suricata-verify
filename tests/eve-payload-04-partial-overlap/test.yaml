@@ -1,0 +1,39 @@
+requires:
+  min-version: 8
+
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2
+      stream: 1
+      payload: "R09PRA=="
+      payload_printable: "GOOD"
+      packet: "RQAAKAAAAABABnTLAQEBAQICAgIwOR+QAAAABgAAA+lQEAoATBcAAA=="
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 3
+      stream: 0
+      payload: "WFhY"
+      payload_printable: "XXX"
+      packet: "BQQDAgEAAAECAwQFgQAABggARQAAKwABAABABnTHAQEBAQICAgIwOR+QAAAAAwAAA+lQEBAAlb4AAFhYWA=="
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 4
+      payload: "R09PRA=="
+      payload_printable: "GOOD"
+      packet: "BQQDAgEAAAECAwQFgQAABggARQAALAABAABABnTGAQEBAQICAgIwOR+QAAAAAgAAA+lQEBAAr4MAAEdPT0Q="
