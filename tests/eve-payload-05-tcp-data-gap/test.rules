@@ -1,0 +1,9 @@
+alert tcp-stream any any -> any any (content:"VERY"; sid:1;)
+alert tcp-stream any any -> any any (content:"GOOD"; sid:2;)
+alert tcp-stream any any -> any any (content:"DATA"; sid:3;)
+
+alert tcp-pkt any any -> any any (content:"VERY"; sid:4;)
+alert tcp-pkt any any -> any any (content:"GOOD"; sid:5;)
+alert tcp-pkt any any -> any any (content:"DATA"; sid:6;)
+
+alert tcp-stream any any -> any any (content:"VERYGOODDATA"; sid:7;)

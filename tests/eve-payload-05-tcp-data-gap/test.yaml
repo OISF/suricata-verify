@@ -1,0 +1,59 @@
+requires:
+  min-version: 8
+
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+      stream: 1
+      payload: "VkVSWVs0IGJ5dGVzIG1pc3NpbmddREFUQQ=="
+      payload_printable: "VERY[4 bytes missing]DATA"
+      pkt_src: "stream (flow timeout)"
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 2
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 3
+      stream: 1
+      payload: "VkVSWVs0IGJ5dGVzIG1pc3NpbmddREFUQQ=="
+      payload_printable: "VERY[4 bytes missing]DATA"
+      pkt_src: "stream (flow timeout)"
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 4
+      payload: "VkVSWQ=="
+      payload_printable: "VERY"
+      packet: "BQQDAgEAAAECAwQFgQAABggARQAALAABAABABnTGAQEBAQICAgIwOR+QAAAAAgAAA+lQEAQAqXgAAFZFUlk="
+      stream: 0
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 5
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 6
+      payload: "REFUQQ=="
+      payload_printable: "DATA"
+      packet: "BQQDAgEAAAECAwQFgQAABggARQAALAABAABABnTGAQEBAQICAgIwOR+QAAAACgAAA+lQEAQAuYwAAERBVEE="
+      stream: 0
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 7
