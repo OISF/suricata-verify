@@ -1,0 +1,51 @@
+requires:
+  min-version: 8
+
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2
+      payload_printable: "[4 bytes missing]GOODDATA"
+      stream: 1
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 3
+      stream: 1
+      payload_printable: "[4 bytes missing]GOODDATA"
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 4
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 5
+      payload_printable: "GOOD"
+      stream: 0
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 6
+      payload_printable: "DATA"
+      stream: 0
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 7

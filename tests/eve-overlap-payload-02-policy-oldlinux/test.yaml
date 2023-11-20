@@ -1,0 +1,36 @@
+requires:
+  min-version: 8
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+      payload: "RVZJTA=="
+      payload_printable: "EVIL"
+      pkt_src: "stream (flow timeout)"
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 2
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 3
+      payload: "RVZJTA=="
+      payload_printable: "EVIL"
+      packet: "BQQDAgEAAAECAwQFgQAABggARQAALAABAABABnTGAQEBAQICAgIwOR+QAAAAAgAAA+lQEBAAt3QAAEVWSUw="
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 4
+      payload: "R09PRA=="
+      payload_printable: "GOOD"
+      packet: "BQQDAgEAAAECAwQFgQAABggARQAALAABAABABnTGAQEBAQICAgIwOR+QAAAAAgAAA+lQEBAAr4MAAEdPT0Q="
