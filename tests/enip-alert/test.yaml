@@ -3,7 +3,7 @@ requires:
 
 # disables checksum verification
 args:
-- -k none --set stream.midstream=true --set app-layer.protocols.enip.enabled=yes
+- -k none --set app-layer.protocols.enip.enabled=yes
 
 checks:
   - filter:
