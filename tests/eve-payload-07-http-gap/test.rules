@@ -1,0 +1,4 @@
+alert http any any -> any any (http.method; content:"GET"; sid:1;)
+alert http any any -> any any (http.stat_msg; content:"OK"; sid:2;)
+alert http any any -> any any (frame:http1.response; content:"AAAA"; sid:3;)
+alert http any any -> any any (content:"AAAA"; sid:4;)
