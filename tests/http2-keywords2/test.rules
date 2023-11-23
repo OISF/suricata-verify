@@ -17,3 +17,4 @@ alert http2 any any -> any any (http.response_body; content:"not found"; sid:36;
 alert http2 any any -> any any (http_request_line; content:"GET /humans.txt HTTP/2"; sid:37;)
 alert http2 any any -> any any (http.stat_msg; content:!"OK"; sid:38;)
 alert http2 any any -> any any (http.stat_msg; bsize:0; sid:39;)
+alert http2 any any -> any any (http_response_line; content:"HTTP/2 200|0d 0a|"; startswith; endswith; sid:40;)
