@@ -1,0 +1,1 @@
+alert smb any any -> any any (frame:smb2.data; content:"wnwk"; sid:1;)
