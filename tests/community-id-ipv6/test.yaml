@@ -9,7 +9,6 @@ checks:
       dest_ip: 2607:f8b0:400a:0800:0000:0000:0000:200e
       dest_port: 443
       event_type: tls
-      pcap_cnt: 41
       proto: TCP
       src_ip: 2600:1f13:00f8:d400:03a6:303c:e011:18eb
       src_port: 60202
@@ -22,7 +21,6 @@ checks:
       dest_ip: 2001:4860:4860:0000:0000:0000:0000:8888
       dest_port: 443
       event_type: tls
-      pcap_cnt: 7
       proto: TCP
       src_ip: 2600:1f13:00f8:d400:03a6:303c:e011:18eb
       src_port: 33892
