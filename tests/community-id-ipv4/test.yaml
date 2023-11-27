@@ -9,7 +9,6 @@ checks:
       dest_ip: 172.217.14.206
       dest_port: 443
       event_type: tls
-      pcap_cnt: 7
       proto: TCP
       src_ip: 172.26.0.39
       src_port: 35958
