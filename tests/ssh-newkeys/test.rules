@@ -1,0 +1,1 @@
+alert ssh any any -> any 22 (msg:"This is a test"; content:"|15 00 00 00 00 00 00 00 00 00 00|"; classtype:protocol-command-decode; sid:1300013; rev:1; metadata:created_at 2023_05_23, updated_at 2023_05_24;)
