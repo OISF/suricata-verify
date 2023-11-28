@@ -1,0 +1,22 @@
+requires:
+  min-version: 8
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 0
+    match:
+      dest_port: 5432
+      event_type: pgsql
+      proto: TCP
+- filter:
+    count: 0
+    match:
+      app_proto: pgsql
+      event_type: flow
+- filter:
+    count: 1
+    match:
+      event_type: flow
