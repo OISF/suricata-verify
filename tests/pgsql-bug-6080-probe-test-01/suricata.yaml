@@ -1,0 +1,18 @@
+%YAML 1.1
+---
+
+app-layer:
+  protocols:
+    pgsql:
+      enabled: yes
+      stream-depth: 0
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - pgsql
+        - flow
+
