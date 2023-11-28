@@ -1,5 +1,5 @@
 requires:
-  min-version: 5.0.0
+  min-version: 6.0.16
   lt-version: 7
 
   features:
@@ -15,7 +15,7 @@ checks:
       count: 1
       match:
         event_type: engine
-        engine.message: "signature can't match as content length 30 is bigger than dsize 10."
+        engine.message: "signature can't match as required content length 30 exceeds dsize value 10"
 
   - filter:
       count: 1
