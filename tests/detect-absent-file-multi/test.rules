@@ -1,0 +1,10 @@
+alert http any any -> any any (msg:"no file data"; flow:established,to_client; file.data; absent; http.stat_code; content: "500"; sid:1;)
+alert http any any -> any any (msg:"no file data, no alert"; flow:established,to_client; file.data; bsize: >0; http.stat_code; content: "500"; sid:2;)
+alert http any any -> any any (msg:"no file data or not abc"; flow:established,to_client; file.data; absent: or_else; content: !"abc"; http.stat_code; content: "500"; sid:3;)
+alert http any any -> any any (msg:"not abc, no alert"; flow:established,to_client; file.data; content: !"abc"; http.stat_code; content: "500"; sid:4;)
+alert http any any -> any any (msg:"alert on only stat code"; flow:established,to_client; http.stat_code; content: "500"; sid:5;)
+alert http any any -> any any (msg:"no file data"; flow:established,to_client; file.data; absent; sid:6;)
+alert http any any -> any any (msg:"no file data or not abc"; flow:established,to_client; file.data; absent: or_else; content: !"abc"; sid:7;)
+
+alert http any any -> any any (msg:"no request headers or not abc"; flow:established,to_server; http.request_header; absent: or_else; content: !"abc"; sid:10;)
+alert http any any -> any any (msg:"no file data or not abc"; flow:established,to_server; http.request_header; absent; http.uri; content: "noheaders"; sid:11;)

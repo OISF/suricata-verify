@@ -1,0 +1,6 @@
+alert http any any -> any any (msg:"no request body"; flow:established,to_server; http.request_body; absent; http.method; content: "POST"; sid:1;)
+alert http any any -> any any (msg:"no request body, no alert"; flow:established,to_server; http.request_body; bsize: >0; http.method; content: "POST"; sid:2;)
+alert http any any -> any any (msg:"no request body or not abc"; flow:established,to_server; http.request_body; absent: or_else; content: !"abc"; http.method; content: "POST"; sid:3;)
+alert http any any -> any any (msg:"not abc, no alert"; flow:established,to_server; http.request_body; content: !"abc"; http.method; content: "POST"; sid:4;)
+alert http any any -> any any (msg:"no request body"; flow:established,to_server; http.request_body; absent; sid:5;)
+alert http any any -> any any (msg:"no request body or not abc"; flow:established,to_server; http.request_body; absent: or_else; content: !"abc"; sid:6;)
