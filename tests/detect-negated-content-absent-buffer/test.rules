@@ -1,0 +1,9 @@
+# Test to ensure it works without a negated content
+# This signature should alert with _any_  pcap
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"TP test for URI"; flow:established,to_server; http.uri; bsize:1; content:"/"; sid:1;)
+
+# Test to prove FN when Referer is not included
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"FN test for Referer"; flow:established,to_server; http.uri; bsize:1; content:"/"; http.referer; content:!"example"; sid:6;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"FN test for Referer"; flow:established,to_server; http.uri; bsize:1; content:"/"; http.referer; pcre:!"/example/"; sid:7;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"FN test for Referer"; flow:established,to_server; http.uri; bsize:1; content:"/"; http.referer; isdataat:!0; sid:8;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"FN test for Referer"; flow:established,to_server; http.uri; bsize:1; content:"/"; http.referer; byte_test:2,!=,1,0; sid:9;)
