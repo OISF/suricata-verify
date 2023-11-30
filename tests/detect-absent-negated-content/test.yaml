@@ -1,0 +1,62 @@
+requires:
+  min-version: 8
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 5
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 6
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 7
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 8
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 9
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 20
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 21
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 22
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 23
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 10
