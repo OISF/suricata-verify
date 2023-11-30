@@ -1,0 +1,1 @@
+alert enip any any -> any any (msg:"TP test for URI"; flow:established,to_server; frame:enip.hdr; bsize:24; frame:enip.cip; absent:only; sid:1;)

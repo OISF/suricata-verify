@@ -1,0 +1,14 @@
+requires:
+  min-version: 8
+
+pcap: ../enip-alert/enip_test1.pcap
+
+args:
+- -k none --set app-layer.protocols.enip.enabled=yes
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1

@@ -1,0 +1,20 @@
+# Test to ensure it works without a negated content
+# This signature should alert with _any_  pcap
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"TP test for URI"; flow:established,to_server; http.uri; bsize:1; content:"/"; sid:1;)
+# No match without `absent` and negated content
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"FN test for Referer"; flow:established,to_server; http.uri; bsize:1; content:"/"; http.referer; content:!"example"; sid:5;)
+
+# Test absent keyword or negated content
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"FN test for Referer"; flow:established,to_server; http.uri; bsize:1; content:"/"; http.referer; absent: or_else; content:!"example"; sid:6;)
+# Test absent keyword or negated pcre
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"FN test for Referer"; flow:established,to_server; http.uri; bsize:1; content:"/"; http.referer; absent: or_else ; pcre:!"/example/"; sid:7;)
+# Test absent keyword without any content
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"FN test for Referer"; flow:established,to_server; http.uri; bsize:1; content:"/"; http.referer; absent:only; sid:8;)
+
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"FN test for Referer"; flow:established,to_server; http.referer; absent:only; sid:11;)
+
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"TP test for UA"; flow:established,to_server; http.user_agent; content:"foo"; content:!"bar"; sid:20;)
+# matches because content is not bar
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"TP test for UA"; flow:established,to_server; http.user_agent; absent: or_else; content:!"bar"; sid:21;)
+# does not match because there is a content
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"TP test for UA"; flow:established,to_server; http.user_agent; absent: only; sid:22;)
