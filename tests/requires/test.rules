@@ -1,0 +1,15 @@
+# Rule for Suricata >= 7 and < 8.
+alert http any any -> any any (msg:"TEST Suricata >= 7 and < 8"; content:"uid=0"; requires: version >= 7 < 8; sid:7; rev:1;)
+
+# Rule for Suricata >= 7.0.3 but less than 8... Or >= 8.0.1
+alert http any any -> any any (content:"uid=0"; requires: version >= 7.0.3 < 8 | >= 8.0.1; sid:9; rev:1;)
+
+# Rule for Suricata >= 8.
+alert http any any -> any any (msg:"TEST Suricata >= 8"; content:"uid=0"; requires: version >= 8.0.0; sid:8; rev:1;)
+
+# These rules have something invalid about them, but do follow the general rule
+# structure, so should be eliminated by the requires statement.
+alert vxlan any any -> any any (requires: version >= 10; sid:1;)
+alert udp any any -> any any (vxlan_vni:10; requires: version >= 10; sid:2;)
+alert http any any => any any (requires: version >= 10; sid:3;)
+alert tcp any any -> any any (frame:smtp.not_supported; requires: version >= 10; sid:4;)

@@ -1,0 +1,44 @@
+requires:
+  files:
+    - rust/src/detect/requires.rs
+
+pcap: ../eve-metadata/testmyids.pcap
+
+checks:
+
+  # Check that for Suricata >= 8.0.0 we have one alert and that alert is sid 8.
+  - filter:
+      requires:
+        min-version: 8
+      count: 1
+      match:
+        event_type: alert
+  - filter:
+      requires:
+        min-version: 8
+      count: 1
+      match:
+        alert.signature_id: 8
+
+  # Check that for Suricata >= 7.0.0 and < 8 we have one alert and that alert
+  # is sid 7.
+  - filter:
+      requires:
+        min-version: 7
+        lt-version: 8
+      count: 1
+      match:
+        event_type: alert
+  - filter:
+      requires:
+        min-version: 7
+        lt-version: 8
+      count: 1
+      match:
+        alert.signature_id: 7
+
+  # Should have nothing for SID 9.
+  - filter:
+      count: 0
+      match:
+        alert.signature_id: 9
