@@ -1,0 +1,28 @@
+requires:
+  min-version: 8
+
+pcap: ../enip-alert/enip_test1.pcap
+
+# disables checksum verification
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: enip
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        # not stats.app_layer.flow.enip
+        stats.app_layer.flow.enip_tcp: 1
+        stats.app_layer.flow.enip_udp: 0
+  - filter:
+      count: 0
+      match:
+        event_type: stats
+        # this key does not exist in eve output
+        stats.app_layer.flow.enip: 0
