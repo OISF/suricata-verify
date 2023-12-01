@@ -60,6 +60,10 @@ requires:
     # Restrict the test to builds with HAVE_LUA.
     - HAVE_LUA
 
+  # Require that one or more files exist in the Suricata source directory
+  files:
+	- src/detect-ipaddr.c
+
   # Don't require a pcap file to be present. By default a test will be skipped
   # if there is no pcap file in the test directory. Not applicable if a
   # command is provided.
