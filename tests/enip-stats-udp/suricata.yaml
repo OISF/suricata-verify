@@ -1,0 +1,18 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - flow
+        - stats
+
+app-layer:
+  protocols:
+    enip:
+      enabled: detection-only
+      detection-ports:
+        dp: 44818
