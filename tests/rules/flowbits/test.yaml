@@ -1,0 +1,100 @@
+requires:
+    min-version: 7.0.0
+    pcap: false
+
+args:
+    - --engine-analysis
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 1
+      lists.postmatch.matches[0].name: "flowbits"
+      lists.postmatch.matches[0].flowbits.cmd: "set"
+      lists.postmatch.matches[0].flowbits.names[0]: "fb1"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 2
+      lists.postmatch.matches[0].name: "flowbits"
+      lists.postmatch.matches[0].flowbits.cmd: "set"
+      lists.postmatch.matches[0].flowbits.names[0]: "fb2"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 3
+      lists.packet.matches[0].name: "flowbits"
+      lists.packet.matches[0].flowbits.cmd: "isset"
+      lists.packet.matches[0].flowbits.names[0]: "fb1"
+      lists.packet.matches[0].flowbits.names[1]: "fb2"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 4
+      lists.packet.matches[0].name: "flowbits"
+      lists.packet.matches[0].flowbits.cmd: "isset"
+      lists.packet.matches[0].flowbits.names[0]: "fb3"
+      lists.packet.matches[0].flowbits.names[1]: "fb1"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 5
+      lists.packet.matches[0].name: "flowbits"
+      lists.packet.matches[0].flowbits.cmd: "isset"
+      lists.packet.matches[0].flowbits.names[0]: "fb3"
+      lists.packet.matches[0].flowbits.names[1]: "fb4"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 6
+      lists.packet.matches[0].name: "flowbits"
+      lists.packet.matches[0].flowbits.cmd: "isnotset"
+      lists.packet.matches[0].flowbits.names[0]: "fb5"
+      lists.packet.matches[0].flowbits.names[1]: "fb6"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 7
+      lists.packet.matches[0].name: "flowbits"
+      lists.packet.matches[0].flowbits.cmd: "isnotset"
+      lists.packet.matches[0].flowbits.names[0]: "fb1"
+      lists.packet.matches[0].flowbits.names[1]: "fb2"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 8
+      lists.postmatch.matches[0].name: "flowbits"
+      lists.postmatch.matches[0].flowbits.cmd: "unset"
+      lists.postmatch.matches[0].flowbits.names[0]: "fb1"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 9
+      lists.postmatch.matches[0].name: "flowbits"
+      lists.postmatch.matches[0].flowbits.cmd: "toggle"
+      lists.postmatch.matches[0].flowbits.names[0]: "fb1"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 10
+      lists.packet.matches[0].name: "flowbits"
+      lists.packet.matches[0].flowbits.cmd: "isset"
+      lists.packet.matches[0].flowbits.names[0]: "fb1"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 11
+      lists.packet.matches[0].name: "flowbits"
+      lists.packet.matches[0].flowbits.action: "noalert"
