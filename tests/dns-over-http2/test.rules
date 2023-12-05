@@ -1,0 +1,2 @@
+alert http2 any any -> any any (http.uri; content: "/dns"; sid:10; )
+alert dns any any -> any any (dns.query; content: "www.gstatic.com"; sid:20; )
