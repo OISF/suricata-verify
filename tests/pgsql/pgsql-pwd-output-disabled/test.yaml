@@ -43,7 +43,7 @@ checks:
       dest_port: 5432
       event_type: pgsql
       pcap_cnt: 12
-      pgsql.request.password_message: password log disabled
+      pgsql.request.password_message: password_log_disabled
       pgsql.response.message: authentication_ok
       pgsql.response.parameter_status[0].application_name: psql
       pgsql.response.parameter_status[10].time_zone: Europe/London
