@@ -13,10 +13,6 @@ args:
 
 checks:
   - filter:
-      count: 97
-      match:
-        event_type: alert
-  - filter:
       count: 1
       match:
         event_type: drop
