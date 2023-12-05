@@ -1,0 +1,73 @@
+requires:
+  min-version: 8.0.0
+
+# disables checksum verification
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 10
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 11
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 20
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 21
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 30
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 31
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 40
+  - filter:
+      count: 2
+      match:
+        event_type: doh2
+        dns.query[0].type: query
+        dns.query[0].rrname: www.gstatic.com
+  - filter:
+      count: 2
+      match:
+        event_type: doh2
+        dns.query[0].type: query
+        dns.query[0].rrname: nav-edge.smartscreen.microsoft.com
+  - filter:
+      count: 2
+      match:
+        event_type: doh2
+        dns.type: answer
+        dns.rrname: www.gstatic.com
+  - filter:
+      count: 2
+      match:
+        event_type: doh2
+        dns.type: answer
+        dns.rrname: nav-edge.smartscreen.microsoft.com
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: doh2
+        app_proto_orig: http2
