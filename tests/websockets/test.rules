@@ -1,0 +1,2 @@
+alert websockets any any -> any any (msg:"header frame"; flow:established,to_server; frame:websockets.header; content:"|81 88|"; sid:1;)
+alert websockets any any -> any any (msg:"pdu frame"; flow:established,to_client; frame:websockets.pdu; content:"|81 15|version,hybi-draft-13"; sid:2;)
