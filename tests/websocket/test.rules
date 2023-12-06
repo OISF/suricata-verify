@@ -1,0 +1,6 @@
+alert websocket any any -> any any (msg:"header frame"; flow:established,to_server; frame:websocket.header; content:"|81 88|"; sid:1;)
+alert websocket any any -> any any (msg:"pdu frame"; flow:established,to_client; frame:websocket.pdu; content:"|81 15|version,hybi-draft-13"; sid:2;)
+alert websocket any any -> any any (msg:"ws opcode"; flow:established,to_client; websocket.opcode:text; sid:3;)
+alert websocket any any -> any any (msg:"ws mask"; flow:established,to_server; websocket.mask:>0; sid:4;)
+alert websocket any any -> any any (msg:"ws fin"; flow:established,to_server; websocket.flags:fin; sid:5;)
+alert websocket any any -> any any (msg:"ws pl"; flow:established,to_server; websocket.payload; content:"version,"; sid:6;)
