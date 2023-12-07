@@ -1,0 +1,51 @@
+# *** Add configuration here ***
+
+requires:
+   min-version: 7
+args:
+- -k none
+- --set stream.midstream=true
+
+checks:
+- filter:
+    count: 1
+    match:
+      dest_ip: 1.2.3.4
+      dest_port: 65
+      event_type: http
+      http.http_method: POST
+      http.length: 0
+      http.protocol: HTTP/1.1
+      http.url: /
+      proto: TCP
+      src_ip: 5.6.7.8
+      src_port: 6666
+      tx_id: 0
+      vlan[0]: 6
+- filter:
+    count: 1
+    match:
+      app_proto: http
+      dest_ip: 1.2.3.4
+      dest_port: 65
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 0
+      flow.bytes_toserver: 321
+      flow.pkts_toclient: 0
+      flow.pkts_toserver: 4
+      flow.reason: shutdown
+      flow.state: established
+      proto: TCP
+      src_ip: 5.6.7.8
+      src_port: 6666
+      tcp.ack: true
+      tcp.psh: true
+      tcp.state: established
+      tcp.tc_max_regions: 1
+      tcp.tcp_flags: '18'
+      tcp.tcp_flags_tc: '10'
+      tcp.tcp_flags_ts: '18'
+      tcp.ts_max_regions: 1
+      vlan[0]: 6

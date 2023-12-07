@@ -1,0 +1,1 @@
+alert tcp any any -> any any (content:"POST"; http_method; content:"dummy"; http_cookie; sid:1; rev:1;)
