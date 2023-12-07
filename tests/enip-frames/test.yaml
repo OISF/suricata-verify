@@ -1,0 +1,50 @@
+requires:
+  min-version: 8
+
+pcap:  ../enip-keywords/enip_cip_example.pcap
+
+# disables checksum verification
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        # check enip metadata logging for frame alert
+        enip.request.command: list_identity
+  - filter:
+      # enip.sud.iface == 0x00000000 && enip.timeout == 1 && enip.cpf.itemcount == 2 && enip.length == 32
+      count: 92
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      # enip.sud.iface == 0x00000000 && enip.timeout == 1 && enip.cpf.itemcount == 2 && len(tcp.payload) == 56
+      count: 92
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      # cip.rr == 0x00 && cip.attribute == 5 && cip.class == 1
+      count: 41
+      match:
+        event_type: alert
+        alert.signature_id: 4
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 5
+  - filter:
+      count: 41
+      match:
+        event_type: enip
+        enip.request.cip.service: "Multiple Service Packet"
+        enip.request.cip.path[0].segment_type: class
+        enip.request.cip.path[0].value: 2
+        enip.request.cip.path[1].segment_type: instance
+        enip.request.cip.path[1].value: 1
+        enip.request.cip.class_name: "Message Router"

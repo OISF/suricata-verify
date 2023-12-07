@@ -1,0 +1,5 @@
+alert enip any any -> any any (msg:"enip header frame"; frame:enip.hdr; content:"|63 00 33 00|"; sid:1;)
+alert enip any any -> any any (msg:"enip payload/data frame"; frame:enip.data; content:"|00 00 00 00 01 00 02 00|"; bsize: 32; sid:2;)
+alert enip any any -> any any (msg:"enip whole pdu frame"; frame:enip.pdu; content:"|00 00 00 00 01 00 02 00|"; bsize: 56; sid:3;)
+alert enip any any -> any any (msg:"header frame"; frame:enip.cip; content:"|03 02 20 8b 24 01 01 00 06 00|"; bsize: 10; sid:4;)
+alert enip any any -> any any (msg:"enip item frame"; frame:enip.enip.item; content:"|0c 00 2d 00|"; sid:5;)
