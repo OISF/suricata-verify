@@ -1,0 +1,70 @@
+requires:
+  min-version: 8
+
+pcap:  ../enip-keywords/enip_cip_example.pcap
+
+# disables checksum verification
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 269
+      match:
+        event_type: alert
+        alert.signature_id: 4
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 5
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 6
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 7
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 8
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 10
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 11
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 12
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 13
+  - filter:
+      count: 41
+      match:
+        event_type: alert
+        alert.signature_id: 14
+  - filter:
+      count: 133
+      match:
+        event_type: alert
+        alert.signature_id: 15
