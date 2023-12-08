@@ -1,0 +1,91 @@
+requires:
+   min-version: 7
+args:
+- -k none
+- --set stream.midstream=true
+
+checks:
+- filter:
+    count: 1
+    match:
+      dest_ip: 100.96.199.113
+      dest_port: 5432
+      event_type: pgsql
+      pgsql.request.message: SSL Request
+      pgsql.response.ssl_accepted: false
+      pgsql.tx_id: 1
+      src_ip: 100.88.2.140
+      src_port: 39704
+- filter:
+    count: 1
+    match:
+      dest_ip: 100.96.199.113
+      dest_port: 5432
+      event_type: pgsql
+      pgsql.request.protocol_version: '3.0'
+      pgsql.request.startup_parameters.optional_parameters[0].database: rules
+      pgsql.request.startup_parameters.optional_parameters[1].application_name: psql
+      pgsql.request.startup_parameters.optional_parameters[2].client_encoding: UTF8
+      pgsql.request.startup_parameters.user: rules
+      pgsql.tx_id: 2
+      src_ip: 100.88.2.140
+      src_port: 39704
+- filter:
+    count: 1
+    match:
+      dest_ip: 100.96.199.113
+      dest_port: 5432
+      event_type: pgsql
+      pgsql.response.message: authentication_ok
+      pgsql.response.parameter_status[0].application_name: psql
+      pgsql.response.process_id: 28954
+      pgsql.response.secret_key: 889887985
+      pgsql.tx_id: 3
+      src_ip: 100.88.2.140
+      src_port: 39704
+- filter:
+    count: 1
+    match:
+      dest_ip: 100.96.199.113
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 23
+      pgsql.request.simple_query: select pg_sleep(9)
+      pgsql.response.code: '57014'
+      pgsql.response.field_count: 1
+      pgsql.response.file: postgres.c
+      pgsql.response.line: '3211'
+      pgsql.response.message: canceling statement due to user request
+      pgsql.response.routine: ProcessInterrupts
+      pgsql.response.severity_localizable: ERROR
+      pgsql.response.severity_non_localizable: ERROR
+      pgsql.tx_id: 4
+      src_ip: 100.88.2.140
+      src_port: 39704
+- filter:
+    count: 1
+    match:
+      dest_ip: 100.96.199.113
+      dest_port: 5432
+      event_type: pgsql
+      pgsql.request.message: termination_message
+      pgsql.tx_id: 5
+      src_ip: 100.88.2.140
+      src_port: 39704
+- filter:
+    count: 1
+    match:
+      dest_ip: 100.96.199.113
+      dest_port: 5432
+      event_type: pgsql
+      pgsql.request.secret_key: 889887985
+      pgsql.request.message: cancel_request
+      pgsql.request.process_id: 28954
+      pgsql.tx_id: 1
+      src_ip: 100.88.2.140
+      src_port: 39706
+- filter:
+    count: 2
+    match:
+      app_proto: pgsql
+      event_type: flow
