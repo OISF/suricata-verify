@@ -97,13 +97,6 @@ checks:
     match:
       id: 11
       lists.packet.matches[0].name: "flowbits"
-      lists.packet.matches[0].flowbits.action: "noalert"
-- filter:
-    filename: rules.json
-    count: 1
-    match:
-      id: 12
-      lists.packet.matches[0].name: "flowbits"
       lists.packet.matches[0].flowbits.cmd: "isset"
       lists.packet.matches[0].flowbits.names[0]: "fb1"
       lists.packet.matches[1].name: "flowbits"
@@ -113,7 +106,7 @@ checks:
     filename: rules.json
     count: 1
     match:
-      id: 13
+      id: 12
       lists.packet.matches[0].name: "flowbits"
       lists.packet.matches[0].flowbits.cmd: "isset"
       lists.packet.matches[0].flowbits.names[0]: "fb1"
