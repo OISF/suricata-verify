@@ -1,0 +1,3 @@
+alert http any any -> any any (http.header_names; strip_pseudo_headers; content: "|0d 0a|accept-ranges"; startswith; nocase; sid:1; )
+alert http any any -> any any (http.header_names; content: "|0d 0a|accept-ranges"; startswith; nocase; sid:2; )
+alert http1 any any -> any any (http.header_names; content: "|0d 0a|accept-ranges"; startswith; nocase; sid:3; )
