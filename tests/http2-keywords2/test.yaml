@@ -86,8 +86,6 @@ checks:
         event_type: alert
         alert.signature_id: 39
   - filter:
-      # to remove when backport is merged
-      min-version: 8.0.0
       count: 1
       match:
         event_type: alert
