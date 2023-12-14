@@ -1,0 +1,12 @@
+requires:
+  pcap: false
+
+args:
+  - --engine-analysis
+
+exit-code: 1
+
+checks:
+    - shell:
+        args: grep "fast_pattern cannot be used with base64_data" suricata.log | wc -l | xargs
+        expect: 1
