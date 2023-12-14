@@ -1,0 +1,8 @@
+requires:
+  pcap: false
+  min-version: 7
+
+args:
+  - --engine-analysis
+
+exit-code: 0

@@ -1,0 +1,1 @@
+alert http $HOME_NET any -> $EXTERNAL_NET any (flow:established,to_server; http.method; content:"POST"; http.request_body; base64_decode:bytes 28; base64_data; content:"something"; content: "first"; pkt_data; content: "newcontent"; fast_pattern; classtype:bad-unknown; sid:123; rev:1;)
