@@ -1,0 +1,15 @@
+requires:
+  pcap: false
+  min-version: 7
+
+args:
+  - --engine-analysis
+
+exit-code: 0
+
+checks:
+  - filter:
+      filename: patterns.json
+      count: 1
+      match:
+        buffers[0].patterns[0].pattern: "POST"
