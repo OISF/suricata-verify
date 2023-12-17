@@ -1,0 +1,36 @@
+requires:
+   min-version: 7
+args:
+- -k none
+- --set stream.midstream=true
+
+checks:
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.signature_id: 1
+      app_proto: http
+      event_type: alert
+      pcap_cnt: 10
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.signature_id: 2
+      app_proto: http
+      event_type: alert
+      pcap_cnt: 12
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.signature_id: 3
+      app_proto: http
+      event_type: alert
+      pcap_cnt: 19
+- filter:
+    count: 1
+    match:
+      app_proto: http
+      event_type: flow
