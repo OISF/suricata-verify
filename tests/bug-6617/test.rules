@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"Filestore toserver"; filestore:to_server,flow; sid:1; rev:1;)

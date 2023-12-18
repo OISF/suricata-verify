@@ -1,0 +1,14 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      types:
+        - files
+        - alert
+        - http
+  - file-store:
+      version: 2
+      enabled: yes
+      stream-depth: 0
