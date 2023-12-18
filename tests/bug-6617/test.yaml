@@ -1,0 +1,17 @@
+pcap: ../filestore-v2.1-forced/suricata-update-pdf.pcap
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 0
+    match:
+      alert.signature: Filestore toserver
+      alert.signature_id: 1
+
+- filter:
+    count: 1
+    match:
+      alert.signature: Filestore toclient
+      alert.signature_id: 2
