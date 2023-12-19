@@ -42,3 +42,9 @@ checks:
       count: 0
       match:
         alert.signature_id: 9
+
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.engines[0].rules_skipped: 7

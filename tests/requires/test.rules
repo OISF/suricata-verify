@@ -13,3 +13,5 @@ alert vxlan any any -> any any (requires: version >= 10; sid:1;)
 alert udp any any -> any any (vxlan_vni:10; requires: version >= 10; sid:2;)
 alert http any any => any any (requires: version >= 10; sid:3;)
 alert tcp any any -> any any (frame:smtp.not_supported; requires: version >= 10; sid:4;)
+
+alert asdf any any -> any any (requires: version >= 6, foo bar; sid:102; rev:1;)
