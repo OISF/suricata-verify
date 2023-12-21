@@ -1,0 +1,8 @@
+# Should alert in both directions as no flow is provided.
+alert dns any any -> any any (dns.rcode; content:"oisf"; sid:1; rev:1;)
+
+# Should only alert in the request direction.
+alert dns any any -> any any (dns.rcode; content:"oisf"; flow:to_server; sid:2; rev:1;)
+
+# Should only alert in the response direction.
+alert dns any any -> any any (dns.rcode; content:"oisf"; flow:to_client; sid:3; rev:1;)
