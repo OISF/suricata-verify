@@ -1,0 +1,9 @@
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.http_user_agent: myscript
