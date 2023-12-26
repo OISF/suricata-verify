@@ -1,0 +1,36 @@
+requires:
+  min-version: 8
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 1
+        direction: to_client
+        app_proto: dns
+        dns.rcode: 12
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 1
+        direction: to_server
+        app_proto: dns
+        dns.rcode: 12
+
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 2
+        direction: to_server
+        app_proto: dns
+        dns.rcode: 12
+
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 3
+        direction: to_client
+        app_proto: dns
+        dns.rcode: 12
