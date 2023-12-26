@@ -1,0 +1,35 @@
+requires:
+  min-version: 8
+
+checks:
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 1
+        dest_ip: 10.16.1.11
+        dest_port: 59465
+        direction: to_client
+        app_proto: dns
+        event_type: alert
+        dns.answer.rcode: NXDOMAIN
+        src_ip: 8.8.4.4
+        src_port: 53
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 2
+        dest_ip: 10.16.1.11
+        dest_port: 59465
+        direction: to_client
+        app_proto: dns
+        event_type: alert
+        dns.answer.rcode: NXDOMAIN
+        src_ip: 8.8.4.4
+        src_port: 53
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 3
+        direction: to_server
+        app_proto: dns
+        event_type: alert
