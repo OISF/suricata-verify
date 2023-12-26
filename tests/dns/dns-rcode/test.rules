@@ -1,0 +1,5 @@
+# Should alert in client direction.
+alert dns any any -> any any (dns.rcode:3; sid:1; rev:1;)
+
+# Should only alert in client direction.
+alert dns any any -> any any (dns.rcode:!3; sid:2; rev:1;)
