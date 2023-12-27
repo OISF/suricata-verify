@@ -1,0 +1,1 @@
+alert http any any -> any any (content:"POST"; http_method; content:"upload.cgi"; http_uri; filestore; sid:1; rev:1;)
