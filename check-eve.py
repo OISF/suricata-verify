@@ -36,6 +36,28 @@ try:
 except:
     HAVE_PY = False
 
+
+class DuplicateKeyError(Exception):
+    pass
+
+
+def duplicate_key_object_pair_hook(pairs):
+    d = {}
+    for k, v in pairs:
+        if k in d:
+            raise DuplicateKeyError(
+                "key={}, current value={}, new value={}".format(k, d[k], v)
+            )
+        d[k] = v
+    return d
+
+
+def check_duplicate_keys(filename):
+    with open(filename) as json_in:
+        for line in json_in:
+            json.loads(line, object_pairs_hook=duplicate_key_object_pair_hook)
+
+
 def validate_json(args, json_filename, schema):
     status = "OK"
     errors = []
@@ -55,6 +77,14 @@ def validate_json(args, json_filename, schema):
                 except ValidationError as err:
                     status = "FAIL"
                     errors.append(err.message)
+
+    # Look for duplicate keys.
+    try:
+        check_duplicate_keys(json_filename)
+    except DuplicateKeyError as err:
+        print("{}: duplicate key error: {}".format(json_filename, err))
+        status = "FAIL"
+        errors.append(err)
 
     if not args.quiet:
         if status == "FAIL":
