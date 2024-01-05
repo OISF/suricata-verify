@@ -1,7 +1,7 @@
 requires:
   min-version: 8
 
-pcap: input.pcap
+pcap: ../../dns-eve-v2-udp-nxdomain-soa/dns-udp-nxdomain-soa.pcap
 
 checks:
   - filter:
@@ -10,14 +10,14 @@ checks:
         alert.signature_id: 1
         direction: to_client
         app_proto: dns
-        dns.rcode: 12
+        dns.rcode: 3
   - filter:
       count: 1
       match:
         alert.signature_id: 1
         direction: to_server
         app_proto: dns
-        dns.rcode: 12
+        dns.rcode: 3
 
   - filter:
       count: 1
@@ -25,7 +25,7 @@ checks:
         alert.signature_id: 2
         direction: to_server
         app_proto: dns
-        dns.rcode: 12
+        dns.rcode: 3
 
   - filter:
       count: 1
@@ -33,4 +33,13 @@ checks:
         alert.signature_id: 3
         direction: to_client
         app_proto: dns
-        dns.rcode: 12
+        dns.rcode: 3
+
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 4
+        direction: to_client
+        app_proto: dns
+        dns.rcode: 3
+        dns.negate: true
