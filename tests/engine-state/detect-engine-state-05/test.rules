@@ -1,0 +1,2 @@
+alert http any any -> any any (content:"POST"; http_method; content:"upload.cgi"; http_uri; filename:"somepicture"; filestore; sid:1; rev:1;)
+alert http any any -> any any (filename:"somepicture"; filestore; sid:2; rev:1;)
