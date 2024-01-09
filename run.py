@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 #
-# Copyright (C) 2017-2022 Open Information Security Foundation
+# Copyright (C) 2017-2024 Open Information Security Foundation
 #
 # Permission is hereby granted, free of charge, to any person
 # obtaining a copy of this software and associated documentation files
@@ -1165,11 +1165,12 @@ def main():
         if not args.patterns:
             tests.append(dirpath)
         else:
+            test_name = dirpath[len(tdir) + 1:]
             for pattern in args.patterns:
                 if args.exact:
-                    if pattern == basename:
+                    if pattern == test_name:
                         tests.append(dirpath)
-                elif basename.find(pattern) > -1:
+                elif test_name.find(pattern) > -1:
                     tests.append(dirpath)
 
     # Sort alphabetically.
