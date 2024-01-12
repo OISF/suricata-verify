@@ -1,0 +1,33 @@
+requires:
+  min-version: 8
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        alert.signature: "PASS SSH"
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+  - filter:
+      count: 2
+      match:
+        event_type: flow
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: flow
+        flow.action: pass
