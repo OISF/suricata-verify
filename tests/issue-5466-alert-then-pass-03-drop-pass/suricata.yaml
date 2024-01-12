@@ -1,0 +1,21 @@
+%YAML 1.1
+---
+
+action-order:
+  - drop
+  - reject
+  - alert
+  - pass
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      types:
+        - alert
+        - drop:
+            flows: all
+            alerts: yes
+        - files
+        - http
+        - flow
