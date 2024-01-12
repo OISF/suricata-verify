@@ -1,0 +1,36 @@
+requires:
+  min-version: 8
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 10211
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 10202
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 10201
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.action: pass
