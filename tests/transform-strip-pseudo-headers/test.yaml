@@ -1,5 +1,5 @@
 requires:
-  min-version: 8.0.0
+  min-version: 7.0.3
 
 pcap: ../http2-range/http2-range.pcap
 
