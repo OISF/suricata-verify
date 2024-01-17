@@ -1,0 +1,28 @@
+requires:
+   min-version: 7
+args:
+- -k none
+- --set stream.midstream=true
+
+checks:
+
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.action: allowed
+      alert.signature_id: 1
+
+- filter:
+    count: 1
+    match:
+      event_type: http
+
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.alerted: true
+
+- shell:
+      args: test -e filestore/ec/ec3a53b52eb11808d59d29ffd01568edf2d62cdc9c02def84d0a11704d552de2
