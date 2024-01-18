@@ -1,0 +1,7 @@
+alert http any any => any any (msg:"matching both uri and status"; sid: 11; http.uri; content: "/download"; http.stat_code; content: "200"; flow: to_server;)
+alert http any any => any any (msg:"matching only uri"; sid: 2; http.uri; content: "/download"; )
+alert http any any => any any (msg:"matching only status"; sid: 3; http.stat_code; content: "200";)
+alert http any any => any any (msg:"matching connection, but from ambiguous direction"; sid: 4; http.uri; content: "/download"; http.stat_code; content: "200"; http.connection; content: "eep";)
+alert http any any => any any (msg:"stream rule"; sid: 5; content: "/download"; content: "200";)
+alert http any any => any any (msg:"stream rule"; sid: 6; bidir.toserver; content: "/download"; bidir.toclient; content: "200";)
+alert enip any any => any any (msg:"frame rule"; sid: 7; bidir.toserver; frame: enip.pdu; content: "/download"; bidir.toclient; frame: enip.pdu; content: "200";)
