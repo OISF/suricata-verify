@@ -1,0 +1,17 @@
+requires:
+  min-version: 8
+
+args:
+ - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2052359
