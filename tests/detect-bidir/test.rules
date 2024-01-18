@@ -1,0 +1,4 @@
+alert http any any => any any (msg:"matching both uri and status"; sid: 1; http.uri; content: "/download"; http.stat_code; content: "200";)
+alert http any any => any any (msg:"matching both uri and status"; sid: 2; http.uri; content: "/download"; http.stat_code; content: "404";)
+# test that Suricata chooses fast_pattern for to server buffer
+alert http any any => any any (msg:"matching connection, but from ambiguous direction"; sid: 7; http.uri; content: "down"; http.server; content: "Apache";)
