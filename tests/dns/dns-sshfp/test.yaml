@@ -1,0 +1,12 @@
+requires:
+  min-version: 8
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: dns
+        dns.answers[0].rrname: anoncvs.netbsd.org
+        dns.answers[0].rrtype: SSHFP
+        dns.answers[0].sshfp.algo: 1
+        dns.answers[0].sshfp.fingerprint: "19:8c:34:a9:2f:c0:b2:ab:1d:a5:2b:68:8c:2f:19:1d:2d:96:0c:09"
