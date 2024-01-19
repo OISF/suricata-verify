@@ -1,0 +1,33 @@
+requires:
+   min-version: 7
+args:
+- -k none
+- --set stream.midstream=true
+
+checks:
+
+- filter:
+    count: 1
+    match:
+      event_type: fileinfo
+      has-key: flow_id
+
+- filter:
+    count: 1
+    match:
+      event_type: stats
+
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.action: allowed
+      alert.signature_id: 1
+
+- filter:
+    count: 1
+    match:
+      event_type: flow
+
+- shell:
+      args: test ! -e filestore/5a/5ab24eb0866bafe7d8c0d07f03f09aef7a4caa991a9dc1edd96e64683b750fe2

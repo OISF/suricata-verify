@@ -1,0 +1,54 @@
+requires:
+   min-version: 7
+args:
+- -k none
+- --set stream.midstream=true
+
+checks:
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.signature_id: 1
+      event_type: alert
+      files[0].filename: somepicture1.jpg
+
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.signature_id: 2
+      event_type: alert
+      files[0].filename: somepicture1.jpg
+
+- shell:
+      args: test -e filestore/5a/5ab24eb0866bafe7d8c0d07f03f09aef7a4caa991a9dc1edd96e64683b750fe2
+
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.signature_id: 1
+      event_type: alert
+      files[0].filename: somepicture2.jpg
+
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.signature_id: 2
+      event_type: alert
+      files[0].filename: somepicture2.jpg
+
+- shell:
+      args: test -e filestore/ec/ec3a53b52eb11808d59d29ffd01568edf2d62cdc9c02def84d0a11704d552de2
+
+- filter:
+    count: 1
+    match:
+      event_type: http
+
+- filter:
+    count: 1
+    match:
+      event_type: flow

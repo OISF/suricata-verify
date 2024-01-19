@@ -1,0 +1,4 @@
+alert http any any -> any any (flow:to_server; content:"POST"; http_method; content:"upload.cgi"; http_uri; filestore; sid:1; rev:1;)
+alert http any any -> any any (content:"GET"; http_method; content:"upload.cgi"; http_uri; filestore; sid:2; rev:1;)
+alert http any any -> any any (content:"GET"; http_method; content:"upload.cgi"; http_uri; filename:"nomatch"; sid:3; rev:1;)
+alert http any any -> any any (content:"POST"; http_method; content:"upload.cgi"; http_uri; filename:"nomatch"; filestore; sid:4; rev:1;)
