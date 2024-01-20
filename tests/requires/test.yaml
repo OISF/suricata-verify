@@ -1,6 +1,5 @@
 requires:
-  files:
-    - rust/src/detect/requires.rs
+  min-version: 7.0.3
 
 pcap: ../eve-metadata/testmyids.pcap
 
@@ -20,13 +19,13 @@ checks:
       match:
         alert.signature_id: 8
 
-  # Check that for Suricata >= 7.0.0 and < 8 we have one alert and that alert
-  # is sid 7.
+  # Check that for Suricata >= 7.0.0 and < 8 we have two alerts and that one is
+  # sid 7 and the other is sid 9.
   - filter:
       requires:
         min-version: 7
         lt-version: 8
-      count: 1
+      count: 2
       match:
         event_type: alert
   - filter:
@@ -36,10 +35,11 @@ checks:
       count: 1
       match:
         alert.signature_id: 7
-
-  # Should have nothing for SID 9.
   - filter:
-      count: 0
+      requires:
+        min-version: 7
+        lt-version: 8
+      count: 1
       match:
         alert.signature_id: 9
 
@@ -47,4 +47,4 @@ checks:
       count: 1
       match:
         event_type: stats
-        stats.detect.engines[0].rules_skipped: 7
+        stats.detect.engines[0].rules_skipped: 6
