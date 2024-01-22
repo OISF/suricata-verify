@@ -44,7 +44,18 @@ checks:
         alert.signature_id: 9
 
   - filter:
+      requires:
+        min-version: 7
+        lt-version: 8
       count: 1
       match:
         event_type: stats
         stats.detect.engines[0].rules_skipped: 6
+
+  - filter:
+      requires:
+        min-version: 8
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.engines[0].rules_skipped: 7
