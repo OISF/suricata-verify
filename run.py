@@ -903,6 +903,17 @@ class TestRunner:
                 args += ["--set", "reference-config-file=%s" % config]
                 break
 
+        threshold_configs = [
+            os.path.join(self.cwd, "threshold.config"),
+        ]
+
+        # Add a threshold-file setting if the tests didn't explicitly set one
+        if 'threshold-file' not in '\t'.join(args):
+            for config in threshold_configs:
+                if os.path.exists(config):
+                    args += ["--set", "threshold-file=%s" % config]
+                    break
+
         # Add other fixed arguments.
         args += [
             "--init-errors-fatal",
