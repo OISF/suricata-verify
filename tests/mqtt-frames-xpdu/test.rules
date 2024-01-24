@@ -1,0 +1,4 @@
+alert mqtt any any -> any any (msg:"mqtt frame: pdu 1"; frame:pdu; content: "|a2 0b 00 02|"; startswith; bsize:13; sid:1;)
+alert mqtt any any -> any any (msg:"mqtt frame: header"; frame:header; content: "|a2|"; startswith; bsize: 2; sid:2;)
+alert mqtt any any -> any any (msg:"mqtt Frame: data"; frame:data; content: "|00 02 00|"; startswith; bsize: 11; sid:3;)
+alert mqtt any any -> any any (msg:"mqtt frame: pdu 2"; frame:pdu; content: "|a2 0b 00 03|"; startswith;  bsize:13; sid:4;)
