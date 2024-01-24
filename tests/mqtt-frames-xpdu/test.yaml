@@ -1,0 +1,89 @@
+pcap: ../mqtt5-unsub-userpass/input.pcap
+
+requires:
+  min-version: 8
+
+args:
+ - -k none
+ - --set outputs.1.eve-log.types.1.frame.enabled=yes
+
+checks:
+- filter:
+    count: 6
+    match:
+      event_type: alert
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      frame.type: pdu
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      frame.type: header
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      frame.type: data
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      pcap_cnt: 12
+      alert.signature_id: 1
+      frame.type: pdu
+      frame.id: 8
+      frame.length: 13
+      frame.complete: true
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      pcap_cnt: 12
+      alert.signature_id: 2
+      frame.type: header
+      frame.id: 9
+      frame.length: 2
+      frame.complete: true
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      pcap_cnt: 12
+      alert.signature_id: 3
+      frame.type: data
+      frame.id: 10
+      frame.length: 11
+      frame.complete: true
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      pcap_cnt: 12
+      alert.signature_id: 4
+      frame.type: pdu
+      frame.id: 11
+      frame.length: 13
+      frame.complete: true
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2
+      pcap_cnt: 12
+      frame.type: header
+      frame.id: 12
+      frame.length: 2
+      frame.complete: true
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      pcap_cnt: 12
+      alert.signature_id: 3
+      frame.type: data
+      frame.id: 13
+      frame.length: 11
+      frame.complete: true
