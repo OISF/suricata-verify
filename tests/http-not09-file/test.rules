@@ -1,0 +1,4 @@
+# should match
+alert http any any -> any any (http.response_line; content:"HTTP/1.1 400"; sid:1;)
+# should not match as it is the response line, not yet the response body
+alert http any any -> any any (file.data; content:"HTTP/1.1 400"; sid:2;)

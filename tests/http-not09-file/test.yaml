@@ -1,0 +1,19 @@
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.size: 166
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
