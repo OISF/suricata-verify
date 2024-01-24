@@ -50,7 +50,9 @@ checks:
       count: 1
       match:
         event_type: stats
-        stats.detect.engines[0].rules_skipped: 6
+        stats.detect.engines[0].rules_skipped: 5
+        stats.detect.engines[0].rules_loaded: 2
+        stats.detect.engines[0].rules_failed: 0
 
   - filter:
       requires:
@@ -58,4 +60,6 @@ checks:
       count: 1
       match:
         event_type: stats
-        stats.detect.engines[0].rules_skipped: 7
+        stats.detect.engines[0].rules_skipped: 6
+        stats.detect.engines[0].rules_loaded: 1
+        stats.detect.engines[0].rules_failed: 0

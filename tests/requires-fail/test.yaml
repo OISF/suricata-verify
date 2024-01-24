@@ -1,0 +1,12 @@
+requires:
+  min-version: 7.0.3
+
+pcap: ../eve-metadata/testmyids.pcap
+
+args:
+  - -v
+
+# As we have a bad rule, expect exit-code 1.
+exit-code: 1
+
+# No checks, as no stats are written on exit code 0.
