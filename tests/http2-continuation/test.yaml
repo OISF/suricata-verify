@@ -1,0 +1,17 @@
+requires:
+  min-version: 7
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: http
+      http.request_headers[6].name: namenamenamenamenamenamenamenamenamename
+      http.request_headers[6].value: valuevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevalue
+- filter:
+    count: 0
+    match:
+      event_type: anomaly
