@@ -1,0 +1,28 @@
+requires:
+    min-version: 7.0.0
+    pcap: false
+
+args:
+    - --engine-analysis
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 1
+      lists.packet.matches[0].name: "tcp.ack"
+      lists.packet.matches[0].ack.number: 782
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 2
+      lists.packet.matches[0].ack.number: 15
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 3
+      lists.packet.matches[0].name: "tcp.ack"
+      lists.packet.matches[0].ack.number: 437528
