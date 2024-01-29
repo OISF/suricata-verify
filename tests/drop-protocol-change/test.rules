@@ -1,0 +1,1 @@
+drop http any any -> any any (msg:"drop http"; sid:1; rev:1;)
