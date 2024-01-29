@@ -1,0 +1,19 @@
+requires:
+  min-version: 8
+
+args:
+  - -k none --set stream.midstream=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: http2
+        app_proto_orig: http
+        flow.action: drop
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
