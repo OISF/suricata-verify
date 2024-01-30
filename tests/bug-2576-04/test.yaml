@@ -1,0 +1,22 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+    - HAVE_NSS
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.md5: 090fe607a5be1228362614ccaa088577
+

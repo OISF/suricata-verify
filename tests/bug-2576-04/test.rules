@@ -1,0 +1,2 @@
+alert ip any any -> any any (msg:"file_data"; file_data; content:"content=IE=Edge"; sid: 3; rev: 1;)
+alert ip any any -> any any (msg:"mix stream with file_data"; content:"content=IE=Edge"; file_data; content:"content=IE=Edge"; sid: 4; rev: 1;)
