@@ -1,0 +1,5 @@
+# Only alert on requests.
+alert dns any any -> any any (dns.rrtype:1; flow:to_server; sid:1; rev:1;)
+
+# Only alert on responses.
+alert dns any any -> any any (dns.rrtype:1; flow:to_client; sid:2; rev:1;)
