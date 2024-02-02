@@ -1,0 +1,34 @@
+requires:
+  min-version: 8
+
+pcap: ../dns-eve-empty-format/input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 1
+        dest_ip: 10.16.1.1
+        dest_port: 53
+        direction: to_server
+        app_proto: dns
+        event_type: alert
+        dns.query[0].rrtype: A
+        src_ip: 10.16.1.11
+        src_port: 57634
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 2
+        dest_ip: 10.16.1.11
+        dest_port: 33458
+        direction: to_client
+        app_proto: dns
+        event_type: alert
+        dns.answer.rrtype: A
+        src_ip: 10.16.1.1
+        src_port: 53
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 3
