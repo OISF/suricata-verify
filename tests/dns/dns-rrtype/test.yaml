@@ -1,0 +1,26 @@
+requires:
+  min-version: 8
+
+pcap: ../dns-answer-name/dns-udp-request-with-answer.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 1
+        direction: to_server
+        app_proto: dns
+        event_type: alert
+        dns.query[0].rrtype: A
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 2
+        direction: to_client
+        app_proto: dns
+        event_type: alert
+        dns.answer.rrtype: A
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 3
