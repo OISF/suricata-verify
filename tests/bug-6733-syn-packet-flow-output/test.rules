@@ -1,0 +1,1 @@
+alert tcp $HOME_NET any -> any any (msg: "example"; flow:established,to_server; content:"GET|20|"; sid:11111; rev:1;)
