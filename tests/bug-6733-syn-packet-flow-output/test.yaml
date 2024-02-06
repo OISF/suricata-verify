@@ -1,0 +1,23 @@
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      dest_ip: "155.166.235.43"
+      dest_port: 25
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 0
+      flow.bytes_toserver: 66
+      flow.pkts_toclient: 0
+      flow.pkts_toserver: 1
+      flow.reason: shutdown
+      flow.state: new
+      proto: TCP
+      src_ip: "147.183.77.73"
+      src_port: 38212
+      tcp.state: syn_sent
+      tcp.syn: true
+      tcp.tcp_flags: "02"
+      tcp.tcp_flags_tc: '00'
+      tcp.tcp_flags_ts: '02'
