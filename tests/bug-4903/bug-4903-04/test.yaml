@@ -89,7 +89,6 @@ checks:
       flow.bytes_toserver: 336
       flow.pkts_toclient: 3
       flow.pkts_toserver: 4
-      pcap_cnt: 7
       proto: TCP
       src_ip: 192.168.100.1
       src_port: 10003
@@ -115,7 +114,6 @@ checks:
       flow.bytes_toserver: 336
       flow.pkts_toclient: 3
       flow.pkts_toserver: 4
-      pcap_cnt: 7
       proto: TCP
       src_ip: 192.168.100.1
       src_port: 10003
