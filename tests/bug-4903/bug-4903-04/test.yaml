@@ -89,7 +89,6 @@ checks:
       flow.bytes_toserver: 336
       flow.pkts_toclient: 3
       flow.pkts_toserver: 4
-      pcap_cnt: 7
       proto: TCP
       src_ip: 192.168.100.1
       src_port: 10003
@@ -115,7 +114,6 @@ checks:
       flow.bytes_toserver: 336
       flow.pkts_toclient: 3
       flow.pkts_toserver: 4
-      pcap_cnt: 7
       proto: TCP
       src_ip: 192.168.100.1
       src_port: 10003
@@ -123,3 +121,11 @@ checks:
       ssh.client.software_version: Cisco_client-1.25
       ssh.server.proto_version: '1.99'
       ssh.server.software_version: Cisco_server-1.24
+- filter:
+# check that alerts do not happen at pcap_cnt 7
+# as this invalid TCP packet should not trigger any tx detection run
+    min-version: 8
+    count: 0
+    match:
+      event_type: alert
+      pcap_cnt: 7
