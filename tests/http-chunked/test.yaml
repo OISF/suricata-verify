@@ -1,0 +1,122 @@
+requires:
+  min-version: 7
+
+args:
+  - -k none --set packet-alert-max=32
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 11
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 12
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 13
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 14
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 15
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 16
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 21
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 23
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 24
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 25
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 26
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 31
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 32
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 33
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 34
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 35
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 36
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 41
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 42
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 43
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 44
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 45
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 46
