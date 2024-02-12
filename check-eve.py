@@ -53,7 +53,7 @@ def duplicate_key_object_pair_hook(pairs):
 
 
 def check_duplicate_keys(filename):
-    with open(filename) as json_in:
+    with open(filename, encoding="utf-8") as json_in:
         for line in json_in:
             json.loads(line, object_pairs_hook=duplicate_key_object_pair_hook)
 
@@ -69,7 +69,7 @@ def validate_json(args, json_filename, schema):
             status = "FAIL"
             errors.append(cp.stdout)
     else:
-        with open(json_filename) as f:
+        with open(json_filename, encoding="utf-8") as f:
             for line in f:
                 obj = json.loads(line)
                 try:
