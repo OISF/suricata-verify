@@ -1,0 +1,28 @@
+alert http any any -> any any (msg:"Test Usage of Unbuffered Content"; flow:established,to_server; content:"Host"; fast_pattern; classtype:web-application-attack; sid:11; rev:1;)
+alert http any any -> any any (msg:"Test Usage of Unbuffered Content"; flow:established,to_server; content:"Cookie"; fast_pattern; classtype:web-application-attack; sid:12; rev:1;)
+alert http any any -> any any (msg:"Test Usage of Unbuffered Content"; flow:established,to_server; content:"X-Qlik-User"; fast_pattern; classtype:web-application-attack; sid:13; rev:1;)
+alert http any any -> any any (msg:"Test Usage of Unbuffered Content"; flow:established,to_server; content:"User-Agent"; fast_pattern; classtype:web-application-attack; sid:14; rev:1;)
+alert http any any -> any any (msg:"Test Usage of Unbuffered Content"; flow:established,to_server; content:"Content-Length"; fast_pattern; classtype:web-application-attack; sid:15; rev:1;)
+alert http any any -> any any (msg:"Test Usage of Unbuffered Content"; flow:established,to_server; content:"Transfer-Encoding"; fast_pattern; classtype:web-application-attack; sid:16; rev:1;)
+
+alert http any any -> any any (msg:"Test Usage of http.header"; flow:established,to_server; http.header; content:"Host"; fast_pattern; classtype:web-application-attack; sid:21; rev:1;)
+# does not work cf http.cookie keyword and http.header doc expliciting this exclusion
+alert http any any -> any any (msg:"Test Usage of http.header"; flow:established,to_server; http.header; content:"Cookie"; fast_pattern; classtype:web-application-attack; sid:22; rev:1;)
+alert http any any -> any any (msg:"Test Usage of http.header"; flow:established,to_server; http.header; content:"X-Qlik-User"; fast_pattern; classtype:web-application-attack; sid:23; rev:1;)
+alert http any any -> any any (msg:"Test Usage of http.header"; flow:established,to_server; http.header; content:"User-Agent"; fast_pattern; classtype:web-application-attack; sid:24; rev:1;)
+alert http any any -> any any (msg:"Test Usage of http.header"; flow:established,to_server; http.header; content:"Content-Length"; fast_pattern; classtype:web-application-attack; sid:25; rev:1;)
+alert http any any -> any any (msg:"Test Usage of http.header"; flow:established,to_server; http.header; content:"Transfer-Encoding"; fast_pattern; classtype:web-application-attack; sid:26; rev:1;)
+
+alert http any any -> any any (msg:"Test Usage of http.header.raw"; flow:established,to_server; http.header.raw; content:"Host"; fast_pattern; classtype:web-application-attack; sid:31; rev:1;)
+alert http any any -> any any (msg:"Test Usage of http.header.raw"; flow:established,to_server; http.header.raw; content:"Cookie"; fast_pattern; classtype:web-application-attack; sid:32; rev:1;)
+alert http any any -> any any (msg:"Test Usage of http.header.raw"; flow:established,to_server; http.header.raw; content:"X-Qlik-User"; fast_pattern; classtype:web-application-attack; sid:33; rev:1;)
+alert http any any -> any any (msg:"Test Usage of http.header.raw"; flow:established,to_server; http.header.raw; content:"User-Agent"; fast_pattern; classtype:web-application-attack; sid:34; rev:1;)
+alert http any any -> any any (msg:"Test Usage of http.header.raw"; flow:established,to_server; http.header.raw; content:"Content-Length"; fast_pattern; classtype:web-application-attack; sid:35; rev:1;)
+alert http any any -> any any (msg:"Test Usage of http.header.raw"; flow:established,to_server; http.header.raw; content:"Transfer-Encoding"; fast_pattern; classtype:web-application-attack; sid:36; rev:1;)
+
+alert http any any -> any any (msg:"Test Usage of http.request_header"; flow:established,to_server; http.request_header; content:"Host"; fast_pattern; classtype:web-application-attack; sid:41; rev:1;)
+alert http any any -> any any (msg:"Test Usage of http.request_header"; flow:established,to_server; http.request_header; content:"Cookie"; fast_pattern; classtype:web-application-attack; sid:42; rev:1;)
+alert http any any -> any any (msg:"Test Usage of http.request_header"; flow:established,to_server; http.request_header; content:"X-Qlik-User"; fast_pattern; classtype:web-application-attack; sid:43; rev:1;)
+alert http any any -> any any (msg:"Test Usage of http.request_header"; flow:established,to_server; http.request_header; content:"User-Agent"; fast_pattern; classtype:web-application-attack; sid:44; rev:1;)
+alert http any any -> any any (msg:"Test Usage of http.request_header"; flow:established,to_server; http.request_header; content:"Content-Length"; fast_pattern; classtype:web-application-attack; sid:45; rev:1;)
+alert http any any -> any any (msg:"Test Usage of http.request_header"; flow:established,to_server; http.request_header; content:"Transfer-Encoding"; fast_pattern; classtype:web-application-attack; sid:46; rev:1;)
