@@ -1,0 +1,6 @@
+## contains trailing |0d 0a| in pcre and does not fire, and should not fire, but when this rule is enabled, causes sid:3 to not fire
+alert http any any -> any any (flow:established,to_server; http.method; content:"GET"; http.uri; content:"/ws"; endswith; http.user_agent; content:"Go|2d|http|2d|client|2f|1|2e|1"; http.connection; content:"Upgrade"; bsize:7; http.request_header; content:"Key|3a 20|"; startswith; pcre:"/^(?:[a-z0-9]{64})\x0d\x0a/R"; sid:2;)
+
+## doesn't contain |0d 0a|, should fire and fires by itself, but not when above rule is enabled.
+alert http any any -> any any (flow:established,to_server; http.method; content:"GET"; http.uri; content:"/ws"; endswith; http.user_agent; content:"Go|2d|http|2d|client|2f|1|2e|1"; http.connection; content:"Upgrade"; bsize:7; http.request_header; bsize:69; content:"Key|3a 20|"; startswith; pcre:"/^(?:[a-z0-9]{64})$/R"; sid:3;)
+
