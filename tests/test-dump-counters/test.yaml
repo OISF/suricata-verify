@@ -1,0 +1,66 @@
+requires:
+    min-version: 7
+    script:
+      # Require root permissions, /proc and the lo loopback interface
+      - 'test `id -u` -eq 0'
+      - 'grep " *lo: *" /proc/net/dev >/dev/null'
+    pcap:
+
+command: ./test.sh
+
+checks:
+- filter:
+    filename: "dump-counters.json"
+    count: 1
+    match:
+      has-key: message.threads.Global.tcp.memuse
+- filter:
+    filename: "dump-counters.json"
+    count: 1
+    match:
+      has-key: message.threads.W#01-lo.capture.kernel_packets
+- filter:
+    filename: "dump-counters.json"
+    count: 1
+    match:
+      has-key: message.threads.W#02-lo.capture.kernel_packets
+- filter:
+    filename: "dump-counters.json"
+    count: 1
+    match:
+      has-key: message.threads.FM#01.flow.mgr.full_hash_pass
+- filter:
+    filename: "dump-counters.json"
+    count: 1
+    match:
+      has-key: message.threads.FM#02.flow.mgr.full_hash_pass
+- filter:
+    filename: "dump-counters.json"
+    count: 1
+    match:
+      has-key: message.threads.FM#03.flow.mgr.full_hash_pass
+- filter:
+    filename: "dump-counters.json"
+    count: 1
+    match:
+      has-key: message.threads.FR#01.flow.recycler.recycled
+- filter:
+    filename: "dump-counters.json"
+    count: 1
+    match:
+      has-key: message.threads.FR#02.flow.recycler.recycled
+- filter:
+    filename: "dump-counters.json"
+    count: 1
+    match:
+      has-key: message.threads.FR#03.flow.recycler.recycled
+- filter:
+    filename: "dump-counters.json"
+    count: 1
+    match:
+      has-key: message.threads.FR#04.flow.recycler.recycled
+- filter:
+    filename: "dump-counters.json"
+    count: 1
+    match:
+      has-key: message.threads.FR#05.flow.recycler.recycled
