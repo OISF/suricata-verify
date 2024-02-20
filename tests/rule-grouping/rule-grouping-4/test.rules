@@ -1,0 +1,7 @@
+drop tls any 1 -> any 1:8 (sid:1; gid:10000002;)
+drop tls any 2 -> any 3:94 (sid:2; gid:10000002;)
+drop tls any 3 -> any 7:43 (sid:3; gid:10000002;)
+drop tls any 4 -> any 100:120 (sid:4; gid:10000002;)
+drop tls any 5 -> any 25:89 (sid:5; gid:10000002;)
+drop tls any 6 -> any 7:25 (sid:6; gid:10000002;)
+drop tls any 7 -> any 80:100 (sid:7; gid:10000002;)
