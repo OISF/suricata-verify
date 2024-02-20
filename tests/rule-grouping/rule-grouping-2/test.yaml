@@ -1,0 +1,122 @@
+requires:
+  min-version: 8
+
+pcap: false
+
+args:
+  - --engine-analysis
+
+checks:
+  - filter:
+      filename: rule_group.json
+      count: 1
+      match:
+        tcp.toserver[0].port: 1
+        tcp.toserver[0].port2: 1
+        tcp.toserver[0].rulegroup.id: 0
+        tcp.toserver[0].rulegroup.rules[0].sig_id: 1
+  - filter:
+      filename: rule_group.json
+      count: 1
+      match:
+        tcp.toserver[1].port: 2
+        tcp.toserver[1].port2: 2
+        tcp.toserver[1].rulegroup.id: 1
+        tcp.toserver[1].rulegroup.rules[0].sig_id: 2
+  - filter:
+      filename: rule_group.json
+      count: 1
+      match:
+        tcp.toserver[2].port: 3
+        tcp.toserver[2].port2: 3
+        tcp.toserver[2].rulegroup.id: 2
+        tcp.toserver[2].rulegroup.rules[0].sig_id: 3
+  - filter:
+      filename: rule_group.json
+      count: 1
+      match:
+        tcp.toserver[3].port: 4
+        tcp.toserver[3].port2: 4
+        tcp.toserver[3].rulegroup.id: 3
+        tcp.toserver[3].rulegroup.rules[0].sig_id: 4
+  - filter:
+      filename: rule_group.json
+      count: 1
+      match:
+        tcp.toserver[4].port: 5
+        tcp.toserver[4].port2: 5
+        tcp.toserver[4].rulegroup.id: 4
+        tcp.toserver[4].rulegroup.rules[0].sig_id: 5
+  - filter:
+      filename: rule_group.json
+      count: 1
+      match:
+        tcp.toserver[5].port: 6
+        tcp.toserver[5].port2: 6
+        tcp.toserver[5].rulegroup.id: 5
+        tcp.toserver[5].rulegroup.rules[0].sig_id: 6
+  - filter:
+      filename: rule_group.json
+      count: 1
+      match:
+        tcp.toserver[6].port: 7
+        tcp.toserver[6].port2: 7
+        tcp.toserver[6].rulegroup.id: 6
+        tcp.toserver[6].rulegroup.rules[0].sig_id: 7
+  - filter:
+      filename: rule_group.json
+      count: 1
+      match:
+        tcp.toserver[7].port: 8
+        tcp.toserver[7].port2: 8
+        tcp.toserver[7].rulegroup.id: 7
+        tcp.toserver[7].rulegroup.rules[0].sig_id: 8
+  - filter:
+      filename: rule_group.json
+      count: 1
+      match:
+        tcp.toserver[8].port: 9
+        tcp.toserver[8].port2: 9
+        tcp.toserver[8].rulegroup.id: 8
+        tcp.toserver[8].rulegroup.rules[0].sig_id: 9
+  - filter:
+      filename: rule_group.json
+      count: 1
+      match:
+        tcp.toserver[9].port: 10
+        tcp.toserver[9].port2: 10
+        tcp.toserver[9].rulegroup.id: 9
+        tcp.toserver[9].rulegroup.rules[0].sig_id: 10
+  - filter:
+      filename: rule_group.json
+      count: 1
+      match:
+        tcp.toserver[10].port: 11
+        tcp.toserver[10].port2: 11
+        tcp.toserver[10].rulegroup.id: 10
+        tcp.toserver[10].rulegroup.rules[0].sig_id: 11
+  - filter:
+      filename: rule_group.json
+      count: 1
+      match:
+        tcp.toserver[11].port: 12
+        tcp.toserver[11].port2: 12
+        tcp.toserver[11].rulegroup.id: 11
+        tcp.toserver[11].rulegroup.rules[0].sig_id: 12
+  - filter:
+      filename: rule_group.json
+      count: 1
+      match:
+        tcp.toserver[12].port: 1024
+        tcp.toserver[12].port2: 65534
+        tcp.toserver[12].rulegroup.id: 12
+        tcp.toserver[12].rulegroup.rules[0].sig_id: 13
+  - filter:
+      filename: rule_group.json
+      count: 1
+      match:
+        tcp.toserver[13].port: 65535
+        tcp.toserver[13].port2: 65535
+        tcp.toserver[13].rulegroup.id: 12
+        tcp.toserver[13].rulegroup.rules[0].sig_id: 13
+
