@@ -1,0 +1,85 @@
+# This test runs Suricata as background process listening on a lo interface.
+# test-dump-counters.py waits for the stats to be ready and saves
+# dump-counters output into $OUTPUT_DIR/dump-counters.json. The checks
+# mechanism is used to verify expected keys are showing up.
+requires:
+    min-version: 7
+    script:
+      # Require root permissions, /proc and the lo loopback interface
+      - 'test `id -u` -eq 0'
+      - 'grep " *lo: *" /proc/net/dev >/dev/null'
+    pcap:
+
+
+command: timeout -k 1 10 ${SRCDIR}/src/suricata -v -l ${OUTPUT_DIR} -c ${SRCDIR}/suricata.yaml
+           --pcap=lo
+           --runmode=workers
+           --pidfile=${OUTPUT_DIR}/suricata.pid
+           --set capture.disable-offloading=false
+           --set capture.checksum-validation=none
+           --set pcap.1.threads=2
+           --set flow.managers=3
+           --set flow.recyclers=5
+           --set stats.interval=1
+           --set unix-command.filename=${OUTPUT_DIR}/suricata.sock &
+
+         PYTHONPATH=${SRCDIR}/python ${TEST_DIR}/test-dump-counters.py
+           --pidfile ${OUTPUT_DIR}/suricata.pid
+           --suricata-socket ${OUTPUT_DIR}/suricata.sock > ${OUTPUT_DIR}/dump-counters.json
+
+checks:
+- filter:
+    filename: "dump-counters.json"
+    count: 1
+    match:
+      has-key: message.threads.Global.tcp.memuse
+- filter:
+    filename: "dump-counters.json"
+    count: 1
+    match:
+      has-key: message.threads.W#01-lo.capture.kernel_packets
+- filter:
+    filename: "dump-counters.json"
+    count: 1
+    match:
+      has-key: message.threads.W#02-lo.capture.kernel_packets
+- filter:
+    filename: "dump-counters.json"
+    count: 1
+    match:
+      has-key: message.threads.FM#01.flow.mgr.full_hash_pass
+- filter:
+    filename: "dump-counters.json"
+    count: 1
+    match:
+      has-key: message.threads.FM#02.flow.mgr.full_hash_pass
+- filter:
+    filename: "dump-counters.json"
+    count: 1
+    match:
+      has-key: message.threads.FM#03.flow.mgr.full_hash_pass
+- filter:
+    filename: "dump-counters.json"
+    count: 1
+    match:
+      has-key: message.threads.FR#01.flow.recycler.recycled
+- filter:
+    filename: "dump-counters.json"
+    count: 1
+    match:
+      has-key: message.threads.FR#02.flow.recycler.recycled
+- filter:
+    filename: "dump-counters.json"
+    count: 1
+    match:
+      has-key: message.threads.FR#03.flow.recycler.recycled
+- filter:
+    filename: "dump-counters.json"
+    count: 1
+    match:
+      has-key: message.threads.FR#04.flow.recycler.recycled
+- filter:
+    filename: "dump-counters.json"
+    count: 1
+    match:
+      has-key: message.threads.FR#05.flow.recycler.recycled
