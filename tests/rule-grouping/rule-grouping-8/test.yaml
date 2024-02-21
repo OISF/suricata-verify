@@ -1,0 +1,23 @@
+requires:
+  min-version: 8
+
+pcap: false
+
+args:
+  - --engine-analysis
+
+checks:
+  - filter:
+      filename: rule_group.json
+      count: 1
+      match:
+        tcp.toserver.__len: 1
+  - filter:
+      filename: rule_group.json
+      count: 1
+      match:
+        tcp.toserver[0].port: 2010
+        tcp.toserver[0].port2: 2011
+        tcp.toserver[0].rulegroup.id: 0
+        tcp.toserver[0].rulegroup.rules[0].sig_id: 3
+

@@ -1,0 +1,1 @@
+alert tcp any any -> any [587,25] (flow:established,to_server; sid:2; rev:3;)
