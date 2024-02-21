@@ -1,0 +1,1 @@
+alert tcp any any -> any [2010,2011] (flow:established,to_server; sid:3; rev:1;)
