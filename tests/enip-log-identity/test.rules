@@ -1,0 +1,1 @@
+alert enip any any -> any any (msg:"SURICATA enip test command string";enip_command:list_identity ; sid:1;)
