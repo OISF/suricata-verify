@@ -1,7 +1,7 @@
 pcap: ../mqtt5-unsub-userpass/input.pcap
 
 requires:
-  min-version: 8
+  min-version: 7
 
 args:
  - -k none
