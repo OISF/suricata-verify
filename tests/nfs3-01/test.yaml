@@ -11142,14 +11142,15 @@ checks:
       src_ip: 139.25.22.2
       src_port: 3296
 - filter:
+    min-version: 8
     count: 1
     match:
       app_proto: failed
       community_id: 1:AUtTX3EtL8yKo1l/4n744z2c67M=
       dest_ip: 139.25.22.2
       dest_port: 3296
-      ether.dest_macs[0]: 00:c0:95:f8:4d:d3
-      ether.src_macs[0]: 00:c0:95:e0:19:be
+      ether.src_macs[0]: 00:c0:95:f8:4d:d3
+      ether.dest_macs[0]: 00:c0:95:e0:19:be
       event_type: netflow
       netflow.age: 0
       netflow.bytes: 66
@@ -11203,14 +11204,15 @@ checks:
       src_ip: 139.25.22.2
       src_port: 3298
 - filter:
+    min-version: 8
     count: 1
     match:
       app_proto: failed
       community_id: 1:7vPYSqvtfQ2cioualTnJzHa1fGs=
       dest_ip: 139.25.22.2
       dest_port: 3298
-      ether.dest_macs[0]: 00:c0:95:f8:4d:d3
-      ether.src_macs[0]: 00:c0:95:e0:19:be
+      ether.src_macs[0]: 00:c0:95:f8:4d:d3
+      ether.dest_macs[0]: 00:c0:95:e0:19:be
       event_type: netflow
       netflow.age: 0
       netflow.bytes: 66
@@ -11264,14 +11266,15 @@ checks:
       src_ip: 139.25.22.2
       src_port: 722
 - filter:
+    min-version: 8
     count: 1
     match:
       app_proto: failed
       community_id: 1:Ec8olmeIKk7iDWku79sjHqEjNgI=
       dest_ip: 139.25.22.2
       dest_port: 722
-      ether.dest_macs[0]: 00:c0:95:f8:4d:d3
-      ether.src_macs[0]: 00:c0:95:e0:19:be
+      ether.src_macs[0]: 00:c0:95:f8:4d:d3
+      ether.dest_macs[0]: 00:c0:95:e0:19:be
       event_type: netflow
       netflow.age: 0
       netflow.bytes: 66
@@ -11325,14 +11328,15 @@ checks:
       src_ip: 139.25.22.2
       src_port: 1022
 - filter:
+    min-version: 8
     count: 1
     match:
       app_proto: nfs
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
       dest_ip: 139.25.22.2
       dest_port: 1022
-      ether.dest_macs[0]: 00:c0:95:f8:4d:d3
-      ether.src_macs[0]: 00:c0:95:e0:19:be
+      ether.src_macs[0]: 00:c0:95:f8:4d:d3
+      ether.dest_macs[0]: 00:c0:95:e0:19:be
       event_type: netflow
       netflow.age: 0
       netflow.bytes: 11038
@@ -11386,14 +11390,15 @@ checks:
       src_ip: 139.25.22.2
       src_port: 3295
 - filter:
+    min-version: 8
     count: 1
     match:
       app_proto: failed
       community_id: 1:Qa82cl2bHpIRvy6bCKNJ8m5uFHc=
       dest_ip: 139.25.22.2
       dest_port: 3295
-      ether.dest_macs[0]: 00:c0:95:f8:4d:d3
-      ether.src_macs[0]: 00:c0:95:e0:19:be
+      ether.src_macs[0]: 00:c0:95:f8:4d:d3
+      ether.dest_macs[0]: 00:c0:95:e0:19:be
       event_type: netflow
       netflow.age: 0
       netflow.bytes: 90
@@ -11447,14 +11452,15 @@ checks:
       src_ip: 139.25.22.2
       src_port: 3299
 - filter:
+    min-version: 8
     count: 1
     match:
       app_proto: failed
       community_id: 1:5s7E1MtKBUIBA6tevSSCEoo4+nY=
       dest_ip: 139.25.22.2
       dest_port: 3299
-      ether.dest_macs[0]: 00:c0:95:f8:4d:d3
-      ether.src_macs[0]: 00:c0:95:e0:19:be
+      ether.src_macs[0]: 00:c0:95:f8:4d:d3
+      ether.dest_macs[0]: 00:c0:95:e0:19:be
       event_type: netflow
       netflow.age: 0
       netflow.bytes: 90
@@ -11508,14 +11514,15 @@ checks:
       src_ip: 139.25.22.2
       src_port: 3297
 - filter:
+    min-version: 8
     count: 1
     match:
       app_proto: failed
       community_id: 1:RDDy+TvkuBpmdeE7O38hhFJL50w=
       dest_ip: 139.25.22.2
       dest_port: 3297
-      ether.dest_macs[0]: 00:c0:95:f8:4d:d3
-      ether.src_macs[0]: 00:c0:95:e0:19:be
+      ether.src_macs[0]: 00:c0:95:f8:4d:d3
+      ether.dest_macs[0]: 00:c0:95:e0:19:be
       event_type: netflow
       netflow.age: 0
       netflow.bytes: 90
@@ -11569,14 +11576,15 @@ checks:
       src_ip: 139.25.22.2
       src_port: 706
 - filter:
+    min-version: 8
     count: 1
     match:
       app_proto: failed
       community_id: 1:9Pe9/OArRDrWNZ2YKjQF8PEpzcI=
       dest_ip: 139.25.22.2
       dest_port: 706
-      ether.dest_macs[0]: 00:c0:95:f8:4d:d3
-      ether.src_macs[0]: 00:c0:95:e0:19:be
+      ether.src_macs[0]: 00:c0:95:f8:4d:d3
+      ether.dest_macs[0]: 00:c0:95:e0:19:be
       event_type: netflow
       netflow.age: 0
       netflow.bytes: 114
