@@ -1,0 +1,4 @@
+# "Zm 9v Ym Fy" is "foobar" with mode RFC2045
+alert http any any -> any any (msg:"from_base64: RFC2045 - will succeed"; http.uri; content:"/?arg=Zm 9v Ym Fy"; from_base64: offset 6, mode rfc2045; content:"foobar"; sid:1; rev:1;)
+alert http any any -> any any (msg:"from_base64: mode strict - will fail"; http.uri; content:"/?arg=Zm 9v Ym Fy"; from_base64: offset 6, mode strict; content:"foobar"; sid:2; rev:1;)
+alert http any any -> any any (msg:"from_base64: mode RFC4648 - will fail"; http.uri; content:"/?arg=Zm 9v Ym Fy"; from_base64: offset 6, mode rfc4648; content:"foobar"; sid:3; rev:1;)

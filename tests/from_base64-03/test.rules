@@ -1,0 +1,8 @@
+# input pcap contains a query to http://home.regit.org/?arg=dGhpc2lzYXRlc3QK
+# "dGhpc2lzYXRlc3QK" is "thisisatest"
+alert http any any -> any any (msg:"from_base64: offset #1 [mode rfc4648]"; http.uri; content:"/?arg=dGhpc2lzYXRlc3QK"; from_base64: offset 6 ; content:"thisisatest"; fast_pattern; sid:1; rev:1;)
+alert http any any -> any any (msg:"from_base64: offset #2 [mode rfc4648]"; http.uri; content:"/?arg=dGhpc2lzYXRlc3QK"; from_base64: offset 10 ; content:"sisatest"; fast_pattern; sid:2; rev:1;)
+alert http any any -> any any (msg:"from_base64: bytes, offset #1 [mode rfc4648]"; http.uri; content:"/?arg=dGhpc2lzYXRlc3QK"; from_base64: bytes 6, offset 6 ; content:"this"; fast_pattern; sid:3; rev:1;)
+alert http any any -> any any (msg:"from_base64: offset #3, mode rfc2045 - will succeed"; http.uri; content:"/?arg=dGhpc2lzYXRlc3QK"; from_base64: offset 6, mode rfc2045 ; content:"thisisatest"; fast_pattern; sid:4; rev:1;)
+alert http any any -> any any (msg:"from_base64: offset #3, mode rfc4648 - will succeed"; http.uri; content:"/?arg=dGhpc2lzYXRlc3QK"; from_base64: offset 6, mode rfc4648 ; content:"thisisatest"; fast_pattern; sid:5; rev:1;)
+alert http any any -> any any (msg:"from_base64: offset #4, mode strict - will succeed"; http.uri; content:"/?arg=dGhpc2lzYXRlc3QK"; from_base64: offset 6, mode strict ; content:"thisisatest"; fast_pattern; sid:6; rev:1;)
