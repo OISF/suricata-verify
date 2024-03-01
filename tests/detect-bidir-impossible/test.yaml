@@ -1,0 +1,29 @@
+requires:
+  min-version: 8
+
+pcap: ../http-all-headers/input.pcap
+
+exit-code: 1
+
+checks:
+  - shell:
+      args: grep -c 'error parsing signature' suricata.log
+      expect: 6
+  - shell:
+      args: grep -c 'rule 2 should use both directions, but does not' suricata.log
+      expect: 1
+  - shell:
+      args: grep -c 'rule 3 should use both directions, but does not' suricata.log
+      expect: 1
+  - shell:
+      args: grep -c 'rule 4 means to use both directions, cannot have keywords ambiguous about directions' suricata.log
+      expect: 1
+  - shell:
+      args: grep -c 'fast_pattern cannot be used on to_client keyword for bidirectional rule 5' suricata.log
+      expect: 1
+  - shell:
+      args: grep -c 'prefilter cannot be used on to_client keyword for bidirectional rule 6' suricata.log
+      expect: 1
+  - shell:
+      args: grep -c 'rule 11 means to use both directions, cannot specify a flow direction' suricata.log
+      expect: 1
