@@ -1,0 +1,21 @@
+pcap: ../../http-all-headers/input.pcap
+
+requires:
+  min-version: 8
+
+args:
+- --set threshold-file=${TEST_DIR}/threshold.config
+- --simulate-ips
+
+retry: 3
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000001
+  - filter:
+      count: 1
+      match:
+        event_type: http
