@@ -1,0 +1,22 @@
+pcap: ../../tls/tls-certs-alert/input.pcap
+
+requires:
+  min-version: 7.0.3
+  features:
+    - HAVE_LUA
+    - HAVE_JA3
+  script:
+    - grep 'ProvidesFeature(FEATURE_JA3);' src/app-layer-ssl.c > /dev/null
+
+args:
+ - -k none
+ - --set security.lua.allow-rules=true
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+  - shell:
+      args: "grep -c 'missing a required feature: feature ja3' stdout"
+      expect: 4
