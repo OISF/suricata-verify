@@ -1,0 +1,18 @@
+pcap: arp-encap.pcap
+
+requires:
+    min-version: 8
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: arp
+        arp.hw_type: ethernet
+        arp.proto_type: ipv4
+        arp.opcode: request
+        arp.src_mac: bc:03:58:5a:d5:ca
+        arp.src_ip: 192.168.1.28
+        arp.dest_mac: 00:00:00:00:00:00
+        arp.dest_ip: 0.0.0.0
+
