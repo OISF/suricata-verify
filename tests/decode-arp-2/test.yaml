@@ -1,0 +1,35 @@
+requires:
+    min-version: 8
+
+pcap: arp.pcap
+
+checks:
+  - filter:
+      count: 4
+      match:
+        event_type: arp
+  - filter:
+      count: 1
+      match:
+        event_type: arp
+        pcap_cnt: 5
+        arp.hw_type: ethernet
+        arp.proto_type: ipv4
+        arp.opcode: request
+        arp.src_mac: 00:1d:09:f0:92:ab
+        arp.src_ip: 10.10.10.1
+        arp.dest_mac: 00:00:00:00:00:00
+        arp.dest_ip: 10.10.10.2
+  - filter:
+      count: 1
+      match:
+        event_type: arp
+        pcap_cnt: 6
+        arp.hw_type: ethernet
+        arp.proto_type: ipv4
+        arp.opcode: reply
+        arp.src_mac: 00:1a:6b:6c:0c:cc
+        arp.src_ip: 10.10.10.2
+        arp.dest_mac: 00:1d:09:f0:92:ab
+        arp.dest_ip: 10.10.10.1
+
