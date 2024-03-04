@@ -51,7 +51,6 @@ According to [my issue upstream](https://github.com/FoxIO-LLC/ja4/issues/3):
   dst_port: 443
   tls_server_name: cloudflare-quic.com
   ja4: t13d1516h2_8daaf6152771_e5627efa2ab1
-  ja4s: t130200_1301_234ea6891581
   ja4l_c: 30_64
   ja4l_s: 5749_56
   http:
@@ -64,7 +63,6 @@ According to [my issue upstream](https://github.com/FoxIO-LLC/ja4/issues/3):
   dst_port: 443
   tls_server_name: cloudflare-quic.com
   ja4: q13d0310h3_55b375c5d22e_cd85d2d88918
-  ja4s: q130200_1301_234ea6891581
   ja4l_c: 113_64
   ja4l_s: 9285_56
 ```
