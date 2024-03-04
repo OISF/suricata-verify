@@ -1,0 +1,30 @@
+requires:
+    min-version: 8
+
+args:
+- -k none
+
+pcap: arp-storm.pcap
+
+checks:
+  - filter:
+      count: 622
+      match:
+        event_type: arp
+  - filter:
+      count: 1
+      match:
+        event_type: arp
+        pcap_cnt: 17
+        arp.hw_type: ethernet
+        arp.proto_type: ipv4
+        arp.hw_size: 6
+        arp.proto_size: 4
+        arp.opcode: request
+        arp.src_mac: 00:07:0d:af:f4:54
+        arp.src_ip: 69.76.216.1
+        arp.dest_mac: 00:00:00:00:00:00
+        arp.dest_ip: 69.76.223.217
+  - stats:
+      decoder.ethernet: 622
+      decoder.arp: 622
