@@ -1,0 +1,16 @@
+requires:
+  min-version: 8.0.0
+  features:
+    - HAVE_JA4
+
+args:
+  - -k none --set app-layer.protocols.tls.ja4-fingerprints=no
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+  - shell:
+      args: "grep -c 'missing a required feature: feature ja4' stdout"
+      expect: 2
