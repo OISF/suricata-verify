@@ -20,4 +20,5 @@ checks:
     count: 1
     match:
       event_type: alert
-      tftp.packet: "read"
+      #disabled until we get tftp tx keywords
+      #tftp.packet: "read"

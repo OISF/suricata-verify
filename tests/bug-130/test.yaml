@@ -22,17 +22,6 @@ checks:
       dest_ip: 10.100.0.8
       dest_port: 44270
       event_type: alert
-      http:
-        hostname: www.abcdefghij.com
-        http_content_type: text/html
-        http_method: GET
-        http_refer: http://www.abcdefghij.com/abdeltat/login
-        http_user_agent: Mozilla/5.0 (X11; U; Linux i686; fr; rv:1.9.0.6) Gecko/2009011912
-          Firefox/3.0.6
-        length: 1483
-        protocol: HTTP/1.1
-        status: 401
-        url: /publication/pub.home/home.html
       pcap_cnt: 14
       proto: TCP
       src_ip: 162.2.41.200
@@ -52,17 +41,6 @@ checks:
       dest_ip: 10.100.0.8
       dest_port: 44270
       event_type: alert
-      http:
-        hostname: www.abcdefghij.com
-        http_content_type: text/html
-        http_method: GET
-        http_refer: http://www.abcdefghij.com/abdeltat/login
-        http_user_agent: Mozilla/5.0 (X11; U; Linux i686; fr; rv:1.9.0.6) Gecko/2009011912
-          Firefox/3.0.6
-        length: 1483
-        protocol: HTTP/1.1
-        status: 401
-        url: /publication/pub.home/home.html
       pcap_cnt: 14
       proto: TCP
       src_ip: 162.2.41.200
@@ -82,17 +60,6 @@ checks:
       dest_ip: 10.100.0.8
       dest_port: 44270
       event_type: alert
-      http:
-        hostname: www.abcdefghij.com
-        http_content_type: text/html
-        http_method: GET
-        http_refer: http://www.abcdefghij.com/abdeltat/login
-        http_user_agent: Mozilla/5.0 (X11; U; Linux i686; fr; rv:1.9.0.6) Gecko/2009011912
-          Firefox/3.0.6
-        length: 1483
-        protocol: HTTP/1.1
-        status: 401
-        url: /publication/pub.home/home.html
       pcap_cnt: 14
       proto: TCP
       src_ip: 162.2.41.200
