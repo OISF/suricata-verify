@@ -7,3 +7,8 @@ checks:
       match:
         event_type: http
         http.http_user_agent: myscript
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: REQUEST_LINE_MISSING_PROTOCOL
