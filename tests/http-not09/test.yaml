@@ -7,3 +7,15 @@ checks:
       match:
         event_type: http
         http.http_user_agent: myscript
+  - filter:
+      min-version: 8
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: REQUEST_LINE_MISSING_PROTOCOL
+  - filter:
+      min-version: 8
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2221055
