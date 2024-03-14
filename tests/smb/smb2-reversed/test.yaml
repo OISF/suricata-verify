@@ -1,0 +1,12 @@
+requires:
+  min-version: 7
+
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: smb
