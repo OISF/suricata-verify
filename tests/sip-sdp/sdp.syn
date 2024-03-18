@@ -1,0 +1,33 @@
+flow default udp 1.1.1.1:5555 > 2.2.2.2:5060;
+default > (content:"INVITE sip:97239287044@voip.brujula.net SIP/2.0\x0d
+Via: SIP/2.0/UDP 192.168.1.2:5060;branch=z9hG4bKnp104984053-44ce4a41192.168.1.2;rport\x0d
+From: \"arik\" <sip:816666@voip.brurjula.net>;tag=6433ef9\x0d
+To: <sip:97239287044@voip.brujula.net>\x0d
+Call-ID: 105090259-446faf7a@192.168.1.2\x0d
+CSeq: 1 INVITE\x0d
+User-Agent: Nero SIPPS IP Phone Version 2.0.51.16\x0d
+Expires: 120\x0d
+Accept: application/sdp\x0d
+Content-Type: application/sdp\x0d
+Content-Length: 272\x0d
+Contact: <sip:816666@192.168.1.2>\x0d
+Max-Forwards: 70\x0d
+Allow: INVITE, ACK, CANCEL, BYE, REFER, OPTIONS, NOTIFY, INFO\x0d
+\x0d
+v=0\x0d
+o=SIPPS 105015165 105015162 IN IP4 192.168.1.2\x0d
+s=SIP call\x0d
+i=Session Description Protocol\x0d
+u=https://www.sdp.proto\x0d
+e=j.doe@example.com (Jane Doe)\x0d
+p=+1 617 555-6011 (Jane Doe)\x0d
+c=IN IP4 192.168.1.2\x0d
+b=AS:64\x0d
+t=3034423619 3042462419\x0d
+r=604800 3600 0 90000\x0d
+z=2882844526 -1h 2898848070 0\x0d
+k=prompt\x0d
+a=sendrecv\x0d
+m=audio 30000 RTP/AVP 0 8 97 2 3\x0d
+a=rtpmap:0 pcmu/8000\x0d\x0a";);
+
