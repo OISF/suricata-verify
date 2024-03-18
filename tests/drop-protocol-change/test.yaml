@@ -1,16 +1,26 @@
 requires:
-  min-version: 7
+  min-version: 6
 
 args:
   - -k none --set stream.midstream=true
 
 checks:
   - filter:
+      requires:
+        min-version: 7
       count: 1
       match:
         event_type: flow
         app_proto: http2
         app_proto_orig: http
+        flow.action: drop
+  - filter:
+      requires:
+        min-version: 6
+      count: 1
+      match:
+        event_type: flow
+        app_proto: http
         flow.action: drop
   - filter:
       count: 1
