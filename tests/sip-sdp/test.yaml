@@ -1,0 +1,27 @@
+requires:
+  min-version: 8
+
+args:
+  - -k none
+
+pcap: ../sip-method/sip.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: sip
+        pcap_cnt: 223
+        sip.sdp.origin: SIPPS 105015165 105015162 IN IP4 192.168.1.2
+        sip.sdp.session_name: SIP call
+        sip.sdp.connection_data: IN IP4 192.168.1.2
+        sip.sdp.time: 0 0
+        sip.sdp.media_descriptions[0].media: audio 30000 RTP/AVP 0 8 97 2 3
+        sip.sdp.media_descriptions[0].attributes[0]: rtpmap:0 pcmu/8000
+        sip.sdp.media_descriptions[0].attributes[1]: rtpmap:8 pcma/8000
+        sip.sdp.media_descriptions[0].attributes[2]: rtpmap:97 iLBC/8000
+        sip.sdp.media_descriptions[0].attributes[3]: rtpmap:2 G726-32/8000
+        sip.sdp.media_descriptions[0].attributes[4]: rtpmap:3 GSM/8000
+        sip.sdp.media_descriptions[0].attributes[5]: fmtp:97 mode=20
+        sip.sdp.media_descriptions[0].attributes[6]: sendrecv
+
