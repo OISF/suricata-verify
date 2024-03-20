@@ -1,0 +1,10 @@
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 1
+        alert.signature_id: 1
+        stream: 0

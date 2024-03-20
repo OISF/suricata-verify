@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"Flowbit set"; sid:1;)
