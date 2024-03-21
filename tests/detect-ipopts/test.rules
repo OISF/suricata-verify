@@ -1,0 +1,10 @@
+alert ip any any -> any any (msg:"RR option set"; ipopts:rr; sid: 1;)
+alert ip any any -> any any (msg:"LSRR option set"; ipopts:lsrr; sid: 2;)
+alert ip any any -> any any (msg:"EOL option set"; ipopts:eol; sid: 3;)
+alert ip any any -> any any (msg:"NOP option set"; ipopts:nop; sid: 4;)
+alert ip any any -> any any (msg:"TS option set"; ipopts:ts; sid: 5;)
+alert ip any any -> any any (msg:"SEC option set"; ipopts:sec; sid: 6;)
+alert ip any any -> any any (msg:"SSRR option set"; ipopts:ssrr; sid: 7;)
+alert ip any any -> any any (msg:"SID option set"; ipopts:satid; sid: 8;)
+# covered in ipopts-sec
+#alert ip any any <> any any (msg:"ESEC option set"; ipopts:esec; sid: 42;)
