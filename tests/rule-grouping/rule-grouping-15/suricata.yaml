@@ -1,0 +1,13 @@
+%YAML 1.1
+---
+
+engine-analysis:
+  rules-fast-pattern: yes
+  rules: yes
+
+detect:
+  profiling:
+    grouping:
+      dump-to-disk: yes
+      include-rules: yes
+      include-mpm-stats: yes

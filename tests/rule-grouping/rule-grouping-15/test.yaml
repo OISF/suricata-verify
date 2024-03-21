@@ -1,0 +1,74 @@
+requires:
+  min-version: 8
+
+pcap: false
+
+args:
+  - --engine-analysis
+
+checks:
+  - filter:
+      filename: rule_group.json
+      count: 1
+      match:
+        tcp.toserver.__len: 7
+  - filter:
+      filename: rule_group.json
+      count: 1
+      match:
+        tcp.toserver[0].port: 15
+        tcp.toserver[0].port2: 20
+        tcp.toserver[0].rulegroup.id: 0
+        tcp.toserver[0].rulegroup.rules[0].sig_id: 1
+        tcp.toserver[0].rulegroup.rules[1].sig_id: 2
+  - filter:
+      filename: rule_group.json
+      count: 1
+      match:
+        tcp.toserver[1].port: 35
+        tcp.toserver[1].port2: 40
+        tcp.toserver[1].rulegroup.id: 1
+        tcp.toserver[1].rulegroup.rules[0].sig_id: 2
+        tcp.toserver[1].rulegroup.rules[1].sig_id: 3
+  - filter:
+      filename: rule_group.json
+      count: 1
+      match:
+        tcp.toserver[2].port: 55
+        tcp.toserver[2].port2: 60
+        tcp.toserver[2].rulegroup.id: 2
+        tcp.toserver[2].rulegroup.rules[0].sig_id: 3
+        tcp.toserver[2].rulegroup.rules[1].sig_id: 4
+  - filter:
+      filename: rule_group.json
+      count: 1
+      match:
+        tcp.toserver[3].port: 1
+        tcp.toserver[3].port2: 14
+        tcp.toserver[3].rulegroup.id: 3
+        tcp.toserver[3].rulegroup.rules[0].sig_id: 1
+  - filter:
+      filename: rule_group.json
+      count: 1
+      match:
+        tcp.toserver[4].port: 21
+        tcp.toserver[4].port2: 34
+        tcp.toserver[4].rulegroup.id: 4
+        tcp.toserver[4].rulegroup.rules[0].sig_id: 2
+  - filter:
+      filename: rule_group.json
+      count: 1
+      match:
+        tcp.toserver[5].port: 41
+        tcp.toserver[5].port2: 54
+        tcp.toserver[5].rulegroup.id: 5
+        tcp.toserver[5].rulegroup.rules[0].sig_id: 3
+  - filter:
+      filename: rule_group.json
+      count: 1
+      match:
+        tcp.toserver[6].port: 61
+        tcp.toserver[6].port2: 80
+        tcp.toserver[6].rulegroup.id: 6
+        tcp.toserver[6].rulegroup.rules[0].sig_id: 4
+
