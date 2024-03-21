@@ -1,0 +1,2 @@
+alert tcp any 1024: -> any 80:100 (flow:to_server; content:"abc"; sid:2;)
+alert tcp any 1024: -> any 100:120 (flow:to_server; content:"abc"; sid:3;)
