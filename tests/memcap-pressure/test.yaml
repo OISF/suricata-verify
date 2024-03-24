@@ -1,0 +1,16 @@
+requires:
+  min-version: 8
+pcap: ../alert-testmyids-midstream5/input.pcap
+
+args:
+- --set stream.midstream=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        has-key: stats.memcap.pressure_max
+        has-key: stats.memcap.pressure
+        not-has-key: stats.memcap_pressure_max
+        not-has-key: stats.memcap_pressure
