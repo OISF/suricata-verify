@@ -1,0 +1,9 @@
+requires:
+  min-version: 8
+
+pcap: false
+
+args:
+  - --engine-analysis
+
+exit-code: 1
