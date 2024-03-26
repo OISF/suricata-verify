@@ -1,0 +1,2 @@
+alert quic any any -> any any (msg:"JA4 Requires Test 1"; requires: feature ja4; sid:1;)
+alert tls any any -> any any (msg:"JA4 Requires Test 1"; requires: feature ja4; sid:2;)

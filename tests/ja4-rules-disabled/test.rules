@@ -1,0 +1,2 @@
+alert quic any any -> any any (msg:"JA4 QUIC Test 1"; ja4.hash; content: "q13d0310h3_55b375c5d22e_cd85d2d88918"; sid:1;)
+alert tls any any -> any any (msg:"JA4 TLS Test 1"; ja4.hash; content: "t13d1516h2_8daaf6152771_e5627efa2ab1"; sid:2;)

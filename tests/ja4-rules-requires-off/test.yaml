@@ -1,0 +1,18 @@
+requires:
+  min-version: 8.0.0
+  files:
+    - rust/src/ja4.rs
+  script:
+    - ./src/suricata --build-info | grep "JA4 support" | grep no > /dev/null
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+  - shell:
+      args: "grep -c 'missing a required feature: feature ja4' stdout"
+      expect: 2

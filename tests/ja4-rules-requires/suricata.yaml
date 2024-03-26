@@ -1,0 +1,28 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular #regular|syslog|unix_dgram|unix_stream|redis
+      filename: eve.json
+      types:
+        - alert:
+            payload: no
+            payload-buffer-size: 4kb
+            payload-printable: no
+            packet: no
+            metadata: yes
+        - tls:
+            extended: yes
+        - quic
+
+app-layer:
+  protocols:
+    tls:
+      enabled: yes
+      detection-ports:
+        dp: 443
+      ja4-fingerprints: no
+    quic:
+      enabled: yes
