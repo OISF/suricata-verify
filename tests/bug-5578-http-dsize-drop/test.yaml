@@ -1,0 +1,30 @@
+pcap: ../bug-4663/input.pcap
+
+args:
+- --simulate-ips
+
+checks:
+  - filter:
+      count: 421
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 421
+      match:
+        event_type: drop
+        drop.reason: rules
+  - filter:
+      count: 421
+      match:
+        event_type: drop
+  - filter:
+      count: 0
+      match:
+        event_type: flow
+        flow.action: drop
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.state: closed
