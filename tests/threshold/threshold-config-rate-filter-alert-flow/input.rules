@@ -1,0 +1,1 @@
+drop tcp any any -> any any (dsize:0; sid: 1000001;)

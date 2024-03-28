@@ -1,0 +1,6 @@
+alert icmp any any -> any any (itype:8; sid:1;)
+alert icmp any any -> any any (itype:8; detection_filter:track by_flow, count 1, seconds 3600; sid:2;)
+alert icmp any any -> any any (itype:8; detection_filter:track by_flow, count 2, seconds 3600; sid:3;)
+alert icmp any any -> any any (itype:8; detection_filter:track by_flow, count 4, seconds 3600; sid:4;)
+alert icmp any any -> any any (itype:8; detection_filter:track by_flow, count 7, seconds 3600; sid:5;)
+alert icmp any any -> any any (itype:8; detection_filter:track by_flow, count 8, seconds 3600; sid:6;)
