@@ -1,16 +1,13 @@
 requires:
   features:
     - DEBUG
-  files:
-    - src/util-exception-policy.c
 pcap: ../tls/tls-certs-alert/input.pcap
 args:
 - --simulate-ips
 - -k none
-# pretend tcp memcap was hit in packet 4, the client hello containing the sni
-- --simulate-packet-tcp-reassembly-memcap=4
-- --set stream.reassembly.memcap-policy=pass-packet
-- --set app-layer.error-policy=ignore
+# pretend pretend error in the first data
+- --simulate-applayer-error-at-offset-ts=0
+- --set app-layer.error-policy=pass-packet
 checks:
   - filter:
       count: 0
@@ -24,11 +21,6 @@ checks:
       count: 0
       match:
         event_type: drop
-        drop.reason: "stream memcap"
-  - filter:
-      count: 0
-      match:
-        event_type: drop
         drop.reason: "flow drop"
   - filter:
       count: 0
@@ -36,7 +28,7 @@ checks:
         event_type: tls
         tls.sni: example.com
   - filter:
-      count: 1
+      count: 0
       match:
         event_type: tls
   - filter:
@@ -54,4 +46,5 @@ checks:
       count: 1
       match:
         event_type: stats
-        stats.tcp.reassembly_exception_policy.pass_packet: 1
+        stats.app_layer.error.tls.exception_policy.pass_packet: 1
+        stats.app_layer.error.tls.exception_policy.drop_packet: 0

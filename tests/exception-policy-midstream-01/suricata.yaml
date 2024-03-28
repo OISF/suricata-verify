@@ -1,6 +1,10 @@
 %YAML 1.1
 ---
 
+stats:
+  enabled: yes
+  eps-zero-valued-counters: true
+
 outputs:
   - eve-log:
       enabled: yes
@@ -26,3 +30,10 @@ outputs:
         - drop:
             alerts: yes
             flows: all
+        - stats
+  - stats:
+       enabled: yes
+       filename: stats.log
+       append: yes
+
+exception-policy: ignore
