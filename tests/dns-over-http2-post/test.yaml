@@ -1,0 +1,24 @@
+requires:
+  min-version: 8.0.0
+
+# disables checksum verification
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: doh2
+        dns.queries[0].rrname: example.com
+        dns.queries[0].rrtype: NS
+        dns.answers[0].rrname: example.com
+        dns.answers[0].rrtype: NS
+        dns.answers[0].rdata: b.iana-servers.net
+        dns.grouped.NS[0]: b.iana-servers.net
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: doh2
+        app_proto_orig: http2
