@@ -1,0 +1,12 @@
+Test the IP options. There's already a test for the extended security option; the following IP options are
+tested:
+- Record Route "rr"
+- Loose source route "lsrr"
+- EOL "eol"
+- NOP "nop"
+- Timestamp "ts"
+- Security "sec"
+- Strict source route "ssrr"
+- Stream id "satid"
+
+The pcap was generated using ipopt.py
