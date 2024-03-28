@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"HTTP traffic"; sid:001; rev:1;)
