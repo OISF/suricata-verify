@@ -1,0 +1,78 @@
+requires:
+   min-version: 7.0.3
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 5
+      match:
+        event_type: dns
+        src_ip: 10.16.1.11
+        ether.src_mac: d8:cb:8a:ed:a1:46
+        dns.type: query
+  - filter:
+      count: 5
+      match:
+        event_type: dns
+        src_ip: 10.16.1.11
+        ether.src_mac: d8:cb:8a:ed:a1:46
+        dns.type: answer
+  - filter:
+      count: 0
+      match:
+        event_type: dns
+        src_ip: 10.16.1.11
+        ether.dest_mac: d8:cb:8a:ed:a1:46
+        dns.type: answer
+  - filter:
+      count: 5
+      match:
+        event_type: flow
+        src_ip: 10.16.1.11
+        ether.src_macs[0]: d8:cb:8a:ed:a1:46
+  - filter:
+      count: 5
+      match:
+        event_type: netflow
+        src_ip: 10.16.1.11
+        ether.src_macs[0]: d8:cb:8a:ed:a1:46
+  - filter:
+      count: 5
+      match:
+        event_type: netflow
+        dest_ip: 10.16.1.11
+        ether.dest_macs[0]: d8:cb:8a:ed:a1:46
+  - filter:
+      count: 4
+      match:
+        event_type: tls
+        src_ip: 192.168.56.1
+        ether.src_mac: 0a:00:27:00:00:00
+  - filter:
+      count: 0
+      match:
+        event_type: tls
+        src_ip: 192.168.56.1
+        ether.dest_mac: 0a:00:27:00:00:00
+  - filter:
+      count: 5
+      match:
+        event_type: flow
+        app_proto: tls
+        src_ip: 192.168.56.1
+        ether.src_macs[0]: 0a:00:27:00:00:00
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        src_ip: 192.168.118.10
+        ether.src_mac: 00:11:2f:8f:a0:76
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_ip: 192.168.118.10
+        ether.dest_mac: 00:11:2f:8f:a0:76
+
