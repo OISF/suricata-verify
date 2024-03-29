@@ -1,0 +1,46 @@
+requires:
+  min-version: 8
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      dest_ip: 72.16.54.30
+      dest_port: 443
+      event_type: tls
+      pcap_cnt: 9
+      proto: TCP
+      src_ip: 192.168.134.106
+      src_port: 23481
+      tls.fingerprint: e9:a0:69:50:ba:18:dc:ac:d3:a7:fe:58:22:4a:1f:42:5b:bc:96:b0
+      tls.issuerdn: C=US, O=Let's Encrypt, CN=R3
+      tls.notafter: '2023-03-01T06:47:30'
+      tls.notbefore: '2022-12-01T06:47:31'
+      tls.serial: 03:DE:23:89:7E:97:FB:86:8E:7C:C5:53:09:FE:AE:D0:AE:20
+      tls.subject: CN=xn--j1ahhq.xn--p1ai
+      tls.subjectaltname[0]: server1.xn--j1ahhq.xn--p1ai
+      tls.subjectaltname[10]: server4.xn--j1ahhq.xn--p1ai
+      tls.subjectaltname[11]: server5.xn--j1ahhq.xn--p1ai
+      tls.subjectaltname[12]: server6.xn--j1ahhq.xn--p1ai
+      tls.subjectaltname[13]: server7.xn--j1ahhq.xn--p1ai
+      tls.subjectaltname[14]: server8.xn--j1ahhq.xn--p1ai
+      tls.subjectaltname[15]: server9.xn--j1ahhq.xn--p1ai
+      tls.subjectaltname[16]: xn--j1ahhq.xn--p1ai
+      tls.subjectaltname[1]: server10.xn--j1ahhq.xn--p1ai
+      tls.subjectaltname[2]: server11.xn--j1ahhq.xn--p1ai
+      tls.subjectaltname[3]: server12.xn--j1ahhq.xn--p1ai
+      tls.subjectaltname[4]: server13.xn--j1ahhq.xn--p1ai
+      tls.subjectaltname[5]: server14.xn--j1ahhq.xn--p1ai
+      tls.subjectaltname[6]: server15.xn--j1ahhq.xn--p1ai
+      tls.subjectaltname[7]: server16.xn--j1ahhq.xn--p1ai
+      tls.subjectaltname[8]: server2.xn--j1ahhq.xn--p1ai
+      tls.subjectaltname[9]: server3.xn--j1ahhq.xn--p1ai
+      tls.version: TLSv1
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
