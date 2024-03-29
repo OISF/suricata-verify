@@ -1,0 +1,4 @@
+# STODO one of these should alert, add test.yaml
+alert tls any any -> any any (msg:"Test tls.subjectaltname option CLIENT"; flow:to_client; tls.subjectaltname; content:"|77 77 77 2e 62 69 6e 67 2e 63 6f 6d|"; sid:1;)
+alert tls any any -> any any (msg:"Test tls.subjectaltname option SERVER"; flow:to_server; tls.subjectaltname; content:"|77 77 77 2e 62 69 6e 67 2e 63 6f 6d|"; sid:2;)
+
