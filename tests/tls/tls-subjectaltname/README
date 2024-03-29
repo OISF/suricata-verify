@@ -1,0 +1,12 @@
+Description
+===========
+Add a `tls.subjectaltname` keyword which is a sticky buffer and matches on TLS `SubjectAltName` field.
+
+
+PCAP
+====
+PCAP comes from the redmine ticket below.
+
+Redmine ticket
+==============
+https://redmine.openinfosecfoundation.org/issues/5234
