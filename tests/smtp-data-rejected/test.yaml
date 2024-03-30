@@ -1,0 +1,13 @@
+requires:
+  min-version: 8
+
+# disables checksum verification
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: 2f4e7dba21a31bde1192ca03b489a9bd47281a28e206b3dcf245082a491e8e0a
