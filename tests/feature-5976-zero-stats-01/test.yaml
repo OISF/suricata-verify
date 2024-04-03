@@ -1,0 +1,25 @@
+requires:
+  min-version: 8
+pcap: ../tls/tls-certs-alert/input.pcap
+args:
+- --simulate-ips
+- -k none
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        has-key: stats.decoder.pkts
+        not-has-key: stats.decoder.invalid
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        has-key: stats.ips.accepted
+        not-has-key: stats.ips.rejected
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        has-key: stats.tcp.sessions
+        not-has-key: stats.tcp.active_sessions

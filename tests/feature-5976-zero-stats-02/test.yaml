@@ -1,0 +1,12 @@
+requires:
+  min-version: 8
+
+pcap: ../bug-3519/input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        has-key: stats.decoder.ipv4
+        not-has-key: stats.decoder.ipv6

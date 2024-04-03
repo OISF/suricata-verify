@@ -1,0 +1,20 @@
+%YAML 1.1
+---
+
+stats:
+  enabled: yes
+  interval: 8
+
+outputs:
+  - eve-log:
+      enabled: yes
+      types:
+        - stats:
+            totals: yes
+            threads: no
+            deltas: no
+            zero-valued-counters: false
+        - flow
+  - stats:
+      enabled: yes
+      filename: stats.log
