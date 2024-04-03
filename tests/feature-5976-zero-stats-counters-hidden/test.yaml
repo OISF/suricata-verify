@@ -1,0 +1,42 @@
+requires:
+  features:
+    - DEBUG
+pcap: ../tls/tls-certs-alert/input.pcap
+args:
+- --simulate-ips
+- -k none
+# pretend pretend error in the first data
+- --simulate-applayer-error-at-offset-ts=0
+- --set app-layer.error-policy=drop-flow
+checks:
+  - filter:
+      min-version: 7
+      count: 1
+      match:
+        event_type: stats
+        stats.ips.drop_reason.applayer_error: 1
+  - filter:
+      min-version: 8
+      count: 0
+      match:
+        event_type: stats
+        stats.ips.blocked: 0
+  - filter:
+      min-version: 8
+      count: 0
+      match:
+        event_type: stats
+        stats.ips.rejected: 0
+  - filter:
+      min-version: 8
+      count: 0
+      match:
+        event_type: stats
+        stats.ips.drop_reason.decode_error: 0
+  - filter:
+      min-version: 8
+      count: 1
+      match:
+        event_type: stats
+        stats.ips.accepted: 3
+        stats.decoder.pkts: 32

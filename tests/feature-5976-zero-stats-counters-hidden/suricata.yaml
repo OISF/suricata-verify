@@ -1,0 +1,39 @@
+%YAML 1.1
+---
+
+stats:
+  enabled: yes
+  interval: 8
+
+outputs:
+  - eve-log:
+      enabled: yes
+      types:
+        - alert:
+            tagged-packets: yes
+        - anomaly:
+            enabled: yes
+            types:
+              decode: no
+              stream: yes
+              applayer: yes
+        - tls:
+            extended: yes
+        - drop:
+            alerts: yes
+            flows: all
+        - stats:
+            totals: yes
+            threads: no
+            deltas: no
+            zero-valued-counters: false
+        - flow
+  - stats:
+      enabled: yes
+      filename: stats.log
+
+action-order:
+  - pass
+  - drop
+  - reject
+  - alert
