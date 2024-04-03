@@ -1,0 +1,11 @@
+requires:
+  pcap: false
+  version: 7
+
+args:
+  - --engine-analysis
+
+checks:
+    - shell:
+        args: grep "fast_pattern is ineffective with base64_data" suricata.log | grep "Info" | wc -l
+        expect: 1
