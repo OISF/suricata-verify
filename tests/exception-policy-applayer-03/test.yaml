@@ -65,3 +65,9 @@ checks:
       proto: UDP
       src_ip: 190.0.0.2
       src_port: 50000
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.app_layer.error.exception_policy.pass_packet: 1
+      stats.app_layer.error.exception_policy.drop_packet: 0
