@@ -1,0 +1,11 @@
+requires:
+  min-version: 8
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+      packet.__len: 87384
+        #packet_info.linktype: 12 # Bug 6954: on OpenBSD this value in 14.

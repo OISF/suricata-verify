@@ -1,0 +1,1 @@
+alert tcp any any -> any any (tcp.flags:S; sid:1;)
