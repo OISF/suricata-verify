@@ -17,7 +17,7 @@ checks:
         event_type: flow
         flow.action: drop
   - filter:
-      min-version: 8
+      min-version: 7
       count: 1
       match:
         event_type: stats
