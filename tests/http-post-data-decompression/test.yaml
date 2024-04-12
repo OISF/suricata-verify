@@ -9,3 +9,9 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 1
+  - filter:
+      min-version: 8
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
