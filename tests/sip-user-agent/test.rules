@@ -1,0 +1,1 @@
+alert sip any any -> any any (flow:to_server; sip.user_agent; content:"Nero"; sid:1;)
