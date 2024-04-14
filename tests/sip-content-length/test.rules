@@ -1,0 +1,2 @@
+alert sip any any -> any any (flow:to_server; sip.content_length; content:"270"; sid:1;)
+alert sip any any -> any any (flow:to_client; sip.content_length; content:"199"; sid:2;)

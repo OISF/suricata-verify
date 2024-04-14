@@ -1,0 +1,34 @@
+pcap: sip_compact_form.pcap
+
+args:
+- -k none
+
+requires:
+  min-version: 8.0.0
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 5
