@@ -1,0 +1,39 @@
+requires:
+# Pgsql was released on version 7.0
+  min-version: 7.0
+
+pcap: ../pgsql-ssl-rejected-md5-auth-simple-query/input.pcap
+
+args:
+- -k none
+
+checks:
+# subtest 1
+- filter:
+    count: 1
+    match:
+      dest_ip: 10.16.1.11
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 25
+      proto: TCP
+      src_ip: 10.16.1.10
+      src_port: 40816
+      pgsql.tx_id: 2
+      pgsql.request.protocol_version: '3.0'
+      pgsql.request.startup_parameters.optional_parameters[0].database: indexer
+      pgsql.request.startup_parameters.user: indexer
+      pgsql.response.authentication_md5_password: "\\x9fi\x1A\\x8e"
+# subtest 2
+- filter:
+    count: 1
+    match:
+      dest_ip: 10.16.1.11
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 29
+      pgsql.tx_id: 3
+      not-has-key: pgsql.request.password
+      pgsql.response.message: authentication_ok
+      pgsql.response.process_id: 61
+      pgsql.response.secret_key: 3152142766

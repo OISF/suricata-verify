@@ -8,11 +8,11 @@ outputs:
       filename: eve.json
       types:
         - pgsql:
-            passwords: false
+            enabled: yes
+            #passwords: no   # enable output of passwords Default is false
+        - flow
 
 app-layer:
   protocols:
     pgsql:
       enabled: yes
-      stream-depth: 0
-

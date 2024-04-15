@@ -36,6 +36,7 @@ checks:
       dest_ip: 100.96.199.113
       dest_port: 5432
       event_type: pgsql
+      not-has-key: pgsql.request.password
       pgsql.response.message: authentication_ok
       pgsql.response.parameter_status[0].application_name: psql
       pgsql.response.process_id: 28954

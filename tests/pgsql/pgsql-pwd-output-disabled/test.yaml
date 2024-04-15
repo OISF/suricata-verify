@@ -44,6 +44,7 @@ checks:
       event_type: pgsql
       pcap_cnt: 12
       pgsql.response.message: authentication_ok
+      not-has-key: pgsql.request.password
       pgsql.response.parameter_status[0].application_name: psql
       pgsql.response.parameter_status[10].time_zone: Europe/London
       pgsql.response.parameter_status[1].client_encoding: UTF8
