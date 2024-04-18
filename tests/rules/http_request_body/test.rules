@@ -1,0 +1,1 @@
+alert http any any -> any any (http.response_body; content:"one"; sid:1;)
