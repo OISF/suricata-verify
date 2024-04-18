@@ -1,5 +1,5 @@
 requires:
-  min-version: 8
+  min-version: 7.0.5
 
 args:
   - --set stream.midstream=true -k none
