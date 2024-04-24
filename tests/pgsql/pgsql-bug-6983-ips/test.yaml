@@ -1,0 +1,26 @@
+requires:
+  min-version: 7.0
+
+pcap: ../pgsql-ssl-rejected-md5-auth-simple-query/input.pcap
+
+args:
+- -k none
+- --simulate-ips
+
+checks:
+- filter:
+    count: 7
+    match:
+      event_type: pgsql
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    min-version: 8
+    count: 1
+    match:
+      event_type: alert
+      tx_id: 3
+      pgsql.request.simple_query: "select * from rules where sid = 2021701;"
