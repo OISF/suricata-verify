@@ -1,0 +1,1 @@
+alert pgsql any any -> any any (msg:"PGSQL Test Rule"; content:"select * from"; sid:1; rev:1;)
