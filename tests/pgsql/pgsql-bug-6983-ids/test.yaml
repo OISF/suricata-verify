@@ -1,0 +1,25 @@
+requires:
+  min-version: 7.0
+
+pcap: ../pgsql-ssl-rejected-md5-auth-simple-query/input.pcap
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 7
+    match:
+      event_type: pgsql
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    min-version: 8
+    count: 1
+    match:
+      event_type: alert
+      flow.pkts_toserver: 10
+      flow.pkts_toclient: 10
