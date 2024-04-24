@@ -1,0 +1,1 @@
+alert pgsql any any -> any any (msg:"PGSQL Test Rule"; pkt_data; content:"|58|"; sid:1; rev:1;)
