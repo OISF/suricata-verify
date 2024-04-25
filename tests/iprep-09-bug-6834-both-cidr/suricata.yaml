@@ -1,0 +1,12 @@
+%YAML 1.1
+---
+
+reputation-files:
+  - iprep.list
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      types:
+        - alert

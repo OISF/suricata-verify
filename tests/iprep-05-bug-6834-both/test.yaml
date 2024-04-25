@@ -1,0 +1,25 @@
+requires:
+  min-version: 8
+
+command: |
+  ${SRCDIR}/src/suricata  -l ${OUTPUT_DIR}                                              \
+      -c ${TEST_DIR}/suricata.yaml                                                      \
+      -r ../issue-4280-iprep/input.pcap -S ${TEST_DIR}/iprep.rules                      \
+      --data-dir="${OUTPUT_DIR}"                                                        \
+      --set default-reputation-path=${TEST_DIR}                                         \
+      --set reputation-categories-file=${TEST_DIR}/categories.txt                       \
+      --set reputation-files=${TEST_DIR}/iprep.list
+
+checks:
+  - filter:
+      count: 5
+      match:
+        alert.signature_id: 1
+  - filter:
+      count: 5
+      match:
+        alert.signature_id: 2
+  - filter:
+      count: 5
+      match:
+        alert.signature_id: 3
