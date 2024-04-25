@@ -1,0 +1,14 @@
+requires:
+  min-version: 8
+
+pcap:  ../bug-2482-01/proxyCONNECT_443.pcap
+
+args:
+- -k none --set outputs.1.eve-log.types.0.alert.packet=yes
+
+checks:
+  - filter:
+      count: 86
+      match:
+        event_type: alert
+        packet_info.linktype_name: RAW
