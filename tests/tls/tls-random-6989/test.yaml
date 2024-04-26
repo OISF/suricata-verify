@@ -1,0 +1,123 @@
+requires:
+  min-version: 8
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: CLIENT HELLO DATA - to_server
+      alert.signature_id: 1
+      app_proto: tls
+      dest_ip: 200.87.8.4
+      dest_port: 443
+      direction: to_server
+      event_type: alert
+      flow.bytes_toclient: 1476
+      flow.bytes_toserver: 348
+      flow.dest_ip: 200.87.8.4
+      flow.dest_port: 443
+      flow.pkts_toclient: 3
+      flow.pkts_toserver: 4
+      flow.src_ip: 10.10.1.1
+      flow.src_port: 1117
+      pcap_cnt: 7
+      proto: TCP
+      src_ip: 10.10.1.1
+      src_port: 1117
+      tls.fingerprint: e8:89:b9:c0:b3:2b:8e:8d:e1:ce:32:73:4c:95:5b:df:5a:f7:7d:53
+      tls.issuerdn: O=INetSim, OU=Development, CN=inetsim.org
+      tls.notafter: '2024-07-12T17:04:39'
+      tls.notbefore: '2014-07-15T17:04:39'
+      tls.serial: 00:97:51:3E:C7:C1:E5:8A:90
+      tls.sni: www.apple.com
+      tls.subject: O=INetSim, OU=Development, CN=inetsim.org
+      tls.version: TLSv1
+      tx_id: 0
+- filter:
+    count: 1
+    match:
+      dest_ip: 200.87.8.4
+      dest_port: 443
+      event_type: tls
+      pcap_cnt: 7
+      proto: TCP
+      src_ip: 10.10.1.1
+      src_port: 1117
+      tls.fingerprint: e8:89:b9:c0:b3:2b:8e:8d:e1:ce:32:73:4c:95:5b:df:5a:f7:7d:53
+      tls.issuerdn: O=INetSim, OU=Development, CN=inetsim.org
+      tls.notafter: '2024-07-12T17:04:39'
+      tls.notbefore: '2014-07-15T17:04:39'
+      tls.serial: 00:97:51:3E:C7:C1:E5:8A:90
+      tls.sni: www.apple.com
+      tls.subject: O=INetSim, OU=Development, CN=inetsim.org
+      tls.version: TLSv1
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: SERVER HELLO DATA - to_client
+      alert.signature_id: 4
+      app_proto: tls
+      dest_ip: 10.10.1.1
+      dest_port: 1117
+      direction: to_client
+      event_type: alert
+      flow.bytes_toclient: 1476
+      flow.bytes_toserver: 348
+      flow.dest_ip: 200.87.8.4
+      flow.dest_port: 443
+      flow.pkts_toclient: 3
+      flow.pkts_toserver: 4
+      flow.src_ip: 10.10.1.1
+      flow.src_port: 1117
+      proto: TCP
+      src_ip: 200.87.8.4
+      src_port: 443
+      tls.fingerprint: e8:89:b9:c0:b3:2b:8e:8d:e1:ce:32:73:4c:95:5b:df:5a:f7:7d:53
+      tls.issuerdn: O=INetSim, OU=Development, CN=inetsim.org
+      tls.notafter: '2024-07-12T17:04:39'
+      tls.notbefore: '2014-07-15T17:04:39'
+      tls.serial: 00:97:51:3E:C7:C1:E5:8A:90
+      tls.sni: www.apple.com
+      tls.subject: O=INetSim, OU=Development, CN=inetsim.org
+      tls.version: TLSv1
+      tx_id: 0
+- filter:
+    count: 1
+    match:
+      app_proto: tls
+      dest_ip: 200.87.8.4
+      dest_port: 443
+      event_type: flow
+      flow.age: 1
+      flow.alerted: true
+      flow.bytes_toclient: 1476
+      flow.bytes_toserver: 348
+      flow.pkts_toclient: 3
+      flow.pkts_toserver: 4
+      flow.reason: shutdown
+      flow.state: established
+      proto: TCP
+      src_ip: 10.10.1.1
+      src_port: 1117
+      tcp.ack: true
+      tcp.psh: true
+      tcp.state: established
+      tcp.syn: true
+      tcp.tc_max_regions: 1
+      tcp.tcp_flags: 1a
+      tcp.tcp_flags_tc: 1a
+      tcp.tcp_flags_ts: 1a
+      tcp.ts_max_regions: 1
