@@ -1,7 +1,7 @@
-alert tls any any -> any any (msg:"Test tls.random option CLIENT HELLO"; tls.random; content:"|94 2d 1f ef 57 5d 77 02 07 c2 9d be 24 01 cc f0 5d cd e1 d2 a5 86 9c 4a 3e ee 38 db 55 1a d9 bc|"; sid:1;)
-alert tls any any -> any any (msg:"Test tls.random option SERVER HELLO"; tls.random; content:"|54 f9 fc 15 77 e4 33 d3 2d a8 2e 9d 38 89 7d 5a 26 28 bf b0 98 51 da d9 bd 03 f8 af a2 09 a4 f0|"; sid:2;)
-alert tls any any -> any any (msg:"Test tls.random_time option CLIENT HELLO"; tls.random_time; content:"|94 2d 1f ef|"; sid:3;)
-alert tls any any -> any any (msg:"Test tls.random_time option SERVER HELLO"; tls.random_time; content:"|54 f9 fc 15|"; sid:4;)
-alert tls any any -> any any (msg:"Test tls.random_data option CLIENT HELLO"; tls.random_bytes; content:"|57 5d 77 02 07 c2 9d be 24 01 cc f0 5d cd e1 d2 a5 86 9c 4a 3e ee 38 db 55 1a d9 bc|"; sid:5;)
-alert tls any any -> any any (msg:"Test tls.random_data option SERVER HELLO"; tls.random_bytes; content:"|77 e4 33 d3 2d a8 2e 9d 38 89 7d 5a 26 28 bf b0 98 51 da d9 bd 03 f8 af a2 09 a4 f0|"; sid:6;)
+alert tls any any -> any any (msg:"Test tls.random option CLIENT HELLO"; flow:established,to_server; tls.random; content:"|94 2d 1f ef 57 5d 77 02 07 c2 9d be 24 01 cc f0 5d cd e1 d2 a5 86 9c 4a 3e ee 38 db 55 1a d9 bc|"; sid:1;)
+alert tls any any -> any any (msg:"Test tls.random option SERVER HELLO"; flow:established,to_client; tls.random; content:"|54 f9 fc 15 77 e4 33 d3 2d a8 2e 9d 38 89 7d 5a 26 28 bf b0 98 51 da d9 bd 03 f8 af a2 09 a4 f0|"; sid:2;)
+alert tls any any -> any any (msg:"Test tls.random_time option CLIENT HELLO"; flow:established,to_server; tls.random_time; content:"|94 2d 1f ef|"; sid:3;)
+alert tls any any -> any any (msg:"Test tls.random_time option SERVER HELLO"; flow:established,to_client; tls.random_time; content:"|54 f9 fc 15|"; sid:4;)
+alert tls any any -> any any (msg:"Test tls.random_data option CLIENT HELLO"; flow:established,to_server; tls.random_bytes; content:"|57 5d 77 02 07 c2 9d be 24 01 cc f0 5d cd e1 d2 a5 86 9c 4a 3e ee 38 db 55 1a d9 bc|"; sid:5;)
+alert tls any any -> any any (msg:"Test tls.random_data option SERVER HELLO"; flow:established,to_client; tls.random_bytes; content:"|77 e4 33 d3 2d a8 2e 9d 38 89 7d 5a 26 28 bf b0 98 51 da d9 bd 03 f8 af a2 09 a4 f0|"; sid:6;)
 
