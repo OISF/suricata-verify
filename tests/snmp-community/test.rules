@@ -1,0 +1,2 @@
+alert snmp any any -> any any (msg:"SNMP Test Rule"; snmp.community; content:"[R0_C@cti!]"; sid:1; rev:1;)
+alert snmp any any -> any any (msg:"SNMP Test Rule"; snmp.community; content:"private"; sid:2; rev:1;)
