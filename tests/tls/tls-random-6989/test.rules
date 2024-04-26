@@ -1,0 +1,4 @@
+alert tls any any -> any any (msg:"CLIENT HELLO DATA - to_server"; flow:established,to_server; tls.random_time; content:"|54 b4 c9 7b|"; sid:1;)
+alert tls any any -> any any (msg:"CLIENT HELLO DATA - to_client"; flow:established,to_client; tls.random_time; content:"|54 b4 c9 7b|"; sid:2;)
+alert tls any any -> any any (msg:"SERVER HELLO DATA - to_server"; flow:established,to_server; tls.random_time; content:"|54 b8 f7 73|"; sid:3;)
+alert tls any any -> any any (msg:"SERVER HELLO DATA - to_client"; flow:established,to_client; tls.random_time; content:"|54 b8 f7 73|"; sid:4;)
