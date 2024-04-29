@@ -1,0 +1,21 @@
+requires:
+  min-version: 8
+
+args:
+ - -k none
+
+pcap: ../dcerpc/zerologon/input.pcap
+
+checks:
+  - filter:
+      count: 21
+      match:
+        event_type: alert
+        alert.signature_id: 20166330
+        alert.references: ["foobar://github.com/corelight/zerologon"]
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 20166331
+        alert.references: ["foobar://github.com/corelight/zerologon"]
