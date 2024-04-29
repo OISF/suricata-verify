@@ -1,0 +1,21 @@
+requires:
+  min-version: 8
+
+pcap: ../dcerpc/zerologon/input.pcap
+
+args:
+ - -k none
+
+checks:
+  - filter:
+      count: 21
+      match:
+        event_type: alert
+        alert.signature_id: 20166330
+        not-has-key: alert.references
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 20166331
+        not-has-key: alert.references
