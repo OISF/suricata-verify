@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"HTTP client to SSH server"; flow:to_client; app-layer-protocol:http1,to_server; app-layer-protocol:ssh,to_client; sid:1; )
