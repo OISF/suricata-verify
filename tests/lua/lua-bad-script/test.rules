@@ -1,0 +1,3 @@
+alert udp any any -> any any (msg:"MATCH"; lua:match.lua; sid:1; rev:1;)
+alert udp any any -> any any (msg:"NOMATCH"; lua:!nomatch.lua; sid:2; rev:1;)
+alert udp any any -> any any (msg:"ERROR"; lua:!error.lua; sid:3; rev:1;)
