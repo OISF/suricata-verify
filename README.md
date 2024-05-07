@@ -151,6 +151,14 @@ checks:
         # Check that a field does not exist:
         not-has-key: flow
 
+  - filter:
+	  # Use a filename other than eve.json
+	  filename: suricata.json
+	  count: 1
+	  match:
+	    # Find a substring in a field
+		engine.message.__find: script failed
+
   - shell:
       # A simple shell check. If the command exits with a non-0 exit code the
       # check will fail. The script is run in the output directory of the
