@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"HTTP1 to HTTP2";  app-layer-protocol:http1,original; prefilter; app-layer-protocol:http2,final; sid:1; )
