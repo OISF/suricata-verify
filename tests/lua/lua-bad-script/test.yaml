@@ -1,0 +1,44 @@
+requires:
+  min-version: 8
+  features:
+    - HAVE_LUA
+
+args:
+   - --set default-rule-path=${TEST_DIR}
+   - --set security.lua.allow-rules=true
+   - --include ${TEST_DIR}/logging.yaml
+
+   # Run single threaded so all Lua errors occur on the same thread so
+   # we can test one-time logging per thread.
+   - --runmode single
+
+checks:
+  - filter:
+      count: 8
+      match:
+        alert.signature_id: 1
+
+  - filter:
+      count: 8
+      match:
+        alert.signature_id: 2
+
+  - filter:
+      count: 0
+      match:
+        alert.signature_id: 3
+
+  # PCAP has 8 packets, which means 8 Lua failures.
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.lua.errors: 8
+
+  # The Lua failure should only be logged once.
+  - filter:
+      filename: suricata.json
+      count: 1
+      match:
+        event_type: engine
+        engine.message.__find: Lua script failed to run successfully
