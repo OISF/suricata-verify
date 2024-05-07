@@ -1,0 +1,11 @@
+pcap: ../output-eve-anomaly-02/input.pcap
+
+requires:
+  min-version: 8
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
