@@ -1,10 +1,11 @@
 requires:
-  min-version: 8.0.0
+  min-version: 7.0.6
   features:
     - HAVE_JA4
 
 args:
   - -k none
+  - --set logging.default-log-level=config
 
 checks:
   - filter:
@@ -27,3 +28,6 @@ checks:
       match:
         event_type: alert
         alert.signature: JA4 TLS Test 1
+  - shell:
+      args: grep -c "enabling JA4 due to rule usage" stdout
+      expect: 1

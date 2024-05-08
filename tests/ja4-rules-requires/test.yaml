@@ -1,10 +1,12 @@
 requires:
-  min-version: 8.0.0
+  min-version: 7.0.6
   features:
     - HAVE_JA4
 
 args:
-  - -k none --set app-layer.protocols.tls.ja4-fingerprints=no
+  - -k none
+  - --set app-layer.protocols.tls.ja4-fingerprints=no
+  - --set logging.default-log-level=info
 
 checks:
   - filter:
