@@ -1,7 +1,7 @@
 requires:
   min-version: 8.0.0
-  script:
-    - ./src/suricata --build-info | grep "JA4 support" | grep no > /dev/null
+  features:
+    - -HAVE_JA4
 
 args:
   - -k none
