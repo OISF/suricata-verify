@@ -342,7 +342,11 @@ def check_requires(requires, suricata_config: SuricataConfig):
                         "only for version {}".format(req_version))
         elif key == "features":
             for feature in requires["features"]:
-                if not suricata_config.has_feature(feature):
+                if feature.startswith("-"):
+                    if suricata_config.has_feature(feature[1:]):
+                        raise UnsatisfiedRequirementError(
+                            "not for feature %s" % (feature[1:]))
+                elif not suricata_config.has_feature(feature):
                     raise UnsatisfiedRequirementError(
                         "requires feature %s" % (feature))
         elif key == "env":
@@ -995,10 +999,10 @@ def run_test(dirpath, args, cwd, suricata_config):
     if args.outdir:
         outdir = os.path.join(os.path.realpath(args.outdir), name, "output")
 
-    test_runner = TestRunner(
-        cwd, dirpath, outdir, suricata_config, args.verbose, args.force,
-        args.quiet)
     try:
+        test_runner = TestRunner(
+            cwd, dirpath, outdir, suricata_config, args.verbose, args.force,
+            args.quiet)
         results = test_runner.run(outdir)
         if results["failure"] > 0:
             with lock:
