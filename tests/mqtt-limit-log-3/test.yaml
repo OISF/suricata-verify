@@ -1,0 +1,19 @@
+pcap: ../mqtt5-sub-userpass/input.pcap
+
+requires:
+  min-version: 8
+
+args:
+  - -k none
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.subscribe.qos: 1
+        mqtt.subscribe.retain: false
+        mqtt.subscribe.dup: false
+        mqtt.subscribe.topics: [ {topic: topicX, qos: 0}, {topic: "topi[truncated 2 additional bytes]", qos: 0} ]
+        mqtt.subscribe.message_id: 1
