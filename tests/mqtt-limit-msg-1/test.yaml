@@ -1,0 +1,58 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  files:
+    - rust/src/mqtt/parser.rs
+  script:
+    - grep 'msg-log-limit' suricata.yaml.in > /dev/null
+
+args:
+  - -k none
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.connect.qos: 0
+        mqtt.connect.retain: false
+        mqtt.connect.dup: false
+        mqtt.connect.protocol_string: MQTT
+        mqtt.connect.protocol_version: 4
+        mqtt.connect.flags.username: false
+        mqtt.connect.flags.password: false
+        mqtt.connect.flags.will: false
+        mqtt.connect.flags.will_retain: false
+        mqtt.connect.flags.clean_session: true
+        mqtt.connect.client_id: "P1"
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.publish.qos: 1
+        mqtt.publish.retain: false
+        mqtt.publish.dup: false
+        mqtt.publish.message: ZZZZZZZZZZ[truncated]
+        mqtt.puback.message_id: 4
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.publish.qos: 1
+        mqtt.publish.retain: false
+        mqtt.publish.dup: false
+        mqtt.publish.message: XXXXXXXXXX[truncated]
+        mqtt.puback.message_id: 2
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.publish.qos: 1
+        mqtt.publish.retain: false
+        mqtt.publish.dup: false
+        mqtt.publish.message: YYYYYYYYYY[truncated]
+        mqtt.puback.message_id: 3

@@ -1,0 +1,16 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - mqtt:
+            msg-log-limit: XXX
+
+app-layer:
+  protocols:
+    mqtt:
+      enabled: yes

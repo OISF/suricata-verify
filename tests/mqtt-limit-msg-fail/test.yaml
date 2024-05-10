@@ -1,0 +1,18 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  files:
+    - rust/src/mqtt/parser.rs
+  script:
+    - grep 'msg-log-limit' suricata.yaml.in > /dev/null
+
+args:
+  - -k none
+
+exit-code: 1
+
+checks:
+  - shell:
+        args: |
+          grep "misc: invalid size argument - XXX. Valid size argument should be in the format" stderr | wc -l 
+        expect: 1
