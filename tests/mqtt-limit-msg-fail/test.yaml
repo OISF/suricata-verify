@@ -1,0 +1,16 @@
+pcap: ../mqtt-limit-2/input.pcap
+
+requires:
+  files:
+    - rust/src/mqtt/parser.rs
+
+args:
+  - -k none
+
+exit-code: 1
+
+checks:
+  - shell:
+        args: |
+          grep "misc: invalid size argument - XXX. Valid size argument should be in the format" stderr | wc -l 
+        expect: 1

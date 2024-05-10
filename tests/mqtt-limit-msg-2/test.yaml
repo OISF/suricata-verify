@@ -1,0 +1,19 @@
+pcap: ../mqtt-limit-2/input.pcap
+
+requires:
+  files:
+    - rust/src/mqtt/parser.rs
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.publish.qos: 1
+        mqtt.publish.retain: false
+        mqtt.publish.dup: false
+        mqtt.publish.message: ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
+        mqtt.puback.message_id: 4
