@@ -1,0 +1,16 @@
+requires:
+  min-version: 7.0.6
+  lt-version: 8
+  features:
+    - HAVE_JA4
+
+pcap: ../ja4-rules/input.pcap
+
+args:
+  - -k none
+  - --set logging.default-log-level=config
+
+checks:
+  - shell:
+      args: grep -c "enabling JA4 due to rule usage" stdout
+      expect: 1

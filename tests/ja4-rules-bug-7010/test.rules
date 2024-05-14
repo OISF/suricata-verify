@@ -1,0 +1,1 @@
+alert quic any any -> any any (msg:"JA4 QUIC Test 1"; requires: feature ja4; ja4.hash; content: "q13d0310h3_55b375c5d22e_cd85d2d88918"; sid:1;)
