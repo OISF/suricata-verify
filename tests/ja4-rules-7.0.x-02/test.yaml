@@ -1,7 +1,10 @@
 requires:
-  min-version: 8
+  min-version: 7.0.6
+  lt-version: 8
   features:
     - HAVE_JA4
+
+pcap: ../ja4-rules/input.pcap
 
 args:
   - -k none
@@ -11,19 +14,18 @@ checks:
       count: 1
       match:
         event_type: tls
-        tls.ja4: t13d1516h2_8daaf6152771_e5627efa2ab1
-  - filter:
-      count: 1
-      match:
-        event_type: quic
-        quic.ja4: q13d0310h3_55b375c5d22e_cd85d2d88918
+        has-key: tls.ja4
   - filter:
       count: 1
       match:
         event_type: alert
+        alert.signature_id: 1
         alert.signature: JA4 QUIC Test 1
+        quic.ja4: "q13d0310h3_55b375c5d22e_cd85d2d88918"
   - filter:
       count: 1
       match:
         event_type: alert
+        alert.signature_id: 2
         alert.signature: JA4 TLS Test 1
+        tls.ja4: t13d1516h2_8daaf6152771_e5627efa2ab1

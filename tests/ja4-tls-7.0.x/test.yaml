@@ -1,7 +1,10 @@
 requires:
-  min-version: 8
+  min-version: 7.0.6
+  lt-version: 8
   features:
     - HAVE_JA4
+
+pcap: ../ja4-tls/input.pcap
 
 args:
   - -k none --set app-layer.protocols.tls.ja4-fingerprints=yes
@@ -11,4 +14,4 @@ checks:
       count: 1
       match:
         event_type: tls
-        tls.ja4: t12i1810s1_27d4652c4487_06a4338d0495
+        not-has-key: tls.ja4

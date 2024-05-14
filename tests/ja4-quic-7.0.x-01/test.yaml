@@ -1,0 +1,17 @@
+requires:
+  min-version: 7.0.6
+  lt-version: 8
+  features:
+    - HAVE_JA4
+
+pcap: ../ja4-quic/input.pcap
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 11
+      match:
+        event_type: quic
+        not-has-key: quic.ja4
