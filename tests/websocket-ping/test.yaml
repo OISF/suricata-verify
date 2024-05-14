@@ -1,0 +1,17 @@
+requires:
+  min-version: 8
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: websocket
+      websocket.opcode: ping
+- filter:
+    count: 1
+    match:
+      event_type: websocket
+      websocket.opcode: pong
