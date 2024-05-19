@@ -1,10 +1,6 @@
 requires:
-  features:
-    - HAVE_LIBJANSSON
   files:
     - rust/src/mqtt/parser.rs
-  script:
-    - grep 'msg-log-limit' suricata.yaml.in > /dev/null
 
 args:
   - -k none
