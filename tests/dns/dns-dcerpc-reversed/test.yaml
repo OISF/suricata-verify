@@ -1,0 +1,41 @@
+requires:
+  min-version: 6.0.0
+
+args:
+  - --set stream.midstream=true
+
+checks:
+
+  - filter:
+      comment: request
+      count: 1
+      match:
+        event_type: dns
+        dns.type: query
+        src_ip: "172.28.255.122"
+        src_port: 54824
+        dest_ip: "192.168.1.12"
+        dest_port: 53
+
+  - filter:
+      comment: response
+      count: 1
+      match:
+        event_type: dns
+        dns.type: answer
+        dns.answers[0].rrtype: A
+        src_ip: "172.28.255.122"
+        src_port: 54824
+        dest_ip: "192.168.1.12"
+        dest_port: 53
+
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: dns
+        src_ip: "172.28.255.122"
+        src_port: 54824
+        dest_ip: "192.168.1.12"
+        dest_port: 53
+
