@@ -1,0 +1,14 @@
+requires:
+  features:
+    - liblz4
+  min-version: 8
+      
+pcap: ../bug-2482-01/proxyCONNECT_443.pcap
+
+args:
+  - --runmode=single
+
+checks:
+    - shell:
+        args: ls -l log.pcap.1-15233891*.lz4 | wc -l | xargs
+        expect: 2
