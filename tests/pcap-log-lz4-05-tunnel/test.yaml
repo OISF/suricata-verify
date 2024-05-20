@@ -1,0 +1,14 @@
+requires:
+  features:
+    - liblz4
+  min-version: 8
+      
+pcap: ../vxlan-decoder-01/input.pcap
+
+args:
+  - --runmode=single
+
+checks:
+    - shell:
+        args: ls -l log.pcap.1525778007.671337.lz4 | wc -l | xargs
+        expect: 1
