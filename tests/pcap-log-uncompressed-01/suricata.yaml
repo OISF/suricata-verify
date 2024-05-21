@@ -1,0 +1,22 @@
+%YAML 1.1
+---
+
+outputs:
+  - pcap-log:
+      enabled: yes
+      filename: log.pcap
+      compression: none
+      mode: normal
+      limit: 4mb
+      ts-format: usec
+
+# Enable enging logging to JSON so we can verify it.
+logging:
+  outputs:
+    - console:
+        enabled: yes
+    - file:
+        enabled: yes
+        level: perf
+        filename: eve.json
+        type: json
