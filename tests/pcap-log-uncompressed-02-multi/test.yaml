@@ -8,5 +8,5 @@ args:
 
 checks:
     - shell:
-        args: ls -l log.pcap.1-1523389*.*-* | wc -l | xargs
+        args: find . -type f -name 'log.pcap.1-1523389*.*-*' | wc -l | xargs
         expect: 3
