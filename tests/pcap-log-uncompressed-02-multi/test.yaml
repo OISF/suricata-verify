@@ -1,0 +1,12 @@
+requires:
+  min-version: 8
+      
+pcap: ../bug-2482-01/proxyCONNECT_443.pcap
+
+args:
+  - --runmode=single
+
+checks:
+    - shell:
+        args: find . -type f -name 'log.pcap.1-1523389*.*-*' | wc -l | xargs
+        expect: 3
