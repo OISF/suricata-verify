@@ -9,9 +9,16 @@ checks:
         event_type: alert
         alert.signature_id: 2220017
   - filter:
+      lt-version: 8
       count: 1
       match:
         event_type: smtp
         smtp.helo: bug.client
         email.status: PARSE_ERROR
-
+  - filter:
+      min-version: 8
+      count: 1
+      match:
+        event_type: smtp
+        smtp.helo: bug.client
+        email.status: PARSE_DONE
