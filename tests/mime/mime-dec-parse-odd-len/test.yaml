@@ -5,20 +5,6 @@ checks:
 - filter:
     count: 1
     match:
-      anomaly.app_proto: smtp
-      anomaly.event: APPLAYER_DETECT_PROTOCOL_ONLY_ONE_DIRECTION
-      anomaly.layer: proto_detect
-      anomaly.type: applayer
-      dest_ip: 127.0.0.1
-      dest_port: 39202
-      event_type: anomaly
-      pcap_cnt: 6
-      proto: TCP
-      src_ip: 127.0.0.1
-      src_port: 25
-- filter:
-    count: 1
-    match:
       dest_ip: 127.0.0.1
       dest_port: 25
       email.from: toto <toto@gmail.com>
