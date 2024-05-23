@@ -1,7 +1,7 @@
 requires:
   features:
     - liblz4
-  min-version: 8
+  min-version: 7
       
 pcap: ../vxlan-decoder-01/input.pcap
 
