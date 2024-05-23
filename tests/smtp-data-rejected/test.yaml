@@ -11,3 +11,8 @@ checks:
       match:
         event_type: fileinfo
         fileinfo.sha256: 2f4e7dba21a31bde1192ca03b489a9bd47281a28e206b3dcf245082a491e8e0a
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        email.received[0]: "from [65.201.218.30] (helo=COZOXORY.club)by 173-66-46-112.wash.fios.verizon.net with esmtpa (Exim 4.86)(envelope-from )id 71cF63a9for mirjam@abrakadabra.ch; Mon, 29 Jul 2019 17:01:45 +0000"
