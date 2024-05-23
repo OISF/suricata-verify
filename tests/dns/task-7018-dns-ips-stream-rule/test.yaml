@@ -1,0 +1,235 @@
+args:
+- -k none
+- --simulate-ips
+
+pcap: ../task-7018-ids-dns-keywords/input.pcap
+
+checks:
+- filter:
+    count: 6
+    match:
+      event_type: alert
+- filter:
+    min-version: 7
+    count: 1
+    match:
+      event_type: alert
+      pcap_cnt: 4
+      alert.signature: DNS suricata query - payload rule
+      alert.signature_id: 1
+      proto: TCP
+      src_ip: 10.16.1.11
+      src_port: 36926
+      app_proto: dns
+      dest_ip: 9.9.9.9
+      dest_port: 53
+      direction: to_server
+- filter:
+    min-version: 7
+    count: 1
+    match:
+      event_type: alert
+      pcap_cnt: 6
+      alert.signature: DNS suricata query - payload rule
+      alert.signature_id: 1
+      app_proto: dns
+      proto: TCP
+      src_ip: 9.9.9.9
+      src_port: 53
+      dest_ip: 10.16.1.11
+      dest_port: 36926
+      direction: to_client
+- filter:
+    min-version: 7
+    count: 1
+    match:
+      event_type: alert
+      pcap_cnt: 10
+      alert.signature: DNS suricata query - payload rule
+      alert.signature_id: 1
+      proto: TCP
+      src_ip: 10.16.1.11
+      src_port: 36926
+      app_proto: dns
+      dest_ip: 9.9.9.9
+      dest_port: 53
+      direction: to_server
+- filter:
+    min-version: 7
+    count: 1
+    match:
+      event_type: alert
+      pcap_cnt: 11
+      alert.signature: DNS suricata query - payload rule
+      alert.signature_id: 1
+      proto: TCP
+      src_ip: 9.9.9.9
+      src_port: 53
+      app_proto: dns
+      dest_ip: 10.16.1.11
+      dest_port: 36926
+      direction: to_client
+- filter:
+    count: 1
+    match:
+      event_type: dns
+      pcap_cnt: 4
+      dest_ip: 9.9.9.9
+      dest_port: 53
+      dns.id: 0
+      dns.opcode: 0
+      dns.rrname: suricata.io
+      dns.rrtype: A
+      dns.tx_id: 0
+      dns.type: query
+      proto: TCP
+      src_ip: 10.16.1.11
+      src_port: 36926
+- filter:
+    count: 1
+    match:
+      event_type: dns
+      pcap_cnt: 6
+      proto: TCP
+      src_ip: 10.16.1.11
+      src_port: 36926
+      dest_ip: 9.9.9.9
+      dest_port: 53
+      dns.answers[0].rdata: 35.212.0.44
+      dns.answers[0].rrname: suricata.io
+      dns.answers[0].rrtype: A
+      dns.answers[0].ttl: 490
+      dns.flags: '8180'
+      dns.grouped.A[0]: 35.212.0.44
+      dns.id: 0
+      dns.opcode: 0
+      dns.qr: true
+      dns.ra: true
+      dns.rcode: NOERROR
+      dns.rd: true
+      dns.rrname: suricata.io
+      dns.rrtype: A
+      dns.type: answer
+      dns.version: 2
+- filter:
+    count: 1
+    match:
+      event_type: dns
+      pcap_cnt: 8
+      proto: TCP
+      src_ip: 10.16.1.11
+      src_port: 36926
+      dest_ip: 9.9.9.9
+      dest_port: 53
+      dns.id: 0
+      dns.opcode: 0
+      dns.rrname: oisf.net
+      dns.rrtype: A
+      dns.tx_id: 2
+      dns.type: query
+- filter:
+    count: 1
+    match:
+      event_type: dns
+      pcap_cnt: 9
+      proto: TCP
+      src_ip: 10.16.1.11
+      src_port: 36926
+      dest_ip: 9.9.9.9
+      dest_port: 53
+      dns.answers[0].rdata: 192.0.78.190
+      dns.answers[0].rrname: oisf.net
+      dns.answers[0].rrtype: A
+      dns.answers[0].ttl: 207
+      dns.answers[1].rdata: 192.0.78.209
+      dns.answers[1].rrname: oisf.net
+      dns.answers[1].rrtype: A
+      dns.answers[1].ttl: 207
+      dns.flags: '8180'
+      dns.grouped.A[0]: 192.0.78.190
+      dns.grouped.A[1]: 192.0.78.209
+      dns.id: 0
+      dns.opcode: 0
+      dns.qr: true
+      dns.ra: true
+      dns.rcode: NOERROR
+      dns.rd: true
+      dns.rrname: oisf.net
+      dns.rrtype: A
+      dns.type: answer
+      dns.version: 2
+- filter:
+    count: 1
+    match:
+      event_type: dns
+      pcap_cnt: 10
+      proto: TCP
+      src_ip: 10.16.1.11
+      src_port: 36926
+      dest_ip: 9.9.9.9
+      dest_port: 53
+      dns.id: 0
+      dns.opcode: 0
+      dns.rrname: suricata.org
+      dns.rrtype: A
+      dns.tx_id: 4
+      dns.type: query
+- filter:
+    count: 1
+    match:
+      event_type: dns
+      pcap_cnt: 11
+      proto: TCP
+      src_ip: 10.16.1.11
+      src_port: 36926
+      dest_ip: 9.9.9.9
+      dest_port: 53
+      dns.answers[0].rdata: 15.197.148.33
+      dns.answers[0].rrname: suricata.org
+      dns.answers[0].rrtype: A
+      dns.answers[0].ttl: 600
+      dns.answers[1].rdata: 3.33.130.190
+      dns.answers[1].rrname: suricata.org
+      dns.answers[1].rrtype: A
+      dns.answers[1].ttl: 600
+      dns.flags: '8180'
+      dns.grouped.A[0]: 15.197.148.33
+      dns.grouped.A[1]: 3.33.130.190
+      dns.id: 0
+      dns.opcode: 0
+      dns.qr: true
+      dns.ra: true
+      dns.rcode: NOERROR
+      dns.rd: true
+      dns.rrname: suricata.org
+      dns.rrtype: A
+      dns.type: answer
+      dns.version: 2
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      app_proto: dns
+      proto: TCP
+      src_ip: 10.16.1.11
+      src_port: 36926
+      dest_ip: 9.9.9.9
+      dest_port: 53
+      flow.age: 0
+      flow.alerted: true
+      flow.bytes_toclient: 575
+      flow.bytes_toserver: 627
+      flow.pkts_toclient: 6
+      flow.pkts_toserver: 8
+      flow.reason: shutdown
+      flow.state: closed
+      tcp.ack: true
+      tcp.fin: true
+      tcp.psh: true
+      tcp.state: closed
+      tcp.syn: true
+      tcp.tc_max_regions: 1
+      tcp.tcp_flags: 1b
+      tcp.tcp_flags_tc: 1b
+      tcp.tcp_flags_ts: 1b
+      tcp.ts_max_regions: 1
