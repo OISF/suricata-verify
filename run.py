@@ -390,9 +390,8 @@ def find_value(name, obj):
                 return len(obj)
             except:
                 return -1
-        if part == "__find":
-            # Return full obj on __find and do a substring find in caller
-            # where the expected is also available
+        if part in ["__find", "__startswith", "__endswith"]:
+            # Return full object, caller will handle the special match logic.
             break
         name = None
         index = None
@@ -562,13 +561,18 @@ class FilterCheck:
                     return False
             else:
                 val = find_value(key, event)
-                if val != expected:
-                    if key.endswith("__find"):
-                        if val.find(expected) != -1:
-                            return True
+                if key.endswith("__find"):
+                    if val.find(expected) < 0:
+                        return False
+                elif key.endswith("__startswith"):
+                    if not val.startswith(expected):
+                        return False
+                elif key.endswith("__endswith"):
+                    if not val.endswith(expected):
+                        return False
+                elif val != expected:
                     if str(val) == str(expected):
                         print("Different types but same string", type(val), val, type(expected), expected)
-                        return False
                     return False
         return True
 
