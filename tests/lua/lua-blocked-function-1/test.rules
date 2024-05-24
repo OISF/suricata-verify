@@ -1,0 +1,3 @@
+alert http any any -> any any (msg:"TEST"; content:"uid=0"; lua:ioopen.lua; sid:1; rev:1;)
+alert http any any -> any any (msg:"TEST"; content:"uid=0"; lua:pcall.lua; sid:2; rev:1;)
+
