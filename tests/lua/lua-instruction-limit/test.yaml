@@ -1,0 +1,26 @@
+requires:
+  min-version: 8
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+  - --set logging.outputs.1.file.type=json
+
+pcap: ../lua-blocked-function-1/testmyids.pcap
+
+checks:
+  - filter:
+      filename: suricata.log
+      count: 1
+      match:
+        engine.message.__startswith: "Lua script failed to run successfully: instruction limit exceeded"
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.lua.errors: 1
+        stats.detect.lua.instruction_limit_errors: 1
+  - filter:
+      count: 0
+      match:
+        event_type: alert
