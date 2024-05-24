@@ -159,6 +159,12 @@ checks:
 	    # Find a substring in a field
 		engine.message.__find: script failed
 
+        # Check if a string starts with an expected value
+        engine.message.__startswith: "This is the start of the string"
+
+        # Check if a string ends with an expected value
+        engine.message.__endswith: "the end of a string"
+
   - shell:
       # A simple shell check. If the command exits with a non-0 exit code the
       # check will fail. The script is run in the output directory of the
