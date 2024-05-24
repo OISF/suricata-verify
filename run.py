@@ -1179,7 +1179,7 @@ def main():
     # Sort alphabetically.
     tests.sort()
 
-    if LINUX:
+    if LINUX and args.j > 1:
         run_mp(args.j, tests, dirpath, args, cwd, suricata_config)
     else:
         run_single(tests, dirpath, args, cwd, suricata_config)
