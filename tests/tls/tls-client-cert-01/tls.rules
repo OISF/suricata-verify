@@ -1,0 +1,5 @@
+alert tls any any -> any any ( \
+    tls.cert_subject; content:"O=TLSClientAuthSampleClient"; \
+    tls.cert_issuer; content:"O=TLSClientAuthSampleCA"; \
+    tls.cert_fingerprint; content:"32:56:41:d0:6a:ff:47:cb:21:e4:89:c5:ae:2a:a2:d8:1b:c9:70:0c"; \
+    sid:1; rev:1;)

@@ -1,0 +1,19 @@
+requires:
+  min-version: 7
+
+args:
+  - -k none
+
+pcap: ../tls-store-02/tls-client-auth.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        app_proto: tls
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: tls
