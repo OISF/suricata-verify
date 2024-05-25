@@ -1,0 +1,2 @@
+alert tls any any -> any any (tls.cert_subject; content:"O=TLSClientAuthSampleServer"; tls.store; sid:1; rev:1;)
+alert tls any any -> any any (tls.cert_subject; content:"O=TLSClientAuthSampleClient"; tls.store; sid:2; rev:1;)

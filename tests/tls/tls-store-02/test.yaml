@@ -1,0 +1,20 @@
+requires:
+  min-version: 8
+
+args:
+  - -k none
+  - --runmode=single
+
+checks:
+  - shell:
+      args: find certs -type f -name '1523912382.235074-1.pem' | wc -l | xargs
+      expect: 1
+  - shell:
+      args: find certs -type f -name '1523912382.235074-1.meta' | wc -l | xargs
+      expect: 1
+  - shell:
+      args: find certs -type f -name 'client-1523912382.237160-2.pem' | wc -l | xargs
+      expect: 1
+  - shell:
+      args: find certs -type f -name 'client-1523912382.237160-2.meta' | wc -l | xargs
+      expect: 1
