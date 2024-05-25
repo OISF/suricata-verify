@@ -1,0 +1,18 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      types:
+        - alert
+        - tls
+  - tls-log:
+      enabled: yes  # Log TLS connections.
+      filename: tls.log # File to store TLS logs.
+      append: yes
+      extended: yes     # Log extended information like fingerprint
+  - tls-store:
+      enabled: yes
+      certs-log-dir: certs # directory to store the certificates files
+
