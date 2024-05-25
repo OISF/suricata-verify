@@ -1,0 +1,9 @@
+pcap: ../tls-cert-issuer/tls.pcap
+
+checks:
+  - shell:
+      args: find . -type f -name '142566914*.*-*.pem' | wc -l | xargs
+      expect: 4
+  - shell:
+      args: find . -type f -name '142566914*.*-*.meta' | wc -l | xargs
+      expect: 4
