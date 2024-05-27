@@ -1,0 +1,3 @@
+alert tcp any any -> any any (content:"EVIL"; sid:1;)
+alert tcp-stream any any -> any any (content:"EVIL"; sid:2;)
+alert tcp-pkt any any -> any any (content:"EVIL"; sid:3;)
