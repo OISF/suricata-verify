@@ -1,0 +1,16 @@
+requires:
+  min-version: 8
+
+args:
+  - -k none
+
+pcap: ldap.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 5
+        event_type: ldap
+        ldap.request.message_id: 3
+        ldap.request.operation: unbind_request

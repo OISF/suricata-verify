@@ -1,0 +1,29 @@
+requires:
+  min-version: 8
+
+args:
+  - -k none
+
+pcap: ldap.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 7
+        event_type: ldap
+        ldap.request.message_id: 2
+        ldap.request.operation: modify_request
+        ldap.request.modify_request.object: uid=jdoe,ou=People,dc=example,dc=com
+        ldap.request.modify_request.changes[0].operation: delete
+        ldap.request.modify_request.changes[0].modification.attribute_type: givenName
+        ldap.request.modify_request.changes[0].modification.attribute_values[0]: John
+        ldap.request.modify_request.changes[1].operation: add
+        ldap.request.modify_request.changes[1].modification.attribute_type: givenName
+        ldap.request.modify_request.changes[1].modification.attribute_values[0]: Jonathan
+        ldap.request.modify_request.changes[2].operation: replace
+        ldap.request.modify_request.changes[2].modification.attribute_type: cn
+        ldap.request.modify_request.changes[2].modification.attribute_values[0]: Jonathan Doe
+        ldap.responses[0].modify_response.result_code: "success"
+        ldap.responses[0].modify_response.matched_dn: ""
+        ldap.responses[0].modify_response.message: ""

@@ -1,0 +1,34 @@
+requires:
+  min-version: 8
+
+args:
+  - -k none
+
+pcap: ldap.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: ldap
+        ldap.request.message_id: 2
+        ldap.request.operation: search_request
+        ldap.request.search_request.base_object: dc=example,dc=com
+        ldap.request.search_request.scope: 2
+        ldap.request.search_request.deref_alias: 0
+        ldap.request.search_request.size_limit: 1000
+        ldap.request.search_request.time_limit: 30
+        ldap.request.search_request.types_only: false
+        ldap.request.search_request.attributes[0]: "*"
+        ldap.request.search_request.attributes[1]: +
+        ldap.responses[0].operation: search_result_entry
+        ldap.responses[0].search_result_entry.base_object: dc=example,dc=com
+        ldap.responses[0].search_result_entry.attributes[0].type: objectClass
+        ldap.responses[0].search_result_entry.attributes[0].values[0]: top
+        ldap.responses[0].search_result_entry.attributes[0].values[1]: domain
+        ldap.responses[0].search_result_entry.attributes[1].type: dc
+        ldap.responses[0].search_result_entry.attributes[1].values[0]: example
+        ldap.responses[1].operation: search_result_done
+        ldap.responses[1].search_result_done.result_code: success
+        ldap.responses[1].search_result_done.matched_dn: ""
+        ldap.responses[1].search_result_done.message: "" 

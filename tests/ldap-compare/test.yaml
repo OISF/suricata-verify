@@ -1,0 +1,23 @@
+requires:
+  min-version: 8
+
+args:
+  - -k none
+
+pcap: ldap.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 7
+        event_type: ldap
+        ldap.request.message_id: 2
+        ldap.request.operation: compare_request
+        ldap.request.compare_request.entry: uid=jdoe,ou=People,dc=example,dc=com
+        ldap.request.compare_request.attribute_value_assertion.description: employeeType
+        ldap.request.compare_request.attribute_value_assertion.value: salaried
+        ldap.responses[0].operation: compare_response
+        ldap.responses[0].compare_response.result_code: "compare_true"
+        ldap.responses[0].compare_response.matched_dn: ""
+        ldap.responses[0].compare_response.message: ""
