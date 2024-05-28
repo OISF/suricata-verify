@@ -1,0 +1,21 @@
+requires:
+  min-version: 8
+
+args:
+  - -k none
+
+pcap: ldap.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 7
+        event_type: ldap
+        ldap.request.message_id: 2
+        ldap.request.operation: del_request
+        ldap.request.del_request.dn: uid=jdoe,ou=People,dc=example,dc=com
+        ldap.responses[0].operation: del_response
+        ldap.responses[0].del_response.result_code: "success"
+        ldap.responses[0].del_response.matched_dn: ""
+        ldap.responses[0].del_response.message: ""
