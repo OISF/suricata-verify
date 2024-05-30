@@ -1,0 +1,2 @@
+#this looks for 0x2e, 20 bytes into the UDP payload
+pass udp 192.168.0.2 4500 -> any any (msg:"Bypass packet 3 and 4";content:"|00 00 00 00|"; offset:0; depth:4; content:"|2e|"; offset:20; depth:1; bypass; sid:1003068;)
