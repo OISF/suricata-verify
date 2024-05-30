@@ -11,6 +11,7 @@ exit-code: 1
 
 checks:
   - filter:
+      min-version: 7
       filename: suricata.json
       count: 1
       match:
@@ -18,3 +19,11 @@ checks:
         event_type: "engine"
         engine.message.__find: "bad base64 encoding ua-seen"
         engine.module: "datasets"
+  - filter:
+      lt-version: 7
+      filename: suricata.json
+      count: 1
+      match:
+        log_level: "Error"
+        event_type: "engine"
+        engine.message.__find: "bad base64 encoding"
