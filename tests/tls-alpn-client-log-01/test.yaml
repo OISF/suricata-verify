@@ -1,0 +1,15 @@
+requires:
+  min-version: 8.0.0
+
+args:
+  - -k none
+
+pcap: ../ja4-tls-quic/input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+        tls.client_alpns[0]: h2
+        tls.client_alpns[1]: http/1.1
