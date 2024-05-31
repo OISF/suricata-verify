@@ -1,0 +1,27 @@
+requires:
+  min-version: 8.0.0
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+        tls.client_alpns[0]: h2
+        tls.client_alpns[1]: http/1.1
+        tls.server_alpns[0]: http/1.1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        tls.client_alpns[0]: h2
+        tls.client_alpns[1]: http/1.1
+        tls.server_alpns[0]: http/1.1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        tls.client_alpns[0]: h2
+        tls.client_alpns[1]: http/1.1
+        tls.server_alpns[0]: http/1.1
