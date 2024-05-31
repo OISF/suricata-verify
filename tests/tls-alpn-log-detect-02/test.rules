@@ -1,0 +1,2 @@
+alert tls any any -> any any (tls.sni; content:"icloud"; tls.alpn; content:"http/1.1"; sid:1;)
+alert tls any any -> any any (tls.subjectaltname; content:"p142-contacts.icloud.com"; tls.alpn; content:"http/1.1"; sid:2;)
