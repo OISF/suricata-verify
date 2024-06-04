@@ -1,3 +1,6 @@
+requires:
+  min-version: 8
+
 args:
 - -k none
 
@@ -6,14 +9,14 @@ checks:
     count: 1
     match:
       event_type: dns
-      dns.type: query
+      dns.type: request
       dns.z: true
 - filter:
     count: 1
     match:
       event_type: alert
       alert.signature_id: 2240006
-      dns.query[0].z: true
+      dns.z: true
 - filter:
     count: 1
     match:

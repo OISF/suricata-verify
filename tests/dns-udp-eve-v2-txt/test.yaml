@@ -1,4 +1,5 @@
-# *** Add configuration here ***
+requires:
+  min-version: 8
 
 checks:
 - filter:
@@ -7,10 +8,10 @@ checks:
       dest_ip: 10.16.1.1
       dest_port: 53
       dns.id: 39372
-      dns.rrname: textsecure-service-ca.whispersystems.org
-      dns.rrtype: A
       dns.tx_id: 0
-      dns.type: query
+      dns.type: request
+      dns.queries[0].rrname: textsecure-service-ca.whispersystems.org
+      dns.queries[0].rrtype: A
       event_type: dns
       pcap_cnt: 3
       proto: UDP
@@ -22,10 +23,10 @@ checks:
       dest_ip: 10.16.1.1
       dest_port: 53
       dns.id: 28243
-      dns.rrname: google.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: google.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 0
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 1
       proto: UDP

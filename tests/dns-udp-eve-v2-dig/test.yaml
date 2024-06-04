@@ -1,3 +1,6 @@
+requires:
+  min-version: 8
+
 pcap: ../cond-log-dns-dig/input.pcap
 
 checks:
@@ -11,10 +14,9 @@ checks:
       dest_ip: 10.16.1.1
       dest_port: 53
       dns.id: 36146
-      dns.rrname: www.suricata-ids.org
-      dns.rrtype: A
-      dns.tx_id: 0
-      dns.type: query
+      dns.queries[0].rrname: www.suricata-ids.org
+      dns.queries[0].rrtype: A
+      dns.type: request
       event_type: dns
       pcap_cnt: 1
       proto: UDP

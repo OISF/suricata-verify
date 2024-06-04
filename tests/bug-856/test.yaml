@@ -13,10 +13,10 @@ checks:
       dest_ip: 192.168.42.129
       dest_port: 53
       dns.id: 59165
-      dns.rrname: static.programme-tv.net
-      dns.rrtype: A
+      dns.queries[0].rrname: static.programme-tv.net
+      dns.queries[0].rrtype: A
       dns.tx_id: 0
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 1
       proto: UDP
@@ -28,10 +28,10 @@ checks:
       dest_ip: 192.168.42.129
       dest_port: 53
       dns.id: 25783
-      dns.rrname: static.programme-tv.net
-      dns.rrtype: AAAA
+      dns.queries[0].rrname: static.programme-tv.net
+      dns.queries[0].rrtype: AAAA
       dns.tx_id: 1
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 2
       proto: UDP

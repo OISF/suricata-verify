@@ -1,14 +1,13 @@
-pcap: ../dns-single-request-v1/input.pcap
-
 requires:
-  features:
-    - HAVE_LIBJANSSON
+  min-version: 8
+
+pcap: ../dns-single-request-v1/input.pcap
 
 checks:
   - filter:
       count: 1
       match:
-        dns.type: query
+        dns.type: request
   - filter:
       count: 1
       match:

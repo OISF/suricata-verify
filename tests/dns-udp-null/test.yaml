@@ -1,13 +1,13 @@
 requires:
-  min-version: 7
+  min-version: 8
 
 checks:
   - filter:
       count: 1
       match:
         event_type: dns
-        dns.type: query
-        dns.rrtype: "NULL"
+        dns.type: request
+        dns.queries[0].rrtype: "NULL"
   - filter:
       count: 1
       match:

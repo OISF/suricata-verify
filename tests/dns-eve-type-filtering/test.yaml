@@ -1,5 +1,5 @@
 requires:
-  min-version: 4.1
+  min-version: 8
 
 checks:
 
@@ -15,12 +15,22 @@ checks:
       count: 4
       match:
         event_type: "dns"
+
+  # 2 should be DNS requests
   - filter:
       filename: only-a.json
-      count: 4
+      count: 2
       match:
         event_type: "dns"
-        dns.rrtype: "A"
+        dns.queries[0].rrtype: "A"
+
+  # 2 should be DNS responses
+  - filter:
+      filename: only-a.json
+      count: 2
+      match:
+        event_type: "dns"
+        dns.answers[1].rrtype: "A"
 
   # Also check that the source and destination addresses and ports are
   # as expected.
@@ -33,7 +43,7 @@ checks:
         src_port: 54888
         dest_ip: "8.8.8.8"
         dest_port: 53
-        dns.type: "query"
+        dns.type: "request"
   - filter:
       filename: only-a.json
       count: 1
@@ -56,19 +66,19 @@ checks:
       count: 2
       match:
         event_type: "dns"
-        dns.rrtype: "A"
+        dns.queries[0].rrtype: "A"
   - filter:
       filename: a-and-aaaa-requests-only.json
       count: 2
       match:
         event_type: "dns"
-        dns.rrtype: "AAAA"
+        dns.queries[0].rrtype: "AAAA"
   - filter:
       filename: a-and-aaaa-requests-only.json
       count: 4
       match:
         event_type: "dns"
-        dns.type: "query"
+        dns.type: "request"
 
   # Check that we only have 3 log entries, and that they are all MX
   # responses.

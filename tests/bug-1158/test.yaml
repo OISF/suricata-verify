@@ -1,5 +1,5 @@
 requires:
-  min-version: 7
+  min-version: 8
 
 args:
 - -k none
@@ -11,10 +11,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 49711
-      dns.rrname: AAAAAO1kQA.=auth.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: AAAAAO1kQA.=auth.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 0
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 1
       proto: UDP
@@ -60,10 +60,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 45160
-      dns.rrname: hvOBgAABAEI5ODFGMjk4MEMyRTFFOEZDREI1MEZGRTA2OEIxQzMwODcyQTlBQjc.=auth.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvOBgAABAEI5ODFGMjk4MEMyRTFFOEZDREI1MEZGRTA2OEIxQzMwODcyQTlBQjc.=auth.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 2
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 3
       proto: UDP
@@ -109,10 +109,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 45946
-      dns.rrname: hvP1kF5BAHNzaA.=connect.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvP1kF5BAHNzaA.=connect.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 4
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 5
       proto: UDP
@@ -158,10 +158,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 20792
-      dns.rrname: hvMAAAABBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAAAABBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 6
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 7
       proto: UDP
@@ -212,10 +212,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 6169
-      dns.rrname: hvMAAQACBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAAQACBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 8
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 9
       proto: UDP
@@ -227,10 +227,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 3701
-      dns.rrname: hvMAAAADCFNTSC0yLjAtT3BlblNTSF82LjBwMSBEZWJpYW4tNA0K.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAAAADCFNTSC0yLjAtT3BlblNTSF82LjBwMSBEZWJpYW4tNA0K.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 9
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 10
       proto: UDP
@@ -242,10 +242,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 61227
-      dns.rrname: hvMAAAAEBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAAAAEBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 10
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 11
       proto: UDP
@@ -257,10 +257,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 25286
-      dns.rrname: hvMAAAAFCAAABPQIFCP3jBGyCsqKjf9o1jmtOwgAAAC3ZWNkaC1zaGEyLW5pc3R.wMjU2LGVjZGgtc2hhMi1uaXN0cDM4NCxlY2RoLXNoYTItbmlzdHA1MjEsZGlmZm.llLWhlbGxtYW4tZ3JvdXAtZXhjaGFuZ2Utc2hhMjU2LGRpZmZp.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAAAAFCAAABPQIFCP3jBGyCsqKjf9o1jmtOwgAAAC3ZWNkaC1zaGEyLW5pc3R.wMjU2LGVjZGgtc2hhMi1uaXN0cDM4NCxlY2RoLXNoYTItbmlzdHA1MjEsZGlmZm.llLWhlbGxtYW4tZ3JvdXAtZXhjaGFuZ2Utc2hhMjU2LGRpZmZp.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 11
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 12
       proto: UDP
@@ -272,10 +272,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 16087
-      dns.rrname: hvMAAAAGBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAAAAGBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 12
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 13
       proto: UDP
@@ -287,10 +287,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 35836
-      dns.rrname: hvMAAAAHCGUtaGVsbG1hbi1ncm91cC1leGNoYW5nZS1zaGExLGRpZmZpZS1oZWx.sbWFuLWdyb3VwMTQtc2hhMSxkaWZmaWUtaGVsbG1hbi1ncm91cDEtc2hhMQAAAT.pzc2gtcnNhLWNlcnQtdjAxQG9wZW5zc2guY29tLHNzaC1yc2Et.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAAAAHCGUtaGVsbG1hbi1ncm91cC1leGNoYW5nZS1zaGExLGRpZmZpZS1oZWx.sbWFuLWdyb3VwMTQtc2hhMSxkaWZmaWUtaGVsbG1hbi1ncm91cDEtc2hhMQAAAT.pzc2gtcnNhLWNlcnQtdjAxQG9wZW5zc2guY29tLHNzaC1yc2Et.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 13
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 14
       proto: UDP
@@ -302,10 +302,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 40074
-      dns.rrname: hvMAAAAIBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAAAAIBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 14
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 15
       proto: UDP
@@ -317,10 +317,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 12387
-      dns.rrname: hvMAAAAJCGNlcnQtdjAwQG9wZW5zc2guY29tLHNzaC1yc2EsZWNkc2Etc2hhMi1.uaXN0cDI1Ni1jZXJ0LXYwMUBvcGVuc3NoLmNvbSxlY2RzYS1zaGEyLW5pc3RwMz.g0LWNlcnQtdjAxQG9wZW5zc2guY29tLGVjZHNhLXNoYTItbmlz.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAAAAJCGNlcnQtdjAwQG9wZW5zc2guY29tLHNzaC1yc2EsZWNkc2Etc2hhMi1.uaXN0cDI1Ni1jZXJ0LXYwMUBvcGVuc3NoLmNvbSxlY2RzYS1zaGEyLW5pc3RwMz.g0LWNlcnQtdjAxQG9wZW5zc2guY29tLGVjZHNhLXNoYTItbmlz.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 15
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 16
       proto: UDP
@@ -332,10 +332,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 38415
-      dns.rrname: hvMAAAAKBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAAAAKBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 16
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 17
       proto: UDP
@@ -347,10 +347,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 25222
-      dns.rrname: hvMAAAALCHRwNTIxLWNlcnQtdjAxQG9wZW5zc2guY29tLHNzaC1kc3MtY2VydC1.2MDFAb3BlbnNzaC5jb20sc3NoLWRzcy1jZXJ0LXYwMEBvcGVuc3NoLmNvbSxlY2.RzYS1zaGEyLW5pc3RwMjU2LGVjZHNhLXNoYTItbmlzdHAzODQs.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAAAALCHRwNTIxLWNlcnQtdjAxQG9wZW5zc2guY29tLHNzaC1kc3MtY2VydC1.2MDFAb3BlbnNzaC5jb20sc3NoLWRzcy1jZXJ0LXYwMEBvcGVuc3NoLmNvbSxlY2.RzYS1zaGEyLW5pc3RwMjU2LGVjZHNhLXNoYTItbmlzdHAzODQs.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 17
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 18
       proto: UDP
@@ -362,10 +362,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 20916
-      dns.rrname: hvMAAAAMBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAAAAMBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 18
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 19
       proto: UDP
@@ -377,10 +377,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 17352
-      dns.rrname: hvMAAAANCGVjZHNhLXNoYTItbmlzdHA1MjEsc3NoLWRzcwAAAJ1hZXMxMjgtY3R.yLGFlczE5Mi1jdHIsYWVzMjU2LWN0cixhcmNmb3VyMjU2LGFyY2ZvdXIxMjgsYW.VzMTI4LWNiYywzZGVzLWNiYyxibG93ZmlzaC1jYmMsY2FzdDEy.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAAAANCGVjZHNhLXNoYTItbmlzdHA1MjEsc3NoLWRzcwAAAJ1hZXMxMjgtY3R.yLGFlczE5Mi1jdHIsYWVzMjU2LWN0cixhcmNmb3VyMjU2LGFyY2ZvdXIxMjgsYW.VzMTI4LWNiYywzZGVzLWNiYyxibG93ZmlzaC1jYmMsY2FzdDEy.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 19
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 20
       proto: UDP
@@ -392,10 +392,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 9521
-      dns.rrname: hvMAAAAOBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAAAAOBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 20
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 21
       proto: UDP
@@ -407,10 +407,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 36146
-      dns.rrname: hvMAAAAPCDgtY2JjLGFlczE5Mi1jYmMsYWVzMjU2LWNiYyxhcmNmb3VyLHJpam5.kYWVsLWNiY0BseXNhdG9yLmxpdS5zZQAAAJ1hZXMxMjgtY3RyLGFlczE5Mi1jdH.IsYWVzMjU2LWN0cixhcmNmb3VyMjU2LGFyY2ZvdXIxMjgsYWVz.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAAAAPCDgtY2JjLGFlczE5Mi1jYmMsYWVzMjU2LWNiYyxhcmNmb3VyLHJpam5.kYWVsLWNiY0BseXNhdG9yLmxpdS5zZQAAAJ1hZXMxMjgtY3RyLGFlczE5Mi1jdH.IsYWVzMjU2LWN0cixhcmNmb3VyMjU2LGFyY2ZvdXIxMjgsYWVz.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 21
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 22
       proto: UDP
@@ -422,10 +422,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 30696
-      dns.rrname: hvMAAAAQBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAAAAQBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 22
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 23
       proto: UDP
@@ -437,10 +437,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 18507
-      dns.rrname: hvMAAAARCDEyOC1jYmMsM2Rlcy1jYmMsYmxvd2Zpc2gtY2JjLGNhc3QxMjgtY2J.jLGFlczE5Mi1jYmMsYWVzMjU2LWNiYyxhcmNmb3VyLHJpam5kYWVsLWNiY0BseX.NhdG9yLmxpdS5zZQAAAKdobWFjLW1kNSxobWFjLXNoYTEsdW1h.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAAAARCDEyOC1jYmMsM2Rlcy1jYmMsYmxvd2Zpc2gtY2JjLGNhc3QxMjgtY2J.jLGFlczE5Mi1jYmMsYWVzMjU2LWNiYyxhcmNmb3VyLHJpam5kYWVsLWNiY0BseX.NhdG9yLmxpdS5zZQAAAKdobWFjLW1kNSxobWFjLXNoYTEsdW1h.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 23
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 24
       proto: UDP
@@ -452,10 +452,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 3486
-      dns.rrname: hvMAAAASCGMtNjRAb3BlbnNzaC5jb20saG1hYy1zaGEyLTI1NixobWFjLXNoYTI.tMjU2LTk2LGhtYWMtc2hhMi01MTIsaG1hYy1zaGEyLTUxMi05NixobWFjLXJpcG.VtZDE2MCxobWFjLXJpcGVtZDE2MEBvcGVuc3NoLmNvbSxobWFj.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAAAASCGMtNjRAb3BlbnNzaC5jb20saG1hYy1zaGEyLTI1NixobWFjLXNoYTI.tMjU2LTk2LGhtYWMtc2hhMi01MTIsaG1hYy1zaGEyLTUxMi05NixobWFjLXJpcG.VtZDE2MCxobWFjLXJpcGVtZDE2MEBvcGVuc3NoLmNvbSxobWFj.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 24
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 25
       proto: UDP
@@ -467,10 +467,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 65517
-      dns.rrname: hvMAAAATCC1zaGExLTk2LGhtYWMtbWQ1LTk2AAAAp2htYWMtbWQ1LGhtYWMtc2h.hMSx1bWFjLTY0QG9wZW5zc2guY29tLGhtYWMtc2hhMi0yNTYsaG1hYy1zaGEyLT.I1Ni05NixobWFjLXNoYTItNTEyLGhtYWMtc2hhMi01MTItOTYs.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAAAATCC1zaGExLTk2LGhtYWMtbWQ1LTk2AAAAp2htYWMtbWQ1LGhtYWMtc2h.hMSx1bWFjLTY0QG9wZW5zc2guY29tLGhtYWMtc2hhMi0yNTYsaG1hYy1zaGEyLT.I1Ni05NixobWFjLXNoYTItNTEyLGhtYWMtc2hhMi01MTItOTYs.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 25
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 26
       proto: UDP
@@ -482,10 +482,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 23977
-      dns.rrname: hvMAAAAUCGhtYWMtcmlwZW1kMTYwLGhtYWMtcmlwZW1kMTYwQG9wZW5zc2guY29.tLGhtYWMtc2hhMS05NixobWFjLW1kNS05NgAAABpub25lLHpsaWJAb3BlbnNzaC.5jb20semxpYgAAABpub25lLHpsaWJAb3BlbnNzaC5jb20semxp.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAAAAUCGhtYWMtcmlwZW1kMTYwLGhtYWMtcmlwZW1kMTYwQG9wZW5zc2guY29.tLGhtYWMtc2hhMS05NixobWFjLW1kNS05NgAAABpub25lLHpsaWJAb3BlbnNzaC.5jb20semxpYgAAABpub25lLHpsaWJAb3BlbnNzaC5jb20semxp.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 26
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 27
       proto: UDP
@@ -497,10 +497,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 31995
-      dns.rrname: hvMAAAAVCGIAAAAAAAAAAAAAAAAAAAAAAAAAAAA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAAAAVCGIAAAAAAAAAAAAAAAAAAAAAAAAAAAA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 27
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 28
       proto: UDP
@@ -694,10 +694,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 4289
-      dns.rrname: hvMAAgAWBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAAgAWBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 31
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 32
       proto: UDP
@@ -709,10 +709,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 53836
-      dns.rrname: hvMAAwAXCAAAABQGIgAABAAAAAQAAAAgAAAAAAAAAA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAAwAXCAAAABQGIgAABAAAAAQAAAAgAAAAAAAAAA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 32
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 33
       proto: UDP
@@ -724,10 +724,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 44271
-      dns.rrname: hvMABAAYBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMABAAYBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 33
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 34
       proto: UDP
@@ -909,10 +909,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 3462
-      dns.rrname: hvMABQAZBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMABQAZBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 39
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 40
       proto: UDP
@@ -992,10 +992,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 52985
-      dns.rrname: hvMABgAaBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMABgAaBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 42
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 43
       proto: UDP
@@ -1075,10 +1075,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 12894
-      dns.rrname: hvMABwAbBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMABwAbBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 45
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 46
       proto: UDP
@@ -1139,10 +1139,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 50286
-      dns.rrname: hvMACAAcBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMACAAcBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 47
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 48
       proto: UDP
@@ -1154,10 +1154,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 62058
-      dns.rrname: hvMACQAdCAAAAIwGIAAAAIAx3itE7XsxfNFkKSwpm/QL2R+3hW5GnOrZviY9/TR.O7d2QlxOeCwmGsxERu0+5DKpF6kwJroS1n8v8wLvqu3jSeOjVnYb7Fo3jRoLT3z.mxMiqSuKTuBNWXb5QoROHUYVRZIqMC+OtncdVw0LG0/FO/Kq8n.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMACQAdCAAAAIwGIAAAAIAx3itE7XsxfNFkKSwpm/QL2R+3hW5GnOrZviY9/TR.O7d2QlxOeCwmGsxERu0+5DKpF6kwJroS1n8v8wLvqu3jSeOjVnYb7Fo3jRoLT3z.mxMiqSuKTuBNWXb5QoROHUYVRZIqMC+OtncdVw0LG0/FO/Kq8n.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 48
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 49
       proto: UDP
@@ -1169,10 +1169,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 3337
-      dns.rrname: hvMACgAeBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMACgAeBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 49
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 50
       proto: UDP
@@ -1184,10 +1184,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 12496
-      dns.rrname: hvMACwAfCJpX6DB9O+5TQ+oIfbIAAAAAAAA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMACwAfCJpX6DB9O+5TQ+oIfbIAAAAAAAA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 50
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 51
       proto: UDP
@@ -1405,10 +1405,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 24710
-      dns.rrname: hvMADAAgBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMADAAgBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 55
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 56
       proto: UDP
@@ -1420,10 +1420,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 14096
-      dns.rrname: hvMADQAhCAAAAAwKFQAAAAAAAAAAAAA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMADQAhCAAAAAwKFQAAAAAAAAAAAAA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 56
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 57
       proto: UDP
@@ -1435,10 +1435,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 6981
-      dns.rrname: hvMADgAiCA9HZU8tQch3tlBA02t6sZzFinsHVFjV9fsbIgJzGV6aC9IX8jmSF82.xjb4dW8dzrA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMADgAiCA9HZU8tQch3tlBA02t6sZzFinsHVFjV9fsbIgJzGV6aC9IX8jmSF82.xjb4dW8dzrA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 57
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 58
       proto: UDP
@@ -1489,10 +1489,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 613
-      dns.rrname: hvMADwAjCDvIMWnWlrLs3njbinEmXNQVYiJ1Hf0sRyNE7D/1NF1b8clSdB/dmtu.UbGQcz7UrbBHNGJWtlVUBLpj6DTggRC0.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMADwAjCDvIMWnWlrLs3njbinEmXNQVYiJ1Hf0sRyNE7D/1NF1b8clSdB/dmtu.UbGQcz7UrbBHNGJWtlVUBLpj6DTggRC0.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 59
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 60
       proto: UDP
@@ -1951,10 +1951,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 21974
-      dns.rrname: hvMAEAAkBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAEAAkBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 73
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 74
       proto: UDP
@@ -2034,10 +2034,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 22814
-      dns.rrname: hvMAEQAlBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAEQAlBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 76
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 77
       proto: UDP
@@ -2083,10 +2083,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 34425
-      dns.rrname: hvMAEgAmBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAEgAmBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 78
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 79
       proto: UDP
@@ -2200,10 +2200,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 28769
-      dns.rrname: hvMAEwAnBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAEwAnBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 82
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 83
       proto: UDP
@@ -2249,10 +2249,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 51221
-      dns.rrname: hvMAFAAoBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAFAAoBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 84
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 86
       proto: UDP
@@ -2264,10 +2264,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 15585
-      dns.rrname: hvMAFQApCOmk2dTdJciDeU1HxaGwOxqdUoJGVho6Jcrgg3EXVwhzTkpRmB3Xrlz.lp2FAtTgUIZC5aeEQm7x/NitPsl8n+xyl8BtH2fraIRJb3eGrIteLsXobanq4+P.pJZNPyaIW2oKX3+ZSx3BKNpSkJpD232RvTt1J7dNuhqFQgFcnd.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAFQApCOmk2dTdJciDeU1HxaGwOxqdUoJGVho6Jcrgg3EXVwhzTkpRmB3Xrlz.lp2FAtTgUIZC5aeEQm7x/NitPsl8n+xyl8BtH2fraIRJb3eGrIteLsXobanq4+P.pJZNPyaIW2oKX3+ZSx3BKNpSkJpD232RvTt1J7dNuhqFQgFcnd.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 85
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 88
       proto: UDP
@@ -2279,10 +2279,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 61116
-      dns.rrname: hvMAFgAqBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAFgAqBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 86
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 89
       proto: UDP
@@ -2294,10 +2294,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 39265
-      dns.rrname: hvMAFwArCMfOP+frB4IA0L7UWQjJpzeyMOo.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAFwArCMfOP+frB4IA0L7UWQjJpzeyMOo.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 87
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 90
       proto: UDP
@@ -2309,10 +2309,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 21179
-      dns.rrname: hvMAGAAsBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAGAAsBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 88
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 91
       proto: UDP
@@ -2494,10 +2494,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 54669
-      dns.rrname: hvMAGQAtBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAGQAtBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 94
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 97
       proto: UDP
@@ -2543,10 +2543,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 14161
-      dns.rrname: hvMAGgAuBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAGgAuBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 96
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 99
       proto: UDP
@@ -2558,10 +2558,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 8495
-      dns.rrname: hvMAGwAvCIkrV/ReccpWoXylVptppBSwm4rQVj+LUzMpFyro3rmKmtRhPMMj0V1.cj60bkoYzh0QlrH6vAMPPSOm7RzOWJNTchkHY5KGt+pyYHPD9I6/81p1PCZuPXi.XMBHf6s08VExh7KxEtR8jggl/dxizgPmqbsBFw1yAsoWmDeEHj.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAGwAvCIkrV/ReccpWoXylVptppBSwm4rQVj+LUzMpFyro3rmKmtRhPMMj0V1.cj60bkoYzh0QlrH6vAMPPSOm7RzOWJNTchkHY5KGt+pyYHPD9I6/81p1PCZuPXi.XMBHf6s08VExh7KxEtR8jggl/dxizgPmqbsBFw1yAsoWmDeEHj.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 97
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 100
       proto: UDP
@@ -2573,10 +2573,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 27970
-      dns.rrname: hvMAHAAwBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAHAAwBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 98
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 101
       proto: UDP
@@ -2588,10 +2588,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 5825
-      dns.rrname: hvMAHQAxCMctAA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAHQAxCMctAA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 99
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 102
       proto: UDP
@@ -2603,10 +2603,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 5562
-      dns.rrname: hvMAHgAyBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAHgAyBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 100
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 103
       proto: UDP
@@ -2657,10 +2657,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 53290
-      dns.rrname: hvMAHwAzBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAHwAzBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 102
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 105
       proto: UDP
@@ -2672,10 +2672,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 37620
-      dns.rrname: hvMAIAA0CIUaLlwuNSK5phv3q0D7jN6FjRu9RhxF2jLcd4ePd/Ssv/fMHo1x7lZ.IJnb9FnEAoCBZUQqizMnd8d+FTgkJK7USPgmxOyR63Yy6sNxUuGdIvZ2Kd8OWaG.qrHQleDgvLDVxhdkeZ4jOUkbqywhagjgn+6LosU/HVT0V2Oql1.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAIAA0CIUaLlwuNSK5phv3q0D7jN6FjRu9RhxF2jLcd4ePd/Ssv/fMHo1x7lZ.IJnb9FnEAoCBZUQqizMnd8d+FTgkJK7USPgmxOyR63Yy6sNxUuGdIvZ2Kd8OWaG.qrHQleDgvLDVxhdkeZ4jOUkbqywhagjgn+6LosU/HVT0V2Oql1.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 103
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 106
       proto: UDP
@@ -2687,10 +2687,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 11415
-      dns.rrname: hvMAIQA1BA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAIQA1BA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 104
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 107
       proto: UDP
@@ -2702,10 +2702,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 41507
-      dns.rrname: hvMAIgA2CCeD1WxPA+m6eHkF1n4qobRCBC/O73OvopuCyJypzQ25p3ZMZeGznpo.Ugpn1L9G8f6H8rrjflBw9YW6C5VxOgiByMyvi1C8xpbuu19dr/b78i9BWGXlzHB.dai5EtV2d2YHxl6AjuP7vZNbkgVL99AScD38jT145YVJuQ2v2j.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAIgA2CCeD1WxPA+m6eHkF1n4qobRCBC/O73OvopuCyJypzQ25p3ZMZeGznpo.Ugpn1L9G8f6H8rrjflBw9YW6C5VxOgiByMyvi1C8xpbuu19dr/b78i9BWGXlzHB.dai5EtV2d2YHxl6AjuP7vZNbkgVL99AScD38jT145YVJuQ2v2j.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 105
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 108
       proto: UDP
@@ -2717,10 +2717,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 58854
-      dns.rrname: hvMAIwA3BA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAIwA3BA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 106
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 109
       proto: UDP
@@ -2732,10 +2732,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 30729
-      dns.rrname: hvMAJAA4CIA3u9zI4HdwAkw2T+n7SYuJHT590+/Y/WkV2jlx6OOhrYYBrH+fF/x.LeqpHbkkYohzQd/aIDDnUnhr+xtyHzrK4Chm5Q9UJmpATyFkU2wWdLs6S3sTeji.sy9fNH+znOgkge5l3POd3slPeZcbLITaDsTaHWEnrwDLMIQ9lw.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAJAA4CIA3u9zI4HdwAkw2T+n7SYuJHT590+/Y/WkV2jlx6OOhrYYBrH+fF/x.LeqpHbkkYohzQd/aIDDnUnhr+xtyHzrK4Chm5Q9UJmpATyFkU2wWdLs6S3sTeji.sy9fNH+znOgkge5l3POd3slPeZcbLITaDsTaHWEnrwDLMIQ9lw.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 107
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 110
       proto: UDP
@@ -2747,10 +2747,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 23354
-      dns.rrname: hvMAJQA5BA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAJQA5BA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 108
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 111
       proto: UDP
@@ -2762,10 +2762,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 13941
-      dns.rrname: hvMAJgA6CNgjb+jJ6jrjge2Jq6S6yufEuid5p1tRS8WmR2IHxwpt6vjhkRJFI8o.9XnSTflh5C6a068gKqhfPSR4M2a/Fo0+L4l+m5yIvRoc.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAJgA6CNgjb+jJ6jrjge2Jq6S6yufEuid5p1tRS8WmR2IHxwpt6vjhkRJFI8o.9XnSTflh5C6a068gKqhfPSR4M2a/Fo0+L4l+m5yIvRoc.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 109
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 112
       proto: UDP
@@ -2777,10 +2777,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 27613
-      dns.rrname: hvMAJwA7BA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAJwA7BA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 110
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 113
       proto: UDP
@@ -2836,10 +2836,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 22948
-      dns.rrname: hvMAKAA8BA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAKAA8BA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 112
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 115
       proto: UDP
@@ -2964,10 +2964,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 62607
-      dns.rrname: hvMAKQA9BA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAKQA9BA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 115
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 118
       proto: UDP
@@ -3018,10 +3018,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 5125
-      dns.rrname: hvMAKgA+BA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAKgA+BA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 117
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 120
       proto: UDP
@@ -3203,10 +3203,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 64110
-      dns.rrname: hvMAKwA/BA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAKwA/BA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 123
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 127
       proto: UDP
@@ -3388,10 +3388,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 15010
-      dns.rrname: hvMALABABA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMALABABA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 129
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 133
       proto: UDP
@@ -3437,10 +3437,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 824
-      dns.rrname: hvMALQBBBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMALQBBBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 131
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 135
       proto: UDP
@@ -3588,10 +3588,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 30595
-      dns.rrname: hvMALgBCBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMALgBCBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 136
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 140
       proto: UDP
@@ -3637,10 +3637,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 59164
-      dns.rrname: hvMALwBDBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMALwBDBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 138
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 142
       proto: UDP
@@ -3686,10 +3686,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 11618
-      dns.rrname: hvMAMABEBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAMABEBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 140
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 144
       proto: UDP
@@ -3735,10 +3735,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 8037
-      dns.rrname: hvMAMQBFBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAMQBFBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 142
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 146
       proto: UDP
@@ -3784,10 +3784,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 3379
-      dns.rrname: hvMAMgBGBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAMgBGBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 144
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 148
       proto: UDP
@@ -3833,10 +3833,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 40311
-      dns.rrname: hvMAMwBHBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAMwBHBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 146
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 150
       proto: UDP
@@ -3882,10 +3882,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 8006
-      dns.rrname: hvMANABIBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMANABIBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 148
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 152
       proto: UDP
@@ -3931,10 +3931,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 32072
-      dns.rrname: hvMANQBJBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMANQBJBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 150
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 154
       proto: UDP
@@ -3980,10 +3980,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 14229
-      dns.rrname: hvMANgBKBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMANgBKBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 152
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 156
       proto: UDP
@@ -4029,10 +4029,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 17107
-      dns.rrname: hvMANwBLBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMANwBLBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 154
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 158
       proto: UDP
@@ -4078,10 +4078,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 38783
-      dns.rrname: hvMAOABMBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAOABMBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 156
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 160
       proto: UDP
@@ -4127,10 +4127,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 64639
-      dns.rrname: hvMAOQBNBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAOQBNBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 158
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 162
       proto: UDP
@@ -4176,10 +4176,10 @@ checks:
       dest_ip: 10.30.28.94
       dest_port: 53
       dns.id: 41923
-      dns.rrname: hvMAOgBOBA.srv.tunnel.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: hvMAOgBOBA.srv.tunnel.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 160
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 164
       proto: UDP

@@ -1,7 +1,6 @@
 requires:
-  features:
-    - HAVE_LIBJANSSON
-    - RUST
+  min-version: 8
+
 args:
   - --set decoder.vxlan.enabled=true
 
@@ -25,7 +24,14 @@ checks:
         app_proto: ntp
         dest_port: 123
   - filter:
-      count: 8
+      count: 4
       match:
         event_type: dns
+        dns.type: request
+        dns.queries[0].rrname: "ec2-18-196-145-224.eu-central-1.compute.amazonaws.com"
+  - filter:
+      count: 4
+      match:
+        event_type: dns
+        dns.type: answer
         dns.rrname: "ec2-18-196-145-224.eu-central-1.compute.amazonaws.com"
