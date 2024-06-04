@@ -1,0 +1,12 @@
+requires:
+  min-version: 8
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        email.url[0]: "http://codashop-free01.duckdns.org/"
