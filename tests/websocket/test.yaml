@@ -19,6 +19,11 @@ checks:
 - filter:
     count: 1
     match:
+      event_type: alert
+      alert.signature_id: 21
+- filter:
+    count: 1
+    match:
       event_type: websocket
       websocket.mask: 3803616749
       websocket.opcode: text
