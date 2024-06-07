@@ -1,0 +1,1 @@
+alert tcp any any -> any any (flow:established,to_server; stream_size:server,<,1111; prefilter; content: "EICAR"; sid:1234;)
