@@ -1,8 +1,7 @@
-pcap: ../dns-tcp-www-google-com-v1/dns.pcap
-
 requires:
-  features:
-    - HAVE_LIBJANSSON
+  min-version: 8
+
+pcap: ../dns-tcp-www-google-com-v1/dns.pcap
 
 checks:
   - filter:
@@ -11,11 +10,11 @@ checks:
         src_ip: "10.16.1.11"
         dest_ip: "8.8.4.4"
         event_type: dns
-        dns.type: query
+        dns.type: request
   - filter:
       count: 1
       match:
         src_ip: "10.16.1.11"
         dest_ip: "8.8.4.4"
         event_type: dns
-        dns.type: answer
+        dns.type: response

@@ -1,18 +1,18 @@
 requires:
-  min-version: 7
+  min-version: 8
 
 checks:
   - filter:
       count: 1
       match:
         event_type: dns
-        dns.type: query
-        dns.rrtype: "NULL"
+        dns.type: request
+        dns.queries[0].rrtype: "NULL"
   - filter:
       count: 1
       match:
         event_type: dns
-        dns.type: answer
+        dns.type: response
         dns.rcode: NOERROR
-        dns.rrtype: "NULL"
+        dns.queries[0].rrtype: "NULL"
         dns.answers[0].rdata: "VACKD\u0003\\xc5\\xe9\u0001"

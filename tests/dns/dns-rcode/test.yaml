@@ -11,7 +11,7 @@ checks:
         direction: to_client
         app_proto: dns
         event_type: alert
-        dns.answer.rcode: NXDOMAIN
+        dns.rcode: NXDOMAIN
         src_ip: 8.8.4.4
         src_port: 53
   - filter:
@@ -23,7 +23,7 @@ checks:
         direction: to_client
         app_proto: dns
         event_type: alert
-        dns.answer.rcode: NXDOMAIN
+        dns.rcode: NXDOMAIN
         src_ip: 8.8.4.4
         src_port: 53
   - filter:

@@ -1,7 +1,5 @@
 requires:
-  min-version: 7
-  features:
-    - HAVE_LIBJANSSON
+  min-version: 8
 
 checks:
 
@@ -10,8 +8,8 @@ checks:
       count: 1
       match:
         event_type: dns
-        dns.type: query
-        dns.rrname: catenacyber.Fr
+        dns.type: request
+        dns.queries[0].rrname: catenacyber.Fr
   # Check that there is one flow event with DNS.
   - filter:
       count: 1
