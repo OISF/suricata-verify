@@ -9,17 +9,17 @@ checks:
       count: 1
       match:
         event_type: dns
-        dns.type: query
-        dns.rrname: google.com
-        dns.rrtype: NS
+        dns.type: request
+        dns.queries[0].rrname: google.com
+        dns.queries[0].rrtype: NS
   - filter:
       count: 1
       match:
         event_type: dns
-        dns.type: answer
-        dns.rrname: google.com
-        dns.rrtype: NS
+        dns.type: response
         dns.rcode: NOERROR
+        dns.queries[0].rrname: google.com
+        dns.queries[0].rrtype: NS
         dns.answers[0].rrname: google.com
         dns.answers[0].rrtype: NS
         dns.answers[0].ttl: 172761

@@ -1,5 +1,5 @@
 requires:
-  min-version: 7
+  min-version: 8
 
 args:
 - -k none
@@ -11,10 +11,10 @@ checks:
       dest_ip: 192.168.2.1
       dest_port: 53
       dns.id: 16995
-      dns.rrname: ipv6.google.com
-      dns.rrtype: AAAA
+      dns.queries[0].rrname: ipv6.google.com
+      dns.queries[0].rrtype: AAAA
       dns.tx_id: 0
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 21
       proto: UDP
@@ -69,10 +69,10 @@ checks:
       dns.ra: true
       dns.rcode: NOERROR
       dns.rd: true
-      dns.rrname: ipv6.google.com
-      dns.rrtype: AAAA
-      dns.type: answer
-      dns.version: 2
+      dns.queries[0].rrname: ipv6.google.com
+      dns.queries[0].rrtype: AAAA
+      dns.type: response
+      dns.version: 3
       event_type: dns
       pcap_cnt: 22
       proto: UDP
@@ -84,10 +84,10 @@ checks:
       dest_ip: 192.168.2.1
       dest_port: 53
       dns.id: 19995
-      dns.rrname: ipv6.google.com
-      dns.rrtype: A
+      dns.queries[0].rrname: ipv6.google.com
+      dns.queries[0].rrtype: A
       dns.tx_id: 2
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 23
       proto: UDP
@@ -141,10 +141,10 @@ checks:
       dns.ra: true
       dns.rcode: NOERROR
       dns.rd: true
-      dns.rrname: ipv6.google.com
-      dns.rrtype: A
-      dns.type: answer
-      dns.version: 2
+      dns.queries[0].rrname: ipv6.google.com
+      dns.queries[0].rrtype: A
+      dns.type: response
+      dns.version: 3
       event_type: dns
       pcap_cnt: 24
       proto: UDP
@@ -156,10 +156,10 @@ checks:
       dest_ip: 192.168.2.1
       dest_port: 53
       dns.id: 38477
-      dns.rrname: www.wireshark.org
-      dns.rrtype: AAAA
+      dns.queries[0].rrname: www.wireshark.org
+      dns.queries[0].rrtype: AAAA
       dns.tx_id: 4
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 58
       proto: UDP
@@ -177,10 +177,10 @@ checks:
       dns.ra: true
       dns.rcode: NOERROR
       dns.rd: true
-      dns.rrname: www.wireshark.org
-      dns.rrtype: AAAA
-      dns.type: answer
-      dns.version: 2
+      dns.queries[0].rrname: www.wireshark.org
+      dns.queries[0].rrtype: AAAA
+      dns.type: response
+      dns.version: 3
       event_type: dns
       pcap_cnt: 59
       proto: UDP
@@ -211,10 +211,10 @@ checks:
       dest_ip: 192.168.2.1
       dest_port: 53
       dns.id: 26746
-      dns.rrname: www.wireshark.org.gateway.2wire.net
-      dns.rrtype: AAAA
+      dns.queries[0].rrname: www.wireshark.org.gateway.2wire.net
+      dns.queries[0].rrtype: AAAA
       dns.tx_id: 6
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 60
       proto: UDP
@@ -231,10 +231,10 @@ checks:
       dns.qr: true
       dns.rcode: REFUSED
       dns.rd: true
-      dns.rrname: www.wireshark.org.gateway.2wire.net
-      dns.rrtype: AAAA
-      dns.type: answer
-      dns.version: 2
+      dns.queries[0].rrname: www.wireshark.org.gateway.2wire.net
+      dns.queries[0].rrtype: AAAA
+      dns.type: response
+      dns.version: 3
       event_type: dns
       pcap_cnt: 61
       proto: UDP
@@ -246,10 +246,10 @@ checks:
       dest_ip: 192.168.2.1
       dest_port: 53
       dns.id: 34278
-      dns.rrname: www.wireshark.org
-      dns.rrtype: A
+      dns.queries[0].rrname: www.wireshark.org
+      dns.queries[0].rrtype: A
       dns.tx_id: 8
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 62
       proto: UDP
@@ -272,10 +272,10 @@ checks:
       dns.ra: true
       dns.rcode: NOERROR
       dns.rd: true
-      dns.rrname: www.wireshark.org
-      dns.rrtype: A
-      dns.type: answer
-      dns.version: 2
+      dns.queries[0].rrname: www.wireshark.org
+      dns.queries[0].rrtype: A
+      dns.type: response
+      dns.version: 3
       event_type: dns
       pcap_cnt: 63
       proto: UDP

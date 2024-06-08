@@ -1,3 +1,6 @@
+requires:
+  min-version: 8
+
 pcap: ../dns-udp-unsolicited-response-v1/dns-response-2x.pcap
 
 checks:
@@ -5,9 +8,9 @@ checks:
       count: 1
       match:
         event_type: dns
-        dns.type: query
+        dns.type: request
   - filter:
       count: 2
       match:
         event_type: dns
-        dns.type: answer
+        dns.type: response

@@ -1,4 +1,5 @@
-# *** Add configuration here ***
+requires:
+  min-version: 8
 
 checks:
 - filter:
@@ -7,10 +8,10 @@ checks:
       dest_ip: 10.16.1.1
       dest_port: 53
       dns.id: 39372
-      dns.rrname: textsecure-service-ca.whispersystems.org
-      dns.rrtype: A
       dns.tx_id: 0
-      dns.type: query
+      dns.type: request
+      dns.queries[0].rrname: textsecure-service-ca.whispersystems.org
+      dns.queries[0].rrtype: A
       event_type: dns
       pcap_cnt: 3
       proto: UDP
@@ -22,10 +23,10 @@ checks:
       dest_ip: 10.16.1.1
       dest_port: 53
       dns.id: 28243
-      dns.rrname: google.com
-      dns.rrtype: TXT
+      dns.queries[0].rrname: google.com
+      dns.queries[0].rrtype: TXT
       dns.tx_id: 0
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 1
       proto: UDP
@@ -47,10 +48,10 @@ checks:
       dns.ra: true
       dns.rcode: NOERROR
       dns.rd: true
-      dns.rrname: textsecure-service-ca.whispersystems.org
-      dns.rrtype: A
-      dns.type: answer
-      dns.version: 2
+      dns.queries[0].rrname: textsecure-service-ca.whispersystems.org
+      dns.queries[0].rrtype: A
+      dns.type: response
+      dns.version: 3
       event_type: dns
       pcap_cnt: 4
       proto: UDP
@@ -72,10 +73,10 @@ checks:
       dns.ra: true
       dns.rcode: NOERROR
       dns.rd: true
-      dns.rrname: google.com
-      dns.rrtype: TXT
-      dns.type: answer
-      dns.version: 2
+      dns.queries[0].rrname: google.com
+      dns.queries[0].rrtype: TXT
+      dns.type: response
+      dns.version: 3
       event_type: dns
       pcap_cnt: 2
       proto: UDP

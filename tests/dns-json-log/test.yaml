@@ -22,4 +22,4 @@ checks:
       filename: dns.json
       match:
         event_type: dns
-        dns.type: answer
+        dns.type: response
