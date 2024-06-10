@@ -1,0 +1,17 @@
+requires:
+  # App-layer gap handling didn't happen until v4.
+  min-version: 4.0.0
+  lt-version: 8
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: dns
+        dns.type: query
+  - filter:
+      count: 3
+      match:
+        event_type: dns
+        dns.type: answer
+        dns.answers.__len: 12

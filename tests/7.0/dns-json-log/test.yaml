@@ -1,0 +1,25 @@
+pcap: ../../dns-eve/input.pcap
+
+requires:
+  lt-version: 6
+  features:
+    - HAVE_LIBJANSSON
+
+checks:
+  - filter:
+      count: 9
+      filename: dns.json
+      match:
+        event_type: dns
+  - filter:
+      count: 4
+      filename: dns.json
+      match:
+        event_type: dns
+        dns.type: query
+  - filter:
+      count: 5
+      filename: dns.json
+      match:
+        event_type: dns
+        dns.type: answer
