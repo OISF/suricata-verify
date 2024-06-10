@@ -1,0 +1,3 @@
+# Rules are similar but would match on different postgresql transactions
+alert pgsql any any -> any any (msg:"Pgsql table select"; content:"select"; nocase; sid:1;)
+alert pgsql any any -> any any (msg:"Pgsql table delete"; content:"delete from"; nocase; sid:2;)

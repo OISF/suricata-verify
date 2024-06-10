@@ -1,0 +1,92 @@
+requires:
+  pcap: false
+  min-version: 7
+
+args:
+- --engine-analysis
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 1
+      raw: "alert pgsql any any -> any any (msg:\"Pgsql table select\"; content:\"select\"; nocase; sid:1;)"
+      app_proto: "pgsql"
+      requirements[0]: "payload"
+      requirements[1]: "flow"
+      type: "stream"
+      flags[0]: "src_any"
+      flags[1]: "dst_any"
+      flags[2]: "sp_any"
+      flags[3]: "dp_any"
+      flags[4]: "applayer"
+      flags[5]: "need_stream"
+      flags[6]: "toserver"
+      flags[7]: "toclient"
+      flags[8]: "prefilter"
+      pkt_engines[0].name: "payload"
+      pkt_engines[0].is_mpm: true
+      lists.payload.matches[0].name: content
+      lists.payload.matches[0].content.pattern: "select"
+      lists.payload.matches[0].content.length: 6
+      lists.payload.matches[0].content.nocase: true
+      lists.payload.matches[0].content.negated: false
+      lists.payload.matches[0].content.starts_with: false
+      lists.payload.matches[0].content.ends_with: false
+      lists.payload.matches[0].content.is_mpm: true
+      lists.payload.matches[0].content.no_double_inspect: true
+      lists.payload.matches[0].content.fast_pattern: false
+      lists.payload.matches[0].content.relative_next: false
+      mpm.buffer: "payload"
+      mpm.pattern: "select"
+      mpm.length: 6
+      mpm.nocase: true
+      mpm.starts_with: false
+      mpm.ends_with: false
+      mpm.is_mpm: true
+      mpm.no_double_inspect: true
+      mpm.fast_pattern: false
+      mpm.relative_next: false
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 2
+      raw: "alert pgsql any any -> any any (msg:\"Pgsql table delete\"; content:\"delete from\"; nocase; sid:2;)"
+      app_proto: "pgsql"
+      requirements[0]: "payload"
+      requirements[1]: "flow"
+      type: "stream"
+      flags[0]: "src_any"
+      flags[1]: "dst_any"
+      flags[2]: "sp_any"
+      flags[3]: "dp_any"
+      flags[4]: "applayer"
+      flags[5]: "need_stream"
+      flags[6]: "toserver"
+      flags[7]: "toclient"
+      flags[8]: "prefilter"
+      pkt_engines[0].name: "payload"
+      pkt_engines[0].is_mpm: true
+      lists.payload.matches[0].name: content
+      lists.payload.matches[0].content.pattern: "delete|20|from"
+      lists.payload.matches[0].content.length: 11
+      lists.payload.matches[0].content.nocase: true
+      lists.payload.matches[0].content.negated: false
+      lists.payload.matches[0].content.starts_with: false
+      lists.payload.matches[0].content.ends_with: false
+      lists.payload.matches[0].content.is_mpm: true
+      lists.payload.matches[0].content.no_double_inspect: true
+      lists.payload.matches[0].content.fast_pattern: false
+      lists.payload.matches[0].content.relative_next: false
+      mpm.buffer: "payload"
+      mpm.pattern: "delete|20|from"
+      mpm.length: 11
+      mpm.nocase: true
+      mpm.starts_with: false
+      mpm.ends_with: false
+      mpm.is_mpm: true
+      mpm.no_double_inspect: true
+      mpm.fast_pattern: false
+      mpm.relative_next: false
