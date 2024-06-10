@@ -1,0 +1,15 @@
+pcap: ../flowbit-oring/input.pcap
+
+requires:
+  min-version: 8
+  os: linux
+
+exit-code: 1
+
+args:
+ - -k none
+
+checks:
+    - shell:
+        args: grep "dataset too large for set memcap" suricata.log | wc -l
+        expect: 1
