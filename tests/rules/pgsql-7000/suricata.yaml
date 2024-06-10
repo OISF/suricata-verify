@@ -1,0 +1,22 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - pgsql
+        - alert:
+            payload: yes
+            payload-printable: yes
+            packet: yes
+
+engine-analysis:
+  rules: yes
+
+app-layer:
+  protocols:
+    pgsql:
+      enabled: yes
