@@ -1,8 +1,0 @@
-%YAML 1.1
----
-
-outputs:
-  - dns-json-log:
-      version: 1
-      enabled: yes
-      filename: dns.json
