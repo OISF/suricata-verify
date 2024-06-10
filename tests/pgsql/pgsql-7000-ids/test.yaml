@@ -1,0 +1,183 @@
+requires:
+   min-version: 8
+args:
+- -k none
+
+pcap: ../pgsql-simple-query-rollback/input.pcap
+
+checks:
+- filter:
+    count: 9
+    match:
+      event_type: alert
+# check 2
+- filter:
+    count: 1
+    match:
+      alert.signature: Pgsql table delete
+      alert.signature_id: 2
+      app_proto: pgsql
+      direction: to_server
+      event_type: alert
+      payload_printable: Q....DELETE FROM new_table WHERE NAME='Remus';.
+      pcap_cnt: 21
+      pgsql.request.simple_query: DELETE FROM new_table WHERE NAME='Remus';
+      pgsql.response.command_completed: DELETE 1
+      pgsql.tx_id: 6
+      stream: 1
+      tx_id: 5
+# check 3
+- filter:
+    count: 1
+    match:
+      alert.signature: Pgsql table delete
+      alert.signature_id: 2
+      app_proto: pgsql
+      direction: to_server
+      event_type: alert
+      payload_printable: Q...1DELETE FROM new_table WHERE NAME='Londubat';.
+      pcap_cnt: 24
+      pgsql.request.simple_query: DELETE FROM new_table WHERE NAME='Londubat';
+      pgsql.response.command_completed: DELETE 1
+      pgsql.tx_id: 7
+      stream: 1
+      tx_id: 6
+# check 4
+- filter:
+    count: 1
+    match:
+      alert.signature: Pgsql table delete
+      alert.signature_id: 2
+      app_proto: pgsql
+      direction: to_server
+      event_type: alert
+      payload_printable: Q...1DELETE FROM new_table WHERE NAME='Hermione';.
+      pcap_cnt: 26
+      pgsql.request.simple_query: DELETE FROM new_table WHERE NAME='Hermione';
+      pgsql.response.command_completed: DELETE 1
+      pgsql.tx_id: 8
+      stream: 1
+      tx_id: 7
+# check 5
+- filter:
+    count: 1
+    match:
+      alert.signature: Pgsql table delete
+      alert.signature_id: 2
+      app_proto: pgsql
+      direction: to_server
+      event_type: alert
+      payload_printable: Q.../DELETE FROM new_table WHERE NAME='Maugre';.
+      pcap_cnt: 28
+      pgsql.request.simple_query: DELETE FROM new_table WHERE NAME='Maugre';
+      pgsql.response.command_completed: DELETE 1
+      pgsql.tx_id: 9
+      stream: 1
+      tx_id: 8
+# check 6
+- filter:
+    count: 1
+    match:
+      alert.signature: Pgsql table select
+      alert.signature_id: 1
+      app_proto: pgsql
+      direction: to_server
+      event_type: alert
+      payload_printable: Q....SELECT 1/0;.
+      pcap_cnt: 43
+      pgsql.request.simple_query: SELECT 1/0;
+      pgsql.response.code: '22012'
+      pgsql.response.file: d:\pginstaller_13.auto\postgres.windows-x64\src\backend\utils\adt\int.c
+      pgsql.response.line: '824'
+      pgsql.response.message: division by zero
+      pgsql.response.routine: int4div
+      pgsql.response.severity_localizable: ERROR
+      pgsql.response.severity_non_localizable: ERROR
+      pgsql.tx_id: 14
+      stream: 1
+      tx_id: 13
+# check 7
+- filter:
+    count: 1
+    match:
+      alert.signature: Pgsql table select
+      alert.signature_id: 1
+      app_proto: pgsql
+      direction: to_server
+      event_type: alert
+      payload_printable: Q....SELECT * FROM new_table;.
+      pcap_cnt: 57
+      pgsql.request.simple_query: SELECT * FROM new_table;
+      pgsql.response.code: 25P02
+      pgsql.response.file: d:\pginstaller_13.auto\postgres.windows-x64\src\backend\tcop\postgres.c
+      pgsql.response.line: '1105'
+      pgsql.response.message: current transaction is aborted, commands ignored until
+        end of transaction block
+      pgsql.response.routine: exec_simple_query
+      pgsql.response.severity_localizable: ERROR
+      pgsql.response.severity_non_localizable: ERROR
+      pgsql.tx_id: 17
+      stream: 1
+      tx_id: 16
+# check 8
+- filter:
+    count: 1
+    match:
+      alert.signature: Pgsql table select
+      alert.signature_id: 1
+      app_proto: pgsql
+      direction: to_server
+      event_type: alert
+      payload_printable: Q....SELECT 1/0;.
+      pcap_cnt: 76
+      pgsql.request.simple_query: SELECT 1/0;
+      pgsql.response.code: '22012'
+      pgsql.response.file: d:\pginstaller_13.auto\postgres.windows-x64\src\backend\utils\adt\int.c
+      pgsql.response.line: '824'
+      pgsql.response.message: division by zero
+      pgsql.response.routine: int4div
+      pgsql.response.severity_localizable: ERROR
+      pgsql.response.severity_non_localizable: ERROR
+      pgsql.tx_id: 23
+      stream: 1
+      tx_id: 22
+# check 9
+- filter:
+    count: 1
+    match:
+      alert.signature: Pgsql table select
+      alert.signature_id: 1
+      app_proto: pgsql
+      direction: to_server
+      event_type: alert
+      payload_printable: Q....SELECT * FROM new_table;.
+      pcap_cnt: 84
+      pgsql.request.simple_query: SELECT * FROM new_table;
+      pgsql.response.command_completed: SELECT 8
+      pgsql.response.data_rows: 8
+      pgsql.response.data_size: 236
+      pgsql.response.field_count: 2
+      pgsql.tx_id: 26
+      stream: 1
+      tx_id: 25
+# check 10
+- filter:
+    count: 1
+    match:
+      alert.signature: Pgsql table select
+      alert.signature_id: 1
+      app_proto: pgsql
+      direction: to_client
+      event_type: alert
+      payload_printable: "T...5..name...@*..............email...@*...........\"..D...1.....\n\
+        Dumbledore....prof_dumbledore@gmail.comD...2.....\nMcGonagall....prof_mc.gonagall@gmail.comD...'......Rogue....prof_rogue@yahoo.comD...)......Hagrid....prof_hagrid@gmail.comD...,......Hermione....prof_gramger@gmail.comD...'......Remus....prof_lupin@gmail.comD...)......Maugre....prof_folloy@gmail.comD...-......Londubat....prof_londubat@gmail.comC...\r\
+        SELECT 8.Z....I"
+      pcap_cnt: 87
+      pgsql.request.simple_query: SELECT * FROM new_table;
+      pgsql.response.command_completed: SELECT 8
+      pgsql.response.data_rows: 8
+      pgsql.response.data_size: 236
+      pgsql.response.field_count: 2
+      pgsql.tx_id: 26
+      stream: 1
+      tx_id: 25
