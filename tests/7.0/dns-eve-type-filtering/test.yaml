@@ -1,0 +1,92 @@
+requires:
+  min-version: 4.1
+  lt-version: 8
+
+checks:
+
+  - filter:
+      filename: all.json
+      count: 14
+      match:
+        event_type: "dns"
+
+  # Check that we only have requests and responses for A records.
+  - filter:
+      filename: only-a.json
+      count: 4
+      match:
+        event_type: "dns"
+  - filter:
+      filename: only-a.json
+      count: 4
+      match:
+        event_type: "dns"
+        dns.rrtype: "A"
+
+  # Also check that the source and destination addresses and ports are
+  # as expected.
+  - filter:
+      filename: only-a.json
+      count: 1
+      match:
+        pcap_cnt: 1
+        src_ip: "10.16.1.11"
+        src_port: 54888
+        dest_ip: "8.8.8.8"
+        dest_port: 53
+        dns.type: "query"
+  - filter:
+      filename: only-a.json
+      count: 1
+      match:
+        pcap_cnt: 2
+        src_ip: "10.16.1.11"
+        src_port: 54888
+        dest_ip: "8.8.8.8"
+        dest_port: 53
+        dns.type: "answer"
+
+  # Check that we only have A and AAAA requests.
+  - filter:
+      filename: a-and-aaaa-requests-only.json
+      count: 4
+      match:
+        event_type: "dns"
+  - filter:
+      filename: a-and-aaaa-requests-only.json
+      count: 2
+      match:
+        event_type: "dns"
+        dns.rrtype: "A"
+  - filter:
+      filename: a-and-aaaa-requests-only.json
+      count: 2
+      match:
+        event_type: "dns"
+        dns.rrtype: "AAAA"
+  - filter:
+      filename: a-and-aaaa-requests-only.json
+      count: 4
+      match:
+        event_type: "dns"
+        dns.type: "query"
+
+  # Check that we only have 3 log entries, and that they are all MX
+  # responses.
+  - filter:
+      filename: mx-responses-only.json
+      count: 3
+      match:
+        event_type: "dns"
+  - filter:
+      filename: mx-responses-only.json
+      count: 3
+      match:
+        event_type: "dns"
+        dns.type: "answer"
+  - filter:
+      filename: mx-responses-only.json
+      count: 3
+      match:
+        event_type: "dns"
+        dns.rrtype: "MX"

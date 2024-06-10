@@ -1,0 +1,19 @@
+requires:
+  min-version: 7
+  lt-version: 8
+
+checks:
+
+  # Check that there is one DNS event with specific parameters.
+  - filter:
+      count: 1
+      match:
+        event_type: dns
+        dns.type: query
+        dns.rrname: catenacyber.Fr
+  # Check that there is one flow event with DNS.
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: dns
