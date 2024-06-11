@@ -60,6 +60,9 @@ requires:
     # Restrict the test to builds with HAVE_LUA.
     - HAVE_LUA
 
+    # Only run a test when a feature is NOT present.
+    - -HAVE_JA4
+
   # Require that one or more files exist in the Suricata source directory
   files:
 	- src/detect-ipaddr.c
