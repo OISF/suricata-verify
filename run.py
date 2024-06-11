@@ -44,6 +44,7 @@ import filecmp
 import subprocess
 import yaml
 import traceback
+import platform
 
 VALIDATE_EVE = False
 WIN32 = sys.platform == "win32"
@@ -368,6 +369,10 @@ def check_requires(requires, suricata_config: SuricataConfig):
         elif key == "lambda":
             if not eval(requires["lambda"]):
                 raise UnsatisfiedRequirementError(requires["lambda"])
+        elif key == "os":
+            cur_platform = platform.system().lower()
+            if not cur_platform.startswith(requires["os"].lower()):
+                raise UnsatisfiedRequirementError(requires["os"])
         else:
             raise Exception("unknown requires types: %s" % (key))
 
