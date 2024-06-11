@@ -55,6 +55,10 @@ requires:
   # release, but 4.0.3 would only match 4.0.3.
   version: 4.0
 
+  # Test is only for the listed OS. For example, the following would make
+  # a test run only on Linux.
+  os: linux
+
   # Require the presence of specific features.
   features:
     # Restrict the test to builds with HAVE_LUA.
