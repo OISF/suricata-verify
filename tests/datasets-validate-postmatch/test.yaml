@@ -1,0 +1,25 @@
+requires:
+  min-version: 8
+
+args:
+  - -k none
+
+checks:
+  # only sid 3 should trigger
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  # data should only be written to one dataset
+  - shell:
+      args: cat none.intel | wc -l | xargs
+      expect: 0
+  - shell:
+      args: cat match.intel | wc -l | xargs
+      expect: 1

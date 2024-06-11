@@ -1,0 +1,4 @@
+# this will not match, and thus not write to the dataset
+alert http any any -> $HOME_NET any (msg:"HTTP learning"; flow:established,to_client; http.content_type; content:"noone"; http.server; content:"ECS"; fast_pattern; dataset:set,http_none,type string,state output/none.intel; sid:2; rev:1; priority:2;)
+# this will match, and thus write to the dataset
+alert http any any -> $HOME_NET any (msg:"HTTP learning"; flow:established,to_client; http.content_type; content:"ocsp"; http.server; content:"ECS"; fast_pattern; dataset:set,http_match,type string,state output/match.intel; sid:3; rev:1; priority:2;)
