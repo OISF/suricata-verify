@@ -368,6 +368,9 @@ def check_requires(requires, suricata_config: SuricataConfig):
         elif key == "lambda":
             if not eval(requires["lambda"]):
                 raise UnsatisfiedRequirementError(requires["lambda"])
+        elif key == "os":
+            if not sys.platform.startswith(requires["os"]):
+                raise UnsatisfiedRequirementError(requires["os"])
         else:
             raise Exception("unknown requires types: %s" % (key))
 
