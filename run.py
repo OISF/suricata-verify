@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 #
-# Copyright (C) 2017-2022 Open Information Security Foundation
+# Copyright (C) 2017-2024 Open Information Security Foundation
 #
 # Permission is hereby granted, free of charge, to any person
 # obtaining a copy of this software and associated documentation files
@@ -797,10 +797,11 @@ class TestRunner:
 
             if not check_value["failure"] and not check_value["skipped"]:
                 if not self.quiet:
-                    if os.path.basename(os.path.dirname(self.directory)) != "tests":
-                        path_name = os.path.join(os.path.basename(os.path.dirname(self.directory)), self.name)
+                    test_name_offset = self.directory.find("tests/")
+                    if test_name_offset > -1:
+                        path_name = self.directory[test_name_offset + len("tests/"):]
                     else:
-                        path_name = (os.path.basename(self.directory))
+                        path_name = os.path.basename(self.directory)
                     print("===> %s: OK%s" % (path_name, " (%dx)" % count if count > 1 else ""))
             elif not check_value["failure"]:
                 if not self.quiet:
@@ -1169,11 +1170,12 @@ def main():
         if not args.patterns:
             tests.append(dirpath)
         else:
+            test_name = dirpath[len(tdir) + 1:]
             for pattern in args.patterns:
                 if args.exact:
-                    if pattern == basename:
+                    if pattern == test_name:
                         tests.append(dirpath)
-                elif basename.find(pattern) > -1:
+                elif test_name.find(pattern) > -1:
                     tests.append(dirpath)
 
     # Sort alphabetically.
