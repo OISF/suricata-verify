@@ -1,0 +1,1 @@
+alert http any any -> $HOME_NET any (msg:"HTTP learning"; flow:established,to_client; http.content_type; content:"noone"; http.server; content:"ECS"; fast_pattern; dataset:set,http,type string,state output/http.intel; dataset:set,http,type string,state output/http_secondary.intel; sid:2; rev:1; priority:2;)
