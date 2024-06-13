@@ -1,0 +1,25 @@
+requires:
+  min-version: 8
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      app_proto: imap
+      dest_ip: 131.151.37.122
+      dest_port: 143
+      event_type: flow
+      flow.age: 26
+      flow.alerted: false
+      flow.bytes_toclient: 23493
+      flow.bytes_toserver: 3790
+      flow.pkts_toclient: 50
+      flow.pkts_toserver: 56
+      flow.reason: shutdown
+      flow.state: closed
+      proto: TCP
+      src_ip: 131.151.32.21
+      src_port: 4167
