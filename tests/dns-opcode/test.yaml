@@ -19,3 +19,14 @@ checks:
       count: 2
       match:
         event_type: alert
+
+  # This PCAP being a zone change has a request with answers in it.
+  - filter:
+      requires:
+        min-version: 8
+      count: 1
+      match:
+        pcap_cnt: 1
+        event_type: "dns"
+        dns.type: "request"
+        dns.answers[0].rrname: "bortzmeyer.42"
