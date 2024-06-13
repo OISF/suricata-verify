@@ -1,0 +1,21 @@
+requires:
+  # While Suricata 5 and 6 do the right thing, they don't generate alerts for
+  # this condition so can't be tested this way.
+  min-version: 7
+
+# disables checksum verification
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: smb
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2225008
