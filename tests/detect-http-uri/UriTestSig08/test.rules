@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"Test pcre /U option with urilen"; pcre:/(blabla){2,}(self)?/U; urilen:3<>20; sid:1;)

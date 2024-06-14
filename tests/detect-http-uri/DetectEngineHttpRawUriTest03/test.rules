@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"http raw uri test"; content:"/a/b"; http_raw_uri; offset:10; sid:1;)

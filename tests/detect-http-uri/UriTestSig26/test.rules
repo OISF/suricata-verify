@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"test multiple relative uricontents"; uricontent:"fix_this"; isdataat:4,relative; sid:1;)

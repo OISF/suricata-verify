@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"test multiple relative raw uri contents"; content:"/c/"; http_raw_uri; isdataat:4,relative; sid:1;)

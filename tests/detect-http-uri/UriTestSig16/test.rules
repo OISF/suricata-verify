@@ -1,0 +1,1 @@
+drop tcp any any -> any any (flow:to_server,established; uricontent:"/search?q="; pcre:"/^\/search\?q=[0-9]{1,3}(&aq=7(\?[0-9a-f]{8})?)?/U"; pcre:"/\x0d\x0aHost\: \d+\.\d+\.\d+\.\d+\x0d\x0a/"; sid:2009024; rev:9;)

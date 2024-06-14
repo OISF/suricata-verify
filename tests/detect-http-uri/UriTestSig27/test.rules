@@ -1,0 +1,1 @@
+alert tcp any any -> any any (uricontent:"fix_this"; isdataat:!10,relative; sid:1;)

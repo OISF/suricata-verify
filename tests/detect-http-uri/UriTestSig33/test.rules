@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"test multiple relative uricontents"; urilen:15; sid:1;)

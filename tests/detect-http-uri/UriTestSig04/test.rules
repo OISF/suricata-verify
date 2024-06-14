@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"Test urilen option"; urilen:>20; sid:1;)

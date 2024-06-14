@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"Test pcre /U option"; pcre:/blah/U; sid:1;)

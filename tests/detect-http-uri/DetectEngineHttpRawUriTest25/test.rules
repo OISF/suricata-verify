@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"http raw uri test"; pcre:/\.\/a/I; content:"/c/"; within:10; http_raw_uri; sid:1;)
