@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"test multiple relative uricontents"; uricontent:"this"; uricontent:"is"; within:9; uricontent:"big"; within:12; uricontent:"string"; within:8; sid:1;)

@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"Test pcre /U, uricontent and urilen option"; uricontent:"one"; pcre:/(one)+self/U; urilen:>2; sid:1;)

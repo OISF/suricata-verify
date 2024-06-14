@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"dummy"; uricontent:"this"; byte_extract:1,2,one,string,dec,relative; uricontent:"g_st"; within:one; sid:1;)
