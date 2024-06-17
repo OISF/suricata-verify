@@ -11,3 +11,9 @@ checks:
         event_type: ftp
         ftp.command: "EPSV"
         ftp.dynamic_port: 58612
+  - filter:
+      min-version: 8
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.event: APPLAYER_DETECT_PROTOCOL_ONLY_ONE_DIRECTION

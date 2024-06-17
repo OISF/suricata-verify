@@ -136,6 +136,12 @@ checks:
       tcp.tcp_flags: 1b
       tcp.tcp_flags_tc: 1b
       tcp.tcp_flags_ts: 1b
+- filter:
+    min-version: 8
+    count: 0
+    match:
+      event_type: anomaly
+      anomaly.event: APPLAYER_DETECT_PROTOCOL_ONLY_ONE_DIRECTION
 
 # Check the stats. A stats check is a specialization of a filter
 # that only checks the last stats entry.
