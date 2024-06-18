@@ -1,6 +1,5 @@
 requires:
-  files:
-    - src/detect-mqtt-connect-protocol-string.c
+  min-version: 8
 
 args:
   - -k none
