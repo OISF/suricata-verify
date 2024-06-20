@@ -1,0 +1,7 @@
+%YAML 1.1
+---
+
+classification-file: classification.config
+reference-config-file: reference.config
+
+include: tenant.yaml
