@@ -1,0 +1,6 @@
+alert sip any any -> any any (sip.from; content:"arik"; sid:1;)
+alert sip any any -> any any (sip.to; content:"sip:"; sid:2;)
+alert sip any any -> any any (sip.via; content:"SIP/2.0/UDP"; sid:3;)
+alert sip any any -> any any (sip.content_type; content:"application/sdp"; sid:4;)
+alert sip any any -> any any (sip.content_length; content:"272"; sid:5;)
+

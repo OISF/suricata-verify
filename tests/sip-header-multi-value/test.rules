@@ -1,0 +1,3 @@
+alert sip any any -> any any (sip.to; content:"sip:97239287044"; sid:1;)
+alert sip any any -> any any (sip.to; content:"sip:12345"; sid:2;)
+
