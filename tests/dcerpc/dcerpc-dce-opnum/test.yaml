@@ -14,6 +14,13 @@ checks:
         event_type: alert
         alert.signature_id: 1
   - filter:
+      min-version: 8
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        dcerpc.req.opnum: 4
+  - filter:
       count: 2
       match:
         event_type: alert
