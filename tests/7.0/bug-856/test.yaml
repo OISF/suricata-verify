@@ -1,0 +1,138 @@
+pcap: ../../dns-udp-z-flag-fp/suricatafpdnsdecoder.pcap
+
+requires:
+  lt-version: 8
+  min-version: 6
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.42.129
+      dest_port: 53
+      dns.id: 59165
+      dns.rrname: static.programme-tv.net
+      dns.rrtype: A
+      dns.tx_id: 0
+      dns.type: query
+      event_type: dns
+      pcap_cnt: 1
+      proto: UDP
+      src_ip: 192.168.42.150
+      src_port: 55597
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.42.129
+      dest_port: 53
+      dns.id: 25783
+      dns.rrname: static.programme-tv.net
+      dns.rrtype: AAAA
+      dns.tx_id: 1
+      dns.type: query
+      event_type: dns
+      pcap_cnt: 2
+      proto: UDP
+      src_ip: 192.168.42.150
+      src_port: 55597
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.42.129
+      dest_port: 53
+      dns.answers[0].rdata: programme-tv.net.edgesuite.net
+      dns.answers[0].rrname: static.programme-tv.net
+      dns.answers[0].rrtype: CNAME
+      dns.answers[0].ttl: 630
+      dns.answers[1].rdata: a1859.g.akamai.net
+      dns.answers[1].rrname: programme-tv.net.edgesuite.net
+      dns.answers[1].rrtype: CNAME
+      dns.answers[1].ttl: 20432
+      dns.answers[2].rdata: 90.84.55.48
+      dns.answers[2].rrname: a1859.g.akamai.net
+      dns.answers[2].rrtype: A
+      dns.answers[2].ttl: 14
+      dns.answers[3].rdata: 90.84.55.64
+      dns.answers[3].rrname: a1859.g.akamai.net
+      dns.answers[3].rrtype: A
+      dns.answers[3].ttl: 14
+      dns.flags: '8180'
+      dns.grouped.A[0]: 90.84.55.48
+      dns.grouped.A[1]: 90.84.55.64
+      dns.grouped.CNAME[0]: programme-tv.net.edgesuite.net
+      dns.grouped.CNAME[1]: a1859.g.akamai.net
+      dns.id: 59165
+      dns.qr: true
+      dns.ra: true
+      dns.rcode: NOERROR
+      dns.rd: true
+      dns.rrname: static.programme-tv.net
+      dns.rrtype: A
+      dns.type: answer
+      dns.version: 2
+      event_type: dns
+      pcap_cnt: 3
+      proto: UDP
+      src_ip: 192.168.42.150
+      src_port: 55597
+- filter:
+    count: 1
+    match:
+      dest_ip: 192.168.42.129
+      dest_port: 53
+      dns.answers[0].rdata: programme-tv.net.edgesuite.net
+      dns.answers[0].rrname: static.programme-tv.net
+      dns.answers[0].rrtype: CNAME
+      dns.answers[0].ttl: 630
+      dns.answers[1].rdata: a1859.g.akamai.net
+      dns.answers[1].rrname: programme-tv.net.edgesuite.net
+      dns.answers[1].rrtype: CNAME
+      dns.answers[1].ttl: 20432
+      dns.authorities[0].rrname: g.akamai.net
+      dns.authorities[0].rrtype: SOA
+      dns.authorities[0].soa.expire: 1000
+      dns.authorities[0].soa.minimum: 1800
+      dns.authorities[0].soa.mname: n0g.akamai.net
+      dns.authorities[0].soa.refresh: 1000
+      dns.authorities[0].soa.retry: 1000
+      dns.authorities[0].soa.rname: hostmaster.akamai.com
+      dns.authorities[0].soa.serial: 1372967523
+      dns.authorities[0].ttl: 1000
+      dns.flags: '8180'
+      dns.grouped.CNAME[0]: programme-tv.net.edgesuite.net
+      dns.grouped.CNAME[1]: a1859.g.akamai.net
+      dns.id: 25783
+      dns.qr: true
+      dns.ra: true
+      dns.rcode: NOERROR
+      dns.rd: true
+      dns.rrname: static.programme-tv.net
+      dns.rrtype: AAAA
+      dns.type: answer
+      dns.version: 2
+      event_type: dns
+      pcap_cnt: 4
+      proto: UDP
+      src_ip: 192.168.42.150
+      src_port: 55597
+- filter:
+    count: 1
+    match:
+      app_proto: dns
+      dest_ip: 192.168.42.129
+      dest_port: 53
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 399
+      flow.bytes_toserver: 166
+      flow.pkts_toclient: 2
+      flow.pkts_toserver: 2
+      flow.reason: shutdown
+      flow.state: established
+      proto: UDP
+      src_ip: 192.168.42.150
+      src_port: 55597

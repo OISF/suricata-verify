@@ -1,7 +1,10 @@
+requires:
+  min-version: 8
+
 checks:
   # Check that we only have requests and responses for HTTPS records.
 - filter:
     count: 1
     match:
       event_type: "dns"
-      dns.rrtype: "HTTPS"
+      dns.queries[0].rrtype: "HTTPS"

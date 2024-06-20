@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"Flow longer than 20 seconds"; flow.age:>20; flowbits: isnotset, longflow; flowbits: set, longflow; sid:3;)

@@ -1,1 +1,0 @@
-alert tcp any any -> any any (msg:"Byte_Extract Example Using depth"; content:"Alice"; depth:d; byte_extract:2,1,size; content:"Bob"; sid:1111;)

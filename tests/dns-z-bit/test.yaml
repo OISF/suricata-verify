@@ -1,3 +1,6 @@
+requires:
+  min-version: 8
+
 args:
 - -k none
 
@@ -6,14 +9,14 @@ checks:
     count: 1
     match:
       event_type: dns
-      dns.type: query
+      dns.type: request
       dns.z: true
 - filter:
     count: 1
     match:
       event_type: alert
       alert.signature_id: 2240006
-      dns.query[0].z: true
+      dns.z: true
 - filter:
     count: 1
     match:
@@ -30,10 +33,10 @@ checks:
       dns.ra: true
       dns.rcode: NOERROR
       dns.rd: true
-      dns.rrname: www.google.com
-      dns.rrtype: A
-      dns.type: answer
-      dns.version: 2
+      dns.queries[0].rrname: www.google.com
+      dns.queries[0].rrtype: A
+      dns.type: response
+      dns.version: 3
       event_type: dns
       pcap_cnt: 2
       proto: UDP

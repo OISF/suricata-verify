@@ -1,0 +1,12 @@
+%YAML 1.1
+---
+
+# Remove stats logging.
+stats:
+  enabled: no
+
+outputs:
+  - eve-log:
+      enabled: yes
+      types:
+        - dns:

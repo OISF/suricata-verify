@@ -1,13 +1,12 @@
 requires:
-  features:
-    - HAVE_LIBJANSSON
+  min-version: 8
 
 checks:
   - filter:
       count: 4
       match:
-        dns.type: query
+        dns.type: request
   - filter:
       count: 4
       match:
-        dns.type: answer
+        dns.type: response
