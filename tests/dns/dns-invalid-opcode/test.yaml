@@ -1,5 +1,5 @@
 requires:
-   min-version: 7
+   min-version: 8
 
 args:
 - -k none
@@ -11,14 +11,14 @@ checks:
     count: 1
     match:
       event_type: dns
-      dns.type: query
+      dns.type: request
 
 # Simple check for one answer.
 - filter:
     count: 1
     match:
       event_type: dns
-      dns.type: answer
+      dns.type: response
 
 # One alert in to_server direction.
 - filter:
@@ -50,12 +50,11 @@ checks:
       dest_ip: 2.2.2.2
       dest_port: 53
       direction: to_server
-      dns.query[0].id: 1
-      dns.query[0].opcode: 9
-      dns.query[0].rrname: suricata.io
-      dns.query[0].rrtype: A
-      dns.query[0].tx_id: 0
-      dns.query[0].type: query
+      dns.id: 1
+      dns.opcode: 9
+      dns.queries[0].rrname: suricata.io
+      dns.queries[0].rrtype: A
+      dns.tx_id: 0
       event_type: alert
       flow.bytes_toclient: 0
       flow.bytes_toserver: 71
@@ -94,10 +93,10 @@ checks:
       dest_port: 53
       dns.id: 1
       dns.opcode: 9
-      dns.rrname: suricata.io
-      dns.rrtype: A
+      dns.queries[0].rrname: suricata.io
+      dns.queries[0].rrtype: A
       dns.tx_id: 0
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 1
       pkt_src: wire/pcap
@@ -118,15 +117,15 @@ checks:
       dest_ip: 1.1.1.1
       dest_port: 5333
       direction: to_client
-      dns.answer.flags: c800
-      dns.answer.id: 1
-      dns.answer.opcode: 9
-      dns.answer.qr: true
-      dns.answer.rcode: NOERROR
-      dns.answer.rrname: suricata.io
-      dns.answer.rrtype: A
-      dns.answer.type: answer
-      dns.answer.version: 2
+      dns.flags: c800
+      dns.id: 1
+      dns.opcode: 9
+      dns.qr: true
+      dns.rcode: NOERROR
+      dns.queries[0].rrname: suricata.io
+      dns.queries[0].rrtype: A
+      dns.type: response
+      dns.version: 3
       event_type: alert
       flow.bytes_toclient: 98
       flow.bytes_toserver: 71
@@ -173,10 +172,10 @@ checks:
       dns.opcode: 9
       dns.qr: true
       dns.rcode: NOERROR
-      dns.rrname: suricata.io
-      dns.rrtype: A
-      dns.type: answer
-      dns.version: 2
+      dns.queries[0].rrname: suricata.io
+      dns.queries[0].rrtype: A
+      dns.type: response
+      dns.version: 3
       event_type: dns
       pcap_cnt: 2
       pkt_src: wire/pcap

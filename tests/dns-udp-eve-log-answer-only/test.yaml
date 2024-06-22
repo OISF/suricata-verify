@@ -1,16 +1,15 @@
-pcap: ../dns-udp-eve-log-query-only-v1/dns-udp-google.com-a-aaaa-mx.pcap
-
 requires:
-  features:
-    - HAVE_LIBJANSSON
+  min-version: 8
+
+pcap: ../dns-udp-eve-log-query-only-v1/dns-udp-google.com-a-aaaa-mx.pcap
 
 checks:
   - filter:
       count: 0
       match:
-        dns.type: query
+        dns.type: request
   - filter:
       count: 3
       match:
-        dns.type: answer
+        dns.type: response
         

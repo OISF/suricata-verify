@@ -1,3 +1,6 @@
+requires:
+  min-version: 8
+
 args:
 - -k none
 
@@ -12,10 +15,10 @@ checks:
       dest_ip: 192.38.129.234
       dest_port: 53
       dns.id: 28390
-      dns.rrname: code.msdn.microsoft.com
-      dns.rrtype: A
+      dns.queries[0].rrname: code.msdn.microsoft.com
+      dns.queries[0].rrtype: A
       dns.tx_id: 0
-      dns.type: query
+      dns.type: request
       event_type: dns
       pcap_cnt: 1
       proto: UDP

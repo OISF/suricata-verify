@@ -1,0 +1,12 @@
+requires:
+  lt-version: 8
+
+checks:
+  - filter:
+      count: 4
+      match:
+        dns.type: query
+  - filter:
+      count: 4
+      match:
+        dns.type: answer

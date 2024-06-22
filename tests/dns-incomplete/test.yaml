@@ -1,5 +1,5 @@
 requires:
-  min-version: 6.0
+  min-version: 8
 
 # disables checksum verification
 args:
@@ -10,8 +10,8 @@ checks:
       count: 1
       match:
         event_type: dns
-        dns.rrname: google.com
-        dns.type: query
+        dns.queries[0].rrname: google.com
+        dns.type: request
   - filter:
       count: 1
       match:
