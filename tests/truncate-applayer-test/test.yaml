@@ -1,0 +1,14 @@
+args:
+  - -k none --set stream.reassembly.depth=8kb
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 0    # because of the depth constraints
+    match:
+      event_type: alert
+      alert.signature_id: 2
