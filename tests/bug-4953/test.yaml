@@ -17,16 +17,6 @@ checks:
         fileinfo.state: TRUNCATED
         fileinfo.size: 137708
   - filter:
-      requires:
-        lt-version: 6
-      count: 1
-      match:
-        event_type: fileinfo
-        fileinfo.filename: "/IEyF/EN3GUkgHakZ3iVe/YBqssWlF8iWaHTr/"
-        fileinfo.gaps: false
-        fileinfo.state: TRUNCATED
-        fileinfo.size: 1176
-  - filter:
       count: 1
       match:
         event_type: fileinfo
