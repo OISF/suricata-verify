@@ -1,0 +1,24 @@
+pcap: ../truncate-applayer-test-01/input.pcap
+
+args:
+  - -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2
+- filter:
+     count: 1
+     match:
+       event_type: dcerpc
+       pcap_cnt: 40
+       dcerpc.request: "REQUEST"
+       dcerpc.response: "RESPONSE"
+       dcerpc.call_id: 5360

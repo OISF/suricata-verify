@@ -1,0 +1,25 @@
+args:
+  - -k none --set stream.reassembly.depth=8kb
+
+requires:
+  min-version: 7
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 0    # because of the depth constraints
+    match:
+      event_type: alert
+      alert.signature_id: 2
+- filter:
+     count: 1
+     match:
+       event_type: dcerpc
+       pcap_cnt: 40
+       dcerpc.request: "REQUEST_LOST"
+       dcerpc.response: "RESPONSE"
+       dcerpc.call_id: 5360
