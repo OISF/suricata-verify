@@ -1,0 +1,1 @@
+alert dns any any -> any any (msg:"DNS suricata query.name"; dns.query.name; content:"suricata"; sid:1; rev:1;)
