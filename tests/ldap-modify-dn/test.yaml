@@ -1,0 +1,23 @@
+requires:
+  min-version: 8
+
+args:
+  - -k none
+
+pcap: ldap.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 7
+        event_type: ldap
+        ldap.request.message_id: 2
+        ldap.request.operation: mod_dn_request
+        ldap.request.mod_dn_request.entry: uid=jdoe,ou=People,dc=example,dc=com
+        ldap.request.mod_dn_request.new_rdn: uid=john.doe
+        ldap.request.mod_dn_request.delete_old_rdn: true
+        ldap.responses[0].operation: mod_dn_response
+        ldap.responses[0].mod_dn_response.result_code: "success"
+        ldap.responses[0].mod_dn_response.matched_dn: ""
+        ldap.responses[0].mod_dn_response.message: ""
