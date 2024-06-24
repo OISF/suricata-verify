@@ -1,0 +1,4 @@
+alert tcp any any -> any any (dsize:>0; sid:1;)
+alert tcp any any -> any any (dsize:>0; threshold:type backoff, track by_flow, count 1, multiplier 2; sid:2;)
+alert tcp any any -> any any (dsize:>0; threshold:type backoff, track by_flow, count 3, multiplier 2; sid:3;)
+alert tcp any any -> any any (dsize:>0; threshold:type backoff, track by_flow, count 1, multiplier 10; sid:4;)

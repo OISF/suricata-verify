@@ -1,0 +1,26 @@
+requires:
+  min-version: 8
+
+pcap: ../../bug-2482-01/proxyCONNECT_443.pcap
+
+checks:
+  - filter:
+      count: 1725
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 707
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 338
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      count: 257
+      match:
+        event_type: alert
+        alert.signature_id: 4
