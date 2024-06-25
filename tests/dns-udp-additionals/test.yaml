@@ -1,0 +1,76 @@
+requires:
+  min-version: 8
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: dns
+        dns.type: query
+        dns.rrname: google.com
+        dns.rrtype: NS
+  - filter:
+      count: 1
+      match:
+        event_type: dns
+        dns.type: answer
+        dns.rrname: google.com
+        dns.rrtype: NS
+        dns.rcode: NOERROR
+        dns.answers[0].rrname: google.com
+        dns.answers[0].rrtype: NS
+        dns.answers[0].ttl: 172761
+        dns.answers[0].rdata: ns4.google.com
+        dns.answers[1].rrname: google.com
+        dns.answers[1].rrtype: NS
+        dns.answers[1].ttl: 172761
+        dns.answers[1].rdata: ns3.google.com
+        dns.answers[2].rrname: google.com
+        dns.answers[2].rrtype: NS
+        dns.answers[2].ttl: 172761
+        dns.answers[2].rdata: ns1.google.com
+        dns.answers[3].rrname: google.com
+        dns.answers[3].rrtype: NS
+        dns.answers[3].ttl: 172761
+        dns.answers[3].rdata: ns2.google.com
+        dns.grouped.NS[0]: ns4.google.com
+        dns.grouped.NS[1]: ns3.google.com
+        dns.grouped.NS[2]: ns1.google.com
+        dns.grouped.NS[3]: ns2.google.com
+        dns.additionals.__len: 8
+        dns.additionals[0].rrname: ns1.google.com
+        dns.additionals[0].rrtype: A
+        dns.additionals[0].ttl: 172761
+        dns.additionals[0].rdata: 216.239.32.10
+        dns.additionals[1].rrname: ns3.google.com
+        dns.additionals[1].rrtype: A
+        dns.additionals[1].ttl: 172761
+        dns.additionals[1].rdata: 216.239.36.10
+        dns.additionals[2].rrname: ns2.google.com
+        dns.additionals[2].rrtype: A
+        dns.additionals[2].ttl: 172761
+        dns.additionals[2].rdata: 216.239.34.10
+        dns.additionals[3].rrname: ns4.google.com
+        dns.additionals[3].rrtype: A
+        dns.additionals[3].ttl: 172761
+        dns.additionals[3].rdata: 216.239.38.10
+        dns.additionals[4].rrname: ns1.google.com
+        dns.additionals[4].rrtype: AAAA
+        dns.additionals[4].ttl: 172761
+        dns.additionals[4].rdata: 2001:4860:4802:0032:0000:0000:0000:000a
+        dns.additionals[5].rrname: ns3.google.com
+        dns.additionals[5].rrtype: AAAA
+        dns.additionals[5].ttl: 172761
+        dns.additionals[5].rdata: 2001:4860:4802:0036:0000:0000:0000:000a
+        dns.additionals[6].rrname: ns2.google.com
+        dns.additionals[6].rrtype: AAAA
+        dns.additionals[6].ttl: 172761
+        dns.additionals[6].rdata: 2001:4860:4802:0034:0000:0000:0000:000a
+        dns.additionals[7].rrname: ns4.google.com
+        dns.additionals[7].rrtype: AAAA
+        dns.additionals[7].ttl: 172761
+        dns.additionals[7].rdata: 2001:4860:4802:0038:0000:0000:0000:000a
+      
