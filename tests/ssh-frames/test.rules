@@ -1,0 +1,3 @@
+alert ssh any any -> any 22 (msg:"pdu frame"; frame:ssh.record.pdu; content: "|06 1e 00 00 00 20|"; offset: 4; depth:6; sid:1;)
+alert ssh any any -> any 22 (msg:"hdr frame new keys"; frame:ssh.record.hdr; content: "|15|"; endswith; bsize: 6; sid:2;)
+alert ssh any any -> any 22 (msg:"data frame"; frame:ssh.record.data; content: "curve"; sid:3;)
