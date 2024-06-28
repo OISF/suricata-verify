@@ -373,6 +373,10 @@ def check_requires(requires, suricata_config: SuricataConfig):
             cur_platform = platform.system().lower()
             if not cur_platform.startswith(requires["os"].lower()):
                 raise UnsatisfiedRequirementError(requires["os"])
+        elif key == "arch":
+            cur_arch = platform.machine().lower()
+            if not cur_arch.startswith(requires["arch"].lower()):
+                raise UnsatisfiedRequirementError(requires["arch"])
         else:
             raise Exception("unknown requires types: %s" % (key))
 
