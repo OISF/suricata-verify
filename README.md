@@ -59,6 +59,10 @@ requires:
   # a test run only on Linux.
   os: linux
 
+  # Test is only for the liste architecture. For example, following would
+  # make a test run only on x86_64. Other values can be amd64, i386, etc.
+  arch: x86_64
+
   # Require the presence of specific features.
   features:
     # Restrict the test to builds with HAVE_LUA.
