@@ -1,5 +1,5 @@
 requires:
-  min-version: 8
+  min-version: 7
 
 command: |
   ${SRCDIR}/src/suricata  -l ${OUTPUT_DIR}                                              \
