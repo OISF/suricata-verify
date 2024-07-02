@@ -1,0 +1,70 @@
+requires:
+   version: 8.0
+
+args:
+- -k none
+- --simulate-ips
+
+checks:
+- filter:
+    count: 657
+    match:
+      event_type: drop
+- filter:
+    count: 657
+    match:
+      event_type: alert
+      alert.signature_id: 2
+      alert.signature: drop_strict action
+- filter:
+    count: 511
+    match:
+      event_type: alert
+      alert.signature_id: 3
+      alert.signature: PASS_CUSTOM_RULE TCP port:443 to support traffic
+- filter:
+    count: 146
+    match:
+      event_type: alert
+      alert.signature_id: 5
+      alert.signature: tls hello
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 4
+      alert.signature: PASS_HTTP_NOT_ESTABLISHED TCP allow http/https traffic to the established state to allow further inspection
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 8
+    match:
+      dest_port: 4432
+      event_type: tls
+      tls.version: TLS 1.2
+- filter:
+    count: 37
+    match:
+      dest_port: 4430
+      event_type: tls
+      tls.version: TLS 1.2
+- filter:
+    count: 16
+    match:
+      dest_port: 4431
+      event_type: tls
+      tls.version: TLS 1.2
+- filter:
+    count: 12
+    match:
+      dest_port: 4433
+      event_type: tls
+      tls.version: TLS 1.2
+- filter:
+    count: 73
+    match:
+      event_type: flow
+      app_proto: tls

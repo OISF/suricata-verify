@@ -1,0 +1,7 @@
+pass udp any any -> any 6081 (sid:1;)
+drop ip any any -> any any (msg:"drop_strict action";flow:stateless; sid:2;)
+# Case A rule has TCP as the protocol
+pass tcp 127.0.0.1 any -> 127.0.0.1 [4430:4433] (msg:"PASS_CUSTOM_RULE TCP port:443 to support traffic";flow:established; alert; sid:3;)
+pass tcp $HOME_NET any <> any [[80,4430:4433]] (msg:"PASS_HTTP_NOT_ESTABLISHED TCP allow http/https traffic to the established state to allow further inspection"; flow:not_established; alert; sid:4;)
+# extra rule to help hightlight the tls hello packet
+alert tls any any -> any any (msg:"tls hello"; content:"|16 03 03|"; flow:to_client; sid:5;)

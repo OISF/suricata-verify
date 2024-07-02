@@ -1,0 +1,652 @@
+requires:
+   version: 8.0
+
+args:
+- -k none
+- --set stream.midstream=true
+- --simulate-ips
+
+checks:
+
+- filter:
+    count: 9
+    match:
+      event_type: drop
+- filter:
+    count: 9
+    match:
+      event_type: alert
+      alert.signature_id: 2
+      alert.signature: drop_strict action
+- filter:
+    count: 7
+    match:
+      event_type: alert
+      alert.signature_id: 3
+      alert.signature: PASS_CUSTOM_RULE TCP port:443 to support traffic
+- filter:
+    count: 2 
+    match:
+      event_type: alert
+      alert.signature_id: 5
+      alert.signature: tls hello
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 4
+      alert.signature: PASS_HTTP_NOT_ESTABLISHED TCP allow http/https traffic to the established state to allow further inspection
+- filter:
+    count: 1
+    match:
+      alert.action: blocked
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: drop_strict action
+      alert.signature_id: 2
+      dest_ip: 127.0.0.1
+      dest_port: 4431
+      direction: to_server
+      event_type: alert
+      flow.bytes_toclient: 0
+      flow.bytes_toserver: 74
+      flow.dest_ip: 127.0.0.1
+      flow.dest_port: 4431
+      flow.pkts_toclient: 0
+      flow.pkts_toserver: 1
+      flow.src_ip: 127.0.0.1
+      flow.src_port: 42376
+      payload_printable: ''
+      pcap_cnt: 1
+      proto: TCP
+      src_ip: 127.0.0.1
+      src_port: 42376
+      stream: 0
+      verdict.action: drop
+- filter:
+    count: 1
+    match:
+      alert.action: blocked
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: drop_strict action
+      alert.signature_id: 2
+      dest_ip: 127.0.0.1
+      dest_port: 42376
+      direction: to_client
+      event_type: alert
+      flow.bytes_toclient: 74
+      flow.bytes_toserver: 74
+      flow.dest_ip: 127.0.0.1
+      flow.dest_port: 4431
+      flow.pkts_toclient: 1
+      flow.pkts_toserver: 1
+      flow.src_ip: 127.0.0.1
+      flow.src_port: 42376
+      payload_printable: ''
+      pcap_cnt: 2
+      proto: TCP
+      src_ip: 127.0.0.1
+      src_port: 4431
+      stream: 0
+      verdict.action: drop
+- filter:
+    count: 1
+    match:
+      alert.action: blocked
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: drop_strict action
+      alert.signature_id: 2
+      dest_ip: 127.0.0.1
+      dest_port: 4431
+      direction: to_server
+      event_type: alert
+      flow.bytes_toclient: 74
+      flow.bytes_toserver: 140
+      flow.dest_ip: 127.0.0.1
+      flow.dest_port: 4431
+      flow.pkts_toclient: 1
+      flow.pkts_toserver: 2
+      flow.src_ip: 127.0.0.1
+      flow.src_port: 42376
+      payload_printable: ''
+      pcap_cnt: 3
+      proto: TCP
+      src_ip: 127.0.0.1
+      src_port: 42376
+      stream: 0
+      verdict.action: drop
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: PASS_CUSTOM_RULE TCP port:443 to support traffic
+      alert.signature_id: 3
+      dest_ip: 127.0.0.1
+      dest_port: 4431
+      direction: to_server
+      event_type: alert
+      flow.bytes_toclient: 74
+      flow.bytes_toserver: 372
+      flow.dest_ip: 127.0.0.1
+      flow.dest_port: 4431
+      flow.pkts_toclient: 1
+      flow.pkts_toserver: 3
+      flow.src_ip: 127.0.0.1
+      flow.src_port: 42376
+      payload_printable: "...........R6,..S.{..pL...p..,....C...{x..7....,......o.........\n\
+        .4.2...\r...........\n...................................#...\r.\". ....................................."
+      pcap_cnt: 4
+      proto: TCP
+      src_ip: 127.0.0.1
+      src_port: 42376
+      stream: 0
+      verdict.action: alert
+- filter:
+    count: 1
+    match:
+      alert.action: blocked
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: drop_strict action
+      alert.signature_id: 2
+      app_proto: tls
+      dest_ip: 127.0.0.1
+      dest_port: 42376
+      direction: to_client
+      event_type: alert
+      flow.bytes_toclient: 140
+      flow.bytes_toserver: 372
+      flow.dest_ip: 127.0.0.1
+      flow.dest_port: 4431
+      flow.pkts_toclient: 2
+      flow.pkts_toserver: 3
+      flow.src_ip: 127.0.0.1
+      flow.src_port: 42376
+      payload_printable: ''
+      pcap_cnt: 5
+      proto: TCP
+      src_ip: 127.0.0.1
+      src_port: 4431
+      stream: 0
+      verdict.action: drop
+- filter:
+    count: 1
+    match:
+      alert.action: blocked
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: drop_strict action
+      alert.signature_id: 2
+      app_proto: tls
+      dest_ip: 127.0.0.1
+      dest_port: 42376
+      direction: to_client
+      event_type: alert
+      flow.bytes_toclient: 854
+      flow.bytes_toserver: 372
+      flow.dest_ip: 127.0.0.1
+      flow.dest_port: 4431
+      flow.pkts_toclient: 3
+      flow.pkts_toserver: 3
+      flow.src_ip: 127.0.0.1
+      flow.src_port: 42376
+      payload_printable: "....B...>..R6,.......I....%.?E;t0|....Uz.....,.................#...........{...w..t..q0..m0.........%...0...*.H.=..0!1.0...U....Test\
+        \ Certificate ECDSA0..\r130915215110Z.\r230913215110Z0!1.0...U....Test Certificate\
+        \ ECDSA0v0...*.H.=....+...\".b......N.s.J.>......<k..s.......B.a.%.t....0.........'PO..p.H..Ep.\
+        \ ..2D...=......:...Y.B....9c..Q..0...*.H.=...i.0f.1..g.=.G..&._....'g.Gjm.\n\
+        .\n...l.O.b.:0Ss....d.4..G.1......:..-A....X..5...j+.=P<i.,z-...%.@&..r.5cIyf............A.4....9GK.+....Lp1..6gd...J.B........+.....;...8Jn8.m.I.z.un/.......f0d.0V..r.........Z.....4,~QG.i....Kl(.zx.d...m.ap\\\
+        ...0m......i..k.*2.!..[..........\";.........l^.1..6.........."
+      pcap_cnt: 6
+      proto: TCP
+      src_ip: 127.0.0.1
+      src_port: 4431
+      stream: 0
+      verdict.action: drop 
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: PASS_CUSTOM_RULE TCP port:443 to support traffic
+      alert.signature_id: 3
+      app_proto: tls
+      dest_ip: 127.0.0.1
+      dest_port: 4431
+      direction: to_server
+      event_type: alert
+      flow.bytes_toclient: 854
+      flow.bytes_toserver: 438
+      flow.dest_ip: 127.0.0.1
+      flow.dest_port: 4431
+      flow.pkts_toclient: 3
+      flow.pkts_toserver: 4
+      flow.src_ip: 127.0.0.1
+      flow.src_port: 42376
+      payload_printable: ''
+      pcap_cnt: 7
+      proto: TCP
+      src_ip: 127.0.0.1
+      src_port: 42376
+      stream: 0
+      verdict.action: alert
+- filter:
+    count: 1
+    match:
+      dest_ip: 127.0.0.1
+      dest_port: 4431
+      event_type: tls
+      pcap_cnt: 6
+      proto: TCP
+      src_ip: 127.0.0.1
+      src_port: 42376
+      tls.fingerprint: 95:8c:e8:93:d6:7b:db:6e:09:e5:b8:33:07:bf:16:74:92:80:88:8e
+      tls.issuerdn: CN=Test Certificate ECDSA
+      tls.notafter: '2023-09-13T21:51:10'
+      tls.notbefore: '2013-09-15T21:51:10'
+      tls.serial: 00:D2:1A:C9:F4:25:BF:A0:F6
+      tls.subject: CN=Test Certificate ECDSA
+      tls.version: TLS 1.2
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: PASS_CUSTOM_RULE TCP port:443 to support traffic
+      alert.signature_id: 3
+      app_proto: tls
+      dest_ip: 127.0.0.1
+      dest_port: 4431
+      direction: to_server
+      event_type: alert
+      flow.bytes_toclient: 854
+      flow.bytes_toserver: 639
+      flow.dest_ip: 127.0.0.1
+      flow.dest_port: 4431
+      flow.pkts_toclient: 3
+      flow.pkts_toserver: 5
+      flow.src_ip: 127.0.0.1
+      flow.src_port: 42376
+      payload_printable: '....F...BA..P.Y.sV&d..a...,..._.....l^.F....R...t .U.Z&V.c`#../..?R.z................1D..,n.......&....z...../`....o..%P%.k..G...sg.m-.'
+      pcap_cnt: 8
+      proto: TCP
+      src_ip: 127.0.0.1
+      src_port: 42376
+      stream: 0
+      verdict.action: alert
+- filter:
+    count: 1
+    match:
+      alert.action: blocked
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: drop_strict action
+      alert.signature_id: 2
+      app_proto: tls
+      dest_ip: 127.0.0.1
+      dest_port: 42376
+      direction: to_client
+      event_type: alert
+      flow.bytes_toclient: 1155
+      flow.bytes_toserver: 639
+      flow.dest_ip: 127.0.0.1
+      flow.dest_port: 4431
+      flow.pkts_toclient: 4
+      flow.pkts_toserver: 5
+      flow.src_ip: 127.0.0.1
+      flow.src_port: 42376
+      payload_printable: "............,..o}.lg.z.~.an.7.='.c#..x&\r.pB. F....U....x..c.6'b-.\n\
+        ....E......{I.........Q.;.`O1... i``>...I.(..B.._O.....2p..l)a..]R.z...X2Lp.......H........(.A.4e..(.7..I..............1QWF............X.@.g{...8RR.d.$\
+        \ .CN...W}..F.....M"
+      pcap_cnt: 9
+      proto: TCP
+      src_ip: 127.0.0.1
+      src_port: 4431
+      stream: 0
+      verdict.action: drop
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: tls hello
+      alert.signature_id: 5
+      app_proto: tls
+      dest_ip: 127.0.0.1
+      dest_port: 42376
+      direction: to_client
+      event_type: alert
+      flow.bytes_toclient: 854
+      flow.bytes_toserver: 372
+      flow.dest_ip: 127.0.0.1
+      flow.dest_port: 4431
+      flow.pkts_toclient: 3
+      flow.pkts_toserver: 3
+      flow.src_ip: 127.0.0.1
+      flow.src_port: 42376
+      payload_printable: "....B...>..R6,.......I....%.?E;t0|....Uz.....,.................#...........{...w..t..q0..m0.........%...0...*.H.=..0!1.0...U....Test Certificate ECDSA0..\r130915215110Z.\r230913215110Z0!1.0...U....Test Certificate ECDSA0v0...*.H.=....+...\".b......N.s.J.>......<k..s.......B.a.%.t....0.........'PO..p.H..Ep. ..2D...=......:...Y.B....9c..Q..0...*.H.=...i.0f.1..g.=.G..&._....'g.Gjm.\n.\n...l.O.b.:0Ss....d.4..G.1......:..-A....X..5...j+.=P<i.,z-...%.@&..r.5cIyf............A.4....9GK.+....Lp1..6gd...J.B........+.....;...8Jn8.m.I.z.un/.......f0d.0V..r.........Z.....4,~QG.i....Kl(.zx.d...m.ap\\...0m......i..k.*2.!..[..........\";.........l^.1..6.........."
+      pcap_cnt: 6
+      proto: TCP
+      src_ip: 127.0.0.1
+      src_port: 4431
+      stream: 1
+      tls.fingerprint: 95:8c:e8:93:d6:7b:db:6e:09:e5:b8:33:07:bf:16:74:92:80:88:8e
+      tls.issuerdn: CN=Test Certificate ECDSA
+      tls.notafter: '2023-09-13T21:51:10'
+      tls.notbefore: '2013-09-15T21:51:10'
+      tls.serial: 00:D2:1A:C9:F4:25:BF:A0:F6
+      tls.subject: CN=Test Certificate ECDSA
+      tls.version: TLS 1.2
+      tx_id: 0
+      verdict.action: drop
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: PASS_CUSTOM_RULE TCP port:443 to support traffic
+      alert.signature_id: 3
+      app_proto: tls
+      dest_ip: 127.0.0.1
+      dest_port: 4431
+      direction: to_server
+      event_type: alert
+      flow.bytes_toclient: 1155
+      flow.bytes_toserver: 758
+      flow.dest_ip: 127.0.0.1
+      flow.dest_port: 4431
+      flow.pkts_toclient: 4
+      flow.pkts_toserver: 6
+      flow.src_ip: 127.0.0.1
+      flow.src_port: 42376
+      payload_printable: '....0D..,n...C.U.......so.. .2...L%..$q....OyS.......'
+      pcap_cnt: 10
+      proto: TCP
+      src_ip: 127.0.0.1
+      src_port: 42376
+      stream: 0
+      verdict.action: alert
+- filter:
+    count: 1
+    match:
+      alert.action: blocked
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: drop_strict action
+      alert.signature_id: 2
+      app_proto: tls
+      dest_ip: 127.0.0.1
+      dest_port: 42376
+      direction: to_client
+      event_type: alert
+      flow.bytes_toclient: 2381
+      flow.bytes_toserver: 758
+      flow.dest_ip: 127.0.0.1
+      flow.dest_port: 4431
+      flow.pkts_toclient: 5
+      flow.pkts_toserver: 6
+      flow.src_ip: 127.0.0.1
+      flow.src_port: 42376
+      payload_printable: ".....QWF......@.Ox$.r6...\"m.O`.h.%.\r..7.%......q6.....P..6....#....5..|bs..\n\
+        .75.3.A\r.a......5]...p\r..{........l.{..7+..dK.e.X*......1r...1A...X.I^..WG......m.ekd.!6.BJ.u.(f.A....x..`...\
+        \ I1V..`..w....0.(..,1+..kV.&<;.$ .Q.Q.,..+\n.(\r...C#..Z]$..e....h.i....z.7.Vn.$!....i..P..\n\
+        +......s..:.Q.d...b..4.3...%G.n.....I46.j.8'K.#...........k...&............&|r...G3\\\
+        yb.#B\\.()...?h..........P.!.-Y..k.7\n8...YE.@1.h.!....p..`_...46s..F.3<.&...v.J.s..b.%.....K....D.'.Y..9..........#Z...yg.../I.8$p-.5....L...^...Z.....&.........U\n\
+        .@}...U.*....U/..Yi\"n.i.N.......{..._c\n.\r>':...;......k...v........;e.`.....\n\
+        L:)l.XPv6..e.*..v..p.VUeN.4..\"..\nH..6.1.....r.q....SS..W..]..q.T..O.`P....A.....b]}....C.#nRJ.......s...)(...)....d...|...!.....\
+        \ ..:o.*...m.><.}.d{X..9.w.......>.....`...+....j...k....U..g.Q..AWn>.....l.se..I......X....w..GC(\"\
+        .\n.'...G.......\"...b.!..D...0.dU....c....~.. \"d....8...t.\n.j..&.\n....%.#......*.l.........E..k\r\
+        ..GK..........WG...Xs]..x.ARJ\".....m.6.....<....r.{.J......A..W......_`=...../..........h..98...@../L..F.`.........4.o.N....N........F3.ou..|.y(C..^$...fWe.......5.I[%..2.C..VvfD)../.}.>>{..-...WbTaj...>.j.l........C.)bdRA8V.q./k.u.....e.,X'"
+      pcap_cnt: 11
+      proto: TCP
+      src_ip: 127.0.0.1
+      src_port: 4431
+      stream: 0
+      verdict.action: drop
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: tls hello
+      alert.signature_id: 5
+      app_proto: tls
+      dest_ip: 127.0.0.1
+      dest_port: 42376
+      direction: to_client
+      event_type: alert
+      flow.bytes_toclient: 1155
+      flow.bytes_toserver: 639
+      flow.dest_ip: 127.0.0.1
+      flow.dest_port: 4431
+      flow.pkts_toclient: 4
+      flow.pkts_toserver: 5
+      flow.src_ip: 127.0.0.1
+      flow.src_port: 42376
+      payload_printable: "....B...>..R6,.......I....%.?E;t0|....Uz.....,.................#...........{...w..t..q0..m0.........%...0...*.H.=..0!1.0...U....Test Certificate ECDSA0..\r130915215110Z.\r230913215110Z0!1.0...U....Test Certificate ECDSA0v0...*.H.=....+...\".b......N.s.J.>......<k..s.......B.a.%.t....0.........'PO..p.H..Ep. ..2D...=......:...Y.B....9c..Q..0...*.H.=...i.0f.1..g.=.G..&._....'g.Gjm.\n.\n...l.O.b.:0Ss....d.4..G.1......:..-A....X..5...j+.=P<i.,z-...%.@&..r.5cIyf............A.4....9GK.+....Lp1..6gd...J.B........+.....;...8Jn8.m.I.z.un/.......f0d.0V..r.........Z.....4,~QG.i....Kl(.zx.d...m.ap\\...0m......i..k.*2.!..[..........\";.........l^.1..6.........."
+      pcap_cnt: 9
+      proto: TCP
+      src_ip: 127.0.0.1
+      src_port: 4431
+      stream: 1
+      tls.fingerprint: 95:8c:e8:93:d6:7b:db:6e:09:e5:b8:33:07:bf:16:74:92:80:88:8e
+      tls.issuerdn: CN=Test Certificate ECDSA
+      tls.notafter: '2023-09-13T21:51:10'
+      tls.notbefore: '2013-09-15T21:51:10'
+      tls.serial: 00:D2:1A:C9:F4:25:BF:A0:F6
+      tls.subject: CN=Test Certificate ECDSA
+      tls.version: TLS 1.2
+      tx_id: 0
+      verdict.action: drop
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: PASS_CUSTOM_RULE TCP port:443 to support traffic
+      alert.signature_id: 3
+      app_proto: tls
+      dest_ip: 127.0.0.1
+      dest_port: 4431
+      direction: to_server
+      event_type: alert
+      flow.bytes_toclient: 2381
+      flow.bytes_toserver: 824
+      flow.dest_ip: 127.0.0.1
+      flow.dest_port: 4431
+      flow.pkts_toclient: 5
+      flow.pkts_toserver: 7
+      flow.src_ip: 127.0.0.1
+      flow.src_port: 42376
+      payload_printable: ''
+      pcap_cnt: 12
+      proto: TCP
+      src_ip: 127.0.0.1
+      src_port: 42376
+      stream: 0
+      verdict.action: alert
+- filter:
+    count: 1
+    match:
+      alert.action: blocked
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: drop_strict action
+      alert.signature_id: 2
+      app_proto: tls
+      dest_ip: 127.0.0.1
+      dest_port: 42376
+      direction: to_client
+      event_type: alert
+      flow.bytes_toclient: 2447
+      flow.bytes_toserver: 824
+      flow.dest_ip: 127.0.0.1
+      flow.dest_port: 4431
+      flow.pkts_toclient: 6
+      flow.pkts_toserver: 7
+      flow.src_ip: 127.0.0.1
+      flow.src_port: 42376
+      payload_printable: ''
+      pcap_cnt: 13
+      proto: TCP
+      src_ip: 127.0.0.1
+      src_port: 4431
+      stream: 0
+      verdict.action: drop
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: PASS_CUSTOM_RULE TCP port:443 to support traffic
+      alert.signature_id: 3
+      app_proto: tls
+      dest_ip: 127.0.0.1
+      dest_port: 4431
+      direction: to_server
+      event_type: alert
+      flow.bytes_toclient: 2447
+      flow.bytes_toserver: 927
+      flow.dest_ip: 127.0.0.1
+      flow.dest_port: 4431
+      flow.pkts_toclient: 6
+      flow.pkts_toserver: 8
+      flow.src_ip: 127.0.0.1
+      flow.src_port: 42376
+      payload_printable: '.... D..,n....w...:....Q.._.t..$.b..^'
+      pcap_cnt: 14
+      proto: TCP
+      src_ip: 127.0.0.1
+      src_port: 42376
+      stream: 0
+      verdict.action: alert
+- filter:
+    count: 1
+    match:
+      alert.action: blocked
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: drop_strict action
+      alert.signature_id: 2
+      app_proto: tls
+      dest_ip: 127.0.0.1
+      dest_port: 42376
+      direction: to_client
+      event_type: alert
+      flow.bytes_toclient: 2501
+      flow.bytes_toserver: 927
+      flow.dest_ip: 127.0.0.1
+      flow.dest_port: 4431
+      flow.pkts_toclient: 7
+      flow.pkts_toserver: 8
+      flow.src_ip: 127.0.0.1
+      flow.src_port: 42376
+      payload_printable: ''
+      pcap_cnt: 15
+      proto: TCP
+      src_ip: 127.0.0.1
+      src_port: 4431
+      stream: 0
+      verdict.action: drop
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: PASS_CUSTOM_RULE TCP port:443 to support traffic
+      alert.signature_id: 3
+      app_proto: tls
+      dest_ip: 127.0.0.1
+      dest_port: 4431
+      direction: to_server
+      event_type: alert
+      flow.bytes_toclient: 2501
+      flow.bytes_toserver: 927
+      flow.dest_ip: 127.0.0.1
+      flow.dest_port: 4431
+      flow.pkts_toclient: 7
+      flow.pkts_toserver: 8
+      flow.src_ip: 127.0.0.1
+      flow.src_port: 42376
+      payload_printable: ''
+      proto: TCP
+      src_ip: 127.0.0.1
+      src_port: 42376
+      stream: 0
+      verdict.action: alert
+- filter:
+    count: 1
+    match:
+      app_proto: tls
+      dest_ip: 127.0.0.1
+      dest_port: 4431
+      event_type: flow
+      flow.age: 0
+      flow.alerted: true
+      flow.bytes_toclient: 2501
+      flow.bytes_toserver: 927
+      flow.pkts_toclient: 7
+      flow.pkts_toserver: 8
+      flow.reason: shutdown
+      flow.state: closed
+      proto: TCP
+      src_ip: 127.0.0.1
+      src_port: 42376
+      tcp.ack: true
+      tcp.fin: true
+      tcp.psh: true
+      tcp.rst: true
+      tcp.state: closed
+      tcp.syn: true
+      tcp.tc_max_regions: 1
+      tcp.tcp_flags: 1f
+      tcp.tcp_flags_tc: 1f
+      tcp.tcp_flags_ts: 1a
+      tcp.ts_max_regions: 1
