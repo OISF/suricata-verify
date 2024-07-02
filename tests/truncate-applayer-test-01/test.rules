@@ -1,0 +1,3 @@
+alert dcerpc any any -> any any (msg:"Test Alert 1"; sid:1; flow:established,to_client; dcerpc.stub_data; bsize:2124;)
+alert dcerpc any any -> any any (msg:"Test Alert 2"; sid:2; flow:established,to_server; dcerpc.stub_data; bsize:2148; dcerpc.opnum: 9;)
+
