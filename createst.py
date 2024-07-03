@@ -370,7 +370,7 @@ def parse_args():
         description="Create tests with a given PCAP. Execute the script"
                 " from a valid Suricata source directory.")
     parser.add_argument("test-name", metavar="<test-name>",
-                        help="Name of the test folder")
+                        help="Name of the test folder. Add `ips` to the test name if you want it to run in IPS mode.")
     parser.add_argument("pcap", metavar="<pcap-file>",
                         help="Path to the PCAP file")
     parser.add_argument("--rules", metavar="<rules>",

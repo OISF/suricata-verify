@@ -20,6 +20,10 @@ Or to run a single test:
 
 - Create a directory that is the name of the new test.
 
+  If you want a test to run in IPS mode, add `ips` to the test name
+  this will make `--simulate-ips` command-line argument be passed when
+  the test is run.
+
 - Copy a single pcap file into the test directory. It must end in
   ".pcap".
 
@@ -200,6 +204,8 @@ directory.
 
 positional arguments:
   <test-name>           Name of the test folder
+                        Add `ips` to the test name if you want it to run in IPS mode
+                        the test is run.
   <pcap-file>           Path to the PCAP file
 
 optional arguments:
@@ -250,6 +256,15 @@ newer:
 ```
 ../suricata-verify/createst.py --min-version 6 --allow-events http,alert,flow \
 --rules ../suricata-verify/tests/no-payload-output/test.rules test-02 input.pcap
+```
+
+#### Example 3
+
+Create a Suricata-verify test named ``ips-drop-rule`` that will run over a pcap file
+called ``input.pcap``, match its traffic against the rules in the ``ips-test.rules``
+file and will have Suricata run the test in IPS mode:
+```
+../suricata-verify/createst.py --rules ../Documents/ips-test.rules ips-drop-rule input.pcap
 ```
 
 #### Add Required Features
