@@ -1,0 +1,25 @@
+pcap: ../tls/tls-certs-alert/input.pcap
+
+args:
+  - --set stream.midstream=false
+  - -k none
+
+checks:
+  # drop is applied after app-layer parsing, so getting tls despite dropping
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+  - filter:
+      count: 13
+      match:
+        event_type: drop
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+  - filter:
+      count: 0
+      match:
+        event_type: flow
+        flow.action: "drop"
