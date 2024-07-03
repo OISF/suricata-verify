@@ -20,6 +20,10 @@ Or to run a single test:
 
 - Create a directory that is the name of the new test.
 
+  If you want a test to be run in IPS mode, add `ips` to the test name.
+  This will make the `--simulate-ips` command-line argument be passed when
+  the test is run.
+
 - Copy a single pcap file into the test directory. It must end in
   ".pcap".
 
