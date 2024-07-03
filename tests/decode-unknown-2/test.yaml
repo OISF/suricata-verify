@@ -1,0 +1,23 @@
+requires:
+    min-version: 8
+
+args:
+- -k none
+
+pcap: ../decode-unknown-1/input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+  - stats:
+      decoder.ethernet: 1
+      decoder.unknown_ethertype: 1
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        ether.ether_type: 47099
+        anomaly.type: decode
+        anomaly.event: decoder.ethernet.unknown_ethertype
