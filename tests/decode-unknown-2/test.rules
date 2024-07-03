@@ -1,0 +1,1 @@
+alert udp any any -> any any (content:"data|0a 0a|"; startswith; endswith; sid:1;)
