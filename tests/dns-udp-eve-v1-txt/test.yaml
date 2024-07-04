@@ -1,7 +1,7 @@
 requires:
   lt-version: 7
 
-pcap: ../dns-udp-eve-v2-txt/input.pcap
+pcap: ../dns/dns-udp-eve-txt/input.pcap
 
 checks:
 - filter:
