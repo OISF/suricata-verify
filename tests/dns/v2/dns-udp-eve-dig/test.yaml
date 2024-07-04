@@ -1,4 +1,7 @@
-pcap: ../cond-log-dns-dig/input.pcap
+env:
+  SURICATA_EVE_DNS_VERSION: 2
+
+pcap: ../../../cond-log-dns-dig/input.pcap
 
 checks:
 - filter:
