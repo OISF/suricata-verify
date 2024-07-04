@@ -1,4 +1,4 @@
-pcap: ../dns-udp-unsolicited-response-v1/dns-response-2x.pcap
+pcap: ../../../dns-udp-unsolicited-response-v1/dns-response-2x.pcap
 
 checks:
   - filter:
