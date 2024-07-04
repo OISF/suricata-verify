@@ -4,6 +4,11 @@ requires:
 args:
 - -k none
 
+pcap: ../../bug-1158/input.pcap
+
+env:
+  SURICATA_EVE_DNS_VERSION: 2
+
 checks:
 - filter:
     count: 1
