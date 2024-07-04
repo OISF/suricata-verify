@@ -1,6 +1,9 @@
 args:
 - -k none
 
+env:
+  SURICATA_EVE_DNS_VERSION: 2
+
 checks:
 - filter:
     count: 1
