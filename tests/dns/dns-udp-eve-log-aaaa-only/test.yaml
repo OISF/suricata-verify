@@ -1,0 +1,21 @@
+pcap: ../../dns-udp-eve-log-query-only-v1/dns-udp-google.com-a-aaaa-mx.pcap
+
+requires:
+  min-version: 8
+
+checks:
+  - filter:
+      count: 1
+      match:
+        dns.type: request
+        dns.queries[0].rrtype: AAAA
+  - filter:
+      count: 1
+      match:
+        dns.type: response
+        dns.answers[0].rrtype: AAAA
+        dns.answers.__len: 1
+  - filter:
+      count: 0
+      match:
+        dns.rrtype: A
