@@ -1,0 +1,13 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - dns:
+            version: 2
+            requests: no
+            responses: yes
