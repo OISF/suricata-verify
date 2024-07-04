@@ -1,8 +1,11 @@
 requires:
-   min-version: 8
+   min-version: 7
 
 args:
 - -k none
+
+env:
+  SURICATA_EVE_DNS_VERSION: 2
 
 checks:
 
@@ -11,14 +14,14 @@ checks:
     count: 1
     match:
       event_type: dns
-      dns.type: request
+      dns.type: query
 
 # Simple check for one answer.
 - filter:
     count: 1
     match:
       event_type: dns
-      dns.type: response
+      dns.type: answer
 
 # One alert in to_server direction.
 - filter:
@@ -132,10 +135,10 @@ checks:
       dest_port: 53
       dns.id: 1
       dns.opcode: 9
-      dns.queries[0].rrname: suricata.io
-      dns.queries[0].rrtype: A
+      dns.rrname: suricata.io
+      dns.rrtype: A
       dns.tx_id: 0
-      dns.type: request
+      dns.type: query
       event_type: dns
       pcap_cnt: 1
       pkt_src: wire/pcap
@@ -253,10 +256,10 @@ checks:
       dns.opcode: 9
       dns.qr: true
       dns.rcode: NOERROR
-      dns.queries[0].rrname: suricata.io
-      dns.queries[0].rrtype: A
-      dns.type: response
-      dns.version: 3
+      dns.rrname: suricata.io
+      dns.rrtype: A
+      dns.type: answer
+      dns.version: 2
       event_type: dns
       pcap_cnt: 2
       pkt_src: wire/pcap
