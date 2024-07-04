@@ -1,0 +1,12 @@
+requires:
+  min-version: 8
+
+checks:
+  - filter:
+      count: 4
+      match:
+        dns.type: request
+  - filter:
+      count: 4
+      match:
+        dns.type: response
