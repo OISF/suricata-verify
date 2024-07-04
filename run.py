@@ -697,6 +697,9 @@ class TestRunner:
         env["OUTPUT_DIR"] = self.output
         if not "ASAN_OPTIONS" in env:
             env["ASAN_OPTIONS"] = "detect_leaks=1"
+        if self.config.get("env"):
+            for key in self.config["env"]:
+                env[key] = str(self.config["env"][key])
         return env
 
     def run(self, outdir):
