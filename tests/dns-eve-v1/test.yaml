@@ -1,4 +1,4 @@
-pcap: ../dns-eve/input.pcap
+pcap: ../dns/dns-eve/input.pcap
 
 requires:
   features:
