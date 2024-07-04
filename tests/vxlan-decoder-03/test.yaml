@@ -25,6 +25,15 @@ checks:
         app_proto: ntp
         dest_port: 123
   - filter:
+      requires:
+        min-version: 8
+      count: 8
+      match:
+        event_type: dns
+        dns.queries[0].rrname: "ec2-18-196-145-224.eu-central-1.compute.amazonaws.com"
+  - filter:
+      requires:
+        lt-version: 8
       count: 8
       match:
         event_type: dns
