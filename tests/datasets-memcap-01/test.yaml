@@ -1,5 +1,8 @@
 pcap: ../flowbit-oring/input.pcap
 
+# need to be tested with Suricata 7 on latest MacOS
+skip: true
+
 requires:
   lt-version: 8
 
