@@ -1,8 +1,4 @@
-pcap: ../dns-udp-eve-log-query-only-v1/dns-udp-google.com-a-aaaa-mx.pcap
-
-requires:
-  features:
-    - HAVE_LIBJANSSON
+pcap: ../../../dns-udp-eve-log-query-only-v1/dns-udp-google.com-a-aaaa-mx.pcap
 
 checks:
   - filter:
