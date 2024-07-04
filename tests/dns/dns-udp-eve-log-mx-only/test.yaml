@@ -1,0 +1,24 @@
+requires:
+  min-version: 8
+
+pcap: ../../dns-udp-eve-log-query-only-v1/dns-udp-google.com-a-aaaa-mx.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        dns.type: request
+        dns.queries[0].rrtype: "MX"
+  - filter:
+      count: 1
+      match:
+        dns.type: request
+  - filter:
+      count: 1
+      match:
+        dns.type: response
+        dns.answers[0].rrtype: "MX"
+  - filter:
+      count: 1
+      match:
+        dns.type: response
