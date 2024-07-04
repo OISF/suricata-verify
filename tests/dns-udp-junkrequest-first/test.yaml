@@ -1,12 +1,20 @@
 requires:
   min-version: 7
-  features:
-    - HAVE_LIBJANSSON
 
 checks:
 
   # Check that there is one DNS event with specific parameters.
   - filter:
+      requires:
+        min-version: 8
+      count: 1
+      match:
+        event_type: dns
+        dns.type: request
+        dns.queries[0].rrname: catenacyber.Fr
+  - filter:
+      requires:
+        lt-version: 8
       count: 1
       match:
         event_type: dns
