@@ -197,10 +197,10 @@ This needs to be run from a valid Suricata source directory.
 
 ### Usage
 ```
-usage: createst.py [-h] [--output-path <output-path>] [--eventtype-only]
-                   [--allow-events [ALLOW_EVENTS]] [--rules <rules-file>]
-                   [--strictcsums] [--min-version <min-version>]
-                   [--midstream]
+usage: createst.py [-h] [--rules <rules>] [--output-path <output-path>]
+                   [--eventtype-only] [--allow-events [ALLOW_EVENTS]] [--strictcsums]
+                   [--midstream] [--min-version <min-version>] [--version <add-version>]
+                   [--cfg <path-to-suricata.yaml>] [--features <features>]
                    <test-name> <pcap-file>
 
 Create tests with a given PCAP. Execute the script from a valid Suricata source
@@ -210,13 +210,11 @@ positional arguments:
   <test-name>           Name of the test folder
   <pcap-file>           Path to the PCAP file
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
-  --rules <rules-path>
-                        Path to rules file (optional)
+  --rules <rules>       Path to rule file
   --output-path <output-path>
-                        Path to the folder where generated test.yaml should be
-                        put
+                        Path to the folder where generated test.yaml should be put
   --eventtype-only      Create filter blocks based on event types only
                         This means the subfields of the event in the eve log
                         will not be added to the test.yaml file
@@ -229,9 +227,12 @@ optional arguments:
   --midstream           Allow midstream session pickups
   --min-version <min-version>
                         Adds a global minimum required version
-  --version <version>   Adds a global version requirement
-  --cfg <suricata.yaml> Add a suricata.yaml to the test
-  --features [FEATS]    Required features (comma separated list)
+  --version <add-version>
+                        Adds a global suricata version
+  --cfg <path-to-suricata.yaml>
+                        Adds a suricata.yaml to the test
+  --features <features>
+                        Adds specified features
 ```
 
 ### Examples
