@@ -1,0 +1,14 @@
+pcap: ../../dns-single-request-v1/input.pcap
+
+requires:
+  min-version: 8
+
+checks:
+  - filter:
+      count: 1
+      match:
+        dns.type: request
+  - filter:
+      count: 1
+      match:
+        dns.type: response
