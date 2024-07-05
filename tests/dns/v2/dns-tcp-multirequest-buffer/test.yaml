@@ -1,0 +1,14 @@
+pcap: ../../dns-tcp-multirequest-buffer/dns-tcp-multirequest-buffer.pcap
+    
+env:
+  SURICATA_EVE_DNS_VERSION: 2
+
+checks:
+  - filter:
+      count: 20
+      match:
+        dns.type: query
+  - filter:
+      count: 20
+      match:
+        dns.type: answer

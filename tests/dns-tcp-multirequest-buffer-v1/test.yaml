@@ -1,4 +1,4 @@
-pcap: ../dns-tcp-multirequest-buffer/dns-tcp-multirequest-buffer.pcap
+pcap: ../dns/dns-tcp-multirequest-buffer/dns-tcp-multirequest-buffer.pcap
 
 requires:
   features:
