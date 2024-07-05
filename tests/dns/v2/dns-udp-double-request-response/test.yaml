@@ -1,8 +1,4 @@
-pcap: ../dns-udp-double-request-response-v1/dns-udp-double-request-response.pcap
-
-requires:
-  features:
-    - HAVE_LIBJANSSON
+pcap: ../../../dns-udp-double-request-response-v1/dns-udp-double-request-response.pcap
 
 checks:
   - filter:
