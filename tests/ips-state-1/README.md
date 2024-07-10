@@ -5,9 +5,7 @@ be full passed with no alerts, while the TLS flow should be dropped.
 
 ## Current Observations
 
-- HTTP response packets are being logged as dropped, however the transaction is
-  logged suggesting the drop is only in logging only, but not actually
-  occurring.
+- HTTP flows are logged as `passed`, as expected.
 
-- All the TLS packets apear to be getting dropped, but `flow.action` is never
-  set to true.
+- All the TLS packets appear to be getting dropped, but `flow.action` is never
+  set to drop.

@@ -8,8 +8,6 @@ checks:
 - filter:
     # We should see 2 http transactions as the pass rule should allow http
     # flows.
-    #
-    # This fails.
     count: 2
     match:
       event_type: http
@@ -28,12 +26,13 @@ checks:
       event_type: flow
       app_proto: http
       flow.alerted: false 
+      flow.action: pass
 
 - filter:
-    # We should see NO drops (or alerts) for http
+    # We should see NO drops for http
     count: 0
     match:
-      event_type: alert
+      event_type: drop
       app_proto: http
 
 - filter:
