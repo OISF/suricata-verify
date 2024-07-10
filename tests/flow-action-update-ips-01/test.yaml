@@ -1,0 +1,73 @@
+requires:
+  min-version: 6
+
+args:
+- -k none --simulate-ips
+
+pcap: ../ips-state-1/input.pcap
+
+checks:
+- filter:
+    # there are 39 packets in the tls flow, so this seems correct
+    count: 39
+    match:
+      event_type: drop
+- filter:
+    min-version: 7
+    count: 37
+    match:
+      event_type: alert
+      app_proto: tls
+- filter:
+    min-version: 7
+    count: 40
+    match:
+      event_type: alert
+- filter:
+    # There should be one tls flow that is alerted
+    # This currently fails - there is no flow.drop in the tls flow event
+    min-version: 8
+    count: 1
+    match:
+      event_type: flow
+      dest_port: 443
+      flow.alerted: true
+      app_proto: tls
+      flow.action: drop
+
+- filter:
+    lt-version: 7
+    count: 36
+    match:
+      event_type: alert
+      app_proto: tls
+- filter:
+    lt-version: 7
+    count: 39
+    match:
+      event_type: alert
+
+# HTTP-related checks
+- filter:
+    # We should see 2 http transactions as the pass rule should allow http
+    # flows.
+    count: 2
+    match:
+      event_type: http
+
+- filter:
+    # There should be no alerts for http.
+    count: 0
+    match:
+      event_type: alert
+      app_proto: http
+
+- filter:
+    # There should be 2 http flow events without alerts.
+    count: 2
+    match:
+      event_type: flow
+      app_proto: http
+      flow.alerted: false 
+      flow.action: pass
+      
