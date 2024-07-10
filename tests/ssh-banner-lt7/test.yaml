@@ -1,3 +1,8 @@
+requires:
+  lt-version: 7
+
+pcap: ../ssh-banner-only/input.pcap
+
 args:
  - -k none
 
@@ -12,12 +17,7 @@ checks:
         ssh.client.software_version: "OpenSSH_for_Windows_7.7"
         ssh.server.software_version: "OpenSSH_7.4"
   - filter:
-      count: 2
+      count: 1
       match:
         event_type: alert
-        alert.signature_id: 1
-  - filter:
-      count: 2
-      match:
-        event_type: alert
-        alert.signature_id: 3
+        alert.signature_id: 2

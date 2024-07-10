@@ -1,0 +1,2 @@
+# ssh.softwareversion is deprecated in favor of ssh.software this is just to check if it still works
+alert ssh any any -> any any (ssh.softwareversion:OpenSSH_7.4; sid:2;)
