@@ -4,6 +4,8 @@ args:
 
 requires:
   min-version: 8
+  features:
+    - NEEDS_FIX
 
 pcap: ../task-7018-ids-dns-keywords/input.pcap
 

@@ -1,10 +1,10 @@
 requires:
    min-version: 7
+   lt-version: 8
 args:
 - -k none
 
 pcap: ../task-7018-ids-dns-keywords/input.pcap
-
 checks:
 - filter:
     count: 1
