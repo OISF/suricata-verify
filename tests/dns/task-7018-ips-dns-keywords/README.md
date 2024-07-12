@@ -1,9 +1,7 @@
 # Test Description
 
 Test to investigate that Suricata is properly inspecting and alerting on DNS
-transactions, without missing any, in IPS mode.
-
-The difference in this case should only be the pcap_cnt for the events.
+transactions, without missing any, in IDS mode.
 
 ## PCAP
 
