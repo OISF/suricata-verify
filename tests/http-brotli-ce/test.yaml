@@ -1,0 +1,21 @@
+checks:
+- filter:
+    count: 0
+    match:
+      event_type: anomaly
+- filter:
+    count: 3
+    match:
+      event_type: http
+- filter:
+    count: 2
+    match:
+      event_type: fileinfo
+- filter:
+    count: 1
+    match:
+      event_type: flow
+- filter:
+    count: 1
+    match:
+      event_type: stats
