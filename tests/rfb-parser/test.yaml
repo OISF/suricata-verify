@@ -1,0 +1,18 @@
+args:
+  - -k none --set stream.inline=true
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: rfb
+        rfb.server_protocol_version.major: "003"
+        rfb.server_protocol_version.minor: "007"
+        rfb.client_protocol_version.major: "003"
+        rfb.client_protocol_version.minor: "007"
+        rfb.authentication.security_type: 1
+        rfb.screen_shared: true
+        rfb.framebuffer.width: 1280
+        rfb.framebuffer.height: 800
+        rfb.framebuffer.name: "aneagles@localhost.localdomain"
