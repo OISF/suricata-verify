@@ -1,0 +1,29 @@
+requires:
+  min-version: 8
+
+args:
+  - -k none
+
+pcap: cldap.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: ldap
+        ldap.request.message_id: 1
+        ldap.request.operation: search_request
+        ldap.request.search_request.base_object: ""
+        ldap.request.search_request.scope: 0
+        ldap.request.search_request.deref_alias: 0
+        ldap.request.search_request.size_limit: 0
+        ldap.request.search_request.time_limit: 0
+        ldap.request.search_request.types_only: false
+        ldap.request.search_request.attributes[0]: Netlogon
+        ldap.responses[0].operation: search_result_entry
+        ldap.responses[0].search_result_entry.base_object: ""
+        ldap.responses[0].search_result_entry.attributes[0].type: netlogon
+        ldap.responses[1].operation: search_result_done
+        ldap.responses[1].search_result_done.result_code: success
+        ldap.responses[1].search_result_done.matched_dn: ""
+        ldap.responses[1].search_result_done.message: "" 
