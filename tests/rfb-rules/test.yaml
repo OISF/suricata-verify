@@ -25,6 +25,12 @@ checks:
         alert.signature: "rfb-secresult1"
 
   - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "rfb-secresult0"
+
+  - filter:
       count: 0
       match:
         event_type: alert
@@ -41,4 +47,10 @@ checks:
       match:
         event_type: alert
         alert.signature: "rfb-secresult2"
+
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature: "rfb-secresult!0"
 

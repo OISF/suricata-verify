@@ -2,6 +2,8 @@ alert rfb any any -> any any (msg:"rfb-name1"; rfb.name; pcre:"/.*\.localdomain/
 alert rfb any any -> any any (msg:"rfb-name2"; rfb.name; pcre:"/.*\.localdoom/"; sid:2;)
 alert rfb any any -> any any (msg:"rfb-sectype1"; rfb.sectype:2; sid:3;)
 alert rfb any any -> any any (msg:"rfb-sectype2"; rfb.sectype:>3; sid:4;)
+alert rfb any any -> any any (msg:"rfb-secresult0"; rfb.secresult:0; sid:50;)
 alert rfb any any -> any any (msg:"rfb-secresult1"; rfb.secresult:ok; sid:5;)
 alert rfb any any -> any any (msg:"rfb-secresult2"; rfb.secresult:unknown; sid:6;)
+alert rfb any any -> any any (msg:"rfb-secresult!0"; rfb.secresult:!0; sid:7;)
 
