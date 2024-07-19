@@ -1,0 +1,5 @@
+alert rfb any any -> any any (msg:"rfb-secresult0"; rfb.secresult:0; sid:50;)
+alert rfb any any -> any any (msg:"rfb-secresult1"; rfb.secresult:ok; sid:5;)
+alert rfb any any -> any any (msg:"rfb-secresult2"; rfb.secresult:unknown; sid:6;)
+alert rfb any any -> any any (msg:"rfb-secresult!0"; rfb.secresult:!0; sid:7;)
+
