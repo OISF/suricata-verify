@@ -1,3 +1,6 @@
+requires:
+  min-version: 7
+
 checks:
   # Look for IPv4 TCP too small
   - filter:
@@ -6,6 +9,15 @@ checks:
         event_type: alert
         src_ip: 1.1.1.1
         alert.signature_id: 1
+
+  - filter:
+      min-version: 8
+      count: 1
+      match:
+        event_type: alert
+        src_ip: 1.1.1.1
+        alert.signature_id: 1
+        alert.rev: 2
 
   # Look for IPv6 TCP too small
   - filter:
