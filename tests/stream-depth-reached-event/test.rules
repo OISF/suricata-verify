@@ -1,1 +1,2 @@
 alert tcp any any -> any any (msg:"SURICATA STREAM reassembly depth reached"; stream-event:reassembly_depth_reached; classtype:protocol-command-decode; sid:2210062; rev:1;)
+alert tcp any any -> any any (msg:"SURICATA STREAM reassembly depth reached"; stream-event:reassembly_depth_reached; prefilter; classtype:protocol-command-decode; requires: version >= 8; sid:2210062; rev:2;)
