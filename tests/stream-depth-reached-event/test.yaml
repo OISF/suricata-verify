@@ -18,3 +18,11 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 2210062
+
+  - filter:
+      min-version: 8
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 2210062
+        alert.rev: 2
