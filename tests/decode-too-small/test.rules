@@ -1,3 +1,4 @@
 alert tcp any any -> any any (msg:"TCP packet too small"; decode-event:tcp.pkt_too_small; sid:1;)
+alert tcp any any -> any any (msg:"TCP packet too small"; decode-event:tcp.pkt_too_small; prefilter; requires: version >= 8; sid:1; rev: 2;)
 alert udp any any -> any any (msg:"UDP packet too small"; decode-event:udp.hlen_too_small; sid:2;)
 alert ip any any -> any any (msg:"GRE packet too small"; decode-event:gre.pkt_too_small; sid:3;)
