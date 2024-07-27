@@ -1,0 +1,64 @@
+requires:
+  min-version: 8
+
+args:
+  - --set stream.midstream=true -k none
+
+pcap: ../detect-ipopts/input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 1
+        alert.signature_id: 1
+        packet_info.linktype_name: IPv4
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 2
+        alert.signature_id: 2
+        packet_info.linktype_name: IPv4
+  - filter:
+      count: 6
+      match:
+        event_type: alert
+        alert.signature_id: 3
+        packet_info.linktype_name: IPv4
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 4
+        alert.signature_id: 4
+        packet_info.linktype_name: IPv4
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 5
+        alert.signature_id: 5
+        packet_info.linktype_name: IPv4
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 6
+        alert.signature_id: 6
+        packet_info.linktype_name: IPv4
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 7
+        alert.signature_id: 7
+        packet_info.linktype_name: IPv4
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 8
+        alert.signature_id: 8
+        packet_info.linktype_name: IPv4
