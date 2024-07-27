@@ -1,10 +1,7 @@
 pcap: ../tcp-fastopen-05/tfo.pcap
 
 requires:
-  features:
-    - HAVE_LIBJANSSON
-  min-version: 5.0.0
-  lt-version: 8
+  min-version: 8
 
 args:
     - -k none
@@ -15,6 +12,7 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 1
+        packet_info.linktype_name: LINUX_SLL
   - filter:
       count: 2
       match:

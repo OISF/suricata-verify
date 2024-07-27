@@ -1,0 +1,2 @@
+alert dnp3 any any -> any any (msg:"SURICATA DNP3 Object Test"; dnp3_obj:22,01; sid:1; rev:1;)
+alert dnp3 any any -> any any (msg:"SURICATA DNP3 Object Test"; dnp3_obj:29,01; sid:2; rev:1;)
