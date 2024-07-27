@@ -14,6 +14,7 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 1
+        packet_info.linktype_name: LINUX_SLL
   - filter:
       count: 2
       match:

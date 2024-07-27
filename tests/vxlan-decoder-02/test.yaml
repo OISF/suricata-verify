@@ -22,3 +22,4 @@ checks:
       match:
         event_type: alert
         tunnel.dest_port: 4789
+        packet_info.linktype_name: RAW

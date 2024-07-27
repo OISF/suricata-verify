@@ -9,3 +9,4 @@ checks:
       alert.signature_id: 1
       packet: "IUUAACwAAQAAQAZ0xgEBAQECAgICMDkfkAAAAAEAAAAAYAIgABkMAAADAw4A"
       packet_info.linktype: 9
+      packet_info.linktype_name: PPP

@@ -24,6 +24,7 @@ checks:
         match:
             event_type: alert
             alert.signature_id: 666
+            packet_info.linktype_name: C_HDLC
 
     - filter:
         count: 1
