@@ -1,0 +1,20 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert:
+            payload: yes
+            packet: yes
+            dnp3: yes
+
+app-layer:
+  protocols:
+    dnp3:
+      enabled: yes
+      detection-ports:
+        dp: 20000
