@@ -1,0 +1,1 @@
+alert tcp any any -> any any (content:"Hello!"; sid:1;)
