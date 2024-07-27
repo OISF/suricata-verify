@@ -1,9 +1,10 @@
 requires:
-  features:
-    - HAVE_LIBJANSSON
+  min-version: 8
 
 args:
   - --set decoder.vxlan.enabled=true
+
+pcap: ../vxlan-decoder-02/vxlan.pcap
 
 checks:
   - filter:
@@ -23,3 +24,4 @@ checks:
       match:
         event_type: alert
         tunnel.dest_port: 4789
+        packet_info.linktype_name: RAW

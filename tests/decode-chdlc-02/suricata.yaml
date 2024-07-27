@@ -1,0 +1,34 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular #regular|syslog|unix_dgram|unix_stream|redis
+      filename: eve.json
+      types:
+        - alert:
+            packet: yes              # enable dumping of packet (without stream segments)
+        - http:
+            extended: true
+        - files:
+            force-magic: no
+        - flow
+        - stats
+app-layer:
+  protocols:
+    http:
+      enabled: yes
+      libhtp:
+         default-config:
+           personality: IDS
+           request-body-limit: 100kb
+           response-body-limit: 100kb
+           request-body-minimal-inspect-size: 32kb
+           request-body-inspect-window: 4kb
+           response-body-minimal-inspect-size: 40kb
+           response-body-inspect-window: 16kb
+           response-body-decompress-layer-limit: 2
+           http-body-inline: auto
+           double-decode-path: no
+           double-decode-query: no
