@@ -1,0 +1,2 @@
+alert tcp any any -> any any (flow:to_server,established; dce_iface:5d2b62aa-ee0a-4a95-91ae-b064fdb471fc; dce_opnum:1; dce_stub_data; content:"|42 77 4E 6F 64 65 49 50 2E 65 78 65 20|"; content:!"|00|"; within:100; distance:97; sid:1; rev:1; )
+alert tcp any any -> any any (dsize:3; sid:2; rev:1; )
