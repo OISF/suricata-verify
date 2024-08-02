@@ -25,3 +25,7 @@ outputs:
         - tls:
             extended: yes     # enable this for extended logging information
         - flow
+
+detect:
+  prefilter:
+    default: auto
