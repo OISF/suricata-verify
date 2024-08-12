@@ -1,0 +1,2 @@
+alert http any any -> any any (http.uri; content: "/toto"; http.user_agent; dataset:set,ua-seen,type string,save after.csv; sid:1;)
+alert http any any -> any any (http.uri; content: "/tata"; http.user_agent; dataset:unset,ua-seen,type string,save after.csv; sid:2;)
