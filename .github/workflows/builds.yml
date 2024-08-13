@@ -25,7 +25,6 @@ jobs:
         branch:
           - master
           - main-7.0.x
-          - master-6.0.x
     steps:
       - name: Install dependencies
         run: |
@@ -96,7 +95,6 @@ jobs:
         branch:
           - master
           - main-7.0.x
-          - master-6.0.x
     steps:
       - name: Install dependencies
         run: |
