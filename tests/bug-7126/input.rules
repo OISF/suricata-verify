@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"Sample rule"; flow: established, to_server; file_data; content:"no-match"; sid:1;)
