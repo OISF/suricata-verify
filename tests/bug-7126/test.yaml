@@ -1,0 +1,13 @@
+requires:
+  min-version: 8
+
+args:
+  - --set logging.outputs.1.file.type=json
+  - -k none
+
+checks:
+  - filter:
+      count: 0
+      filename: suricata.log
+      match:
+        engine.message: "Extra characters following numeric value"
