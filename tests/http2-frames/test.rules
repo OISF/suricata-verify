@@ -1,0 +1,1 @@
+alert http2 any any -> any any (frame:http2.hdr; content:"|00 00 04 08 00|"; flow:to_server; sid:1;)
