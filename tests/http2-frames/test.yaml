@@ -1,0 +1,16 @@
+requires:
+  min-version: 8
+
+# disables checksum verification
+args:
+  - -k none --set stream.midstream=true
+
+pcap:  ../http2-keywords2/input.pcap
+
+checks:
+# checks for http.uri keyword : 1 for HTTP1, 1 for mimicked HTTP2 response, so 2 for whole HTTP
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
