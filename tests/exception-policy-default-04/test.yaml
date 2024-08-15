@@ -23,19 +23,3 @@ checks:
       count: 0
       match:
         event_type: http
-  - filter:
-      filename: suricata.json
-      lt-version: 7
-      count: 1
-      match:
-        log_level: Info
-        event_type: engine
-        engine.message: "master exception-policy set to: auto"
-  - filter:
-      filename: suricata.json
-      lt-version: 7
-      count: 1
-      match:
-        log_level: Config
-        event_type: engine
-        engine.message: "app-layer.error-policy: ignore (defined via 'exception-policy' master switch). Warning: this will change to drop-flow or drop-packet in Suricata 7."

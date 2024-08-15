@@ -1,1 +1,0 @@
-alert http any any -> any any (msg:"HTTP with pcrexform"; http.request_line; pcrexform:"No-match"; content:"/no-match.jpg"; sid:1;)

@@ -1,1 +1,0 @@
-alert udp any any -> any any (msg:"TEST SUCCESSFUL - dsize with range INVALID combination "; dsize:5<>10; content:"thisstringisgreaterthan10bytes"; sid:6666664; rev:1;)

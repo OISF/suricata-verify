@@ -9,10 +9,3 @@ checks:
       count: 1
       match:
         alert.xff: 10.2.2.2
-
-  - filter:
-      lt-version: 7
-      count: 1
-      match:
-        xff: 10.2.2.2
-

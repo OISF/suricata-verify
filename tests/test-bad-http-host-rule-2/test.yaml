@@ -5,12 +5,6 @@ checks:
   # check that we have the following entries in eve.json
   # match 1 specific rule load failure reason
   - filter:
-      lt-version: 7
-      count: 1
-      match:
-        event_type: engine
-        engine.error: "SC_ERR_NO_RULES_LOADED"
-  - filter:
       min-version: 7
       count: 1
       match:

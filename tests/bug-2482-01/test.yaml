@@ -9,8 +9,3 @@ checks:
         event_type: alert
         alert.signature_id: 2013933
         http.http_method: "CONNECT"
-  - filter:
-      version: 6
-      count: 172
-      match:
-        event_type: tls

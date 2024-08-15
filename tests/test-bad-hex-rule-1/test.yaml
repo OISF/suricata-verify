@@ -14,13 +14,6 @@ checks:
         engine.message: "Invalid hex code in content - |l0 01 01|, hex l. Invalidating signature."
 
   - filter:
-      lt-version: 7
-      count: 1
-      match:
-        event_type: engine
-        engine.error: "SC_ERR_NO_RULES_LOADED"
-
-  - filter:
       min-version: 7
       count: 4
       match:
@@ -33,10 +26,3 @@ checks:
       match:
         event_type: engine
         engine.message: "Incomplete hex code in content - |22 2 22|. Invalidating signature."
-
-  - filter:
-      lt-version: 7
-      count: 1
-      match:
-        event_type: engine
-        engine.message: "Incomplete hex code in content - |22 2 22|. Invalidating signature. This will become an error in Suricata 7.0."

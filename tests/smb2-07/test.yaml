@@ -11,11 +11,6 @@ args:
 
 checks:
   - filter:
-      version: 6
-      count: 59
-      match:
-        event_type: smb
-  - filter:
       # additional event for file deletion
       min-version: 7
       count: 60

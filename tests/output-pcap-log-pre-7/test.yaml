@@ -1,7 +1,0 @@
-requires:
-  lt-version: 7
-
-checks:
-  - file-compare:
-      filename: log.pcap.1444144603
-      expected: expected/log.pcap.1444144603

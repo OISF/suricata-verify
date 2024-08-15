@@ -1,1 +1,0 @@
-alert tcp any any -> any any (msg:"incomplete hex test rule"; content:"|22 2 22|"; sid:12346; rev:1;)

@@ -17,13 +17,6 @@ checks:
         engine.message: "can't use a relative keyword like within/distance with a absolute relative keyword like depth/offset for the same content."
 
   - filter:
-      lt-version: 7
-      count: 1
-      match:
-        event_type: engine
-        engine.error: "SC_ERR_NO_RULES_LOADED"
-
-  - filter:
       min-version: 7
       count: 3
       match:

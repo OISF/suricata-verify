@@ -10,9 +10,3 @@ checks:
     - shell:
         args: grep "Error loading threshold configuration" suricata.log | wc -l | xargs
         expect: 1
-
-    # TODO
-    #- shell:
-    #    lt-version: 7
-    #    args: grep "SC_WARN_THRESH_CONFIG" suricata.log | wc -l | xargs
-    #    expect: 1

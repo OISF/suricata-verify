@@ -13,8 +13,3 @@ checks:
         args: |-
           grep "Error: detect: decode-event keyword no longer supports event \"decoder.udp.hlen_invalid\"" suricata.log | wc -l
         expect: 1
-    - shell:
-        version: 6
-        args: |-
-          grep -E "Error.*SC_WARN_DEPRECATED.*decode-event keyword no longer supports event \"decoder.udp.hlen_invalid\"" suricata.log | wc -l
-        expect: 1

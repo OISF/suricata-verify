@@ -5,19 +5,6 @@ args:
 
 checks:
 - filter:
-    lt-version: 7
-    count: 1
-    match:
-      dest_ip: 10.16.1.10
-      dest_port: 7000
-      event_type: template
-      pcap_cnt: 7
-      proto: TCP
-      src_ip: 10.16.1.11
-      src_port: 58352
-      template.request: 12:Hello World!
-      template.response: 3:Bye
-- filter:
     min-version: 7
     count: 1
     match:
