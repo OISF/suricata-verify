@@ -1,5 +1,5 @@
 requires:
-  min-version: 8
+  min-version: 7.0.7
 
 pcap: ../http-gap-beyond-body/input.pcap
 
@@ -14,6 +14,7 @@ checks:
       alert.signature_id: 1
 - filter:
     count: 1
+    min-version: 8
     match:
       event_type: alert
       alert.signature_id: 1
@@ -21,6 +22,14 @@ checks:
       payload_length: 40
 - filter:
     count: 1
+    min-version: 7.0.7
+    match:
+      event_type: alert
+      alert.signature_id: 1
+      payload_printable: "GET /1 HTTP/1.0\r\nUser-Agent: Mozilla\r\n\r\n"
+- filter:
+    count: 1
+    min-version: 8
     match:
       event_type: alert
       alert.signature_id: 1
@@ -28,6 +37,14 @@ checks:
       payload_length: 80
 - filter:
     count: 1
+    min-version: 7.0.7
+    match:
+      event_type: alert
+      alert.signature_id: 1
+      payload_printable: "GET /1 HTTP/1.0\r\nUser-Agent: Mozilla\r\n\r\nGET /2 HTTP/1.0\r\nUser-Agent: Mozilla\r\n\r\n"
+- filter:
+    count: 1
+    min-version: 8
     match:
       event_type: alert
       alert.signature_id: 1
@@ -35,11 +52,26 @@ checks:
       payload_length: 120
 - filter:
     count: 1
+    min-version: 7.0.7
+    match:
+      event_type: alert
+      alert.signature_id: 1
+      payload_printable: "GET /1 HTTP/1.0\r\nUser-Agent: Mozilla\r\n\r\nGET /2 HTTP/1.0\r\nUser-Agent: Mozilla\r\n\r\nGET /3 HTTP/1.0\r\nUser-Agent: Mozilla\r\n\r\n"
+- filter:
+    count: 1
+    min-version: 8
     match:
       event_type: alert
       alert.signature_id: 2
       payload_printable: "HTTP/1.0 200 OK\r\nDate: Mon, 31 Aug 2009 20:25:50 GMT\r\nServer: Apache\r\nConnection: close\r\nContent-Type: text/html\r\nContent-Length: 12\r\n\r\n"
       payload_length: 136
+- filter:
+    count: 1
+    min-version: 7.0.7
+    match:
+      event_type: alert
+      alert.signature_id: 2
+      payload_printable: "HTTP/1.0 200 OK\r\nDate: Mon, 31 Aug 2009 20:25:50 GMT\r\nServer: Apache\r\nConnection: close\r\nContent-Type: text/html\r\nContent-Length: 12\r\n\r\n"
 - filter:
     count: 1
     match:
@@ -48,6 +80,7 @@ checks:
       payload_printable: "HTTP/1.0 200 OK\r\nDate: Mon, 31 Aug 2009 20:25:50 GMT\r\nServer: Apache\r\nConnection: close\r\nContent-Type: text/html\r\nContent-Length: 12\r\n\r\n[127 bytes missing]AAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 - filter:
     count: 1
+    min-version: 8
     match:
       event_type: alert
       alert.signature_id: 4
