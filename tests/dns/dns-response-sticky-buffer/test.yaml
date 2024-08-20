@@ -1,0 +1,19 @@
+requires:
+  min-version: 8
+
+pcap: ../../dns-eve-v2-udp-nxdomain-soa/dns-udp-nxdomain-soa.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 1
+        direction: to_client
+        app_proto: dns
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 2
+        direction: to_client
+        app_proto: dns
+        
