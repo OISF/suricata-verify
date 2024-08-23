@@ -1,1 +1,1 @@
-alert ip any any -> any any (msg:"Flow has 10 packets"; flow.pkts:toclient,=10; flow.pkts:toserver,=10; flow.bytes:toserver,<3000; flow.bytes:toclient,>8000; sid:1;)
+alert ip any any -> any any (msg:"Flow has 10 packets"; flow.pkts:toclient,10; flow.pkts:toserver,=10; flow.bytes:toserver,<3000; flow.bytes:toclient,>8000; sid:1;)

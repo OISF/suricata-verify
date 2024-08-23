@@ -1,0 +1,14 @@
+requires:
+  min-version: 8
+
+pcap: ../decode-teredo-01/input.pcap
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 3
+    match:
+      event_type: alert
+      alert.signature_id: 1
