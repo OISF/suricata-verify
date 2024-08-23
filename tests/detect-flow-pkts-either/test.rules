@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"Flow has 1000 bytes in either direction";flow.pkts:either,=10;flow.bytes:either,>3000; sid:1;)
