@@ -1,0 +1,5 @@
+alert ip any any -> any any (msg:"Flow has more than 3000 bytes and 10 pkts in either direction";flow.pkts:either,=10;flow.bytes:either,>3000; sid:1;)
+alert ip any any -> any any (msg:"Flow has 10 pkts in toserver direction";flow.pkts:toserver,=10;prefilter;sid:2;)
+alert ip any any -> any any (msg:"Flow has 10 pkts in toclient direction";flow.pkts:toclient,=10;sid:3;)
+alert ip any any -> any any (msg:"Flow has more than 3000 bytes in toserver direction";flow.bytes:toserver,>3000;sid:4;)
+alert ip any any -> any any (msg:"Flow has more than 3000 bytes in toclient direction";flow.bytes:toclient,>3000; threshold: type backoff, track by_flow, count 2, multiplier 10; sid:5;)
