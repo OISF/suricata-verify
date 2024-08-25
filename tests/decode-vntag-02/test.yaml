@@ -1,4 +1,4 @@
-pcap: ../decode-vntag-03/input.pcap
+pcap: ../decode-vntag-01/input.pcap
 
 requires:
 
