@@ -1,4 +1,4 @@
-pcap: ../../../dns-single-request-v1/input.pcap
+pcap: ../../../dns/dns-single-request/input.pcap
 
 checks:
   - filter:

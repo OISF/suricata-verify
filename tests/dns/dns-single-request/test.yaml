@@ -1,5 +1,3 @@
-pcap: ../../dns-single-request-v1/input.pcap
-
 requires:
   min-version: 8
 

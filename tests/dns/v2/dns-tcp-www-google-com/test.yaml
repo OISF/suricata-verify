@@ -1,4 +1,4 @@
-pcap: ../../../dns-tcp-www-google-com-v1/dns.pcap
+pcap: ../../../dns/dns-tcp-www-google-com/dns.pcap
 
 checks:
   - filter:

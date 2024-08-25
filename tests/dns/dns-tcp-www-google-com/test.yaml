@@ -1,8 +1,6 @@
 requires:
   min-version: 8
 
-pcap: ../../dns-tcp-www-google-com-v1/dns.pcap
-
 checks:
   - filter:
       count: 1

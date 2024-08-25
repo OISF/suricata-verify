@@ -1,4 +1,4 @@
-pcap: ../../../dns-udp-double-request-response-v1/dns-udp-double-request-response.pcap
+pcap: ../../../dns/dns-udp-double-request-response/dns-udp-double-request-response.pcap
 
 checks:
   - filter:

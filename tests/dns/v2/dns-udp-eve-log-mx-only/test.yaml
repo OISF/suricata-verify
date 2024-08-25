@@ -1,4 +1,4 @@
-pcap: ../../../dns-udp-eve-log-query-only-v1/dns-udp-google.com-a-aaaa-mx.pcap
+pcap: ../../../dns/dns-udp-eve-log-answer-only/dns-udp-google.com-a-aaaa-mx.pcap
 
 checks:
   - filter:
