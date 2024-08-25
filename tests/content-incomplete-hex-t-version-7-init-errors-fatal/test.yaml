@@ -1,5 +1,3 @@
-pcap: ../content-incomplete-hex-t-version-6-init-errors-fatal/empty.pcap
-
 requires:
   min-version: 7
 

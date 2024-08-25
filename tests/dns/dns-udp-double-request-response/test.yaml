@@ -1,5 +1,3 @@
-pcap: ../../dns-udp-double-request-response-v1/dns-udp-double-request-response.pcap
-
 requires:
   min-version: 8
 
