@@ -13,7 +13,15 @@ checks:
     match:
       event_type: pgsql
 - filter:
+    # in ips mode, as this rule inspects the stream only (no pgsql keywords), we end up getting two alerts instead of one
     count: 2
     match:
       event_type: alert
       alert.signature_id: 1
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+      pgsql.request.simple_query: "select * from rules where sid = 2021701;"
+      pgsql.response.field_count: 10

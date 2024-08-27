@@ -10,7 +10,9 @@ outputs:
         - pgsql:
             enabled: yes
             passwords: yes
-        - alert
+        - alert:
+            enabled: yes
+            metadata: no
 
 app-layer:
   protocols:

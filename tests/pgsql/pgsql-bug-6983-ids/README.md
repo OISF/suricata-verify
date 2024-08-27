@@ -1,6 +1,7 @@
 # Description
 
-Tests that alerts for the pgsql app-proto will include pgsql app-proto metadata.
+Tests that alerts for the pgsql app-proto will not include pgsql app-proto metadata
+if this setting is disabled in the configuration file.
 
 ## PCAP
 

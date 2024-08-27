@@ -16,10 +16,5 @@ checks:
     match:
       event_type: alert
       alert.signature_id: 1
-- filter:
-    min-version: 8
-    count: 1
-    match:
-      event_type: alert
-      flow.pkts_toserver: 10
-      flow.pkts_toclient: 10
+      not-has-key: flow
+      not-has-key: pgsql
