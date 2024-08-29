@@ -1,0 +1,1 @@
+alert tcp-stream any any -> any ![21,25,110,143,443,465,587,636,989:995,3128,5061,5222,8443,8080] (msg:"Policy: Possible TOR SSL traffic (TLS1.3)";flow:established,to_server; content:"|16 03 01|"; depth:3; content:"|01|"; distance:2; within:1; content:"www"; pcre:"/www.[0-9a-z]{4,25}.com/"; metadata:created_at 2022_25_07,priority:5; sid:900000004; rev:1;)

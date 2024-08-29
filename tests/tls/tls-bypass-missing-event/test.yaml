@@ -1,0 +1,13 @@
+requires:
+  min-version: 7.0.7
+
+args:
+  - --set app-layer.protocols.tls.encryption-handling=bypass
+
+checks:
+
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 900000004
