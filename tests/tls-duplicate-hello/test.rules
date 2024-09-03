@@ -1,0 +1,1 @@
+alert tls any any -> any any (msg:"ja3.string test"; ja3.string; content:"771,"; sid:1;)

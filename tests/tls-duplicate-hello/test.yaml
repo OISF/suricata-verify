@@ -1,0 +1,18 @@
+requires:
+  min-version: 8
+
+# disables checksum verification
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+        tls.ja3.string: "771,4866-4867-4865-4868-49196-52393-49325-49162-49195-49324-49161-49200-52392-49172-49199-49171-157-49309-53-156-49308-47-159-52394-49311-57-158-49310-51,5-10-11-13-22-23-35-51-43-65281-0-45,23,0"
