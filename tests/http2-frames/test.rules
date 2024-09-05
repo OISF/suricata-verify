@@ -1,1 +1,3 @@
 alert http2 any any -> any any (frame:http2.hdr; content:"|00 00 04 08 00|"; flow:to_server; sid:1;)
+alert http2 any any -> any any (frame:http2.data; content:"|3f ff 00 01|"; bsize: 4; flow:to_server; sid:2;)
+alert http2 any any -> any any (frame:http2.pdu; content:"|00 00 04 08 00 00 00 00 00 3f ff 00 01|"; flow:to_server; sid:3;)
