@@ -1,0 +1,4 @@
+drop tcp any any -> any any (flow:established; app-layer-protocol:!tls; sid:1;)
+drop tcp any any -> any any (flow:established; app-layer-protocol:!tls; prefilter; sid:2;)
+drop tcp any any -> any any (flow:established; app-layer-protocol:!tls,either; sid:3;)
+drop tcp any any -> any any (flow:established; app-layer-protocol:!tls,either; prefilter; sid:4;)
