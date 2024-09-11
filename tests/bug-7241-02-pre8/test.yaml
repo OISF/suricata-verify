@@ -1,0 +1,14 @@
+requires:
+  min-version: 7
+
+pcap: ../tls/tls-random/input.pcap
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 0
+    match:
+      alert.signature_id: 1
+      event_type: alert
