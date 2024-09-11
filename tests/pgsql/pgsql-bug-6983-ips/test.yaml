@@ -13,15 +13,26 @@ checks:
     match:
       event_type: pgsql
 - filter:
-    # in ips mode, as this rule inspects the stream only (no pgsql keywords), we end up getting two alerts instead of one
+    # in ips mode, as this rule inspects the stream only (no pgsql keywords),
+    # we end up getting two alerts instead of one
     count: 2
     match:
       event_type: alert
       alert.signature_id: 1
 - filter:
+    lt-version: 8
     count: 1
     match:
       event_type: alert
       alert.signature_id: 1
       pgsql.request.simple_query: "select * from rules where sid = 2021701;"
       pgsql.response.field_count: 10
+- filter:
+    # Once pgsql's completed transactions are tracked per-direction, we don't have the
+    # response part of the transaction when we get the alert, in IPS mode
+    min-version: 8
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+      pgsql.request.simple_query: "select * from rules where sid = 2021701;"
