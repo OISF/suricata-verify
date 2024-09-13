@@ -1,0 +1,24 @@
+requires:
+    min-version: 7.0
+    pcap: false
+
+args:
+    - --engine-analysis
+    - --simulate-ips
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 1
+      app_proto: "unknown"
+      not-has-key: "prefilter"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 2
+      app_proto: "unknown"
+      prefilter.buffer: "packet"
+      prefilter.name: app-layer-protocol
