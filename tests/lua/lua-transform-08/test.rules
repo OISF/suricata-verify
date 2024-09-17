@@ -1,0 +1,7 @@
+# base64 encode: "/exec_post.php"
+alert http any any -> any any (msg:"TEST: base64 encode "; http.uri; luaxform:transform-base64.lua; content:"L2V4ZWNfcG9zdC5waHA=";  sid:1;)
+# sha256 encode: "/exec_post.php"
+alert http any any -> any any (msg:"TEST: sha256 encode"; http.uri; luaxform:transform-hashlib.lua; content:"3c09198a7be48f234b17995d5cc6e9614388b6c0915be55ede7e2df20d110dba";  sid:2;)
+# adds uri to dataset
+alert http any any -> any any (msg:"TEST: add uri to dataset"; http.uri; luaxform:transform-dataset.lua; content:"/exec_post.php";  sid:3;)
+alert http any any -> any any (msg:"TEST: uri in dataset"; http.uri; dataset:isset,versions-seen; sid:4;)

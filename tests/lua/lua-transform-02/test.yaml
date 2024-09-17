@@ -1,0 +1,20 @@
+requires:
+  min-version: 8
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+  - --set logging.outputs.1.file.type=json
+  - -T
+
+exit-code: 1
+
+pcap: false
+checks:
+  - filter:
+      count: 1
+      filename: suricata.log
+      match:
+        event_type: engine
+        engine.message.__startswith: "couldn't load file"
+        engine.message.__find: "no_filetransform.lua: No such file or directory"

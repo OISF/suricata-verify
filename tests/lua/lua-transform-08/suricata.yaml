@@ -1,0 +1,313 @@
+%YAML 1.1
+---
+
+stats:
+  enabled: yes
+  interval: 8
+
+# Configure the type of alert (and other) logging you would like.
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular #regular|syslog|unix_dgram|unix_stream|redis
+      filename: eve.json
+      # Enable for multi-threaded eve.json output; output files are amended with
+      # an identifier, e.g., eve.9.json
+      #threaded: false
+      #prefix: "@cee: " # prefix to prepend to each log entry
+      # the following are valid when type: syslog above
+      #identity: "suricata"
+      #facility: local5
+      #level: Info ## possible levels: Emergency, Alert, Critical,
+                   ## Error, Warning, Notice, Info, Debug
+      #ethernet: no  # log ethernet header in events when available
+      #redis:
+      #  server: 127.0.0.1
+      #  port: 6379
+      #  async: true ## if redis replies are read asynchronously
+      #  mode: list ## possible values: list|lpush (default), rpush, channel|publish, xadd|stream
+      #             ## lpush and rpush are using a Redis list. "list" is an alias for lpush
+      #             ## publish is using a Redis channel. "channel" is an alias for publish
+      #             ## xadd is using a Redis stream. "stream" is an alias for xadd
+      #  key: suricata ## string denoting the key/channel/stream to use (default to suricata)
+      #  stream-maxlen: 100000        ## Automatically trims the stream length to at most
+                                      ## this number of events. Set to 0 to disable trimming.
+                                      ## Only used when mode is set to xadd/stream.
+      #  stream-trim-exact: false     ## Trim exactly to the maximum stream length above.
+                                      ## Default: use inexact trimming (inexact by a few
+                                      ## tens of items)
+                                      ## Only used when mode is set to xadd/stream.
+      # Redis pipelining set up. This will enable to only do a query every
+      # 'batch-size' events. This should lower the latency induced by network
+      # connection at the cost of some memory. There is no flushing implemented
+      # so this setting should be reserved to high traffic Suricata deployments.
+      #  pipelining:
+      #    enabled: yes ## set enable to yes to enable query pipelining
+      #    batch-size: 10 ## number of entries to keep in buffer
+
+      # Include top level metadata. Default yes.
+      #metadata: no
+
+      # include the name of the input pcap file in pcap file processing mode
+      pcap-file: false
+
+      # Community Flow ID
+      # Adds a 'community_id' field to EVE records. These are meant to give
+      # records a predictable flow ID that can be used to match records to
+      # output of other tools such as Zeek (Bro).
+      #
+      # Takes a 'seed' that needs to be same across sensors and tools
+      # to make the id less predictable.
+
+      # enable/disable the community id feature.
+      community-id: false
+      # Seed value for the ID output. Valid values are 0-65535.
+      community-id-seed: 0
+
+      # HTTP X-Forwarded-For support by adding an extra field or overwriting
+      # the source or destination IP address (depending on flow direction)
+      # with the one reported in the X-Forwarded-For HTTP header. This is
+      # helpful when reviewing alerts for traffic that is being reverse
+      # or forward proxied.
+      xff:
+        enabled: no
+        # Two operation modes are available: "extra-data" and "overwrite".
+        mode: extra-data
+        # Two proxy deployments are supported: "reverse" and "forward". In
+        # a "reverse" deployment the IP address used is the last one, in a
+        # "forward" deployment the first IP address is used.
+        deployment: reverse
+        # Header name where the actual IP address will be reported. If more
+        # than one IP address is present, the last IP address will be the
+        # one taken into consideration.
+        header: X-Forwarded-For
+
+      types:
+        - alert:
+            # payload: yes             # enable dumping payload in Base64
+            # payload-buffer-size: 4 KiB  # max size of payload buffer to output in eve-log
+            # payload-printable: yes   # enable dumping payload in printable (lossy) format
+            # payload-length: yes      # enable dumping payload length, including the gaps
+            # packet: yes              # enable dumping of packet (without stream segments)
+            # metadata: no             # enable inclusion of app layer metadata with alert. Default yes
+            # If you want metadata, use:
+            # metadata:
+              # Include the decoded application layer (ie. http, dns)
+              #app-layer: true
+              # Log the current state of the flow record.
+              #flow: true
+              #rule:
+                # Log the metadata field from the rule in a structured
+                # format.
+                #metadata: true
+                # Log the raw rule text.
+                #raw: false
+                #reference: false      # include reference information from the rule
+            # http-body: yes           # Requires metadata; enable dumping of HTTP body in Base64
+            # http-body-printable: yes # Requires metadata; enable dumping of HTTP body in printable format
+            # websocket-payload: yes   # Requires metadata; enable dumping of WebSocket Payload in Base64
+            # websocket-payload-printable: yes # Requires metadata; enable dumping of WebSocket Payload in printable format
+
+            # Enable the logging of tagged packets for rules using the
+            # "tag" keyword.
+            tagged-packets: yes
+            # Enable logging the final action taken on a packet by the engine
+            # (e.g: the alert may have action 'allowed' but the verdict be
+            # 'drop' due to another alert. That's the engine's verdict)
+            # verdict: yes
+        # app layer frames
+        - frame:
+            # disabled by default as this is very verbose.
+            enabled: no
+            # payload-buffer-size: 4 KiB # max size of frame payload buffer to output in eve-log
+        - anomaly:
+            # Anomaly log records describe unexpected conditions such
+            # as truncated packets, packets with invalid IP/UDP/TCP
+            # length values, and other events that render the packet
+            # invalid for further processing or describe unexpected
+            # behavior on an established stream. Networks which
+            # experience high occurrences of anomalies may experience
+            # packet processing degradation.
+            #
+            # Anomalies are reported for the following:
+            # 1. Decode: Values and conditions that are detected while
+            # decoding individual packets. This includes invalid or
+            # unexpected values for low-level protocol lengths as well
+            # as stream related events (TCP 3-way handshake issues,
+            # unexpected sequence number, etc).
+            # 2. Stream: This includes stream related events (TCP
+            # 3-way handshake issues, unexpected sequence number,
+            # etc).
+            # 3. Application layer: These denote application layer
+            # specific conditions that are unexpected, invalid or are
+            # unexpected given the application monitoring state.
+            #
+            # By default, anomaly logging is enabled. When anomaly
+            # logging is enabled, applayer anomaly reporting is
+            # also enabled.
+            enabled: yes
+            #
+            # Choose one or more types of anomaly logging and whether to enable
+            # logging of the packet header for packet anomalies.
+            types:
+              # decode: no
+              # stream: no
+              # applayer: yes
+            #packethdr: no
+        - http:
+            extended: yes     # enable this for extended logging information
+            # custom allows additional HTTP fields to be included in eve-log.
+            # the example below adds three additional fields when uncommented
+            #custom: [Accept-Encoding, Accept-Language, Authorization]
+            # set this value to one and only one from {both, request, response}
+            # to dump all HTTP headers for every HTTP request and/or response
+            # dump-all-headers: none
+        - dns:
+            # Suricata 8.0 uses a new DNS logging format, to keep with
+            # the old format while you upgrade the version can be set
+            # to 2. See https://docs.suricata.io/en/latest/upgrade/8.0-dns-logging-changes.html
+            #version: 3
+
+            # Enable/disable this logger. Default: enabled.
+            #enabled: yes
+
+            # Control logging of requests and responses:
+            # - requests: enable logging of DNS queries
+            # - responses: enable logging of DNS answers
+            # By default both requests and responses are logged.
+            #requests: no
+            #responses: no
+
+            # Format of answer logging:
+            # - detailed: array item per answer
+            # - grouped: answers aggregated by type
+            # Default: all
+            #formats: [detailed, grouped]
+
+            # DNS record types to log, based on the query type.
+            # Default: all.
+            #types: [a, aaaa, cname, mx, ns, ptr, txt]
+        - tls:
+            extended: yes     # enable this for extended logging information
+            # output TLS transaction where the session is resumed using a
+            # session id
+            #session-resumption: no
+            # custom controls which TLS fields that are included in eve-log
+            # WARNING: enabling custom disables extended logging.
+            #custom: [subject, issuer, session_resumed, serial, fingerprint, sni, version, not_before, not_after, certificate, chain, ja3, ja3s, ja4, subjectaltname, client, client_certificate, client_chain, client_alpns, server_alpns]
+        - files:
+            force-magic: no   # force logging magic on all logged files
+            # force logging of checksums, available hash functions are md5,
+            # sha1 and sha256
+            #force-hash: [md5]
+        #- drop:
+        #    alerts: yes      # log alerts that caused drops
+        #    flows: all       # start or all: 'start' logs only a single drop
+        #                     # per flow direction. All logs each dropped pkt.
+            # Enable logging the final action taken on a packet by the engine
+            # (will show more information in case of a drop caused by 'reject')
+            # verdict: yes
+        - smtp:
+            #extended: yes # enable this for extended logging information
+            # this includes: bcc, message-id, subject, x_mailer, user-agent
+            # custom fields logging from the list:
+            #  reply-to, bcc, message-id, subject, x-mailer, user-agent, received,
+            #  x-originating-ip, in-reply-to, references, importance, priority,
+            #  sensitivity, organization, content-md5, date
+            #custom: [received, x-mailer, x-originating-ip, relays, reply-to, bcc]
+            # output md5 of fields: body, subject
+            # for the body you need to set app-layer.protocols.smtp.mime.body-md5
+            # to yes
+            #md5: [body, subject]
+
+        #- dnp3
+        - websocket
+        #- enip
+        - ftp
+        - rdp
+        - nfs
+        - smb
+        - tftp
+        - ike
+        - dcerpc
+        - krb5
+        - snmp
+        - rfb
+        - sip
+        - quic
+        - ldap
+        - arp:
+            enabled: no        # Many events can be logged. Disabled by default
+        - dhcp:
+            enabled: yes
+            # When extended mode is on, all DHCP messages are logged
+            # with full detail. When extended mode is off (the
+            # default), just enough information to map a MAC address
+            # to an IP address is logged.
+            extended: no
+        - ssh
+        - mqtt:
+            # passwords: yes           # enable output of passwords
+            # string-log-limit: 1KiB   # limit size of logged strings in bytes.
+                                       # Can be specified in KiB, MiB, GiB. Just a number
+                                       # is parsed as bytes. Default is 1 KiB.
+                                       # Use a value of 0 to disable limiting.
+                                       # Note that the size is also bounded by
+                                       # the maximum parsed message size (see
+                                       # app-layer configuration)
+        - http2
+        # dns over http2
+        - doh2
+        - pgsql:
+            enabled: no
+            # passwords: yes           # enable output of passwords. Disabled by default
+        - stats:
+            totals: yes       # stats for all threads merged together
+            threads: no       # per thread stats
+            deltas: no        # include delta values
+            # Don't log stats counters that are zero. Default: true
+            #null-values: false    # False will NOT log stats counters: 0
+        # bi-directional flows
+        - flow
+        # uni-directional flows
+        #- netflow
+
+        # Metadata event type. Triggered whenever a pktvar is saved
+        # and will include the pktvars, flowvars, flowbits and
+        # flowints.
+        #- metadata
+
+        # EXPERIMENTAL per packet output giving TCP state tracking details
+        # including internal state, flags, etc.
+        # This output is experimental, meant for debugging and subject to
+        # change in both config and output without any notice.
+        #- stream:
+        #   all: false                      # log all TCP packets
+        #   event-set: false                # log packets that have a decoder/stream event
+        #   state-update: false             # log packets triggering a TCP state update
+        #   spurious-retransmission: false  # log spurious retransmission packets
+
+# Datasets default settings
+datasets:
+  # Default fallback memcap and hashsize values for datasets in case these
+  # were not explicitly defined.
+  defaults:
+    #memcap: 100 MiB
+    #hashsize: 2048
+
+  rules:
+    # Set to true to allow absolute filenames and filenames that use
+    # ".." components to reference parent directories in rules that specify
+    # their filenames.
+    #allow-absolute-filenames: false
+
+    # Allow datasets in rules write access for "save" and
+    # "state". This is enabled by default, however write access is
+    # limited to the data directory.
+    #allow-write: true
+  versions-seen:
+    type: string
+
+security:
+  lua:
+    allow-rules: true
