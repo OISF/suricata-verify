@@ -1,0 +1,14 @@
+requires:
+  min-version: 8
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        http.url: /exec_post.php

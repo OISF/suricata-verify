@@ -1,0 +1,18 @@
+requires:
+  min-version: 8
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+
+pcap: ../lua-transform-01/test.pcap
+
+checks:
+
+  - shell:
+      args: grep  "1 item.*  bytes 0" stdout | wc -l | xargs
+      expect: 1
+
+  - shell:
+      args: grep  "2 item.*  offset 2" stdout| wc -l | xargs
+      expect: 1
