@@ -1,0 +1,20 @@
+pcap: ../bypass-depth-disabled/input.pcap
+
+requires:
+    min-version: 7
+
+args:
+- -k none
+- --set app-layer.protocols.tls.encryption-handling=full
+- --set app-layer.protocols.ssh.encryption-handling=full
+- --set stream.reassembly.depth=1
+- --set stream.bypass=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+  - stats:
+      flow_bypassed.local_pkts: 11
+      flow_bypassed.local_bytes: 6126
