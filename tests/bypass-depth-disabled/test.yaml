@@ -1,0 +1,18 @@
+requires:
+    min-version: 7
+
+args:
+- -k none
+- --set app-layer.protocols.tls.encryption-handling=full
+- --set app-layer.protocols.ssh.encryption-handling=full
+- --set stream.reassembly.depth=1
+- --set stream.bypass=false
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+  - stats:
+      flow_bypassed.local_pkts: 0
+      flow_bypassed.local_bytes: 0
