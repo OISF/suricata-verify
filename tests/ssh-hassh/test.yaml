@@ -4,7 +4,7 @@ features:
     - RUST
 
 args:
- - -k none --set stream.bypass=yes
+ - -k none --set stream.bypass=yes --set app-layer.protocols.ssh.encryption-handling=bypass
 
 checks:
   # Check that we have the following events in eve.json
