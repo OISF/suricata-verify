@@ -1,0 +1,25 @@
+requires:
+  min-version: 8
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+        tls.sni: raw.githubusercontent.com
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 188
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 6001
+
+

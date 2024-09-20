@@ -1,0 +1,2 @@
+pass tls any any -> any any (tls.sni; dotprefix; content:".githubusercontent.com"; nocase; endswith; alert; msg:"Allowed TLS traffic"; flow:established,to_server; sid:188; rev:1;)
+drop tls any any -> any any (msg:"Reject non allowed TLS traffic"; flow:to_server; sid:6001;)
