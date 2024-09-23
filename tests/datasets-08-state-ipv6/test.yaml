@@ -5,7 +5,7 @@ requires:
     - src/detect-ipaddr.c
 
 args:
-  - --data-dir=${OUTPUT_DIR}
+  - --no-random --data-dir=${OUTPUT_DIR}
 
 checks:
   - file-compare:
