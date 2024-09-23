@@ -1,0 +1,43 @@
+requires:
+   min-version: 8
+args:
+- -k none
+- --set stream.midstream=true
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: stun
+      pcap_cnt: 2
+      dest_ip: 10.16.2.51
+      dest_port: 7900
+      proto: UDP
+      src_ip: 212.227.67.34
+      src_port: 3478
+      stun.request.message_type: binding_request
+      stun.response.attributes[0].mapped_address: "\0\x01\x1E\\xdc\\x8e\\xa5\\xcd\\\
+        x87"
+      stun.response.attributes[1].source_address: "\0\x01\r\\x97\\xd4\\xe3C\""
+      stun.response.attributes[2].changed_address: "\0\x01\r\\x96\\xd4\\xe3C!"
+      stun.response.attributes[3].xor_mapped_address: "\0\x01\\xcc\\xb4\\\\xcd\\xe4\x1A"
+      stun.response.attributes[4].software: "Vovida.org 0.97\0"
+      stun.response.message_type: binding_response
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      app_proto: stun
+      dest_ip: 212.227.67.34
+      dest_port: 3478
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 130
+      flow.bytes_toserver: 62
+      flow.pkts_toclient: 1
+      flow.pkts_toserver: 1
+      flow.reason: shutdown
+      flow.state: established
+      proto: UDP
+      src_ip: 10.16.2.51
+      src_port: 7900
