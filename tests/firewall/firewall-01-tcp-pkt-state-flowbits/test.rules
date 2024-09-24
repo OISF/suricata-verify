@@ -1,0 +1,13 @@
+# allow tcp handshake
+
+pass tcp any any -> any 443 (flags:S; flow:not_established; flowbits:set,syn; sid:1;)
+pass tcp any 443 -> any any (flags:SA; flow:not_established; flowbits:isset,syn; flowbits:set,synack; sid:2;)
+pass tcp any any -> any 443 (flags:A; flow:not_established; flowbits:isset,synack; flowbits:unset,syn; flowbits:unset,synack; sid:3;)
+
+# allow established
+
+pass tcp any any <> any 443 (flow:established; sid:4;)
+
+# drop everything else
+
+drop ip any any -> any any (msg:"Drop all else"; flow:stateless; sid:5;)
