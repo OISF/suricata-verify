@@ -1,0 +1,11 @@
+# allow tcp handshake
+
+pass tcp any any <> any 443 (flow:not_established; sid:1;)
+
+# allow tls
+
+pass tls any any <> any 443 (flow:established; tls.sni; content:"raw.githubusercontent.com"; sid:2;)
+
+# drop everything else
+
+drop ip any any -> any any (msg:"Drop all else"; flow:stateless; sid:3;)
