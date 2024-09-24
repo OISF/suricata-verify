@@ -1,0 +1,41 @@
+pcap: ../../bug-2646-01/input.pcap
+
+args:
+- -k none
+- --simulate-ips
+
+checks:
+- filter:
+    count: 26
+    match:
+      event_type: alert
+      alert.signature_id: 3
+- filter:
+    count: 26
+    match:
+      event_type: alert
+- filter:
+    count: 1
+    match:
+      event_type: drop
+      pcap_cnt: 28
+      drop.reason: "stream midstream"
+- filter:
+    count: 1
+    match:
+      event_type: drop
+      pcap_cnt: 29
+      drop.reason: "flow drop"
+- filter:
+    count: 26
+    match:
+      event_type: drop
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      pkt_src: "stream (flow timeout)"
+- filter:
+    count: 1
+    match:
+      event_type: tls
