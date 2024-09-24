@@ -1,0 +1,1 @@
+alert http1 any any -> any any (file.data; content:"|1e 9a 32 7a|"; startswith; sid:1;)
