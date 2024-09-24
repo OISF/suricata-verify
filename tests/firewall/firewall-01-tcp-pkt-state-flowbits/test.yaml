@@ -1,0 +1,20 @@
+pcap: ../../tls/tls-random/input.pcap
+
+args:
+- -k none
+- --simulate-ips
+
+checks:
+- filter:
+    count: 0
+    match:
+      event_type: alert
+- filter:
+    count: 0
+    match:
+      event_type: drop
+- filter:
+    count: 1
+    match:
+      event_type: tls
+      tls.subject: C=FR, ST=IDF, L=Paris, O=Stamus, CN=SELKS
