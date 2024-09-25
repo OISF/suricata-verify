@@ -30,3 +30,12 @@ checks:
         dns.type: answer
         src_ip: "10.16.1.11"
         dest_ip: "10.16.1.1"
+
+  # This pcap has one packet, 10.16.1.1 -> 10.16.1.11, but Suricata
+  # should reverse that as it detect this as a DNS response.
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_ip: "10.16.1.11"
+        dest_ip: "10.16.1.1"
