@@ -3,6 +3,9 @@ pcap: ../flowbit-oring/input.pcap
 requires:
   min-version: 7
 
+args:
+  - --data-dir=${OUTPUT_DIR}
+
 checks:
   - filter:
       count: 1
