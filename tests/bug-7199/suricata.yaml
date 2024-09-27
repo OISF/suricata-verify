@@ -1,0 +1,22 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert:
+            enabled: true
+            tagged-packets: true
+            metadata: true
+            http-body: true
+        - http:
+            extended: true
+            tagged-packets: true
+        - tls:
+            extended: true
+
+detect:
+  force-applayer-findtx: yes
