@@ -1,0 +1,73 @@
+requires:
+  min-version: 8
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: mysql
+      mysql.command: select * from requests WHERE id =1 limit 1
+      mysql.tls: false
+      mysql.version: 8.4.0
+- filter:
+    count: 1
+    match:
+      event_type: mysql
+      mysql.command: select * from requests WHERE id =2 limit 1
+      mysql.tls: false
+      mysql.version: 8.4.0
+- filter:
+    count: 1
+    match:
+      event_type: mysql
+      mysql.command: select * from requests WHERE id=3 and client_code=client2 limit
+        1
+      mysql.tls: false
+      mysql.version: 8.4.0
+- filter:
+    count: 1
+    match:
+      event_type: mysql
+      mysql.command: select * from requests WHERE id =4 limit 1
+      mysql.tls: false
+      mysql.version: 8.4.0
+- filter:
+    count: 1
+    match:
+      event_type: mysql
+      mysql.command: select * from requests WHERE id =5 limit 1
+      mysql.tls: false
+      mysql.version: 8.4.0
+- filter:
+    count: 1
+    match:
+      event_type: mysql
+      mysql.command: select * from requests WHERE id =6 limit 1
+      mysql.tls: false
+      mysql.version: 8.4.0
+- filter:
+    count: 1
+    match:
+      event_type: mysql
+      mysql.command: select * from requests WHERE id =7 limit 1
+      mysql.tls: false
+      mysql.version: 8.4.0
+- filter:
+    count: 1
+    match:
+      event_type: mysql
+      mysql.command: select * from requests WHERE id=8 and client_code=client2 limit
+        1
+      mysql.tls: false
+      mysql.version: 8.4.0
+- filter:
+    count: 1
+    match:
+      event_type: mysql
+      mysql.command: select * from requests WHERE id=9 and client_code=client2 limit
+        1
+      mysql.tls: false
+      mysql.version: 8.4.0
