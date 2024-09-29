@@ -1,0 +1,11 @@
+args:
+- -k none
+
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: "test mysql"
+        
