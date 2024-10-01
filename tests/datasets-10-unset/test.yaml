@@ -1,0 +1,21 @@
+requires:
+  min-version: 7
+
+args:
+  - --data-dir=${OUTPUT_DIR} -k none --runmode single
+
+checks:
+# 2 sets and 1 unset alerts
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - file-compare:
+      filename: after.csv
+      expected: expected/after.csv
