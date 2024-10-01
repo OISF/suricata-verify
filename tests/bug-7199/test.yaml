@@ -1,0 +1,52 @@
+args:
+- -k none
+- --set stream.midstream=true
+- --simulate-ips
+
+checks:
+    - filter:
+        count: 4
+        match:
+            event_type: alert
+            alert.signature_id: 1
+    - filter:
+        count: 0
+        match:
+            event_type: alert
+            alert.signature_id: 2
+    - filter:
+        count: 1
+        match:
+            event_type: alert
+            alert.signature_id: 3
+            has-key: http
+    - filter:
+        min-version: 7.0.6
+        count: 1
+        match:
+            event_type: alert
+            alert.signature_id: 4
+            has-key: http
+    - filter:
+        min-version: 7.0.6
+        count: 4
+        match:
+            event_type: alert
+            alert.signature_id: 1
+            has-key: http
+    # starting with Suricata 7.0.6, app-layer transaction is only logged for
+    # stream rules
+    - filter:
+        lt-version: 7.0.6
+        count: 1
+        match:
+            event_type: alert
+            alert.signature_id: 4
+            has-key: http
+    - filter:
+        lt-version: 7.0.6
+        count: 4
+        match:
+            event_type: alert
+            alert.signature_id: 1
+            has-key: http
