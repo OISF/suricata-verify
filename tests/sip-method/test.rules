@@ -1,1 +1,2 @@
 alert sip any any -> any any (flow:to_server; sip.method; content:"REGISTER"; sid:1;)
+alert sip any any -> any any (sip.stat_code; content:"REGISTER"; sid:2;)
