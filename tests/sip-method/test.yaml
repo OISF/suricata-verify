@@ -14,3 +14,9 @@ checks:
       count: 18
       match:
         event_type: alert
+  - filter:
+  # only sid 1 triggered the 7 alerts
+      count: 18
+      match:
+        event_type: alert
+        alert.signature_id: 1
