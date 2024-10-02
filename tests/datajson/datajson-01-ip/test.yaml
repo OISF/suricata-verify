@@ -1,0 +1,20 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  files:
+    - src/datasets.c
+
+args:
+ - -k none --set datasets.enabled=yes
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        alert.extra.src_ip.test: success
