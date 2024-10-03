@@ -1,0 +1,105 @@
+%YAML 1.1
+---
+pcap-file:
+
+  checksum-checks: no
+
+stream:
+
+  checksum-validation: no
+  midstream: true
+outputs:
+  - fast:
+      enabled: yes
+      filename: /dev/null
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      #filename: /dev/null
+      xff:
+        enabled: yes
+        mode: extra-data
+        deployment: reverse
+        header: X-Forwarded-For
+      types:
+        - alert:
+            payload: yes
+            payload-printable: yes
+            packet: yes
+            metadata: yes
+            http-body: yes
+            http-body-printable: yes
+            tagged-packets: yes
+        - anomaly:
+            enabled: yes
+            types:
+              decode: yes
+              stream: yes
+              applayer: yes
+            packethdr: yes
+        - http:
+            extended: yes
+            dump-all-headers: both
+        - dns
+        - tls:
+            extended: yes
+            session-resumption: yes
+        - files
+        - smtp:
+            extended: yes
+        - dnp3
+        - ftp
+        - rdp
+        - nfs
+        - smb
+        - tftp
+        - ike
+        - krb5
+        - snmp
+        - rfb
+        - sip
+        - dhcp:
+            enabled: yes
+            extended: yes
+        - ssh
+        - flow
+        - netflow
+        - metadata
+  - http-log:
+      enabled: yes
+      filename: /dev/null
+      extended: yes
+  - tls-log:
+      enabled: yes
+      filename: /dev/null
+      extended: yes
+  - file-store:
+      version: 2
+      enabled: yes
+      force-filestore: yes
+app-layer:
+  protocols:
+    rdp:
+      enabled: yes
+    modbus:
+      enabled: yes
+      detection-ports:
+        dp: 502
+    dnp3:
+      enabled: yes
+      detection-ports:
+        dp: 20000
+    enip:
+      enabled: yes
+      detection-ports:
+        dp: 44818
+        sp: 44818
+    sip:
+      enabled: yes
+    ssh:
+      enabled: yes
+      hassh: yes
+    mqtt:
+      enabled: yes
+    http2:
+      enabled: yes

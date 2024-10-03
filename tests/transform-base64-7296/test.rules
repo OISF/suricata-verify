@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"from_base64: offset #1 [mode rfc4648]"; http.uri; content:"/?arg=dGhpc2lzYXRlc3QK"; from_base64: offset 6 ; content:"thisisatest"; fast_pattern; sid:1; rev:1;)
