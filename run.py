@@ -802,6 +802,9 @@ class TestRunner:
                 print("===> {}: Retrying".format(os.path.basename(self.directory)))
                 continue
 
+            global VALIDATE_EVE
+            VALIDATE_EVE = not self.config.get("skip-eve-validation", False)
+
             if VALIDATE_EVE:
                 check_output = subprocess.call([os.path.join(TOPDIR, "check-eve.py"), outdir, "-q", "-s", os.path.join(self.cwd, "etc", "schema.json")])
                 if check_output != 0:
