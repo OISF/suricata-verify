@@ -26,5 +26,67 @@ checks:
         sip.sdp.encryption_key: prompt
         sip.sdp.attributes[0]: sendrecv
         sip.sdp.media_descriptions[0].media: audio 30000 RTP/AVP 0 8 97 2 3
+        sip.sdp.media_descriptions[0].media_info: media info
+        sip.sdp.media_descriptions[0].connection_data: IN IP4 192.168.1.2
+        sip.sdp.media_descriptions[0].encryption_key: prompt
         sip.sdp.media_descriptions[0].attributes[0]: rtpmap:0 pcmu/8000
-
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 5
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 6
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 7
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 8
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 10
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 11
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 12
