@@ -1,0 +1,20 @@
+alert sip any any -> any any (flow:to_server; sdp.origin; content:"SIPPS 105015165 105015162 IN IP4 192.168.1.2"; sdp.session_name; content:"SIP call"; \
+	sdp.session_info; content:"Session Description Protocol"; sid:1;)
+alert sip any any -> any any (flow:to_server; sdp.uri; content:"https://www.sdp.proto"; sdp.email; content:"j.doe@example.com (Jane Doe)"; \
+	sdp.phone_number; content:"+1 617 555-6011 (Jane Doe)"; sid:2;)
+alert sip any any -> any any (flow:to_server; sdp.connection_data; content:"IN IP4 192.168.1.2"; sdp.bandwidth; content:"AS:64"; sid:3;)
+alert sip any any -> any any (flow:to_server; sdp.time; content:"3034423619 3042462419"; sdp.repeat_time; content:"604800 3600 0 90000"; \
+	sdp.timezone; content:"2882844526 -1h 2898848070 0"; sid:4;)
+alert sip any any -> any any (flow:to_server; sdp.encryption_key; content:"prompt"; sdp.attribute; content:"sendrecv"; sid:5;)
+alert sip any any -> any any (flow:to_server; sdp.media.media; content:"audio 30000 RTP/AVP 0 8 97 2 3"; sdp.media.encryption_key; content:"prompt"; \
+	sdp.media.connection_data; content:"IN IP4 192.168.1.2"; sdp.media.media_info; content:"media info"; sid:6;)
+alert sip any any -> any any (flow:to_client; sdp.origin; content:"SIPPS 105015165 105015162 IN IP4 192.168.1.2"; sdp.session_name; content:"SIP call"; \
+	sdp.session_info; content:"Session Description Protocol"; sid:7;)
+alert sip any any -> any any (flow:to_client; sdp.uri; content:"https://www.sdp.proto"; sdp.email; content:"j.doe@example.com (Jane Doe)"; \
+	sdp.phone_number; content:"+1 617 555-6011 (Jane Doe)"; sid:8;)
+alert sip any any -> any any (flow:to_client; sdp.connection_data; content:"IN IP4 192.168.1.2"; sdp.bandwidth; content:"AS:64"; sid:9;)
+alert sip any any -> any any (flow:to_client; sdp.time; content:"3034423619 3042462419"; sdp.repeat_time; content:"604800 3600 0 90000"; \
+	sdp.timezone; content:"2882844526 -1h 2898848070 0"; sid:10;)
+alert sip any any -> any any (flow:to_client; sdp.encryption_key; content:"prompt"; sdp.attribute; content:"sendrecv"; sid:11;)
+alert sip any any -> any any (flow:to_client; sdp.media.media; content:"audio 30000 RTP/AVP 0 8 97 2 3"; sdp.media.encryption_key; content:"prompt"; \
+	sdp.media.connection_data; content:"IN IP4 192.168.1.2"; sdp.media.media_info; content:"media info"; sid:12;)
