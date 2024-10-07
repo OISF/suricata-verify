@@ -1,0 +1,5 @@
+alert tcp any any -> any 443 (flow: to_server; flags: S,CE; flowbits:set, tls_tracker; flowbits: noalert; sid:09901001; )
+alert tcp any any -> any 443 (flowbits:isset, tls_tracker; content: "|15 03 01 00 02 02|"; startswith; flowbits:set, tls_error; sid:09901031; rev:1; msg:"TLS 1.2 Fatal Alert (outgoing packet)"; )
+alert tcp any 443 -> any any (flowbits:isset, tls_tracker; content: "|15 03 01 00 02 02|"; startswith; flowbits:set, tls_error; sid:09901032; rev:1; msg:"TLS 1.2 Fatal Alert (incoming packet)"; )
+alert tcp any any -> any 443 (flow: to_server; flowbits:isset, tls_error; sid:09901033; rev:1; msg:"Allow TLS error handling (outgoing packet)"; )
+alert tcp any 443 -> any any (flow: to_client; flowbits:isset, tls_error; sid:09901034; rev:1; msg:"Allow TLS error handling (incoming packet)"; )
