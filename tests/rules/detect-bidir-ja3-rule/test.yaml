@@ -1,0 +1,20 @@
+requires:
+  min-version: 8
+  pcap: false
+
+args:
+ - --engine-analysis
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 1
+      engines[0].name: "ja3.string"
+      engines[0].direction: "toserver"
+      engines[0].app_proto: "tls"
+      engines[1].name: "ja3s.hash"
+      engines[1].direction: "toclient"
+      engines[1].app_proto: "tls"
+      mpm.buffer: "ja3.string"
