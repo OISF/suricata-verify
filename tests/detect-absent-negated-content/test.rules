@@ -1,0 +1,17 @@
+# This signature should alert with _any_  pcap
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"TP test for URI"; flow:established,to_server; http.uri; bsize:1; content:"/"; sid:1;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"No match without `absent` and negated content"; flow:established,to_server; http.uri; bsize:1; content:"/"; http.referer; content:!"example"; sid:5;)
+
+# Positive tests about alerts
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"absent keyword or negated content"; flow:established,to_server; http.uri; bsize:1; content:"/"; http.referer; absent: or_else; content:!"example"; sid:6;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"absent keyword or negated pcre"; flow:established,to_server; http.uri; bsize:1; content:"/"; http.referer; absent: or_else ; pcre:!"/example/"; sid:7;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"absent only keyword without any content"; flow:established,to_server; http.uri; bsize:1; content:"/"; http.referer; absent; sid:8;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"absent only keyword without any content to fast_pattern"; flow:established,to_server; http.referer; absent; sid:9;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"absent keyword or positive content"; flow:established,to_server; http.uri; bsize:1; content:"/"; http.referer; absent: or_else; content:"example"; sid:10;)
+
+# reference test with positive and negated content
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"TP test for UA"; flow:established,to_server; http.user_agent; content:"foo"; content:!"bar"; sid:20;)
+
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"absent or negated content matches on the negated content"; flow:established,to_server; http.user_agent; absent: or_else; content:!"bar"; sid:21;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"absent only does not match"; flow:established,to_server; http.user_agent; absent; sid:22;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"absent or positive content matches on the positive content"; flow:established,to_server; http.user_agent; absent: or_else; content:"foo"; sid:23;)

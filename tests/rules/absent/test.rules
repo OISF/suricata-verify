@@ -1,0 +1,3 @@
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"absent keyword or negated content"; flow:established,to_server; http.uri; bsize:1; content:"/"; http.referer; absent: or_else; content:!"example"; sid:6;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"absent keyword or negated pcre"; flow:established,to_server; http.uri; bsize:1; content:"/"; http.referer; absent: or_else ; pcre:!"/example/"; sid:7;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"absent only keyword without any content"; flow:established,to_server; http.uri; bsize:1; content:"/"; http.referer; absent; sid:8;)
