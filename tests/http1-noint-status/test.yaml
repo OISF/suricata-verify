@@ -1,0 +1,13 @@
+requires:
+  min-version: 8
+
+# disables checksum verification
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.status_str: 2XX
