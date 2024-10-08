@@ -1,5 +1,9 @@
 # *** Add configuration here ***
 
+# TODO remove once template-rust string is out of main7
+requires:
+  min-version: 8
+
 args:
 - -k none
 
