@@ -16,7 +16,8 @@ checks:
         rev: 0
         msg: TEST 1
         app_proto: http
-        requirements[0]: flow
+        requirements[0]: no_payload
+        requirements[1]: flow
         flags[0]: sp_any
         flags[1]: applayer
         flags[2]: toserver
@@ -133,7 +134,8 @@ checks:
         rev: 0
         msg: TEST 5
         app_proto: http
-        requirements[0]: flow
+        requirements[0]: no_payload
+        requirements[1]: flow
         flags[0]: dp_any
         flags[1]: applayer
         flags[2]: need_flowvar
