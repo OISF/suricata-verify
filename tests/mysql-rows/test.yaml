@@ -1,10 +1,14 @@
+requires:
+  min-version: 8
+
 args:
 - -k none
 
 checks:
   - filter:
-      count: 1
+      count: 2
       match:
         event_type: alert
         alert.signature: "test mysql"
+        alert.metadata.mysql[0]: "rows"
         
