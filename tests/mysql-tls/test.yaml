@@ -1,0 +1,19 @@
+# *** Add configuration here ***
+requires:
+  min-version: 8
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: mysql
+      mysql.tls: true
+- filter:
+    count: 1
+    match:
+      app_proto: tls
+      app_proto_orig: mysql
+
