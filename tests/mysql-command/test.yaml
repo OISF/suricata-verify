@@ -1,6 +1,8 @@
+requires:
+  min-version: 8
+
 args:
 - -k none
-
 
 checks:
   - filter:
@@ -8,4 +10,5 @@ checks:
       match:
         event_type: alert
         alert.signature: "test mysql"
+        alert.metadata.mysql[0]: "command"
         

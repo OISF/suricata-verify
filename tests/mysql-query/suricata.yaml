@@ -1,0 +1,15 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - mysql
+
+app-layer:
+  protocols:
+    mysql:
+      enabled: yes
