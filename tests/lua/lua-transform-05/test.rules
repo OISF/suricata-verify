@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"TEST"; http.uri; luaxform:transform.lua, bytes 0, offset 2;content:"exec_post.php";  sid:1; rev:1;)
