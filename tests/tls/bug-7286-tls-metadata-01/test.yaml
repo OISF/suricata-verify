@@ -1,0 +1,14 @@
+pcap: ../../ja4-tls/input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+        tls.subject: C=FR, ST=IDF, L=Paris, O=Stamus, CN=SELKS
+        tls.issuerdn: C=FR, ST=IDF, L=Paris, O=Stamus, CN=SELKS
+        tls.serial: 00:97:E6:47:09:8E:EA:C9:B4
+        tls.fingerprint: 3a:0b:3b:23:15:2c:44:5c:27:ac:6a:0c:41:d6:fa:74:af:b4:09:5b
+        tls.version: TLS 1.2
+        tls.notbefore: '2015-02-12T18:07:27'
+        tls.notafter: '2025-02-09T18:07:27'
