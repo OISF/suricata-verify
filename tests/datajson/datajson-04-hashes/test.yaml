@@ -9,7 +9,7 @@ args:
 
 checks:
   - filter:
-      count: 1
+      count: 2
       match:
         event_type: alert
   - filter:
@@ -18,3 +18,9 @@ checks:
         event_type: alert
         alert.signature_id: 1
         alert.extra.bad_sha.year: 2005
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        alert.extra.bad_md5.year: 2007
