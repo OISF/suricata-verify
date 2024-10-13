@@ -1,0 +1,1 @@
+alert http any any -> any any (flow:established,to_server; http.host; content: "testmyids"; to_sha256; datajson:isset,badcat,type sha256,load badsha.lst,key bad_sha; sid:1; rev:1;)
