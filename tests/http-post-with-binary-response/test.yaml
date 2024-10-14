@@ -1,0 +1,24 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+# disables checksum verification
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: "b1dbafe74eb2c8c7f3f696c304132b1ac8837bed9fbbc892fdcf947ba21b6aca"
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: "fdf94334125b58ffd1b30d89ab5b539b98ecc77934c70c402bccac9c2e8c7927"
