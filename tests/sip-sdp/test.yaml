@@ -20,8 +20,8 @@ checks:
         sip.sdp.phone_number: +1 617 555-6011 (Jane Doe)
         sip.sdp.connection_data: IN IP4 192.168.1.2
         sip.sdp.bandwidths[0]: AS:64
-        sip.sdp.time: 3034423619 3042462419
-        sip.sdp.repeat_time: 604800 3600 0 90000
+        sip.sdp.time_descriptions[0].time: 3034423619 3042462419
+        sip.sdp.time_descriptions[0].repeat_time: 604800 3600 0 90000
         sip.sdp.timezone: 2882844526 -1h 2898848070 0
         sip.sdp.encryption_key: prompt
         sip.sdp.attributes[0]: sendrecv
