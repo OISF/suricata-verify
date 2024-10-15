@@ -1,0 +1,1 @@
+alert http any any -> any any ( sid: 1; http.stat_code; content: "200"; fast_pattern; http.response_header; content: "first"; dataset:set,http_match,type string,save http_match.csv; file.data; content: "later";)
