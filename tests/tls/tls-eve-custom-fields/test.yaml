@@ -1,0 +1,36 @@
+requires:
+    min-version: 8
+
+args:
+- -k none
+
+pcap: ../tls-store-02/tls-client-auth.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+        tls.subject: C=HU, ST=Budapest, L=Budapest, O=TLSClientAuthSampleServer, CN=SampleServer
+        tls.issuerdn: C=HU, ST=Budapest, L=Budapest, O=TLSClientAuthSampleCA, CN=SampleRoot
+        tls.subjectaltname[0]: localhost
+        tls.serial: 00:C7:D4:28:8B:80:E0:1E:25
+        tls.fingerprint: 06:39:f9:5d:fe:81:53:c4:9d:f0:ac:80:3e:2d:42:07:e8:96:de:09
+        tls.sni: localhost
+        tls.version: TLS 1.2
+        tls.notbefore: '2018-04-14T20:55:27'
+        tls.notafter: '2018-05-14T20:55:27'
+        tls.client.serial: 00:C7:D4:28:8B:80:E0:1E:27
+        tls.client.notbefore: '2018-04-14T20:55:27'
+        tls.client.notafter: '2018-05-14T20:55:27'
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+        has-key: tls.certificate
+        has-key: tls.chain
+        has-key: tls.client.subject
+        has-key: tls.client.issuerdn
+        has-key: tls.client.fingerprint
+        has-key: tls.client.chain
+        has-key: tls.client.certificate
