@@ -8,7 +8,18 @@ checks:
   - filter:
       count: 1
       match:
+        pcap_cnt: 40
+        src_ip: 172.18.0.1
+        src_port: 35316
+        dest_ip: 172.18.0.3
+        dest_port: 3306
+        proto: "TCP"
+        direction: "to_server"
         event_type: alert
         alert.signature: "test mysql"
+        alert.signature_id: 1
+        alert.severity: 3
         alert.metadata.mysql[0]: "command"
+        mysql.command: "select * from test.identify where identify = 33030219971120201X"
+        mysql.rows[0]: "1,33030219971120201X"
         

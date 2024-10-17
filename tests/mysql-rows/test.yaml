@@ -6,9 +6,45 @@ args:
 
 checks:
   - filter:
-      count: 2
+      count: 1
       match:
+        tx_id: 1
+        pcap_cnt: 41
+        src_ip: 172.18.0.3
+        src_port: 3306
+        dest_port: 35318
+        dest_ip: 172.18.0.1
+        proto: "TCP"
         event_type: alert
+        alert.action: "allowed"
         alert.signature: "test mysql"
+        alert.signature_id: 1
+        alert.severity: 3
+        direction: "to_client"
         alert.metadata.mysql[0]: "rows"
+        mysql.version: "9.0.1"
+        mysql.tls: false
+        mysql.command: "select * from test.identify where id = 1"
+        mysql.rows[0]: "1,33030219971120201X"
+  - filter:
+      count: 1
+      match:
+        tx_id: 3
+        pcap_cnt: 43
+        src_ip: 172.18.0.3
+        src_port: 3306
+        dest_port: 35316
+        dest_ip: 172.18.0.1
+        proto: "TCP"
+        direction: "to_client"
+        event_type: alert
+        alert.action: "allowed"
+        alert.signature: "test mysql"
+        alert.signature_id: 1
+        alert.severity: 3
+        alert.metadata.mysql[0]: "rows"
+        mysql.version: "9.0.1"
+        mysql.tls: false
+        mysql.command: "select * from test.identify where identify = 33030219971120201X"
+        mysql.rows[0]: "1,33030219971120201X"
         
