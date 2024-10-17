@@ -10,3 +10,8 @@ checks:
     match:
       alert.signature_id: 1
       event_type: alert
+- filter:
+    count: 28
+    match:
+      event_type: tls
+      has-key: tls.subjectaltname
