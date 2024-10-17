@@ -9,11 +9,20 @@ checks:
 - filter:
     count: 1
     match:
+      src_ip: 172.18.0.1
+      src_port: 36592
+      dest_ip: 172.18.0.3
+      dest_port: 3306
+      proto: TCP
       event_type: mysql
       mysql.tls: true
 - filter:
     count: 1
     match:
-      app_proto: tls
-      app_proto_orig: mysql
-
+      src_ip: 172.18.0.1
+      src_port: 36592
+      dest_ip: 172.18.0.3
+      dest_port: 3306
+      proto: TCP
+      event_type: tls
+      tls.from_proto: mysql
