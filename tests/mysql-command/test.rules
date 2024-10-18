@@ -1,0 +1,1 @@
+alert mysql any any -> any any (msg:"test mysql";mysql.command; content:"33030219971120201X"; metadata: mysql command; sid:1;)
