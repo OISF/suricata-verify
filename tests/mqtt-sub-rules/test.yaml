@@ -51,6 +51,16 @@ checks:
       count: 1
       match:
         event_type: mqtt
+        mqtt.suback.qos: 0
+        mqtt.suback.retain: false
+        mqtt.suback.dup: false
+        mqtt.suback.message_id: 1
+        mqtt.suback.qos_granted: [ 0, 0 ]
+
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
         mqtt.disconnect.qos: 0
         mqtt.disconnect.retain: false
         mqtt.disconnect.dup: false
@@ -109,3 +119,10 @@ checks:
       match:
         event_type: alert
         alert.signature: MQTT SUBSCRIBE topicY
+
+  - filter:
+      min-version: 8
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: MQTT SUBACK topicY reason code 0

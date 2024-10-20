@@ -7,4 +7,4 @@ alert mqtt any any -> any any (msg:"MQTT CONNECT flags"; mqtt.connect.flags:user
 alert mqtt any any -> any any (msg:"MQTT CONNECT username"; mqtt.connect.username; content:"user"; sid:19;)
 alert mqtt any any -> any any (msg:"MQTT CONNECT password"; mqtt.connect.password; content:"pass"; sid:20;)
 alert mqtt any any -> any any (msg:"MQTT SUBSCRIBE topicY"; mqtt.type:SUBSCRIBE; mqtt.subscribe.topic; content:"topicY"; sid:15;)
-alert mqtt any any -> any any (msg:"MQTT SUBSCRIBE topicY"; mqtt.type:SUBACK; mqtt.reason_code:0; sid:16;)
+alert mqtt any any -> any any (msg:"MQTT SUBACK topicY reason code 0"; mqtt.type:SUBACK; mqtt.subscribe.topic; content:"topicY"; mqtt.reason_code:0; sid:16;)
