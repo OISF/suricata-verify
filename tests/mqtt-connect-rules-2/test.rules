@@ -1,0 +1,4 @@
+alert mqtt any any -> any any (msg:"MQTT CONNACK reason code 134"; mqtt.type:CONNACK; mqtt.reason_code:134; sid:1;)
+alert mqtt any any -> any any (msg:"MQTT CONNACK reason code 0"; mqtt.type:CONNACK; mqtt.reason_code:0; sid:2;)
+
+
