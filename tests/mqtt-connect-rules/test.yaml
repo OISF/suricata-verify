@@ -60,3 +60,15 @@ checks:
       match:
         event_type: alert
         alert.signature: MQTT CONNECT protocol string FAIL
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: MQTT CONNACK reason code 0
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature: MQTT DISCONNECT reason code 0
