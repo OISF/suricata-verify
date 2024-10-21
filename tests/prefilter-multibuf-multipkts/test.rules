@@ -1,0 +1,2 @@
+alert http any any -> any any ( sid: 2; http.stat_code; content: "200"; fast_pattern; http.response_header; content: "first";)
+alert http any any -> any any ( sid: 3; http.stat_code; content: "200"; http.response_header; content: "first"; fast_pattern;)
