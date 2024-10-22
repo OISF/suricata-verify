@@ -1,0 +1,96 @@
+requires:
+    min-version: 8.0
+    pcap: false
+
+args:
+    - --engine-analysis
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 1
+      lists.packet.matches[0].name: "flow.age"
+      lists.packet.matches[0].flow_age.equal: 19
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 2
+      lists.packet.matches[0].name: "flow.age"
+      lists.packet.matches[0].flow_age.equal: 19
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 3
+      lists.packet.matches[0].name: "flow.age"
+      lists.packet.matches[0].flow_age.diff: 20
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 4
+      lists.packet.matches[0].name: "flow.age"
+      lists.packet.matches[0].flow_age.diff: 20
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 5
+      lists.packet.matches[0].name: "flow.age"
+      lists.packet.matches[0].flow_age.gt: 21
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 6
+      lists.packet.matches[0].name: "flow.age"
+      lists.packet.matches[0].flow_age.gte: 21
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 7
+      lists.packet.matches[0].name: "flow.age"
+      lists.packet.matches[0].flow_age.lt: 22
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 8
+      lists.packet.matches[0].name: "flow.age"
+      lists.packet.matches[0].flow_age.lte: 22
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 9
+      lists.packet.matches[0].name: "flow.age"
+      lists.packet.matches[0].flow_age.range.min: 19
+      lists.packet.matches[0].flow_age.range.max: 22
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 10
+      lists.packet.matches[0].name: "flow.age"
+      lists.packet.matches[0].flow_age.negated_range.min: 19
+      lists.packet.matches[0].flow_age.negated_range.max: 22
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 11
+      lists.packet.matches[0].name: "flow.age"
+      lists.packet.matches[0].flow_age.bitmask.mask: 192
+      lists.packet.matches[0].flow_age.bitmask.value: 128
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 12
+      lists.packet.matches[0].name: "flow.age"
+      lists.packet.matches[0].flow_age.negated_bitmask.mask: 192
+      lists.packet.matches[0].flow_age.negated_bitmask.value: 0
