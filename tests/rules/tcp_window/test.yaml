@@ -1,0 +1,25 @@
+requires:
+    min-version: 8.0
+    pcap: false
+
+args:
+    - --engine-analysis
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 1
+      lists.packet.matches[0].name: "tcp.window"
+      lists.packet.matches[0].window.size: 30336
+      lists.packet.matches[0].window.negated: false
+
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 2
+      lists.packet.matches[0].name: "tcp.window"
+      lists.packet.matches[0].window.size: 1024
+      lists.packet.matches[0].window.negated: true
