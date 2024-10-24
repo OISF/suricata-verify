@@ -1,0 +1,2 @@
+alert tcp any any -> any any (msg:"TCP window size"; window:30336; sid:1;)
+alert tcp any any -> any any (msg:"TCP window size"; tcp.window:!1024; sid:2;)
