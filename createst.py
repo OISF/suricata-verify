@@ -226,17 +226,30 @@ def get_manipulated_list():
     mentioned in `skip_fields` variable.
     """
     eve_path = os.path.join(test_dir, "output", "eve.json")
+    exclude_fields = args["exclude_fields"].strip().split(",") if args["exclude_fields"] else []
     allow_events = args["allow_events"].strip().split(",") if args["allow_events"] else []
+
+    def exclude_nested_fields(data, base_key=""):
+        if isinstance(data, dict):
+            filtered_data = {}
+            for k, v in data.items():
+                full_key = f"{base_key}.{k}" if base_key else k
+                if not any(full_key == excl or full_key.startswith(f"{excl}.") for excl in exclude_fields):
+                    filtered_data[k] = exclude_nested_fields(v, full_key)
+            return filtered_data
+        return data
+
     with open(eve_path, "r") as fp:
         content = fp.read()
     content_list = content.strip().split("\n")
     jcontent_list = [json.loads(e) for e in content_list]
     all_content_list = []
     for e in jcontent_list:
-        md = {k: v for k, v in e.items() if k not in skip_fields}
+        md = exclude_nested_fields(e)
+        
         if "event_type" in md and md["event_type"] == "stats":
             continue
-        all_content_list.append(md)
+        all_content_list.append(md) 
     if allow_events:
         def_eve_content_list = [item for item in all_content_list if item["event_type"] in allow_events]
         if not def_eve_content_list:
@@ -393,6 +406,8 @@ def parse_args():
                         help="Adds a suricata.yaml to the test")
     parser.add_argument("--features", default=None, metavar="<features>",
                         help="Adds specified features")
+    parser.add_argument("--exclude-fields", nargs="?", default=None,
+                        help="Exclude specified fields from filter block")                   
     # add arg to allow stdout only
     args = parser.parse_args()
 
