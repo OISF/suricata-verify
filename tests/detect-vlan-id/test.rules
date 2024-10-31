@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"Vlan ID is equal to 300"; vlan.id:300; sid:1;)
