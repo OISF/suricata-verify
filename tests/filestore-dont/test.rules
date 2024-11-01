@@ -1,1 +1,1 @@
-alert http any any -> any any (msg:"FILE HTTP filtore"; http.uri; content: "pipeline"; filestore:both,flow; sid:2; rev:1;)
+alert http any any -> any any (msg:"FILE HTTP filtore"; http.uri; content: "pipeline"; filestore:both,tx; sid:2; rev:1;)
