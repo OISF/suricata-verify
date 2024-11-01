@@ -1,0 +1,8 @@
+# A resource name was too long (over 1025 chars)
+alert dns any any -> any any (msg:"SURICATA DNS Name too long"; app-layer-event:dns.name_too_long; classtype:protocol-command-decode; sid:224008; rev:1;)
+
+# An infinite loop was found while decoding a DNS resource name.
+alert dns any any -> any any (msg:"SURICATA DNS Infinite loop"; app-layer-event:dns.infinite_loop; classtype:protocol-command-decode; sid:224009; rev:1;)
+
+# Suricata's maximum number of DNS name labels was reached while parsing a resource name.
+alert dns any any -> any any (msg:"SURICATA DNS Too many labels"; app-layer-event:dns.too_many_labels; classtype:protocol-command-decode; sid:224010; rev:1;)
