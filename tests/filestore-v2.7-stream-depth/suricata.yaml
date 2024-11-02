@@ -6,11 +6,12 @@ outputs:
       enabled: yes
       types:
         - files
-  - stream:
-      reassembly:
-          depth: 1000
   - file-store:
       version: 2
       enabled: yes
       force-filestore: yes
       stream-depth: 100000
+
+stream:
+  reassembly:
+    depth: 1000
