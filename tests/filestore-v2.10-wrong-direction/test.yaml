@@ -14,4 +14,12 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 2
-
+  - filter:
+      count: 0
+      match:
+        event_type: fileinfo
+        fileinfo.stored: true
+  - filter:
+      count: 11
+      match:
+        event_type: fileinfo
