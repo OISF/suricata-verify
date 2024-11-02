@@ -1,0 +1,20 @@
+%YAML 1.1
+---
+
+include: ../../etc/suricata-4.0.3.yaml
+
+# Configure the type of alert (and other) logging you would like.
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+
+      # Enable to disable top-level metadata logging. Default: yes.
+      #metadata: no
+
+      types:
+        - alert:
+            file-data: yes
+            payload-buffer-size: 50
+        - files

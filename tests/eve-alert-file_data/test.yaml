@@ -1,0 +1,15 @@
+pcap: ../filestore-filecontainer-http/filecontainer-http.pcap
+
+args:
+  - -k none
+
+requires:
+  script:
+    - grep LOG_JSON_FILE_DATA src/output-json-alert.c > /dev/null
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        files[0].data:  iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAAGXRFWHRTb2Z0d2FyZQA=
