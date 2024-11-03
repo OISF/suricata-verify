@@ -32,3 +32,18 @@ checks:
       match:
          event_type: alert
          alert.signature_id: 5
+  - filter:
+      count: 1
+      match:
+         event_type: alert
+         alert.signature_id: 6
+  - filter:
+      count: 1
+      match:
+         event_type: alert
+         alert.signature_id: 7
+  - filter:
+      count: 1
+      match:
+         event_type: alert
+         alert.signature_id: 8

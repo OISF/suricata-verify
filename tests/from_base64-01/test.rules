@@ -6,3 +6,5 @@ alert http any any -> any any (msg:"from_base64: bytes, offset #1 [mode rfc4648]
 alert http any any -> any any (msg:"from_base64: offset #3, mode rfc2045 - will succeed"; http.uri; content:"/?arg=dGhpc2lzYXRlc3QK"; from_base64: offset 6, mode rfc2045 ; content:"thisisatest"; sid:4; rev:1;)
 alert http any any -> any any (msg:"from_base64: offset #3, mode rfc4648 - will succeed"; http.uri; content:"/?arg=dGhpc2lzYXRlc3QK"; from_base64: offset 6, mode rfc4648 ; content:"thisisatest"; sid:5; rev:1;)
 alert http any any -> any any (msg:"from_base64: offset #4, mode strict - will succeed"; http.uri; content:"/?arg=dGhpc2lzYXRlc3QK"; from_base64: offset 6, mode strict ; content:"thisisatest"; sid:6; rev:1;)
+alert http any any -> any any (msg:"from_base64: error condition on non-b64 content"; file.data; content:"To Linux and beyond"; from_base64: set_error; content:"BASE64_ECODE_BUF"; sid:7; rev:1;)
+alert http any any -> any any (msg:"from_base64: error condition not set on b64 content"; http.uri; content:"/?arg=dGhpc2lzYXRlc3QK"; from_base64: offset 6, mode strict, set_error ; content:!"BASE64_ECODE_BUF"; content:"thisisatest";  sid:8; rev:1;)
