@@ -1,0 +1,6 @@
+pcap: ../flowbit-oring/input.pcap
+
+args:
+ - -k none
+
+exit-code: 0
