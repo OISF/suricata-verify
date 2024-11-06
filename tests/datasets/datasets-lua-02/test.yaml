@@ -1,0 +1,13 @@
+requires:
+  min-version: 8
+
+pcap: ../../bug-2482-01/proxyCONNECT_443.pcap
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 42
+      match:
+        event_type: alert
