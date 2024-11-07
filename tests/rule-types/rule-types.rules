@@ -9,6 +9,7 @@ alert tcp-pkt any any -> any any (msg:"tcp-pkt, anchored content"; content:"abc"
 alert tcp any any -> any any (msg:"tcp, no content"; sid:301;)
 alert tcp any any -> any any (msg:"tcp, simple content"; content:"abc"; sid:302;)
 alert tcp any any -> any any (msg:"tcp, anchored content"; content:"abc"; startswith; sid:303;)
+alert tcp !192.168.0.1 any -> any any (msg:"tcp, negated IP address"; sid:304;)
 
 alert tcp any any -> any any (msg:"tcp, pd negated"; app-layer-protocol:!http; sid:401;)
 alert tcp any any -> any any (msg:"tcp, pd positive"; app-layer-protocol:http; sid:402;)
@@ -38,3 +39,4 @@ alert tcp any any -> any any (msg:"byte_extract with dce"; dcerpc.stub_data; con
 
 alert udp any any -> any any (msg:"UDP with flow direction"; flow:to_server; sid:1001;)
 
+alert pkthdr any any -> any any (msg:"SURICATA IPv6 duplicated Hop-By-Hop Options extension header"; decode-event:ipv6.exthdr_dupl_hh; classtype:protocol-command-decode; sid:1101;)
