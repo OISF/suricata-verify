@@ -160,3 +160,15 @@ checks:
       match:
         id: 1001
         type: "pkt"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1101
+        type: "de_only"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 304
+        type: "like_ip_only"
