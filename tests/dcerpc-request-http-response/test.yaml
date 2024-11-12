@@ -1,0 +1,12 @@
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: dcerpc
+        app_proto_tc: http
+        tcp.psh: true
+        tcp.ack: true
