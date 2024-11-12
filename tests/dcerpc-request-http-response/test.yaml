@@ -1,0 +1,12 @@
+args:
+- -k none
+- --set stream.midstream=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: dcerpc
+        tcp.psh: true
+        tcp.ack: true
