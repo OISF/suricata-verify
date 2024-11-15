@@ -1,0 +1,2 @@
+alert tcp any any -> any any (msg:"Flow rate is 500 bytes per second"; flow.rate:500; sid:1;)
+pass tcp any any -> any any (msg:"Flow rate is greater than 5 mbytes per second"; flow.rate:>5mb; alert; sid:2;)
