@@ -1,0 +1,1 @@
+pass tcp any any -> any any (msg:"Testing flow.rate"; flow.rate:500; alert; sid:1;)
