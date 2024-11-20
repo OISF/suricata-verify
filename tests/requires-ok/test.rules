@@ -4,8 +4,11 @@ alert http any any -> any any (msg:"TEST Suricata >= 7 and < 8"; content:"uid=0"
 # Rule for Suricata >= 7.0.3 but less than 8... Or >= 8.0.1
 alert http any any -> any any (content:"uid=0"; requires: version >= 7.0.3 < 8 | >= 8.0.1; sid:9; rev:1;)
 
-# Rule for Suricata >= 8.
-alert http any any -> any any (msg:"TEST Suricata >= 8"; content:"uid=0"; requires: version >= 8.0.0; sid:8; rev:1;)
+# Rule for Suricata >= 8, with pretty useless check for sid keyword.
+alert http any any -> any any (msg:"TEST Suricata >= 8"; content:"uid=0"; requires: version >= 8.0.0, keyword sid; sid:8; rev:1;)
+
+# Requires unknown keyword, should be marked as skipped.
+alert http any any -> any any (msg:"TEST Requires unknown keyword"; requires: version >= 8, keyword foobar; sid:100; rev:1;)
 
 # These rules have something invalid about them, but do follow the general rule
 # structure, so should be eliminated by the requires statement.
