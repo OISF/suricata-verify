@@ -1,0 +1,19 @@
+requires:
+  min-version: 8
+
+args:
+- -k none
+- --simulate-ips
+
+checks:
+- filter:
+    count: 3
+    match:
+      event_type: alert
+      alert.signature_id: 9901033
+      pkt_src: wire/pcap
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      not-has-key: pcap_cnt
