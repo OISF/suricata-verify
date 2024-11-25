@@ -1,7 +1,3 @@
-requires:
-  files:
-    - src/detect-transform-xor.c
-
 args:
   - -k none
 checks:
