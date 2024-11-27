@@ -121,7 +121,6 @@ checks:
         alert.signature: MQTT SUBSCRIBE topicY
 
   - filter:
-      min-version: 8
       count: 1
       match:
         event_type: alert
