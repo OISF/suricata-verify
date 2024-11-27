@@ -2,8 +2,6 @@ pcap: ../bug-3616-ips/input.pcap
 
 requires:
     pcap: false
-    files:
-      - src/detect-transform-casechange.c
 
 exit-code: 0
 
