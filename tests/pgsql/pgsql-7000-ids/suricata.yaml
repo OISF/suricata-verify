@@ -15,3 +15,6 @@ app-layer:
   protocols:
     pgsql:
       enabled: yes
+
+detect:
+  force-applayer-findtx: true
