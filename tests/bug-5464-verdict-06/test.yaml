@@ -9,6 +9,22 @@ args:
 
 checks:
   - filter:
+      min-version: 8
+      count: 25
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        verdict.action: alert
+  - filter:
+      min-version: 8
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        verdict.action: alert
+        has-not-key: pcap_cnt
+  - filter:
+      lt-version: 7
       count: 28
       match:
         event_type: alert
