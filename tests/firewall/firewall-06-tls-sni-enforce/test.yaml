@@ -6,11 +6,24 @@ args:
 
 checks:
 - filter:
+    min-version: 8
+    count: 24
+    match:
+      event_type: alert
+      alert.signature_id: 3
+- filter:
+    min-version: 8
+    count: 24
+    match:
+      event_type: alert
+- filter:
+    lt-version: 7
     count: 26
     match:
       event_type: alert
       alert.signature_id: 3
 - filter:
+    lt-version: 7
     count: 26
     match:
       event_type: alert
@@ -39,6 +52,13 @@ checks:
     match:
       event_type: drop
 - filter:
+    min-version: 8
+    count: 0
+    match:
+      event_type: alert
+      pkt_src: "stream (flow timeout)"
+- filter:
+    lt-version: 7
     count: 2
     match:
       event_type: alert
