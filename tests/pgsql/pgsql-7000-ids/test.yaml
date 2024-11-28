@@ -1,3 +1,5 @@
+requires:
+    min-version: 8
 args:
 - -k none
 
@@ -24,6 +26,7 @@ checks:
       pgsql.tx_id: 6
       stream: 1
       tx_id: 5
+      tx_guessed: true
 # check 3
 - filter:
     count: 1
@@ -40,6 +43,7 @@ checks:
       pgsql.tx_id: 7
       stream: 1
       tx_id: 6
+      tx_guessed: true
 # check 4
 - filter:
     count: 1
@@ -56,6 +60,7 @@ checks:
       pgsql.tx_id: 8
       stream: 1
       tx_id: 7
+      tx_guessed: true
 # check 5
 - filter:
     count: 1
@@ -72,6 +77,7 @@ checks:
       pgsql.tx_id: 9
       stream: 1
       tx_id: 8
+      tx_guessed: true
 # check 6
 - filter:
     count: 1
@@ -94,6 +100,7 @@ checks:
       pgsql.tx_id: 14
       stream: 1
       tx_id: 13
+      tx_guessed: true
 # check 7
 - filter:
     count: 1
@@ -117,6 +124,7 @@ checks:
       pgsql.tx_id: 17
       stream: 1
       tx_id: 16
+      tx_guessed: true
 # check 8
 - filter:
     count: 1
@@ -139,6 +147,7 @@ checks:
       pgsql.tx_id: 23
       stream: 1
       tx_id: 22
+      tx_guessed: true
 # check 9
 - filter:
     count: 1
@@ -158,6 +167,7 @@ checks:
       pgsql.tx_id: 26
       stream: 1
       tx_id: 25
+      tx_guessed: true
 # check 10
 - filter:
     count: 1
@@ -171,11 +181,4 @@ checks:
         Dumbledore....prof_dumbledore@gmail.comD...2.....\nMcGonagall....prof_mc.gonagall@gmail.comD...'......Rogue....prof_rogue@yahoo.comD...)......Hagrid....prof_hagrid@gmail.comD...,......Hermione....prof_gramger@gmail.comD...'......Remus....prof_lupin@gmail.comD...)......Maugre....prof_folloy@gmail.comD...-......Londubat....prof_londubat@gmail.comC...\r\
         SELECT 8.Z....I"
       pcap_cnt: 87
-      pgsql.request.simple_query: SELECT * FROM new_table;
-      pgsql.response.command_completed: SELECT 8
-      pgsql.response.data_rows: 8
-      pgsql.response.data_size: 236
-      pgsql.response.field_count: 2
-      pgsql.tx_id: 26
       stream: 1
-      tx_id: 25
