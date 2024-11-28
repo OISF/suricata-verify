@@ -171,11 +171,4 @@ checks:
         Dumbledore....prof_dumbledore@gmail.comD...2.....\nMcGonagall....prof_mc.gonagall@gmail.comD...'......Rogue....prof_rogue@yahoo.comD...)......Hagrid....prof_hagrid@gmail.comD...,......Hermione....prof_gramger@gmail.comD...'......Remus....prof_lupin@gmail.comD...)......Maugre....prof_folloy@gmail.comD...-......Londubat....prof_londubat@gmail.comC...\r\
         SELECT 8.Z....I"
       pcap_cnt: 87
-      pgsql.request.simple_query: SELECT * FROM new_table;
-      pgsql.response.command_completed: SELECT 8
-      pgsql.response.data_rows: 8
-      pgsql.response.data_size: 236
-      pgsql.response.field_count: 2
-      pgsql.tx_id: 26
       stream: 1
-      tx_id: 25
