@@ -1,5 +1,5 @@
 requires:
-  min-version: 7.0
+  min-version: 8.0
 
 pcap: ../pgsql-ssl-rejected-md5-auth-simple-query/input.pcap
 
@@ -19,9 +19,11 @@ checks:
     match:
       event_type: alert
       alert.signature_id: 1
+      tx_guessed: true
 - filter:
     count: 1
     match:
       event_type: alert
       alert.signature_id: 1
+      tx_guessed: true
       pgsql.request.simple_query: "select * from rules where sid = 2021701;"
