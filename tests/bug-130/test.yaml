@@ -1,10 +1,8 @@
 requires:
   min-version: 5.0.0
-  features:
-    - HAVE_LIBJANSSON
 
 args:
- - -k none
+ - -k none --set detect.force-applayer-findtx=true
 
 checks:
 - filter:
