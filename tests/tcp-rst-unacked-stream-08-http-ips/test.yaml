@@ -1,0 +1,20 @@
+requires:
+  min-version: 8
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 6
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2210048
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.tcp.reassembly_gap: 0
