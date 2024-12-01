@@ -1,0 +1,10 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  files:
+    - src/datasets.c
+
+args:
+ - -k none --set datasets.enabled=yes
+
+exit-code: 1
