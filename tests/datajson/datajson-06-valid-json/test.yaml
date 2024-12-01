@@ -1,0 +1,28 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  files:
+    - src/datasets.c
+
+args:
+ - -k none --set datasets.enabled=yes
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        alert.extra.ip: 42
+        alert.extra.bad_host: context
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        alert.extra.ip: 1.2
+        alert.extra.bad_host: context
