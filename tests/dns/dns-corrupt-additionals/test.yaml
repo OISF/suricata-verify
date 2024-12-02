@@ -1,0 +1,18 @@
+requires:
+  min-version: 8
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: dns
+      dns.answers[0].rrname:  "_sip._udp.sip.voice.google.com"
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2240008
+      dns.queries[0].rrtype: SRV
