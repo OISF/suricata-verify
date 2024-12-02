@@ -15,6 +15,14 @@ checks:
     match:
       event_type: alert
 - filter:
+    min-version: 8
+    # check for https://redmine.openinfosecfoundation.org/issues/7350
+    count: 4
+    match:
+      event_type: alert
+      alert.signature_id: 3
+      tls.sni: raw.githubusercontent.com
+- filter:
     count: 1
     match:
       event_type: drop

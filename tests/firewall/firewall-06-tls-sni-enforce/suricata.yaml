@@ -15,6 +15,10 @@ stats:
   # Add stream events as stats.
   #stream-events: false
 
+detect:
+  stream-tx-log-limit: 4
+  guess-applayer-tx: true
+
 # Configure the type of alert (and other) logging you would like.
 outputs:
   - eve-log:
