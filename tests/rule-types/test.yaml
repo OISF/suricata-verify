@@ -8,86 +8,270 @@ checks:
       filename: rules.json
       count: 1
       match:
+        raw: "alert tcp-stream any any -> any any (msg:\"tcp-stream, no content\"; sid:101;)"
         id: 101
         type: "ip_only"
   - filter:
       filename: rules.json
       count: 1
       match:
+        raw: "alert tcp-stream any any -> any any (msg:\"tcp-stream, simple content\"; content:\"abc\"; sid:102;)"
         id: 102
         type: "stream"
   - filter:
       filename: rules.json
       count: 1
       match:
+        raw: "alert tcp-stream any any -> any any (msg:\"tcp-stream, anchored content\"; content:\"abc\"; startswith; sid:103;)"
+        id: 103
+        type: "stream"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        raw: "alert tcp-pkt any any -> any any (msg:\"tcp-pkt, no content\"; sid:201;)"
         id: 201
         type: "ip_only"
   - filter:
       filename: rules.json
       count: 1
       match:
+        raw: "alert tcp-pkt any any -> any any (msg:\"tcp-pkt, simple content\"; content:\"abc\"; sid:202;)"
         id: 202
         type: "pkt"
   - filter:
       filename: rules.json
       count: 1
       match:
+        raw: "alert tcp-pkt any any -> any any (msg:\"tcp-pkt, anchored content\"; content:\"abc\"; startswith; sid:203;)"
         id: 203
         type: "pkt"
   - filter:
       filename: rules.json
       count: 1
       match:
+        raw: "alert tcp any any -> any any (msg:\"tcp, no content\"; sid:301;)"
         id: 301
         type: "ip_only"
   - filter:
       filename: rules.json
       count: 1
       match:
+        raw: "alert tcp any any -> any any (msg:\"tcp, simple content\"; content:\"abc\"; sid:302;)"
         id: 302
         type: "stream"
   - filter:
       filename: rules.json
       count: 1
       match:
+        raw: "alert tcp any any -> any any (msg:\"tcp, anchored content\"; content:\"abc\"; startswith; sid:303;)"
         id: 303
         type: "pkt_stream"
   - filter:
       filename: rules.json
       count: 1
       match:
+        raw: "alert tcp !192.168.0.1 any -> any any (msg:\"tcp, has negated IP address\"; sid:304;)"
+        id: 304
+        type: "like_ip_only"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        raw: "alert tcp [10.0.0.0/8,!10.10.10.10] any -> [10.0.0.0/8,!10.10.10.10] any (msg:\"tcp, has negated IP address\"; sid:305;)"
+        id: 305
+        type: "like_ip_only"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        raw: "alert tcp any any -> any any (msg:\"tcp, pd negated\"; app-layer-protocol:!http; sid:401;)"
         id: 401
         type: "pd_only"
   - filter:
       filename: rules.json
       count: 1
       match:
+        raw: "alert tcp any any -> any any (msg:\"tcp, pd positive\"; app-layer-protocol:http; sid:402;)"
         id: 402
         type: "pd_only"
   - filter:
       filename: rules.json
       count: 1
       match:
+        raw: "alert tcp any any -> any any (msg:\"tcp, pd positive dns\"; app-layer-protocol:dns; sid:403;)"
+        id: 403
+        type: "pd_only"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        raw: "alert tcp any any -> any any (msg:\"tcp, pd positive, dns, flow:to_server\"; app-layer-protocol:dns; flow:to_server; sid:404;)"
+        id: 404
+        type: "pd_only"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        raw: "alert tcp any any -> any any (msg:\"tcp, pd positive, dns, flow:not_established\"; app-layer-protocol:dns; flow:not_established; sid:405;)"
+        id: 405
+        type: "pkt"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        raw: "alert tcp any any -> any any (msg:\"tcp, pd positive, dns, flow:established\"; app-layer-protocol:dns; flow:established; sid:406;)"
+        id: 406
+        type: "pkt"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        raw: "alert dns any any -> any any (msg:\"app-layer, dns\"; sid:407;)"
+        id: 407
+        type: "app_layer"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        raw: "alert dns any any -> any any (msg:\"app-layer, dns, flow:to_server\"; flow:to_server; sid:408;)"
+        id: 408
+        type: "app_layer"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        raw: "alert tcp any any -> any any (msg:\"tcp, pd positive, dns, flowbits:isset\"; app-layer-protocol:dns; flowbits:isset,dns_error; sid:409;)"
+        id: 409
+        type: "pkt"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        raw: "alert tcp any any -> any any (msg:\"http, pos event\"; app-layer-event:http.file_name_too_long; sid:501;)"
         id: 501
         type: "app_tx"
   - filter:
       filename: rules.json
       count: 1
       match:
+        raw: "alert http any any -> any any (msg:\"http, no content\"; sid:601;)"
         id: 601
         type: "app_layer"
   - filter:
       filename: rules.json
       count: 1
       match:
+        raw: "alert http any any -> any any (msg:\"http, simple content\"; content:\"abc\"; sid:602;)"
         id: 602
         type: "stream"
   - filter:
       filename: rules.json
       count: 1
       match:
+        raw: "alert http any any -> any any (msg:\"http, anchored content\"; content:\"abc\"; depth:30; sid:603;)"
         id: 603
         type: "pkt_stream"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        raw: "alert tls any any -> any any (msg:\"tls, pkt or app-layer? alert\"; sid:604;)"
+        id: 604
+        type: "app_layer"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 605
+        type: "app_layer"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 606
+        type: "pkt"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 607
+        type: "app_layer"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 608
+        type: "pkt"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 609
+        type: "pkt"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        raw: "alert tls any any -> any any (msg:\"tls, pkt or app-layer?\"; flowbits:isset,tls_error; sid:610;)"
+        id: 610
+        type: "pkt"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        raw: "alert tls any any -> any any (msg:\"tls, pkt or app-layer?\"; flowbits:isnotset,tls_error; sid:611;)"
+        id: 611
+        type: "pkt"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        raw: "alert tls any any -> any any (msg:\"tls, pkt or app-layer?\"; flowbits:set,tls_error; sid:612;)"
+        id: 612
+        type: "app_layer"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 613
+        type: "app_layer"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 614
+        type: "pkt"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 615
+        type: "pkt"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 616
+        type: "app_layer"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 617
+        type: "app_layer"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 618
+        type: "app_layer"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 619
+        type: "pkt"
   - filter:
       filename: rules.json
       count: 1
@@ -146,14 +330,23 @@ checks:
       filename: rules.json
       count: 1
       match:
+        raw: "alert tcp any any -> any any (msg:\"byte_extract with dce\"; byte_extract:4,0,var,dce; byte_test:4,>,var,4,little; sid:901;)"
         id: 901
         type: "stream"
   - filter:
       filename: rules.json
       count: 1
       match:
+        raw: "alert tcp any any -> any any (msg:\"byte_extract with dce\"; dcerpc.stub_data; content:\"abc\"; byte_extract:4,0,var,relative; byte_test:4,>,var,4,little; sid:902;)"
         id: 902
         type: "app_tx"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        raw: "alert tcp any any -> any any (msg:\"byte_extract with dce and flow check\"; byte_extract:4,0,var,dce; byte_test:4,>,var,4,little; flow:established; sid:903;)"
+        id: 903
+        type: "stream"
   - filter:
       filename: rules.json
       count: 1
@@ -170,5 +363,187 @@ checks:
       filename: rules.json
       count: 1
       match:
-        id: 304
-        type: "like_ip_only"
+        id: 1201
+        type: "pkt"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1202
+        type: "pkt"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1301
+        type: "app_tx"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1302
+        type: "app_tx"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1303
+        type: "app_tx"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1401
+        type: "app_tx"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1402
+        type: "app_tx"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        raw: "drop http any any -> any any (msg:\"Block 206 response for IPPair\"; content:\"206\"; http_stat_code; xbits:isset, blocked_http, track ip_pair; priority:1; sid:1501;)"
+        id: 1501
+        type: "app_tx"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        raw:  "alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:\"tls xbits:set\";xbits:set,ipcheck,track ip_src; sid:1502;)"
+        id: 1502
+        type: "app_layer"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1503
+        type: "app_tx"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1504
+        type: "stream"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1505
+        type: "ip_only"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1506
+        type: "app_tx"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1507
+        type: "app_tx"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1508
+        type: "app_tx"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1509
+        type: "ip_only"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1510
+        type: "ip_only"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1511
+        type: "stream"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1512
+        type: "stream"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1513
+        type: "stream"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1514
+        type: "ip_only"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1515
+        type: "app_tx"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1516
+        type: "app_tx"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1517
+        type: "pkt"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1518
+        type: "de_only"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1519
+        type: "pkt"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1520
+        type: "pkt_stream"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1521
+        type: "pkt_stream"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1601
+        type: "pkt"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1602
+        type: "pkt"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1603
+        type: "pkt"
