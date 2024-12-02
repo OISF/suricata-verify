@@ -1,0 +1,1 @@
+alert http any any -> any any (flow:established,to_server; ip.src; datajson:isset,bip,type ipv6,load ip.lst,key ip; sid:1;)
