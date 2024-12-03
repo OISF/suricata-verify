@@ -1,0 +1,27 @@
+requires:
+  min-version: 8
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: 2a6d1d2d85129cf9e84290a94e7b4d7cfe09d80c47a899dbc04cc61cc737c5a4
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+  - filter:
+      count: 1
+      match:
+        event_type: http
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.app_layer.tx.http: 1
+        # Should be 1, but gives 23. See https://redmine.openinfosecfoundation.org/issues/7238
+        #stats.app_layer.flow.http: 1
