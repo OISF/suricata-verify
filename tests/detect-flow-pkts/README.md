@@ -1,7 +1,7 @@
 Test
 ====
 
-Test `flow.pkts_toclient` and alike (bytes, server) keywords
+Test `flow.pkts:toclient`.. and alike (bytes, server) keywords
 
 PCAP
 ====
