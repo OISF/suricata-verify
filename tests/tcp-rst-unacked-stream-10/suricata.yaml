@@ -1,0 +1,560 @@
+%YAML 1.1
+---
+
+stats:
+  enabled: yes
+  # The interval field (in seconds) controls the interval at
+  # which stats are updated in the log.
+  interval: 8
+  # Add decode events to stats.
+  #decoder-events: true
+  # Decoder event prefix in stats. Has been 'decoder' before, but that leads
+  # to missing events in the eve.stats records. See issue #2225.
+  #decoder-events-prefix: "decoder.event"
+  # Add stream events as stats.
+  #stream-events: false
+  exception-policy:
+    #per-app-proto-errors: false  # default: false. True will log errors for
+                                  # each app-proto. Warning: VERY verbose
+
+# Configure the type of alert (and other) logging you would like.
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular #regular|syslog|unix_dgram|unix_stream|redis
+      filename: eve.json
+      types:
+        - alert:
+            # payload: yes             # enable dumping payload in Base64
+            # payload-buffer-size: 4 KiB  # max size of payload buffer to output in eve-log
+            # payload-printable: yes   # enable dumping payload in printable (lossy) format
+            # payload-length: yes      # enable dumping payload length, including the gaps
+            # packet: yes              # enable dumping of packet (without stream segments)
+            # metadata: no             # enable inclusion of app layer metadata with alert. Default yes
+            # If you want metadata, use:
+            # metadata:
+              # Include the decoded application layer (ie. http, dns)
+              #app-layer: true
+              # Log the current state of the flow record.
+              #flow: true
+              #rule:
+                # Log the metadata field from the rule in a structured
+                # format.
+                #metadata: true
+                # Log the raw rule text.
+                #raw: false
+                #reference: false      # include reference information from the rule
+            # http-body: yes           # Requires metadata; enable dumping of HTTP body in Base64
+            # http-body-printable: yes # Requires metadata; enable dumping of HTTP body in printable format
+            # websocket-payload: yes   # Requires metadata; enable dumping of WebSocket Payload in Base64
+            # websocket-payload-printable: yes # Requires metadata; enable dumping of WebSocket Payload in printable format
+
+            # Enable the logging of tagged packets for rules using the
+            # "tag" keyword.
+            tagged-packets: yes
+            # Enable logging the final action taken on a packet by the engine
+            # (e.g: the alert may have action 'allowed' but the verdict be
+            # 'drop' due to another alert. That's the engine's verdict)
+            # verdict: yes
+        # app layer frames
+        - frame:
+            # disabled by default as this is very verbose.
+            enabled: no
+            # payload-buffer-size: 4 KiB # max size of frame payload buffer to output in eve-log
+        - anomaly:
+            # Anomaly log records describe unexpected conditions such
+            # as truncated packets, packets with invalid IP/UDP/TCP
+            # length values, and other events that render the packet
+            # invalid for further processing or describe unexpected
+            # behavior on an established stream. Networks which
+            # experience high occurrences of anomalies may experience
+            # packet processing degradation.
+            #
+            # Anomalies are reported for the following:
+            # 1. Decode: Values and conditions that are detected while
+            # decoding individual packets. This includes invalid or
+            # unexpected values for low-level protocol lengths as well
+            # as stream related events (TCP 3-way handshake issues,
+            # unexpected sequence number, etc).
+            # 2. Stream: This includes stream related events (TCP
+            # 3-way handshake issues, unexpected sequence number,
+            # etc).
+            # 3. Application layer: These denote application layer
+            # specific conditions that are unexpected, invalid or are
+            # unexpected given the application monitoring state.
+            #
+            # By default, anomaly logging is enabled. When anomaly
+            # logging is enabled, applayer anomaly reporting is
+            # also enabled.
+            enabled: yes
+            #
+            # Choose one or more types of anomaly logging and whether to enable
+            # logging of the packet header for packet anomalies.
+            types:
+              # decode: no
+              # stream: no
+              # applayer: yes
+            #packethdr: no
+        - http:
+            extended: yes     # enable this for extended logging information
+            # custom allows additional HTTP fields to be included in eve-log.
+            # the example below adds three additional fields when uncommented
+            #custom: [Accept-Encoding, Accept-Language, Authorization]
+            # set this value to one and only one from {both, request, response}
+            # to dump all HTTP headers for every HTTP request and/or response
+            # dump-all-headers: none
+        - dns:
+            # Suricata 8.0 uses a new DNS logging format, to keep with
+            # the old format while you upgrade the version can be set
+            # to 2. See https://docs.suricata.io/en/latest/upgrade/8.0-dns-logging-changes.html
+            #version: 3
+
+            # Enable/disable this logger. Default: enabled.
+            #enabled: yes
+
+            # Control logging of requests and responses:
+            # - requests: enable logging of DNS queries
+            # - responses: enable logging of DNS answers
+            # By default both requests and responses are logged.
+            #requests: no
+            #responses: no
+
+            # Format of answer logging:
+            # - detailed: array item per answer
+            # - grouped: answers aggregated by type
+            # Default: all
+            #formats: [detailed, grouped]
+
+            # DNS record types to log, based on the query type.
+            # Default: all.
+            #types: [a, aaaa, cname, mx, ns, ptr, txt]
+        - tls:
+            extended: yes     # enable this for extended logging information
+            # output TLS transaction where the session is resumed using a
+            # session id
+            #session-resumption: no
+            # custom controls which TLS fields that are included in eve-log
+            # WARNING: enabling custom disables extended logging.
+            #custom: [subject, issuer, session_resumed, serial, fingerprint, sni, version, not_before, not_after, certificate, chain, ja3, ja3s, ja4, subjectaltname, client, client_certificate, client_chain, client_alpns, server_alpns]
+        - files:
+            force-magic: no   # force logging magic on all logged files
+            # force logging of checksums, available hash functions are md5,
+            # sha1 and sha256
+            #force-hash: [md5]
+        #- drop:
+        #    alerts: yes      # log alerts that caused drops
+        #    flows: all       # start or all: 'start' logs only a single drop
+        #                     # per flow direction. All logs each dropped pkt.
+            # Enable logging the final action taken on a packet by the engine
+            # (will show more information in case of a drop caused by 'reject')
+            # verdict: yes
+        - smtp:
+            #extended: yes # enable this for extended logging information
+            # this includes: bcc, message-id, subject, x_mailer, user-agent
+            # custom fields logging from the list:
+            #  reply-to, bcc, message-id, subject, x-mailer, user-agent, received,
+            #  x-originating-ip, in-reply-to, references, importance, priority,
+            #  sensitivity, organization, content-md5, date
+            #custom: [received, x-mailer, x-originating-ip, relays, reply-to, bcc]
+            # output md5 of fields: body, subject
+            # for the body you need to set app-layer.protocols.smtp.mime.body-md5
+            # to yes
+            #md5: [body, subject]
+
+        #- dnp3
+        - websocket
+        #- enip
+        - ftp
+        - rdp
+        - nfs
+        - smb
+        - tftp
+        - ike
+        - dcerpc
+        - krb5
+        - bittorrent-dht
+        - snmp
+        - rfb
+        - sip
+        - quic
+        - ldap
+        - arp:
+            enabled: no        # Many events can be logged. Disabled by default
+        - dhcp:
+            enabled: yes
+            # When extended mode is on, all DHCP messages are logged
+            # with full detail. When extended mode is off (the
+            # default), just enough information to map a MAC address
+            # to an IP address is logged.
+            extended: no
+        - ssh
+        - mqtt:
+            # passwords: yes           # enable output of passwords
+            # string-log-limit: 1KiB   # limit size of logged strings in bytes.
+                                       # Can be specified in KiB, MiB, GiB. Just a number
+                                       # is parsed as bytes. Default is 1 KiB.
+                                       # Use a value of 0 to disable limiting.
+                                       # Note that the size is also bounded by
+                                       # the maximum parsed message size (see
+                                       # app-layer configuration)
+        - http2
+        # dns over http2
+        - doh2
+        - pgsql:
+            enabled: no
+            # passwords: yes           # enable output of passwords. Disabled by default
+        - stats:
+            totals: yes       # stats for all threads merged together
+            threads: no       # per thread stats
+            deltas: no        # include delta values
+            # Don't log stats counters that are zero. Default: true
+            #null-values: false    # False will NOT log stats counters: 0
+        # bi-directional flows
+        - flow
+        # uni-directional flows
+        #- netflow
+
+        # Metadata event type. Triggered whenever a pktvar is saved
+        # and will include the pktvars, flowvars, flowbits and
+        # flowints.
+        #- metadata
+
+        # EXPERIMENTAL per packet output giving TCP state tracking details
+        # including internal state, flags, etc.
+        # This output is experimental, meant for debugging and subject to
+        # change in both config and output without any notice.
+        #- stream:
+        #   all: false                      # log all TCP packets
+        #   event-set: false                # log packets that have a decoder/stream event
+        #   state-update: false             # log packets triggering a TCP state update
+        #   spurious-retransmission: false  # log spurious retransmission packets
+
+  - file-store:
+      version: 2
+      enabled: yes
+      write-fileinfo: yes
+      force-filestore: yes
+      stream-depth: 0
+
+app-layer:
+  # error-policy: ignore
+  protocols:
+    telnet:
+      enabled: yes
+    rfb:
+      enabled: yes
+      detection-ports:
+        dp: 5900, 5901, 5902, 5903, 5904, 5905, 5906, 5907, 5908, 5909
+    mqtt:
+      enabled: yes
+      # max-msg-length: 1 MiB
+      # subscribe-topic-match-limit: 100
+      # unsubscribe-topic-match-limit: 100
+      # Maximum number of live MQTT transactions per flow
+      # max-tx: 4096
+    krb5:
+      enabled: yes
+    bittorrent-dht:
+      enabled: yes
+    snmp:
+      enabled: yes
+    ike:
+      enabled: yes
+    tls:
+      enabled: yes
+      detection-ports:
+        dp: 443
+
+      # Generate JA3/JA4 fingerprints from client hello. If not specified it
+      # will be disabled by default, but enabled if rules require it.
+      #ja3-fingerprints: auto
+      #ja4-fingerprints: auto
+
+      # What to do when the encrypted communications start:
+      # - default: keep tracking TLS session, check for protocol anomalies,
+      #            inspect tls_* keywords. Disables inspection of unmodified
+      #            'content' signatures.
+      # - bypass:  stop processing this flow as much as possible. No further
+      #            TLS parsing and inspection. Offload flow bypass to kernel
+      #            or hardware if possible.
+      # - full:    keep tracking and inspection as normal. Unmodified content
+      #            keyword signatures are inspected as well.
+      #
+      # For best performance, select 'bypass'.
+      #
+      #encryption-handling: default
+
+    pgsql:
+      enabled: no
+      # Stream reassembly size for PostgreSQL. By default, track it completely.
+      stream-depth: 0
+      # Maximum number of live PostgreSQL transactions per flow
+      # max-tx: 1024
+    dcerpc:
+      enabled: yes
+      # Maximum number of live DCERPC transactions per flow
+      # max-tx: 1024
+    ftp:
+      enabled: yes
+      # memcap: 64 MiB
+    websocket:
+      #enabled: yes
+      # Maximum used payload size, the rest is skipped
+      # max-payload-size: 64 KiB
+    rdp:
+      #enabled: yes
+    ssh:
+      enabled: yes
+      #hassh: yes
+    doh2:
+      enabled: yes
+    http2:
+      enabled: yes
+      # Maximum number of live HTTP2 streams in a flow
+      #max-streams: 4096
+      # Maximum headers table size
+      #max-table-size: 65536
+      # Maximum reassembly size for header + continuation frames
+      #max-reassembly-size: 102400
+    smtp:
+      enabled: yes
+      raw-extraction: no
+      # Maximum number of live SMTP transactions per flow
+      # max-tx: 256
+      # Configure SMTP-MIME Decoder
+      mime:
+        # Decode MIME messages from SMTP transactions
+        # (may be resource intensive)
+        # This field supersedes all others because it turns the entire
+        # process on or off
+        decode-mime: yes
+
+        # Decode MIME entity bodies (ie. Base64, quoted-printable, etc.)
+        decode-base64: yes
+        decode-quoted-printable: yes
+
+        # Maximum bytes per header data value stored in the data structure
+        # (default is 2000)
+        header-value-depth: 2000
+
+        # Extract URLs and save in state data structure
+        extract-urls: yes
+        # Scheme of URLs to extract
+        # (default is [http])
+        #extract-urls-schemes: [http, https, ftp, mailto]
+        # Log the scheme of URLs that are extracted
+        # (default is no)
+        #log-url-scheme: yes
+        # Set to yes to compute the md5 of the mail body. You will then
+        # be able to journalize it.
+        body-md5: no
+      # Configure inspected-tracker for file_data keyword
+      inspected-tracker:
+        content-limit: 100000
+        content-inspect-min-size: 32768
+        content-inspect-window: 4096
+    imap:
+      enabled: detection-only
+    pop3:
+      enabled: detection-only
+    smb:
+      enabled: yes
+      detection-ports:
+        dp: 139, 445
+      # Maximum number of live SMB transactions per flow
+      # max-tx: 1024
+
+      # Stream reassembly size for SMB streams. By default track it completely.
+      #stream-depth: 0
+
+    nfs:
+      enabled: yes
+      # max-tx: 1024
+    tftp:
+      enabled: yes
+    dns:
+      tcp:
+        enabled: yes
+        detection-ports:
+          dp: 53
+      udp:
+        enabled: yes
+        detection-ports:
+          dp: 53
+    http:
+      enabled: yes
+
+      # Byte Range Containers default settings
+      # byterange:
+      #   memcap: 100 MiB
+      #   timeout: 60
+
+      # memcap:                   Maximum memory capacity for HTTP
+      #                           Default is unlimited, values can be 64 MiB, e.g.
+
+      # default-config:           Used when no server-config matches
+      #   personality:            List of personalities used by default
+      #   request-body-limit:     Limit reassembly of request body for inspection
+      #                           by http_client_body & pcre /P option.
+      #   response-body-limit:    Limit reassembly of response body for inspection
+      #                           by file_data, http_server_body & pcre /Q option.
+      #
+      #   For advanced options, see the user guide
+
+
+      # server-config:            List of server configurations to use if address matches
+      #   address:                List of IP addresses or networks for this block
+      #   personality:            List of personalities used by this block
+      #
+      #                           Then, all the fields from default-config can be overloaded
+      #
+      # Currently Available Personalities:
+      #   Minimal, Generic, IDS (default), IIS_4_0, IIS_5_0, IIS_5_1, IIS_6_0,
+      #   IIS_7_0, IIS_7_5, Apache_2
+      libhtp:
+         default-config:
+           personality: IDS
+
+           # Can be specified in KiB, MiB, GiB.  Just a number indicates
+           # it's in bytes.
+           request-body-limit: 0
+           response-body-limit: 0
+
+           # inspection limits
+           request-body-minimal-inspect-size: 32 KiB
+           request-body-inspect-window: 4 KiB
+           response-body-minimal-inspect-size: 40 KiB
+           response-body-inspect-window: 16 KiB
+
+           # response body decompression (0 disables)
+           response-body-decompress-layer-limit: 2
+
+           # auto will use http-body-inline mode in IPS mode, yes or no set it statically
+           http-body-inline: auto
+
+           # Decompress SWF files. Disabled by default.
+           # Two types: 'deflate', 'lzma', 'both' will decompress deflate and lzma
+           # compress-depth:
+           # Specifies the maximum amount of data to decompress,
+           # set 0 for unlimited.
+           # decompress-depth:
+           # Specifies the maximum amount of decompressed data to obtain,
+           # set 0 for unlimited.
+           swf-decompression:
+             enabled: no
+             type: both
+             compress-depth: 100 KiB
+             decompress-depth: 100 KiB
+
+           # Use a random value for inspection sizes around the specified value.
+           # This lowers the risk of some evasion techniques but could lead
+           # to detection change between runs. It is set to 'yes' by default.
+           #randomize-inspection-sizes: yes
+           # If "randomize-inspection-sizes" is active, the value of various
+           # inspection size will be chosen from the [1 - range%, 1 + range%]
+           # range
+           # Default value of "randomize-inspection-range" is 10.
+           #randomize-inspection-range: 10
+
+           # decoding
+           double-decode-path: no
+           double-decode-query: no
+
+           # Can enable LZMA decompression
+           #lzma-enabled: false
+           # Memory limit usage for LZMA decompression dictionary
+           # Data is decompressed until dictionary reaches this size
+           #lzma-memlimit: 1 MiB
+           # Maximum decompressed size with a compression ratio
+           # above 2048 (only LZMA can reach this ratio, deflate cannot)
+           #compression-bomb-limit: 1 MiB
+           # Maximum time spent decompressing a single transaction in usec
+           #decompression-time-limit: 100000
+           # Maximum number of live transactions per flow
+           #max-tx: 512
+           # Maximum used number of HTTP1 headers in one request or response
+           #headers-limit: 1024
+
+         server-config:
+
+           #- apache:
+           #    address: [192.168.1.0/24, 127.0.0.0/8, "::1"]
+           #    personality: Apache_2
+           #    # Can be specified in KiB, MiB, GiB.  Just a number indicates
+           #    # it's in bytes.
+           #    request-body-limit: 4096
+           #    response-body-limit: 4096
+           #    double-decode-path: no
+           #    double-decode-query: no
+
+           #- iis7:
+           #    address:
+           #      - 192.168.0.0/24
+           #      - 192.168.10.0/24
+           #    personality: IIS_7_0
+           #    # Can be specified in KiB, MiB, GiB.  Just a number indicates
+           #    # it's in bytes.
+           #    request-body-limit: 4096
+           #    response-body-limit: 4096
+           #    double-decode-path: no
+           #    double-decode-query: no
+
+    # Note: Modbus probe parser is minimalist due to the limited usage in the field.
+    # Only Modbus message length (greater than Modbus header length)
+    # and protocol ID (equal to 0) are checked in probing parser
+    # It is important to enable detection port and define Modbus port
+    # to avoid false positives
+    modbus:
+      # How many unanswered Modbus requests are considered a flood.
+      # If the limit is reached, the app-layer-event:modbus.flooded; will match.
+      #request-flood: 500
+
+      enabled: no
+      detection-ports:
+        dp: 502
+      # According to MODBUS Messaging on TCP/IP Implementation Guide V1.0b, it
+      # is recommended to keep the TCP connection opened with a remote device
+      # and not to open and close it for each MODBUS/TCP transaction. In that
+      # case, it is important to set the depth of the stream reassembling as
+      # unlimited (stream.reassembly.depth: 0)
+
+      # Stream reassembly size for modbus. By default track it completely.
+      stream-depth: 0
+
+    # DNP3
+    dnp3:
+      enabled: no
+      detection-ports:
+        dp: 20000
+
+    # SCADA EtherNet/IP and CIP protocol support
+    enip:
+      enabled: no
+      detection-ports:
+        dp: 44818
+        sp: 44818
+
+    ntp:
+      enabled: yes
+
+    quic:
+      enabled: yes
+
+    dhcp:
+      enabled: yes
+
+    sip:
+      #enabled: yes
+
+    ldap:
+      tcp:
+        enabled: yes
+        detection-ports:
+          dp: 389, 3268
+      udp:
+        enabled: yes
+        detection-ports:
+          dp: 389, 3268
+      # Maximum number of live LDAP transactions per flow
+      # max-tx: 1024
+
