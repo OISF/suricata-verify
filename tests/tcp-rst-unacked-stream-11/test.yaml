@@ -1,0 +1,31 @@
+requires:
+  min-version: 8
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: b6e5d8314e3c65a277af9db044b0cd6df1b641c0378703a5ab5de6d54cb9033f
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: 33d346033ff4559e8f74a90112232610f4ea63db60a3f7434745a1aae5ea9169
+  - filter:
+      count: 2
+      match:
+        event_type: fileinfo
+  - filter:
+      count: 2
+      match:
+        event_type: http
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.app_layer.tx.http: 2
+        stats.app_layer.flow.http: 1

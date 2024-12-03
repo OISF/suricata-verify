@@ -1,0 +1,77 @@
+%YAML 1.1
+---
+
+stats:
+  enabled: yes
+  interval: 8
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filename: eve.json
+      types:
+        - alert
+        - anomaly:
+            enabled: yes
+        - http:
+            extended: yes     # enable this for extended logging information
+        - files:
+            force-magic: no   # force logging magic on all logged files
+            # force logging of checksums, available hash functions are md5,
+            # sha1 and sha256
+            #force-hash: [md5]
+        #- drop:
+        #    alerts: yes      # log alerts that caused drops
+        #    flows: all       # start or all: 'start' logs only a single drop
+        #                     # per flow direction. All logs each dropped pkt.
+            # Enable logging the final action taken on a packet by the engine
+            # (will show more information in case of a drop caused by 'reject')
+            # verdict: yes
+        - stats:
+            totals: yes       # stats for all threads merged together
+            threads: no       # per thread stats
+            deltas: no        # include delta values
+            # Don't log stats counters that are zero. Default: true
+            #null-values: false    # False will NOT log stats counters: 0
+        # bi-directional flows
+        - flow
+
+  - file-store:
+      version: 2
+      enabled: yes
+      write-fileinfo: yes
+      force-filestore: yes
+      stream-depth: 0
+
+app-layer:
+  # error-policy: ignore
+  protocols:
+    http:
+      enabled: yes
+      libhtp:
+         default-config:
+           personality: IDS
+
+           # Can be specified in KiB, MiB, GiB.  Just a number indicates
+           # it's in bytes.
+           request-body-limit: 0
+           response-body-limit: 0
+
+           # inspection limits
+           request-body-minimal-inspect-size: 32 KiB
+           request-body-inspect-window: 4 KiB
+           response-body-minimal-inspect-size: 40 KiB
+           response-body-inspect-window: 16 KiB
+
+           # response body decompression (0 disables)
+           response-body-decompress-layer-limit: 2
+
+           # auto will use http-body-inline mode in IPS mode, yes or no set it statically
+           http-body-inline: auto
+
+           swf-decompression:
+             enabled: no
+             type: both
+             compress-depth: 100 KiB
+             decompress-depth: 100 KiB
+
