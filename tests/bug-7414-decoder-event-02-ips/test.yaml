@@ -1,0 +1,61 @@
+pcap: ../bug-7414-decoder-event-01/ip_secopt.pcap
+
+requires:
+  min-version: 8
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2200005
+        pcap_cnt: 3
+        pkt_src: "wire/pcap"
+        ether.src_mac: "f6:3a:04:28:26:77"
+        ether.dest_mac: "fe:2d:cf:ad:28:54"
+        alert.action: "blocked"
+        packet: "/i3PrShU9joEKCZ3CABIAABoAAEAAEARWEoeHh4eFBQUFIIC8TUAAN6tvu+qABPEE8QASB76g3Jy/3MMn6/gl+2PaHNYfvkOoBoRYsUb5ZV3mCocwk9Xbm1VI6ZMlgQ+xZbugYD/RB0xtXrOiZQ43SvBfdo36g=="
+        verdict.action: "drop"
+        pcap_filename.__endswith: "ip_secopt.pcap"
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.decoder.invalid: 1
+        stats.ips.accepted: 2
+        stats.ips.blocked: 1
+        stats.ips.drop_reason.rules: 1
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 3
+        event_type: "anomaly"
+        pkt_src: "wire/pcap"
+        ether.src_mac: "f6:3a:04:28:26:77"
+        ether.dest_mac: "fe:2d:cf:ad:28:54"
+        anomaly.type: "decode"
+        anomaly.event: "decoder.ipv4.opt_pad_required"
+        pcap_filename.__endswith: "ip_secopt.pcap"
+  - filter:
+      count: 2
+      match:
+        pcap_cnt: 3
+        event_type: "anomaly"
+        pkt_src: "wire/pcap"
+        ether.src_mac: "f6:3a:04:28:26:77"
+        ether.dest_mac: "fe:2d:cf:ad:28:54"
+        anomaly.type: "decode"
+        anomaly.event: "decoder.ipv4.opt_invalid_len"
+        pcap_filename.__endswith: "ip_secopt.pcap"
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        alert.signature_id: 2200005
+        pcap_cnt: 3
+        pkt_src: "wire/pcap"
+        ether.src_mac: "f6:3a:04:28:26:77"
+        ether.dest_mac: "fe:2d:cf:ad:28:54"
+        alert.action: "blocked"
+        pcap_filename.__endswith: "ip_secopt.pcap"
+        drop.reason: "rules"

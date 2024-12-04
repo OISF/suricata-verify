@@ -1,0 +1,41 @@
+%YAML 1.1
+---
+
+# Global stats configuration
+stats:
+  enabled: yes
+  # The interval field (in seconds) controls the interval at
+  # which stats are updated in the log.
+  interval: 8
+  # Add decode events to stats.
+  #decoder-events: true
+  # Decoder event prefix in stats. Has been 'decoder' before, but that leads
+  # to missing events in the eve.stats records. See issue #2225.
+  #decoder-events-prefix: "decoder.event"
+  # Add stream events as stats.
+  #stream-events: false
+  exception-policy:
+    #per-app-proto-errors: false  # default: false. True will log errors for
+                                  # each app-proto. Warning: VERY verbose
+
+# Configure the type of alert (and other) logging you would like.
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular #regular|syslog|unix_dgram|unix_stream|redis
+      filename: eve.json
+      ethernet: true
+      pcap-file: true
+
+      types:
+        - alert:
+            packet: yes              # enable dumping of packet (without stream segments)
+            verdict: yes
+        - anomaly:
+            enabled: yes
+            types:
+              decode: true
+        - stats:
+            totals: yes       # stats for all threads merged together
+            threads: no       # per thread stats
+            deltas: no        # include delta values
