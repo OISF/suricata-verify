@@ -1,0 +1,2 @@
+alert tls any any -> any any (msg:"test flowint isnotset"; flowint:flowtls1,isnotset; flowint:flowtls1,+,1; noalert; sid:1;)
+alert tls any any -> any any (msg:"test flowint notset"; flowint:flowtls2,notset; flowint:flowtls2,+,1; sid:2;)
