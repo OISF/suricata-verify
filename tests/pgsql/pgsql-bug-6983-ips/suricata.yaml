@@ -16,3 +16,6 @@ app-layer:
   protocols:
     pgsql:
       enabled: yes
+
+detect:
+  guess-applayer-tx: true
