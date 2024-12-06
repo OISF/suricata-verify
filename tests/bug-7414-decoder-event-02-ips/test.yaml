@@ -1,7 +1,7 @@
 pcap: ../bug-7414-decoder-event-01/ip_secopt.pcap
 
 requires:
-  min-version: 8
+  min-version: 7
 
 checks:
   - filter:
