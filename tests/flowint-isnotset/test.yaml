@@ -1,5 +1,5 @@
 requires:
-  min-version: 8
+  min-version: 7.0.8
 
 pcap: ../tls/tls-subjectaltname/input.pcap
 
