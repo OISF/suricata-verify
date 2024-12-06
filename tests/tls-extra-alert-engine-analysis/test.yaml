@@ -1,0 +1,229 @@
+requires:
+  min-version: 8
+
+args:
+  - --simulate-ips
+  - --engine-analysis
+
+pcap: false
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      flags:
+      - src_any
+      - dst_any
+      - sp_any
+      - noalert
+      - need_packet
+      - toserver
+      id: 9901001
+      lists:
+        packet:
+          matches:
+          - name: tcp.flags
+        postmatch:
+          matches:
+          - flowbits:
+              cmd: set
+              names:
+              - tls_tracker
+            name: flowbits
+      pkt_engines:
+      - is_mpm: false
+        name: packet
+      requirements:
+      - tcp_flags_init_deinit
+      - real_pkt
+      type: pkt
+
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      flags:
+      - src_any
+      - dst_any
+      - sp_any
+      - need_packet
+      - need_stream
+      - need_flowvar
+      - toserver
+      - toclient
+      - prefilter
+      id: 9901031
+      lists:
+        packet:
+          matches:
+          - flowbits:
+              cmd: isset
+              names:
+              - tls_tracker
+            name: flowbits
+        payload:
+          matches:
+          - content:
+              depth: 6
+              ends_with: false
+              fast_pattern: false
+              is_mpm: true
+              length: 6
+              negated: false
+              no_double_inspect: false
+              nocase: false
+              pattern: '|15 03 01 00 02 02|'
+              relative_next: false
+              starts_with: true
+            name: content
+        postmatch:
+          matches:
+          - flowbits:
+              cmd: set
+              names:
+              - tls_error
+            name: flowbits
+      mpm:
+        buffer: payload
+        depth: 6
+        ends_with: false
+        fast_pattern: false
+        is_mpm: true
+        length: 6
+        negated: false
+        no_double_inspect: false
+        nocase: false
+        pattern: '|15 03 01 00 02 02|'
+        relative_next: false
+        starts_with: true
+      pkt_engines:
+      - is_mpm: true
+        name: payload
+      - is_mpm: false
+        name: packet
+      requirements:
+      - payload
+      - flow
+      type: pkt_stream
+
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      flags:
+      - src_any
+      - dst_any
+      - dp_any
+      - need_packet
+      - need_stream
+      - need_flowvar
+      - toserver
+      - toclient
+      - prefilter
+      id: 9901032
+      lists:
+        packet:
+          matches:
+          - flowbits:
+              cmd: isset
+              names:
+              - tls_tracker
+            name: flowbits
+        payload:
+          matches:
+          - content:
+              depth: 6
+              ends_with: false
+              fast_pattern: false
+              is_mpm: true
+              length: 6
+              negated: false
+              no_double_inspect: false
+              nocase: false
+              pattern: '|15 03 01 00 02 02|'
+              relative_next: false
+              starts_with: true
+            name: content
+        postmatch:
+          matches:
+          - flowbits:
+              cmd: set
+              names:
+              - tls_error
+            name: flowbits
+      mpm:
+        buffer: payload
+        depth: 6
+        ends_with: false
+        fast_pattern: false
+        is_mpm: true
+        length: 6
+        negated: false
+        no_double_inspect: false
+        nocase: false
+        pattern: '|15 03 01 00 02 02|'
+        relative_next: false
+        starts_with: true
+      pkt_engines:
+      - is_mpm: true
+        name: payload
+      - is_mpm: false
+        name: packet
+      requirements:
+      - payload
+      - flow
+      type: pkt_stream
+
+# Following is the signature of interest
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      flags:
+      - src_any
+      - dst_any
+      - sp_any
+      - need_flowvar
+      - toserver
+      id: 9901033
+      lists:
+        packet:
+          matches:
+          - flowbits:
+              cmd: isset
+              names:
+              - tls_error
+            name: flowbits
+      pkt_engines:
+      - is_mpm: false
+        name: packet
+      requirements:
+      - flow
+      type: pkt
+
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      flags:
+      - src_any
+      - dst_any
+      - dp_any
+      - need_flowvar
+      - toclient
+      id: 9901034
+      lists:
+        packet:
+          matches:
+          - flowbits:
+              cmd: isset
+              names:
+              - tls_error
+            name: flowbits
+      pkt_engines:
+      - is_mpm: false
+        name: packet
+      requirements:
+      - flow
+      type: pkt

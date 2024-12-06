@@ -1,0 +1,22 @@
+requires:
+  min-version: 7
+  #features:
+  #- TLC
+
+args:
+- -k none
+- --runmode=single
+- --set stream.midstream=true
+
+# 2 or 3 flows depending on tcp reuse behavior, see ticket 5843
+checks:
+  - filter:
+      lt-version: 7
+      count: 3
+      match:
+        event_type: flow
+  - filter:
+      min-version: 8
+      count: 3
+      match:
+        event_type: flow
