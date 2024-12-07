@@ -1,0 +1,27 @@
+args:
+  # Suricata 8 doesn't respect this setting.
+  - --set ignore-unknown-requirements=true
+
+pcap: ../eve-metadata/testmyids.pcap
+
+checks:
+
+  - filter:
+      requires:
+        lt-version: 8
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.engines[0].rules_skipped: 0
+        stats.detect.engines[0].rules_loaded: 1
+        stats.detect.engines[0].rules_failed: 0
+
+  - filter:
+      requires:
+        min-version: 8
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.engines[0].rules_skipped: 1
+        stats.detect.engines[0].rules_loaded: 0
+        stats.detect.engines[0].rules_failed: 0
