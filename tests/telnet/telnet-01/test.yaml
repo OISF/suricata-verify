@@ -3,6 +3,7 @@ requires:
 
 args:
  - -k none
+ - --set stream.reassembly.urgent.policy=oob
 
 checks:
   - filter:
@@ -23,7 +24,15 @@ checks:
         app_proto: telnet
         frame.type: data
   - filter:
+      lt-version: 7
       count: 68
+      match:
+        event_type: frame
+        app_proto: telnet
+        frame.type: ctl
+  - filter:
+      min-version: 8
+      count: 67
       match:
         event_type: frame
         app_proto: telnet
