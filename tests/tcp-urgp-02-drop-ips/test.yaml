@@ -1,0 +1,34 @@
+requires:
+  min-version: 8
+
+args:
+- --set stream.reassembly.urgent.policy=drop
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1000001
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000002
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1000003
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.ips.accepted: 6
+        stats.ips.blocked: 10
+        stats.ips.drop_reason.flow_drop: 8
+        stats.ips.drop_reason.rules: 1
+        stats.ips.drop_reason.stream_urgent: 1
+        stats.tcp.urg: 1
+        stats.tcp.reassembly_gap: 1
+        stats.detect.alert: 1

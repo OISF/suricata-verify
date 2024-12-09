@@ -1,0 +1,28 @@
+requires:
+  min-version: 8
+
+args:
+- --set stream.reassembly.urgent.policy=oob
+
+checks:
+  - filter:
+      count: 0 # TODO find out why
+      match:
+        event_type: alert
+        alert.signature_id: 1000001
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000002
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000003
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.tcp.urg: 64000
+        stats.tcp.reassembly_gap: 0

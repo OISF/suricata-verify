@@ -1,0 +1,38 @@
+requires:
+  min-version: 8
+
+args:
+- --set stream.reassembly.urgent.policy=oob
+- --set stream.reassembly.urgent.oob-limit-policy=gap
+- --simulate-ips
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1000001
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000002
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1000003
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.url: "/malicious"
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.ips.accepted: 132014
+        stats.ips.blocked: 0
+        stats.ips.drop_reason.stream_reassembly: 0
+        stats.tcp.urg: 66000
+        stats.tcp.reassembly_gap: 1
