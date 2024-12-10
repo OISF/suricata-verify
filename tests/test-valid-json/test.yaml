@@ -1,0 +1,19 @@
+requires:
+  min-version: 8
+
+args:
+  - -T
+
+pcap: false
+
+exit-code: 1
+
+checks:
+  # check that we have the following entries in eve.json
+  # match rule load failure reason as it is super long
+  - filter:
+      count: 2
+      match:
+        event_type: engine
+        engine.module: detect
+
