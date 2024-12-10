@@ -6,12 +6,14 @@ args:
 
 checks:
 - filter:
-    count: 26
+    count: 24
     match:
       event_type: alert
       alert.signature_id: 3
+      pkt_src: "wire/pcap"
 - filter:
-    count: 26
+    min-version: 8
+    count: 24
     match:
       event_type: alert
 - filter:
@@ -30,11 +32,6 @@ checks:
     count: 26
     match:
       event_type: drop
-- filter:
-    count: 2
-    match:
-      event_type: alert
-      pkt_src: "stream (flow timeout)"
 - filter:
     count: 1
     match:
