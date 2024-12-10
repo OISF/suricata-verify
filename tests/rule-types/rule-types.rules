@@ -9,10 +9,18 @@ alert tcp-pkt any any -> any any (msg:"tcp-pkt, anchored content"; content:"abc"
 alert tcp any any -> any any (msg:"tcp, no content"; sid:301;)
 alert tcp any any -> any any (msg:"tcp, simple content"; content:"abc"; sid:302;)
 alert tcp any any -> any any (msg:"tcp, anchored content"; content:"abc"; startswith; sid:303;)
-alert tcp !192.168.0.1 any -> any any (msg:"tcp, negated IP address"; sid:304;)
+alert tcp !192.168.0.1 any -> any any (msg:"tcp, has negated IP address"; sid:304;)
+alert tcp [10.0.0.0/8,!10.10.10.10] any -> [10.0.0.0/8,!10.10.10.10] any (msg:"tcp, has negated IP address"; sid:305;)
 
 alert tcp any any -> any any (msg:"tcp, pd negated"; app-layer-protocol:!http; sid:401;)
 alert tcp any any -> any any (msg:"tcp, pd positive"; app-layer-protocol:http; sid:402;)
+alert tcp any any -> any any (msg:"tcp, pd positive dns"; app-layer-protocol:dns; sid:403;)
+alert tcp any any -> any any (msg:"tcp, pd positive, dns, flow:to_server"; app-layer-protocol:dns; flow:to_server; sid:404;)
+alert tcp any any -> any any (msg:"tcp, pd positive, dns, flow:not_established"; app-layer-protocol:dns; flow:not_established; sid:405;)
+alert tcp any any -> any any (msg:"tcp, pd positive, dns, flow:established"; app-layer-protocol:dns; flow:established; sid:406;)
+alert dns any any -> any any (msg:"app-layer, dns"; sid:407;)
+alert dns any any -> any any (msg:"app-layer, dns, flow:to_server"; flow:to_server; sid:408;)
+alert tcp any any -> any any (msg:"tcp, pd positive, dns, flowbits:isset"; app-layer-protocol:dns; flowbits:isset,dns_error; sid:409;)
 
 alert tcp any any -> any any (msg:"http, pos event"; app-layer-event:http.file_name_too_long; sid:501;)
 #alert tcp any any -> any any (msg:"http, neg event"; app-layer-event:!http.file_name_too_long; sid:502;)
@@ -21,7 +29,25 @@ alert tcp any any -> any any (msg:"http, pos event"; app-layer-event:http.file_n
 
 alert http any any -> any any (msg:"http, no content"; sid:601;)
 alert http any any -> any any (msg:"http, simple content"; content:"abc"; sid:602;)
-alert http any any -> any any (msg:"http, anchored content"; content:"abc"; startswith; sid:603;)
+alert http any any -> any any (msg:"http, anchored content"; content:"abc"; depth:30; sid:603;)
+## redundant with 601
+alert tls any any -> any any (msg:"tls, pkt or app-layer? alert"; sid:604;)
+## somewhat redundant with 604
+pass tls any any -> any any (msg:"tls, pkt or app-layer? pass"; sid:605;)
+pass tls any any -> any any (msg:"tls, pkt or app-layer? flow:established"; flow:established; sid:606;)
+alert tls any any -> any any (msg:"tls, pkt or app-layer? flow:to_client"; flow:to_client; sid:607;)
+alert tls any any -> any any (msg:"tls, pkt or app-layer? flow:not_established"; flow:not_established; sid:608;)
+alert tls any any -> any any (msg:"tls, pkt or app-layer? flow:stateless"; flow:stateless; sid:609;)
+alert tls any any -> any any (msg:"tls, pkt or app-layer?"; flowbits:isset,tls_error; sid:610;)
+alert tls any any -> any any (msg:"tls, pkt or app-layer?"; flowbits:isnotset,tls_error; sid:611;)
+alert tls any any -> any any (msg:"tls, pkt or app-layer?"; flowbits:set,tls_error; sid:612;)
+alert tls any any -> any any (msg:"tls, pkt or app-layer?"; flowint:tls_error_int,=,0; sid:613;)
+alert tls any any -> any any (msg:"tls, pkt or app-layer?"; flowint:tls_error_int, notset; sid:614;)
+alert tls any any -> any any (msg:"tls, pkt or app-layer?"; flowint:tls_error_int, isset; sid:615;)
+alert tls any any -> any any (msg:"tls, pkt or app-layer?"; flowbits:unset,tls_error; sid:616;)
+alert tls any any -> any any (msg:"tls, pkt or app-layer?"; flowbits:toggle,tls_error; sid:617;)
+alert tls any any -> any any (msg:"tls, pkt or app-layer?"; hostbits:toggle,tls_error; sid:618;)
+alert tls any any -> any any (msg:"tls, pkt or app-layer?"; hostbits:isset,tls_error; sid:619;)
 
 alert tcp any any -> any any (msg:"ttl"; ttl:123; sid:701;)
 alert tcp any any -> any any (msg:"ttl"; ttl:123; flow:established; sid:702;)
@@ -36,7 +62,46 @@ alert http any any -> any any (http.uri; content:"abc"; sid:803;)
 
 alert tcp any any -> any any (msg:"byte_extract with dce"; byte_extract:4,0,var,dce; byte_test:4,>,var,4,little; sid:901;)
 alert tcp any any -> any any (msg:"byte_extract with dce"; dcerpc.stub_data; content:"abc"; byte_extract:4,0,var,relative; byte_test:4,>,var,4,little; sid:902;)
+alert tcp any any -> any any (msg:"byte_extract with dce and flow check"; byte_extract:4,0,var,dce; byte_test:4,>,var,4,little; flow:established; sid:903;)
 
 alert udp any any -> any any (msg:"UDP with flow direction"; flow:to_server; sid:1001;)
 
 alert pkthdr any any -> any any (msg:"SURICATA IPv6 duplicated Hop-By-Hop Options extension header"; decode-event:ipv6.exthdr_dupl_hh; classtype:protocol-command-decode; sid:1101;)
+
+alert ip $EXTERNAL_NET any -> $HOME_NET any (msg:"fragbits"; fragbits:M+; threshold:type both, track by_dst, count 5000, seconds 5; classtype:attempted-dos; sid:1201; rev:1;)
+
+alert ip $EXTERNAL_NET any -> $HOME_NET any (msg:"fragbits broken"; flow:stateless; fragbits:M+; threshold:type both, track by_dst, count 5000, seconds 5; classtype:attempted-dos; sid:1202; rev:1;)
+
+alert http any any -> any any (flow:to_server; frame:http1.request; content:"GET / HTTP/1.1|0d 0a|Host: www.testmyids.com"; startswith; bsize:81; sid:1301;)
+alert http1 any any -> any any (flow:to_client; frame:response; content:"uid=0|28|root|29|"; sid:1302;)
+alert http1 any any -> any any (flow:to_server; frame:request; strip_whitespace; content:"GET/HTTP/1.1Host:www.testmyids.com"; startswith; bsize:66; sid:1303;)
+
+alert tcp any any -> any any (msg:"DNS UDP Frame"; flow:to_server; frame:dns.pdu; content:"|01 20 00 01|"; offset:2; content:"suricata"; offset:13; sid:1401; rev:1;)
+alert udp any any -> any any (msg:"DNS UDP Frame"; flow:to_server; frame:dns.pdu; content:"|01 20 00 01|"; offset:2; content:"suricata"; offset:13; sid:1402; rev:1;)
+
+drop http any any -> any any (msg:"Block 206 response for IPPair"; content:"206"; http_stat_code; xbits:isset, blocked_http, track ip_pair; priority:1; sid:1501;)
+alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"tls xbits:set";xbits:set,ipcheck,track ip_src; sid:1502;)
+alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"tls xbits:set"; flow:established,to_server; tls.sni; content:"myexternalip.com"; endswith; nocase; xbits:set,ET.ipcheck,track ip_src; sid:1503;)
+alert ip any any -> any any (msg:"isset option"; hostbits:isset,fbt; content:"GET "; sid:1504;)
+alert ip any any -> any any (hostbits:set,myflow2; sid:1505;)
+alert dns any any -> any any (dns.query; dataset: isnotset, dns-seen, type string; sid:1506;)
+alert dns any any -> any any (dns.query; dataset:set,dns-seen, type string; sid:1507;)
+
+drop http any any -> any any (msg:"Block 206 response for IPPair"; content:"206"; http_stat_code; xbits:toggle, blocked_http, track ip_pair; priority:1; sid:1508;)
+alert ip any any -> any any (hostbits:toggle,myflow2; sid:1509;)
+alert ip any any -> any any (hostbits:unset,myflow2; sid:1510;)
+alert ip any any -> any any (msg:"hostbits, simple content, toggle option"; hostbits:toggle,fbt; content:"GET "; sid:1511;)
+alert ip any any -> any any (msg:"hostbits, simple content, set option"; hostbits:set,fbt; content:"GET "; sid:1512;)
+alert ip any any -> any any (msg:"hostbits, simple content, unset option"; hostbits:unset,fbt; content:"GET "; sid:1513;)
+alert ip any any -> any any (hostbits:isset,myflow2; sid:1514;)
+alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"tls xbits:isset"; flow:established,to_server; tls.sni; content:"myexternalip.com"; endswith; nocase; xbits:isset,ET.ipcheck,track ip_src; sid:1515;)
+alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"tls flowbits:isset"; flow:established,to_server; tls.sni; content:"myexternalip.com"; endswith; nocase; flowbits:isset,ET.ipcheck; sid:1516;)
+alert pkthdr any any -> any any (msg:"SURICATA IPv6 duplicated Hop-By-Hop Options extension header"; decode-event:ipv6.exthdr_dupl_hh; hostbits:isset,badflow; classtype:protocol-command-decode; sid:1517;)
+alert pkthdr any any -> any any (msg:"SURICATA IPv6 duplicated Hop-By-Hop Options extension header"; decode-event:ipv6.exthdr_dupl_hh; hostbits:set,badflow; classtype:protocol-command-decode; sid:1518;)
+alert ip any any -> any any (msg:"SURICATA IPv6 duplicated Hop-By-Hop Options extension header"; decode-event:ipv6.exthdr_dupl_hh; hostbits:isset,badflow; classtype:protocol-command-decode; sid:1519;)
+alert tcp any any -> any any (msg:"tcp, anchored content flowbits"; content:"GET"; startswith; flowbits:set,bad-content; sid:1520;)
+alert tcp any any -> any any (msg:"tcp, anchored content, flowbits"; content:"GET"; startswith; flowbits:isset,bad-content; sid:1521;)
+
+alert tcp any any -> any 443 (flow: to_server; flags: S,CE; flowbits:set, tls_tracker; flowbits: noalert; sid:1601;)
+alert tls any any -> any 443 (msg:"Allow TLS error handling (outgoing packet)"; flow: to_server; flowbits:isset,tls_error; flowbits: noalert; sid:1602;)
+alert tcp any any -> any 443 (flow: to_server; flowbits:isset,tls_error; sid:1603; msg:"Allow TLS error handling (outgoing packet)"; )

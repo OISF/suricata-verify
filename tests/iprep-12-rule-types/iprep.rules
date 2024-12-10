@@ -1,0 +1,6 @@
+alert ip any any -> any any (sid:1; iprep:dst,2402000,isset;)
+alert ip any any -> any any (sid:2; iprep:dst,2402000,isnotset;)
+alert ip any any -> any any (sid:3; iprep:dst,2402000,=,0;)
+alert http any any -> any any (sid:4; iprep:dst,2402000,=,0;)
+alert http any any -> any any (sid:5; iprep:dst,2402000,isset;)
+alert http any any -> any any (sid:6; iprep:dst,2402000,isnotset;)

@@ -1,0 +1,17 @@
+%YAML 1.1
+---
+
+reputation-categories-file: scirius-categories.txt
+reputation-files:
+  - scirius-iprep.list
+
+engine-analysis:
+  # enables printing reports for each rule
+  rules: yes
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      types:
+        - alert
