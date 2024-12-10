@@ -1,5 +1,5 @@
 requires:
-  min-version: 8
+  min-version: 7
 
 args:
   - --set app-layer.protocols.dns.tcp.detection-ports.dp=1053
@@ -7,6 +7,8 @@ args:
 
 checks:
   - filter:
+      requires:
+        min-version: 8
       count: 1
       match:
         pcap_cnt: 8
@@ -14,9 +16,29 @@ checks:
         dns.queries[0].rrname.__len: 1025
         dns.queries[0].rrname_truncated: true
   - filter:
+      requires:
+        lt-version: 8
+      count: 1500
+      match:
+        pcap_cnt: 8
+        event_type: dns
+        dns.rrname.__len: 1025
+        dns.rrname_truncated: true
+  - filter:
+      requires:
+        min-version: 8
       count: 1
       match:
         pcap_cnt: 9
         event_type: alert
         alert.signature_id: 224008
         dns.queries[0].rrname_truncated: true
+  - filter:
+      requires:
+        lt-version: 8
+      count: 1
+      match:
+        pcap_cnt: 9
+        event_type: alert
+        alert.signature_id: 224008
+        dns.query[0].rrname_truncated: true
