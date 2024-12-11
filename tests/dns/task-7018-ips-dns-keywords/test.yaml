@@ -1,11 +1,11 @@
 args:
 - -k none
+# redundant as ips is in the test name
 - --simulate-ips
+- --set detect.guess-applayer-tx=true
 
 requires:
   min-version: 8
-  features:
-    - NEEDS_FIX
 
 pcap: ../task-7018-ids-dns-keywords/input.pcap
 
@@ -29,12 +29,12 @@ checks:
       dest_ip: 9.9.9.9
       dest_port: 53
       direction: to_server
-      dns.query[0].id: 0
-      dns.query[0].opcode: 0
-      dns.query[0].rrname: suricata.io
-      dns.query[0].rrtype: A
-      dns.query[0].tx_id: 0
-      dns.query[0].type: query
+      dns.id: 0
+      dns.opcode: 0
+      dns.tx_id: 0
+      dns.type: request
+      dns.queries[0].rrname: suricata.io
+      dns.queries[0].rrtype: A
 - filter:
     count: 1
     match:
@@ -50,17 +50,17 @@ checks:
       dest_ip: 10.16.1.11
       dest_port: 36926
       direction: to_client
-      dns.answer.flags: '8180'
-      dns.answer.id: 0
-      dns.answer.opcode: 0
-      dns.answer.qr: true
-      dns.answer.ra: true
-      dns.answer.rcode: NOERROR
-      dns.answer.rd: true
-      dns.answer.rrname: suricata.io
-      dns.answer.rrtype: A
-      dns.answer.type: answer
-      dns.answer.version: 2
+      dns.flags: '8180'
+      dns.id: 0
+      dns.opcode: 0
+      dns.qr: true
+      dns.ra: true
+      dns.rcode: NOERROR
+      dns.rd: true
+      dns.answers[0].rrname: suricata.io
+      dns.answers[0].rrtype: A
+      dns.type: response
+      dns.version: 3
 - filter:
     count: 1
     match:
@@ -76,12 +76,12 @@ checks:
       dest_ip: 9.9.9.9
       dest_port: 53
       direction: to_server
-      dns.query[0].id: 0
-      dns.query[0].opcode: 0
-      dns.query[0].rrname: suricata.org
-      dns.query[0].rrtype: A
-      dns.query[0].tx_id: 4
-      dns.query[0].type: query
+      dns.id: 0
+      dns.opcode: 0
+      dns.tx_id: 4
+      dns.type: request
+      dns.queries[0].rrname: suricata.org
+      dns.queries[0].rrtype: A
 - filter:
     count: 1
     match:
@@ -97,17 +97,17 @@ checks:
       dest_ip: 10.16.1.11
       dest_port: 36926
       direction: to_client
-      dns.answer.flags: '8180'
-      dns.answer.id: 0
-      dns.answer.opcode: 0
-      dns.answer.qr: true
-      dns.answer.ra: true
-      dns.answer.rcode: NOERROR
-      dns.answer.rd: true
-      dns.answer.rrname: suricata.org
-      dns.answer.rrtype: A
-      dns.answer.type: answer
-      dns.answer.version: 2
+      dns.flags: '8180'
+      dns.id: 0
+      dns.opcode: 0
+      dns.qr: true
+      dns.ra: true
+      dns.rcode: NOERROR
+      dns.rd: true
+      dns.answers[0].rrname: suricata.org
+      dns.answers[0].rrtype: A
+      dns.type: response
+      dns.version: 3
 - filter:
     count: 1
     match:
@@ -117,10 +117,10 @@ checks:
       dest_port: 53
       dns.id: 0
       dns.opcode: 0
-      dns.rrname: suricata.io
-      dns.rrtype: A
+      dns.queries[0].rrname: suricata.io
+      dns.queries[0].rrtype: A
       dns.tx_id: 0
-      dns.type: query
+      dns.type: request
       proto: TCP
       src_ip: 10.16.1.11
       src_port: 36926
@@ -146,10 +146,10 @@ checks:
       dns.ra: true
       dns.rcode: NOERROR
       dns.rd: true
-      dns.rrname: suricata.io
-      dns.rrtype: A
-      dns.type: answer
-      dns.version: 2
+      dns.queries[0].rrname: suricata.io
+      dns.queries[0].rrtype: A
+      dns.type: response
+      dns.version: 3
 - filter:
     count: 1
     match:
@@ -162,10 +162,10 @@ checks:
       dest_port: 53
       dns.id: 0
       dns.opcode: 0
-      dns.rrname: oisf.net
-      dns.rrtype: A
+      dns.queries[0].rrname: oisf.net
+      dns.queries[0].rrtype: A
       dns.tx_id: 2
-      dns.type: query
+      dns.type: request
 - filter:
     count: 1
     match:
@@ -193,10 +193,10 @@ checks:
       dns.ra: true
       dns.rcode: NOERROR
       dns.rd: true
-      dns.rrname: oisf.net
-      dns.rrtype: A
-      dns.type: answer
-      dns.version: 2
+      dns.queries[0].rrname: oisf.net
+      dns.queries[0].rrtype: A
+      dns.type: response
+      dns.version: 3
 - filter:
     count: 1
     match:
@@ -209,10 +209,10 @@ checks:
       dest_port: 53
       dns.id: 0
       dns.opcode: 0
-      dns.rrname: suricata.org
-      dns.rrtype: A
+      dns.queries[0].rrname: suricata.org
+      dns.queries[0].rrtype: A
       dns.tx_id: 4
-      dns.type: query
+      dns.type: request
 - filter:
     count: 1
     match:
@@ -240,10 +240,10 @@ checks:
       dns.ra: true
       dns.rcode: NOERROR
       dns.rd: true
-      dns.rrname: suricata.org
-      dns.rrtype: A
-      dns.type: answer
-      dns.version: 2
+      dns.queries[0].rrname: suricata.org
+      dns.queries[0].rrtype: A
+      dns.type: response
+      dns.version: 3
 - filter:
     count: 1
     match:
