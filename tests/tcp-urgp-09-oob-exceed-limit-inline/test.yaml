@@ -1,5 +1,5 @@
 requires:
-  min-version: 8
+  min-version: 7
 
 args:
 - --set stream.reassembly.urgent.policy=oob
