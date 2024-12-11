@@ -6,31 +6,27 @@ args:
 
 checks:
 - filter:
-    min-version: 8
     count: 24
     match:
       event_type: alert
       alert.signature_id: 3
+      pkt_src: "wire/pcap"
 - filter:
-    min-version: 8
     count: 24
     match:
       event_type: alert
 - filter:
-    lt-version: 7
-    count: 26
-    match:
-      event_type: alert
-      alert.signature_id: 3
-- filter:
-    lt-version: 7
-    count: 26
-    match:
-      event_type: alert
-- filter:
-    min-version: 8
     # check for https://redmine.openinfosecfoundation.org/issues/7350
+    min-version: 8
     count: 4
+    match:
+      event_type: alert
+      alert.signature_id: 3
+      tls.sni: raw.githubusercontent.com
+- filter:
+    # version 7 does not use suricata.yaml stream-tx-log-limit
+    lt-version: 8
+    count: 24
     match:
       event_type: alert
       alert.signature_id: 3
@@ -51,18 +47,6 @@ checks:
     count: 26
     match:
       event_type: drop
-- filter:
-    min-version: 8
-    count: 0
-    match:
-      event_type: alert
-      pkt_src: "stream (flow timeout)"
-- filter:
-    lt-version: 7
-    count: 2
-    match:
-      event_type: alert
-      pkt_src: "stream (flow timeout)"
 - filter:
     count: 1
     match:

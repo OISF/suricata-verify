@@ -3,6 +3,7 @@ requires:
    lt-version: 8
 args:
 - -k none
+- --set detect.guess-applayer-tx=true
 
 pcap: ../task-7018-ids-dns-keywords/input.pcap
 checks:
