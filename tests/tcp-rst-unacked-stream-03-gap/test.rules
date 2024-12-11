@@ -1,0 +1,2 @@
+alert tcp any any -> any any (content:"Me In"; sid:1;)
+alert tcp any any -> any any (msg:"SURICATA STREAM reassembly sequence GAP -- missing packet(s)"; stream-event:reassembly_seq_gap; threshold:type backoff, track by_flow, count 1, multiplier 10; classtype:protocol-command-decode; sid:2210048; rev:3;)
