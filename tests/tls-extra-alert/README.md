@@ -9,4 +9,4 @@ Internal.
 
 ## Related issues
 
-None so far. State: Trying to establish what's the issue.
+https://redmine.openinfosecfoundation.org/issues/7318
