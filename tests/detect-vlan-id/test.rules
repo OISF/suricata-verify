@@ -1,0 +1,2 @@
+alert ip any any -> any any (msg:"Vlan ID is equal to 200 with specific layer"; vlan.id:200,1; sid:1;)
+alert ip any any -> any any (msg:"Vlan ID is equal to 400"; vlan.id:400; sid:2;)
