@@ -1,9 +1,11 @@
 pcap: ../eve-flow-vlan/input.pcap
 
 requires:
-  min-version: 7
-  features:
-    - FIX_FOR_BUG_5836
+  min-version: 8
+
+skip:
+  - uid: 0
+    msg: "Test requires non-root user"
 
 setup:
   # Create a log directory without write permission
