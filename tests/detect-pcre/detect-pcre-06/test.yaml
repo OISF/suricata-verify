@@ -1,0 +1,41 @@
+pcap: ../detect-pcre-05/input.pcap
+
+requires:
+  min-version: 8
+
+args:
+- --set stream.midstream=true
+
+checks:
+- filter:
+    count: 2
+    match:
+      event_type: flow
+- filter:
+    count: 1
+    match:
+      event_type: stats
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+      alert.extra.ua: Mozilla
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2
+      alert.extra.user_agent: Mozilla
+      metadata.flowvars[0].ubuntu: "8.1"
+      metadata.pktvars[0].firefox: "3.0.13"
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 3
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 4
