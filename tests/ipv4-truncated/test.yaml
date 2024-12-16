@@ -1,0 +1,9 @@
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: null
+        dest_ip: null
+        src_port: null
+        dest_port: null
