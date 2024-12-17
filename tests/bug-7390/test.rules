@@ -1,0 +1,4 @@
+# This test uses a variable for distance
+alert tcp any any -> any 8080 (msg:"TEST #1: distance using variable"; flow:to_server; content:"Authorization:"; content:"5f71ycy"; distance:0; byte_extract:1,0,option_len,string,relative; content:!"|38|"; distance:option_len; within:1; content:"|37|"; distance:-1; within:1; content:"|49|"; distance:option_len; within:1; sid:1;)
+# This test uses a variable for distance
+alert tcp any any -> any 8080 (msg:"TEST #2: distance using scalar value"; flow:to_server; content:"Authorization:"; content:"5f71ycy"; distance:0; byte_extract:1,0,option_len,string,relative; content:!"|38|"; distance:7; within:1; content:"|37|"; distance:-1; within:1; content:"|49|"; distance:option_len; within:1; sid:2;)
