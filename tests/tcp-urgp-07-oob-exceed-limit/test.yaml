@@ -5,6 +5,7 @@ args:
 - --set stream.reassembly.urgent.policy=oob
 - --set stream.reassembly.urgent.oob-limit-policy=drop
 - --simulate-ips
+- --set stats.interval=3600
 
 checks:
   - filter:
