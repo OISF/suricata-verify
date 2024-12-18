@@ -1,10 +1,12 @@
 requires:
    min-version: 7
-   lt-version: 8
 
 args:
 - -k none
 - --set detect.guess-applayer-tx=true
+
+env:
+  SURICATA_EVE_DNS_VERSION: 2
 
 pcap: ../task-7018-ids-dns-keywords/input.pcap
 
@@ -30,6 +32,7 @@ checks:
       src_ip: 10.16.1.11
       src_port: 36926
 - filter:
+    lt-version: 8
     count: 1
     match:
       event_type: alert
@@ -50,6 +53,28 @@ checks:
       dns.query[0].rrtype: A
       dns.query[0].tx_id: 0
       dns.query[0].type: query
+- filter:
+    # DNS has only v3 logging for alerts in 8
+    min-version: 8
+    count: 1
+    match:
+      event_type: alert
+      pcap_cnt: 4
+      proto: TCP
+      app_proto: dns
+      src_ip: 10.16.1.11
+      src_port: 36926
+      alert.signature: DNS suricata query - payload rule
+      alert.signature_id: 1
+      dest_ip: 9.9.9.9
+      dest_port: 53
+      direction: to_server
+      tx_id: 0
+      dns.id: 0
+      dns.opcode: 0
+      dns.queries[0].rrname: suricata.io
+      dns.queries[0].rrtype: A
+      dns.type: request
 - filter:
     count: 1
     match:
@@ -77,6 +102,7 @@ checks:
       dns.type: answer
       dns.version: 2
 - filter:
+    lt-version: 8
     count: 1
     match:
       event_type: alert
@@ -103,6 +129,28 @@ checks:
       dns.answer.type: answer
       dns.answer.version: 2
 - filter:
+    min-version: 8
+    count: 1
+    match:
+      event_type: alert
+      pcap_cnt: 6
+      proto: TCP
+      src_ip: 9.9.9.9
+      src_port: 53
+      alert.signature: DNS suricata query - payload rule
+      alert.signature_id: 1
+      app_proto: dns
+      dest_ip: 10.16.1.11
+      dest_port: 36926
+      direction: to_client
+      tx_id: 1
+      dns.opcode: 0
+      dns.rcode: NOERROR
+      dns.answers[0].rrname: suricata.io
+      dns.answers[0].rrtype: A
+      dns.type: response
+      dns.version: 3
+- filter:
     count: 1
     match:
       event_type: dns
@@ -119,6 +167,8 @@ checks:
       src_ip: 10.16.1.11
       src_port: 36926
 - filter:
+    # This check is about an undesirable behavior cf redmine ticket #7004
+    lt-version: 8
     count: 1
     match:
       event_type: alert
@@ -140,6 +190,29 @@ checks:
       dns.query[0].rrtype: A
       dns.query[0].tx_id: 2
 - filter:
+    # This check is about an undesirable behavior cf redmine ticket #7004
+    min-version: 8
+    count: 1
+    match:
+      event_type: alert
+      pcap_cnt: 8
+      proto: TCP
+      src_ip: 10.16.1.11
+      src_port: 36926
+      alert.signature: DNS suricata query - payload rule
+      alert.signature_id: 1
+      app_proto: dns
+      dest_ip: 9.9.9.9
+      dest_port: 53
+      direction: to_server
+      tx_id: 2
+      dns.type: request
+      dns.id: 0
+      dns.opcode: 0
+      dns.queries[0].rrname: oisf.net
+      dns.queries[0].rrtype: A
+- filter:
+    lt-version: 8
     count: 1
     match:
       event_type: alert
@@ -164,6 +237,27 @@ checks:
       dns.answer.rcode: NOERROR
       dns.answer.type: answer
       dns.answer.version: 2
+- filter:
+    min-version: 8
+    count: 1
+    match:
+      event_type: alert
+      pcap_cnt: 9
+      alert.signature: DNS suricata query - payload rule
+      alert.signature_id: 1
+      proto: TCP
+      src_ip: 9.9.9.9
+      src_port: 53
+      dest_ip: 10.16.1.11
+      dest_port: 36926
+      app_proto: dns
+      direction: to_client
+      dns.answers[0].rrname: oisf.net
+      dns.answers[0].rrtype: A
+      dns.opcode: 0
+      dns.rcode: NOERROR
+      dns.type: response
+      dns.version: 3
 - filter:
     count: 1
     match:
@@ -196,6 +290,7 @@ checks:
       dns.type: answer
       dns.version: 2
 - filter:
+    lt-version: 8
     count: 1
     match:
       event_type: alert
@@ -215,6 +310,26 @@ checks:
       dns.query[0].rrtype: A
       dns.query[0].tx_id: 4
       dns.query[0].type: query
+- filter:
+    min-version: 8
+    count: 1
+    match:
+      event_type: alert
+      alert.signature: DNS suricata query - payload rule
+      alert.signature_id: 1
+      dest_ip: 9.9.9.9
+      dest_port: 53
+      proto: TCP
+      src_ip: 10.16.1.11
+      src_port: 36926
+      direction: to_server
+      pcap_cnt: 10
+      tx_id: 4
+      dns.id: 0
+      dns.opcode: 0
+      dns.queries[0].rrname: suricata.org
+      dns.queries[0].rrtype: A
+      dns.type: request
 - filter:
     count: 1
     match:
