@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"TEST"; flow:established,to_client; file.data; content:"|50 4E 47|"; sid:1; rev:1;)
