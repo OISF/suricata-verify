@@ -1,0 +1,4 @@
+# packet 6 to client
+alert tcp any any -> any any (flow:to_client; dsize:259; flowbits:set,size; sid:1;)
+# packet 7 to server
+alert tcp any any -> any any (flow:to_server; tcp.flags:A; tcp.ack:2548486954; flowbits:isset,size; prefilter; sid:2;)
