@@ -1,0 +1,1 @@
+alert http any any -> any any (flow:established,to_server; http.host; datajson:isset,badhost,type string,load host.lst,key bad_host; ip.src; datajson:isset,src_ip,type ip,load src.lst,key src_ip; sid:1;)
