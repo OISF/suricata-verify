@@ -3,6 +3,7 @@ requires:
 
 args:
 - --set stream.reassembly.urgent.policy=oob
+- --set stats.interval=3600
 
 checks:
   - filter:
