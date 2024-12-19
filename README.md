@@ -237,6 +237,8 @@ options:
                         Adds a suricata.yaml to the test
   --features <features>
                         Adds specified features
+  --exclude-fields [EXCLUDE_FIELDS]
+                        Exclude specified fields from filter block
 ```
 
 ### Examples
