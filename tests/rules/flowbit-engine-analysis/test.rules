@@ -1,0 +1,8 @@
+alert http any any -> any any (msg:"Setting flowbit fb1";content:"testmyids.com";http_header;flowbits:set,fb1;noalert;sid:1;rev:1;)
+alert http any any -> any any (msg:"Setting flowbit fb3";content:"wwnotginh";flowbits:set,fb5;sid:3;rev:1;)
+alert ip any any -> any any (msg:"Flowbit isset ored flowbits"; flowbits:isset,fb1; sid:1801;)
+alert ip any any -> any any (msg:"Is-Setting flowbit fb2, pkt rule";flowbits:isset,fb2;sid:1904;)
+alert http any any -> any any (msg:"Setting flowbit fb2, app_tx rule";http.uri;content:"something";flowbits:set,fb2;sid:1901;)
+alert http any any -> any any (msg:"Is-Setting flowbit fb2, stream rule";content:"something";flowbits:isset,fb2;sid:1902;)
+alert tcp-pkt any any -> any any (msg:"Is-Setting flowbit fb2, pkt rule";content:"something";flowbits:isset,fb2;sid:1903;)
+
