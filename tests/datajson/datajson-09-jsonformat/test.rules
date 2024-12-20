@@ -1,0 +1,6 @@
+alert http any any -> any any (flow:established,to_server; http.host; datajson:isset,badhost,type string,load hosts.json,key bad_host,json_key host, array_key threat; ip.src; datajson:isset,src_ip,type ip,load src.json,key src_ip,json_key ip; sid:1;)
+
+alert http any any -> any any (flow:established,to_server; http.host; datajson:isset,dbadhost,type string,load hosts-direct.json,key dbad_host,json_key host; ip.src; datajson:isset,src_ip,type ip,load src.json,key src_ip,json_key ip; sid:2;)
+
+
+alert http any any -> any any (flow:established,to_server; http.host; datajson:isset,nbadhost,type string,load hosts-nested.json,key nbad_host,json_key host, array_key info.threat; ip.src; datajson:isset,src_ip,type ip,load src.json,key src_ip,json_key ip; sid:3;)
