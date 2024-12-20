@@ -1,0 +1,60 @@
+requires:
+  min-version: 8
+  pcap: false
+args:
+- --engine-analysis
+
+checks:
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1801
+        type: "pkt"
+        rule_state_dependant.rule_depends_on_sid: 1
+        rule_state_dependant.rule_depends_on_flowbit: "fb1"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1
+        type: "app_tx"
+        rule_state_dependant: false
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 3
+        type: "stream"
+        rule_state_dependant: false
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1901
+        type: "app_tx"
+        rule_state_dependant: false
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1902
+        type: "stream"
+        rule_state_dependant.rule_depends_on_sid: 1901
+        rule_state_dependant.rule_depends_on_flowbit: "fb2"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1903
+        type: "pkt"
+        rule_state_dependant.rule_depends_on_sid: 1901
+        rule_state_dependant.rule_depends_on_flowbit: "fb2"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1904
+        type: "pkt"
+        rule_state_dependant.rule_depends_on_sid: 1901
+        rule_state_dependant.rule_depends_on_flowbit: "fb2"
