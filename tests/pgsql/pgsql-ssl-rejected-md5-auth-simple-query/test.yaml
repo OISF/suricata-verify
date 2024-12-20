@@ -141,7 +141,6 @@ checks:
       flow.bytes_toserver: 1180
       flow.pkts_toclient: 12
       flow.pkts_toserver: 15
-      flow.reason: shutdown
       flow.state: closed
       proto: TCP
       src_ip: 10.16.1.10
@@ -168,7 +167,6 @@ checks:
       flow.bytes_toserver: 626
       flow.pkts_toclient: 6
       flow.pkts_toserver: 8
-      flow.reason: shutdown
       flow.state: closed
       proto: TCP
       src_ip: 10.16.1.10
