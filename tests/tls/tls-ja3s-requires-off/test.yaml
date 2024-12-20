@@ -4,8 +4,9 @@ requires:
   min-version: 7.0.3
   features:
     - HAVE_LUA
-  script:
-    - ./src/suricata --build-info | grep "JA3 support" | grep no > /dev/null
+
+skip:
+  - feature: HAVE_JA3
 
 args:
  - -k none
