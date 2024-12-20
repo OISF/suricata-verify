@@ -7,6 +7,24 @@ args:
 
 checks:
   - filter:
+      min-version: 8
+      count: 14
+      match:
+        event_type: flow
+        dest_port: 4789
+        flow.pkts_toclient: 0
+        flow.bytes_toclient: 0
+  - filter:
+      min-version: 8
+      count: 2
+      match:
+        event_type: flow
+        dest_port: 4789
+        src_port: 65445
+        flow.pkts_toclient: 0
+        flow.bytes_toclient: 0
+  - filter:
+      lt-version: 8
       count: 13
       match:
         event_type: flow
