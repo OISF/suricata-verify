@@ -1,0 +1,191 @@
+requires:
+  min-version: 8
+  pcap: false
+args:
+- --engine-analysis
+
+checks:
+# check 1
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1
+        type: "app_tx"
+        not-has-key: dependencies
+# check 2
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 2
+        type: "app_tx"
+        not-has-key: dependencies
+# check 3
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 3
+        type: "app_tx"
+        not-has-key: dependencies
+# check 4
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 4
+        type: "pkt"
+        dependencies.flowbits.upstream.state_modifying_rules.sids[0]: 1
+        dependencies.flowbits.upstream.state_modifying_rules.names[0]: fb1
+# check 5
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 5
+        type: "app_tx"
+        not-has-key: dependencies
+# check 6
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 6
+        type: "pkt"
+        dependencies.flowbits.upstream.state_modifying_rules.sids[0]: 5
+        dependencies.flowbits.upstream.state_modifying_rules.names[0]: fb2
+# check 7
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 7
+        type: "stream"
+        dependencies.flowbits.upstream.state_modifying_rules.sids[0]: 1
+        dependencies.flowbits.upstream.state_modifying_rules.sids[1]: 5
+        dependencies.flowbits.upstream.state_modifying_rules.names[0]: fb1
+        dependencies.flowbits.upstream.state_modifying_rules.names[1]: fb2
+# check 8
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 8
+        type: "stream"
+        not-has-key: dependencies
+# check 9
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 9
+        type: "pkt"
+        not-has-key: dependencies
+# check 10
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 10
+        type: "pkt"
+        not-has-key: dependencies
+# check 11
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 11
+        type: "pkt"
+        dependencies.flowbits.upstream.state_modifying_rules.sids[0]: 1
+        dependencies.flowbits.upstream.state_modifying_rules.sids[1]: 5
+        dependencies.flowbits.upstream.state_modifying_rules.names[0]: fb1
+        dependencies.flowbits.upstream.state_modifying_rules.names[1]: fb2
+# check 12
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 12
+        type: "pkt"
+        dependencies.flowbits.upstream.state_modifying_rules.sids[0]: 1
+        dependencies.flowbits.upstream.state_modifying_rules.sids[1]: 5
+        dependencies.flowbits.upstream.state_modifying_rules.names[0]: fb1
+        dependencies.flowbits.upstream.state_modifying_rules.names[1]: fb2
+# check 13
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 13
+        type: "pkt"
+        not-has-key: dependencies
+# check 14
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 14
+        type: "pkt"
+        dependencies.flowbits.upstream.state_modifying_rules.sids[0]: 2
+        dependencies.flowbits.upstream.state_modifying_rules.names[0]: fb6
+# check 15
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 15
+        type: "app_tx"
+        not-has-key: dependencies
+# check 16
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 16
+        type: "pkt"
+        dependencies.flowbits.upstream.state_modifying_rules.sids[0]: 2
+        dependencies.flowbits.upstream.state_modifying_rules.sids[1]: 15
+        dependencies.flowbits.upstream.state_modifying_rules.names[0]: fb6
+        dependencies.flowbits.upstream.state_modifying_rules.names[1]: fb5
+# check 17
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 17
+        type: "stream"
+        not-has-key: dependencies
+# check 18
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 18
+        type: "app_tx"
+        not-has-key: dependencies
+# check 19
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 19
+        type: "stream"
+        not-has-key: dependencies
+# check 20
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 20
+        type: "pkt_stream"
+        dependencies.flowbits.upstream.state_modifying_rules.sids[0]: 1
+        dependencies.flowbits.upstream.state_modifying_rules.names[0]: fb1
+# check 21
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 21
+        type: "pkt_stream"
+        not-has-key: dependencies
