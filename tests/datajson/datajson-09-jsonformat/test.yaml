@@ -9,7 +9,7 @@ args:
 
 checks:
   - filter:
-      count: 3
+      count: 4
       match:
         event_type: alert
   - filter:
@@ -33,3 +33,11 @@ checks:
         alert.signature_id: 3
         alert.extra.src_ip.test: success
         alert.extra.nbad_host.year: 2005
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
+        alert.extra.src_ip.test: success
+        alert.extra.nkbad_host.year: 2005
+        alert.extra.nkbad_host.host.domain: testmyids.com
