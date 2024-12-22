@@ -1,0 +1,21 @@
+{
+  "info": {
+    "threat": [
+      {
+        "context": "gold old test",
+        "year": 2005,
+        "host": {
+          "fqdn": "www.testmyids.com",
+          "domain": "testmyids.com"
+        }
+      },
+      {
+        "context": "old test",
+        "year": 2023,
+        "host": {
+          "domain": "testmyids.com"
+        }
+      }
+    ]
+  }
+}
