@@ -1,0 +1,6 @@
+alert tcp any any -> any any (msg:"Test LDAP search request number argument"; ldap.request.operation:3; sid:1;)
+alert tcp any any -> any any (msg:"Test LDAP search request str argument"; ldap.request.operation:search_request; sid:2;)
+alert tcp any any -> any any (msg:"Test LDAP search result entry"; ldap.responses.operation:search_result_entry; sid:3;)
+alert tcp any any -> any any (msg:"Test LDAP search result done"; ldap.responses.operation:search_result_done; sid:4;)
+alert tcp any any -> any any (msg:"Test LDAP search result done at index 1"; ldap.responses.operation:search_result_done,1; sid:5;)
+alert tcp any any -> any any (msg:"Test LDAP search result done at any index"; ldap.responses.operation:search_result_done,any; sid:6;)

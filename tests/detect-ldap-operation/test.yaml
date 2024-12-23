@@ -1,0 +1,51 @@
+requires:
+  min-version: 8
+
+pcap: ../ldap-search/ldap.pcap
+
+args:
+  - -k none --set stream.inline=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 4
+        ldap.request.operation: search_request
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 4
+        ldap.request.operation: search_request
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 6
+        ldap.responses[0].operation: search_result_entry
+        alert.signature_id: 3
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 8
+        ldap.responses[1].operation: search_result_done
+        alert.signature_id: 4
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 8
+        ldap.responses[1].operation: search_result_done
+        alert.signature_id: 5
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 8
+        ldap.responses[1].operation: search_result_done
+        alert.signature_id: 6
