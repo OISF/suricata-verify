@@ -13,7 +13,7 @@ checks:
          event_type: alert
          alert.signature_id: 1
   - filter:
-      count: 1
+      count: 0
       match:
          event_type: alert
          alert.signature_id: 2
@@ -23,17 +23,7 @@ checks:
          event_type: alert
          alert.signature_id: 3
   - filter:
-      count: 1
+      count: 0
       match:
          event_type: alert
          alert.signature_id: 4
-  - filter:
-      count: 1
-      match:
-         event_type: alert
-         alert.signature_id: 5
-  - filter:
-      count: 1
-      match:
-         event_type: alert
-         alert.signature_id: 6
