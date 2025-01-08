@@ -1,0 +1,4 @@
+alert ip any any -> any any (msg:"Packet has 3 VLAN layers"; vlan.layers:3; sid:1;)
+alert ip any any -> any any (msg:"Packet has more than 2 VLAN layers"; vlan.layers:>2; sid:2;)
+alert ip any any -> any any (msg:"The number of layers in the packet is not 1"; vlan.layers:!1; sid:3;)
+alert ip any any -> any any (msg:"Packet has 0 VLAN layers"; vlan.layers:0; sid:4;)
