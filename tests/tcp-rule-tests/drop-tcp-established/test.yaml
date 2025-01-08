@@ -1,0 +1,11 @@
+pcap: ../tcp_conn.pcapng
+
+args:
+  - --simulate-ips
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.action: blocked

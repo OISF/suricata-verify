@@ -1,0 +1,3 @@
+alert tls any any -> any any (msg:"Test msg";flow:established,to_server;tls.sni;content:"www.google.com";sid:1;gid:1;rev:1;)
+pass tls any any -> any any (msg:"Test msg";flow:established,to_server;tls.sni;content:"www.google.com";sid:2;gid:2;rev:2;)
+drop ip any any -> any any (msg:"Drop all else"; flow:established; sid:3;)

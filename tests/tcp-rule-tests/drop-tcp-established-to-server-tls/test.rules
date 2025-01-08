@@ -1,0 +1,1 @@
+drop tcp any any -> any any (msg:"Test msg";flow:established,to_server;app-layer-protocol:tls;sid:1;gid:1;rev:1;)

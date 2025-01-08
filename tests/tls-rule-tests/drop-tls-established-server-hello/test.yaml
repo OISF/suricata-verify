@@ -1,0 +1,11 @@
+pcap: ../tls_conn.pcap
+
+args:
+  - --simulate-ips
+
+checks:
+  - filter:
+      count: 0 #Should be 0, as the server hello and server hello finished come in the same packet
+      match:
+        event_type: alert
+        alert.action: blocked

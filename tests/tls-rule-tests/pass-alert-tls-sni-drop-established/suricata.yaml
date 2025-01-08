@@ -1,0 +1,97 @@
+%YAML 1.1
+---
+
+config-fingerprint: initial
+
+rule-reorder-disabled: true
+
+vars:
+  address-groups:
+    HOME_NET: "[10.0.0.0/8]"
+    EXTERNAL_NET: "!$HOME_NET"
+
+
+decoder:
+  geneve:
+    # This is a placeholder. Value is set by config agent based on firewall endpoint's tunnel ID.
+    # Tunnel ID is always 8 bytes as hex.
+    expected-agwe-tunnel-id: '93f7bd022f9c6c41'
+
+app-layer:
+  protocols:
+    tls:
+      enabled: yes
+      detection-ports:
+        dp: 443   # TODO why only 443? Should we do for all ports? Can we?
+      ja3-fingerprints: auto
+      encryption-handling: default
+    dns:
+      tcp:
+        enabled: no
+      udp:
+        enabled: no
+
+logging:
+  default-log-level: notice
+  default-log-format: "%t [%p] - <%d> - "
+  default-output-filter:
+
+  outputs:
+    - console:
+        enabled: yes
+        level: notice
+
+af-packet:
+  - inteface: default
+    threads: 1
+
+stream:
+  midstream: no
+  midstream-policy: ignore
+
+stats:
+  enabled: yes
+
+pcap-file:
+  checksum-checks: no
+
+outputs:
+  - fast:
+      enabled: yes
+      filename: fast.log
+      append: no
+      #filetype: regular # 'regular', 'unix_stream' or 'unix_dgram'
+  - eve-log:
+      enabled: yes
+      metadata: no
+      pcap-file: no
+      community-id: no
+      xff:
+        enabled: no
+      types:
+        - alert:
+            payload: no
+            packet: no
+            http-body: no
+            metadata:
+              app-layer: true
+              flow: true
+              rule:
+                metadata: true
+                raw: false
+            tagged-packets: yes
+        - drop:
+            payload: no
+            packet: no
+            http-body: no
+            metadata: no
+            tagged-packets: yes
+        - stats:
+            totals: yes
+            threads: no
+            deltas: yes
+  - tls-log:
+      enabled: yes
+      filename: tls.log
+      append: no
+      extended: yes

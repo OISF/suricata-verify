@@ -1,0 +1,31 @@
+pcap: ./tls-traffic.pcap
+
+args:
+  - -k none
+  - --simulate-ips
+  - --set detect.pass-applayer-flow-action=true
+
+checks:
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 31
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 33
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.action: pass

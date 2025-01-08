@@ -1,0 +1,3 @@
+alert tcp any any -> any any (msg:"Test msg";flow:established;app-layer-protocol:!tls;sid:1;gid:1;rev:1;)
+pass tcp any any -> any any (msg:"Test msg";flow:established;app-layer-protocol:!tls;sid:2;gid:2;rev:2;)
+drop ip any any -> any any (msg:"Drop all else"; flow:established; sid:3;)
