@@ -18,4 +18,4 @@ checks:
         log_level: "Error"
         event_type: "engine"
         engine.message.__find: "bad base64 encoding ua-seen"
-        engine.module: "datasets"
+        engine.module: "debug"
