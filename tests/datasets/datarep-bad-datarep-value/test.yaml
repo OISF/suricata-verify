@@ -1,0 +1,22 @@
+pcap: ../../flowbit-oring/input.pcap
+
+requires:
+  features:
+    - HAVE_LIBJANSSON
+  files:
+    - src/datasets.c
+
+args:
+ - -k none
+
+exit-code: 1
+
+checks:
+  - filter:
+      min-version: 8
+      filename: suricata.json
+      count: 1
+      match:
+        log_level: "Error"
+        event_type: "engine"
+        engine.message.__find: "invalid datarep value dns_string"
