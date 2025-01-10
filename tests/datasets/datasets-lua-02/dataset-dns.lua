@@ -1,3 +1,5 @@
+local dataset = require("suricata.dataset")
+
 function init (args)
     local needs = {}
     needs["dns.request"] = tostring(true)
