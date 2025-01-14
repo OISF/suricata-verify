@@ -1,0 +1,2 @@
+flow default tcp 1.1.1.1:5555 > 2.2.2.2:389 (tcp.initialize; mss:9000;);
+default > (content:"\x30\x06\x02\x01\x06\x50\x01\x05";);
