@@ -1,0 +1,34 @@
+requires:
+  min-version: 8
+
+pcap: ../detect-chksum-01/input.pcap
+
+args:
+- --set stream.checksum-validation=no
+
+checks:
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Generic Protocol Command Decode
+      alert.gid: 1
+      alert.severity: 3
+      alert.signature: SURICATA TCPv4 invalid checksum
+      alert.signature_id: 1
+      dest_ip: 209.85.225.105
+      dest_port: 80
+      direction: to_server
+      event_type: alert
+      flow.bytes_toclient: 0
+      flow.bytes_toserver: 74
+      flow.dest_ip: 209.85.225.105
+      flow.dest_port: 80
+      flow.pkts_toclient: 0
+      flow.pkts_toserver: 1
+      flow.src_ip: 192.168.2.3
+      flow.src_port: 39867
+      pcap_cnt: 1
+      proto: TCP
+      src_ip: 192.168.2.3
+      src_port: 39867
