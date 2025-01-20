@@ -1,0 +1,25 @@
+requires:
+  min-version: 7
+  pcap: false
+args:
+- --engine-analysis
+checks:
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 404
+        type: "app_layer"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        raw: "alert http any any -> any any (msg:\"http, no content\"; sid:601;)"
+        id: 601
+        type: "app_layer"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 613
+        type: "app_layer"

@@ -1,0 +1,5 @@
+# Application Layer Protocol Rules
+alert dns any any -> any any (msg:"app-layer, dns"; sid:404;)
+alert http any any -> any any (msg:"http, no content"; sid:601;)
+pass tls any any -> any any (msg:"tls, pkt or app-layer? pass"; sid:605;)
+alert tls any any -> any any (msg:"tls, pkt or app-layer?"; flowint:tls_error_int,=,0; sid:613;)
