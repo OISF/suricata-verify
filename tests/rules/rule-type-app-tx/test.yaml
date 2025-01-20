@@ -1,0 +1,32 @@
+requires:
+  min-version: 7
+  pcap: false
+args:
+- --engine-analysis
+checks:
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        raw: "alert tcp any any -> any any (msg:\"http, pos event\"; app-layer-event:http.file_name_too_long; sid:501;)"
+        id: 501
+        type: "app_tx"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        raw: "alert tcp any any -> any any (msg:\"byte_extract with dce\"; dcerpc.stub_data; content:\"abc\"; byte_extract:4,0,var,relative; byte_test:4,>,var,4,little; sid:902;)"
+        id: 902
+        type: "app_tx"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1102
+        type: "app_tx"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1402
+        type: "app_tx"
