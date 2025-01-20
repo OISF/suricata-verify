@@ -1,0 +1,26 @@
+pcap: ../../bug-3519/input.pcap
+
+requires:
+  version: 8
+
+exit-code: 1
+
+checks:
+  - shell:
+      args: grep "rule 10 mixes keywords with conflicting directions" suricata.log | wc -l | xargs
+      expect: 1
+  - shell:
+      args: grep "rule 20 mixes keywords with conflicting directions" suricata.log | wc -l | xargs
+      expect: 1
+  - shell:
+      args: grep "rule 30 mixes keywords with conflicting directions" suricata.log | wc -l | xargs
+      expect: 1
+  - shell:
+      args: grep "rule 40 mixes keywords with conflicting directions" suricata.log | wc -l | xargs
+      expect: 1
+  - shell:
+      args: grep "rule 50 mixes keywords with conflicting directions" suricata.log | wc -l | xargs
+      expect: 1
+  - shell:
+      args: grep "rule 60 mixes keywords with conflicting directions" suricata.log | wc -l | xargs
+      expect: 1

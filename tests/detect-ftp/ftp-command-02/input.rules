@@ -1,0 +1,7 @@
+# Wrong direction -- won't load
+alert ftp any any -> any any (flow:to_client; ftp.command; content:"PASS"; sid:10;)
+alert ftp any any -> any any (flow:to_client; ftp.command; content:"USER"; sid:20;)
+alert ftp any any -> any any (flow:to_client; ftp.command; content:"NLST"; sid:30;)
+alert ftp any any -> any any (flow:to_client; ftp.command; content:"PORT"; sid:40;)
+alert ftp any any -> any any (flow:to_client; ftp.command; content:"RETR"; sid:50;)
+alert ftp any any -> any any (flow:to_client; ftp.command; content:"QUIT"; sid:60;)

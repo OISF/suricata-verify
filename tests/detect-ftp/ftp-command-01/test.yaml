@@ -1,0 +1,49 @@
+pcap: ../../bug-3519/input.pcap
+
+requires:
+  version: 8
+
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.command: PASS
+        alert.signature_id: 1
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.command: USER
+        alert.signature_id: 2
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.command: NLST
+        alert.signature_id: 3
+
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        ftp.command: PORT
+        alert.signature_id: 4
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.command: RETR
+        alert.signature_id: 5
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.command: QUIT
+        alert.signature_id: 6
