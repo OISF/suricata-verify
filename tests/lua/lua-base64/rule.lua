@@ -9,7 +9,6 @@ local input_base64_with_spaces = "d3 d3 Ln N1 cm lj YX Rh LW lk cy 5v cm c="
 
 function init (args)
    local needs = {}
-   needs["dns.request"] = true
    return needs
 end
 
