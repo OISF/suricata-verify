@@ -1,0 +1,14 @@
+alert ftp any any -> any any (msg: "Match on FTP command PASS"; flow:to_server; ftp.command; content:"PASS"; sid:1;)
+alert ftp any any -> any any (msg: "Match on FTP command USER"; flow:to_server; ftp.command; content:"USER"; sid:2;)
+alert ftp any any -> any any (msg: "Match on FTP command NLST"; flow:to_server; ftp.command; content:"NLST"; sid:3;)
+alert ftp any any -> any any (msg: "Match on FTP command PORT"; flow:to_server; ftp.command; content:"PORT"; sid:4;)
+alert ftp any any -> any any (msg: "Match on FTP command RETR"; flow:to_server; ftp.command; content:"RETR"; sid:5;)
+alert ftp any any -> any any (msg: "Match on FTP command QUIT"; flow:to_server; ftp.command; content:"QUIT"; sid:6;)
+
+# Wrong direction -- won't match
+#alert ftp any any -> any any (flow:to_client; ftp.command; content:"PASS"; sid:10;)
+#alert ftp any any -> any any (flow:to_client; ftp.command; content:"USER"; sid:20;)
+#alert ftp any any -> any any (flow:to_client; ftp.command; content:"NLST"; sid:30;)
+#alert ftp any any -> any any (flow:to_client; ftp.command; content:"PORT"; sid:40;)
+#alert ftp any any -> any any (flow:to_client; ftp.command; content:"RETR"; sid:50;)
+#alert ftp any any -> any any (flow:to_client; ftp.command; content:"QUIT"; sid:60;)
