@@ -1,0 +1,5 @@
+# Protocol Detection Only Rules
+alert tcp any any -> any any (msg:"tcp, pd negated"; app-layer-protocol:!http; sid:401;)
+alert tcp any any -> any any (msg:"tcp, pd positive"; app-layer-protocol:http; sid:402;)
+alert tcp any any -> any any (msg:"tcp, pd positive dns"; app-layer-protocol:dns; sid:403;)
+alert tcp any any -> any any (msg:"tcp, pd positive, dns, flow:to_server"; app-layer-protocol:dns; flow:to_server; sid:405;)
