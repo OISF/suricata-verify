@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"SURICATA TCPv4 invalid checksum"; tcpv4-csum:invalid; classtype:protocol-command-decode; sid:1;)
