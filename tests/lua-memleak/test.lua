@@ -1,6 +1,5 @@
 function init (args)
     local needs = {}
-    needs["http.request_headers"] = tostring(true)
     return needs
 end
 
