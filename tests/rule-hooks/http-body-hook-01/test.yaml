@@ -1,0 +1,39 @@
+requires:
+  min-version: 8
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: http
+      http.url: "/~regit/ids-suricata-esiea.pdf"
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1 # not started
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2 # request_line
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 3 # header
+- filter:
+    count: 443
+    match:
+      event_type: alert
+      alert.signature_id: 4 # body update
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 5 # trailer
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 6 # complete

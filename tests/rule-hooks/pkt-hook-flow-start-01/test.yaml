@@ -1,0 +1,36 @@
+requires:
+  min-version: 8
+
+pcap: ../http-body-hook-01/input.pcap
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: http
+      http.url: "/~regit/ids-suricata-esiea.pdf"
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 2
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 3
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 4
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 5
