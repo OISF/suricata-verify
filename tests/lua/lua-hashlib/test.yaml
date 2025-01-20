@@ -1,0 +1,14 @@
+pcap: ../../cond-log-dns-dig/input.pcap
+
+requires:
+  min-version: 8
+
+args:
+  - --set security.lua.allow-rules=true
+  - --set default-rule-path=.
+
+checks:
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 1
