@@ -2,7 +2,6 @@ local dns = require("suricata.dns")
 
 function init (args)
    local needs = {}
-   needs["dns.response"] = tostring(true)
    return needs
 end
 
