@@ -1,0 +1,20 @@
+requires:
+    min-version: 7
+    pcap: false
+
+args:
+- --engine-analysis
+
+checks:
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 1101
+            type: de_only
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 2200005
+            type: de_only
