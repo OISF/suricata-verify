@@ -1,0 +1,19 @@
+requires:
+ min-version: 8
+
+pcap: ../websocket-ping/input.pcap
+
+args:
+  - -k none --set stream.inline=true
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      pcap_cnt: 8
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      pcap_cnt: 11
