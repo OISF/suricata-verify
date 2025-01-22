@@ -1,0 +1,2 @@
+alert websocket any any -> any any (msg:"There is no pong opcode in this packet"; websocket.opcode:!pong; sid:1;)
+alert websocket any any -> any any (msg:"There is no ping opcode in this packet"; websocket.opcode:!ping; sid:2;)
