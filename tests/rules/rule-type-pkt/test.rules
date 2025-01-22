@@ -1,0 +1,6 @@
+# Packet rules
+alert tcp-pkt any any -> any any (msg:"tcp-pkt, anchored content"; content:"abc"; startswith; sid:203;)
+alert tcp any any -> any any (msg:"ttl"; ttl:123; sid:701;)
+alert udp any any -> any any (msg:"UDP with flow direction"; flow:to_server; sid:1001;)
+alert tcp any any -> any 443 (flow: to_server; flowbits:set,tls_error; sid:1604; msg:"Allow TLS error handling (outgoing packet) - non-stateful rule";)
+alert tcp-pkt any any -> any any (msg:"Flowbit isset"; flowbits:isset,fb6; flowbits:isset,fb7; sid:1919;)
