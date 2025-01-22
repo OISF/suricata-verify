@@ -2,7 +2,7 @@ requires:
   min-version: 8
 
 args:
-- -k none
+- -k none --set stream.inline=true
 
 checks:
 - filter:
@@ -15,3 +15,24 @@ checks:
     match:
       event_type: websocket
       websocket.opcode: pong
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+      websocket.opcode: ping
+      pcap_cnt: 8
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2
+      websocket.opcode: pong
+      pcap_cnt: 11
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 3
+      websocket.opcode: pong
+      pcap_cnt: 11
