@@ -1,5 +1,4 @@
 -- lua_pushinteger output test for SCRuleIds and ...
-local packet = require "suricata.packet"
 name = "lua-scrule-ids.log"
 
 function init(args)
@@ -16,8 +15,7 @@ function setup(args)
 end
 
 function log(args)
-    p = packet.get()
-    timestring = p:timestring()
+    timestring = SCPacketTimeString()
     sid, rev, gid = SCRuleIds()
 
     file:write ("[**] " .. timestring .. "\nSCRuleIds is\n[**]\nSignature id: " .. sid .. "\nrevision: " .. rev .. "\nGroup id: " .. gid .. "[**]")

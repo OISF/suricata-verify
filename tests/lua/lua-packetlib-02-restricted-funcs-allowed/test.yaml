@@ -1,0 +1,14 @@
+requires:
+  min-version: 8
+
+pcap: ../../http-request-line/input.pcap
+
+args:
+  - -k none
+  - --set security.lua.allow-restricted-functions=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
