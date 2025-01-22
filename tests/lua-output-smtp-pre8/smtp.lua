@@ -1,6 +1,4 @@
 -- simple fast-log to file lua module
-local packet = require "suricata.packet"
-
 name = "smtp_lua.log"
 
 function init (args)
@@ -17,8 +15,7 @@ function setup (args)
 end
 
 function log(args)
-   p = packet.get()
-   ts = p:timestring_legacy()
+   ts = SCPacketTimeString()
    from = SMTPGetMailFrom()
    to = SMTPGetRcptList()
    to_string = ""

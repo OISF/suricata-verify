@@ -36,7 +36,7 @@ function log(args)
     http_ua = string.gsub(http_ua, "%c", ".")
 
     p = packet.get()
-    ts = p:timestring_legacy()
+    ts = p:timestring_iso8601()
     ipver, srcip, dstip, proto, sp, dp = SCFlowTuple()
 
     file:write (ts .. " " .. http_host .. " [**] " .. http_uri .. " [**] " ..

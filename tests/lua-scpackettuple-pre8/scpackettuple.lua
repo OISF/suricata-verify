@@ -1,5 +1,3 @@
-local packet = require "suricata.packet"
-
 -- simple SCPacketTuple log test
 name = "scpacket-tuple.log"
 
@@ -17,10 +15,8 @@ function setup(args)
 end
 
 function log(args)
-    p = packet.get()
-    timestring = p:timestring_legacy()
-
-    ipver, srcip, dstip, proto, sp, dp = p:tuple()
+    timestring = SCPacketTimeString()
+    ipver, srcip, dstip, proto, sp, dp = SCPacketTuple()
 
     file:write ("{" .. timestring .. " [**]\nSCPacketTuple is\nIP Version:  " .. ipver .. "\nSrc: " .. srcip .. ":" .. sp .. " -> Dst: " .. dstip .. ":" .. dp .. " [**] Protocol: " .. proto .. "}\n")
     file:flush()

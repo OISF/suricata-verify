@@ -3,6 +3,8 @@ requires:
     - HAVE_LUA
   min-version: 8
 
+pcap: ../lua-output-http/input.pcap
+
 checks:
   - file-compare:
       filename: http_lua.log

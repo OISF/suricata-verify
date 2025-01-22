@@ -3,7 +3,7 @@ pcap: ../lua-output-http/input.pcap
 requires:
   features:
     - HAVE_LUA
-  min-version: 8
+  lt-version: 8
 
 checks:
   - file-compare:
