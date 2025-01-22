@@ -1,0 +1,38 @@
+requires:
+    min-version: 7
+    pcap: false
+
+args:
+- --engine-analysis
+
+checks:
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 203
+            type: pkt
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 701
+            type: pkt
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 1001
+            type: pkt
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 1604
+            type: pkt
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 1919
+            type: pkt
