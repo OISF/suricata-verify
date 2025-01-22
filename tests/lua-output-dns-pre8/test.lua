@@ -1,5 +1,3 @@
-local packet = require "suricata.packet"
-
 filename = "lua-dns.log"
 
 function init (args)
@@ -14,8 +12,7 @@ function setup (args)
 end
 
 function log(args)
-   p = packet.get()
-   ts = p:timestring()
+   ts = SCPacketTimeString()
    ip_ver, src_ip, dst_ip, proto, sp, dp = SCFlowTuple()
    tx_id = DnsGetTxid()
 

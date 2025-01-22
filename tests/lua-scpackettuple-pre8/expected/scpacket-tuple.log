@@ -1,0 +1,40 @@
+{10/06/2015-15:16:43.136335 [**]
+SCPacketTuple is
+IP Version:  4
+Src: 10.16.1.11:59733 -> Dst: 104.131.202.103:80 [**] Protocol: 6}
+{10/06/2015-15:16:43.136772 [**]
+SCPacketTuple is
+IP Version:  4
+Src: 104.131.202.103:80 -> Dst: 10.16.1.11:59733 [**] Protocol: 6}
+{10/06/2015-15:16:43.136823 [**]
+SCPacketTuple is
+IP Version:  4
+Src: 10.16.1.11:59733 -> Dst: 104.131.202.103:80 [**] Protocol: 6}
+{10/06/2015-15:16:43.136911 [**]
+SCPacketTuple is
+IP Version:  4
+Src: 10.16.1.11:59733 -> Dst: 104.131.202.103:80 [**] Protocol: 6}
+{10/06/2015-15:16:43.137046 [**]
+SCPacketTuple is
+IP Version:  4
+Src: 104.131.202.103:80 -> Dst: 10.16.1.11:59733 [**] Protocol: 6}
+{10/06/2015-15:16:43.137760 [**]
+SCPacketTuple is
+IP Version:  4
+Src: 104.131.202.103:80 -> Dst: 10.16.1.11:59733 [**] Protocol: 6}
+{10/06/2015-15:16:43.137833 [**]
+SCPacketTuple is
+IP Version:  4
+Src: 10.16.1.11:59733 -> Dst: 104.131.202.103:80 [**] Protocol: 6}
+{10/06/2015-15:16:43.138142 [**]
+SCPacketTuple is
+IP Version:  4
+Src: 10.16.1.11:59733 -> Dst: 104.131.202.103:80 [**] Protocol: 6}
+{10/06/2015-15:16:43.138441 [**]
+SCPacketTuple is
+IP Version:  4
+Src: 104.131.202.103:80 -> Dst: 10.16.1.11:59733 [**] Protocol: 6}
+{10/06/2015-15:16:43.138468 [**]
+SCPacketTuple is
+IP Version:  4
+Src: 10.16.1.11:59733 -> Dst: 104.131.202.103:80 [**] Protocol: 6}

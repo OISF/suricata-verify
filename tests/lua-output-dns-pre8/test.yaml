@@ -1,7 +1,9 @@
 requires:
-  min-version: 8
   features:
     - HAVE_LUA
+  lt-version: 8
+
+pcap: ../lua-output-dns/test.pcap
 
 checks:
   - shell:

@@ -1,0 +1,1 @@
+alert icmp any any -> any any (lua:packet.lua; sid:1;)

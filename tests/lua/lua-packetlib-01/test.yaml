@@ -1,0 +1,13 @@
+requires:
+  min-version: 8
+
+pcap: ../../http-request-line/input.pcap
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
