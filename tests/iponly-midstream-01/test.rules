@@ -1,0 +1,4 @@
+alert tcp 192.168.1.5 any -> 192.168.1.1 any (sid:1;)
+alert tcp 192.168.1.1 any -> 192.168.1.5 any (sid:2;)
+alert tcp any any -> any any (sid:3;)
+alert tcp 192.168.1.0/24 any -> 192.168.1.0/24 any (sid:4;)
