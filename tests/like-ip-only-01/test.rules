@@ -1,0 +1,1 @@
+alert tcp 192.168.51.206 any -> !192.168.51.206 any (msg:"simple negated ip test"; flow:established; sid:1001;)
