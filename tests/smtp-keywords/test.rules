@@ -1,0 +1,4 @@
+alert smtp any any -> any any (msg:"SMTP helo GP"; smtp.helo; content:"GP"; sid:1; rev:1;)
+
+# signatures not matching
+alert smtp any any -> any any (msg:"SMTP helo not triggering"; smtp.helo; content:"not there"; sid:10; rev:1;)
