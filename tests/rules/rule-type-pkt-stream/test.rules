@@ -1,0 +1,3 @@
+# Packet Stream rules
+alert tcp any any -> any any (msg:"tcp, anchored content"; content:"abc"; startswith; sid:303;)
+alert http any any -> any any (msg:"http, anchored content"; content:"abc"; depth:30; sid:603;)
