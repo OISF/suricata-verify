@@ -1,0 +1,44 @@
+requires:
+    min-version: 7
+    pcap: false
+
+args:
+- --engine-analysis
+
+checks:
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 102
+            type: stream
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 602
+            type: stream
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 901
+            type: stream
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 1605
+            type: stream
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 160401
+            type: stream
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 160402
+            type: stream
