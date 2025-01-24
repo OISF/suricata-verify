@@ -1,0 +1,26 @@
+requires:
+  min-version: 7
+  pcap: false
+
+args:
+- --engine-analysis
+
+checks:
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 101
+            type: ip_only
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 201
+            type: ip_only
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 1505
+            type: ip_only

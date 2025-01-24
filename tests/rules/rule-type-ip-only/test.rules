@@ -1,0 +1,4 @@
+# IP Only Rules
+alert tcp-stream any any -> any any (msg:"tcp-stream, no content"; sid:101;)
+alert tcp-pkt [192.168.0.0/16,10.0.0.0/8,172.16.0.0/12] any -> any any (msg:"tcp-pkt, no content"; sid:201;)
+alert ip any any -> any any (hostbits:set,myflow2; sid:1505;)
