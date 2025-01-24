@@ -27,3 +27,14 @@ checks:
     match:
       event_type: alert
       alert.signature_id: 12
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      smtp.rcpt_to[0]: "<raj_deol2002in@yahoo.co.in>"
+      alert.signature_id: 3
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 13
