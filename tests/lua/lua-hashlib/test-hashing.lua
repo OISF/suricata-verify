@@ -6,7 +6,6 @@ local expected_md5 = "27170ec0609347c6a158bb5b694822a5"
 
 function init (args)
    local needs = {}
-   needs["dns.rrname"] = tostring(true)
    return needs
 end
 
@@ -127,7 +126,7 @@ function test_md5(name)
 end
 
 function match(args)
-   rrname = tostring(args["dns.rrname"])
+   rrname = DnsGetDnsRrname()
 
    if not test_sha256(rrname) then
       SCLogError("test_sha256 failed")
