@@ -1,0 +1,7 @@
+# Stream rules
+alert tcp-stream any any -> any any (msg:"tcp-stream, simple content"; content:"abc"; sid:102;)
+alert http any any -> any any (msg:"http, simple content"; content:"abc"; sid:602;)
+alert tcp any any -> any any (msg:"byte_extract with dce"; byte_extract:4,0,var,dce; byte_test:4,>,var,4,little; sid:901;)
+alert tcp any any -> any 443 (flow: to_server; content:"abc"; flowbits:set,tls_error; sid:1605; msg:"Allow TLS error handling (outgoing packet) with simple content - Stream rule";)
+alert tcp any any -> any 443 (flow: to_server; content:"abc"; sid:160401; msg:"Allow TLS error handling (outgoing packet) - stream rule";)
+alert tcp any any -> any 443 (content:"abc"; sid:160402; msg:"Allow TLS error handling (outgoing packet) - stream rule";)
