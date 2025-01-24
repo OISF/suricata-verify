@@ -1,0 +1,20 @@
+requires:
+  min-version: 7
+  pcap: false
+
+args:
+- --engine-analysis
+
+checks:
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 304
+        type: "like_ip_only"
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 305
+        type: "like_ip_only"
