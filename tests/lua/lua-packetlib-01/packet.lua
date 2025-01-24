@@ -2,7 +2,6 @@ local packet = require "suricata.packet"
 
 function init (args)
     local needs = {}
-    needs["packet"] = true
     return needs
 end
 
