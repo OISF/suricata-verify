@@ -1,0 +1,11 @@
+requires:
+  min-version: 7
+
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 17
+      match:
+        event_type: alert
