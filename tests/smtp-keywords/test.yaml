@@ -16,3 +16,14 @@ checks:
     match:
       event_type: alert
       alert.signature_id: 10
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      smtp.mail_from: "<gurpartap@patriots.in>"
+      alert.signature_id: 2
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 12
