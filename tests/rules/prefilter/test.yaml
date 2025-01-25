@@ -1,0 +1,57 @@
+requires:
+    min-version: 8.0.0
+    pcap: false
+
+args:
+    - --engine-analysis
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 1
+      mpm.buffer: "payload"
+      mpm.pattern: "1"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 2
+      mpm.buffer: "http_uri"
+      mpm.pattern: "1"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 3
+      mpm.buffer: "http_uri"
+      mpm.pattern: "1"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 4
+      mpm.buffer: "http_uri"
+      mpm.pattern: "1"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 10
+      mpm.buffer: "file_data"
+      mpm.pattern: ".pdf.exe"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 11
+      mpm.buffer: "file_data"
+      mpm.pattern: ".pdf.exe"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 20
+      prefilter.buffer: "packet"
+      prefilter.name: "stream_size"

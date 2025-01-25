@@ -1,0 +1,11 @@
+alert tcp any any -> any any (content:"one"; content:"1"; prefilter; sid:1;)
+alert tcp any any -> any any (uricontent:"one"; uricontent:"1"; prefilter; sid:2;)
+alert tcp any any -> any any (content:"one"; http_uri; content:"1"; prefilter; http_uri; sid:3;)
+alert tcp any any -> any any (http.uri; content:"one"; content:"1"; prefilter; sid:4;)
+
+# test prefilter keyword for file_data
+alert tcp any any -> any 25 (msg:"VIRUS INBOUND bad file attachment"; flow:to_server,established; content:"content-disposition|3a| attachment|3b|"; nocase; content:".zip|22|"; nocase; within:128; file_data; content:".pdf.exe"; prefilter; within:64; sid:10; rev:1;)
+# test prefilter keyword for file.data
+alert tcp any any -> any 25 (msg:"VIRUS INBOUND bad file attachment"; flow:to_server,established; content:"content-disposition|3a| attachment|3b|"; nocase; content:".zip|22|"; nocase; within:128; file.data; content:".pdf.exe"; prefilter; within:64; sid:11; rev:1;)
+
+alert tcp any any -> any any (flow:established,to_server; stream_size:server,<,1111; prefilter; content: "EICAR"; sid:20;)
