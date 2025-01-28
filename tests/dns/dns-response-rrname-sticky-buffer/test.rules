@@ -1,0 +1,5 @@
+# Will alert on name field of Query section in response 
+alert dns any any -> any any (dns.response.rrname; content: "dne.oisf.net"; sid:1; rev:1;)
+
+# Will alert on rdata field of Authority section in response 
+alert dns any any -> any any (dns.response.rrname; content: "ns-110.awsdns-13.com"; sid:2; rev:1;)
