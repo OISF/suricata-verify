@@ -1,0 +1,18 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - tls:
+            enabled: yes
+            custom: [ja4, client_handshake]
+
+app-layer:
+  protocols:
+    tls:
+      enabled: yes
+      ja4-fingerprints: yes
