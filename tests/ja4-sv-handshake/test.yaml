@@ -1,0 +1,14 @@
+requires:
+  min-version: 8
+  features:
+    - HAVE_JA4
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+        tls.ja4s: t120400_c030_12a20535f9be
+        tls.server_handshake.version: TLS 1.2
+        tls.server_handshake.cipher: 49200
+        tls.server_handshake.exts: [65281,11,35,23]
