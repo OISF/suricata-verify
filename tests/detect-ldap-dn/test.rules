@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"Test ldap dn"; ldap.request.distinguished_name; content:"dc=example,dc=com"; sid:1;)

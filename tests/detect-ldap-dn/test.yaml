@@ -1,0 +1,17 @@
+requires:
+  min-version: 8
+
+pcap: ../ldap-search/ldap.pcap
+
+args:
+  - -k none --set stream.inline=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 4
+        ldap.request.operation: search_request
+        ldap.request.search_request.base_object: dc=example,dc=com
+        alert.signature_id: 1
