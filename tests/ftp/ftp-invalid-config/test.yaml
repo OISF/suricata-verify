@@ -1,0 +1,20 @@
+requires:
+  min-version: 8
+pcap: false
+
+args:
+  - -T
+  - --set app-layer.protocols.ftp.memcap=suricata
+  - --set app-layer.protocols.ftp.max-tx=suricata
+  - --set app-layer.protocols.ftp.max-line-length=suricata
+
+checks:
+    - shell:
+        args: grep "Warning.*ftp.*Invalid value.*ftp.memcap" suricata.log | wc -l | xargs
+        expect: 1
+    - shell:
+        args: grep "Warning.*ftp.*Invalid value.*ftp.max-tx" suricata.log | wc -l | xargs
+        expect: 1
+    - shell:
+        args: grep "Warning.*ftp.*Invalid value.*ftp.max-line-length" suricata.log | wc -l | xargs
+        expect: 1
