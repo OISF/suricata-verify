@@ -1,0 +1,1 @@
+drop tls any any -> any any (msg:"Test msg";flow:established;ssl_state:server_hello;sid:1;gid:1;rev:1;)

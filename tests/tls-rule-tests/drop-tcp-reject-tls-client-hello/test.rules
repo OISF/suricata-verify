@@ -1,0 +1,2 @@
+drop tcp any any -> any any (msg:"Test msg";flow:established;app-layer-protocol:!tls;sid:1;gid:1;rev:1;)
+reject tls any any -> any any (msg:"pass tls";ssl_state:client_hello;sid:2;gid:2;rev:2;)
