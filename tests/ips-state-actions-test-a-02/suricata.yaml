@@ -1,0 +1,136 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular #regular|syslog|unix_dgram|unix_stream|redis
+      filename: eve.json
+      types:
+        - alert:
+            # payload: yes             # enable dumping payload in Base64
+            # payload-buffer-size: 4kb # max size of payload buffer to output in eve-log
+            # payload-printable: yes   # enable dumping payload in printable (lossy) format
+            # payload-length: yes      # enable dumping payload length
+            # packet: yes              # enable dumping of packet (without stream segments)
+            # metadata: no             # enable inclusion of app layer metadata with alert. Default yes
+            # http-body: yes           # Requires metadata; enable dumping of HTTP body in Base64
+            # http-body-printable: yes # Requires metadata; enable dumping of HTTP body in printable format
+            # websocket-payload: yes   # Requires metadata; enable dumping of WebSocket Payload in Base64
+            # websocket-payload-printable: yes # Requires metadata; enable dumping of WebSocket Payload in printable format
+
+            # Enable the logging of tagged packets for rules using the
+            # "tag" keyword.
+            tagged-packets: yes
+            # Enable logging the final action taken on a packet by the engine
+            # (e.g: the alert may have action 'allowed' but the verdict be
+            # 'drop' due to another alert. That's the engine's verdict)
+            # verdict: yes
+        # app layer frames
+        - anomaly:
+            # Anomaly log records describe unexpected conditions such
+            # as truncated packets, packets with invalid IP/UDP/TCP
+            # length values, and other events that render the packet
+            # invalid for further processing or describe unexpected
+            # behavior on an established stream. Networks which
+            # experience high occurrences of anomalies may experience
+            # packet processing degradation.
+            #
+            # Anomalies are reported for the following:
+            # 1. Decode: Values and conditions that are detected while
+            # decoding individual packets. This includes invalid or
+            # unexpected values for low-level protocol lengths as well
+            # as stream related events (TCP 3-way handshake issues,
+            # unexpected sequence number, etc).
+            # 2. Stream: This includes stream related events (TCP
+            # 3-way handshake issues, unexpected sequence number,
+            # etc).
+            # 3. Application layer: These denote application layer
+            # specific conditions that are unexpected, invalid or are
+            # unexpected given the application monitoring state.
+            #
+            # By default, anomaly logging is enabled. When anomaly
+            # logging is enabled, applayer anomaly reporting is
+            # also enabled.
+            enabled: yes
+            #
+            # Choose one or more types of anomaly logging and whether to enable
+            # logging of the packet header for packet anomalies.
+            types:
+              # decode: no
+              # stream: no
+              # applayer: yes
+            #packethdr: no
+        - tls:
+            extended: yes     # enable this for extended logging information
+            # output TLS transaction where the session is resumed using a
+            # session id
+            #session-resumption: no
+            # custom controls which TLS fields that are included in eve-log
+            #custom: [subject, issuer, session_resumed, serial, fingerprint, sni, version, not_before, not_after, certificate, chain, ja3, ja3s, ja4, subjectaltname]
+        - drop:
+            alerts: yes      # log alerts that caused drops
+            flows: all       # start or all: 'start' logs only a single drop
+                             # per flow direction. All logs each dropped pkt.
+            # Enable logging the final action taken on a packet by the engine
+            # (will show more information in case of a drop caused by 'reject')
+            verdict: yes
+        - flow
+
+# Logging configuration.  This is not about logging IDS alerts/events, but
+# output about what Suricata is doing, like startup messages, errors, etc.
+logging:
+  # The default log level: can be overridden in an output section.
+  # Note that debug level logging will only be emitted if Suricata was
+  # compiled with the --enable-debug configure option.
+  #
+  # This value is overridden by the SC_LOG_LEVEL env var.
+  default-log-level: notice
+
+  # The default output format.  Optional parameter, should default to
+  # something reasonable if not provided.  Can be overridden in an
+  # output section.  You can leave this out to get the default.
+  #
+  # This console log format value can be overridden by the SC_LOG_FORMAT env var.
+  #default-log-format: "%D: %S: %M"
+  #
+  # For the pre-7.0 log format use:
+  #default-log-format: "[%i] %t [%S] - (%f:%l) <%d> (%n) -- "
+
+  # A regex to filter output.  Can be overridden in an output section.
+  # Defaults to empty (no filter).
+  #
+  # This value is overridden by the SC_LOG_OP_FILTER env var.
+  default-output-filter:
+
+  # Requires libunwind to be available when Suricata is configured and built.
+  # If a signal unexpectedly terminates Suricata, displays a brief diagnostic
+  # message with the offending stacktrace if enabled.
+  #stacktrace-on-signal: on
+
+  # Define your logging outputs.  If none are defined, or they are all
+  # disabled you will get the default: console output.
+  outputs:
+  - console:
+      enabled: yes
+      # type: json
+  - file:
+      enabled: yes
+      level: info
+      filename: suricata.log
+      # format: "[%i - %m] %z %d: %S: %M"
+      # type: json
+  - syslog:
+      enabled: no
+      facility: local5
+      format: "[%i] <%d> -- "
+      # type: json
+
+# Set the order of alerts based on actions
+# The default order is pass, drop, reject, alert
+action-order:
+  - pass
+  - drop
+  - reject
+  - alert
+
