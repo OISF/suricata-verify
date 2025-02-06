@@ -1,0 +1,3 @@
+alert dns any any -> any any (msg:"Test dns_query option"; dns_query; content:"google.com"; nocase; sid:1;)
+alert dns any any -> any any (msg:"Test dns_query option"; dns_query; content:"google.net"; nocase; sid:2;)
+alert dns any any -> any any (msg:"Test Z flag event"; app-layer-event:dns.z_flag_set; sid:3;)
