@@ -1,4 +1,5 @@
-Test ldap.request.dn keyword.
+Test ldap.request.dn and
+ldap.responses.dn keywords.
 
 PCAP from ../ldap-search/ldap.pcap
 
