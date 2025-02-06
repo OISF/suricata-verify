@@ -15,3 +15,11 @@ checks:
         ldap.request.operation: search_request
         ldap.request.search_request.base_object: dc=example,dc=com
         alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 6
+        ldap.responses[0].operation: search_result_entry
+        ldap.responses[0].search_result_entry.base_object: dc=example,dc=com
+        alert.signature_id: 2
