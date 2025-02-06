@@ -1,1 +1,2 @@
 alert ldap any any -> any any (msg:"Test ldap request dn"; ldap.request.distinguished_name; content:"dc=example,dc=com"; startswith; endswith; sid:1;)
+alert ldap any any -> any any (msg:"Test ldap responses dn"; ldap.responses.dn; content:"dc=example,dc=com"; startswith; endswith; sid:2;)

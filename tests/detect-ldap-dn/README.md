@@ -1,4 +1,5 @@
-Test ldap.request.distinguished_name keyword.
+Test ldap.request.distinguished_name and
+ldap.responses.dn keywords.
 
 PCAP from ../ldap-search/ldap.pcap
 
