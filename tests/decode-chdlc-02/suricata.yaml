@@ -1,0 +1,24 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular #regular|syslog|unix_dgram|unix_stream|redis
+      filename: eve.json
+      types:
+        - alert:
+            packet: yes              # enable dumping of packet (without stream segments)
+        - http:
+            extended: true
+        - files:
+            force-magic: no
+        - flow
+        - stats
+app-layer:
+  protocols:
+    http:
+      enabled: yes
+      libhtp:
+         default-config:
+           response-body-limit: 100kb
