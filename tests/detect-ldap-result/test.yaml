@@ -1,0 +1,18 @@
+requires:
+  min-version: 8
+
+args:
+  - -k none
+  - --set stream.midstream=true
+
+pcap: ../ldap-unsolicited/ldap.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 2
+        event_type: alert
+        ldap.responses[0].operation: extended_response
+        ldap.responses[0].extended_response.result_code: "unavailable"
+        alert.signature_id: 1
