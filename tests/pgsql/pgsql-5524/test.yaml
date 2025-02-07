@@ -1,0 +1,42 @@
+requires:
+   min-version: 8
+args:
+- -k none
+- --set stream.midstream=true
+
+checks:
+- filter:
+    count: 1
+    match:
+      dest_ip: 127.0.0.1
+      dest_port: 5432
+      event_type: pgsql
+      pgsql.request.protocol_version: '3.0'
+      pgsql.request.startup_parameters.optional_parameters[0].database: test
+      pgsql.request.startup_parameters.optional_parameters[1].client_encoding: UNICODE
+      pgsql.request.startup_parameters.optional_parameters[2].date_style: ISO
+      pgsql.request.startup_parameters.optional_parameters[3].time_zone: US/Pacific
+      pgsql.request.startup_parameters.user: test
+      pgsql.response.message: authentication_ok
+      pgsql.response.parameter_status[0].client_encoding: UNICODE
+      pgsql.response.parameter_status[1].date_style: ISO, MDY
+      pgsql.response.parameter_status[2].is_superuser: 'on'
+      pgsql.response.parameter_status[3].server_version: 7.4.5
+      pgsql.response.parameter_status[4].session_authorization: test
+      pgsql.response.process_id: 30259
+      pgsql.response.secret_key: 2074654521
+      pgsql.tx_id: 1
+      proto: TCP
+      src_ip: 127.0.0.1
+      src_port: 57829
+- filter:
+    count: 1
+    match:
+      dest_ip: 127.0.0.1
+      dest_port: 5432
+      event_type: pgsql
+      pgsql.request.message: termination_message
+      pgsql.tx_id: 2
+      proto: TCP
+      src_ip: 127.0.0.1
+      src_port: 57829
