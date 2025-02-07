@@ -1,0 +1,21 @@
+%YAML 1.1
+---
+
+outputs:
+   - eve-log:
+       enabled: yes
+       filetype: regular #regular|syslog|unix_dgram|unix_stream|redis
+       filename: eve.json
+       types:
+         - pgsql:
+             enabled: yes
+         - flow
+
+app-layer:
+  protocols:
+    pgsql:
+      enabled: yes
+      # Stream reassembly size for PostgreSQL. By default, track it completely.
+      stream-depth: 0
+      # Maximum number of live PostgreSQL transactions per flow
+      # max-tx: 1024
