@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"HTTP Stat Code Response"; http.stat_code; content:"200"; sid:1;)

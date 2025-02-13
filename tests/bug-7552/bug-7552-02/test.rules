@@ -1,0 +1,2 @@
+# we want alert tcp instead od alert ldap to test one more edge case
+alert tcp any any -> any any (msg:"Test LDAP response operation"; ldap.responses.operation:extended_response; sid:1;)
