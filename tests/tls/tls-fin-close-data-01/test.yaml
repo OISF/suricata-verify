@@ -1,0 +1,17 @@
+requires:
+  min-version: 8
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.app_layer.error.tls.parser: 0
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+        tls.sni: rr4---sn-5hne6nzy.googlevideo.com
