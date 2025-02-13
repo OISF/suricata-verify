@@ -1,0 +1,2 @@
+alert ldap any any -> any any (msg:"Test request attribute type"; ldap.request.attribute_type; content:"*"; startswith; endswith; sid:1;)
+alert ldap any any -> any any (msg:"Test request attribute type"; ldap.request.attribute_type; content:"+"; startswith; endswith; sid:2;)
