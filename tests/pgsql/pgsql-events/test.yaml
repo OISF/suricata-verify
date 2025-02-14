@@ -1,0 +1,13 @@
+requires:
+    min-version: 8
+
+args:
+- -k none --set stream.midstream=true --set stream.inline=true
+
+checks:
+    - filter:
+        filename: eve.json
+        count: 1
+        match:
+            event_type: alert
+            alert.signature_id: 1

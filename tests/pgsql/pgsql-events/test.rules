@@ -1,0 +1,1 @@
+alert pgsql any any -> any any (msg:"PGSQL unknown/ malformed message"; app-layer-event:pgsql.malformed_request; flow:to_server; sid:1;)
