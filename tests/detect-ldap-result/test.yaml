@@ -13,3 +13,28 @@ checks:
         ldap.responses[0].operation: search_result_done
         ldap.responses[0].search_result_done.result_code: size_limit_exceeded
         alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 4
+        event_type: alert
+        ldap.responses[0].operation: search_result_done
+        ldap.responses[0].search_result_done.result_code: size_limit_exceeded
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 4
+        event_type: alert
+        ldap.responses[0].operation: search_result_done
+        ldap.responses[0].search_result_done.result_code: size_limit_exceeded
+        alert.signature_id: 3
+checks:
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 4
+        event_type: alert
+        ldap.responses[0].operation: search_result_done
+        ldap.responses[0].search_result_done.message: "Message: size limit got exceeded (max 65k)"
+        alert.signature_id: 4

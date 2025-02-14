@@ -1,1 +1,4 @@
 alert ldap any any -> any any (msg:"Test LDAP result code"; ldap.responses.result_code:size_limit_exceeded; sid:1;)
+alert ldap any any -> any any (msg:"Test LDAP result code at index 0"; ldap.responses.result_code:size_limit_exceeded,0; sid:2;)
+alert ldap any any -> any any (msg:"Packet has only size_limit_exceeded result code"; ldap.responses.result_code:size_limit_exceeded,all; sid:3;)
+alert ldap any any -> any any (msg:"Test LDAP error message"; ldap.responses.message; content:"Message: size limit got exceeded (max 65k)"; startswith; endswith; sid:4;)
