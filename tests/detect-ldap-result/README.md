@@ -1,4 +1,4 @@
-Test ldap.responses.result_code keyword.
+Test ldap.responses.result_code and ldap.responses.error_message keywords.
 
 PCAP created with flowsynth.py
 

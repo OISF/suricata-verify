@@ -13,3 +13,12 @@ checks:
         ldap.responses[0].operation: search_result_done
         ldap.responses[0].search_result_done.result_code: size_limit_exceeded
         alert.signature_id: 1
+checks:
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 4
+        event_type: alert
+        ldap.responses[0].operation: search_result_done
+        ldap.responses[0].search_result_done.message: "Size limit exceeded"
+        alert.signature_id: 2
