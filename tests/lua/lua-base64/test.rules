@@ -1,3 +1,4 @@
 alert dns any any -> any any (msg:"TEST DNS LUA dns.rrname"; \
+      flow:to_server; \
       dns.query.name; content: "www.suricata-ids.org"; \
       lua:rule.lua; sid:1; rev:1;)
