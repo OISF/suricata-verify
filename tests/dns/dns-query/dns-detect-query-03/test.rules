@@ -1,0 +1,1 @@
+alert dns any any -> any any (msg:"Test dns_query option"; dns_query; content:"google"; nocase; sid:1;)
