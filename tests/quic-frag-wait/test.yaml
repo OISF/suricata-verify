@@ -1,0 +1,14 @@
+requires:
+  min-version: 8
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: quic
+        pcap_cnt: 6
+        quic.extensions[0].name: "key_share"
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly

@@ -1,0 +1,13 @@
+requires:
+  min-version: 8
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: quic
+        pcap_cnt: 3
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
