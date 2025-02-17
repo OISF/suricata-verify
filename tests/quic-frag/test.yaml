@@ -1,0 +1,12 @@
+requires:
+  min-version: 8
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: quic
+        pcap_cnt: 2
+        quic.extensions[0].name: "status_request"
+        quic.extensions[4].name: "alpn"
+        quic.extensions[4].values[0]: "h3"

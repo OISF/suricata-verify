@@ -1,0 +1,12 @@
+requires:
+  min-version: 8
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: quic
+        pcap_cnt: 2
+        quic.extensions[0].name: "supported_groups"
+        quic.extensions[7].name: "server_name"
+        quic.extensions[7].values[0]: "mastodon.social"
