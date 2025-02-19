@@ -1,14 +1,18 @@
-requires:
-  min-version: 6
-  features:
-    - HAVE_LIBJANSSON
-
 args:
 - -k none
 
 checks:
   - filter:
+      min-version: 6
       count: 2
       match:
         event_type: alert
         alert.signature_id: 1
+  - filter:
+      min-version: 8
+      count: 1
+      match:
+        event_type: dcerpc
+        dcerpc.request: REQUEST
+        dcerpc.interfaces[0].uuid: "367abb81-9844-35f1-ad32-98f038001003"
+        dcerpc.call_id: 20
