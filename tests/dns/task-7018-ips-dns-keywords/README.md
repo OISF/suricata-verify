@@ -14,7 +14,7 @@ Query 1: suricata.io
 Query 2: oisf.net
 Query 3: suricata.org
 
-We match those against a single rule with `dns.query.name` and inspecting
+We match those against a single rule with `dns.queries.rrname` and inspecting
 content `suricata`, so the expectation is to have 4 alerts.
 
 ## Related issues
