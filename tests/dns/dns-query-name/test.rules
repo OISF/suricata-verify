@@ -1,8 +1,8 @@
 # Will alert in both directions as no direction is specified.
-alert dns any any -> any any (dns.query.name; content:"suricata"; sid:1; rev:1;)
+alert dns any any -> any any (dns.queries.rrname; content:"suricata"; sid:1; rev:1;)
 
 # Only alert on requests.
-alert dns any any -> any any (dns.query.name; content:"suricata"; flow:to_server; sid:2; rev:1;)
+alert dns any any -> any any (dns.queries.rrname; content:"suricata"; flow:to_server; sid:2; rev:1;)
 
 # Only alert on responses.
-alert dns any any -> any any (dns.query.name; content:"suricata"; flow:to_client; sid:3; rev:1;)
+alert dns any any -> any any (dns.queries.rrname; content:"suricata"; flow:to_client; sid:3; rev:1;)
