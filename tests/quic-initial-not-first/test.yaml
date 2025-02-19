@@ -1,0 +1,20 @@
+requires:
+  min-version: 8
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: quic
+        pcap_cnt: 8
+        quic.extensions[0].name: "supported_versions"
+  - filter:
+      count: 1
+      match:
+        event_type: quic
+        pcap_cnt: 1
+        quic.extensions[1].name: "server_name"
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly

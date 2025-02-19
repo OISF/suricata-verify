@@ -1,0 +1,16 @@
+requires:
+  min-version: 8
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: quic
+        pcap_cnt: 3
+        quic.extensions[0].name: "key_share"        
+        quic.extensions[8].name: "server_name"
+        quic.extensions[8].values[0]: "optimizationguide-pa.googleapis.com"
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
