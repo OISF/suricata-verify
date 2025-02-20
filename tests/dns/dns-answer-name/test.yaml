@@ -41,3 +41,10 @@ checks:
         alert.signature_id: 3
         direction: to_client
         app_proto: dns
+
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 4
+        direction: to_client
+        app_proto: dns
