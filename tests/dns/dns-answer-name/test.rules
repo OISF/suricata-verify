@@ -6,3 +6,6 @@ alert dns any any -> any any (dns.answers.rrname; content:"oisf"; flow:to_server
 
 # Should only alert in the response direction.
 alert dns any any -> any any (dns.answers.rrname; content:"oisf"; flow:to_client; sid:3; rev:1;)
+
+# And the more generic rrname match in a response.
+alert dns any any -> any any (dns.response.rrname; content:"oisf"; flow:to_client; sid:4; rev:1;)
