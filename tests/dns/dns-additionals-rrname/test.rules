@@ -2,3 +2,8 @@ alert dns any any -> any any (dns.queries.rrname; content:"suricata.io"; sid:1; 
 alert dns any any -> any any (dns.authorities.rrname; content:"io"; sid:2; rev:1;)
 alert dns any any -> any any (dns.additionals.rrname; content:"a0.nic.io"; sid:3; rev:1;)
 alert dns any any -> any any (dns.additionals.rrname; content:"c0.nic.io"; sid:4; rev:1;)
+
+# Tests use more generic dns.response.rrname
+alert dns any any -> any any (dns.response.rrname; content:"suricata.io"; sid:5; rev:1;)
+alert dns any any -> any any (dns.response.rrname; content:"a0.nic.io"; sid:6; rev:1;)
+alert dns any any -> any any (dns.response.rrname; content:"c0.nic.io"; sid:7; rev:1;)

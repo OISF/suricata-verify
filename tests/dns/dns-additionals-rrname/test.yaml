@@ -20,3 +20,15 @@ checks:
       count: 1
       match:
         alert.signature_id: 4
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 5
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 6
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 7
