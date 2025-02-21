@@ -1,0 +1,2 @@
+# suricata.io only exists in the rdata of a ptr record
+alert dns any any -> any any (dns.response.rrname; content:"suricata.io"; sid:1;)
