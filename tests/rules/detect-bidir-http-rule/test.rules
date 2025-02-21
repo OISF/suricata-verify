@@ -1,0 +1,1 @@
+alert http1 any any => any any (msg:"matching both uri and status"; sid: 1; http.uri; content: "/download"; http.stat_code; content: "200";)
