@@ -26,3 +26,7 @@ checks:
       match:
         alert.signature_id: 3
         direction: to_client
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 4
