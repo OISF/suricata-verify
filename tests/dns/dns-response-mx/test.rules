@@ -1,0 +1,2 @@
+# only exists in mx rdata
+alert dns any any -> any any (dns.response.rrname; content:"aspmx.l.google.com"; sid:1; rev:1;)
