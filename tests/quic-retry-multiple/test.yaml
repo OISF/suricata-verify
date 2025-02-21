@@ -1,0 +1,26 @@
+requires:
+  min-version: 8
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: quic
+        pcap_cnt: 2
+        quic.extensions[0].name: "extended_master_secret"
+  - filter:
+      count: 1
+      match:
+        event_type: quic
+        pcap_cnt: 5
+        quic.extensions[0].name: "extended_master_secret"
+  - filter:
+      count: 1
+      match:
+        event_type: quic
+        pcap_cnt: 8
+        quic.extensions[0].name: "supported_versions"
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
