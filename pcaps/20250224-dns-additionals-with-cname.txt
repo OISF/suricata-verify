@@ -1,0 +1,38 @@
+```
+# Scapy script to create a DNS response with an addtional field that
+# contains an rrname as these can be hard to find in the wild
+
+from scapy.all import *
+
+request = (
+    IP(dst="8.8.8.8")
+    / UDP(dport=53)
+    / DNS(rd=1, qd=DNSQR(qname="example.com", qtype="A"))
+)
+
+# Create a DNS response with an additional record
+dns_response = (
+    IP(dst=request[IP].src, src=request[IP].dst)
+    / UDP(dport=request[UDP].sport, sport=request[UDP].dport)
+    / DNS(
+        id=request[DNS].id,
+        qr=1,
+        aa=1,
+        rd=request[DNS].rd,
+        ra=1,
+        qd=request[DNS].qd,
+        an=DNSRR(
+            rrname=request[DNS].qd.qname.decode(), type=request[DNS].qd.qtype, ttl=300, rdata="192.168.1.1"
+        ),
+        ar=DNSRR(
+            rrname="service.example.com",
+            type="CNAME",
+            ttl=300,
+            rdata="internal-service.example.net",
+        ),
+    )
+)
+
+# Write to pcap.
+wrpcap("scapy-dns-with-additionals-rrname.pcap", [request, dns_response])
+```
