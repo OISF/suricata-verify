@@ -48,3 +48,10 @@ checks:
         event_type: stats
         stats.app_layer.error.tls.exception_policy.pass_packet: 1
         stats.app_layer.error.tls.exception_policy.drop_packet: 0
+  - filter:
+      min-version: 8
+      count: 1
+      match:
+        event_type: flow
+        flow.exception_policy_triggered[0].target: "app_layer_error"
+        flow.exception_policy_triggered[0].policy: "pass_packet"
