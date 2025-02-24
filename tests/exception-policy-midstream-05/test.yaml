@@ -24,3 +24,10 @@ checks:
       match:
         event_type: stats
         stats.tcp.midstream_exception_policy.bypass: 1
+  - filter:
+      min-version: 8
+      count: 1
+      match:
+        event_type: flow
+        flow.exception_policy[0].target: "stream_midstream"
+        flow.exception_policy[0].policy: "bypass"
