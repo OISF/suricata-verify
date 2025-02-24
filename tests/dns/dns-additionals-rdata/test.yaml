@@ -1,0 +1,10 @@
+requires:
+  min-version: 8
+
+pcap: ../../../pcaps/20250224-dns-additionals-with-cname.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 5
