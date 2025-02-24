@@ -1,0 +1,1 @@
+alert http $HOME_NET any -> any 443 (msg:"ET POLICY HTTP traffic on port 443 (CONNECT)"; flow:to_server,established; content:"CONNECT"; http_method; classtype:bad-unknown; sid:2013933; rev:4; metadata:created_at 2011_11_17, updated_at 2011_11_17;)
