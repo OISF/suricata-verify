@@ -1,0 +1,1 @@
+alert dns any any -> any any (dns.response.rrname; content:"internal-service.example.net"; sid:5; rev:1;)
