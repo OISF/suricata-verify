@@ -23,3 +23,10 @@ checks:
       count: 0
       match:
         event_type: http
+  - filter:
+      min-version: 8
+      count: 1
+      match:
+        event_type: flow
+        flow.exception_policy_triggered[0].target: "stream_midstream"
+        flow.exception_policy_triggered[0].policy: "ignore"

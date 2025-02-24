@@ -22,3 +22,10 @@ checks:
       match:
         event_type: tls
         tls.sni: example.com
+  - filter:
+      min-version: 8
+      count: 1
+      match:
+        event_type: flow
+        not-has-key: flow.exception_policy_triggered[0].target
+        not-has-key: flow.exception_policy_triggered[0].policy
