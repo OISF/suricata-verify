@@ -25,3 +25,10 @@ checks:
     match:
       event_type: stats
       stats.tcp.midstream_exception_policy.pass_flow: 2
+- filter:
+    min-version: 8
+    count: 1
+    match:
+      event_type: flow
+      flow.exception_policy_triggered.target: "stream_midstream"
+      flow.exception_policy_triggered.policy: "pass_flow"

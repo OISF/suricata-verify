@@ -34,3 +34,10 @@ checks:
         event_type: flow
         app_proto: tls
         flow.action: pass
+  - filter:
+      min-version: 8
+      count: 1
+      match:
+        event_type: flow
+        flow.exception_policy_triggered.target: "stream_reassembly_memcap"
+        flow.exception_policy_triggered.policy: "pass_flow"
