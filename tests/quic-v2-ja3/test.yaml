@@ -1,5 +1,7 @@
 requires:
   min-version: 7.0.0
+  features:
+    - HAVE_JA3
 
 checks:
   - filter:
@@ -14,3 +16,8 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 4
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
