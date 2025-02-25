@@ -1,9 +1,5 @@
 pcap: ../../dcerpc/dcerpc-dce-iface-02/input.pcap
 
-requires:
-  features:
-    - HAVE_LIBJANSSON
-
 args:
 - -k none
 

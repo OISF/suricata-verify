@@ -1,11 +1,5 @@
 pcap: ../mqtt-limit-2/input.pcap
 
-requires:
-  features:
-    - HAVE_LIBJANSSON
-  files:
-    - rust/src/mqtt/parser.rs
-
 args:
   - -k none
 

@@ -1,11 +1,5 @@
 pcap: ../rfb-rules/00-vnc-openwall-3.7.pcap
 
-requires:
-  features:
-    - HAVE_LIBJANSSON
-  files:
-    - rust/src/rfb/parser.rs
-
 checks:
 
   - filter:

@@ -1,10 +1,5 @@
 pcap: ../http2-keywords2/input.pcap
 
-requires:
-  features:
-    - HAVE_LIBJANSSON
-  min-version: 6.0.0
-
 # disables checksum verification
 args:
   - -k none --set stream.midstream=true

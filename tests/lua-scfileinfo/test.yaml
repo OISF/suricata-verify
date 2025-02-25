@@ -1,7 +1,6 @@
 requires:
   features:
       - HAVE_LUA
-      - HAVE_NSS
 
 checks:
   - file-compare:

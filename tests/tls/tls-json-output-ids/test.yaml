@@ -1,9 +1,5 @@
 pcap: ../../tls/tls-fingerprint-alert/input.pcap
 
-requires:
-  features:
-    - HAVE_LIBJANSSON
-
 checks:
   - filter:
       count: 1

@@ -1,10 +1,5 @@
 pcap: ../eve-metadata-01-alert/80000000-037-PTP_Example_IPv4_HTTP_Session-PUBLIC-tp-01-TEST1.pcap
 
-requires:
-  features:
-    - HAVE_LIBJANSSON
-  files:
-    - src/output-json-metadata.c
 args:
 - --set stream.midstream=true
 
