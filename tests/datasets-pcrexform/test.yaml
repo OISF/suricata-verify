@@ -1,9 +1,5 @@
 requires:
   min-version: 6
-  features:
-    - HAVE_LIBJANSSON
-  files:
-    - src/datasets.c
 
 args:
  - -k none  --no-random --data-dir=${OUTPUT_DIR}
