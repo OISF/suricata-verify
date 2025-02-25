@@ -1,7 +1,5 @@
 requires:
   min-version: 7.0.0
-  script:
-    - test $(fgrep -c 'current_transaction.complete = true' rust/src/rfb/rfb.rs) -gt 1
 
 checks:
   - filter:
