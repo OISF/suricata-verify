@@ -8,5 +8,14 @@ checks:
       match:
         event_type: tls
         tls.version: "TLS 1.3 draft-23"
+
+  - filter:
+      requires:
+        features:
+          - HAVE_JA3
+      count: 1
+      match:
+        event_type: tls
+        tls.version: "TLS 1.3 draft-23"
         tls.ja3.hash: "0558cf38ebac58d332d7f39308fcd006"
         tls.ja3.string: "771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49161-49187-49171-49191-49162-49188-49172-49192-156-157-47-60-53-61-10,65281-23-35-13-11-51-45-43-10,29-23-24,0"
