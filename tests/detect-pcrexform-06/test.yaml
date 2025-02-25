@@ -1,10 +1,5 @@
 pcap: ../detect-pcrexform-01/input.pcap
 
-requires:
-
-  files:
-    - src/detect-transform-pcrexform.c
-
 checks:
   - filter:
       count: 0

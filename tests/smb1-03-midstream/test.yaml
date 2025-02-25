@@ -1,9 +1,4 @@
 requires:
-  features:
-    - HAVE_LIBJANSSON
-    - RUST
-  files:
-    - rust/src/smb/smb.rs
   min-version: 5.0.0
 
 args:

@@ -1,12 +1,5 @@
 pcap: ../bug-3519/input.pcap
 
-requires:
-  features:
-    - HAVE_LIBJANSSON
-
-  files:
-    - src/output-json-ftp.c
-
 checks:
   - filter:
       count: 8

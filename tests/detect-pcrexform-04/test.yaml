@@ -1,9 +1,5 @@
 pcap: ../detect-pcrexform-01/input.pcap
 
-requires:
-
-  files:
-    - src/detect-transform-pcrexform.c
 
 exit-code: 1
 

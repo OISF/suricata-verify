@@ -1,7 +1,3 @@
-requires:
-  files:
-    - src/datasets.c
-
 pcap: ../flowbit-oring/input.pcap
 
 args:

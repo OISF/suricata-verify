@@ -1,8 +1,5 @@
 pcap: ../detect-bytemath-01/input.pcap
 
-requires:
-   files:
-       - src/detect-bytemath.c
 
 checks:
   - filter:

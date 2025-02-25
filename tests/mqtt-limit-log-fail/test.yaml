@@ -2,8 +2,6 @@ pcap: ../mqtt-limit-2/input.pcap
 
 requires:
   min-version: 8
-  files:
-    - rust/src/mqtt/parser.rs
 
 args:
   - -k none
