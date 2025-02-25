@@ -1,6 +1,3 @@
-requires:
-  min-version: 5.0.0
-
 checks:
 
   - shell:

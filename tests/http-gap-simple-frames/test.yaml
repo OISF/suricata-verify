@@ -1,10 +1,5 @@
 pcap: ../http-gap-simple/input.pcap
 
-requires:
-  features:
-    - HAVE_LIBJANSSON
-  min-version: 7.0.0
-
 # disables checksum verification
 args:
   - -k none

@@ -1,7 +1,3 @@
-requires:
-  features:
-    - HAVE_LIBJANSSON
-  min-version: 5.0.0
 args:
 - --set stream.midstream=true
 - --set stream.async-oneside=true
