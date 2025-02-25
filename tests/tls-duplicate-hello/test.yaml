@@ -1,4 +1,6 @@
 requires:
+  features:
+    - HAVE_JA3
   min-version: 7
 
 # disables checksum verification
