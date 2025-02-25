@@ -50,14 +50,14 @@ Or to run a single test:
 requires:
 
   # Require a minimum version of Suricata.
-  min-version: 4.1.0
+  min-version: 8.0.0
 
   # Require that the Suricata version be less than a version.
-  lt-version: 6
+  lt-version: 8
 
   # Test is only for this version. For example, 4.0 would match any 4.0
   # release, but 4.0.3 would only match 4.0.3.
-  version: 4.0
+  version: 7.0.6
 
   # Test is only for the listed OS. For example, the following would make
   # a test run only on Linux.
@@ -94,7 +94,7 @@ requires:
 
 skip:
   # Skip a test if a feature is present, with a message that is logged.
-  - feature: RUST
+  - feature: HAVE_LUA
     msg: eve dns v1 not supported by rust
 
 # Add additional arguments to Suricata.
