@@ -1,7 +1,3 @@
-requires:
-  features:
-    - HAVE_LIBJANSSON
-
 # disables checksum verification
 args:
   - -k none --set app-layer.protocols.http.libhtp.default-config.response-body-decompress-layer-limit=3

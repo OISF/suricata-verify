@@ -1,8 +1,5 @@
 pcap: ../dhcp-eve-extended/input.pcap
 
-requires:
-  features:
-    - RUST
 checks:
 - filter:
     count: 2

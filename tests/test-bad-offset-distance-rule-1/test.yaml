@@ -1,9 +1,3 @@
-requires:
-  min-version: 5.0.0
-
-  features:
-    - HAVE_LIBJANSSON
-
 command: |
   ${SRCDIR}/src/suricata --set classification-file="${SRCDIR}/classification.config" --set reference-config-file="${SRCDIR}/reference.config" -l ${OUTPUT_DIR} -c ${TEST_DIR}/suricata.yaml -r ${TEST_DIR}/ -S ${TEST_DIR}/test.rules
 

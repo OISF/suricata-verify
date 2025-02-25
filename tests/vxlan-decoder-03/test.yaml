@@ -1,7 +1,3 @@
-requires:
-  features:
-    - HAVE_LIBJANSSON
-    - RUST
 args:
   - --set decoder.vxlan.enabled=true
 

@@ -1,6 +1,5 @@
 requires:
   features:
-    - HAVE_LIBJANSSON
     - GeoIP2
 
 pcap: ../flowbit-oring/input.pcap

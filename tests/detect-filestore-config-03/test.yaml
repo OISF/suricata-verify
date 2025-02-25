@@ -1,10 +1,5 @@
 pcap: ../detect-filestore-config-04/test.pcap
 
-requires:
-  min-version: 5.0.1
-  features:
-    - HAVE_NSS
-
 checks:
   - shell:
       args: |

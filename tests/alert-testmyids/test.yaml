@@ -1,9 +1,5 @@
 pcap: ../flowbit-oring/input.pcap
 
-requires:
-  features:
-    - HAVE_LIBJANSSON
-
 checks:
 
   # Check that we only have one alert event type in eve.
