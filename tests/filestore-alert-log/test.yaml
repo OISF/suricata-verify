@@ -3,9 +3,6 @@ pcap: ../filestore-filecontainer-http/filecontainer-http.pcap
 requires:
   features:
     - MAGIC
-    - HAVE_NSS
-  files:
-    - src/output-filestore.c
 
 checks:
 

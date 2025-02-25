@@ -1,7 +1,3 @@
-requires:
-  files:
-    - src/output-eve-stream.c
-
 args:
 - --simulate-ips
 - --runmode=single

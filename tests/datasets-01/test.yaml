@@ -1,9 +1,5 @@
 pcap: ../flowbit-oring/input.pcap
 
-requires:
-  files:
-    - src/datasets.c
-
 args:
   - --data-dir=${OUTPUT_DIR}
 

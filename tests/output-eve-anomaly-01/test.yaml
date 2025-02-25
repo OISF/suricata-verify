@@ -1,12 +1,5 @@
 pcap: ../output-eve-anomaly-packethdr/anomaly.pcap
 
-requires:
-  features:
-    - HAVE_LIBJANSSON
-
-  files:
-    - src/output-json-anomaly.c
-
 args:
   - -k none
 

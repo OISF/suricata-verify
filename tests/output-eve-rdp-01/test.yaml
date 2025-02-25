@@ -1,11 +1,5 @@
 pcap: ../rdp-protocol/RDP-003.pcap
 
-requires:
-  features:
-    - HAVE_LIBJANSSON
-  files:
-    - rust/src/rdp/parser.rs
-
 checks:
 
   - filter:

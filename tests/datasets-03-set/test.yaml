@@ -1,11 +1,5 @@
 pcap: ../datasets-05-state/input.pcap
 
-requires:
-  features:
-    - HAVE_LIBJANSSON
-  files:
-    - src/datasets.c
-
 args:
  - -k none
 

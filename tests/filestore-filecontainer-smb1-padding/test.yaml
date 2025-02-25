@@ -1,10 +1,6 @@
 requires:
   features:
-    - HAVE_NSS
     - MAGIC
-    - RUST
-  files:
-    - src/output-filestore.c
   min-version: 7
 
 args:
