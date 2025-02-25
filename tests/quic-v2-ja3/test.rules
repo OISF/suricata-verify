@@ -1,0 +1,2 @@
+alert quic any any -> any any (msg:"QUIC V2"; quic.version; content:"|6b 33 43 cf|"; sid:4;)
+alert quic any any -> any any (msg:"QUIC JA3"; ja3.string; content:"771,4865-4866-4867,5-10-11-13-65281-23-16-18-43-51-57,29-23-24-25,0"; sid:3;)
