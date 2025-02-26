@@ -1,1 +1,1 @@
-Test the `dns.query.name` sticky buffer.
+Test the `dns.queries.rrname` sticky buffer.

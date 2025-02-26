@@ -1,0 +1,10 @@
+requires:
+  min-version: 8
+
+pcap: ../../dns/dns-udp-eve-log-answer-only/dns-udp-google.com-a-aaaa-mx.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 1
