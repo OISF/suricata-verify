@@ -1,13 +1,5 @@
 pcap: ../ikev1-rules/ikev1-isakmp-main-mode.pcap
 
-requires:
-  features:
-    - HAVE_NSS
-    - HAVE_LIBJANSSON
-  files:
-    - rust/src/ike/parser.rs
-  min-version: 7.0.0
-
 checks:
   - filter:
       count: 5

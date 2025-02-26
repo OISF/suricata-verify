@@ -1,9 +1,3 @@
-requires:
-  features:
-    - HAVE_LIBJANSSON
-  files:
-    - src/detect-ipaddr.c
-
 args:
   - --no-random --data-dir=${OUTPUT_DIR}
 

@@ -1,9 +1,5 @@
 pcap: ../bug-78-uricontent/input.pcap
 
-requires:
-  features:
-    - HAVE_LIBJANSSON
-
 args:
  - -k none
 

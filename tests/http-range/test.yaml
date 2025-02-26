@@ -1,10 +1,5 @@
 pcap: ../detect-pcrexform-01/input.pcap
 
-requires:
-  features:
-    - HAVE_LIBJANSSON
-  min-version: 5.0.0
-
 # disables checksum verification
 args:
   - -k none

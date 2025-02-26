@@ -1,9 +1,3 @@
-requires:
-  features:
-    - HAVE_LIBJANSSON
-  files:
-    - rust/src/rdp/parser.rs
-
 checks:
 
   # Check if rdp is detected and some protocol specific details are in the output

@@ -1,11 +1,5 @@
 pcap: ../flowbit-oring/input.pcap
 
-requires:
-  features:
-    - HAVE_LIBJANSSON
-  files:
-    - src/detect-ipaddr.c
-
 args:
  - -k none
 

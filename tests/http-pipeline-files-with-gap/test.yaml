@@ -1,8 +1,3 @@
-requires:
-  min-version: 6
-  features:
-    - HAVE_NSS
-
 checks:
   - filter:
       count: 3

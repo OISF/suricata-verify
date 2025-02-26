@@ -1,9 +1,3 @@
-requires:
-  features:
-    - HAVE_LIBJANSSON
-  files:
-    - rust/src/rfb/parser.rs
-
 checks:
 
   - filter:

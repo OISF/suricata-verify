@@ -1,9 +1,6 @@
 requires:
   features:
-    - HAVE_NSS
     - MAGIC
-  files:
-    - src/output-filestore.c
 
 checks:
 

@@ -1,10 +1,7 @@
 pcap: ../../tls/tls-certs-alert/input.pcap
 
 requires:
-  min-version: 5.0.0
   features:
-    - HAVE_LIBJANSSON
-    - HAVE_NSS
     - HAVE_LUA
     - HAVE_JA3
 

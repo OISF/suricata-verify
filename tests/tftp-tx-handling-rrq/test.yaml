@@ -1,10 +1,5 @@
 pcap: ../output-eve-tftp-01/input.pcap
 
-requires:
-  features:
-    - HAVE_LIBJANSSON
-    - RUST
-
 args:
  - -k none
 

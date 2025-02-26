@@ -1,9 +1,3 @@
-requires:
-  features:
-    - HAVE_LIBJANSSON
-  files:
-    - src/datasets.c
-
 args:
   - --data-dir=${OUTPUT_DIR}
 

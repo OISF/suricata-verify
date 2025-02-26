@@ -1,12 +1,5 @@
 pcap: ../smb2-03-rule/smb2.pcap
 
-requires:
-  features:
-    - HAVE_LIBJANSSON
-    - RUST
-  files:
-    - rust/src/smb/smb.rs
-    - src/detect-smb-ntlmssp.c
 args:
 - --set stream.reassembly.depth=0
 

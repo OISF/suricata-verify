@@ -1,9 +1,5 @@
 pcap: ../../../dns/dns-udp-eve-log-answer-only/dns-udp-google.com-a-aaaa-mx.pcap
 
-requires:
-  features:
-    - HAVE_LIBJANSSON
-
 checks:
   - filter:
       count: 3
