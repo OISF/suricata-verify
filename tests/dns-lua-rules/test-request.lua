@@ -1,6 +1,5 @@
 function init (args)
    local needs = {}
-   needs["dns.request"] = tostring(true)
    return needs
 end
 

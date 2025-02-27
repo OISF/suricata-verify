@@ -1,6 +1,5 @@
 function init(args)
     local needs = {}
-    needs["tls"] = tostring(true)
     return needs
 end
 
