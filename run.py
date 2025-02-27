@@ -954,7 +954,10 @@ class TestRunner:
             args.append("--disable-detection")
         elif len(rules) == 1:
             rulefile = rules[0]
-            if rule_is_version_compatible(os.path.basename(rulefile), self.suricata_config.version):
+            # switch to firewall mode if file is named firewall.rules
+            if rulefile.endswith("firewall.rules"):
+                args += ["--firewall-rules-exclusive", rulefile]
+            elif rule_is_version_compatible(os.path.basename(rulefile), self.suricata_config.version):
                 args += ["-S", rulefile]
             else:
                 args.append("--disable-detection")
