@@ -1,0 +1,2 @@
+pass:flow tcp:flow_start any any -> any 443 (flow:to_server; sid:1;)
+drop:flow tcp:flow_start any any -> any any (sid:2;)
