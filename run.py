@@ -949,15 +949,31 @@ class TestRunner:
                 args += ["-r", pcaps[0]]
 
         # Find rules.
-        rules = glob.glob(os.path.join(self.directory, "*.rules"))
+        rules = sorted(glob.glob(os.path.join(self.directory, "*.rules")))
         if not rules:
             args.append("--disable-detection")
         elif len(rules) == 1:
             rulefile = rules[0]
-            if rule_is_version_compatible(os.path.basename(rulefile), self.suricata_config.version):
+            # switch to firewall mode if file is named firewall.rules
+            if rulefile.endswith("firewall.rules"):
+                args += ["--firewall-rules-exclusive", rulefile]
+            elif rule_is_version_compatible(os.path.basename(rulefile), self.suricata_config.version):
                 args += ["-S", rulefile]
             else:
                 args.append("--disable-detection")
+        elif len(rules) == 2:
+            rulefile = rules[0]
+            # switch to firewall mode if file is named firewall.rules
+            if rulefile.endswith("firewall.rules"):
+                args += ["--firewall-rules-exclusive", rulefile]
+            else:
+                raise TestError("multi rule file should have firewall.rules and td.rules. Got {} {}".format(rules[0],rules[1]))
+
+            rulefile = rules[1]
+            if rulefile.endswith("td.rules"):
+                args += ["-S", rulefile]
+            else:
+                raise TestError("multi rule file should have firewall.rules and td.rules")
         else:
             raise TestError("More than 1 rule file found")
 
