@@ -1,0 +1,2 @@
+pass tls:client_hello_done any any -> any any (tls.sni; content:"www.bing.com"; sid:21; alert;)
+drop tls:client_hello_done any any -> any any (sid:22;)
