@@ -1,0 +1,11 @@
+requires:
+  min-version: 7
+
+pcap: 154.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        has-key: ether
