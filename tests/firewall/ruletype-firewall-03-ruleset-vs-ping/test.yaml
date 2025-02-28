@@ -1,0 +1,30 @@
+pcap: ../../detect-itype-prefilter/icmpv4-ping.pcap
+
+args:
+  - --simulate-ips
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 101
+- filter:
+    count: 0
+    match:
+      event_type: drop
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.pkts_toserver: 75
+      flow.pkts_toclient: 75
+      flow.state: "established"
+      flow.alerted: true
+      flow.action: "pass"
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.ips.accepted: 150
+      stats.ips.blocked: 0
