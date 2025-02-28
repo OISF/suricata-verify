@@ -1,0 +1,26 @@
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+      dns.type: response
+      dns.queries[0].rrname: suricata.io
+      dns.queries[0].rrtype: A
+      dns.answers[0].rrname: suricata.io
+      dns.answers[0].rrtype: A
+      dns.answers[0].ttl: 600
+      dns.answers[0].rdata: 35.212.0.44
+
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2
+      dns.type: request
+      dns.queries[0].rrname: suricata.io
+      dns.queries[0].rrtype: A
+
