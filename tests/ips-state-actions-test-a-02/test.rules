@@ -1,0 +1,5 @@
+pass udp any any -> any 6081 (sid:1;)
+pass tcp 2a03:b0c0:0002:00d0:0000:0000:0bd3:4001 any <> 2606:2800:0220:0001:0248:1893:25c8:1946 443 (msg:"PASS_CUSTOM_RULE TCP port:443 to support traffic"; flow:established; sid:201000044;)
+
+pass tcp 2a03:b0c0:0002:00d0::/64 any <> any [[80,443]] (msg:"PASS_HTTP_NOT_ESTABLISHED TCP allow http/https traffic to the established state to allow further inspection"; flow:not_established; sid:201000012;)
+drop ip any any -> any any (msg:"drop_strict action"; flow:stateless; sid:2;)
