@@ -1,0 +1,13 @@
+# matching ones
+alert http any any -> any any (msg:"test"; file.data; content:"bateau"; file.name; content:"titi.txt"; sid:1;)
+alert http any any -> any any (msg:"test"; file.data; content:"bateau"; file.name; content:"toto.txt"; sid:2;)
+alert http any any -> any any (msg:"test"; file.data; content:"Titi"; sid:3;)
+alert http any any -> any any (msg:"test"; file.data; content:"minet"; sid:4;)
+alert http any any -> any any (msg:"test"; file.data; content:"Titi"; file.data; content:"minet"; sid:5;)
+alert http any any -> any any (msg:"test"; file.data; content:"minet"; fast_pattern; sid:6;)
+
+# matching as different file.data have each content
+alert http any any -> any any (msg:"test"; file.data; content:"bateau"; file.data; content:"minet"; sid:7;)
+# not matching as not the same file.data has both contents
+alert http any any -> any any (msg:"test"; file.data; content:"bateau"; content:"minet"; sid:8;)
+
