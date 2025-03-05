@@ -1,3 +1,2 @@
-# This rule will only match on the first DNS transaction that contains
-# `suricata`, as the second is followed by |03|
-alert dns any any -> any any (msg:"DNS suricata query - payload rule"; content:"suricata|02|"; sid:1; rev:1;)
+alert dns any any -> any any (msg:"DNS suricata"; content:"suricata"; flow:to_client; sid:1; rev:1;)
+alert dns any any -> any any (msg:"DNS suricata"; content:"suricata"; flow:to_server; sid:2; rev:1;)
