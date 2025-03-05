@@ -1,8 +1,3 @@
-requires:
-  min-version: 4.1.0
-  features:
-    - HAVE_NSS
-
 checks:
   - shell:
       args: find filestore -type f | xargs | wc -l

@@ -1,7 +1,3 @@
-requires:
-    features:
-        - HAVE_LIBJANSSON
-
 checks:
     - filter:
         count: 18

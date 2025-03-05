@@ -2,7 +2,6 @@ pcap: ../flowbit-oring/input.pcap
 
 requires:
   features:
-    - HAVE_LIBJANSSON
     - LIBNET1.1
 
 args:

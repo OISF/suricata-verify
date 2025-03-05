@@ -1,11 +1,3 @@
-requires:
-  features:
-    - HAVE_LIBJANSSON
-    - RUST
-  min-version: 4.1.0-dev
-  script:
-    - grep "record_mark > 16384" rust/src/krb/krb5.rs > /dev/null 2>&1
-
 args:
   - --set pcap-file.checksum-checks=no
 
