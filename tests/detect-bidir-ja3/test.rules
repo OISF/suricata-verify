@@ -1,0 +1,4 @@
+alert tls any any => any any (msg:"bidir ja3"; ja3s.hash; content:"5d79edf64e03689ff559a54e9d9487bc"; ja3.string; content:"771,49196-49200"; sid:1;)
+# should not match
+alert tls any any => any any (msg:"bidir ja3"; ja3s.hash; content:"6d79edf64e03689ff559a54e9d9487bc"; ja3.string; content:"771,49196-49200"; sid:2;)
+alert tls any any => any any (msg:"bidir ja3"; ja3s.hash; content:"5d79edf64e03689ff559a54e9d9487bc"; ja3.string; content:"9999999999"; sid:3;)
