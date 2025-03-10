@@ -1,6 +1,5 @@
 requires:
   features:
-    - HAVE_LIBJANSSON
     - MAGIC
 
 args:

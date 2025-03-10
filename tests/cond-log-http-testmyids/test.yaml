@@ -1,10 +1,5 @@
 pcap: ../flowbit-oring/input.pcap
 
-requires:
-  features:
-    - HAVE_LIBJANSSON
-  min-version: 6.0.0
-
 checks:
   - filter:
       count: 0

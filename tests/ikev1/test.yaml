@@ -1,8 +1,5 @@
 pcap: ../ikev1-rules/ikev1-isakmp-main-mode.pcap
 
-requires:
-  min-version: 7.0.0
-
 checks:
   - filter:
       count: 1

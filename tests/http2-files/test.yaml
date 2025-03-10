@@ -1,11 +1,5 @@
 pcap: ../http2-keywords/input.pcap
 
-requires:
-  features:
-    - HAVE_NSS
-    - HAVE_LIBJANSSON
-  min-version: 7
-
 # disables checksum verification
 args:
   - -k none
