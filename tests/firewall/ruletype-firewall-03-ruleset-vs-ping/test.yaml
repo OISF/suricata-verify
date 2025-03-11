@@ -21,7 +21,7 @@ checks:
       flow.pkts_toclient: 75
       flow.state: "established"
       flow.alerted: true
-      flow.action: "pass"
+      flow.action: "accept"
 - filter:
     count: 1
     match:

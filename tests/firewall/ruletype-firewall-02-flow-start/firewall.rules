@@ -1,2 +1,2 @@
-pass:flow tcp:flow_start any any -> any 80 (flow:to_server; alert; sid:1;)
+accept:flow tcp:flow_start any any -> any 80 (flow:to_server; alert; sid:1;)
 drop:flow tcp:flow_start any any -> any any (sid:2;)
