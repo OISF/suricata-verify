@@ -1,8 +1,6 @@
-local dns = require("suricata.dns")
-
 function init (args)
    local needs = {}
-   needs["dns.request"] = tostring(true)
+   needs["dns.response"] = tostring(true)
    return needs
 end
 
@@ -15,24 +13,18 @@ function count(t)
 end
 
 function match(args)
-   local tx, err = dns.get_tx()
-   if tx == nil then
-       print(err)
-       return 0
-   end
-
-   if tx:txid() ~= 36146 then
+   if DnsGetTxid() ~= 36146 then
       return 0
    end
 
    -- The requested name.
-   local rrname = tx:rrname()
+   local rrname = DnsGetDnsRrname()
    if rrname ~= "www.suricata-ids.org" then
       return 0
    end
 
    -- Queries
-   local queries = tx:queries()
+   local queries = DnsGetQueries()
    if queries == nil then return 0 end
 
    -- There should only be one query.
@@ -48,13 +40,18 @@ function match(args)
       return 0
    end
 
-   local answers = tx:answers()
-   if answers == nil then return 0 end
-   if count(answers) ~= 0 then return 0 end
+   local rcode = DnsGetRcode()
+   print(rcode)
 
-   local authorities = tx:authorities()
+   local answers = DnsGetAnswers()
+   if answers == nil then return 0 end
+   if count(answers) ~= 3 then return 0 end
+
+   local authorities = DnsGetAuthorities()
    if authorities == nil then return 0 end
    if count(authorities) ~= 0 then return 0 end
+
+   -- TODO: Look at the answers.
 
    return 1
 end

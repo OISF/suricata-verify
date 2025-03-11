@@ -1,4 +1,5 @@
 local dataset = require("suricata.dataset")
+local dns = require("suricata.dns")
 
 function init (args)
     local needs = {}
@@ -17,7 +18,8 @@ end
 
 function match (args)
     ipver, srcip, dstip, proto, sp, dp = SCFlowTuple()
-    query = DnsGetDnsRrname()
+    local tx = dns.get_tx()
+    query = tx:rrname()
     if query == nil then
         return 0
     end

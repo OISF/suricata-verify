@@ -1,4 +1,5 @@
 local hashlib = require("suricata.hashlib")
+local dns = require("suricata.dns")
 
 -- We don't actually use, but the script will fail to run if it fails
 -- to "require".
@@ -21,7 +22,8 @@ function setup (args)
 end
 
 function log(args)
-   queries = DnsGetQueries()
+   local tx = dns.get_tx()
+   queries = tx:queries()
    if queries ~= nil then
       for n, t in pairs(queries) do
          if hashlib.md5_hexdigest(t["rrname"]) == expected_md5 then
