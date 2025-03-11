@@ -1,9 +1,9 @@
 # Packet rules
 
 # allow session setup
-pass:packet tcp:all $HOME_NET any <> $EXTERNAL_NET 443 (flow:not_established; alert; sid:1021;)
+accept:packet tcp:all $HOME_NET any <> $EXTERNAL_NET 443 (flow:not_established; alert; sid:1021;)
 
-# pass rest of the flow, packet by packet
-pass:packet tcp:all $HOME_NET any <> $EXTERNAL_NET 443 (flow:established; alert; sid:1023;)
+# allow rest of the flow, packet by packet
+accept:packet tcp:all $HOME_NET any <> $EXTERNAL_NET 443 (flow:established; alert; sid:1023;)
 
 # default drop
