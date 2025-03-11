@@ -1,3 +1,5 @@
+local dns = require("suricata.dns")
+
 function init (args)
    local needs = {}
    needs["dns.request"] = tostring(true)
@@ -13,18 +15,18 @@ function count(t)
 end
 
 function match(args)
-   if DnsGetTxid() ~= 36146 then
+   if dns.txid() ~= 36146 then
       return 0
    end
 
    -- The requested name.
-   local rrname = DnsGetDnsRrname()
+   local rrname = dns.rrname()
    if rrname ~= "www.suricata-ids.org" then
       return 0
    end
 
    -- Queries
-   local queries = DnsGetQueries()
+   local queries = dns.queries()
    if queries == nil then return 0 end
 
    -- There should only be one query.
@@ -40,11 +42,11 @@ function match(args)
       return 0
    end
 
-   local answers = DnsGetAnswers()
+   local answers = dns.answers()
    if answers == nil then return 0 end
    if count(answers) ~= 0 then return 0 end
 
-   local authorities = DnsGetAuthorities()
+   local authorities = dns.authorities()
    if authorities == nil then return 0 end
    if count(authorities) ~= 0 then return 0 end
 

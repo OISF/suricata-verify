@@ -1,0 +1,7 @@
+alert dns any any -> any any (msg:"TEST DNS LUA dns.rrname"; \
+      lua:test-rrname.lua; sid:1; rev:1;)
+alert dns any any -> any any (msg:"TEST DNS LUA dns.request"; \
+      lua:test-request.lua; sid:2; rev:1;)
+alert dns any any -> any any (msg:"TEST DNS LUA dns.response"; \
+      lua:test-response.lua; sid:3; rev:1;)
+      
