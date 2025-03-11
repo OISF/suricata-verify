@@ -1,4 +1,5 @@
 local packet = require "suricata.packet"
+local dns = require "suricata.dns"
 
 filename = "lua-dns.log"
 
@@ -17,9 +18,10 @@ function log(args)
    p = packet.get()
    ts = p:timestring_legacy()
    ip_ver, src_ip, dst_ip, proto, sp, dp = SCFlowTuple()
-   tx_id = DnsGetTxid()
+   local tx = dns.get_tx()
+   tx_id = tx:txid()
 
-   queries = DnsGetQueries()
+   queries = tx:queries()
    if queries ~= nil then
       for n, t in pairs(queries) do
 	 msg = string.format(
@@ -36,13 +38,13 @@ function log(args)
       end
    end
 
-   rcode = DnsGetRcode()
-   if rcode ~= nil then
+   rcode_string = tx:rcode_string()
+   if rcode_string ~= nil then
       msg = string.format(
 	 "%s [**] Response TX %04x [**] %s [**] %s:%d -> %s:%d",
 	 ts,
 	 tx_id,
-	 rcode,
+	 rcode_string,
 	 src_ip,
 	 sp,
 	 dst_ip,
@@ -50,7 +52,7 @@ function log(args)
       write(msg)
    end
    
-   answers = DnsGetAnswers()
+   answers = tx:answers()
    if answers ~= nil then
       for n, t in pairs(answers) do
 	 msg = string.format(
@@ -69,7 +71,7 @@ function log(args)
       end
    end
    
-   authorities = DnsGetAuthorities()
+   authorities = tx:authorities()
    if authorities ~= nil then
       for n, t in pairs(authorities) do
 	 msg = string.format(

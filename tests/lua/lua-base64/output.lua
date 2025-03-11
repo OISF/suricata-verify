@@ -2,6 +2,7 @@
 -- script. More thourough testing of base64 in rule.lua.
 
 local base64 = require("suricata.base64")
+local dns = require("suricata.dns")
 
 local expected_base64 = "d3d3LnN1cmljYXRhLWlkcy5vcmc="
 
@@ -19,7 +20,8 @@ function setup (args)
 end
 
 function log(args)
-   queries = DnsGetQueries()
+   local tx = dns.get_tx()
+   queries = tx:queries()
    if queries ~= nil then
       for n, t in pairs(queries) do
 
