@@ -37,7 +37,7 @@ checks:
       flow.pkts_toclient: 30
       flow.state: "closed"
       flow.alerted: true
-      flow.action: pass
+      flow.action: accept
 - filter:
     count: 1
     match:

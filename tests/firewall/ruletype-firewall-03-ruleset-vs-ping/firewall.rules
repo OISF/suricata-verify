@@ -1,9 +1,9 @@
-pass:flow icmp:flow_start $HOME_NET any -> $HOME_NET any (itype:8; msg:"Ping!"; alert; sid:101;)
+accept:flow icmp:flow_start $HOME_NET any -> $HOME_NET any (itype:8; msg:"Ping!"; alert; sid:101;)
 
 drop:flow tls:client_hello_done $HOME_NET any -> 172.16.0.0/12 any (ja3.hash; content:"e7eca2baf4458d095b7f45da28c16c34"; msg:"Drop naughty JA3"; sid:102;)
 
 drop:flow tls:server_hello_done $HOME_NET any -> $EXTERNAL_NET any (tls.version:1.0; msg:"TLS 1.0 not allowed"; sid:103;)
 
-pass:flow tls:client_hello_done $HOME_NET any -> $EXTERNAL_NET any (tls.sni; content:"www.google.com"; sid:104; alert;)
+accept:flow tls:client_hello_done $HOME_NET any -> $EXTERNAL_NET any (tls.sni; content:"www.google.com"; sid:104; alert;)
 
 # Implicit drop all else
