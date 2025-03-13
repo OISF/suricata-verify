@@ -1,7 +1,7 @@
-alert http any any -> any any (flow:established,to_server; http.host; datajson:isset,badhost,type string,load hosts.json,key bad_host,json_key host, array_key threat; ip.src; datajson:isset,src_ip,type ip,load src.json,key src_ip,json_key ip; sid:1;)
+alert http any any -> any any (flow:established,to_server; http.host; dataset:isset,badhost,type string,load hosts.json,format json, enrichment_key bad_host,value_key host, array_key threat; ip.src; dataset:isset,src_ip,type ip,load src.json,format json, enrichment_key src_ip,value_key ip; sid:1;)
 
-alert http any any -> any any (flow:established,to_server; http.host; datajson:isset,dbadhost,type string,load hosts-direct.json,key dbad_host,json_key host; ip.src; datajson:isset,src_ip,type ip,load src.json,key src_ip,json_key ip; sid:2;)
+alert http any any -> any any (flow:established,to_server; http.host; dataset:isset,dbadhost,type string,load hosts-direct.json,format json,enrichment_key dbad_host,value_key host; ip.src; dataset:isset,src_ip,type ip,load src.json,format json, enrichment_key src_ip,value_key ip; sid:2;)
 
-alert http any any -> any any (flow:established,to_server; http.host; datajson:isset,nbadhost,type string,load hosts-nested.json,key nbad_host,json_key host, array_key info.threat; ip.src; datajson:isset,src_ip,type ip,load src.json,key src_ip,json_key ip; sid:3;)
+alert http any any -> any any (flow:established,to_server; http.host; dataset:isset,nbadhost,type string,load hosts-nested.json,format json, enrichment_key nbad_host,value_key host, array_key info.threat; ip.src; dataset:isset,src_ip,type ip,load src.json,format json, enrichment_key src_ip,value_key ip; sid:3;)
 
-alert http any any -> any any (flow:established,to_server; http.host; datajson:isset,nkbadhost,type string,load hosts-nested-key.json,key nkbad_host,json_key host.fqdn, array_key info.threat; ip.src; datajson:isset,src_ip,type ip,load src.json,key src_ip,json_key ip; sid:4;)
+alert http any any -> any any (flow:established,to_server; http.host; dataset:isset,nkbadhost,type string,load hosts-nested-key.json,format json, enrichment_key nkbad_host,value_key host.fqdn, array_key info.threat; ip.src; dataset:isset,src_ip,type ip,load src.json,format json, enrichment_key src_ip,value_key ip; sid:4;)
