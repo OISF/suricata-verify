@@ -1,0 +1,23 @@
+# Packet rules
+
+# accept outgoing ping and the returning pongs
+accept:flow icmp:flow_start $HOME_NET any -> $HOME_NET any (itype:8; msg:"Ping!"; alert; sid:1011;)
+# allow session setup
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET 443 (flow:not_established; alert; sid:1021;)
+# allow rest of the flow to 
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET 443 (flow:established; alert; sid:1023;)
+
+# default drop
+
+
+
+
+# App-layer rules
+
+# should match, pcap is to google
+accept:flow tls:client_hello_done $HOME_NET any -> $EXTERNAL_NET any (tls.sni; content:"www.google.com"; sid:104; alert;)
+# allow tls before client hello is done.
+# TODO Since hook "in_progress" will also be triggered once if the protocol has progressed beyond it, we need to place this after client_hello_done. Perhaps we need a way to specify matching the hook as it is now.
+accept:hook tls:client_in_progress $HOME_NET any -> $EXTERNAL_NET any (alert; sid:105;)
+
+# default drop
