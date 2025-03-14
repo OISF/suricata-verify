@@ -1,0 +1,6 @@
+alert http1:response_not_started any any -> any any (sid:1;)
+alert http1:response_line any any -> any any (sid:2;)
+alert http1:response_headers any any -> any any (sid:3;)
+alert http1:response_body any any -> any any (sid:4;)
+alert http1:response_trailer any any -> any any (sid:5;)
+alert http1:response_complete any any -> any any (sid:6;)
