@@ -36,3 +36,10 @@ checks:
         event_type: engine
         log_level: Warning
         engine.module: exception-policy
+  - filter:
+      min-version: 8
+      count: 1
+      match:
+        event_type: flow
+        flow.exception_policy[0].target: "stream_midstream"
+        flow.exception_policy[0].policy: "ignore"
