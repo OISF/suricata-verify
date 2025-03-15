@@ -1,0 +1,38 @@
+requires:
+
+  min-version: 8
+
+pcap: ../decode-chdlc-01/hdlc-http_1tx.pcap
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.hostname: "view.atdmt.com"
+        http.status: 200
+        http.length: 8079
+
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.state: CLOSED
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 666
+        packet_info.linktype_name: C_HDLC
+
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        proto: TCP
+
+  - stats:
+      decoder.ipv4: 17
+      decoder.chdlc: 17
