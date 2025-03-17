@@ -1,0 +1,13 @@
+requires:
+  min-version: 8
+
+pcap: 154.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        has-key: ether
+        ether.src_mac: 00:08:02:1c:47:ae
+        ether.dest_mac: 20:e5:2a:b6:93:f1
