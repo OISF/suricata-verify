@@ -1,0 +1,29 @@
+requires:
+  min-version: 8
+
+args:
+- --set stream.reassembly.depth=0
+- -k none
+
+pcap: ../smb2-01/smb2-peter.pcap
+
+checks:
+  - filter:
+      count: 108
+      match:
+        event_type: smb
+  - filter:
+      count: 57
+      match:
+        event_type: smb
+        smb.command: SMB2_COMMAND_CREATE
+  - filter:
+      count: 34
+      match:
+        event_type: smb
+        smb.command: SMB2_COMMAND_READ
+  - filter:
+      count: 17
+      match:
+        event_type: smb
+        smb.command: SMB2_COMMAND_WRITE
