@@ -1,5 +1,5 @@
 requires:
-    min-version: 8
+    min-version: 7.0.10
 
 args:
 - -k none --set stream.midstream=true --set stream.inline=true
