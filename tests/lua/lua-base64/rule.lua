@@ -1,4 +1,5 @@
 local base64 = require("suricata.base64")
+local dns = require("suricata.dns")
 
 local rrname = "www.suricata-ids.org"
 local expected_base64 = "d3d3LnN1cmljYXRhLWlkcy5vcmc="
@@ -12,7 +13,8 @@ function init (args)
 end
 
 function match(args)
-   rrname = DnsGetDnsRrname()
+   local tx = dns.get_tx()
+   rrname = tx:rrname()
 
    encoded = base64.encode(rrname)
    if encoded ~= expected_base64 then
