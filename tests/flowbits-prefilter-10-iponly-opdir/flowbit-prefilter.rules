@@ -1,0 +1,2 @@
+alert tcp any any -> 82.165.177.154 any (flowbits:set,set_by_iponly; sid:1;)
+alert tcp any any -> any any (flow:to_client; dsize:259; flowbits:isset,set_by_iponly; prefilter; sid:2;)
