@@ -1,0 +1,18 @@
+requires:
+  min-version: 8
+
+pcap: ../tls/tls-certs-alert/input.pcap
+
+args:
+ - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
