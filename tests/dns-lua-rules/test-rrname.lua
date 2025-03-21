@@ -1,10 +1,14 @@
+local dns = require("suricata.dns")
+
 function init (args)
    local needs = {}
    return needs
 end
 
 function match(args)
-   rrname = DnsGetDnsRrname()
+   local tx = dns.get_tx()
+
+   rrname = tx:rrname()
    if rrname == "www.suricata-ids.org" then
       return 1
    end
