@@ -1,0 +1,1 @@
+alert smtp any any -> any any (msg:"Test mime email subject"; email.subject; content:"This is a test email"; startswith; endswith; bsize:20; sid:1;)
