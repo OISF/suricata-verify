@@ -2,8 +2,73 @@ requires:
   min-version: 8
 
 checks:
-  - filter:
-      count: 1
-      match:
-        event_type: flow
-        app_proto: pop3
+- filter:
+    count: 5
+    # count: 56
+    match:
+      event_type: pop3
+
+- filter:
+    count: 1
+    match:
+      dest_ip: 74.208.5.11
+      pop3.response.success: true
+      pop3.response.status: "OK"
+      pop3.response.header: "POP server ready H mieueus020 1Mw7UO-1j88qA02mS-00sOH0"
+      pop3.errors: "NONE"
+      pop3.error_flags: 0
+
+- filter:
+    count: 1
+    match:
+      dest_ip: 74.208.5.11
+      pop3.command.keyword: "USER"
+      pop3.command.args[0]: "moises.nunez@ingenierianumar.com"
+      pop3.response.success: true
+      pop3.response.status: "OK"
+      pop3.response.header: "password required for user \"moises.nunez@ingenierianumar.com\""
+      pop3.errors: "NONE"
+      pop3.error_flags: 0
+
+- filter:
+    count: 1
+    match:
+      pop3.command.keyword: "PASS"
+      pop3.response.success: true
+      pop3.error_flags: 0
+
+- filter:
+    count: 1
+    match:
+      pop3.command.keyword: "STAT"
+      pop3.response.success: true
+      pop3.error_flags: 0
+
+- filter:
+    count: 1
+    match:
+      pop3.command.keyword: "LIST"
+      pop3.response.success: true
+      pop3.error_flags: 0
+
+# Bug with sawp_pop3 causing early exit
+# - filter:
+#     count: 1
+#     match:
+#       pop3.command.keyword: "RSET"
+#       pop3.response.success: true
+#       pop3.error_flags: 0
+
+# - filter:
+#     count: 1
+#     match:
+#       pop3.command.keyword: "UIDL"
+#       pop3.response.success: true
+#       pop3.error_flags: 0
+
+# - filter:
+#     count: 49
+#     match:
+#       pop3.command.keyword: "TOP"
+#       pop3.response.success: true
+#       pop3.error_flags: 0
