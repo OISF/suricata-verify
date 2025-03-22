@@ -1,0 +1,16 @@
+requires:
+  min-version: 8
+
+pcap: ../smtp-to-comma/10.7.29.101_49898-178.63.41.150_25.pcap
+
+args:
+  - -k none --set stream.inline=true
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      email.cc[0]: "\"jam,abrakadabra.ch\" <mirjam@abrakadabra.ch>"
+      pcap_cnt: 18
+      alert.signature_id: 1
