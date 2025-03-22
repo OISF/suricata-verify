@@ -1,0 +1,23 @@
+# Packet rules
+
+# allow session setup
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET 443 (flow:not_established; alert; sid:1021;)
+
+# pass rest of the flow to 
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET 443 (flow:established; alert; sid:1023;)
+
+# default drop
+
+
+
+
+# App-layer rules
+
+accept:hook tls:client_hello_done $HOME_NET any -> $EXTERNAL_NET any (tls.sni; content:"www.google.com"; sid:104; alert;)
+accept:hook tls:request_update $HOME_NET any -> $EXTERNAL_NET any (app-layer-state:<client_hello_done; alert; sid:105;)
+accept:hook tls:request_update $HOME_NET any -> $EXTERNAL_NET any (app-layer-state:>client_hello_done; alert; sid:106;)
+
+# accept all return states
+accept:hook tls:response_update $EXTERNAL_NET any -> $HOME_NET any (alert; sid:205;)
+
+# default drop
