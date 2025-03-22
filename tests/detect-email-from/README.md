@@ -1,5 +1,5 @@
 # Test Description
-Test mime email keywords
+Test mime email.from keyword
 
 ## PCAP
 From ../mime/mime-dec-parse-full-msg-test02/input.pcap
