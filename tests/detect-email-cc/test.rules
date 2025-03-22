@@ -1,0 +1,1 @@
+alert smtp any any -> any any (msg:"Test mime email cc"; email.cc; content:"\"jam,abrakadabra.ch\" <mirjam@abrakadabra.ch>"; startswith; endswith; bsize:44; sid:1;)
