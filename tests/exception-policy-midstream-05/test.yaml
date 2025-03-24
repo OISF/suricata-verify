@@ -23,7 +23,7 @@ checks:
       count: 1
       match:
         event_type: stats
-        stats.tcp.midstream_exception_policy.bypass: 1
+        stats.exception_policy.tcp.midstream.bypass: 1
   - filter:
       min-version: 8
       count: 1
