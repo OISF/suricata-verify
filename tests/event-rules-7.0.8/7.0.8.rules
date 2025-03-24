@@ -1,0 +1,753 @@
+# App layer event  rules
+#
+# SID's fall in the 2260000+ range. See http://doc.emergingthreats.net/bin/view/Main/SidAllocation
+#
+# These sigs fire at most once per connection.
+#
+# A flowint applayer.anomaly.count is incremented for each match. By default it will be 0.
+#
+alert ip any any -> any any (msg:"SURICATA Applayer Mismatch protocol both directions"; flow:established; app-layer-event:applayer_mismatch_protocol_both_directions; flowint:applayer.anomaly.count,+,1; classtype:protocol-command-decode; sid:2260000; rev:1;)
+alert ip any any -> any any (msg:"SURICATA Applayer Wrong direction first Data"; flow:established; app-layer-event:applayer_wrong_direction_first_data; flowint:applayer.anomaly.count,+,1; classtype:protocol-command-decode; sid:2260001; rev:1;)
+alert ip any any -> any any (msg:"SURICATA Applayer Detect protocol only one direction"; flow:established; app-layer-event:applayer_detect_protocol_only_one_direction; flowint:applayer.anomaly.count,+,1; classtype:protocol-command-decode; sid:2260002; rev:1;)
+alert ip any any -> any any (msg:"SURICATA Applayer Protocol detection skipped"; flow:established; app-layer-event:applayer_proto_detection_skipped; flowint:applayer.anomaly.count,+,1; classtype:protocol-command-decode; sid:2260003; rev:1;)
+# alert if STARTTLS was not followed by actual SSL/TLS
+alert tcp any any -> any any (msg:"SURICATA Applayer No TLS after STARTTLS"; flow:established; app-layer-event:applayer_no_tls_after_starttls; flowint:applayer.anomaly.count,+,1; classtype:protocol-command-decode; sid:2260004; rev:2;)
+# unexpected protocol in protocol upgrade
+alert tcp any any -> any any (msg:"SURICATA Applayer Unexpected protocol"; flow:established; app-layer-event:applayer_unexpected_protocol; flowint:applayer.anomaly.count,+,1; classtype:protocol-command-decode; sid:2260005; rev:1;)
+
+#next sid is 2260006
+# Decoder event signatures for Suricata.
+# SID's fall in the 2200000+ range. See http://doc.emergingthreats.net/bin/view/Main/SidAllocation
+alert pkthdr any any -> any any (msg:"SURICATA IPv4 packet too small"; decode-event:ipv4.pkt_too_small; classtype:protocol-command-decode; sid:2200000; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA IPv4 header size too small"; decode-event:ipv4.hlen_too_small; classtype:protocol-command-decode; sid:2200001; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA IPv4 total length smaller than header size"; decode-event:ipv4.iplen_smaller_than_hlen; classtype:protocol-command-decode; sid:2200002; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA IPv4 truncated packet"; decode-event:ipv4.trunc_pkt; classtype:protocol-command-decode; sid:2200003; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA IPv4 invalid option"; decode-event:ipv4.opt_invalid; classtype:protocol-command-decode; sid:2200004; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA IPv4 invalid option length"; decode-event:ipv4.opt_invalid_len; classtype:protocol-command-decode; sid:2200005; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA IPv4 malformed option"; decode-event:ipv4.opt_malformed; classtype:protocol-command-decode; sid:2200006; rev:2;)
+#alert pkthdr any any -> any any (msg:"SURICATA IPv4 padding required "; decode-event:ipv4.opt_pad_required; classtype:protocol-command-decode; sid:2200007; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA IPv4 with ICMPv6 header"; decode-event:ipv4.icmpv6; classtype:protocol-command-decode; sid:2200092; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA IPv4 option end of list required"; decode-event:ipv4.opt_eol_required; classtype:protocol-command-decode; sid:2200008; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA IPv4 duplicated IP option"; decode-event:ipv4.opt_duplicate; classtype:protocol-command-decode; sid:2200009; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA IPv4 unknown IP option"; decode-event:ipv4.opt_unknown; classtype:protocol-command-decode; sid:2200010; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA IPv4 wrong IP version"; decode-event:ipv4.wrong_ip_version; classtype:protocol-command-decode; sid:2200011; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA IPv6 packet too small"; decode-event:ipv6.pkt_too_small; classtype:protocol-command-decode; sid:2200012; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA IPv6 truncated packet"; decode-event:ipv6.trunc_pkt; classtype:protocol-command-decode; sid:2200013; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA IPv6 truncated extension header"; decode-event:ipv6.trunc_exthdr; classtype:protocol-command-decode; sid:2200014; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA IPv6 duplicated Fragment extension header"; decode-event:ipv6.exthdr_dupl_fh; classtype:protocol-command-decode; sid:2200015; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA IPv6 useless Fragment extension header"; decode-event:ipv6.exthdr_useless_fh; classtype:protocol-command-decode; sid:2200080; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA IPv6 duplicated Routing extension header"; decode-event:ipv6.exthdr_dupl_rh; classtype:protocol-command-decode; sid:2200016; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA IPv6 duplicated Hop-By-Hop Options extension header"; decode-event:ipv6.exthdr_dupl_hh; classtype:protocol-command-decode; sid:2200017; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA IPv6 duplicated Destination Options extension header"; decode-event:ipv6.exthdr_dupl_dh; classtype:protocol-command-decode; sid:2200018; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA IPv6 duplicated Authentication Header extension header"; decode-event:ipv6.exthdr_dupl_ah; classtype:protocol-command-decode; sid:2200019; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA IPv6 duplicate ESP extension header"; decode-event:ipv6.exthdr_dupl_eh; classtype:protocol-command-decode; sid:2200020; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA IPv6 invalid option length in header"; decode-event:ipv6.exthdr_invalid_optlen; classtype:protocol-command-decode; sid:2200021; rev:3;)
+alert pkthdr any any -> any any (msg:"SURICATA IPv6 wrong IP version"; decode-event:ipv6.wrong_ip_version; classtype:protocol-command-decode; sid:2200022; rev:2;)
+# RFC 4302 states the reserved field should be 0.
+alert pkthdr any any -> any any (msg:"SURICATA IPv6 AH reserved field not 0"; decode-event:ipv6.exthdr_ah_res_not_null; classtype:protocol-command-decode; sid:2200081; rev:2;)
+# HOP option that we don't understand
+alert pkthdr any any -> any any (msg:"SURICATA IPv6 HOPOPTS unknown option"; decode-event:ipv6.hopopts_unknown_opt; classtype:protocol-command-decode; sid:2200086; rev:2;)
+# HOP header with only padding, covert channel?
+alert pkthdr any any -> any any (msg:"SURICATA IPv6 HOPOPTS only padding"; decode-event:ipv6.hopopts_only_padding; classtype:protocol-command-decode; sid:2200087; rev:2;)
+# DST option that we don't understand
+alert pkthdr any any -> any any (msg:"SURICATA IPv6 DSTOPTS unknown option"; decode-event:ipv6.dstopts_unknown_opt; classtype:protocol-command-decode; sid:2200088; rev:2;)
+# DST header with only padding, covert channel?
+alert pkthdr any any -> any any (msg:"SURICATA IPv6 DSTOPTS only padding"; decode-event:ipv6.dstopts_only_padding; classtype:protocol-command-decode; sid:2200089; rev:2;)
+# Type 0 Routing header deprecated per RFC 5095
+alert ipv6 any any -> any any (msg:"SURICATA RH Type 0"; decode-event:ipv6.rh_type_0; classtype:protocol-command-decode; sid:2200093; rev:2;)
+# padN option with zero length field. This is not uncommon, so disabled by default.
+#alert ipv6 any any -> any any (msg:"SURICATA zero length padN option"; decode-event:ipv6.zero_len_padn; classtype:protocol-command-decode; sid:2200094; rev:2;)
+# Frag Header 'length' field is reserved and should be 0
+alert ipv6 any any -> any any (msg:"SURICATA reserved field in Frag Header not zero"; decode-event:ipv6.fh_non_zero_reserved_field; classtype:protocol-command-decode; sid:2200095; rev:2;)
+# Data after the 'none' header (59) is suspicious.
+alert ipv6 any any -> any any (msg:"SURICATA data after none (59) header"; decode-event:ipv6.data_after_none_header; classtype:protocol-command-decode; sid:2200096; rev:2;)
+# unknown/unsupported next header / protocol. Valid protocols are not yet supported, so disabling by default
+#alert ipv6 any any -> any any (msg:"SURICATA unknown next header / protocol"; decode-event:ipv6.unknown_next_header; classtype:protocol-command-decode; sid:2200097; rev:2;)
+alert ipv6 any any -> any any (msg:"SURICATA IPv6 with ICMPv4 header"; decode-event:ipv6.icmpv4; classtype:protocol-command-decode; sid:2200090; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA ICMPv4 packet too small"; decode-event:icmpv4.pkt_too_small; classtype:protocol-command-decode; sid:2200023; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA ICMPv4 unknown type"; decode-event:icmpv4.unknown_type; classtype:protocol-command-decode; sid:2200024; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA ICMPv4 unknown code"; decode-event:icmpv4.unknown_code; classtype:protocol-command-decode; sid:2200025; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA ICMPv4 truncated packet"; decode-event:icmpv4.ipv4_trunc_pkt; classtype:protocol-command-decode; sid:2200026; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA ICMPv4 unknown version"; decode-event:icmpv4.ipv4_unknown_ver; classtype:protocol-command-decode; sid:2200027; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA ICMPv6 packet too small"; decode-event:icmpv6.pkt_too_small; classtype:protocol-command-decode; sid:2200028; rev:2;)
+# uncomment the following signature if you plan to update suricata code to support more ICMPv6 type
+#alert pkthdr any any -> any any (msg:"SURICATA ICMPv6 unknown type"; decode-event:icmpv6.unknown_type; classtype:protocol-command-decode; sid:2200029; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA ICMPv6 unknown code"; decode-event:icmpv6.unknown_code; classtype:protocol-command-decode; sid:2200030; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA ICMPv6 truncated packet"; decode-event:icmpv6.ipv6_trunc_pkt; classtype:protocol-command-decode; sid:2200031; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA ICMPv6 unknown version"; decode-event:icmpv6.ipv6_unknown_version; classtype:protocol-command-decode; sid:2200032; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA ICMPv6 MLD hop limit not 1"; decode-event:icmpv6.mld_message_with_invalid_hl; classtype:protocol-command-decode; sid:2200102; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA ICMPv6 unassigned type"; decode-event:icmpv6.unassigned_type; classtype:protocol-command-decode; sid:2200108; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA ICMPv6 private experimentation type"; decode-event:icmpv6.experimentation_type; classtype:protocol-command-decode; sid:2200109; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA TCP packet too small"; decode-event:tcp.pkt_too_small; classtype:protocol-command-decode; sid:2200033; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA TCP header length too small"; decode-event:tcp.hlen_too_small; classtype:protocol-command-decode; sid:2200034; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA TCP invalid option length"; decode-event:tcp.invalid_optlen; classtype:protocol-command-decode; sid:2200035; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA TCP option invalid length"; decode-event:tcp.opt_invalid_len; classtype:protocol-command-decode; sid:2200036; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA TCP duplicated option"; decode-event:tcp.opt_duplicate; classtype:protocol-command-decode; sid:2200037; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA UDP packet too small"; decode-event:udp.pkt_too_small; classtype:protocol-command-decode; sid:2200038; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA UDP header length too small"; decode-event:udp.hlen_too_small; classtype:protocol-command-decode; sid:2200039; rev:2;)
+# 2200040 "udp.hlen_invalid" has been retired.
+alert pkthdr any any -> any any (msg:"SURICATA UDP invalid length field in the header"; decode-event:udp.len_invalid; classtype:protocol-command-decode; sid:2200120; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA SLL packet too small"; decode-event:sll.pkt_too_small; classtype:protocol-command-decode; sid:2200041; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA Ethernet packet too small"; decode-event:ethernet.pkt_too_small; classtype:protocol-command-decode; sid:2200042; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA PPP packet too small"; decode-event:ppp.pkt_too_small; classtype:protocol-command-decode; sid:2200043; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA PPP VJU packet too small"; decode-event:ppp.vju_pkt_too_small; classtype:protocol-command-decode; sid:2200044; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA PPP IPv4 packet too small"; decode-event:ppp.ip4_pkt_too_small; classtype:protocol-command-decode; sid:2200045; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA PPP IPv6 too small"; decode-event:ppp.ip6_pkt_too_small; classtype:protocol-command-decode; sid:2200046; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA PPP wrong type"; decode-event:ppp.wrong_type; classtype:protocol-command-decode; sid:2200047; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA PPP unsupported protocol"; decode-event:ppp.unsup_proto; classtype:protocol-command-decode; sid:2200048; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA PPPOE packet too small"; decode-event:pppoe.pkt_too_small; classtype:protocol-command-decode; sid:2200049; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA PPPOE wrong code"; decode-event:pppoe.wrong_code; classtype:protocol-command-decode; sid:2200050; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA PPPOE malformed tags"; decode-event:pppoe.malformed_tags; classtype:protocol-command-decode; sid:2200051; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA GRE packet too small"; decode-event:gre.pkt_too_small; classtype:protocol-command-decode; sid:2200052; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA GRE wrong version"; decode-event:gre.wrong_version; classtype:protocol-command-decode; sid:2200053; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA GRE v0 recursion control"; decode-event:gre.version0_recur; classtype:protocol-command-decode; sid:2200054; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA GRE v0 flags"; decode-event:gre.version0_flags; classtype:protocol-command-decode; sid:2200055; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA GRE v0 header too big"; decode-event:gre.version0_hdr_too_big; classtype:protocol-command-decode; sid:2200056; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA GRE v1 checksum present"; decode-event:gre.version1_chksum; classtype:protocol-command-decode; sid:2200057; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA GRE v1 routing present"; decode-event:gre.version1_route; classtype:protocol-command-decode; sid:2200058; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA GRE v1 strict source route"; decode-event:gre.version1_ssr; classtype:protocol-command-decode; sid:2200059; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA GRE v1 recursion control"; decode-event:gre.version1_recur; classtype:protocol-command-decode; sid:2200060; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA GRE v1 flags"; decode-event:gre.version1_flags; classtype:protocol-command-decode; sid:2200061; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA GRE v1 no key present"; decode-event:gre.version1_no_key; classtype:protocol-command-decode; sid:2200062; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA GRE v1 wrong protocol"; decode-event:gre.version1_wrong_protocol; classtype:protocol-command-decode; sid:2200063; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA GRE v1 malformed Source Route Entry header"; decode-event:gre.version1_malformed_sre_hdr; classtype:protocol-command-decode; sid:2200064; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA GRE v1 header too big"; decode-event:gre.version1_hdr_too_big; classtype:protocol-command-decode; sid:2200065; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA VLAN header too small "; decode-event:vlan.header_too_small; classtype:protocol-command-decode; sid:2200066; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA VLAN unknown type"; decode-event:vlan.unknown_type; classtype:protocol-command-decode; sid:2200067; rev:2;)
+# more than 2 vlan layers in the packet
+alert pkthdr any any -> any any (msg:"SURICATA VLAN too many layers"; decode-event:vlan.too_many_layers; classtype:protocol-command-decode; sid:2200091; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA VNTAG header too small"; decode-event:vntag.header_too_small; classtype:protocol-command-decode; sid:2200117; rev:1;)
+alert pkthdr any any -> any any (msg:"SURICATA VNTAG unknown type"; decode-event:vntag.unknown_type; classtype:protocol-command-decode; sid:2200118; rev:1;)
+alert pkthdr any any -> any any (msg:"SURICATA IEEE802.1AH header too small"; decode-event:ieee8021ah.header_too_small; classtype:protocol-command-decode; sid:2200112; rev:1;)
+
+alert pkthdr any any -> any any (msg:"SURICATA IP raw invalid IP version "; decode-event:ipraw.invalid_ip_version; classtype:protocol-command-decode; sid:2200068; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA FRAG IPv4 Packet size too large"; decode-event:ipv4.frag_pkt_too_large; classtype:protocol-command-decode; sid:2200069; rev:3;)
+alert pkthdr any any -> any any (msg:"SURICATA FRAG IPv4 Fragmentation overlap"; decode-event:ipv4.frag_overlap; classtype:protocol-command-decode; sid:2200070; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA FRAG IPv6 Packet size too large"; decode-event:ipv6.frag_pkt_too_large; classtype:protocol-command-decode; sid:2200071; rev:3;)
+alert pkthdr any any -> any any (msg:"SURICATA FRAG IPv6 Fragmentation overlap"; decode-event:ipv6.frag_overlap; classtype:protocol-command-decode; sid:2200072; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA FRAG IPv6 Fragment invalid length"; decode-event:ipv6.frag_invalid_length; classtype:protocol-command-decode; sid:2200119; rev:1;)
+
+# checksum rules
+alert ip any any -> any any (msg:"SURICATA IPv4 invalid checksum"; ipv4-csum:invalid; classtype:protocol-command-decode; sid:2200073; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA TCPv4 invalid checksum"; tcpv4-csum:invalid; classtype:protocol-command-decode; sid:2200074; rev:2;)
+alert udp any any -> any any (msg:"SURICATA UDPv4 invalid checksum"; udpv4-csum:invalid; classtype:protocol-command-decode; sid:2200075; rev:2;)
+alert icmp any any -> any any (msg:"SURICATA ICMPv4 invalid checksum"; icmpv4-csum:invalid; classtype:protocol-command-decode; sid:2200076; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA TCPv6 invalid checksum"; tcpv6-csum:invalid; classtype:protocol-command-decode; sid:2200077; rev:2;)
+alert udp any any -> any any (msg:"SURICATA UDPv6 invalid checksum"; udpv6-csum:invalid; classtype:protocol-command-decode; sid:2200078; rev:2;)
+alert icmp any any -> any any (msg:"SURICATA ICMPv6 invalid checksum"; icmpv6-csum:invalid; classtype:protocol-command-decode; sid:2200079; rev:2;)
+# IPv4 in IPv6 rules
+alert pkthdr any any -> any any (msg:"SURICATA IPv4-in-IPv6 packet too short"; decode-event:ipv6.ipv4_in_ipv6_too_small; classtype:protocol-command-decode; sid:2200082; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA IPv4-in-IPv6 invalid protocol"; decode-event:ipv6.ipv4_in_ipv6_wrong_version; classtype:protocol-command-decode; sid:2200083; rev:2;)
+# IPv6 in IPv6 rules
+alert pkthdr any any -> any any (msg:"SURICATA IPv6-in-IPv6 packet too short"; decode-event:ipv6.ipv6_in_ipv6_too_small; classtype:protocol-command-decode; sid:2200084; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA IPv6-in-IPv6 invalid protocol"; decode-event:ipv6.ipv6_in_ipv6_wrong_version; classtype:protocol-command-decode; sid:2200085; rev:2;)
+
+# MPLS rules
+alert pkthdr any any -> any any (msg:"SURICATA MPLS header too small"; decode-event:mpls.header_too_small; classtype:protocol-command-decode; sid:2200111; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA MPLS packet too small"; decode-event:mpls.pkt_too_small; classtype:protocol-command-decode; sid:2200114; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA MPLS bad router alert label"; decode-event:mpls.bad_label_router_alert; classtype:protocol-command-decode; sid:2200098; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA MPLS bad implicit null label"; decode-event:mpls.bad_label_implicit_null; classtype:protocol-command-decode; sid:2200099; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA MPLS reserved label"; decode-event:mpls.bad_label_reserved; classtype:protocol-command-decode; sid:2200100; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA MPLS unknown payload type"; decode-event:mpls.unknown_payload_type; classtype:protocol-command-decode; sid:2200101; rev:2;)
+
+# linktype null
+alert pkthdr any any -> any any (msg:"SURICATA NULL pkt too small"; decode-event:ltnull.pkt_too_small; classtype:protocol-command-decode; sid:2200103; rev:2;)
+# packet has type not supported by Suricata's decoders
+alert pkthdr any any -> any any (msg:"SURICATA NULL unsupported type"; decode-event:ltnull.unsupported_type; classtype:protocol-command-decode; sid:2200104; rev:2;)
+
+# ERSPAN
+alert pkthdr any any -> any any (msg:"SURICATA ERSPAN pkt too small"; decode-event:erspan.header_too_small; classtype:protocol-command-decode; sid:2200105; rev:2;)
+# packet has type not supported by Suricata's decoders
+alert pkthdr any any -> any any (msg:"SURICATA ERSPAN unsupported version"; decode-event:erspan.unsupported_version; classtype:protocol-command-decode; sid:2200106; rev:2;)
+alert pkthdr any any -> any any (msg:"SURICATA ERSPAN too many vlan layers"; decode-event:erspan.too_many_vlan_layers; classtype:protocol-command-decode; sid:2200107; rev:2;)
+
+# Cisco Fabric Path/DCE
+alert pkthdr any any -> any any (msg:"SURICATA DCE packet too small"; decode-event:dce.pkt_too_small; classtype:protocol-command-decode; sid:2200110; rev:2;)
+
+# Cisco HDLC
+alert pkthdr any any -> any any (msg:"SURICATA CHDLC packet too small"; decode-event:chdlc.pkt_too_small; classtype:protocol-command-decode; sid:2200115; rev:1;)
+
+alert pkthdr any any -> any any (msg:"SURICATA packet with too many layers"; decode-event:too_many_layers; classtype:protocol-command-decode; sid:2200116; rev:1;)
+
+# next sid is 2200121
+
+# DHCP app-layer event rules.  See
+#
+# https://redmine.openinfosecfoundation.org/projects/suricata/wiki/AppLayer
+# for SID allocation.
+
+alert dhcp any any -> any any (msg:"SURICATA DHCP malformed options"; app-layer-event:dhcp.malformed_options; classtype:protocol-command-decode; sid:2227000; rev:1;)
+alert dhcp any any -> any any (msg:"SURICATA DHCP truncated options"; app-layer-event:dhcp.truncated_options; classtype:protocol-command-decode; sid:2227001; rev:1;)
+# DNP3 application decoder event rules.
+#
+# This SIDs fall in the 2270000+ range. See:
+#    http://doc.emergingthreats.net/bin/view/Main/SidAllocation
+
+# Flooded.
+alert dnp3 any any -> any any (msg:"SURICATA DNP3 Request flood detected"; \
+      app-layer-event:dnp3.flooded; classtype:protocol-command-decode; sid:2270000; rev:2;)
+
+# Length to small for PDU type. For example, link specifies the type
+# as user data, but the length field is not large enough for user
+# data.
+alert dnp3 any any -> any any (msg:"SURICATA DNP3 Length too small"; \
+      app-layer-event:dnp3.len_too_small; classtype:protocol-command-decode; sid:2270001; rev:3;)
+
+# Bad link layer CRC.
+alert dnp3 any any -> any any (msg:"SURICATA DNP3 Bad link CRC"; \
+      app-layer-event:dnp3.bad_link_crc; classtype:protocol-command-decode; sid:2270002; rev:2;)
+
+# Bad transport layer CRC.
+alert dnp3 any any -> any any (msg:"SURICATA DNP3 Bad transport CRC"; \
+      app-layer-event:dnp3.bad_transport_crc; classtype:protocol-command-decode; sid:2270003; rev:2;)
+
+# Unknown object.
+alert dnp3 any any -> any any (msg:"SURICATA DNP3 Unknown object"; \
+      app-layer-event:dnp3.unknown_object; classtype:protocol-command-decode; sid:2270004; rev:2;)
+# Malformed data in request. Malformed means length fields are wrong, etc.
+alert dns any any -> any any (msg:"SURICATA DNS malformed request data"; flow:to_server; app-layer-event:dns.malformed_data; classtype:protocol-command-decode; sid:2240002; rev:2;)
+alert dns any any -> any any (msg:"SURICATA DNS malformed response data"; flow:to_client; app-layer-event:dns.malformed_data; classtype:protocol-command-decode; sid:2240003; rev:2;)
+# Response flag set on to_server packet
+alert dns any any -> any any (msg:"SURICATA DNS Not a request"; flow:to_server; app-layer-event:dns.not_request; classtype:protocol-command-decode; sid:2240004; rev:3;)
+# Response flag not set on to_client packet
+alert dns any any -> any any (msg:"SURICATA DNS Not a response"; flow:to_client; app-layer-event:dns.not_response; classtype:protocol-command-decode; sid:2240005; rev:3;)
+# Z flag (reserved) not 0
+alert dns any any -> any any (msg:"SURICATA DNS Z flag set"; app-layer-event:dns.z_flag_set; classtype:protocol-command-decode; sid:2240006; rev:2;)
+alert dns any any -> any any (msg:"SURICATA DNS Invalid opcode"; app-layer-event:dns.invalid_opcode; classtype:protocol-command-decode; sid:2240007; rev:1;)
+
+# A resource name was too long (over 1025 chars)
+alert dns any any -> any any (msg:"SURICATA DNS Name too long"; app-layer-event:dns.name_too_long; classtype:protocol-command-decode; sid:224008; rev:1;)
+
+# An infinite loop was found while decoding a DNS resource name.
+alert dns any any -> any any (msg:"SURICATA DNS Infinite loop"; app-layer-event:dns.infinite_loop; classtype:protocol-command-decode; sid:224009; rev:1;)
+
+# Suricata's maximum number of DNS name labels was reached while parsing a resource name.
+alert dns any any -> any any (msg:"SURICATA DNS Too many labels"; app-layer-event:dns.too_many_labels; classtype:protocol-command-decode; sid:224010; rev:1;)
+# Example rules for using the file handling and extraction functionality in Suricata.
+#
+# For storing files make sure you enable the "file" output.
+# Also, make sure you read the comments that go with it in the suricata.yaml file.
+
+# Alert on files with jpg or bmp extensions
+#alert http any any -> any any (msg:"FILEEXT JPG file claimed"; fileext:"jpg"; sid:1; rev:1;)
+#alert http any any -> any any (msg:"FILEEXT BMP file claimed"; fileext:"bmp"; sid:3; rev:1;)
+
+# Store all files with jpg or pdf extension.
+#alert http any any -> any any (msg:"FILESTORE jpg"; flow:established,to_server; fileext:"jpg"; filestore; sid:6; rev:1;)
+#alert http any any -> any any (msg:"FILESTORE pdf"; flow:established,to_server; fileext:"pdf"; filestore; sid:8; rev:1;)
+
+# Store all PDF files, regardless of their name.
+#alert http any any -> any any (msg:"FILEMAGIC pdf"; flow:established,to_server; filemagic:"PDF document"; filestore; sid:9; rev:1;)
+
+# Same for JPEG's.
+#alert http any any -> any any (msg:"FILEMAGIC jpg(1)"; flow:established,to_server; filemagic:"JPEG image data"; filestore; sid:10; rev:1;)
+#alert http any any -> any any (msg:"FILEMAGIC jpg(2)"; flow:established,to_server; filemagic:"JFIF"; filestore; sid:11; rev:1;)
+
+# Unusually short file
+#alert http any any -> any any (msg:"FILEMAGIC short"; flow:established,to_server; filemagic:"very short file (no magic)"; filestore; sid:12; rev:1;)
+
+# Simply store all files we encounter, no alerts.
+#alert http any any -> any any (msg:"FILE store all"; filestore; noalert; sid:15; rev:1;)
+
+# Store all JPG files, don't alert.
+#alert http any any -> any any (msg:"FILE magic"; filemagic:"JFIF"; filestore; noalert; sid:16; rev:1;)
+#alert http any any -> any any (msg:"FILE magic"; filemagic:"GIF"; filestore; noalert; sid:23; rev:1;)
+#alert http any any -> any any (msg:"FILE magic"; filemagic:"PNG"; filestore; noalert; sid:17; rev:1;)
+
+# Store all Windows executables
+#alert http any any -> any any (msg:"FILE magic -- windows"; flow:established,to_client; filemagic:"executable for MS Windows"; filestore; sid:18; rev:1;)
+
+# Alert on PNG with 1x1 pixels (tracking)
+#alert http any any -> any any (msg:"FILE tracking PNG (1x1 pixel) (1)"; filemagic:"PNG image data, 1 x 1,"; sid:19; rev:1;)
+#alert http any any -> any any (msg:"FILE tracking PNG (1x1 pixel) (2)"; filemagic:"PNG image data, 1 x 1|00|"; sid:20; rev:1;)
+
+# Alert on GIF with 1x1 pixels (tracking)
+# The pattern matches on |00| which is the end of the magic buffer, this way we won't match on 1 x 128.
+#alert http any any -> any any (msg:"FILE tracking GIF (1x1 pixel)"; filemagic:"GIF image data, version 89a, 1 x 1|00|"; sid:21; rev:1;)
+
+# Alert and store pdf attachment but not pdf file
+#alert http any any -> any any (msg:"FILE pdf claimed, but not pdf"; flow:established,to_client; fileext:"pdf"; filemagic:!"PDF document"; filestore; sid:22; rev:1;)
+
+# Alert and store files over SMTP
+#alert smtp any any -> any any (msg:"File Found over SMTP and stored"; filestore; sid:27; rev:1;)
+
+# Alert and store files from black list checksum: md5 or sha1 or sha256
+#alert http any any -> any any (msg:"Black list checksum match and extract MD5"; filemd5:fileextraction-chksum.list; filestore; sid:28; rev:1;)
+#alert http any any -> any any (msg:"Black list checksum match and extract SHA1"; filesha1:fileextraction-chksum.list; filestore; sid:29; rev:1;)
+#alert http any any -> any any (msg:"Black list checksum match and extract SHA256"; filesha256:fileextraction-chksum.list; filestore; sid:30; rev:1;)
+
+# Alert and store files over FTP
+#alert ftp-data any any -> any any (msg:"File Found within FTP and stored"; filestore; filename:"password"; ftpdata_command:stor; sid:31; rev:1;)
+
+# Alert and store files over SMB (with RUST activated)
+#alert smb any any -> any any (msg:"File Found over SMB and stored"; filestore; sid:32; rev:1;)
+
+# Alert and store files over NFS (with RUST activated)
+#alert nfs any any -> any any (msg:"File found within NFS and stored"; filestore; sid:33; rev:1;)
+# FTP app-layer event rules
+#
+# SID range start: 2232000
+
+alert ftp any any -> any any (msg:"SURICATA FTP Request command too long"; flow:to_server; app-layer-event:ftp.request_command_too_long; classtype:protocol-command-decode; sid:2232000; rev:1;)
+alert ftp any any -> any any (msg:"SURICATA FTP Response command too long"; flow:to_client; app-layer-event:ftp.response_command_too_long; classtype:protocol-command-decode; sid:2232001; rev:1;)
+# HTTP2 app layer event rules
+#
+# SID's fall in the 2290000+ range. See https://redmine.openinfosecfoundation.org/projects/suricata/wiki/AppLayer
+#
+# These sigs fire at most once per connection.
+#
+
+alert http2 any any -> any any (msg:"SURICATA HTTP2 invalid frame header"; flow:established; app-layer-event:http2.invalid_frame_header; classtype:protocol-command-decode; sid:2290000; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 invalid client magic"; flow:established; app-layer-event:http2.invalid_client_magic; classtype:protocol-command-decode; sid:2290001; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 invalid frame data"; flow:established; app-layer-event:http2.invalid_frame_data; classtype:protocol-command-decode; sid:2290002; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 invalid header"; flow:established; app-layer-event:http2.invalid_header; classtype:protocol-command-decode; sid:2290003; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 invalid frame length"; flow:established; app-layer-event:http2.invalid_frame_length; classtype:protocol-command-decode; sid:2290004; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 header frame with extra data"; flow:established; app-layer-event:http2.extra_header_data; classtype:protocol-command-decode; sid:2290005; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 too long frame data"; flow:established; app-layer-event:http2.long_frame_data; classtype:protocol-command-decode; sid:2290006; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 stream identifier reuse"; flow:established; app-layer-event:http2.stream_id_reuse; classtype:protocol-command-decode; sid:2290007; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 invalid HTTP1 settings during upgrade"; flow:established; app-layer-event:http2.invalid_http1_settings; classtype:protocol-command-decode; sid:2290008; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 failed decompression"; flow:established; app-layer-event:http2.failed_decompression; classtype:protocol-command-decode; sid:2290009; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 invalid range header"; flow:established; app-layer-event:http2.invalid_range; classtype:protocol-command-decode; sid:2290010; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 variable-length integer overflow"; flow:established; app-layer-event:http2.header_integer_overflow; classtype:protocol-command-decode; sid:2290011; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 too many streams"; flow:established; app-layer-event:http2.too_many_streams; classtype:protocol-command-decode; sid:2290012; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 authority host mismatch"; flow:established,to_server; app-layer-event:http2.authority_host_mismatch; classtype:protocol-command-decode; sid:2290013; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 user info in uri"; flow:established,to_server; app-layer-event:http2.userinfo_in_uri; classtype:protocol-command-decode; sid:2290014; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 reassembly limit reached"; flow:established; app-layer-event:http2.reassembly_limit_reached; classtype:protocol-command-decode; sid:2290015; rev:1;)
+# HTTP event  rules
+#
+# SID's fall in the 2221000+ range. See http://doc.emergingthreats.net/bin/view/Main/SidAllocation
+#
+# These sigs fire at most once per HTTP transaction.
+#
+# A flowint http.anomaly.count is incremented for each match. By default it will be 0.
+#
+alert http any any -> any any (msg:"SURICATA HTTP unknown error"; flow:established; app-layer-event:http.unknown_error; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221000; rev:1;)
+alert http any any -> any any (msg:"SURICATA HTTP gzip decompression failed"; flow:established; app-layer-event:http.gzip_decompression_failed; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221001; rev:1;)
+alert http any any -> any any (msg:"SURICATA HTTP request field missing colon"; flow:established,to_server; app-layer-event:http.request_field_missing_colon; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221002; rev:1;)
+alert http any any -> any any (msg:"SURICATA HTTP response field missing colon"; flow:established,to_client; app-layer-event:http.response_field_missing_colon; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221020; rev:1;)
+alert http any any -> any any (msg:"SURICATA HTTP invalid request chunk len"; flow:established,to_server; app-layer-event:http.invalid_request_chunk_len; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221003; rev:1;)
+alert http any any -> any any (msg:"SURICATA HTTP invalid response chunk len"; flow:established,to_client; app-layer-event:http.invalid_response_chunk_len; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221004; rev:1;)
+alert http any any -> any any (msg:"SURICATA HTTP invalid transfer encoding value in request"; flow:established,to_server; app-layer-event:http.invalid_transfer_encoding_value_in_request; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221005; rev:1;)
+alert http any any -> any any (msg:"SURICATA HTTP invalid transfer encoding value in response"; flow:established,to_client; app-layer-event:http.invalid_transfer_encoding_value_in_response; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221006; rev:1;)
+alert http any any -> any any (msg:"SURICATA HTTP invalid content length field in request"; flow:established,to_server; app-layer-event:http.invalid_content_length_field_in_request; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221007; rev:1;)
+alert http any any -> any any (msg:"SURICATA HTTP invalid content length field in response"; flow:established,to_client; app-layer-event:http.invalid_content_length_field_in_response; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221008; rev:1;)
+alert http any any -> any any (msg:"SURICATA HTTP status 100-Continue already seen"; flow:established,to_client; app-layer-event:http.100_continue_already_seen; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221009; rev:1;)
+alert http any any -> any any (msg:"SURICATA HTTP unable to match response to request"; flow:established,to_client; app-layer-event:http.unable_to_match_response_to_request; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221010; rev:1;)
+alert http any any -> any any (msg:"SURICATA HTTP invalid server port in request"; flow:established,to_server; app-layer-event:http.invalid_server_port_in_request; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221011; rev:1;)
+alert http any any -> any any (msg:"SURICATA HTTP invalid authority port"; flow:established; app-layer-event:http.invalid_authority_port; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221012; rev:1;)
+alert http any any -> any any (msg:"SURICATA HTTP request header invalid"; flow:established,to_server; app-layer-event:http.request_header_invalid; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221013; rev:1;)
+alert http any any -> any any (msg:"SURICATA HTTP response header invalid"; flow:established,to_client; app-layer-event:http.response_header_invalid; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221021; rev:1;)
+alert http any any -> any any (msg:"SURICATA HTTP missing Host header"; flow:established,to_server; app-layer-event:http.missing_host_header; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221014; rev:1;)
+# Alert if hostname is both part of URL and Host header and they are not the same.
+alert http any any -> any any (msg:"SURICATA HTTP Host header ambiguous"; flow:established,to_server; app-layer-event:http.host_header_ambiguous; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221015; rev:1;)
+alert http any any -> any any (msg:"SURICATA HTTP invalid request field folding"; flow:established,to_server; app-layer-event:http.invalid_request_field_folding; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221016; rev:1;)
+alert http any any -> any any (msg:"SURICATA HTTP invalid response field folding"; flow:established,to_client; app-layer-event:http.invalid_response_field_folding; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221017; rev:1;)
+alert http any any -> any any (msg:"SURICATA HTTP request buffer too long"; flow:established,to_server; app-layer-event:http.request_field_too_long; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221018; rev:1;)
+alert http any any -> any any (msg:"SURICATA HTTP response buffer too long"; flow:established,to_client; app-layer-event:http.response_field_too_long; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221019; rev:1;)
+# Multipart parser detected generic error.
+alert http any any -> any any (msg:"SURICATA HTTP multipart generic error"; flow:established,to_server; app-layer-event:http.multipart_generic_error; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221022; rev:1;)
+# Multipart header claiming a file to present, but no actual filedata available.
+alert http any any -> any any (msg:"SURICATA HTTP multipart no filedata"; flow:established,to_server; app-layer-event:http.multipart_no_filedata; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221023; rev:1;)
+# Multipart header invalid.
+alert http any any -> any any (msg:"SURICATA HTTP multipart invalid header"; flow:established,to_server; app-layer-event:http.multipart_invalid_header; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221024; rev:1;)
+# Warn when the port in the Host: header doesn't match the actual TCP Server port.
+alert http any any -> any any (msg:"SURICATA HTTP request server port doesn't match TCP port"; flow:established,to_server; app-layer-event:http.request_server_port_tcp_port_mismatch; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221026; rev:1;)
+# Host part of URI is invalid
+alert http any any -> any any (msg:"SURICATA HTTP Host part of URI is invalid"; flow:established,to_server; app-layer-event:http.request_uri_host_invalid; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221027; rev:1;)
+# Host header is invalid
+alert http any any -> any any (msg:"SURICATA HTTP Host header invalid"; flow:established,to_server; app-layer-event:http.request_header_host_invalid; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221028; rev:1;)
+# URI is terminated by non-compliant characters. RFC allows for space (0x20), but many implementations permit others like tab and more.
+alert http any any -> any any (msg:"SURICATA HTTP URI terminated by non-compliant character"; flow:established,to_server; app-layer-event:http.uri_delim_non_compliant; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221029; rev:1;)
+# Method is terminated by non-compliant characters. RFC allows for space (0x20), but many implementations permit others like tab and more.
+alert http any any -> any any (msg:"SURICATA HTTP METHOD terminated by non-compliant character"; flow:established,to_server; app-layer-event:http.method_delim_non_compliant; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221030; rev:1;)
+# Request line started with whitespace
+alert http any any -> any any (msg:"SURICATA HTTP Request line with leading whitespace"; flow:established,to_server; app-layer-event:http.request_line_leading_whitespace; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221031; rev:1;)
+
+
+alert http any any -> any any (msg:"SURICATA HTTP Request too many encoding layers"; flow:established,to_server; app-layer-event:http.too_many_encoding_layers; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221032; rev:1;)
+alert http any any -> any any (msg:"SURICATA HTTP Request abnormal Content-Encoding header"; flow:established,to_server; app-layer-event:http.abnormal_ce_header; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221033; rev:1;)
+
+alert http any any -> any any (msg:"SURICATA HTTP Request unrecognized authorization method"; flow:established,to_server; app-layer-event:http.request_auth_unrecognized; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221034; rev:1;)
+
+alert http any any -> any any (msg:"SURICATA HTTP Request excessive header repetition"; flow:established,to_server; app-layer-event:http.request_header_repetition; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221035; rev:1;)
+alert http any any -> any any (msg:"SURICATA HTTP Response excessive header repetition"; flow:established,to_client; app-layer-event:http.response_header_repetition; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221036; rev:1;)
+
+# This is a suricata limitation rather than anomaly traffic
+# alert http any any -> any any (msg:"SURICATA HTTP Response multipart/byteranges"; flow:established,to_client; app-layer-event:http.response_multipart_byteranges; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221037; rev:1;)
+
+alert http any any -> any any (msg:"SURICATA HTTP Response abnormal chunked for transfer-encoding"; flow:established,to_client; app-layer-event:http.response_abnormal_transfer_encoding; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221038; rev:1;)
+
+alert http any any -> any any (msg:"SURICATA HTTP Response chunked with HTTP 0.9 or 1.0"; flow:established,to_client; app-layer-event:http.response_chunked_old_proto; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221039; rev:1;)
+
+alert http any any -> any any (msg:"SURICATA HTTP Response invalid protocol"; flow:established,to_client; app-layer-event:http.response_invalid_protocol; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221040; rev:1;)
+alert http any any -> any any (msg:"SURICATA HTTP Response invalid status"; flow:established,to_client; app-layer-event:http.response_invalid_status; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221041; rev:1;)
+
+alert http any any -> any any (msg:"SURICATA HTTP Request line incomplete"; flow:established,to_server; app-layer-event:http.request_line_incomplete; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221042; rev:1;)
+
+alert http any any -> any any (msg:"SURICATA HTTP Request double encoded URI"; flow:established,to_server; app-layer-event:http.double_encoded_uri; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221043; rev:1;)
+
+alert http any any -> any any (msg:"SURICATA HTTP Invalid Request line"; flow:established,to_server; app-layer-event:http.request_line_invalid; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221044; rev:1;)
+alert http any any -> any any (msg:"SURICATA HTTP Unexpected Request body"; flow:established,to_server; app-layer-event:http.request_body_unexpected; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221045; rev:1;)
+
+alert http any any -> any any (msg:"SURICATA HTTP LZMA reached its memory limit"; flow:established; app-layer-event:http.lzma_memlimit_reached; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221046; rev:1;)
+
+alert http any any -> any any (msg:"SURICATA HTTP duplicate content length field in request"; flow:established,to_server; app-layer-event:http.duplicate_content_length_field_in_request; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221047; rev:1;)
+alert http any any -> any any (msg:"SURICATA HTTP duplicate content length field in response"; flow:established,to_client; app-layer-event:http.duplicate_content_length_field_in_response; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221048; rev:1;)
+
+alert http any any -> any any (msg:"SURICATA HTTP compression bomb"; flow:established; app-layer-event:http.compression_bomb; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221049; rev:1;)
+
+alert http any any -> any any (msg:"SURICATA HTTP too many warnings"; flow:established; app-layer-event:http.too_many_warnings; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221050; rev:1;)
+
+alert http any any -> any any (msg:"SURICATA HTTP invalid Range header value"; flow:established; app-layer-event:http.range_invalid; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221051; rev:1;)
+
+alert http any any -> any any (msg:"SURICATA HTTP file name too long"; flow:established; app-layer-event:http.file_name_too_long; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221052; rev:1;)
+
+alert http any any -> any any (msg:"SURICATA HTTP failed protocol change"; flow:established; app-layer-event:http.failed_protocol_change; flowint:http.anomaly.count,+,1; classtype:protocol-command-decode; sid:2221053; rev:1;)
+
+#alert http any any -> any any (msg:"SURICATA HTTP request chunk extension"; flow:established; app-layer-event:http.request_chunk_extension; classtype:protocol-command-decode; sid:2221054; rev:1;)
+
+#alert http any any -> any any (msg:"SURICATA HTTP request missing protocol"; flow:established,to_server; app-layer-event:http.request_line_missing_protocol; classtype:protocol-command-decode; sid:2221055; rev:1;)
+
+alert http any any -> any any (msg:"SURICATA HTTP request too many headers"; flow:established,to_server; app-layer-event:http.request_too_many_headers; classtype:protocol-command-decode; sid:2221056; rev:1;)
+alert http any any -> any any (msg:"SURICATA HTTP response too many headers"; flow:established,to_client; app-layer-event:http.response_too_many_headers; classtype:protocol-command-decode; sid:2221057; rev:1;)
+
+# next sid 2221058
+# IPsec app layer event rules
+#
+# SID's fall in the 2224000+ range. See https://redmine.openinfosecfoundation.org/projects/suricata/wiki/AppLayer
+#
+# These sigs fire at most once per connection.
+#
+alert ike any any -> any any (msg:"SURICATA IKE malformed request data"; flow:to_server; app-layer-event:ike.malformed_data; classtype:protocol-command-decode; sid:2224000; rev:2;)
+alert ike any any -> any any (msg:"SURICATA IKE malformed response data"; flow:to_client; app-layer-event:ike.malformed_data; classtype:protocol-command-decode; sid:2224001; rev:2;)
+alert ike any any -> any any (msg:"SURICATA IKE weak cryptographic parameters (Encryption)"; flow:to_client; app-layer-event:ike.weak_crypto_enc; classtype:protocol-command-decode; sid:2224002; rev:2;)
+alert ike any any -> any any (msg:"SURICATA IKE weak cryptographic parameters (PRF)"; flow:to_client; app-layer-event:ike.weak_crypto_prf; classtype:protocol-command-decode; sid:2224003; rev:2;)
+alert ike any any -> any any (msg:"SURICATA IKE weak cryptographic parameters (Auth)"; flow:to_client; app-layer-event:ike.weak_crypto_auth; classtype:protocol-command-decode; sid:2224004; rev:3;)
+alert ike any any -> any any (msg:"SURICATA IKE weak cryptographic parameters (Diffie-Hellman)"; flow:to_client; app-layer-event:ike.weak_crypto_dh; classtype:protocol-command-decode; sid:2224005; rev:3;)
+alert ike any any -> any any (msg:"SURICATA IKE no Diffie-Hellman exchange parameters"; flow:to_client; app-layer-event:ike.weak_crypto_no_dh; classtype:protocol-command-decode; sid:2224006; rev:3;)
+alert ike any any -> any any (msg:"SURICATA IKE no authentication"; flow:to_client; app-layer-event:ike.weak_crypto_no_auth; classtype:protocol-command-decode; sid:2224007; rev:3;)
+alert ike any any -> any any (msg:"SURICATA IKE no encryption (AH)"; flow:to_client; app-layer-event:ike.no_encryption; classtype:protocol-command-decode; sid:2224008; rev:2;)
+alert ike any any -> any any (msg:"SURICATA IKE invalid proposal"; flow:to_server; app-layer-event:ike.invalid_proposal; classtype:protocol-command-decode; sid:2224009; rev:2;)
+alert ike any any -> any any (msg:"SURICATA IKE invalid proposal selected"; flow:to_client; app-layer-event:ike.invalid_proposal; classtype:protocol-command-decode; sid:2224010; rev:2;)
+alert ike any any -> any any (msg:"SURICATA IKE unknown proposal"; flow:to_server; app-layer-event:ike.unknown_proposal; classtype:protocol-command-decode; sid:2224011; rev:2;)
+alert ike any any -> any any (msg:"SURICATA IKE unknown proposal selected"; flow:to_client; app-layer-event:ike.unknown_proposal; classtype:protocol-command-decode; sid:2224012; rev:2;)
+alert ike any any -> any any (msg:"SURICATA IKE multiple server proposal"; flow:to_client; app-layer-event:ike.multiple_server_proposal; classtype:protocol-command-decode; sid:2224013; rev:1;)
+# Kerberos app layer event rules
+#
+# SID's fall in the 2226000+ range. See https://redmine.openinfosecfoundation.org/projects/suricata/wiki/AppLayer
+#
+# These sigs fire at most once per connection.
+#
+alert krb5 any any -> any any (msg:"SURICATA Kerberos 5 malformed request data"; flow:to_server; app-layer-event:krb5.malformed_data; classtype:protocol-command-decode; sid:2226000; rev:1;)
+alert krb5 any any -> any any (msg:"SURICATA Kerberos 5 weak encryption parameters"; flow:to_client; app-layer-event:krb5.weak_encryption; classtype:protocol-command-decode; sid:2226001; rev:1;)
+# Modbus Protocol version field is incorrect (Modbus version = 0)
+alert modbus any any -> any any (msg:"SURICATA Modbus invalid Protocol version"; app-layer-event:modbus.invalid_protocol_id; classtype:protocol-command-decode; sid:2250001; rev:2;)
+# Response (answer) we didn't see a Request for. Could be packet loss.
+alert modbus any any -> any any (msg:"SURICATA Modbus unsolicited response"; app-layer-event:modbus.unsolicited_response; classtype:protocol-command-decode; sid:2250002; rev:2;)
+# Malformed request or response. Malformed means length field is wrong
+alert modbus any any -> any any (msg:"SURICATA Modbus invalid Length"; app-layer-event:modbus.invalid_length; classtype:protocol-command-decode; sid:2250003; rev:2;)
+# Modbus Function code is incorrect
+alert modbus any any -> any any (msg:"SURICATA Modbus invalid Function code"; app-layer-event:modbus.invalid_function_code; classtype:protocol-command-decode; sid:2250005; rev:2;)
+# Modbus Request/Response value field is incorrect
+alert modbus any any -> any any (msg:"SURICATA Modbus invalid Value"; app-layer-event:modbus.invalid_value; classtype:protocol-command-decode; sid:2250006; rev:2;)
+# Modbus Exception code is incorrect
+alert modbus any any -> any any (msg:"SURICATA Modbus Exception code invalid"; flow:to_client; app-layer-event:modbus.invalid_exception_code; classtype:protocol-command-decode; sid:2250007; rev:2;)
+# Value field in Modbus Response does not match with Modbus Request
+alert modbus any any -> any any (msg:"SURICATA Modbus Data mismatch"; flow:to_client; app-layer-event:modbus.value_mismatch; classtype:protocol-command-decode; sid:2250008; rev:2;)
+# Request Flood Detected
+alert modbus any any -> any any (msg:"SURICATA Modbus Request flood detected"; flow:to_server; app-layer-event:modbus.flooded; classtype:protocol-command-decode; sid:2250009; rev:2;)
+# MQTT app-layer event rules.
+#
+# These SIDs fall in the 2228000+ range. See:
+#    http://doc.emergingthreats.net/bin/view/Main/SidAllocation and
+#    https://redmine.openinfosecfoundation.org/projects/suricata/wiki/AppLayer
+
+alert mqtt any any -> any any (msg:"SURICATA MQTT CONNECT not seen before CONNACK"; app-layer-event:mqtt.missing_connect; classtype:protocol-command-decode; sid:2229000; rev:1;)
+alert mqtt any any -> any any (msg:"SURICATA MQTT PUBLISH not seen before PUBACK/PUBREL/PUBREC/PUBCOMP"; app-layer-event:mqtt.missing_publish; classtype:protocol-command-decode; sid:2229001; rev:1;)
+alert mqtt any any -> any any (msg:"SURICATA MQTT SUBSCRIBE not seen before SUBACK"; app-layer-event:mqtt.missing_subscribe; classtype:protocol-command-decode; sid:2229002; rev:1;)
+alert mqtt any any -> any any (msg:"SURICATA MQTT UNSUBSCRIBE not seen before UNSUBACK"; app-layer-event:mqtt.missing_unsubscribe; classtype:protocol-command-decode; sid:2229003; rev:1;)
+alert mqtt any any -> any any (msg:"SURICATA MQTT duplicate CONNECT"; app-layer-event:mqtt.double_connect; classtype:protocol-command-decode; sid:2229004; rev:1;)
+alert mqtt any any -> any any (msg:"SURICATA MQTT message seen before CONNECT/CONNACK completion"; app-layer-event:mqtt.unintroduced_message; classtype:protocol-command-decode; sid:2229005; rev:1;)
+alert mqtt any any -> any any (msg:"SURICATA MQTT invalid QOS level"; app-layer-event:mqtt.invalid_qos_level; classtype:protocol-command-decode; sid:2229006; rev:1;)
+alert mqtt any any -> any any (msg:"SURICATA MQTT missing message ID"; app-layer-event:mqtt.missing_msg_id; classtype:protocol-command-decode; sid:2229007; rev:1;)
+alert mqtt any any -> any any (msg:"SURICATA MQTT unassigned message type (0 or >15)"; app-layer-event:mqtt.unassigned_msg_type; classtype:protocol-command-decode; sid:2229008; rev:1;)
+alert mqtt any any -> any any (msg:"SURICATA MQTT too many transactions"; app-layer-event:mqtt.too_many_transactions; classtype:protocol-command-decode; sid:2229009; rev:1;)
+alert mqtt any any -> any any (msg:"SURICATA MQTT malformed traffic"; app-layer-event:mqtt.malformed_traffic; classtype:protocol-command-decode; sid:2229010; rev:1;)
+# NFS app layer event rules
+#
+# SID's fall in the 2223000+ range. See https://redmine.openinfosecfoundation.org/projects/suricata/wiki/AppLayer
+#
+# These sigs fire at most once per connection.
+#
+alert nfs any any -> any any (msg:"SURICATA NFS malformed request data"; flow:to_server; app-layer-event:nfs.malformed_data; classtype:protocol-command-decode; sid:2223000; rev:1;)
+alert nfs any any -> any any (msg:"SURICATA NFS malformed response data"; flow:to_client; app-layer-event:nfs.malformed_data; classtype:protocol-command-decode; sid:2223001; rev:1;)
+alert nfs any any -> any any (msg:"SURICATA NFS too many transactions"; app-layer-event:nfs.too_many_transactions; classtype:protocol-command-decode; sid:2223002; rev:1;)
+# NTP app layer event rules
+#
+# SID's fall in the 2222000+ range. See https://redmine.openinfosecfoundation.org/projects/suricata/wiki/AppLayer
+#
+# These sigs fire at most once per connection.
+#
+alert ntp any any -> any any (msg:"SURICATA NTP malformed request data"; flow:to_server; app-layer-event:ntp.malformed_data; classtype:protocol-command-decode; sid:2222000; rev:1;)
+alert ntp any any -> any any (msg:"SURICATA NTP malformed response data"; flow:to_client; app-layer-event:ntp.malformed_data; classtype:protocol-command-decode; sid:2222001; rev:1;)
+# QUIC app-layer event rules.
+#
+# These SIDs fall in the 2231000+ range. See:
+#    http://doc.emergingthreats.net/bin/view/Main/SidAllocation and
+#    https://redmine.openinfosecfoundation.org/projects/suricata/wiki/AppLayer
+
+alert quic any any -> any any (msg:"SURICATA QUIC failed decrypt"; app-layer-event:quic.failed_decrypt; classtype:protocol-command-decode; sid:2231000; rev:1;)
+alert quic any any -> any any (msg:"SURICATA QUIC error on data"; app-layer-event:quic.error_on_data; classtype:protocol-command-decode; sid:2231001; rev:1;)
+# RFB app-layer event rules.
+#
+# These SIDs fall in the 2233000+ range. See:
+#    http://doc.emergingthreats.net/bin/view/Main/SidAllocation and
+#    https://redmine.openinfosecfoundation.org/projects/suricata/wiki/AppLayer
+
+alert rfb any any -> any any (msg:"SURICATA RFB Malformed or unknown message"; app-layer-event:rfb.malformed_message; classtype:protocol-command-decode; sid:2233000; rev:1;)
+alert rfb any any -> any any (msg:"SURICATA RFB Unimplemented security type"; app-layer-event:rfb.unimplemented_security_type; classtype:protocol-command-decode; sid:2233001; rev:1;)
+alert rfb any any -> any any (msg:"SURICATA RFB Unknown security result"; app-layer-event:rfb.unknown_security_result; classtype:protocol-command-decode; sid:2233002; rev:1;)
+alert rfb any any -> any any (msg:"SURICATA RFB Unexpected State in Parser"; app-layer-event:rfb.confused_state; classtype:protocol-command-decode; sid:2233003; rev:1;)
+# SMB app layer event rules
+#
+# SID's fall in the 2225000+ range. See https://redmine.openinfosecfoundation.org/projects/suricata/wiki/AppLayer
+#
+# These sigs fire at most once per connection.
+#
+
+alert smb any any -> any any (msg:"SURICATA SMB internal parser error"; flow:to_server; app-layer-event:smb.internal_error; classtype:protocol-command-decode; sid:2225000; rev:1;)
+alert smb any any -> any any (msg:"SURICATA SMB internal parser error"; flow:to_client; app-layer-event:smb.internal_error; classtype:protocol-command-decode; sid:2225001; rev:1;)
+
+alert smb any any -> any any (msg:"SURICATA SMB malformed request data"; flow:to_server; app-layer-event:smb.malformed_data; classtype:protocol-command-decode; sid:2225002; rev:1;)
+alert smb any any -> any any (msg:"SURICATA SMB malformed response data"; flow:to_client; app-layer-event:smb.malformed_data; classtype:protocol-command-decode; sid:2225003; rev:1;)
+
+alert smb any any -> any any (msg:"SURICATA SMB malformed NTLMSSP record"; flow:to_server; app-layer-event:smb.malformed_ntlmssp_request; classtype:protocol-command-decode; sid:2225004; rev:1;)
+
+alert smb any any -> any any (msg:"SURICATA SMB malformed request dialects"; flow:to_server; app-layer-event:smb.negotiate_malformed_dialects; classtype:protocol-command-decode; sid:2225005; rev:1;)
+
+alert smb any any -> any any (msg:"SURICATA SMB file overlap"; app-layer-event:smb.file_overlap; classtype:protocol-command-decode; sid:2225006; rev:1;)
+alert smb any any -> any any (msg:"SURICATA SMB wrong direction"; app-layer-event:smb.response_to_server; classtype:protocol-command-decode; sid:2225007; rev:1;)
+alert smb any any -> any any (msg:"SURICATA SMB wrong direction"; app-layer-event:smb.request_to_client; classtype:protocol-command-decode; sid:2225008; rev:1;)
+
+# checks negotiated max-read-size and 'app-layer.protocols.smb.max-read-size`
+alert smb any any -> any any (msg:"SURICATA SMB max requested READ size exceeded"; flow:to_server; app-layer-event:smb.read_request_too_large; classtype:protocol-command-decode; sid:2225009; rev:1;)
+# checks negotiated max-read-size and 'app-layer.protocols.smb.max-read-size`
+alert smb any any -> any any (msg:"SURICATA SMB max response READ size exceeded"; flow:to_client; app-layer-event:smb.read_response_too_large; classtype:protocol-command-decode; sid:2225010; rev:1;)
+# checks negotiated max-write-size and 'app-layer.protocols.smb.max-write-size`
+alert smb any any -> any any (msg:"SURICATA SMB max WRITE size exceeded"; flow:to_server; app-layer-event:smb.write_request_too_large; classtype:protocol-command-decode; sid:2225011; rev:1;)
+
+# checks 'app-layer.protocols.smb.max-read-size`, NEGOTIATE PROTOCOL response, and NBSS record length against SMB read data length
+alert smb any any -> any any (msg:"SURICATA SMB supported READ size exceeded"; flow:to_client; app-layer-event:smb.negotiate_max_read_size_too_large; classtype:protocol-command-decode; sid:2225012; rev:1;)
+# checks 'app-layer.protocols.smb.max-write-size`, NEGOTIATE PROTOCOL response, NBSS record length against SMB write data length
+alert smb any any -> any any (msg:"SURICATA SMB supported WRITE size exceeded"; flow:to_server; app-layer-event:smb.negotiate_max_write_size_too_large; classtype:protocol-command-decode; sid:2225013; rev:1;)
+
+# checks 'app-layer.protocols.smb.max-write-queue-size` against out of order chunks
+alert smb any any -> any any (msg:"SURICATA SMB max WRITE queue size exceeded"; flow:to_server; app-layer-event:smb.write_queue_size_exceeded; classtype:protocol-command-decode; sid:2225014; rev:1;)
+# checks 'app-layer.protocols.smb.max-write-queue-cnt` against out of order chunks
+alert smb any any -> any any (msg:"SURICATA SMB max WRITE queue cnt exceeded"; flow:to_server; app-layer-event:smb.write_queue_cnt_exceeded; classtype:protocol-command-decode; sid:2225015; rev:1;)
+
+# checks 'app-layer.protocols.smb.max-read-queue-size` against out of order chunks
+alert smb any any -> any any (msg:"SURICATA SMB max READ queue size exceeded"; flow:to_client; app-layer-event:smb.read_queue_size_exceeded; classtype:protocol-command-decode; sid:2225016; rev:1;)
+# checks 'app-layer.protocols.smb.max-read-queue-cnt` against out of order chunks
+alert smb any any -> any any (msg:"SURICATA SMB max READ queue cnt exceeded"; flow:to_client; app-layer-event:smb.read_queue_cnt_exceeded; classtype:protocol-command-decode; sid:2225017; rev:1;)
+
+alert smb any any -> any any (msg:"SURICATA SMB too many transactions"; app-layer-event:smb.too_many_transactions; classtype:protocol-command-decode; sid:2225018; rev:1;)
+
+# next sid 2225019
+# SMTP event  rules
+#
+# SID's fall in the 2220000+ range. See http://doc.emergingthreats.net/bin/view/Main/SidAllocation
+#
+# These sigs fire at most once per connection.
+#
+# A flowint smtp.anomaly.count is incremented for each match. By default it will be 0.
+#
+alert smtp any any -> any any (msg:"SURICATA SMTP invalid reply"; flow:established,to_client; app-layer-event:smtp.invalid_reply; flowint:smtp.anomaly.count,+,1; classtype:protocol-command-decode; sid:2220000; rev:1;)
+alert smtp any any -> any any (msg:"SURICATA SMTP unable to match reply with request"; flow:established,to_client; app-layer-event:smtp.unable_to_match_reply_with_request; flowint:smtp.anomaly.count,+,1; classtype:protocol-command-decode; sid:2220001; rev:1;)
+alert smtp any any -> any any (msg:"SURICATA SMTP max command line len exceeded"; flow:established; app-layer-event:smtp.max_command_line_len_exceeded; flowint:smtp.anomaly.count,+,1; classtype:protocol-command-decode; sid:2220002; rev:1;)
+alert smtp any any -> any any (msg:"SURICATA SMTP max reply line len exceeded"; flow:established,to_client; app-layer-event:smtp.max_reply_line_len_exceeded; flowint:smtp.anomaly.count,+,1; classtype:protocol-command-decode; sid:2220003; rev:1;)
+alert smtp any any -> any any (msg:"SURICATA SMTP invalid pipelined sequence"; flow:established,to_server; app-layer-event:smtp.invalid_pipelined_sequence; flowint:smtp.anomaly.count,+,1; classtype:protocol-command-decode; sid:2220004; rev:1;)
+alert smtp any any -> any any (msg:"SURICATA SMTP bdat chunk len exceeded"; flow:established; app-layer-event:smtp.bdat_chunk_len_exceeded; flowint:smtp.anomaly.count,+,1; classtype:protocol-command-decode; sid:2220005; rev:1;)
+alert smtp any any -> any any (msg:"SURICATA SMTP no server welcome message"; flow:established,to_client; app-layer-event:smtp.no_server_welcome_message; flowint:smtp.anomaly.count,+,1; classtype:protocol-command-decode; sid:2220006; rev:1;)
+alert smtp any any -> any any (msg:"SURICATA SMTP tls rejected"; flow:established; app-layer-event:smtp.tls_rejected; flowint:smtp.anomaly.count,+,1; classtype:protocol-command-decode; sid:2220007; rev:1;)
+alert smtp any any -> any any (msg:"SURICATA SMTP data command rejected"; flow:established,to_client; app-layer-event:smtp.data_command_rejected; flowint:smtp.anomaly.count,+,1; classtype:protocol-command-decode; sid:2220008; rev:1;)
+
+# SMTP MIME events
+#alert smtp any any -> any any (msg:"SURICATA SMTP Mime parser failed"; flow:established; app-layer-event:smtp.mime_parse_failed; flowint:smtp.anomaly.count,+,1; classtype:protocol-command-decode; sid:2220009; rev:1;)
+#alert smtp any any -> any any (msg:"SURICATA SMTP Mime malformed message found"; flow:established; app-layer-event:smtp.mime_malformed_msg; flowint:smtp.anomaly.count,+,1; classtype:protocol-command-decode; sid:2220010; rev:1;)
+#alert smtp any any -> any any (msg:"SURICATA SMTP Mime base64-decoding failed"; flow:established; app-layer-event:smtp.mime_invalid_base64; flowint:smtp.anomaly.count,+,1; classtype:protocol-command-decode; sid:2220011; rev:1;)
+#alert smtp any any -> any any (msg:"SURICATA SMTP Mime header name len exceeded"; flow:established; app-layer-event:smtp.mime_long_header_name; flowint:smtp.anomaly.count,+,1; classtype:protocol-command-decode; sid:2220012; rev:1;)
+#alert smtp any any -> any any (msg:"SURICATA SMTP Mime header value len exceeded"; flow:established; app-layer-event:smtp.mime_long_header_value; flowint:smtp.anomaly.count,+,1; classtype:protocol-command-decode; sid:2220013; rev:1;)
+#alert smtp any any -> any any (msg:"SURICATA SMTP Mime quoted-printable-decoding failed"; flow:established; app-layer-event:smtp.mime_invalid_qp; flowint:smtp.anomaly.count,+,1; classtype:protocol-command-decode; sid:2220014; rev:1;)
+#alert smtp any any -> any any (msg:"SURICATA SMTP Mime line len exceeded"; flow:established; app-layer-event:smtp.mime_long_line; flowint:smtp.anomaly.count,+,1; classtype:protocol-command-decode; sid:2220015; rev:1;)
+#alert smtp any any -> any any (msg:"SURICATA SMTP Mime encoded line len exceeded"; flow:established; app-layer-event:smtp.mime_long_enc_line; flowint:smtp.anomaly.count,+,1; classtype:protocol-command-decode; sid:2220016; rev:1;)
+alert smtp any any -> any any (msg:"SURICATA SMTP Mime boundary length exceeded"; flow:established,to_server; app-layer-event:smtp.mime_long_boundary; flowint:smtp.anomaly.count,+,1; classtype:protocol-command-decode; sid:2220017; rev:1;)
+
+alert smtp any any -> any any (msg:"SURICATA SMTP duplicate fields"; flow:established,to_server; app-layer-event:smtp.duplicate_fields; flowint:smtp.anomaly.count,+,1; classtype:protocol-command-decode; sid:2220018; rev:1;)
+alert smtp any any -> any any (msg:"SURICATA SMTP unparsable content"; flow:established,to_server; app-layer-event:smtp.unparsable_content; flowint:smtp.anomaly.count,+,1; classtype:protocol-command-decode; sid:2220019; rev:1;)
+alert smtp any any -> any any (msg:"SURICATA SMTP filename truncated"; flow:established,to_server; app-layer-event:smtp.mime_long_filename; flowint:smtp.anomaly.count,+,1; classtype:protocol-command-decode; sid:2220020; rev:1;)
+alert smtp any any -> any any (msg:"SURICATA SMTP failed protocol change"; flow:established; app-layer-event:smtp.failed_protocol_change; flowint:smtp.anomaly.count,+,1; classtype:protocol-command-decode; sid:2220021; rev:1;)
+# next sid 2220022
+# SSH app layer event rules
+#
+# SID's fall in the 2228000+ range. See https://redmine.openinfosecfoundation.org/projects/suricata/wiki/AppLayer
+#
+# These sigs fire at most once per connection.
+#
+
+alert ssh any any -> any any (msg:"SURICATA SSH invalid banner"; flow:established; app-layer-event:ssh.invalid_banner; classtype:protocol-command-decode; sid:2228000; rev:1;)
+alert ssh any any -> any any (msg:"SURICATA SSH too long banner"; flow:established; app-layer-event:ssh.long_banner; classtype:protocol-command-decode; sid:2228001; rev:1;)
+alert ssh any any -> any any (msg:"SURICATA SSH invalid record"; flow:established; app-layer-event:ssh.invalid_record; classtype:protocol-command-decode; sid:2228002; rev:1;)
+# Stream events -- rules for matching on TCP stream engine events.
+#
+# SID's fall in the 2210000+ range. See http://doc.emergingthreats.net/bin/view/Main/SidAllocation
+#
+alert tcp any any -> any any (msg:"SURICATA STREAM 3way handshake with ack in wrong dir"; stream-event:3whs_ack_in_wrong_dir; classtype:protocol-command-decode; sid:2210000; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM 3way handshake async wrong sequence"; stream-event:3whs_async_wrong_seq; classtype:protocol-command-decode; sid:2210001; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM 3way handshake right seq wrong ack evasion"; stream-event:3whs_right_seq_wrong_ack_evasion; classtype:protocol-command-decode; sid:2210002; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM 3way handshake SYNACK in wrong direction"; stream-event:3whs_synack_in_wrong_direction; classtype:protocol-command-decode; sid:2210003; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM 3way handshake SYNACK resend with different ack"; stream-event:3whs_synack_resend_with_different_ack; classtype:protocol-command-decode; sid:2210004; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM 3way handshake SYNACK resend with different seq"; stream-event:3whs_synack_resend_with_diff_seq; classtype:protocol-command-decode; sid:2210005; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM 3way handshake SYNACK to server on SYN recv"; stream-event:3whs_synack_toserver_on_syn_recv; classtype:protocol-command-decode; sid:2210006; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM 3way handshake SYNACK with wrong ack"; stream-event:3whs_synack_with_wrong_ack; classtype:protocol-command-decode; sid:2210007; rev:2;)
+# Excessive SYNs or SYN/ACKs within a session. Limit is set in stream engine, "stream.max-synack-queued".
+alert tcp any any -> any any (msg:"SURICATA STREAM 3way handshake excessive different SYN/ACKs"; stream-event:3whs_synack_flood; classtype:protocol-command-decode; sid:2210055; rev:2;)
+# Client sent an SYN packet with TCP fast open and data, but the server only ACK'd
+# the SYN, not the data, while still supporting TFO.
+alert tcp any any -> any any (msg:"SURICATA STREAM 3way handshake SYN/ACK ignored TFO data"; stream-event:3whs_synack_tfo_data_ignored; classtype:protocol-command-decode; sid:2210064; rev:1;)
+alert tcp any any -> any any (msg:"SURICATA STREAM 3way handshake excessive different SYNs"; stream-event:3whs_syn_flood; classtype:protocol-command-decode; sid:2210063; rev:1;)
+alert tcp any any -> any any (msg:"SURICATA STREAM 3way handshake SYN resend different seq on SYN recv"; stream-event:3whs_syn_resend_diff_seq_on_syn_recv; classtype:protocol-command-decode; sid:2210008; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM 3way handshake SYN to client on SYN recv"; stream-event:3whs_syn_toclient_on_syn_recv; classtype:protocol-command-decode; sid:2210009; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM 3way handshake wrong seq wrong ack"; stream-event:3whs_wrong_seq_wrong_ack; classtype:protocol-command-decode; sid:2210010; rev:2;)
+# suspected data injection by sending data packet right after the SYN/ACK,
+# this to make sure network inspection reject tools reject it as it's
+# before the 3whs is complete. Only set in IPS mode. Drops unconditionally
+# in the code, so can't be made not to drop.
+drop tcp any any -> any any (msg:"SURICATA STREAM 3way handshake toclient data injection suspected"; flow:to_client; stream-event:3whs_ack_data_inject; classtype:protocol-command-decode; sid:2210057; rev:1;)
+alert tcp any any -> any any (msg:"SURICATA STREAM 4way handshake SYNACK with wrong ACK"; stream-event:4whs_synack_with_wrong_ack; classtype:protocol-command-decode; sid:2210011; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM 4way handshake SYNACK with wrong SYN"; stream-event:4whs_synack_with_wrong_syn; classtype:protocol-command-decode; sid:2210012; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM 4way handshake wrong seq"; stream-event:4whs_wrong_seq; classtype:protocol-command-decode; sid:2210013; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM 4way handshake invalid ack"; stream-event:4whs_invalid_ack; classtype:protocol-command-decode; sid:2210014; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM CLOSEWAIT ACK out of window"; stream-event:closewait_ack_out_of_window; classtype:protocol-command-decode; sid:2210015; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM CLOSEWAIT FIN out of window"; stream-event:closewait_fin_out_of_window; classtype:protocol-command-decode; sid:2210016; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM CLOSEWAIT invalid ACK"; stream-event:closewait_invalid_ack; classtype:protocol-command-decode; sid:2210017; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM CLOSING ACK wrong seq"; stream-event:closing_ack_wrong_seq; classtype:protocol-command-decode; sid:2210018; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM CLOSING invalid ACK"; stream-event:closing_invalid_ack; classtype:protocol-command-decode; sid:2210019; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM ESTABLISHED packet out of window"; stream-event:est_packet_out_of_window; classtype:protocol-command-decode; sid:2210020; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM ESTABLISHED SYNACK resend"; stream-event:est_synack_resend; classtype:protocol-command-decode; sid:2210022; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM ESTABLISHED SYNACK resend with different ACK"; stream-event:est_synack_resend_with_different_ack; classtype:protocol-command-decode; sid:2210023; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM ESTABLISHED SYNACK resend with different seq"; stream-event:est_synack_resend_with_diff_seq; classtype:protocol-command-decode; sid:2210024; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM ESTABLISHED SYNACK to server"; stream-event:est_synack_toserver; classtype:protocol-command-decode; sid:2210025; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM ESTABLISHED SYN resend"; stream-event:est_syn_resend; classtype:protocol-command-decode; sid:2210026; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM ESTABLISHED SYN resend with different seq"; stream-event:est_syn_resend_diff_seq; classtype:protocol-command-decode; sid:2210027; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM ESTABLISHED SYN to client"; stream-event:est_syn_toclient; classtype:protocol-command-decode; sid:2210028; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM ESTABLISHED invalid ack"; stream-event:est_invalid_ack; classtype:protocol-command-decode; sid:2210029; rev:2;)
+
+# ACK received for Zero Window Probe segment.
+#alert tcp any any -> any any (msg:"SURICATA STREAM ESTABLISHED ack for ZWP data"; stream-event:est_invalid_ack; classtype:protocol-command-decode; sid:2210065; rev:1;)
+
+alert tcp any any -> any any (msg:"SURICATA STREAM FIN invalid ack"; stream-event:fin_invalid_ack; classtype:protocol-command-decode; sid:2210030; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM FIN1 ack with wrong seq"; stream-event:fin1_ack_wrong_seq; classtype:protocol-command-decode; sid:2210031; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM FIN1 FIN with wrong seq"; stream-event:fin1_fin_wrong_seq; classtype:protocol-command-decode; sid:2210032; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM FIN1 invalid ack"; stream-event:fin1_invalid_ack; classtype:protocol-command-decode; sid:2210033; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM FIN2 ack with wrong seq"; stream-event:fin2_ack_wrong_seq; classtype:protocol-command-decode; sid:2210034; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM FIN2 FIN with wrong seq"; stream-event:fin2_fin_wrong_seq; classtype:protocol-command-decode; sid:2210035; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM FIN2 invalid ack"; stream-event:fin2_invalid_ack; classtype:protocol-command-decode; sid:2210036; rev:2;)
+# very common when looking at midstream traffic after IDS started
+#alert tcp any any -> any any (msg:"SURICATA STREAM FIN recv but no session"; stream-event:fin_but_no_session; classtype:protocol-command-decode; sid:2210037; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM FIN out of window"; stream-event:fin_out_of_window; classtype:protocol-command-decode; sid:2210038; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM Last ACK with wrong seq"; stream-event:lastack_ack_wrong_seq; classtype:protocol-command-decode; sid:2210039; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM Last ACK invalid ACK"; stream-event:lastack_invalid_ack; classtype:protocol-command-decode; sid:2210040; rev:2;)
+# very common when looking at midstream traffic after IDS started
+#alert tcp any any -> any any (msg:"SURICATA STREAM RST recv but no session"; stream-event:rst_but_no_session; classtype:protocol-command-decode; sid:2210041; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM TIMEWAIT ACK with wrong seq"; stream-event:timewait_ack_wrong_seq; classtype:protocol-command-decode; sid:2210042; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM TIMEWAIT invalid ack"; stream-event:timewait_invalid_ack; classtype:protocol-command-decode; sid:2210043; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM Packet with invalid timestamp"; stream-event:pkt_invalid_timestamp; classtype:protocol-command-decode; sid:2210044; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM Packet with invalid ack"; stream-event:pkt_invalid_ack; classtype:protocol-command-decode; sid:2210045; rev:2;)
+# Broken TCP: ack field non 0, but ACK flag not set. http://ask.wireshark.org/questions/3183/acknowledgment-number-broken-tcp-the-acknowledge-field-is-nonzero-while-the-ack-flag-is-not-set
+# Often result of broken load balancers, firewalls and such.
+#alert tcp any any -> any any (msg:"SURICATA STREAM Packet with broken ack"; stream-event:pkt_broken_ack; classtype:protocol-command-decode; sid:2210051; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM SHUTDOWN RST invalid ack"; stream-event:rst_invalid_ack; classtype:protocol-command-decode; sid:2210046; rev:2;)
+# SYN (re)send during shutdown (closing, closewait, finwait1, finwait2, lastack, timewait states)
+#alert tcp any any -> any any (msg:"SURICATA STREAM SYN resend"; stream-event:shutdown_syn_resend; classtype:protocol-command-decode; sid:2210049; rev:2;)
+# Sequence gap: missing data in the reassembly engine. Usually due to packet loss. Will be very noisy on a overloaded link / sensor.
+#alert tcp any any -> any any (msg:"SURICATA STREAM reassembly sequence GAP -- missing packet(s)"; stream-event:reassembly_seq_gap; classtype:protocol-command-decode; sid:2210048; rev:2;)
+alert tcp any any -> any any (msg:"SURICATA STREAM reassembly overlap with different data"; stream-event:reassembly_overlap_different_data; classtype:protocol-command-decode; sid:2210050; rev:2;)
+# Bad Window Update: see bug 1238 for an explanation
+alert tcp any any -> any any (msg:"SURICATA STREAM bad window update"; stream-event:pkt_bad_window_update; classtype:protocol-command-decode; sid:2210056; rev:1;)
+# RST injection suspected. Alerts on packets *after* the RST, as these indicate the target
+# rejected/ignored the RST.
+alert tcp any any -> any any (msg:"SURICATA STREAM suspected RST injection"; stream-event:suspected_rst_inject; classtype:protocol-command-decode; sid:2210058; rev:1;)
+
+# retransmission detection
+#
+# The rules below match on retransmissions detected in various stages of the
+# stream engine. They are all "noalert" rules that increment the counter
+# tcp.retransmission.count. The last rule sid:2210054 matches if the counter
+# reaches 10. Increase this number if the rule is too noisy.
+#
+# "regular" retransmissions, only count
+alert tcp any any -> any any (msg:"SURICATA STREAM ESTABLISHED retransmission packet before last ack"; stream-event:est_pkt_before_last_ack; flowint:tcp.retransmission.count,+,1; noalert; classtype:protocol-command-decode; sid:2210021; rev:3;)
+# retransmission, only count
+alert tcp any any -> any any (msg:"SURICATA STREAM CLOSEWAIT retransmission packet before last ack"; stream-event:closewait_pkt_before_last_ack; flowint:tcp.retransmission.count,+,1; noalert; classtype:protocol-command-decode; sid:2210052; rev:3;)
+# retransmission of pkt before reassembly window, only count
+alert tcp any any -> any any (msg:"SURICATA STREAM reassembly segment before base seq (retransmission)"; stream-event:reassembly_segment_before_base_seq; flowint:tcp.retransmission.count,+,1; noalert; classtype:protocol-command-decode; sid:2210047; rev:2;)
+# count "general" retransmissions
+alert tcp any any -> any any (msg:"SURICATA STREAM Packet is retransmission"; stream-event:pkt_retransmission; flowint:tcp.retransmission.count,+,1; noalert; classtype:protocol-command-decode; sid:2210053; rev:1;)
+# rule to alert if a stream has excessive retransmissions
+alert tcp any any -> any any (msg:"SURICATA STREAM excessive retransmissions"; flowbits:isnotset,tcp.retransmission.alerted; flowint:tcp.retransmission.count,>=,10; flowbits:set,tcp.retransmission.alerted; classtype:protocol-command-decode; sid:2210054; rev:1;)
+# Packet on wrong thread. Fires at most once per flow.
+alert tcp any any -> any any (msg:"SURICATA STREAM pkt seen on wrong thread"; stream-event:wrong_thread; sid:2210059; rev:1;)
+
+# Packet with FIN+SYN set
+alert tcp any any -> any any (msg:"SURICATA STREAM FIN SYN reuse"; stream-event:fin_syn; classtype:protocol-command-decode; sid:2210060; rev:1;)
+
+# Packet is a spurious retransmission, so a retransmission of already ACK'd data.
+# Disabled by default as this quite common and not malicious.
+#alert tcp any any -> any any (msg:"SURICATA STREAM spurious retransmission"; stream-event:pkt_spurious_retransmission; classtype:protocol-command-decode; sid:2210061; rev:1;)
+
+# Depth setting reached for a stream. Very common in normal traffic, so disable by default.
+#alert tcp any any -> any any (msg:"SURICATA STREAM reassembly depth reached"; stream-event:reassembly_depth_reached; classtype:protocol-command-decode; sid:2210062; rev:1;)
+
+alert tcp any any -> any any (msg:"SURICATA STREAM urgent OOB limit reached";  stream-event:reassembly_urgent_oob_limit_reached; classtype:protocol-command-decode; sid:2210066; rev:1;)
+
+# next sid 2210067
+
+# TLS event  rules
+#
+# SID's fall in the 2230000+ range. See http://doc.emergingthreats.net/bin/view/Main/SidAllocation
+#
+# These sigs fire at most once per connection.
+#
+# A flowint tls.anomaly.count is incremented for each match. By default it will be 0.
+#
+alert tls any any -> any any (msg:"SURICATA TLS invalid SSLv2 header"; flow:established; app-layer-event:tls.invalid_sslv2_header; flowint:tls.anomaly.count,+,1; classtype:protocol-command-decode; sid:2230000; rev:1;)
+alert tls any any -> any any (msg:"SURICATA TLS invalid TLS header"; flow:established; app-layer-event:tls.invalid_tls_header; flowint:tls.anomaly.count,+,1; classtype:protocol-command-decode; sid:2230001; rev:1;)
+alert tls any any -> any any (msg:"SURICATA TLS invalid record version"; flow:established; app-layer-event:tls.invalid_record_version; flowint:tls.anomaly.count,+,1; classtype:protocol-command-decode; sid:2230015; rev:1;)
+alert tls any any -> any any (msg:"SURICATA TLS invalid record type"; flow:established; app-layer-event:tls.invalid_record_type; flowint:tls.anomaly.count,+,1; classtype:protocol-command-decode; sid:2230002; rev:1;)
+alert tls any any -> any any (msg:"SURICATA TLS invalid handshake message"; flow:established; app-layer-event:tls.invalid_handshake_message; flowint:tls.anomaly.count,+,1; classtype:protocol-command-decode; sid:2230003; rev:1;)
+alert tls any any -> any any (msg:"SURICATA TLS invalid certificate"; flow:established; app-layer-event:tls.invalid_certificate; flowint:tls.anomaly.count,+,1; classtype:protocol-command-decode; sid:2230004; rev:1;)
+alert tls any any -> any any (msg:"SURICATA TLS certificate invalid length"; flow:established; app-layer-event:tls.certificate_invalid_length; flowint:tls.anomaly.count,+,1; classtype:protocol-command-decode; sid:2230007; rev:1;)
+alert tls any any -> any any (msg:"SURICATA TLS error message encountered"; flow:established; app-layer-event:tls.error_message_encountered; flowint:tls.anomaly.count,+,1; classtype:protocol-command-decode; sid:2230009; rev:1;)
+alert tls any any -> any any (msg:"SURICATA TLS invalid record/traffic"; flow:established; app-layer-event:tls.invalid_ssl_record; flowint:tls.anomaly.count,+,1; classtype:protocol-command-decode; sid:2230010; rev:1;)
+alert tls any any -> any any (msg:"SURICATA TLS heartbeat encountered"; flow:established; app-layer-event:tls.heartbeat_message; flowint:tls.anomaly.count,+,1; classtype:protocol-command-decode; sid:2230011; rev:1;)
+alert tls any any -> any any (msg:"SURICATA TLS overflow heartbeat encountered, possible exploit attempt (heartbleed)"; flow:established; app-layer-event:tls.overflow_heartbeat_message; flowint:tls.anomaly.count,+,1; classtype:protocol-command-decode; reference:cve,2014-0160; sid:2230012; rev:1;)
+alert tls any any -> any any (msg:"SURICATA TLS invalid heartbeat encountered, possible exploit attempt (heartbleed)"; flow:established; app-layer-event:tls.invalid_heartbeat_message; flowint:tls.anomaly.count,+,1; classtype:protocol-command-decode; reference:cve,2014-0160; sid:2230013; rev:1;)
+alert tls any any -> any any (msg:"SURICATA TLS invalid encrypted heartbeat encountered, possible exploit attempt (heartbleed)"; flow:established; app-layer-event:tls.dataleak_heartbeat_mismatch; flowint:tls.anomaly.count,+,1; classtype:protocol-command-decode; reference:cve,2014-0160; sid:2230014; rev:1;)
+alert tls any any -> any any (msg:"SURICATA TLS multiple SNI extensions"; flow:established,to_server; app-layer-event:tls.multiple_sni_extensions; flowint:tls.anomaly.count,+,1; classtype:protocol-command-decode; sid:2230016; rev:1;)
+alert tls any any -> any any (msg:"SURICATA TLS invalid SNI type"; flow:established,to_server; app-layer-event:tls.invalid_sni_type; flowint:tls.anomaly.count,+,1; classtype:protocol-command-decode; sid:2230017; rev:1;)
+alert tls any any -> any any (msg:"SURICATA TLS invalid SNI length"; flow:established,to_server; app-layer-event:tls.invalid_sni_length; flowint:tls.anomaly.count,+,1; classtype:protocol-command-decode; sid:2230018; rev:1;)
+alert tls any any -> any any (msg:"SURICATA TLS handshake invalid length"; flow:established; app-layer-event:tls.handshake_invalid_length; flowint:tls.anomaly.count,+,1; classtype:protocol-command-decode; sid:2230019; rev:1;)
+alert tls any any -> any any (msg:"SURICATA TLS too many records in packet"; flow:established; app-layer-event:tls.too_many_records_in_packet; flowint:tls.anomaly.count,+,1; classtype:protocol-command-decode; sid:2230020; rev:1;)
+alert tls any any -> any any (msg:"SURICATA TLS certificate invalid version"; flow:established; app-layer-event:tls.certificate_invalid_version; flowint:tls.anomaly.count,+,1; classtype:protocol-command-decode; sid:2230021; rev:1;)
+alert tls any any -> any any (msg:"SURICATA TLS certificate invalid serial"; flow:established; app-layer-event:tls.certificate_invalid_serial; flowint:tls.anomaly.count,+,1; classtype:protocol-command-decode; sid:2230022; rev:1;)
+alert tls any any -> any any (msg:"SURICATA TLS certificate invalid algorithm identifier"; flow:established; app-layer-event:tls.certificate_invalid_algorithmidentifier; flowint:tls.anomaly.count,+,1; classtype:protocol-command-decode; sid:2230023; rev:1;)
+alert tls any any -> any any (msg:"SURICATA TLS certificate invalid x509 name"; flow:established; app-layer-event:tls.certificate_invalid_x509name; flowint:tls.anomaly.count,+,1; classtype:protocol-command-decode; sid:2230024; rev:1;)
+alert tls any any -> any any (msg:"SURICATA TLS certificate invalid date"; flow:established; app-layer-event:tls.certificate_invalid_date; flowint:tls.anomaly.count,+,1; classtype:protocol-command-decode; sid:2230025; rev:1;)
+alert tls any any -> any any (msg:"SURICATA TLS certificate invalid extensions"; flow:established; app-layer-event:tls.certificate_invalid_extensions; flowint:tls.anomaly.count,+,1; classtype:protocol-command-decode; sid:2230026; rev:1;)
+alert tls any any -> any any (msg:"SURICATA TLS certificate invalid der"; flow:established; app-layer-event:tls.certificate_invalid_der; flowint:tls.anomaly.count,+,1; classtype:protocol-command-decode; sid:2230027; rev:1;)
+alert tls any any -> any any (msg:"SURICATA TLS certificate invalid subject"; flow:established; app-layer-event:tls.certificate_invalid_subject; flowint:tls.anomaly.count,+,1; classtype:protocol-command-decode; sid:2230028; rev:1;)
+alert tls any any -> any any (msg:"SURICATA TLS certificate invalid issuer"; flow:established; app-layer-event:tls.certificate_invalid_issuer; flowint:tls.anomaly.count,+,1; classtype:protocol-command-decode; sid:2230029; rev:1;)
+alert tls any any -> any any (msg:"SURICATA TLS certificate invalid validity"; flow:established; app-layer-event:tls.certificate_invalid_validity; flowint:tls.anomaly.count,+,1; classtype:protocol-command-decode; sid:2230030; rev:1;)
+
+#next sid is 2230031
