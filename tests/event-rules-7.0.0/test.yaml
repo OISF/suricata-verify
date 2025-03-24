@@ -1,0 +1,5 @@
+pcap: false
+args:
+  - -T
+  - --set app-layer.protocols.modbus.enabled=true
+  - --set app-layer.protocols.dnp3.enabled=true
