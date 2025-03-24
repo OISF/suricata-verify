@@ -1,2 +1,2 @@
-alert http any any -> any any (flow:established,to_server; ip.src; datajson:isset,bip,type ipv6,load ip.lst,key ip; sid:1;)
-alert http any any -> any any (flow:established,to_server; http.host; datajson:isset,badhost,type string,load host.lst,key bad_host; sid:2;)
+alert http any any -> any any (flow:established,to_server; ip.src; dataset:isset,bip,type ipv6,load ip.lst,key ip; sid:1;)
+alert http any any -> any any (flow:established,to_server; http.host; dataset:isset,badhost,type string,load host.lst,enrichment_key bad_host; sid:2;)
