@@ -37,8 +37,8 @@ checks:
       count: 1
       match:
         event_type: stats
-        stats.flow.memcap_exception_policy.drop_packet: 1
-        stats.flow.memcap_exception_policy.pass_packet: 0
+        stats.exception_policy.flow.memcap.drop_packet: 1
+        stats.exception_policy.flow.memcap.pass_packet: 0
   - filter:
       min-version: 8
       count: 1

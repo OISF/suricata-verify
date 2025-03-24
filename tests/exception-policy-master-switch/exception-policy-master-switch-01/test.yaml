@@ -42,3 +42,9 @@ checks:
         event_type: flow
         flow.exception_policy[0].target: "stream_midstream"
         flow.exception_policy[0].policy: "drop_flow"
+  - filter:
+      min-version: 8
+      count: 1
+      match:
+        event_type: stats
+        stats.exception_policy.tcp.midstream.drop_flow: 1
