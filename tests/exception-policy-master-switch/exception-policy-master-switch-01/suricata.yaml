@@ -26,4 +26,11 @@ outputs:
         - drop:
             alerts: yes
             flows: all
+        - stats:
+            null-values: false
+
+  - stats:
+       enabled: yes
+       filename: stats.log
+       append: yes
 

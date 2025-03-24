@@ -57,8 +57,8 @@ checks:
       count: 1
       match:
         event_type: stats
-        stats.app_layer.error.exception_policy.drop_flow: 1
-        stats.app_layer.error.exception_policy.pass_flow: 0
+        stats.exception_policy.app_layer.error.drop_flow: 1
+        stats.exception_policy.app_layer.error.pass_flow: 0
   - filter:
       min-version: 8
       count: 1
