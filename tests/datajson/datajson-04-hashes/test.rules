@@ -1,2 +1,2 @@
-alert http any any -> any any (flow:established,to_server; http.host; content: "testmyids"; to_sha256; datajson:isset,badcat,type sha256,load badsha.lst,key bad_sha; sid:1; rev:1;)
-alert http any any -> any any (flow:established,to_server; http.host; content: "testmyids"; to_md5; datajson:isset,badmd5,type md5,load badmd5.lst,key bad_md5; sid:2; rev:1;)
+alert http any any -> any any (flow:established,to_server; http.host; content: "testmyids"; to_sha256; dataset:isset,badcat,type sha256,load badsha.lst,format json,enrichment_key bad_sha,value_key hash; sid:1; rev:1;)
+alert http any any -> any any (flow:established,to_server; http.host; content: "testmyids"; to_md5; dataset:isset,badmd5,type md5,load badmd5.lst,format json,enrichment_key bad_md5,value_key hash; sid:2; rev:1;)
