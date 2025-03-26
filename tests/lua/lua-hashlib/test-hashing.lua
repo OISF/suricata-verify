@@ -1,13 +1,12 @@
 local hashlib = require("suricata.hashlib")
+local dns = require("suricata.dns")
 
 local expected_sha256 = "080bdfdfcd8c2c7fce747f9be4603ced6253caac70894ad89d605309588c60f6"
 local expected_sha1 = "00f495ffd50c8b5ef3645f61486dae496db0fe2e"
 local expected_md5 = "27170ec0609347c6a158bb5b694822a5"
 
 function init (args)
-   local needs = {}
-   needs["dns.rrname"] = tostring(true)
-   return needs
+   return {["dns.request"] = true}
 end
 
 local function tohex(str)
@@ -127,7 +126,8 @@ function test_md5(name)
 end
 
 function match(args)
-   rrname = tostring(args["dns.rrname"])
+   local tx = dns.get_tx()
+   local rrname = tx:rrname()
 
    if not test_sha256(rrname) then
       SCLogError("test_sha256 failed")
