@@ -1,6 +1,7 @@
 -- simple fast-log to file lua module
 local flow = require("suricata.flow")
 local packet = require "suricata.packet"
+local http = require("suricata.http")
 
 name = "http_lua.log"
 
@@ -14,23 +15,24 @@ function setup (args)
     filename = SCLogPath() .. "/" .. name
     file = assert(io.open(filename, "a"))
     SCLogInfo("HTTP Log Filename " .. filename)
-    http = 0
+    http_tx = 0
 end
 
 function log(args)
-    http_uri = HttpGetRequestUriRaw()
+    local tx = http.get_tx()
+    http_uri = tx:request_raw_uri()
     if http_uri == nil then
         http_uri = "<unknown>"
     end
     http_uri = string.gsub(http_uri, "%c", ".")
 
-    http_host = HttpGetRequestHost()
+    http_host = tx:request_host()
     if http_host == nil then
         http_host = "<hostname unknown>"
     end
     http_host = string.gsub(http_host, "%c", ".")
 
-    http_ua = HttpGetRequestHeader("User-Agent")
+    http_ua = tx:request_header("User-Agent")
     if http_ua == nil then
         http_ua = "<useragent unknown>"
     end
@@ -46,10 +48,10 @@ function log(args)
            dstip .. ":" .. math.floor(dp) .. "\n")
     file:flush()
 
-    http = http + 1
+    http_tx = http_tx + 1
 end
 
 function deinit (args)
-    SCLogInfo ("HTTP transactions logged: " .. http);
+    SCLogInfo ("HTTP transactions logged: " .. http_tx);
     file:close(file)
 end
