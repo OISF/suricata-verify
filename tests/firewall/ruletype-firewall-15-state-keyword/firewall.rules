@@ -13,11 +13,17 @@ accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET 443 (flow:established; alert;
 
 # App-layer rules
 
-accept:hook tls:client_hello_done $HOME_NET any -> $EXTERNAL_NET any (tls.sni; content:"www.google.com"; sid:104; alert;)
-accept:hook tls:request_update $HOME_NET any -> $EXTERNAL_NET any (app-layer-state:<client_hello_done; alert; sid:105;)
-accept:hook tls:request_update $HOME_NET any -> $EXTERNAL_NET any (app-layer-state:>client_hello_done; alert; sid:106;)
+accept:hook tls:client_in_progress $HOME_NET any -> $EXTERNAL_NET any (alert; sid:100;)
+accept:hook tls:client_hello_done $HOME_NET any -> $EXTERNAL_NET any (tls.sni; content:"www.google.com"; sid:101; alert;)
+accept:hook tls:client_cert_done $HOME_NET any -> $EXTERNAL_NET any (alert; sid:102;)
+accept:hook tls:client_handshake_done $HOME_NET any -> $EXTERNAL_NET any (alert; sid:103;)
+accept:hook tls:client_finished $HOME_NET any -> $EXTERNAL_NET any (alert; sid:104;)
 
-# accept all return states
-accept:hook tls:response_update $EXTERNAL_NET any -> $HOME_NET any (alert; sid:205;)
+accept:hook tls:server_in_progress $EXTERNAL_NET any -> $HOME_NET any (alert; sid:200;)
+accept:hook tls:server_hello $EXTERNAL_NET any -> $HOME_NET any (alert; sid:201;)
+accept:hook tls:server_cert_done $EXTERNAL_NET any -> $HOME_NET any (alert; sid:202;)
+accept:hook tls:server_hello_done $EXTERNAL_NET any -> $HOME_NET any (alert; sid:203;)
+accept:hook tls:server_handshake_done $EXTERNAL_NET any -> $HOME_NET any (alert; sid:204;)
+accept:hook tls:server_finished $EXTERNAL_NET any -> $HOME_NET any (alert; sid:205;)
 
 # default drop

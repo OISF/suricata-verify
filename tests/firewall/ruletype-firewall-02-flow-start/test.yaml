@@ -10,7 +10,7 @@ checks:
       event_type: alert
       alert.action: blocked
 - filter:
-    count: 0
+    count: 13
     match:
       event_type: drop
 - filter:

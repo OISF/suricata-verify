@@ -17,9 +17,14 @@ checks:
     count: 8
     match:
       event_type: alert
+      alert.signature_id: 100
+- filter:
+    count: 8
+    match:
+      event_type: alert
       alert.signature_id: 101
 - filter:
-    count: 0
+    count: 8
     match:
       event_type: alert
       alert.signature_id: 102
@@ -29,12 +34,12 @@ checks:
       event_type: alert
       alert.signature_id: 103
 - filter:
-    count: 0
+    count: 8
     match:
       event_type: alert
       alert.signature_id: 104
 - filter:
-    count: 0
+    count: 8
     match:
       event_type: alert
       alert.signature_id: 105
@@ -42,17 +47,37 @@ checks:
     count: 8
     match:
       event_type: alert
+      alert.signature_id: 106
+- filter:
+    count: 8
+    match:
+      event_type: alert
+      alert.signature_id: 200
+- filter:
+    count: 8
+    match:
+      event_type: alert
       alert.signature_id: 201
 - filter:
-    count: 0
+    count: 8
     match:
       event_type: alert
       alert.signature_id: 202
 - filter:
-    count: 0
+    count: 8
     match:
       event_type: alert
       alert.signature_id: 203
+- filter:
+    count: 8
+    match:
+      event_type: alert
+      alert.signature_id: 204
+- filter:
+    count: 8
+    match:
+      event_type: alert
+      alert.signature_id: 205
 - filter:
     count: 0
     match:
