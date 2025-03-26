@@ -1,0 +1,1 @@
+alert smtp any any -> any any (msg:"Test mime email to"; email.to; content:"172.16.92.2@linuxbox"; startswith; endswith; bsize:20; sid:1;)
