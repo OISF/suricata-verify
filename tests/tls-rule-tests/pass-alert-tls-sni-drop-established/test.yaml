@@ -1,0 +1,16 @@
+pcap: ../tls_conn.pcap
+
+args:
+  - --simulate-ips
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.action: blocked
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.action: allowed

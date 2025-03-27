@@ -1,0 +1,10 @@
+# allow tcp handshake
+alert tcp any any <> any 443 (flow:not_established; sid:31; rev:1;)
+pass tcp any any <> any 443 (flow:not_established; sid:32; rev:1;)
+
+# allow tls
+alert tls any any -> any 443 (flow:to_server, established; sid:33; rev:1;)
+pass tls any any -> any 443 (flow:to_server, established; sid:34; rev:1;)
+
+# drop rule
+drop ip any any -> any any (flow:stateless; sid:212313; rev:233;)
