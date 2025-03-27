@@ -1,6 +1,8 @@
 %YAML 1.1
 ---
 
+include: ../../etc/suricata-4.0.3.yaml
+
 outputs:
   - lua:
       enabled: yes

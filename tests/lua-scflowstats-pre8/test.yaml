@@ -3,9 +3,11 @@ pcap: ../lua-output-http/input.pcap
 requires:
   features:
     - HAVE_LUA
+  lt-version: 8
 
 checks:
+
   - file-compare:
       # A check that compares two files
-      filename: scflow-tuple.log
-      expected: expected/scflow-tuple.log
+      filename: lua-scflowstats.log
+      expected: expected/lua-scflowstats.log
