@@ -1,0 +1,13 @@
+requires:
+  min-version: 8
+
+args:
+  - --set security.lua.allow-rules=true
+
+pcap: ../dnp3-eve/input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 4

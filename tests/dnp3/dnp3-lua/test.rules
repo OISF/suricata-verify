@@ -1,0 +1,1 @@
+alert dnp3 any any -> any any (msg:"LUA"; dnp3_func:21; lua:rule.lua; sid:4; rev:1;)
