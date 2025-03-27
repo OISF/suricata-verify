@@ -1,6 +1,7 @@
 requires:
   features:
     - HAVE_LUA
+  lt-version: 8
 
 pcap: ../filestore-v2.1-forced/suricata-update-pdf.pcap
 
