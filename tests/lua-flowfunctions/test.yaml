@@ -1,0 +1,15 @@
+pcap: ../lua-output-http/input.pcap
+
+requires:
+  features:
+    - HAVE_LUA
+  min-version: 8
+
+checks:
+  - file-compare:
+      filename: flow_http_lua.log
+      expected: expected/flow_http_lua.log
+  - filter:
+      count: 1
+      match:
+        event_type: alert

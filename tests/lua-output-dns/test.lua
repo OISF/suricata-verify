@@ -1,3 +1,4 @@
+local flow = require("suricata.flow")
 local packet = require "suricata.packet"
 local dns = require "suricata.dns"
 
@@ -17,7 +18,8 @@ end
 function log(args)
    p = packet.get()
    ts = p:timestring_legacy()
-   ip_ver, src_ip, dst_ip, proto, sp, dp = SCFlowTuple()
+   f = flow.get()
+   ip_ver, src_ip, dst_ip, proto, sp, dp = f:tuple()
    local tx = dns.get_tx()
    tx_id = tx:txid()
 

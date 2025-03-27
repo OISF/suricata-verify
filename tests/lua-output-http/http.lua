@@ -1,5 +1,6 @@
 -- simple fast-log to file lua module
 local packet = require "suricata.packet"
+local flow = require("suricata.flow")
 
 name = "http_lua.log"
 
@@ -37,7 +38,8 @@ function log(args)
 
     p = packet.get()
     ts = p:timestring_legacy()
-    ipver, srcip, dstip, proto, sp, dp = SCFlowTuple()
+    f = flow.get()
+    ipver, srcip, dstip, proto, sp, dp = f:tuple()
 
     file:write (ts .. " " .. http_host .. " [**] " .. http_uri .. " [**] " ..
            http_ua .. " [**] " .. srcip .. ":" .. math.floor(sp) .. " -> " ..

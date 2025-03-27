@@ -1,3 +1,4 @@
+local flow = require("suricata.flow")
 local dataset = require("suricata.dataset")
 local dns = require("suricata.dns")
 
@@ -17,7 +18,8 @@ function thread_init (args)
 end
 
 function match (args)
-    ipver, srcip, dstip, proto, sp, dp = SCFlowTuple()
+    local f = flow.get()
+    ipver, srcip, dstip, proto, sp, dp = f:tuple()
     local tx = dns.get_tx()
     query = tx:rrname()
     if query == nil then

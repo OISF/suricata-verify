@@ -1,0 +1,12 @@
+pcap: ../lua-output-http/input.pcap
+
+requires:
+  features:
+    - HAVE_LUA
+  min-version: 8
+
+checks:
+  - file-compare:
+      # A check that compares two files
+      filename: lua-scflowstats.log
+      expected: expected/lua-scflowstats.log
