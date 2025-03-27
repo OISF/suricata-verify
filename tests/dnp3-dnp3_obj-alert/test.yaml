@@ -11,3 +11,11 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 2
+
+  - filter:
+      count: 4
+      min-version: 8
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        packet_info.linktype_name: EN10MB
