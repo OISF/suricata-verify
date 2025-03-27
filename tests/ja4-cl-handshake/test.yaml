@@ -1,0 +1,13 @@
+requires:
+  min-version: 8
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+        tls.ja4: t12d280700_d943125447b4_3c5a66c06c35
+        tls.client_handshake.version: TLS 1.2
+        tls.client_handshake.ciphers: [49196,49200,159,52393,52392,52394,49195,49199,158,49188,49192,107,49187,49191,103,49162,49172,57,49161,49171,51,157,156,61,60,53,47,255]
+        tls.client_handshake.exts: [0,11,10,35,22,23,13]
+        tls.client_handshake.sig_algs: [1027,1283,1539,2055,2056,2057,2058,2059,2052,2053,2054,1025,1281,1537,771,515,769,513,770,514,1026,1282,1538]
