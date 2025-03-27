@@ -1,5 +1,5 @@
 requires:
-  version: 7
+  min-version: 7
 
 command: |
   ${SRCDIR}/src/suricata --set classification-file="${SRCDIR}/etc/classification.config" --set reference-config-file="${SRCDIR}/etc/reference.config" -l ${OUTPUT_DIR} -c ${TEST_DIR}/suricata.yaml -r ${TEST_DIR}/ -S ${TEST_DIR}/test.rules
@@ -14,7 +14,6 @@ checks:
         engine.message: "signature can't match as required content length 20 exceeds dsize value 16"
 
   - filter:
-      min-version: 7
       count: 3
       match:
         event_type: engine
