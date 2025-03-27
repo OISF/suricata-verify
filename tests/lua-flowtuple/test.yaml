@@ -1,0 +1,15 @@
+pcap: ../http2-keywords2/input.pcap
+
+args:
+- -k none --set stream.midstream=true
+
+requires:
+  features:
+    - HAVE_LUA
+  min-version: 8
+
+checks:
+  - file-compare:
+      # A check that compares two files
+      filename: scflow-tuple.log
+      expected: expected/scflow-tuple.log

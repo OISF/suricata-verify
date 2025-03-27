@@ -1,0 +1,19 @@
+%YAML 1.1
+---
+
+include: ../lua-output-http/default.yaml
+
+outputs:
+  - lua:
+      enabled: yes
+      scripts-dir: .
+      scripts:
+         - lua-flowfunctions.lua
+  - eve-log:
+      enabled: yes
+      filetype: regular #regular|syslog|unix_dgram|unix_stream|redis
+      filename: eve.json
+      types:
+        - alert
+        - http
+        - flow

@@ -1,0 +1,11 @@
+%YAML 1.1
+---
+
+include: ../lua-output-http/default.yaml
+
+outputs:
+  - lua:
+      enabled: yes
+      scripts-dir: .
+      scripts:
+         - lua-scflowstats.lua

@@ -1,0 +1,14 @@
+requires:
+  features:
+    - HAVE_LUA
+  min-version: 8
+
+pcap: ../filestore-v2.1-forced/suricata-update-pdf.pcap
+
+checks:
+  - file-compare:
+      filename: 6-172.16.1.68-162.209.114.75-58384-80
+      expected: expected/6-172.16.1.68-162.209.114.75-58384-80
+  - file-compare:
+      filename: http-6-172.16.1.68-162.209.114.75-58384-80
+      expected: expected/http-6-172.16.1.68-162.209.114.75-58384-80

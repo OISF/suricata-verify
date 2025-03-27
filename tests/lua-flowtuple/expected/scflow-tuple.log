@@ -1,0 +1,4 @@
+{2018-08-12T17:30:41.693796+0000 [**]
+SCFlowTuple is
+IP Version:  4
+Src: 10.9.0.2:58038 -> Dst: 139.162.123.134:80 [**] Protocol: http2(6) alproto_orig: http alproto_expect:  http2}

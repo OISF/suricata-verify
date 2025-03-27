@@ -1,4 +1,5 @@
 local dataset = require "suricata.dataset"
+local flow = require("suricata.flow")
 
 function init (args)
     local needs = {}
@@ -16,7 +17,8 @@ function thread_init (args)
 end
 
 function match (args)
-    ipver, srcip, dstip, proto, sp, dp = SCFlowTuple()
+    local f = flow.get()
+    ipver, srcip, dstip, proto, sp, dp = f:tuple()
     str = ipver .. ":<" .. srcip .. ">:<" .. dstip .. ">:" .. dp
 
     ret, err = conn_new:add(str, #str);
