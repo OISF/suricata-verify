@@ -177,6 +177,10 @@ checks:
         # Check if a string ends with an expected value
         engine.message.__endswith: "the end of a string"
 
+        # Check if a string is contained within a JSON list.
+        # Eg. "ftp":{"reply":["Opening BINARY mode data connection for temp.txt (1164 bytes).","Transfer complete."], }
+        ftp.reply.__contains: 'Transfer complete.'
+
   - shell:
       # A simple shell check. If the command exits with a non-0 exit code the
       # check will fail. The script is run in the output directory of the
