@@ -1,0 +1,41 @@
+pcap: ../../bug-3519/input.pcap
+
+requires:
+  min-version: 8
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.reply: ['Please specify the password.']
+        alert.signature_id: 1
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.reply.__contains: 'Opening BINARY mode data connection for temp.txt (1164 bytes).'
+        alert.signature_id: 2
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.reply.__contains: 'Transfer complete.'
+        alert.signature_id: 3
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.reply.__contains: 'Goodbye.'
+        alert.signature_id: 4
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.reply.__contains: 'Directory send OK.'
+        alert.signature_id: 5
