@@ -56,7 +56,7 @@ checks:
       count: 1
       match:
         event_type: stats
-        stats.tcp.ssn_memcap_exception_policy.drop_flow: 1
+        stats.exception_policy.tcp.ssn_memcap.drop_flow: 1
   - filter:
       min-version: 8
       count: 1

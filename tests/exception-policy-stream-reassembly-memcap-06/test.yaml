@@ -52,7 +52,7 @@ checks:
       count: 1
       match:
         event_type: stats
-        stats.tcp.reassembly_exception_policy.pass_packet: 1
+        stats.exception_policy.tcp.reassembly.pass_packet: 1
   - filter:
       min-version: 8
       count: 1
