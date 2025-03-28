@@ -1,0 +1,1 @@
+alert smtp any any -> any any (msg:"Test mime email date"; email.date; content:"Fri, 21 Apr 2023 05:10:36 +0000"; startswith; endswith; bsize:31; sid:1;)

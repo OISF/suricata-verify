@@ -1,0 +1,16 @@
+requires:
+  min-version: 8
+
+pcap: ../mime/mime-dec-parse-full-msg-test02/input.pcap
+
+args:
+  - -k none --set stream.inline=true
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      email.date: Fri, 21 Apr 2023 05:10:36 +0000
+      pcap_cnt: 13
+      alert.signature_id: 1
