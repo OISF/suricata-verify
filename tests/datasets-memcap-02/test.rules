@@ -1,1 +1,1 @@
-alert http any any -> any any (http.user_agent; dataset:isset,ua-seen,type string,load datasets.csv,memcap 88074,hashsize 1; sid:1;)
+alert http any any -> any any (http.user_agent; dataset:isset,ua-seen,type string,load datasets.csv,memcap 104064,hashsize 1; sid:1;)
