@@ -7,13 +7,14 @@ on:
 jobs:
   
   pcapng-check:
-    name: PCAP-NG Check
+    name: PCAP Check
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
       - run: sudo apt update
       - run: sudo apt -y install tshark
       - run: ./pcapng-check.sh
+      - run: ./pcap-check.sh
 
   ubuntu-22-04:
     name: Ubuntu 22.04
