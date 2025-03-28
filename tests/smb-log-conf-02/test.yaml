@@ -1,0 +1,29 @@
+requires:
+  min-version: 8
+
+args:
+- --set stream.reassembly.depth=0
+- -k none
+
+pcap: ../smb2-01/smb2-peter.pcap
+
+checks:
+  - filter:
+      count: 4
+      match:
+        event_type: smb
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.command: SMB2_COMMAND_NEGOTIATE_PROTOCOL
+  - filter:
+      count: 2
+      match:
+        event_type: smb
+        smb.command: SMB2_COMMAND_SESSION_SETUP
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.command: SMB2_COMMAND_TREE_CONNECT
