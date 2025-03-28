@@ -1,0 +1,5 @@
+alert ftp any any -> any any (msg: "Match on FTP reply #1"; flow:to_client; ftp.reply; content:"Please specify the password."; sid:1;)
+alert ftp any any -> any any (msg: "Match on FTP reply #2"; flow:to_client; ftp.reply; content:"Opening BINARY mode data connection for temp.txt (1164 bytes)."; sid:2;)
+alert ftp any any -> any any (msg: "Match on FTP reply #3"; flow:to_client; ftp.reply; content:"Transfer complete."; sid:3;)
+alert ftp any any -> any any (msg: "Match on FTP reply #4"; flow:to_client; ftp.reply; content:"Goodbye."; sid:4;)
+alert ftp any any -> any any (msg: "Match on FTP reply #5"; flow:to_client; ftp.reply; content:"Directory send OK."; sid:5;)
