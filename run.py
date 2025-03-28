@@ -399,7 +399,7 @@ def find_value(name, obj):
                 return len(obj)
             except:
                 return -1
-        if part in ["__find", "__startswith", "__endswith"]:
+        if part in ["__contains", "__find", "__startswith", "__endswith"]:
             # Return full object, caller will handle the special match logic.
             break
         name = None
@@ -572,6 +572,9 @@ class FilterCheck:
                 val = find_value(key, event)
                 if key.endswith("__find"):
                     if val.find(expected) < 0:
+                        return False
+                elif key.endswith("__contains"):
+                    if not expected in val:
                         return False
                 elif key.endswith("__startswith"):
                     if not val.startswith(expected):
