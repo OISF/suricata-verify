@@ -1,0 +1,1 @@
+alert smtp any any -> any any (msg:"Test mime email message id"; email.message_id; content:"<alpine.DEB.2.00.1311261630120.9535@sd-26634.dedibox.fr>"; startswith; endswith; bsize:56; sid:1;)
