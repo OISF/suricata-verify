@@ -6,7 +6,8 @@ local expected_sha1 = "00f495ffd50c8b5ef3645f61486dae496db0fe2e"
 local expected_md5 = "27170ec0609347c6a158bb5b694822a5"
 
 function init (args)
-   return {["dns.request"] = true}
+   local needs = {}
+   return needs
 end
 
 local function tohex(str)

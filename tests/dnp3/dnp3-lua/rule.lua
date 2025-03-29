@@ -1,7 +1,7 @@
 local dnp3 = require("suricata.dnp3")
 
 function init (args)
-   return {dnp3 = true}
+   return {}
 end
 
 function match(args)
