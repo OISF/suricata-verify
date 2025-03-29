@@ -1,0 +1,17 @@
+requires:
+  min-version: 8
+
+pcap: ../bug-1045/smtpsuricataflowbitsFN.pcap
+
+args:
+  - -k none --set stream.inline=true
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      email.message_id: <alpine.DEB.2.00.1311261630120.9535@sd-26634.dedibox.fr>
+      pcap_cnt: 13
+      alert.signature_id: 1
+
