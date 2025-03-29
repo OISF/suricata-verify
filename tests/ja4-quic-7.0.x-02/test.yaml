@@ -1,6 +1,5 @@
 requires:
   min-version: 7.0.6
-  lt-version: 8
   features:
     - HAVE_JA4
 
