@@ -1,0 +1,1 @@
+alert http any any -> any any (flow:established,to_server; http.host; dataset:isset,badhost,type string,load host.lst,format jsonline,enrichment_key bad_host,value_key ioc.host,remove_key; ip.src; dataset:isset,src_ip,type ip,load src.lst,format jsonline,enrichment_key src_ip,value_key ip; sid:1;)
