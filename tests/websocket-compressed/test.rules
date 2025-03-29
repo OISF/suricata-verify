@@ -1,0 +1,1 @@
+alert websocket any any -> any any (msg:"There is no text opcode in this packet"; websocket.payload; content: "TOGGLE=5659131662f54334"; sid:1;)
