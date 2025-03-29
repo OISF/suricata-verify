@@ -1,0 +1,4 @@
+alert ftp any any -> any any (msg: "Match on FTP command/command-data #1"; flow:to_server; ftp.command; content: "USER"; ftp.command_data; content:"anonymous"; sid:1;)
+alert ftp any any -> any any (msg: "Match on FTP command/command-data #2"; flow:to_server; ftp.command; content: "PASS"; ftp.command_data; content:"anonymous"; sid:2;)
+alert ftp any any -> any any (msg: "Match on FTP command-data #2"; flow:to_server; ftp.command_data; content:"temp.txt"; sid:3;)
+alert ftp any any -> any any (msg: "Match on FTP command-data #3"; flow:to_server; ftp.command_data; content:"192,168,0,13,234,10"; sid:4;)

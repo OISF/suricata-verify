@@ -1,0 +1,38 @@
+pcap: ../../bug-3519/input.pcap
+
+requires:
+  min-version: 8
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.command: USER
+        ftp.command_data: anonymous
+        alert.signature_id: 1
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.command: PASS
+        ftp.command_data: anonymous
+        alert.signature_id: 2
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.command: RETR
+        ftp.command_data: temp.txt
+        alert.signature_id: 3
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.command: PORT
+        ftp.command_data: 192,168,0,13,234,10
+        alert.signature_id: 4
