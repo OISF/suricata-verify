@@ -1,0 +1,2 @@
+alert ssh $HOME_NET any -> any any (msg:"pcre without content and no match"; pcre:"/rabbit/"; sid:1; rev:1;)
+alert smb $HOME_NET any -> any any (msg:"smb share content with match"; smb.share; content:"C"; sid:2; rev:1;)
