@@ -1,0 +1,20 @@
+# Packet rules
+
+# allow session setup
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET 443 (flow:not_established; alert; sid:1021;)
+# allow rest of the flow to 
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET 443 (flow:established; alert; sid:1023;)
+
+# default drop
+
+
+
+
+# App-layer rules
+
+# should match, pcap is to google
+accept:flow tls:client_hello_done $HOME_NET any -> $EXTERNAL_NET any (tls.sni; content:"www.google.com"; sid:104; alert;)
+# allow tls before client hello is done.
+accept:hook tls:client_in_progress $HOME_NET any -> $EXTERNAL_NET any (alert; sid:105;)
+
+# default drop

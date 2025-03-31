@@ -1,0 +1,63 @@
+requires:
+  min-version: 8
+
+pcap: ../../dns/dns-eve/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 100
+- filter:
+    count: 4
+    match:
+      event_type: alert
+      alert.signature_id: 101
+- filter:
+    count: 3
+    match:
+      event_type: alert
+      alert.signature_id: 102
+- filter:
+    count: 3
+    match:
+      event_type: alert
+      alert.signature_id: 201
+- filter:
+    count: 3
+    match:
+      event_type: alert
+      alert.signature_id: 202
+- filter:
+    count: 2
+    match:
+      event_type: drop
+- filter:
+    count: 3
+    match:
+      event_type: flow
+      flow.pkts_toserver: 1
+      flow.pkts_toclient: 1
+      flow.alerted: true
+      not-has-key: flow.action
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.pkts_toserver: 1
+      flow.pkts_toclient: 1
+      flow.alerted: true
+      flow.action: drop
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.ips.accepted: 6
+      stats.ips.blocked: 2
+      stats.ips.drop_reason.default_app_policy: 1
+      stats.ips.drop_reason.flow_drop: 1

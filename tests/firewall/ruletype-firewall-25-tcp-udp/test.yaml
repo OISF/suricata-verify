@@ -1,0 +1,43 @@
+requires:
+  min-version: 8
+
+pcap: ../../dns/dns-frames/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 100
+- filter:
+    count: 10
+    match:
+      event_type: drop
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      proto: TCP
+      flow.pkts_toserver: 6
+      flow.pkts_toclient: 4
+      not-has-key: flow.action
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      proto: UDP
+      flow.pkts_toserver: 1
+      flow.pkts_toclient: 1
+      not-has-key: flow.action
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.ips.accepted: 2
+      stats.ips.blocked: 10
+      stats.ips.drop_reason.default_packet_policy: 10
+      stats.ips.drop_reason.default_app_policy: 0
