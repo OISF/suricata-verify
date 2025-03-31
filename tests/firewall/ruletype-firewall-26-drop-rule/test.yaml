@@ -4,16 +4,26 @@ requires:
 pcap: ../../tls/tls-random/input.pcap
 
 args:
-- -k none
-- --simulate-ips
+  - --simulate-ips
 
 checks:
 - filter:
     count: 0
     match:
       event_type: alert
+      alert.signature_id: 1
 - filter:
     count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 2
+- filter:
+    count: 13
+    match:
+      event_type: alert
+      alert.signature_id: 99
+- filter:
+    count: 13
     match:
       event_type: drop
 - filter:

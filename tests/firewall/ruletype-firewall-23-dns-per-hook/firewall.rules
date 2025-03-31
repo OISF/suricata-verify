@@ -1,0 +1,11 @@
+# Packet rules
+
+accept:hook udp:all any any -> any any (sid:100;)
+# default drop
+
+
+accept:hook dns:request_started any any -> any any (alert; sid:101;)
+accept:hook dns:request_complete any any -> any any (dns.query; content:"dropbox"; alert; sid:102;)
+
+accept:hook dns:response_started any any -> any any (alert; sid:201;)
+accept:hook dns:response_complete any any -> any any (dns.response.rrname; content:"dropbox"; alert; sid:202;)
