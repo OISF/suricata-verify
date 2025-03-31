@@ -1,0 +1,1 @@
+drop:packet tcp-pkt any any -> any any (flow:to_server; content:"|16 03 01 02 00|"; startswith; sid:666;)

@@ -1,0 +1,2 @@
+accept:packet udp:all any any -> any any (sid:100;)
+# default drop

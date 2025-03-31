@@ -1,0 +1,11 @@
+# Packet rules
+
+accept:packet ip:all any any -> any any (flowbits:isset,fw_flow_accept; alert; sid:1010;)
+
+# allow session setup
+accept:packet tcp:all $HOME_NET any <> $EXTERNAL_NET 443 (flow:not_established; alert; sid:1021;)
+
+# allow rest of the flow to 
+accept:packet tcp:all $HOME_NET any <> $EXTERNAL_NET 443 (flow:established; flowbits:set,fw_flow_accept; alert; sid:1023;)
+
+# default drop

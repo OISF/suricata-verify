@@ -1,0 +1,12 @@
+# Packet rules
+
+# allow session setup
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET 80 (flow:not_established; alert; sid:1021;)
+
+# pass rest of the flow to 
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET 80 (flow:established; alert; sid:1023;)
+
+# default drop
+
+accept:hook http1:request_started any any -> any any (alert; sid:100;)
+accept:tx http1:request_line any any -> any any (http.method; content:"GET"; http.uri; content:"/c.gif"; alert; sid:101;)
