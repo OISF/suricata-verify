@@ -1,0 +1,19 @@
+pcap: ../smb-filename/input.pcap
+
+checks:
+  - filter:
+      count: 29
+      match:
+        event_type: flow
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_port: 49455
+        flow.tx_cnt: 22
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_port: 49452
+        flow.tx_cnt: 43
