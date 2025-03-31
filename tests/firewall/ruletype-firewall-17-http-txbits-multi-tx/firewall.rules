@@ -1,0 +1,25 @@
+# Packet rules
+
+# allow session setup
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET 80 (flow:not_established; alert; sid:1021;)
+
+# pass rest of the flow to 
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET 80 (flow:established; alert; sid:1023;)
+
+# default drop
+
+accept:hook http1:request_started any any -> any any (alert; sid:100;)
+accept:hook http1:request_line any any -> any any (http.method; content:"GET"; http.uri; content:"/c.gif"; xbits:set,xxx,track tx; alert; sid:101;)
+accept:hook http1:request_headers any any -> any any (http.user_agent; content:"Windows NT"; xbits:isset,xxx,track tx; alert; sid:102;)
+accept:hook http1:request_headers any any -> any any (http.host; content:"msn"; xbits:isset,xxx,track tx; alert; sid:103;)
+
+accept:hook http1:request_body any any -> any any (xbits:isset,xxx,track tx; alert; sid:104;)
+accept:hook http1:request_trailer any any -> any any (xbits:isset,xxx,track tx; alert; sid:105;)
+accept:hook http1:request_complete any any -> any any (xbits:isset,xxx,track tx; alert; sid:106;)
+
+accept:hook http1:response_started any any -> any any (xbits:isset,xxx,track tx; alert; sid:200;)
+accept:hook http1:response_line any any -> any any (http.stat_code; content:"200"; xbits:isset,xxx,track tx; alert; sid:201;)
+accept:hook http1:response_headers any any -> any any (xbits:isset,xxx,track tx; alert; sid:202;)
+accept:hook http1:response_body any any -> any any (xbits:isset,xxx,track tx; alert; sid:203;)
+accept:hook http1:response_trailer any any -> any any (xbits:isset,xxx,track tx; alert; sid:204;)
+accept:hook http1:response_complete any any -> any any (xbits:isset,xxx,track tx; alert; sid:205;)
