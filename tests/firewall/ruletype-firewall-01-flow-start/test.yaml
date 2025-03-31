@@ -4,8 +4,7 @@ requires:
 pcap: ../../tls/tls-random/input.pcap
 
 args:
-- -k none
-- --simulate-ips
+  - --simulate-ips
 
 checks:
 - filter:
