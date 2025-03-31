@@ -1,0 +1,4 @@
+alert http any any -> any any (msg: "Test HTTP Lua request.line"; lua: test-request-line.lua; sid:1;)
+alert http any any -> any any (msg: "Test HTTP Lua request.headers.raw"; lua: test-request-headers-raw.lua; flow:to_server; sid:2;)
+alert http any any -> any any (msg: "Test HTTP Lua response.body"; lua: test-response-body.lua; sid:3;)
+alert http any any -> any any (msg: "Test HTTP Lua response-headers-raw"; lua: test-response-headers-raw.lua; flow:to_client; sid:4;)
