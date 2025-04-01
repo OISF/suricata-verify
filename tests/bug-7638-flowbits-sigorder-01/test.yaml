@@ -1,0 +1,33 @@
+requires:
+    min-version: 8.0
+
+pcap: false
+
+args:
+  - --engine-analysis
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      __lineno: 1
+      id: 11
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      __lineno: 2
+      id: 12
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      __lineno: 3
+      id: 10
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      __lineno: 4
+      id: 14
