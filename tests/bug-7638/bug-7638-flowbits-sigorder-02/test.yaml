@@ -1,0 +1,11 @@
+requires:
+    min-version: 9
+
+pcap: false
+
+args:
+  - --engine-analysis
+
+exit-code: 1
+
+# STODO check for error message string

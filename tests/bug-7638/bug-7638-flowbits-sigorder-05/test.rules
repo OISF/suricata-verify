@@ -1,0 +1,5 @@
+alert http any any -> any any (flowbits:set,E; sid:5;)
+alert http any any -> any any (flowbits:set,A; flowbits:isset,E; sid:1;)
+alert http any any -> any any (flowbits:set,B; flowbits:isset,A; sid:2;)
+alert http any any -> any any (flowbits:set,C; flowbits:isset,B; sid:3;)
+alert http any any -> any any (flowbits:set,D; flowbits:isset,C; flowbits:isset,D; sid:4;)
