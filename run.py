@@ -574,8 +574,11 @@ class FilterCheck:
 
         count = 0
         with open(json_filename, "r", encoding="utf-8") as fileobj:
+            lineno = 1
             for line in fileobj:
                 event = json.loads(line)
+                event["__lineno"] = lineno
+                lineno = lineno + 1
                 if self.match(event):
                     count += 1
         if count == self.config["count"]:
