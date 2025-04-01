@@ -1,0 +1,15 @@
+%YAML 1.1
+---
+
+flow:
+  rate-tracking:
+    bytes: 10KiB
+    interval: 10
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filename: eve.json
+      types:
+        - flow
+        - stats
