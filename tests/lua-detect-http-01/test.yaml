@@ -1,0 +1,28 @@
+requires:
+  features:
+    - HAVE_LUA
+  min-version: 8
+
+pcap: ../lua-output-http/input.pcap
+
+args:
+  - --set security.lua.allow-rules=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 3
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 4
+
