@@ -1,6 +1,8 @@
 requires:
   min-version: 8
   pcap: false
+  features:
+    - HAVE_JA3
 
 args:
  - --engine-analysis
