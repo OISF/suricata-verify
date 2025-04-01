@@ -1,0 +1,22 @@
+2019-12-10T06:42:37.521488+0000
+
+URI: /ubuntu/pool/main/m/manpages/manpages-dev_4.04-2_all.deb
+
+REQUEST
+.......
+Host: archive.ubuntu.com
+User-Agent: Debian APT-HTTP/1.3 (1.2.32)
+
+
+RESPONSE
+........
+Date: Tue, 10 Dec 2019 06:42:37 GMT
+Server: Apache/2.4.18 (Ubuntu)
+Last-Modified: Mon, 15 Feb 2016 18:15:51 GMT
+ETag: "1f3e78-52bd301bfe3c0"
+Accept-Ranges: bytes
+Content-Length: 2047608
+Cache-Control: max-age=86400
+Content-Type: application/x-debian-package
+
+
