@@ -1,5 +1,7 @@
 requires:
   min-version: 8
+  features:
+    - HAVE_JA3
 
 pcap: ../tls/tls-certs-alert/input.pcap
 
