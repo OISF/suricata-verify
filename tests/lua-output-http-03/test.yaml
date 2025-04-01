@@ -1,0 +1,11 @@
+requires:
+  features:
+    - HAVE_LUA
+  min-version: 8
+
+pcap: ../http-body-inspect/http-aptget-ids-02-s2.pcap
+
+checks:
+  - file-compare:
+      filename: http_lua.log
+      expected: expected/http_lua.log
