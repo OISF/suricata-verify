@@ -1,0 +1,15 @@
+pcap: ../tcp-urgp-09-oob-exceed-limit-inline/tcp-urgent-1byte-66k.pcap
+
+requires:
+  min-version: 8
+
+checks:
+  - filter:
+      count: 1
+      match:
+        stats.flow.elephant: 1
+
+  - filter:
+      count: 1
+      match:
+        flow.elephant: true
