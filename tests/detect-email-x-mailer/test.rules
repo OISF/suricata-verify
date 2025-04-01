@@ -1,0 +1,1 @@
+alert smtp any any -> any any (msg:"Test mime email x_mailer"; email.x_mailer; content:"Microsoft Office Outlook, Build 11.0.5510"; bsize:41; sid:1;)
