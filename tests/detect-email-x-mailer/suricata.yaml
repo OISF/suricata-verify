@@ -1,0 +1,29 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filename: eve.json
+      types:
+        - alert:
+            tagged-packets: yes
+        - smtp:
+            custom: [x-mailer]    # for 'x-mailer' logging information
+        - drop:
+            alerts: yes      # log alerts that caused drops
+            flows: all       # start or all: 'start' logs only a single drop
+        - stats
+        - flow
+  - stats:
+       enabled: yes
+       filename: stats.log
+       append: yes
+
+action-order:
+  - pass
+  - drop
+  - reject
+  - alert
+
+exception-policy: ignore

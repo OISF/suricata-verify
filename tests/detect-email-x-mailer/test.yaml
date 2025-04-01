@@ -1,0 +1,19 @@
+requires:
+  min-version: 8
+
+pcap: ../smtp-bug-5981/input.pcap
+
+args:
+  - -k none --set stream.inline=true
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 1
+    match:
+      event_type: smtp
+      email.x_mailer: Microsoft Office Outlook, Build 11.0.5510
