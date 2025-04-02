@@ -13,3 +13,9 @@ checks:
       event_type: alert
       pcap_cnt: 13
       alert.signature_id: 1
+- filter:
+    count: 1
+    match:
+      event_type: smtp
+      pcap_cnt: 13
+      email.subject: This is a test email
