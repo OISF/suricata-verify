@@ -11,6 +11,11 @@ checks:
     count: 1
     match:
       event_type: alert
-      email.date: Fri, 21 Apr 2023 05:10:36 +0000
       pcap_cnt: 13
       alert.signature_id: 1
+- filter:
+    count: 1
+    match:
+      event_type: smtp
+      email.date: Fri, 21 Apr 2023 05:10:36 +0000
+      pcap_cnt: 13
