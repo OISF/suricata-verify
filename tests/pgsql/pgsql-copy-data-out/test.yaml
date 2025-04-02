@@ -1,0 +1,21 @@
+requires:
+  min-version: 8
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 5
+    match:
+      event_type: pgsql
+- filter:
+    count: 1
+    match:
+      event_type: pgsql
+      pgsql.request.simple_query: "COPY (SELECT * FROM rules WHERE source = 'tgreen/hunting' LIMIT 5) TO STDOUT"
+      pgsql.response.command_completed: COPY 5
+      pgsql.response.copy_data_out.row_count: 5
+      pgsql.response.copy_data_out.data_size: 2779
+      pgsql.tx_id: 4
+      proto: TCP
