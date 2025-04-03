@@ -1,0 +1,15 @@
+requires:
+  min-version: 8
+
+args:
+  - -k none --no-random --data-dir=${OUTPUT_DIR}
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - file-compare:
+      filename: http_match.csv
+      expected: expected/http_match.csv
