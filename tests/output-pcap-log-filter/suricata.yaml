@@ -1,0 +1,17 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      types:
+        - stats:
+  - pcap-log:
+      enabled: yes
+      filename: log.pcap
+      limit: 1gb
+      max-files: 1000
+      mode: normal
+      use-stream-depth: no
+      honor-pass-rules: no
+      bpf-filter: udp and port 53
