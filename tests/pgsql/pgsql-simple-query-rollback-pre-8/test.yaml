@@ -1,5 +1,7 @@
 requires:
-  min-version: 8
+# Pgsql was released on version 7.0
+  min-version: 7.0 
+  lt-version: 8
 
 args:
 - -k none
@@ -70,8 +72,8 @@ checks:
       pgsql.response.parameter_status[7].server_version: '13.4'
       pgsql.response.parameter_status[8].session_authorization: ju-Test
       pgsql.response.parameter_status[9].standard_conforming_strings: 'on'
-      pgsql.response.backend_key_data.process_id: 5008
-      pgsql.response.backend_key_data.secret_key: 2050730518
+      pgsql.response.process_id: 5008
+      pgsql.response.secret_key: 2050730518
       pgsql.tx_id: 4
       proto: TCP
       src_ip: 192.168.1.102
@@ -83,7 +85,7 @@ checks:
       dest_port: 5432
       event_type: pgsql
       pcap_cnt: 18
-      pgsql.request.simple_query.statement: BEGIN;
+      pgsql.request.simple_query: BEGIN;
       pgsql.response.command_completed: BEGIN
       pgsql.tx_id: 5
       proto: TCP
@@ -96,7 +98,7 @@ checks:
       dest_port: 5432
       event_type: pgsql
       pcap_cnt: 21
-      pgsql.request.simple_query.statement: DELETE FROM new_table WHERE NAME='Remus';
+      pgsql.request.simple_query: DELETE FROM new_table WHERE NAME='Remus';
       pgsql.response.command_completed: DELETE 1
       pgsql.tx_id: 6
       proto: TCP
@@ -109,7 +111,7 @@ checks:
       dest_port: 5432
       event_type: pgsql
       pcap_cnt: 24
-      pgsql.request.simple_query.statement: DELETE FROM new_table WHERE NAME='Londubat';
+      pgsql.request.simple_query: DELETE FROM new_table WHERE NAME='Londubat';
       pgsql.response.command_completed: DELETE 1
       pgsql.tx_id: 7
       proto: TCP
@@ -122,7 +124,7 @@ checks:
       dest_port: 5432
       event_type: pgsql
       pcap_cnt: 26
-      pgsql.request.simple_query.statement: DELETE FROM new_table WHERE NAME='Hermione';
+      pgsql.request.simple_query: DELETE FROM new_table WHERE NAME='Hermione';
       pgsql.response.command_completed: DELETE 1
       pgsql.tx_id: 8
       proto: TCP
@@ -135,7 +137,7 @@ checks:
       dest_port: 5432
       event_type: pgsql
       pcap_cnt: 28
-      pgsql.request.simple_query.statement: DELETE FROM new_table WHERE NAME='Maugre';
+      pgsql.request.simple_query: DELETE FROM new_table WHERE NAME='Maugre';
       pgsql.response.command_completed: DELETE 1
       pgsql.tx_id: 9
       proto: TCP
@@ -148,7 +150,7 @@ checks:
       dest_port: 5432
       event_type: pgsql
       pcap_cnt: 30
-      pgsql.request.simple_query.statement: COMMIT;
+      pgsql.request.simple_query: COMMIT;
       pgsql.response.command_completed: COMMIT
       pgsql.tx_id: 10
       proto: TCP
@@ -161,7 +163,7 @@ checks:
       dest_port: 5432
       event_type: pgsql
       pcap_cnt: 33
-      pgsql.request.simple_query.statement: BEGIN;
+      pgsql.request.simple_query: BEGIN;
       pgsql.response.command_completed: BEGIN
       pgsql.tx_id: 11
       proto: TCP
@@ -174,7 +176,7 @@ checks:
       dest_port: 5432
       event_type: pgsql
       pcap_cnt: 36
-      pgsql.request.simple_query.statement: INSERT INTO new_table VALUES('Hermione', 'prof_gramger@gmail.com');
+      pgsql.request.simple_query: INSERT INTO new_table VALUES('Hermione', 'prof_gramger@gmail.com');
       pgsql.response.command_completed: INSERT 0 1
       pgsql.tx_id: 12
       proto: TCP
@@ -187,7 +189,7 @@ checks:
       dest_port: 5432
       event_type: pgsql
       pcap_cnt: 39
-      pgsql.request.simple_query.statement: INSERT INTO new_table VALUES('Remus', 'prof_lupin@gmail.com');
+      pgsql.request.simple_query: INSERT INTO new_table VALUES('Remus', 'prof_lupin@gmail.com');
       pgsql.response.command_completed: INSERT 0 1
       pgsql.tx_id: 13
       proto: TCP
@@ -200,14 +202,14 @@ checks:
       dest_port: 5432
       event_type: pgsql
       pcap_cnt: 44
-      pgsql.request.simple_query.statement: SELECT 1/0;
-      pgsql.response.error_response.code: '22012'
-      pgsql.response.error_response.file: d:\pginstaller_13.auto\postgres.windows-x64\src\backend\utils\adt\int.c
-      pgsql.response.error_response.line: '824'
-      pgsql.response.error_response.message: division by zero
-      pgsql.response.error_response.routine: int4div
-      pgsql.response.error_response.severity_localizable: ERROR
-      pgsql.response.error_response.severity_non_localizable: ERROR
+      pgsql.request.simple_query: SELECT 1/0;
+      pgsql.response.code: '22012'
+      pgsql.response.file: d:\pginstaller_13.auto\postgres.windows-x64\src\backend\utils\adt\int.c
+      pgsql.response.line: '824'
+      pgsql.response.message: division by zero
+      pgsql.response.routine: int4div
+      pgsql.response.severity_localizable: ERROR
+      pgsql.response.severity_non_localizable: ERROR
       pgsql.tx_id: 14
       proto: TCP
       src_ip: 192.168.1.102
@@ -219,14 +221,15 @@ checks:
       dest_port: 5432
       event_type: pgsql
       pcap_cnt: 49
-      pgsql.request.simple_query.statement: INSERT INTO new_table VALUES('Maugre', 'prof_folloy@gmail.com');
-      pgsql.response.error_response.code: 25P02
-      pgsql.response.error_response.file: d:\pginstaller_13.auto\postgres.windows-x64\src\backend\tcop\postgres.c
-      pgsql.response.error_response.line: '1105'
-      pgsql.response.error_response.message: "current transaction is aborted, commands ignored until end of transaction block"
-      pgsql.response.error_response.routine: exec_simple_query
-      pgsql.response.error_response.severity_localizable: ERROR
-      pgsql.response.error_response.severity_non_localizable: ERROR
+      pgsql.request.simple_query: INSERT INTO new_table VALUES('Maugre', 'prof_folloy@gmail.com');
+      pgsql.response.code: 25P02
+      pgsql.response.file: d:\pginstaller_13.auto\postgres.windows-x64\src\backend\tcop\postgres.c
+      pgsql.response.line: '1105'
+      pgsql.response.message: current transaction is aborted, commands ignored until
+        end of transaction block
+      pgsql.response.routine: exec_simple_query
+      pgsql.response.severity_localizable: ERROR
+      pgsql.response.severity_non_localizable: ERROR
       pgsql.tx_id: 15
       proto: TCP
       src_ip: 192.168.1.102
@@ -238,14 +241,15 @@ checks:
       dest_port: 5432
       event_type: pgsql
       pcap_cnt: 53
-      pgsql.request.simple_query.statement: INSERT INTO new_table VALUES('Londubat', 'prof_londubat@gmail.com');
-      pgsql.response.error_response.code: 25P02
-      pgsql.response.error_response.file: d:\pginstaller_13.auto\postgres.windows-x64\src\backend\tcop\postgres.c
-      pgsql.response.error_response.line: '1105'
-      pgsql.response.error_response.message: "current transaction is aborted, commands ignored until end of transaction block"
-      pgsql.response.error_response.routine: exec_simple_query
-      pgsql.response.error_response.severity_localizable: ERROR
-      pgsql.response.error_response.severity_non_localizable: ERROR
+      pgsql.request.simple_query: INSERT INTO new_table VALUES('Londubat', 'prof_londubat@gmail.com');
+      pgsql.response.code: 25P02
+      pgsql.response.file: d:\pginstaller_13.auto\postgres.windows-x64\src\backend\tcop\postgres.c
+      pgsql.response.line: '1105'
+      pgsql.response.message: current transaction is aborted, commands ignored until
+        end of transaction block
+      pgsql.response.routine: exec_simple_query
+      pgsql.response.severity_localizable: ERROR
+      pgsql.response.severity_non_localizable: ERROR
       pgsql.tx_id: 16
       proto: TCP
       src_ip: 192.168.1.102
@@ -257,14 +261,15 @@ checks:
       dest_port: 5432
       event_type: pgsql
       pcap_cnt: 57
-      pgsql.request.simple_query.statement: SELECT * FROM new_table;
-      pgsql.response.error_response.code: 25P02
-      pgsql.response.error_response.file: d:\pginstaller_13.auto\postgres.windows-x64\src\backend\tcop\postgres.c
-      pgsql.response.error_response.line: '1105'
-      pgsql.response.error_response.message: "current transaction is aborted, commands ignored until end of transaction block"
-      pgsql.response.error_response.routine: exec_simple_query
-      pgsql.response.error_response.severity_localizable: ERROR
-      pgsql.response.error_response.severity_non_localizable: ERROR
+      pgsql.request.simple_query: SELECT * FROM new_table;
+      pgsql.response.code: 25P02
+      pgsql.response.file: d:\pginstaller_13.auto\postgres.windows-x64\src\backend\tcop\postgres.c
+      pgsql.response.line: '1105'
+      pgsql.response.message: current transaction is aborted, commands ignored until
+        end of transaction block
+      pgsql.response.routine: exec_simple_query
+      pgsql.response.severity_localizable: ERROR
+      pgsql.response.severity_non_localizable: ERROR
       pgsql.tx_id: 17
       proto: TCP
       src_ip: 192.168.1.102
@@ -276,7 +281,7 @@ checks:
       dest_port: 5432
       event_type: pgsql
       pcap_cnt: 60
-      pgsql.request.simple_query.statement: COMMIT;
+      pgsql.request.simple_query: COMMIT;
       pgsql.response.command_completed: ROLLBACK
       pgsql.tx_id: 18
       proto: TCP
@@ -289,7 +294,7 @@ checks:
       dest_port: 5432
       event_type: pgsql
       pcap_cnt: 63
-      pgsql.request.simple_query.statement: BEGIN;
+      pgsql.request.simple_query: BEGIN;
       pgsql.response.command_completed: BEGIN
       pgsql.tx_id: 19
       proto: TCP
@@ -302,7 +307,7 @@ checks:
       dest_port: 5432
       event_type: pgsql
       pcap_cnt: 66
-      pgsql.request.simple_query.statement: INSERT INTO new_table VALUES('Hermione', 'prof_gramger@gmail.com');
+      pgsql.request.simple_query: INSERT INTO new_table VALUES('Hermione', 'prof_gramger@gmail.com');
       pgsql.response.command_completed: INSERT 0 1
       pgsql.tx_id: 20
       proto: TCP
@@ -315,7 +320,7 @@ checks:
       dest_port: 5432
       event_type: pgsql
       pcap_cnt: 69
-      pgsql.request.simple_query.statement: COMMIT;
+      pgsql.request.simple_query: COMMIT;
       pgsql.response.command_completed: COMMIT
       pgsql.tx_id: 21
       proto: TCP
@@ -328,7 +333,7 @@ checks:
       dest_port: 5432
       event_type: pgsql
       pcap_cnt: 72
-      pgsql.request.simple_query.statement: INSERT INTO new_table VALUES('Remus', 'prof_lupin@gmail.com');
+      pgsql.request.simple_query: INSERT INTO new_table VALUES('Remus', 'prof_lupin@gmail.com');
       pgsql.response.command_completed: INSERT 0 1
       pgsql.tx_id: 22
       proto: TCP
@@ -341,14 +346,14 @@ checks:
       dest_port: 5432
       event_type: pgsql
       pcap_cnt: 77
-      pgsql.request.simple_query.statement: SELECT 1/0;
-      pgsql.response.error_response.code: '22012'
-      pgsql.response.error_response.file: d:\pginstaller_13.auto\postgres.windows-x64\src\backend\utils\adt\int.c
-      pgsql.response.error_response.line: '824'
-      pgsql.response.error_response.message: division by zero
-      pgsql.response.error_response.routine: int4div
-      pgsql.response.error_response.severity_localizable: ERROR
-      pgsql.response.error_response.severity_non_localizable: ERROR
+      pgsql.request.simple_query: SELECT 1/0;
+      pgsql.response.code: '22012'
+      pgsql.response.file: d:\pginstaller_13.auto\postgres.windows-x64\src\backend\utils\adt\int.c
+      pgsql.response.line: '824'
+      pgsql.response.message: division by zero
+      pgsql.response.routine: int4div
+      pgsql.response.severity_localizable: ERROR
+      pgsql.response.severity_non_localizable: ERROR
       pgsql.tx_id: 23
       proto: TCP
       src_ip: 192.168.1.102
@@ -360,7 +365,7 @@ checks:
       dest_port: 5432
       event_type: pgsql
       pcap_cnt: 80
-      pgsql.request.simple_query.statement: INSERT INTO new_table VALUES('Maugre', 'prof_folloy@gmail.com');
+      pgsql.request.simple_query: INSERT INTO new_table VALUES('Maugre', 'prof_folloy@gmail.com');
       pgsql.response.command_completed: INSERT 0 1
       pgsql.tx_id: 24
       proto: TCP
@@ -373,7 +378,7 @@ checks:
       dest_port: 5432
       event_type: pgsql
       pcap_cnt: 82
-      pgsql.request.simple_query.statement: INSERT INTO new_table VALUES('Londubat', 'prof_londubat@gmail.com');
+      pgsql.request.simple_query: INSERT INTO new_table VALUES('Londubat', 'prof_londubat@gmail.com');
       pgsql.response.command_completed: INSERT 0 1
       pgsql.tx_id: 25
       proto: TCP
@@ -386,11 +391,11 @@ checks:
       dest_port: 5432
       event_type: pgsql
       pcap_cnt: 84
-      pgsql.request.simple_query.statement: SELECT * FROM new_table;
+      pgsql.request.simple_query: SELECT * FROM new_table;
       pgsql.response.command_completed: SELECT 8
-      pgsql.response.consolidated_data_rows.data_rows: 8
-      pgsql.response.consolidated_data_rows.data_size: 236
-      pgsql.response.row_description.field_count: 2
+      pgsql.response.data_rows: 8
+      pgsql.response.data_size: 236
+      pgsql.response.field_count: 2
       pgsql.tx_id: 26
       proto: TCP
       src_ip: 192.168.1.102

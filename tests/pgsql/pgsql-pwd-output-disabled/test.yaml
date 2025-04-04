@@ -37,6 +37,8 @@ checks:
       src_ip: 192.168.1.102
       src_port: 41662
 - filter:
+    requires:
+      lt-version: 8
     count: 1
     match:
       dest_ip: 192.168.1.74
@@ -101,3 +103,31 @@ checks:
       tcp.tcp_flags: 1f
       tcp.tcp_flags_tc: 1e
       tcp.tcp_flags_ts: 1b
+- filter:
+    requires:
+      min-version: 8
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 12
+      pgsql.response.message: authentication_ok
+      not-has-key: pgsql.request.password
+      pgsql.response.parameter_status[0].application_name: psql
+      pgsql.response.parameter_status[10].time_zone: Europe/London
+      pgsql.response.parameter_status[1].client_encoding: UTF8
+      pgsql.response.parameter_status[2].date_style: ISO, DMY
+      pgsql.response.parameter_status[3].integer_datetimes: 'on'
+      pgsql.response.parameter_status[4].interval_style: postgres
+      pgsql.response.parameter_status[5].is_superuser: 'on'
+      pgsql.response.parameter_status[6].server_encoding: UTF8
+      pgsql.response.parameter_status[7].server_version: '13.4'
+      pgsql.response.parameter_status[8].session_authorization: ju-Test
+      pgsql.response.parameter_status[9].standard_conforming_strings: 'on'
+      pgsql.response.backend_key_data.process_id: 11828
+      pgsql.response.backend_key_data.secret_key: 3666668912
+      pgsql.tx_id: 3
+      proto: TCP
+      src_ip: 192.168.1.102
+      src_port: 41662

@@ -26,6 +26,8 @@ checks:
       pgsql.response.authentication_md5_password: "\\x9fi\x1A\\x8e"
 # subtest 2
 - filter:
+    requires:
+      lt-version: 8
     count: 1
     match:
       dest_ip: 10.16.1.11
@@ -37,3 +39,19 @@ checks:
       pgsql.response.message: authentication_ok
       pgsql.response.process_id: 61
       pgsql.response.secret_key: 3152142766
+# subtest 3
+#### Version 8 ##########
+- filter:
+    requires:
+      min-version: 8
+    count: 1
+    match:
+      dest_ip: 10.16.1.11
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 29
+      pgsql.tx_id: 3
+      not-has-key: pgsql.request.password
+      pgsql.response.message: authentication_ok
+      pgsql.response.backend_key_data.process_id: 61
+      pgsql.response.backend_key_data.secret_key: 3152142766

@@ -18,9 +18,21 @@ checks:
       alert.signature_id: 1
       tx_guessed: true
 - filter:
+    requires:
+      min-version: 7
+      lt-version: 8
     count: 1
     match:
       event_type: alert
       alert.signature_id: 1
       tx_guessed: true
       pgsql.request.simple_query: "select * from rules where sid = 2021701;"
+- filter:
+    requires:
+      min-version: 8
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+      tx_guessed: true
+      pgsql.request.simple_query.statement: "select * from rules where sid = 2021701;"
