@@ -72,6 +72,8 @@ checks:
       src_port: 40816
 # subtest 5
 - filter:
+    requires:
+      lt-version: 8
     count: 1
     match:
       dest_ip: 10.16.1.11
@@ -99,6 +101,8 @@ checks:
       src_port: 40816
 # subtest 6
 - filter:
+    requires:
+      lt-version: 8
     count: 1
     match:
       dest_ip: 10.16.1.11
@@ -179,3 +183,51 @@ checks:
       tcp.tcp_flags: 1b
       tcp.tcp_flags_tc: 1b
       tcp.tcp_flags_ts: 1b
+# subtest 10
+- filter:
+    requires:
+      min-version: 8
+    count: 1
+    match:
+      dest_ip: 10.16.1.11
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 29
+      pgsql.request.password: md5e4cfa9552468cae5d48ca2822ca36e22 
+      pgsql.response.message: authentication_ok
+      pgsql.response.parameter_status[0].application_name: psql
+      pgsql.response.parameter_status[10].time_zone: Etc/UTC
+      pgsql.response.parameter_status[1].client_encoding: UTF8
+      pgsql.response.parameter_status[2].date_style: ISO, MDY
+      pgsql.response.parameter_status[3].integer_datetimes: 'on'
+      pgsql.response.parameter_status[4].interval_style: postgres
+      pgsql.response.parameter_status[5].is_superuser: 'on'
+      pgsql.response.parameter_status[6].server_encoding: UTF8
+      pgsql.response.parameter_status[7].server_version: 13.0 (Debian 13.0-1.pgdg100+1)
+      pgsql.response.parameter_status[8].session_authorization: indexer
+      pgsql.response.parameter_status[9].standard_conforming_strings: 'on'
+      pgsql.response.backend_key_data.process_id: 61
+      pgsql.response.backend_key_data.secret_key: 3152142766
+      pgsql.tx_id: 3
+      proto: TCP
+      src_ip: 10.16.1.10
+      src_port: 40816
+# subtest 11
+- filter:
+    requires:
+      min-version: 8
+    count: 1
+    match:
+      dest_ip: 10.16.1.11
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 35
+      pgsql.request.simple_query.statement: select * from rules where sid = 2021701;
+      pgsql.response.command_completed: SELECT 3
+      pgsql.response.consolidated_data_rows.data_rows: 3
+      pgsql.response.consolidated_data_rows.data_size: 1104
+      pgsql.response.row_description.field_count: 10
+      pgsql.tx_id: 4
+      proto: TCP
+      src_ip: 10.16.1.10
+      src_port: 40816

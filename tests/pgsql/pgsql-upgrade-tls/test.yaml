@@ -64,6 +64,8 @@ checks:
       tcp.tcp_flags_tc: 1a
       tcp.tcp_flags_ts: 1e
 - filter:
+    requires:
+      lt-version: 8
     count: 1
     match:
       src_ip: 192.168.50.11
@@ -110,3 +112,26 @@ checks:
       tcp.tcp_flags: 1a
       tcp.tcp_flags_tc: 1a
       tcp.tcp_flags_ts: 1a
+- filter:
+    requires:
+      min-version: 8
+    count: 1
+    match:
+      src_ip: 192.168.50.11
+      src_port: 60359
+      event_type: pgsql
+      pgsql.request.protocol_version: '3.0'
+      pgsql.request.startup_parameters.optional_parameters[0].database: replication
+      pgsql.request.startup_parameters.optional_parameters[1].replication: 'true'
+      pgsql.request.startup_parameters.optional_parameters[2].application_name: walreceiver
+      pgsql.request.startup_parameters.user: rep
+      pgsql.response.error_response.code: '28000'
+      pgsql.response.error_response.file: auth.c
+      pgsql.response.error_response.line: '481'
+      pgsql.response.error_response.message: no pg_hba.conf entry for replication connection from host "192.168.50.11", user "rep", SSL off
+      pgsql.response.error_response.routine: ClientAuthentication
+      pgsql.response.error_response.severity_localizable: FATAL
+      pgsql.tx_id: 1
+      proto: TCP
+      dest_ip: 192.168.50.12
+      dest_port: 5432

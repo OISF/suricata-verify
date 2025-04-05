@@ -1,3 +1,6 @@
+requires:
+  min-version: 7
+
 args:
 - -k none
 
@@ -10,6 +13,8 @@ checks:
       event_type: alert
 # check 2
 - filter:
+    requires:
+      lt-version: 8
     count: 1
     match:
       alert.signature: Pgsql table delete
@@ -27,6 +32,8 @@ checks:
       tx_guessed: true
 # check 3
 - filter:
+    requires:
+      lt-version: 8
     count: 1
     match:
       alert.signature: Pgsql table delete
@@ -44,6 +51,8 @@ checks:
       tx_guessed: true
 # check 4
 - filter:
+    requires:
+      lt-version: 8
     count: 1
     match:
       alert.signature: Pgsql table delete
@@ -61,6 +70,8 @@ checks:
       tx_guessed: true
 # check 5
 - filter:
+    requires:
+      lt-version: 8
     count: 1
     match:
       alert.signature: Pgsql table delete
@@ -78,6 +89,8 @@ checks:
       tx_guessed: true
 # check 6
 - filter:
+    requires:
+      lt-version: 8
     count: 1
     match:
       alert.signature: Pgsql table select
@@ -101,6 +114,8 @@ checks:
       tx_guessed: true
 # check 7
 - filter:
+    requires:
+      lt-version: 8
     count: 1
     match:
       alert.signature: Pgsql table select
@@ -125,6 +140,8 @@ checks:
       tx_guessed: true
 # check 8
 - filter:
+    requires:
+      lt-version: 8
     count: 1
     match:
       alert.signature: Pgsql table select
@@ -148,6 +165,8 @@ checks:
       tx_guessed: true
 # check 9
 - filter:
+    requires:
+      lt-version: 8
     count: 1
     match:
       alert.signature: Pgsql table select
@@ -168,6 +187,8 @@ checks:
       tx_guessed: true
 # check 10
 - filter:
+    requires:
+      lt-version: 8
     count: 1
     match:
       alert.signature: Pgsql table select
@@ -180,3 +201,177 @@ checks:
         SELECT 8.Z....I"
       pcap_cnt: 87
       stream: 1
+################## Version 8 ##############
+# check 11
+- filter:
+    requires:
+      min-version: 8
+    count: 1
+    match:
+      alert.signature: Pgsql table delete
+      alert.signature_id: 2
+      app_proto: pgsql
+      direction: to_server
+      event_type: alert
+      payload_printable: Q....DELETE FROM new_table WHERE NAME='Remus';.
+      pcap_cnt: 21
+      pgsql.request.simple_query.statement: DELETE FROM new_table WHERE NAME='Remus';
+      pgsql.response.command_completed: DELETE 1
+      pgsql.tx_id: 6
+      stream: 1
+      tx_id: 5
+      tx_guessed: true
+# check 12
+- filter:
+    requires:
+      min-version: 8
+    count: 1
+    match:
+      alert.signature: Pgsql table delete
+      alert.signature_id: 2
+      app_proto: pgsql
+      direction: to_server
+      event_type: alert
+      payload_printable: Q...1DELETE FROM new_table WHERE NAME='Londubat';.
+      pcap_cnt: 24
+      pgsql.request.simple_query.statement: DELETE FROM new_table WHERE NAME='Londubat';
+      pgsql.response.command_completed: DELETE 1
+      pgsql.tx_id: 7
+      stream: 1
+      tx_id: 6
+      tx_guessed: true
+# check 13
+- filter:
+    requires:
+      min-version: 8
+    count: 1
+    match:
+      alert.signature: Pgsql table delete
+      alert.signature_id: 2
+      app_proto: pgsql
+      direction: to_server
+      event_type: alert
+      payload_printable: Q...1DELETE FROM new_table WHERE NAME='Hermione';.
+      pcap_cnt: 26
+      pgsql.request.simple_query.statement: DELETE FROM new_table WHERE NAME='Hermione';
+      pgsql.response.command_completed: DELETE 1
+      pgsql.tx_id: 8
+      stream: 1
+      tx_id: 7
+      tx_guessed: true
+# check 14
+- filter:
+    requires:
+      min-version: 8
+    count: 1
+    match:
+      alert.signature: Pgsql table delete
+      alert.signature_id: 2
+      app_proto: pgsql
+      direction: to_server
+      event_type: alert
+      payload_printable: Q.../DELETE FROM new_table WHERE NAME='Maugre';.
+      pcap_cnt: 28
+      pgsql.request.simple_query.statement: DELETE FROM new_table WHERE NAME='Maugre';
+      pgsql.response.command_completed: DELETE 1
+      pgsql.tx_id: 9
+      stream: 1
+      tx_id: 8
+      tx_guessed: true
+# check 15
+- filter:
+    requires:
+      min-version: 8
+    count: 1
+    match:
+      alert.signature: Pgsql table select
+      alert.signature_id: 1
+      app_proto: pgsql
+      direction: to_server
+      event_type: alert
+      payload_printable: Q....SELECT 1/0;.
+      pcap_cnt: 43
+      pgsql.request.simple_query.statement: SELECT 1/0;
+      pgsql.response.error_response.code: '22012'
+      pgsql.response.error_response.file: d:\pginstaller_13.auto\postgres.windows-x64\src\backend\utils\adt\int.c
+      pgsql.response.error_response.line: '824'
+      pgsql.response.error_response.message: division by zero
+      pgsql.response.error_response.routine: int4div
+      pgsql.response.error_response.severity_localizable: ERROR
+      pgsql.response.error_response.severity_non_localizable: ERROR
+      pgsql.tx_id: 14
+      stream: 1
+      tx_id: 13
+      tx_guessed: true
+# check 16
+- filter:
+    requires:
+      min-version: 8
+    count: 1
+    match:
+      alert.signature: Pgsql table select
+      alert.signature_id: 1
+      app_proto: pgsql
+      direction: to_server
+      event_type: alert
+      payload_printable: Q....SELECT * FROM new_table;.
+      pcap_cnt: 57
+      pgsql.request.simple_query.statement: 'SELECT * FROM new_table;'
+      pgsql.response.error_response.code: 25P02
+      pgsql.response.error_response.file: 'd:\pginstaller_13.auto\postgres.windows-x64\src\backend\tcop\postgres.c'
+      pgsql.response.error_response.line: '1105'
+      pgsql.response.error_response.message: "current transaction is aborted, commands ignored until end of transaction block"
+      pgsql.response.error_response.routine: exec_simple_query
+      pgsql.response.error_response.severity_localizable: ERROR
+      pgsql.response.error_response.severity_non_localizable: ERROR
+      pgsql.tx_id: 17
+      stream: 1
+      tx_id: 16
+      tx_guessed: true
+# check 17
+- filter:
+    requires:
+      min-version: 8
+    count: 1
+    match:
+      alert.signature: Pgsql table select
+      alert.signature_id: 1
+      app_proto: pgsql
+      direction: to_server
+      event_type: alert
+      payload_printable: Q....SELECT 1/0;.
+      pcap_cnt: 76
+      pgsql.request.simple_query.statement: SELECT 1/0;
+      pgsql.response.error_response.code: '22012'
+      pgsql.response.error_response.file: d:\pginstaller_13.auto\postgres.windows-x64\src\backend\utils\adt\int.c
+      pgsql.response.error_response.line: '824'
+      pgsql.response.error_response.message: division by zero
+      pgsql.response.error_response.routine: int4div
+      pgsql.response.error_response.severity_localizable: ERROR
+      pgsql.response.error_response.severity_non_localizable: ERROR
+      pgsql.tx_id: 23
+      stream: 1
+      tx_id: 22
+      tx_guessed: true
+# check 18
+- filter:
+    requires:
+      min-version: 8
+    count: 1
+    match:
+      alert.signature: Pgsql table select
+      alert.signature_id: 1
+      app_proto: pgsql
+      direction: to_server
+      event_type: alert
+      payload_printable: Q....SELECT * FROM new_table;.
+      pcap_cnt: 84
+      pgsql.request.simple_query.statement: SELECT * FROM new_table;
+      pgsql.response.command_completed: SELECT 8
+      pgsql.response.consolidated_data_rows.data_rows: 8
+      pgsql.response.consolidated_data_rows.data_size: 236
+      pgsql.response.row_description.field_count: 2
+      pgsql.tx_id: 26
+      stream: 1
+      tx_id: 25
+      tx_guessed: true
