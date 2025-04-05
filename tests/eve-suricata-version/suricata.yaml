@@ -1,0 +1,15 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      suricata-version: yes
+      types:
+        - alert
+        - dns
+        - flow
+        - netflow
+        - tls
+        - http
+        - files
