@@ -1,0 +1,15 @@
+pcap: ../ssh-banner-only/input.pcap
+
+requires:
+  min-version: 8
+
+args:
+  - --set security.lua.allow-rules=true -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 1
+        # we do not have a toclient packet after server data is acked
+        pkt_src: "stream (flow timeout)"
