@@ -1,3 +1,6 @@
+requires:
+  min-version: 8
+
 pcap: ../../bug-2646-01/input.pcap
 
 args:

@@ -1,0 +1,43 @@
+requires:
+  min-version: 8
+
+pcap: ../../flowbit-oring/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 100
+- filter:
+    count: 1
+    match:
+      event_type: drop
+      alert.signature_id: 100
+      drop.reason: "rules"
+- filter:
+    count: 9
+    match:
+      event_type: drop
+      drop.reason: "flow drop"
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.pkts_toserver: 6
+      flow.pkts_toclient: 4
+      flow.state: "new"
+      flow.alerted: true
+      flow.action: drop
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.ips.accepted: 0
+      stats.ips.blocked: 10
+      stats.ips.drop_reason.rules: 1
+      stats.ips.drop_reason.flow_drop: 9

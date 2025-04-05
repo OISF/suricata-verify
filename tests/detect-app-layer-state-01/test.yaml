@@ -1,0 +1,24 @@
+requires:
+  min-version: 8
+
+pcap: ../tls/tls-client-hello-frag-01/dump_mtu300.pcap
+
+args:
+- -k none
+- --simulate-ips
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 2
+- filter:
+    count: 1
+    match:
+      event_type: tls

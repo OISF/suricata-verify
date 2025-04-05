@@ -1,0 +1,45 @@
+requires:
+  min-version: 8
+
+pcap: ../../tls/tls-client-hello-frag-01/dump_mtu300.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 1011
+- filter:
+    count: 3
+    match:
+      event_type: alert
+      alert.signature_id: 1021
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 1022
+- filter:
+    count: 59
+    match:
+      event_type: drop
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.pkts_toserver: 32
+      flow.pkts_toclient: 30
+      flow.state: "closed" # TODO due to no drop being applied to the flow, we only drop after stream/app-layer
+      flow.alerted: true
+      not-has-key: flow.action
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.ips.accepted: 3
+      stats.ips.blocked: 59
+      stats.ips.drop_reason.default_packet_policy: 59

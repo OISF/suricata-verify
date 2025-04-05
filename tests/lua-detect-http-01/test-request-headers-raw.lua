@@ -4,7 +4,6 @@ local http = require("suricata.http")
 
 function init (args)
     local needs = {}
-    needs["http.request_headers.raw"] = tostring(true)
     return needs
 end
 

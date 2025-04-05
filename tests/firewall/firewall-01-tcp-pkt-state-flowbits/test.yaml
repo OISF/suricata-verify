@@ -1,3 +1,6 @@
+requires:
+  min-version: 8
+
 pcap: ../../tls/tls-random/input.pcap
 
 args:

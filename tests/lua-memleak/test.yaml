@@ -1,6 +1,8 @@
 requires:
    features:
      - HAVE_LUA
+   min-version: 8
+
 args:
 - --set security.lua.allow-rules=true
 - --set default-rule-path=${TEST_DIR}

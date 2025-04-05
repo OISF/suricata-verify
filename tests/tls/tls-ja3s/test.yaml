@@ -4,6 +4,7 @@ requires:
   features:
     - HAVE_LUA
     - HAVE_JA3
+  min-version: 8
 
 args:
  - -k none

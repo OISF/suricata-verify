@@ -1,0 +1,2 @@
+alert http any any -> any any (http.user_agent; content:"Mozilla"; sid:9998;)
+alert http any any -> any any (http.stat_code; content:"200"; sid:9999;)

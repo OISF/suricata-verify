@@ -1,0 +1,4 @@
+# this pass should prevent match of 998, but it should not affect the fw rules
+pass:flow tls any any -> any any (flow:to_server; tls.version:1.0; sid:999; alert;)
+# would match if 999 didn't set a flow pass
+alert tls any any -> any any (tls.sni; content:"google"; sid:998;)

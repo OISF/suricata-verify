@@ -1,0 +1,2 @@
+alert tls any any -> any any (app-layer-state:<client_hello_done; sid:1;)
+alert tls any any -> any any (app-layer-state:client_hello_done; sid:2;)

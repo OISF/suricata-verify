@@ -3,7 +3,6 @@ local http = require("suricata.http")
 
 function init (args)
     local needs = {}
-    needs["http.response_body"] = tostring(true)
     return needs
 end
 

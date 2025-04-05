@@ -1,0 +1,3 @@
+drop:packet tcp:all any any -> any any (sid:99;)
+accept:flow tcp:flow_start any any -> any 443 (alert; flow:to_server; sid:1;)
+drop:flow tcp:flow_start any any -> any any (sid:2;)
