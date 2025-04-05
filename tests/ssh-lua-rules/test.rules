@@ -1,0 +1,1 @@
+alert ssh:response_banner_done any any -> any any (msg:"TEST SSH LUA"; lua:test-ssh.lua; sid:1; rev:1;)
