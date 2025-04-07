@@ -35,3 +35,27 @@ checks:
         ldap.responses[0].operation: search_result_entry
         ldap.responses[0].search_result_entry.attributes[1].type: dc
         alert.signature_id: 4
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ldap.responses[0].operation: search_result_entry
+        ldap.responses[0].search_result_entry.attributes[0].type: objectClass
+        ldap.responses[0].search_result_entry.attributes[0].values[0]: top
+        alert.signature_id: 5
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ldap.responses[0].operation: search_result_entry
+        ldap.responses[0].search_result_entry.attributes[0].type: objectClass
+        ldap.responses[0].search_result_entry.attributes[0].values[1]: domain
+        alert.signature_id: 6
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ldap.responses[0].operation: search_result_entry
+        ldap.responses[0].search_result_entry.attributes[1].type: dc
+        ldap.responses[0].search_result_entry.attributes[1].values[0]: example
+        alert.signature_id: 7

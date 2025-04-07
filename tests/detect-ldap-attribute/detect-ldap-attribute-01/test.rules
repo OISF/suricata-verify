@@ -2,3 +2,7 @@ alert ldap any any -> any any (msg:"Test request attribute type"; ldap.request.a
 alert ldap any any -> any any (msg:"Test request attribute type"; ldap.request.attribute_type; content:"+"; sid:2;)
 alert ldap any any -> any any (msg:"Test responses attribute type"; ldap.responses.attribute_type; content:"objectClass"; sid:3;)
 alert ldap any any -> any any (msg:"Test responses attribute type"; ldap.responses.attribute_type; content:"dc"; sid:4;)
+
+alert ldap any any -> any any (msg:"Test responses attribute type and value"; ldap.responses.attributes; content:"objectClass=top"; sid:5;)
+alert ldap any any -> any any (msg:"Test responses attribute type and value"; ldap.responses.attributes; content:"objectClass=domain"; sid:6;)
+alert ldap any any -> any any (msg:"Test responses attribute type and value"; ldap.responses.attributes; content:"dc=example"; sid:7;)

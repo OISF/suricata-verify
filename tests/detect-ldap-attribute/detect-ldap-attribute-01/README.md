@@ -1,4 +1,5 @@
-Test ldap.request.attribute_type and ldap.responses.attribute_type keywords.
+Test ldap.request.attribute_type, ldap.responses.attribute_type
+and ldap.responses.attributes keywords.
 
 PCAP from ../../ldap-search/ldap.pcap
 
