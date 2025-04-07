@@ -1,0 +1,33 @@
+requires:
+  min-version: 8
+
+pcap: ../../ldap-add/ldap.pcap
+
+args:
+  - -k none --set stream.inline=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ldap.request.operation: add_request
+        ldap.request.add_request.attributes[0].name: objectClass
+        ldap.request.add_request.attributes[0].values[0]: top
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ldap.request.operation: add_request
+        ldap.request.add_request.attributes[0].name: objectClass
+        ldap.request.add_request.attributes[0].values[1]: domain
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ldap.request.operation: add_request
+        ldap.request.add_request.attributes[1].name: dc
+        ldap.request.add_request.attributes[1].values[0]: example
+        alert.signature_id: 3

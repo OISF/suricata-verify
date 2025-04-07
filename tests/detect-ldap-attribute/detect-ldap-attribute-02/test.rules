@@ -1,0 +1,3 @@
+alert ldap any any -> any any (msg:"Test request attribute type and value"; ldap.request.attributes; content:"objectClass=top"; sid:1;)
+alert ldap any any -> any any (msg:"Test request attribute type and value"; ldap.request.attributes; content:"objectClass=domain"; sid:2;)
+alert ldap any any -> any any (msg:"Test request attribute type and value"; ldap.request.attributes; content:"dc=example"; sid:3;)
