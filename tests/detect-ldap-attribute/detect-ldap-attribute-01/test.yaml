@@ -1,0 +1,23 @@
+requires:
+  min-version: 8
+
+pcap: ../../ldap-search/ldap.pcap
+
+args:
+  - -k none --set stream.inline=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ldap.request.operation: search_request
+        ldap.request.search_request.attributes[0]: "*"
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ldap.request.operation: search_request
+        ldap.request.search_request.attributes[1]: +
+        alert.signature_id: 2
