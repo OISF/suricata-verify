@@ -1,0 +1,56 @@
+pcap: ../../bug-3519/input.pcap
+
+requires:
+  min-version: 8
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.completion_code.__contains: '331'
+        ftp.reply.__contains: 'Please specify the password.'
+        alert.signature_id: 1
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.completion_code.__contains: '230'
+        ftp.reply.__contains: 'Login successful.'
+        alert.signature_id: 2
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.completion_code.__contains: '226'
+        ftp.reply.__contains: 'Directory send OK.'
+        alert.signature_id: 3
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.completion_code.__contains: '221'
+        ftp.reply.__contains: 'Goodbye.'
+        alert.signature_id: 4
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.command: "RETR"
+        ftp.completion_code.__contains: '150'
+        ftp.reply.__contains: 'Opening BINARY mode data connection for temp.txt (1164 bytes).'
+        alert.signature_id: 5
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.command: "RETR"
+        ftp.completion_code.__contains: '226'
+        ftp.reply.__contains: 'Transfer complete.'
+        alert.signature_id: 5
