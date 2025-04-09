@@ -1,0 +1,2 @@
+alert smtp any any -> any any (msg:"Test mime email url"; email.url; content:"test-site.org/blah/123/"; startswith; endswith; bsize:23; sid:1;)
+alert smtp any any -> any any (msg:"Test mime email url"; email.url; content:"google.com"; startswith; endswith; bsize:10; sid:2;)

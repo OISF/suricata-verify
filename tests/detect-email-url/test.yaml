@@ -1,0 +1,21 @@
+requires:
+  min-version: 8
+
+pcap: ../smtp-extract-url-schemes/input.pcap
+
+args:
+  - -k none --set stream.inline=true
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      email.url[0]: "test-site.org/blah/123/"
+      alert.signature_id: 1
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      email.url[1]: "google.com"
+      alert.signature_id: 2
