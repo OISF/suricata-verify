@@ -1,0 +1,16 @@
+pcap: ../../flowbit-oring/input.pcap
+
+requires:
+  features:
+    - HAVE_LUA
+  min-version: 8
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+  - file-compare:
+      # A check that compares two files
+      filename: fast.log
+      expected: expected/fast.log
