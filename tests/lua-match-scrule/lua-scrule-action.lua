@@ -1,10 +1,13 @@
+local rule = require("suricata.rule")
+
 function init(args)
     local needs = {}
     return needs
 end
 
 function match(args)
-    action = SCRuleAction()
+    local sig = rule.get_rule()
+    local action = sig:action()
 
     if action == "alert" then
         return 1
