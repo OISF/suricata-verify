@@ -1044,7 +1044,13 @@ def run_test(dirpath, args, cwd, suricata_config):
                 count_dict["skipped"] += 1
         elif results["success"] > 0:
             with lock:
-                count_dict["passed"] += 1  
+                count_dict["passed"] += 1
+                if args.aggressivecleanup:
+                    try:
+                        shutil.rmtree(outdir)
+                    except Exception as err:
+                        print("ERR: Couldn't delete output dir in aggressive cleanup mode")
+                        traceback.print_exc()
     except UnsatisfiedRequirementError as ue:
         if not args.quiet:
             print("===> {}: SKIPPED: {}".format(os.path.basename(dirpath), ue))
@@ -1122,6 +1128,8 @@ def main():
                         help="Prints debug output for failed tests")
     parser.add_argument("-q", "--quiet", dest="quiet", action="store_true",
                         help="Only show failures and end summary")
+    parser.add_argument("--aggressive-cleanup", dest="aggressivecleanup", action="store_true",
+                        help="Clean up output directories of passing tests")
     parser.add_argument("--no-validation", action="store_true", help="Disable EVE validation")
     parser.add_argument("patterns", nargs="*", default=[])
     if LINUX:
