@@ -1,12 +1,14 @@
 -- lua_pushinteger output test for SCRuleIds and ...
 local packet = require "suricata.packet"
+local rule = require "suricata.rule"
+
 name = "lua-scrule-ids.log"
 
 function init(args)
-    local needs = {}
-    needs["type"] = "packet"
-    needs["filter"] = "alerts"
-    return needs
+    return {
+        type = "packet",
+        filter = "alerts",
+    }
 end
 
 function setup(args)
@@ -18,7 +20,10 @@ end
 function log(args)
     p = packet.get()
     timestring = p:timestring_legacy()
-    sid, rev, gid = SCRuleIds()
+    local sig = rule.get_rule()
+    local sid = sig:sid()
+    local rev = sig:rev()
+    local gid = sig:gid()
 
     file:write ("[**] " .. timestring .. "\nSCRuleIds is\n[**]\nSignature id: " .. sid .. "\nrevision: " .. rev .. "\nGroup id: " .. gid .. "[**]")
     file:flush()

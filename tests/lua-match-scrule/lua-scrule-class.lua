@@ -1,14 +1,22 @@
+local rule = require("suricata.rule")
+
 function init(args)
     local needs = {}
     return needs
 end
 
 function match(args)
-    msg, prio = SCRuleClass()
+    local sig = rule.get_rule()
 
-    if msg == "Potentially Bad Traffic" and prio == 2 then
-        return 1
-    else
-        return 0
+    local class_description = sig:class_description()
+    if class_description ~= "Potentially Bad Traffic" then
+       return 0
     end
+
+    local priority = sig:priority()
+    if priority ~= 2 then
+       return 0
+    end
+
+    return 1
 end

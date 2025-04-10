@@ -1,15 +1,12 @@
-local rule = require("suricata.rule")
-
 function init(args)
     local needs = {}
     return needs
 end
 
 function match(args)
-    local sig = rule.get_rule()
-    local msg = sig:msg()
+    sid, rev, gid = SCRuleIds()
 
-    if msg == "FOO" then
+    if sid == 1 and rev == 7 and gid == 1 then
         return 1
     else
         return 0
