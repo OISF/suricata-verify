@@ -1,0 +1,3 @@
+alert smtp any any -> any any (msg:"Test mime email received"; email.received; content:"from client.local (client.local [10.0.0.1]) by smtp.relay1.com with ESMTP id relay1abc\; Thu, 10 Apr 2025 12:00:00 -0000"; startswith; endswith; bsize:119; sid:1;)
+alert smtp any any -> any any (msg:"Test mime email received"; email.received; content:"from smtp.relay1.com (smtp.relay1.com [10.0.0.10]) by smtp.relay2.com with ESMTP id relay2xyz\; Thu, 10 Apr 2025 12:01:00 -0000"; startswith; endswith; bsize:126; sid:2;)
+alert smtp any any -> any any (msg:"Test mime email received"; email.received; content:"from smtp.relay2.com (smtp.relay2.com [10.0.0.20]) by smtp.destination.com with ESMTP id final123\; Thu, 10 Apr 2025 12:02:00 -0000"; startswith; endswith; bsize:130; sid:3;)
