@@ -1,0 +1,15 @@
+# accept outgoing ping and the returning pongs
+accept:flow icmp:flow_start $HOME_NET any -> $HOME_NET any (itype:8; msg:"Ping!"; alert; sid:101;)
+
+# allow session setup
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; alert; sid:1021;)
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; alert; sid:1022;)
+
+drop:flow tls:client_hello_done $HOME_NET any -> $EXTERNAL_NET any (tls.version:1.0; msg:"TLS 1.0 not allowed"; sid:102;)
+drop:flow tls:server_hello_done $EXTERNAL_NET any -> $HOME_NET any (tls.version:1.0; msg:"TLS 1.0 not allowed"; sid:103;)
+
+accept:hook tls:client_in_progress $HOME_NET any -> $EXTERNAL_NET any (alert; sid:105;)
+accept:flow tls:client_hello_done $HOME_NET any -> $EXTERNAL_NET any (tls.sni; content:"www.google.com"; sid:104; alert;)
+
+# Implicit drop all else
+drop:packet ip:all any any -> any any (msg:"policy drop"; sid:999;)
