@@ -2,7 +2,6 @@ local ssh = require("suricata.ssh")
 
 function init (args)
    local needs = {}
-   needs["ssh"] = true
    return needs
 end
 

@@ -1,1 +1,1 @@
-alert ssh any any -> any any (msg:"TEST SSH LUA"; flow: to_client; lua:test-ssh.lua; sid:1; rev:1;)
+alert ssh:banner_done any any -> any any (msg:"TEST SSH LUA"; flow: to_client; lua:test-ssh.lua; sid:1; rev:1;)
