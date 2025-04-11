@@ -8,6 +8,6 @@ args:
 
 checks:
   - filter:
-      count: 1
+      count: 2
       match:
         alert.signature_id: 1
