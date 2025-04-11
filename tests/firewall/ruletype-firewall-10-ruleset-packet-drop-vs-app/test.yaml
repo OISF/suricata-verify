@@ -25,7 +25,7 @@ checks:
       alert.action: allowed
       pcap_cnt: 6
 - filter:
-    count: 3 # 105 also matches here
+    count: 2
     match:
       event_type: alert
       pcap_cnt: 6
@@ -65,7 +65,7 @@ checks:
       event_type: alert
       alert.signature_id: 104
 - filter:
-    count: 2
+    count: 1
     match:
       event_type: alert
       alert.signature_id: 105

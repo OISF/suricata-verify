@@ -6,7 +6,7 @@ args:
 
 checks:
 - filter:
-    min-version: 7
+    lt-version: 8
     count: 1
     match:
       event_type: flow
@@ -23,11 +23,26 @@ checks:
       event_type: alert
       alert.signature_id: 1
 - filter:
+    min-version: 8
+    count: 3
+    match:
+      event_type: alert
+      alert.signature_id: 2
+# IP-only, so max 2.
+- filter:
+    min-version: 8
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 3
+- filter:
+    lt-version: 8
     count: 1
     match:
       event_type: alert
       alert.signature_id: 2
 - filter:
+    lt-version: 8
     count: 1
     match:
       event_type: alert
