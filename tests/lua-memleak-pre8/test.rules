@@ -1,0 +1,1 @@
+alert http any any -> any any (msg: "Test1"; flow: to_server; lua:test.lua; sid:6677001; rev:1;)

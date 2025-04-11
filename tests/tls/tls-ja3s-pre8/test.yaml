@@ -1,0 +1,26 @@
+pcap: ../../tls/tls-certs-alert/input.pcap
+
+requires:
+  features:
+    - HAVE_LUA
+    - HAVE_JA3
+  lt-version: 8
+
+args:
+ - -k none
+ - --set security.lua.allow-rules=true
+
+checks:
+  # Check that we have the following events in eve.json
+  # 2 - alert events
+  # 1 - tls event
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+        tls.ja3s.hash: "5d79edf64e03689ff559a54e9d9487bc"
+        tls.ja3s.string: "771,49199,65281-0-11-16-23"

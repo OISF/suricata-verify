@@ -1,0 +1,50 @@
+requires:
+   features:
+     - HAVE_LUA
+   lt-version: 8
+
+args:
+- --set security.lua.allow-rules=true
+- --set default-rule-path=${TEST_DIR}
+- -k none
+
+exit-code: 0
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      pcap_cnt: 7
+      proto: TCP
+      src_ip: 192.168.2.3
+      src_port: 39867
+      dest_ip: 209.85.225.105
+      dest_port: 80
+      app_proto: http
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 1
+      alert.severity: 3
+      alert.signature: Test1
+      alert.signature_id: 6677001
+      direction: to_server
+      flow.bytes_toclient: 1624
+      flow.bytes_toserver: 407
+      flow.dest_ip: 209.85.225.105
+      flow.dest_port: 80
+      flow.pkts_toclient: 3
+      flow.pkts_toserver: 4
+      flow.src_ip: 192.168.2.3
+      flow.src_port: 39867
+      http.hostname: www.google.com
+      http.http_content_type: text/html
+      http.http_method: GET
+      http.http_user_agent: Wget/1.11.4
+      http.length: 1201
+      http.protocol: HTTP/1.0
+      http.status: 404
+      http.url: /AllWorkAndNoPlayMakesWillADullBoy
+      metadata.flowvars[0].key: value
+      tx_id: 0
