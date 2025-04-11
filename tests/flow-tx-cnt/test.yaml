@@ -1,3 +1,6 @@
+requires:
+  min-version: 8
+
 pcap: ../smb-filename/input.pcap
 
 checks:
