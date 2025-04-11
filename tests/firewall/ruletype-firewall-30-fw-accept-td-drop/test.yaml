@@ -37,8 +37,9 @@ checks:
       event_type: alert
       alert.signature_id: 104
       pcap_cnt: 6
+# packet:td drop sid 666 takes precedence
 - filter:
-    count: 1
+    count: 0
     match:
       event_type: alert
       alert.signature_id: 105
