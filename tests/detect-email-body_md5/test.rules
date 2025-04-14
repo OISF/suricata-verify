@@ -1,0 +1,1 @@
+alert smtp any any -> any any (msg:"Test mime email body_md5"; email.body_md5; content:"ed00c81b85fa455d60e19f1230977134"; sid:1;)
