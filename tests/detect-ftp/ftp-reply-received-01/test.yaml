@@ -1,0 +1,13 @@
+requires:
+  version: 8
+
+pcap: ../../bug-3519/input.pcap
+
+checks:
+
+  - filter:
+      count: 7
+      match:
+        event_type: alert
+        ftp.reply_received: "yes"
+        alert.signature_id: 1
