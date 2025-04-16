@@ -1,0 +1,2 @@
+alert ftp any any -> any any (msg: "Match on FTP reply received: yes"; flow:established; ftp.reply_received: yes; sid:1;)
+alert ftp any any -> any any (msg: "Match on FTP reply received: yes"; flow:established; ftp.reply_received: on; sid:2;)

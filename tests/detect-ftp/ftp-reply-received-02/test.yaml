@@ -1,0 +1,20 @@
+requires:
+  version: 8
+
+pcap: ../../ftp/ftp-too-long-response/ftp-too-long-response.pcap
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.reply_received: "no"
+        alert.signature_id: 1
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.reply_received: "no"
+        alert.signature_id: 2
