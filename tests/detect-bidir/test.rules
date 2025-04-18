@@ -8,3 +8,6 @@ alert http any any => any any (msg:"disambiguated toserver"; sid: 12; http.uri; 
 alert http any any => any any (msg:"disambiguated toclient, without other toclient"; sid: 13; http.uri; content: "/download"; http.connection: to_client; content: "eep";)
 alert http any any => any any (msg:"disambiguated both sides"; sid: 14; http.connection: to_client; content: "eep"; http.connection: to_server; content: "eep";)
 alert http any any => any any (msg:"toclient, followed by http.uri implicitly toserver"; sid: 15; http.connection: to_client; content: "eep"; http.uri; content: "/download"; )
+
+alert http any any => any any (msg:"matching uri and status and file size"; sid: 16; http.uri; content: "/download"; http.stat_code; content: "200"; filesize: to_client, <100;)
+alert http any any => any any (msg:"matching uri and status and file size"; sid: 17; http.uri; content: "/download"; http.stat_code; content: "200"; filesize: to_client, >100;)
