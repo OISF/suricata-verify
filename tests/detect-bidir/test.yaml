@@ -54,3 +54,13 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 15
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 16
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 17
