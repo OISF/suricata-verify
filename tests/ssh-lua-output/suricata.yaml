@@ -1,0 +1,19 @@
+%YAML 1.1
+---
+
+outputs:
+
+  # Extensible Event Format (nicknamed EVE) event log in JSON format
+  - eve-log:
+      enabled: yes
+      filetype: regular #regular|syslog|unix_dgram|unix_stream|redis
+      filename: eve.json
+      types:
+        - ssh
+        - flow
+
+  - lua:
+      enabled: yes
+      scripts-dir: .
+      scripts:
+        - output.lua
