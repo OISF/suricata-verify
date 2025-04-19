@@ -76,9 +76,14 @@ checks:
       event_type: alert
       alert.signature_id: 206
 - filter:
-    count: 4
+    count: 6
     match:
       event_type: drop
+- filter:
+    count: 1
+    match:
+      event_type: drop
+      pcap_cnt: 4
 - filter:
     count: 1
     match:
@@ -92,7 +97,7 @@ checks:
     count: 1
     match:
       event_type: stats
-      stats.ips.accepted: 5
-      stats.ips.blocked: 4
+      stats.ips.accepted: 3
+      stats.ips.blocked: 6
       stats.ips.drop_reason.default_app_policy: 1
-      stats.ips.drop_reason.flow_drop: 3
+      stats.ips.drop_reason.flow_drop: 5
