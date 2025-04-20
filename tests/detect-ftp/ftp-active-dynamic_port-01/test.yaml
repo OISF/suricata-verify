@@ -1,0 +1,63 @@
+pcap: ../../bug-3519/input.pcap
+
+requires:
+  version: 8
+
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.command: PORT
+        ftp.dynamic_port: 59914
+        alert.signature_id: 1
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.command: PORT
+        ftp.dynamic_port: 59926
+        alert.signature_id: 2
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.command: PORT
+        ftp.dynamic_port: 59926
+        alert.signature_id: 3
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.command: PORT
+        ftp.dynamic_port: 59926
+        alert.signature_id: 4
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.command: PORT
+        ftp.dynamic_port: 59926
+        alert.signature_id: 5
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.command: PORT
+        ftp.dynamic_port: 59926
+        alert.signature_id: 6
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.command: PORT
+        ftp.dynamic_port: 59926
+        alert.signature_id: 7

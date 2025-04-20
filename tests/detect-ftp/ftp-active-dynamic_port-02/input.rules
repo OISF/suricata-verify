@@ -1,0 +1,1 @@
+alert ftp any any -> any any (msg: "Match on FTP active port #1"; ftp.dynamic_port: 34325; sid:1;)

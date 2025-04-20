@@ -1,0 +1,14 @@
+pcap: ../../ftp-epsv/input.pcap
+
+requires:
+  version: 8
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ftp.command: EPSV
+        ftp.dynamic_port: 58612
+        alert.signature_id: 1

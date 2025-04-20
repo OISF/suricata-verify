@@ -1,0 +1,16 @@
+pcap: ftp-active-dynamic_port.pcap
+
+requires:
+  version: 8
+
+args:
+- -k none
+checks:
+
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        ftp.command: EPRT
+        ftp.dynamic_port: 34325
+        alert.signature_id: 1

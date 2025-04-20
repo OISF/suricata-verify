@@ -1,0 +1,7 @@
+alert ftp any any -> any any (msg: "Match on FTP active port #1"; flow:to_server; ftp.dynamic_port: 59914; sid:1;)
+alert ftp any any -> any any (msg: "Match on FTP active port #2: equality"; flow:to_server; ftp.dynamic_port: =59926; sid:2;)
+alert ftp any any -> any any (msg: "Match on FTP active port #3: >="; flow:to_server; ftp.dynamic_port: >=59926; sid:3;)
+alert ftp any any -> any any (msg: "Match on FTP active port #4: <="; flow:to_server; ftp.dynamic_port: <=59926; sid:4;)
+alert ftp any any -> any any (msg: "Match on FTP active port #5: <"; flow:to_server; ftp.dynamic_port: <59927; sid:5;)
+alert ftp any any -> any any (msg: "Match on FTP active port #6: >"; flow:to_server; ftp.dynamic_port: >59925; sid:6;)
+alert ftp any any -> any any (msg: "Match on FTP active port #7: range"; flow:to_server; ftp.dynamic_port: 59925-59927; sid:7;)
