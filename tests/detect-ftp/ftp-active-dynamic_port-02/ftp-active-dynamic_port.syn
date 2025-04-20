@@ -1,0 +1,10 @@
+flow default tcp 1.1.1.1:5555 > 2.2.2.2:21 (tcp.initialize; mss: 9000;);
+default < (content:"220 (Ftp Server)\x0d\x0a";);
+default > (content:"USER user\x0d\x0a";);
+default < (content:"331 Please specify the password.\x0d\x0a";);
+default > (content:"PASS password\x0d\x0a";);
+default < (content:"230 Login successful.\x0d\x0a";);
+default > (content:"EPRT |2|2601:191:8500:2e00:7c0f:78e0:dc5b:f7c1|34325|\x0d\x0a";);
+default < (content:"200 EPRT command successful. Consider using EPSV\x0d\x0a";);
+default < (content:"QUIT\x0d\x0a";);
+default < (content:"221 Goodbye.\x0d\x0a";);

@@ -1,0 +1,1 @@
+alert ftp any any -> any any (msg: "Match on FTP EPSV port"; flow:to_server; ftp.dynamic_port; content: "47373"; sid:1;)
