@@ -1,0 +1,1 @@
+alert http1 any any -> any any (http.method; content:"GET"; alert; sid:1;)
