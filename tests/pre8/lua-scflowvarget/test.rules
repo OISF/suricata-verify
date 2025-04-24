@@ -1,0 +1,2 @@
+alert http any any -> any any (msg: "Test"; http.request_line; pcre: "^/GET (.*)$/G, flow:TestVar"; flowbits: set, flowtestvar; noalert; sid:6677000; rev:1;)
+alert http any any -> any any (msg: "Test2"; flow: to_server; lua:test.lua; flowbits: isset, flowtestvar; sid:6677001; rev:1;)

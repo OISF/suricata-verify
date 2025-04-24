@@ -1,0 +1,20 @@
+requires:
+  min-version: 8.0.0
+
+args:
+ - -k none
+ - --set security.lua.allow-rules=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        metadata.flowvars[0].test_var: foobar
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        metadata.flowvars[0].test_var: foobar

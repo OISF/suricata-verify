@@ -1,7 +1,5 @@
 requires:
-  min-version: 7.0.0
-  features:
-    - HAVE_LUA
+  min-version: 8.0.0
 
 args:
  - -k none
