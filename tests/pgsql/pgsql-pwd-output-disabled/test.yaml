@@ -62,6 +62,17 @@ checks:
       proto: TCP
       src_ip: 192.168.1.102
       src_port: 41662
+# check to ensure there's no empty request (Bug #7647)
+- filter:
+    min-version: 8
+    count: 1
+    match:
+      dest_ip: 192.168.1.74
+      dest_port: 5432
+      event_type: pgsql
+      pcap_cnt: 12
+      pgsql.response.message: authentication_ok
+      not-has-key: pgsql.request
 - filter:
     count: 1
     match:
