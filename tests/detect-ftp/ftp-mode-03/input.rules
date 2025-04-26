@@ -1,0 +1,3 @@
+alert ftp any any -> any any (msg: "Match on FTP active mode"; flow:established; ftp.mode: suricata; sid:1;)
+alert ftp any any -> any any (msg: "Match on FTP active mode"; flow:established; ftp.mode: xpassive; sid:2;)
+alert ftp any any -> any any (msg: "Match on FTP active mode"; flow:established; ftp.mode: xactive; sid:3;)
