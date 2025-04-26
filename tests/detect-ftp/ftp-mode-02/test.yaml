@@ -1,0 +1,16 @@
+requires:
+  version: 8
+
+pcap: ../../ftp-epsv/input.pcap
+
+args:
+ -  -k none
+
+checks:
+
+  - filter:
+      count: 8
+      match:
+        event_type: alert
+        ftp.mode: passive
+        alert.signature_id: 1
