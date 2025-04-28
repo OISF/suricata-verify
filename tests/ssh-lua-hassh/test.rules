@@ -1,0 +1,2 @@
+alert ssh:request_finished any any -> any any (msg:"TEST SSH LUA"; lua:test-ssh.lua; sid:1; rev:1;)
+alert ssh:response_finished any any -> any any (msg:"TEST SSH LUA"; lua:test-ssh-resp.lua; sid:2; rev:1;)
