@@ -1,0 +1,18 @@
+pcap: ../ssh-hassh/input.pcap
+
+requires:
+  min-version: 8
+
+args:
+  - -k none --set default-rule-path=. --simulate-ips
+  #we could do --set app-layer.protocols.ssh.hassh=yes
+
+checks:
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 2
