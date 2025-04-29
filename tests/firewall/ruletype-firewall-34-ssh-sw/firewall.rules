@@ -1,0 +1,19 @@
+# Packet rules
+
+# allow all packets while protocol detection is running
+accept:hook tcp:all any any <> any 22 (app-layer-protocol:unknown; alert; sid:1000;)
+# then when detected a protocol, only allow ssh
+accept:hook tcp:all any any <> any 22 (app-layer-protocol:ssh; alert; sid:1001;)
+
+# default drop
+
+
+
+
+# App-layer rules
+
+accept:hook ssh:request_started any any -> any any (alert; sid:2000;)
+accept:hook ssh:request_banner_wait_eol any any -> any any (alert; sid:2001;)
+accept:tx ssh:request_banner_done any any -> any any (ssh.software; content:"OpenSSH_8.2p1"; alert; sid:2002;)
+
+# default drop

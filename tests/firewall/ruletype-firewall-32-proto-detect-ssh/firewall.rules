@@ -1,0 +1,22 @@
+# Packet rules
+
+# allow session setup
+accept:packet tcp:all any any <> any 22 (flow:not_established; alert; sid:1000;)
+
+# ssh protocol detect
+
+accept:packet tcp:all any any -> any 22 (flow:established,to_server; dsize:0; app-layer-protocol:unknown,to_server; alert; sid:1003;)
+accept:packet tcp:all any any -> any 22 (flow:established; app-layer-protocol:ssh,to_server; alert; sid:1001;)
+
+accept:packet tcp:all any 22 -> any any (flow:established,to_client; dsize:0; app-layer-protocol:unknown,to_client; alert; sid:1004;)
+accept:packet tcp:all any 22 -> any any (flow:established; app-layer-protocol:ssh,to_client; alert; sid:1002;)
+
+# default drop
+
+
+
+
+# App-layer rules
+
+
+# default drop

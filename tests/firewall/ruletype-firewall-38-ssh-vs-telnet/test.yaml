@@ -1,0 +1,42 @@
+requires:
+  min-version: 8
+
+pcap: ../../telnet/telnet-01/telnet.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- filter:
+    count: 3
+    match:
+      event_type: alert
+      alert.signature_id: 1000
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 1001
+- filter:
+    count: 89
+    match:
+      event_type: drop
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.pkts_toserver: 43
+      flow.pkts_toclient: 44
+      flow.state: "closed"
+      flow.alerted: true
+      not-has-key: flow.action
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.ips.accepted: 3
+      stats.ips.blocked: 89
+      stats.ips.drop_reason.default_app_policy: 0
+      stats.ips.drop_reason.default_packet_policy: 89
+      stats.ips.drop_reason.rules: 0

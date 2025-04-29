@@ -1,0 +1,8 @@
+# Packet rules
+
+# allow all packets while protocol detection is running
+accept:hook tcp:all any any <> any 23 (app-layer-protocol:unknown; alert; sid:1000;)
+# then when detected a protocol, only allow ssh
+accept:hook tcp:all any any <> any 23 (app-layer-protocol:ssh; alert; sid:1001;)
+
+# default drop
