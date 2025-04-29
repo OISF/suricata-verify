@@ -1,0 +1,23 @@
+# Packet rules
+
+# allow session setup
+accept:hook tcp:all any any <> any 22 (alert; sid:1000;)
+
+# default drop
+
+
+
+
+# App-layer rules
+
+accept:hook ssh:request_started any any -> any any (alert; sid:2000;)
+accept:hook ssh:request_banner_wait_eol any any -> any any (alert; sid:2001;)
+accept:hook ssh:request_banner_done any any -> any any (ssh.software; content:"OpenSSH_8.2p1"; alert; sid:2002;)
+accept:hook ssh:request_finished any any -> any any (alert; sid:2003;)
+
+accept:hook ssh:response_started any any -> any any (alert; sid:3000;)
+accept:hook ssh:response_banner_wait_eol any any -> any any (alert; sid:3001;)
+accept:hook ssh:response_banner_done any any -> any any (ssh.software; content:"OpenSSH_7.9p1"; alert; sid:3002;)
+accept:hook ssh:response_finished any any -> any any (alert; sid:3003;)
+
+# default drop

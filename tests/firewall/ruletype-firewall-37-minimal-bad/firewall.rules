@@ -1,0 +1,14 @@
+# Packet rules
+
+accept:packet tcp:all any any -> any 22 (flow:not_established; alert; sid:1000;)
+
+# default drop
+
+
+
+
+# App-layer rules
+
+accept:flow ssh:response_finished any any -> any any (flow:established; alert; sid:2000;)
+
+# default drop

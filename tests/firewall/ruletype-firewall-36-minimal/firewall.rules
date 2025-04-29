@@ -1,0 +1,15 @@
+# Packet rules
+
+# allow session setup
+accept:hook tcp:all any any <> any 22 (alert; sid:1000;)
+
+# default drop
+
+
+
+
+# App-layer rules
+
+accept:flow ssh:request_started any any -> any any (alert; sid:2000;)
+
+# default drop

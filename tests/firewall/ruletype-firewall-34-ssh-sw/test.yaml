@@ -1,0 +1,56 @@
+requires:
+  min-version: 8
+
+pcap: ../../issue-5466-alert-then-pass-02/icmp_and_ssh-s0.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- filter:
+    count: 4
+    match:
+      event_type: alert
+      alert.signature_id: 1000
+- filter:
+    count: 320
+    match:
+      event_type: alert
+      alert.signature_id: 1001
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2000
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2001
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2002
+- filter:
+    count: 0
+    match:
+      event_type: drop
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.pkts_toserver: 140
+      flow.pkts_toclient: 182
+      flow.state: "established"
+      flow.alerted: true
+      not-has-key: flow.action
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.ips.accepted: 322
+      stats.ips.blocked: 0
+      stats.ips.drop_reason.default_app_policy: 0
+      stats.ips.drop_reason.rules: 0
