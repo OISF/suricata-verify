@@ -1,0 +1,2 @@
+alert smtp any any -> any any (msg:"Test mime email attachment"; email.attachment; content:"file-test-0.zip"; startswith; endswith; bsize:15; sid:1;)
+alert smtp any any -> any any (msg:"Test mime email attachment"; email.attachment; content:"file-test-1.txt"; startswith; endswith; bsize:15; sid:2;)

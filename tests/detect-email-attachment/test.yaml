@@ -1,0 +1,23 @@
+requires:
+  min-version: 8
+
+args:
+  - -k none --set stream.inline=true
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2
+- filter:
+    count: 1
+    match:
+      event_type: smtp
+      email.attachment[0]: file-test-0.zip
+      email.attachment[1]: file-test-1.txt
