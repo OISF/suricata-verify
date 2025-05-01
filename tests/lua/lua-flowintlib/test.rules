@@ -1,0 +1,4 @@
+alert http any any -> any any (http.response_body; content: "root"; flowint: root_count, +, 1; sid: 1;)
+alert http any any -> any any (flowint: root_count, ==, 5; lua: check-root-count.lua; sid: 2;)
+
+alert http any any -> any any (http.response_body; content: "root"; lua: update-counter.lua; sid: 3;)
