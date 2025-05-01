@@ -1,0 +1,29 @@
+requires:
+  min-version: 8
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 6
+    match:
+      event_type: pgsql
+- filter:
+    count: 1
+    match:
+      event_type: pgsql
+      pcap_cnt: 17
+      pgsql.tx_id: 4
+      pgsql.request.simple_query: "COPY tmp FROM STDIN"
+      pgsql.response.copy_in_response.copy_column_count: 13
+- filter:
+    count: 1
+    match:
+      event_type: pgsql
+      pcap_cnt: 21
+      pgsql.tx_id: 5
+      pgsql.request.copy_data_in.msg_count: 1
+      pgsql.request.copy_data_in.data_size: 2779
+      pgsql.request.message: "copy_done"
+      pgsql.response.command_completed: "COPY 5"
