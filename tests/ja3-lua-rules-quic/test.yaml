@@ -1,0 +1,14 @@
+pcap: ../quic-v2-ja3/input.pcap
+
+requires:
+  min-version: 8
+
+args:
+  - -k none --set default-rule-path=. --simulate-ips
+
+checks:
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 1
+        pcap_cnt: 1
