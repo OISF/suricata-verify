@@ -1,10 +1,15 @@
+local ja3 = require("suricata.ja3")
+
 function init(args)
+    ja3.enable_ja3()
     local needs = {}
+    needs["ja3s"] = true
     return needs
 end
 
 function match(args)
-    hash = Ja3SGetHash()
+    local tx = ja3.get_tx()
+    local hash = tx:ja3s_get_hash()
     if hash == nil then
         return 0
     end
