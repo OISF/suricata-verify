@@ -1,4 +1,5 @@
 alert tls any any -> any any (msg:"ja3s.hash test"; flow:established,to_client; ja3s.hash; content:"5d79edf64e03689ff559a54e9d9487bc"; sid:1;)
 alert tls any any -> any any (msg:"ja3s.string test"; flow:established,to_client; ja3s.string; content:"771,49199,65281-0-11-16-23"; sid:2;)
-alert tls:server_hello any any -> any any (msg:"ja3s.hash Lua test"; flow:established,to_client; lua:test-ja3s-hash.lua; sid:3;)
-alert tls:server_hello any any -> any any (msg:"ja3s.string Lua test"; flow:established,to_client; lua:test-ja3s-string.lua; sid:4;)
+# flow:established,to_client is not really needed as Suricata engine will deduce that from the needs["ja3s"] in lua
+alert tls:server_hello any any -> any any (msg:"ja3s.hash Lua test"; requires: feature ja3; flow:established,to_client; lua:test-ja3s-hash.lua; sid:3;)
+alert tls:server_hello any any -> any any (msg:"ja3s.string Lua test"; requires: feature ja3; flow:established,to_client; lua:test-ja3s-string.lua; sid:4;)

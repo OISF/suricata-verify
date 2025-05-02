@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"TEST JA3 LUA"; requires: feature ja3; lua:test-ja3.lua; sid:1; rev:1;)

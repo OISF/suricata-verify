@@ -1,10 +1,15 @@
+local ja3 = require("suricata.ja3")
+
 function init(args)
+    ja3.enable_ja3()
     local needs = {}
+    needs["ja3s"] = true
     return needs
 end
 
 function match(args)
-    str = Ja3SGetString()
+    local tx = ja3.get_tx()
+    local str = tx:ja3s_get_string()
     if str == nil then
         return 0
     end
