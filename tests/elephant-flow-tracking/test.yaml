@@ -1,5 +1,8 @@
 pcap: ../tcp-urgp-09-oob-exceed-limit-inline/tcp-urgent-1byte-66k.pcap
 
+args:
+- --set stats.interval=3600
+
 requires:
   min-version: 8
 
