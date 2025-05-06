@@ -1,0 +1,2 @@
+alert ip any any -> any any (ip.dst; dataset: set, ip-list, type ip, state ip-list.lst; sid:1; rev:1;)
+alert ip any any -> any any (ip.dst; dataset: set, ipv4-list, type ipv4, state ipv4-list.lst; sid:2; rev:1;)

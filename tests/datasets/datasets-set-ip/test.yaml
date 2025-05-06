@@ -1,0 +1,17 @@
+pcap: ../../snmp-v2c-get/SNMPv2c_get_requests.pcap
+
+args:
+  - --data-dir=${OUTPUT_DIR}
+  - --set datasets.enabled=yes
+  - --set datasets.save-directory=.
+  - --runmode=single
+
+checks:
+  - filter:
+      count: 2
+      match:
+        alert.signature_id: 1
+  - filter:
+      count: 2
+      match:
+        alert.signature_id: 2
