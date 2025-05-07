@@ -1,0 +1,17 @@
+requires:
+  min-version: 8
+
+pcap: ../../tls/tls-certs-alert/input.pcap
+
+args:
+ - -k none
+ - --set security.lua.allow-rules=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 1
+  - file-compare:
+      filename: lua.log
+      expected: expected/lua.log
