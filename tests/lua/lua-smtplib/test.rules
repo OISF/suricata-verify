@@ -1,0 +1,1 @@
+alert smtp any any -> any any (file.name; content: "smtptest-2021-02-25T13-54-22Z-aefb2fc1308d62f4b6c74769f69b13ddf80e995fd98ae442f3be499ea928c67f..zip"; lua: test.lua; sid: 1;)
