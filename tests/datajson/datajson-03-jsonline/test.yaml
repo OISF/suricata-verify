@@ -16,7 +16,7 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 1
-        alert.extra.src_ip.test: success
-        alert.extra.bad_host.year: 2005
-        alert.extra.src_ip.ip: "10.16.1.11"
-        alert.extra.bad_host.host: "www.testmyids.com"
+        alert.context.src_ip.test: success
+        alert.context.bad_host.year: 2005
+        alert.context.src_ip.ip: "10.16.1.11"
+        alert.context.bad_host.host: "www.testmyids.com"

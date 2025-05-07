@@ -14,27 +14,27 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 1
-        alert.extra.src_ip.test: success
-        alert.extra.bad_host.year: 2005
+        alert.context.src_ip.test: success
+        alert.context.bad_host.year: 2005
   - filter:
       count: 1
       match:
         event_type: alert
         alert.signature_id: 2
-        alert.extra.src_ip.test: success
-        alert.extra.dbad_host.year: 2005
+        alert.context.src_ip.test: success
+        alert.context.dbad_host.year: 2005
   - filter:
       count: 1
       match:
         event_type: alert
         alert.signature_id: 3
-        alert.extra.src_ip.test: success
-        alert.extra.nbad_host.year: 2005
+        alert.context.src_ip.test: success
+        alert.context.nbad_host.year: 2005
   - filter:
       count: 1
       match:
         event_type: alert
         alert.signature_id: 4
-        alert.extra.src_ip.test: success
-        alert.extra.nkbad_host.year: 2005
-        alert.extra.nkbad_host.host.domain: testmyids.com
+        alert.context.src_ip.test: success
+        alert.context.nkbad_host.year: 2005
+        alert.context.nkbad_host.host.domain: testmyids.com

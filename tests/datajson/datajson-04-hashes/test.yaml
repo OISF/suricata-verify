@@ -14,10 +14,10 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 1
-        alert.extra.bad_sha.year: 2005
+        alert.context.bad_sha.year: 2005
   - filter:
       count: 1
       match:
         event_type: alert
         alert.signature_id: 2
-        alert.extra.bad_md5.year: 2007
+        alert.context.bad_md5.year: 2007
