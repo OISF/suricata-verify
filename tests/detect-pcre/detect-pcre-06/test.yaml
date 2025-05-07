@@ -20,13 +20,13 @@ checks:
     match:
       event_type: alert
       alert.signature_id: 1
-      alert.extra.ua: Mozilla
+      alert.context.ua: Mozilla
 - filter:
     count: 1
     match:
       event_type: alert
       alert.signature_id: 2
-      alert.extra.user_agent: Mozilla
+      alert.context.user_agent: Mozilla
       metadata.flowvars[0].ubuntu: "8.1"
       metadata.pktvars[0].firefox: "3.0.13"
 - filter:
