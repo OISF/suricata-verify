@@ -1,0 +1,11 @@
+requires:
+  min-version: 8
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+        tls.server_handshake.version: TLS 1.2
+        tls.server_handshake.cipher: 49200
+        tls.server_handshake.exts: [65281,11,35,23]
