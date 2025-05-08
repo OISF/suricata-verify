@@ -295,3 +295,37 @@ checks:
       proto: UDP
       src_ip: 190.0.0.1
       src_port: 40000
+- filter:
+    min-version: 8
+    count: 1
+    match:
+      bittorrent_dht.request.id: 6162636465666768696a30313233343536373839
+      bittorrent_dht.request_type: ping
+      bittorrent_dht.transaction_id: '6161'
+      dest_ip: 190.0.0.3
+      dest_port: 30000
+      event_type: bittorrent_dht
+      pcap_cnt: 3
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 190.0.0.1
+      src_port: 20000
+      ip_v: 4
+- filter:
+    min-version: 8
+    count: 1
+    match:
+      anomaly.app_proto: bittorrent-dht
+      anomaly.event: malformed_packet
+      anomaly.layer: proto_parser
+      anomaly.type: applayer
+      dest_ip: 190.0.0.3
+      dest_port: 30000
+      event_type: anomaly
+      pcap_cnt: 15
+      pkt_src: wire/pcap
+      proto: UDP
+      src_ip: 190.0.0.1
+      src_port: 20000
+      tx_id: 12
+      ip_v: 4

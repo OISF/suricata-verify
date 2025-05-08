@@ -1,0 +1,16 @@
+requires:
+  min-version: 8
+
+pcap: ../ipv6-hdr-keyword-01/input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        ip_v: 6
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        ip_v: 6
