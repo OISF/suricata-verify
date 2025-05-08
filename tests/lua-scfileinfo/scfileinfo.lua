@@ -1,29 +1,40 @@
+local filelib = require("suricata.file")
+
 -- Output test for SCFileInfo
 file_name = "scfileinfo.log"
 
 function init (args)
-    local needs = {}
-    needs['type'] = 'file'
-    return needs
+    return {type = "file"}
 end
 
 function setup(args)
     filename = SCLogPath() .. "/" .. file_name
-    file = assert(io.open(filename, "w"))
+    output = assert(io.open(filename, "w"))
     SCLogInfo("lua SCFileInfo Log Filename " .. filename)
 end
 
 function log(args)
-    fileid, txid, name, size, magic, md5, sha1, sha256 = SCFileInfo()
+    local file = filelib.get_file()
+
+    local fileid = file:file_id()
+    local txid = file:tx_id()
+    local name = file:name()
+    local size = file:size()
+    local magic = file:magic()
     if magic == nil then
         magic = "nomagic"
     end
+    local md5 = file:md5()
+    local sha1 = file:sha1()
+    local sha256 = file:sha256()
 
-    file:write ("** SCFileInfo is: [**] fileid: " .. fileid .. " [**] txid: " .. txid .. "\nname: " .. name .. "\nsize: " .. size .. " [**] magic: " .. magic .. "\nmd5: " .. md5 .. "\nsha1: " .. sha1 .. "\nsha256: " .. sha256 .. "\n")
-    file:flush()
+    output:write("** SCFileInfo is: [**] fileid: " .. fileid .. " [**] txid: " .. txid .. "\nname: " .. name .. "\nsize: " .. size .. " [**] magic: " .. magic .. "\nmd5: " .. md5 .. "\nsha1: " .. sha1 .. "\nsha256: " .. sha256 .. "\n")
+    output:write("state: " .. file:get_state() .. "\n")
+    output:write("is_stored: " .. tostring(file:is_stored()) .. "\n")
+    output:flush()
 end
 
 function deinit(args)
     SCLogInfo ("SCFileInfo logging finished");
-    file:close(file)
+    output:close()
 end

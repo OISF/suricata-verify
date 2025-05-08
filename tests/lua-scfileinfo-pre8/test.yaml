@@ -1,8 +1,9 @@
 requires:
-  min-version: 8.0.0
+  features:
+    - HAVE_LUA
+  lt-version: 8
 
-args:
- - -k none
+pcap: ../lua-scfileinfo/filecontainer-http-slice.pcap
 
 checks:
   - file-compare:
