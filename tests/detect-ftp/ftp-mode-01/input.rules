@@ -1,0 +1,1 @@
+alert ftp any any -> any any (msg: "Match on FTP active mode"; flow:established; ftp.mode: active; sid:1;)

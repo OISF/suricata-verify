@@ -1,0 +1,14 @@
+requires:
+  version: 8
+
+pcap: ../../bug-3519/input.pcap
+
+checks:
+
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        ftp.command: PORT
+        ftp.mode: active
+        alert.signature_id: 1
