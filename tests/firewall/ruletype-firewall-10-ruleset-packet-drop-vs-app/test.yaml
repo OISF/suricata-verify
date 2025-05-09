@@ -24,11 +24,13 @@ checks:
       alert.signature_id: 1023
       alert.action: allowed
       pcap_cnt: 6
+      verdict.action: drop
 - filter:
     count: 2
     match:
       event_type: alert
       pcap_cnt: 6
+      verdict.action: drop
 - filter:
     count: 0
     match:
@@ -39,6 +41,7 @@ checks:
     match:
       event_type: alert
       alert.signature_id: 1021
+      verdict.action: accept
 - filter:
     count: 0
     match:
@@ -49,6 +52,20 @@ checks:
     match:
       event_type: alert
       alert.signature_id: 1023
+# packet rule accepted, also accepted at app layer
+- filter:
+    count: 5
+    match:
+      event_type: alert
+      alert.signature_id: 1023
+      verdict.action: accept
+# packet rule accepted, dropped at app layer
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 1023
+      verdict.action: drop
 - filter:
     count: 0
     match:
@@ -69,10 +86,22 @@ checks:
     match:
       event_type: alert
       alert.signature_id: 105
+      verdict.action: accept
 - filter:
     count: 54 # 53 + 1 (drop sid 999)
     match:
       event_type: drop
+      verdict.action: drop
+# count all records with verdict field
+- filter:
+    count: 9
+    match:
+      verdict.action: accept
+# count all records with verdict field
+- filter:
+    count: 57
+    match:
+      verdict.action: drop
 - filter:
     count: 1
     match:
