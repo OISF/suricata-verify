@@ -2,12 +2,6 @@
 ---
 
 outputs:
-  - eve-log:
-      enabled: yes
-      types:
-        - alert:
-        - files:
-
   - lua:
       enabled: yes
       scripts-dir: .
