@@ -1,0 +1,19 @@
+requires:
+  min-version: 8
+
+pcap: ../bug-3616-smtp/input.pcap
+
+args:
+  - -k none --set stream.inline=true
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 1
+    match:
+      event_type: smtp
+      email.body_md5: "ed00c81b85fa455d60e19f1230977134"
