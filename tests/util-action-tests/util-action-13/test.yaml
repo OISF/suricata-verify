@@ -4,13 +4,6 @@ args:
 
 checks:
 - filter:
-    lt-version: 8
-    count: 1
-    match:
-      event_type: flow
-      flow.alerted: true
-      flow.action: pass
-- filter:
     count: 1
     match:
       event_type: flow
@@ -21,14 +14,7 @@ checks:
       event_type: alert
       alert.signature_id: 1
 - filter:
-    min-version: 8
     count: 3
-    match:
-      event_type: alert
-      alert.signature_id: 2
-- filter:
-    lt-version: 8
-    count: 1
     match:
       event_type: alert
       alert.signature_id: 2
