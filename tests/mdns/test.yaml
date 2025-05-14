@@ -1,0 +1,41 @@
+requires:
+  min-version: 8.0.0
+
+pcap: ../ipv6-evasion/ipv6-malformed-fragments-9/frag-9.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 6
+        event_type: mdns
+        mdns.type: response
+        mdns.answers[0].rrname: "John’s iMac._device-info._tcp.local"
+        mdns.answers[0].txt: ["model=iMac17,1", "osxvers=17"]
+        mdns.answers[1].rrname: "_companion-link._tcp.local"
+        mdns.answers[1].ptr: "John’s iMac._companion-link._tcp.local"
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 11
+        event_type: mdns
+        mdns.type: request
+        mdns.queries[0].rrname: "_apple-mobdev._tcp.local"
+        mdns.queries[0].rrtype: "ptr"
+        mdns.queries[1].rrname: "92e80812._sub._apple-mobdev2._tcp.local"
+        mdns.queries[1].rrtype: "ptr"
+        mdns.queries[2].rrname: "_apple-pairable._tcp.local"
+        mdns.queries[2].rrtype: "ptr"
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 3
+
