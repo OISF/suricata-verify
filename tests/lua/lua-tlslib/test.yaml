@@ -1,0 +1,11 @@
+pcap: ../../ethernet-eve/test.pcap
+
+requires:
+  features:
+    - HAVE_LUA
+  min-version: 8
+
+checks:
+  - file-compare:
+      filename: tlslib_lua.log
+      expected: expected/tlslib_lua.log

@@ -1,0 +1,20 @@
+%YAML 1.1
+---
+
+include: default.yaml
+
+outputs:
+  - lua:
+      enabled: yes
+      scripts-dir: .
+      scripts:
+         - lua-tlsfunctions.lua
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert
+        - http
+        - flow
+        - tls
