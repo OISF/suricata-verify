@@ -1,0 +1,21 @@
+pcap: ../filestore-filecontainer-http/filecontainer-http.pcap
+
+requires:
+  min-version: 8
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.stored: true
