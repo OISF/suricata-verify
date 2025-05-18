@@ -1,0 +1,38 @@
+requires:
+  min-version: 8
+
+pcap: ../../tls/tls-random/input.pcap
+
+args:
+  - --simulate-ips
+
+checks:
+- filter:
+    count: 0
+    match:
+      event_type: alert
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 0
+    match:
+      event_type: drop
+- filter:
+    count: 0
+    match:
+      event_type: tls
+- filter:
+    count: 0
+    match:
+      event_type: flow
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.ips.accepted: 13
+      stats.ips.blocked: 0
+      stats.ips.drop_reason.pre_flow_hook: 0
+      stats.ips.drop_reason.default_packet_policy: 0
