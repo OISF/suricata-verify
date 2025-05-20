@@ -1,7 +1,7 @@
 pcap: ../../snmp-v2c-get/SNMPv2c_get_requests.pcap
 
 requires:
-  min-version: 8.0.0
+  min-version: 7.0.11
 
 args:
   - --data-dir=${OUTPUT_DIR}
