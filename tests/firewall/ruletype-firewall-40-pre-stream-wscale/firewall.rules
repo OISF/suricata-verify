@@ -1,0 +1,2 @@
+accept:packet tcp:all any any <> any 443 (sid:1;)
+drop:packet tcp:pre_stream any any -> any 443 (flow:to_server; tcp.wscale:>5; alert; sid:2;)

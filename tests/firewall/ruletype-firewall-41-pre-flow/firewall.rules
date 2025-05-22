@@ -1,0 +1,2 @@
+accept:packet tcp:all any any <> any 443 (sid:1;)
+drop:packet tcp:pre_flow any any <> any 443 (alert; sid:2;)

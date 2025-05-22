@@ -1,0 +1,2 @@
+accept:packet tcp:all any any <> any 443 (sid:1;)
+config:packet ip:pre_flow any any <> any 443 (config: tracking disable, type flow, scope packet; sid:2;)
