@@ -1,0 +1,24 @@
+requires:
+
+  min-version: 8
+
+args:
+  - -k none
+checks:
+
+- stats:
+    decoder.sll2: 159
+    decoder.tcp: 159
+    decoder.ipv4: 159
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+      packet_info.linktype_name: LINUX_SLL2
+- filter:
+    count: 1
+    match:
+      event_type: http
+      http.hostname: 192.168.1.21
+      http.http_method: GET

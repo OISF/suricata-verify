@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"SLL2/HTTP test"; flow:established, to_server; http.uri; content: "/testing"; sid: 1;)

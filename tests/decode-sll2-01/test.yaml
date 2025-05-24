@@ -1,0 +1,10 @@
+requires:
+
+  min-version: 8
+
+checks:
+
+- stats:
+    decoder.ipv4: 5
+    decoder.tcp: 5
+    decoder.sll2: 5
