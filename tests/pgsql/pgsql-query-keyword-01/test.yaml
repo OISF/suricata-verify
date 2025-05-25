@@ -1,0 +1,32 @@
+requires:
+   min-version: 8.0
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      direction: to_server
+      alert.signature: Query keyword check - listen
+      alert.signature_id: 2
+      app_proto: pgsql
+      pcap_cnt: 18
+      pgsql.request.simple_query: LISTEN rules;
+      pgsql.response.command_completed: LISTEN
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      direction: to_server
+      alert.signature: Query keyword check - SELECT
+      alert.signature_id: 1
+      app_proto: pgsql
+      pcap_cnt: 24
+      pgsql.request.simple_query: SELECT 1;
+      pgsql.response.command_completed: SELECT 1
+      pgsql.response.data_rows: 1
+      pgsql.response.data_size: 1
+      pgsql.response.field_count: 1
+      pgsql.tx_id: 5
