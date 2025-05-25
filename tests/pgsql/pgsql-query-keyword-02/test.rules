@@ -1,0 +1,2 @@
+alert pgsql any any -> any any (msg:"Query keyword check - select"; pgsql.query; content:"select *"; nocase; sid: 1;)
+alert pgsql any any -> any any (msg:"Query keyword check - delete"; pgsql.query; content:"delete"; nocase; sid: 2;)
