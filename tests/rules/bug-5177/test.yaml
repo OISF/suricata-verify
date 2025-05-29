@@ -1,0 +1,25 @@
+requires:
+    min-version: 7
+    pcap: false
+
+args:
+- --engine-analysis
+
+checks:
+    - filter:
+        # rule 61 uses the new buffer and shouldn't have a warning issued
+        filename: rules.json
+        count: 1
+        match:
+            id: 61
+            raw: "alert http any any -> any any (http.request_line; content:\"GET /index.html HTTP/1.0\"; sid:61;)"
+            warnings[0]: "pattern looks like it inspects HTTP, use http.request_line or http.method and http.uri instead for improved performance"
+            warnings[1]: "pattern looks like it inspects HTTP, use http.request_line or http.method and http.uri instead for improved performance"
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 62
+            raw: "alert http any any -> any any (http_request_line; content:\"GET /index.html HTTP/1.0\"; sid:62;)"
+            warnings[0]: "pattern looks like it inspects HTTP, use http.request_line or http.method and http.uri instead for improved performance"
+            warnings[1]: "pattern looks like it inspects HTTP, use http.request_line or http.method and http.uri instead for improved performance"
