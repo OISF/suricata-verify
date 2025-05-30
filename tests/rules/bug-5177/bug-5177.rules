@@ -1,0 +1,3 @@
+# rule 61 uses the new buffer and shouldn't get a warning issued, but it does
+alert http any any -> any any (http.request_line; content:"GET /index.html HTTP/1.0"; sid:61;)
+alert http any any -> any any (http_request_line; content:"GET /index.html HTTP/1.0"; sid:62;)
