@@ -1,0 +1,17 @@
+requires:
+  min-version: 8
+
+args:
+ - -k none --set datasets.enabled=yes
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        alert.context.src_ip.test: success

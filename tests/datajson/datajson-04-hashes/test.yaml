@@ -1,0 +1,23 @@
+requires:
+  min-version: 8
+
+args:
+ - -k none --set datasets.enabled=yes
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        alert.context.bad_sha.year: 2005
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        alert.context.bad_md5.year: 2007
