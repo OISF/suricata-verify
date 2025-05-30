@@ -1,4 +1,5 @@
 local flow = require("suricata.flow")
+local config = require("suricata.config")
 
 function init (args)
     local needs = {}
@@ -8,7 +9,7 @@ function init (args)
 end
 
 function setup (args)
-    filepath = SCLogPath()
+    filepath = config.log_path()
     alerts = 0
 end
 

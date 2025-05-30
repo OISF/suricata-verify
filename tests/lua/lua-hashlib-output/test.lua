@@ -1,6 +1,7 @@
 local hashlib = require("suricata.hashlib")
 local dns = require("suricata.dns")
 local logger = require("suricata.log")
+local config = require("suricata.config")
 
 -- We don't actually use, but the script will fail to run if it fails
 -- to "require".
@@ -19,7 +20,7 @@ end
 
 function setup (args)
    logger.notice("lua: setup()")
-   file = assert(io.open(SCLogPath() .. "/" .. filename, "w"))
+   file = assert(io.open(config.log_path() .. "/" .. filename, "w"))
 end
 
 function log(args)
