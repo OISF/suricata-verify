@@ -1,4 +1,5 @@
 local packet = require "suricata.packet"
+local logger = require("suricata.log")
 
 function init (args)
     local needs = {}
@@ -10,12 +11,12 @@ function match (args)
 
     sp, err = p:sp()
     if err == nil then
-        SCLogError("sp() should have failed for icmp")
+        logger.error("sp() should have failed for icmp")
         return 0
     end
 
     if err ~= "sp only available for tcp, udp and sctp" then
-        SCLogError("sp() error message mismatch")
+        logger.error("sp() error message mismatch")
         return 0
     end
 

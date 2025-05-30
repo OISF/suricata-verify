@@ -1,4 +1,5 @@
 local packet = require "suricata.packet"
+local logger = require("suricata.log")
 
 function init (args)
     local needs = {}
@@ -10,7 +11,7 @@ function match (args)
     if p:sp() == 6666 and p:dp() == 63 then
         ts = p:timestring_iso8601()
 
-        SCLogNotice(string.format("%s %d->%d (pcap_cnt:%d) match!", ts, p:sp(), p:dp(), p:pcap_cnt()));
+        logger.notice(string.format("%s %d->%d (pcap_cnt:%d) match!", ts, p:sp(), p:dp(), p:pcap_cnt()));
         return 1
     end
 

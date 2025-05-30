@@ -1,6 +1,7 @@
 local flow = require("suricata.flow")
-local packet = require "suricata.packet"
-local dns = require "suricata.dns"
+local packet = require("suricata.packet")
+local dns = require("suricata.dns")
+local logger = require("suricata.log")
 
 filename = "lua-dns.log"
 
@@ -11,7 +12,7 @@ function init (args)
 end
 
 function setup (args)
-   SCLogNotice("lua: setup()")
+   logger.notice("lua: setup()")
    file = assert(io.open(SCLogPath() .. "/" .. filename, "w"))
 end
 

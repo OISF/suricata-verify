@@ -3,6 +3,7 @@
 
 local base64 = require("suricata.base64")
 local dns = require("suricata.dns")
+local logger = require("suricata.log")
 
 local expected_base64 = "d3d3LnN1cmljYXRhLWlkcy5vcmc="
 
@@ -15,7 +16,7 @@ function init (args)
 end
 
 function setup (args)
-   SCLogNotice("lua: setup()")
+   logger.notice("lua: setup()")
    file = assert(io.open(SCLogPath() .. "/" .. filename, "w"))
 end
 

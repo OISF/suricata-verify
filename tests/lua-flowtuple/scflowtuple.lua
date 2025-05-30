@@ -1,5 +1,6 @@
 -- simple SCFlowTuple log test
 local flow = require("suricata.flow")
+local logger = require("suricata.log")
 
 name = "scflow-tuple.log"
 
@@ -13,7 +14,7 @@ end
 function setup(args)
     filename = SCLogPath() .. "/" .. name
     file = assert(io.open(filename, "a"))
-    SCLogNotice("lua SCFlowTuple Log Filename " .. filename)
+    logger.notice("lua SCFlowTuple Log Filename " .. filename)
 end
 
 function log(args)

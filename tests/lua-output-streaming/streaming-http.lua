@@ -1,4 +1,5 @@
 local flow = require "suricata.flow"
+local logger = require("suricata.log")
 
 function init (args)
     local needs = {}
@@ -16,7 +17,7 @@ function log(args)
     ts = f:timestring_legacy()
     ipver, srcip, dstip, proto, sp, dp = f:tuple()
     data, data_open, data_close = SCStreamingBuffer()
-    SCLogNotice("called with data_open " .. tostring(data_open) .. " data_close " .. tostring(data_close));
+    logger.notice("called with data_open " .. tostring(data_open) .. " data_close " .. tostring(data_close));
     filename = filepath .. "/http-" .. proto .. "-" .. srcip .. "-" .. dstip .. "-" .. sp .. "-" .. dp
 
     file_mode = "a"

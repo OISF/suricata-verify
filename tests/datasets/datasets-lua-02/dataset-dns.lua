@@ -1,6 +1,7 @@
 local flow = require("suricata.flow")
 local dataset = require("suricata.dataset")
 local dns = require("suricata.dns")
+local logger = require("suricata.log")
 
 function init (args)
     local needs = {}
@@ -11,7 +12,7 @@ function thread_init (args)
     dns_new = dataset.new()
     ret, err = dns_new:get("dns-seen")
     if err ~= nil then
-        SCLogWarning("dataset warning: " .. err)
+        logger.warning("dataset warning: " .. err)
         return 0
     end
 end
@@ -28,11 +29,11 @@ function match (args)
 
     ret, err = dns_new:add(str, #str);
     if err ~= nil then
-        SCLogWarning("lua warning " .. err)
+        logger.warning("lua warning " .. err)
         return 0
     end
     if ret == 1 then
-        SCLogNotice(str .. " => " .. ret)
+        logger.notice(str .. " => " .. ret)
     end
     return ret
 end

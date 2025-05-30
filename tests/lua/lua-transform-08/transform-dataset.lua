@@ -1,14 +1,15 @@
 local dataset = require("suricata.dataset")
+local logger = require("suricata.log")
 
 function thread_init(args)
     dataset_new, err = dataset.new()
     if err ~= nil then
-        SCLogWarning("dataset warning: " .. err)
+        logger.warning("dataset warning: " .. err)
         return 0
     end
     ret, err = dataset_new:get("versions-seen")
     if err ~= nil then
-        SCLogWarning("dataset warning: " .. err)
+        logger.warning("dataset warning: " .. err)
         return 0
     end
 end
@@ -16,11 +17,11 @@ end
 function transform(input, args)
     ret, err = dataset_new:add(input, #input)
     if err ~= nil then
-        SCLogWarning("lua warning: " .. err)
+        logger.warning("lua warning: " .. err)
         return 0
     end
     if ret == 1 then
-        SCLogNotice(input .. " => " .. ret)
+        logger.notice(input .. " => " .. ret)
     end
     return ret
 end

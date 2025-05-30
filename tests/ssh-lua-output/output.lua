@@ -1,4 +1,5 @@
 local ssh = require("suricata.ssh")
+local logger = require("suricata.log")
 
 filename = "results.log"
 
@@ -9,7 +10,7 @@ function init (args)
 end
 
 function setup (args)
-    SCLogNotice("lua: setup()")
+    logger.notice("lua: setup()")
     file = assert(io.open(SCLogPath() .. "/" .. filename, "w"))
 end
 

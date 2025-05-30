@@ -1,5 +1,6 @@
 local hashlib = require("suricata.hashlib")
 local dns = require("suricata.dns")
+local logger = require("suricata.log")
 
 local expected_sha256 = "080bdfdfcd8c2c7fce747f9be4603ced6253caac70894ad89d605309588c60f6"
 local expected_sha1 = "00f495ffd50c8b5ef3645f61486dae496db0fe2e"
@@ -131,17 +132,17 @@ function match(args)
    local rrname = tx:rrname()
 
    if not test_sha256(rrname) then
-      SCLogError("test_sha256 failed")
+      logger.error("test_sha256 failed")
       return 0
    end
 
    if not test_sha1(rrname) then
-      SCLogError("test_sha1 failed")
+      logger.error("test_sha1 failed")
       return 0
    end
 
    if not test_md5(rrname) then
-      SCLogError("test_md5 failed")
+      logger.error("test_md5 failed")
       return 0
    end
 

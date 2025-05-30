@@ -1,5 +1,6 @@
 local dataset = require "suricata.dataset"
 local flow = require("suricata.flow")
+local logger = require("suricata.log")
 
 function init (args)
     local needs = {}
@@ -11,7 +12,7 @@ function thread_init (args)
     conn_new, err = dataset.new()
     ret, err = conn_new:get("conn-seen")
     if err ~= nil then
-        SCLogWarning("dataset warning: " .. err)
+        logger.warning("dataset warning: " .. err)
         return 0
     end
 end
@@ -23,7 +24,7 @@ function match (args)
 
     ret, err = conn_new:add(str, #str);
     if ret == 1 then
-        SCLogInfo(str .. " => " .. ret)
+        logger.info(str .. " => " .. ret)
     end
     return ret
 end

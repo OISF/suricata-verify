@@ -2,6 +2,7 @@
 name = "lua-scflowstats.log"
 
 local flow = require("suricata.flow")
+local logger = require("suricata.log")
 
 function init(args)
     local needs = {}
@@ -12,7 +13,7 @@ end
 function setup(args)
     filename = SCLogPath() .. "/" .. name
     file = assert(io.open(filename, "a"))
-    SCLogInfo("lua SCFlowStats Log Filename " .. filename)
+    logger.info("lua SCFlowStats Log Filename " .. filename)
 end
 
 function log(args)

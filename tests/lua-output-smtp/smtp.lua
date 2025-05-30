@@ -1,6 +1,7 @@
 -- simple fast-log to file lua module
 local packet = require "suricata.packet"
 local smtp = require "suricata.smtp"
+local logger = require("suricata.log")
 
 name = "smtp_lua.log"
 
@@ -13,7 +14,7 @@ end
 function setup (args)
     filename = SCLogPath() .. "/" .. name
     file = assert(io.open(filename, "a"))
-    SCLogInfo("Log Filename " .. filename)
+    logger.info("Log Filename " .. filename)
     count = 0
 end
 
@@ -34,6 +35,6 @@ function log(args)
 end
 
 function deinit (args)
-    SCLogInfo ("transactions logged: " .. count);
+    logger.info ("transactions logged: " .. count);
     file:close(file)
 end

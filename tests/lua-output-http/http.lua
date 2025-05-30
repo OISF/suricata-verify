@@ -2,6 +2,7 @@
 local packet = require "suricata.packet"
 local flow = require("suricata.flow")
 local http = require("suricata.http")
+local logger = require("suricata.log")
 
 name = "http_lua.log"
 
@@ -51,6 +52,6 @@ function log(args)
 end
 
 function deinit (args)
-    SCLogInfo ("HTTP transactions logged: " .. http_tx);
+    logger.info ("HTTP transactions logged: " .. http_tx);
     file:close(file)
 end
