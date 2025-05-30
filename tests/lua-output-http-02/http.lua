@@ -2,6 +2,7 @@
 local flow = require("suricata.flow")
 local packet = require "suricata.packet"
 local http = require("suricata.http")
+local config = require("suricata.config")
 
 name = "http_lua.log"
 
@@ -12,7 +13,7 @@ function init (args)
 end
 
 function setup (args)
-    filename = SCLogPath() .. "/" .. name
+    filename = config.log_path() .. "/" .. name
     file = assert(io.open(filename, "a"))
     SCLogInfo("HTTP Log Filename " .. filename)
     http_tx = 0

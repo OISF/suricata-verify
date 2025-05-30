@@ -1,6 +1,7 @@
 -- simple fast-log to file lua module
 local packet = require "suricata.packet"
 local smtp = require "suricata.smtp"
+local config = require "suricata.config"
 
 name = "smtp_lua.log"
 
@@ -11,7 +12,7 @@ function init (args)
 end
 
 function setup (args)
-    filename = SCLogPath() .. "/" .. name
+    filename = config.log_path() .. "/" .. name
     file = assert(io.open(filename, "a"))
     SCLogInfo("Log Filename " .. filename)
     count = 0

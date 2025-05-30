@@ -1,6 +1,7 @@
 -- lua_pushinteger output test for SCRuleIds and ...
 local packet = require "suricata.packet"
 local rule = require "suricata.rule"
+local config = require "suricata.config"
 
 name = "lua-scrule-ids.log"
 
@@ -12,7 +13,7 @@ function init(args)
 end
 
 function setup(args)
-    filename = SCLogPath() .. "/" .. name
+    filename = config.log_path() .. "/" .. name
     file = assert(io.open(filename, "a"))
     SCLogInfo("lua SCRuleIds Log Filename " .. filename)
 end
