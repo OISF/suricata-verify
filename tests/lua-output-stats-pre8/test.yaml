@@ -1,5 +1,7 @@
 requires:
-  min-version: 8
+  lt-version: 8
+  features:
+    - HAVE_LUA
 
 checks:
   - shell:

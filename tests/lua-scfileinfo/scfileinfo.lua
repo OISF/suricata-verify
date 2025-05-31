@@ -1,4 +1,5 @@
 local filelib = require("suricata.file")
+local config = require("suricata.config")
 
 -- Output test for SCFileInfo
 file_name = "scfileinfo.log"
@@ -8,7 +9,7 @@ function init (args)
 end
 
 function setup(args)
-    filename = SCLogPath() .. "/" .. file_name
+    filename = config.log_path() .. "/" .. file_name
     output = assert(io.open(filename, "w"))
     SCLogInfo("lua SCFileInfo Log Filename " .. filename)
 end

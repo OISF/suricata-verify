@@ -1,5 +1,3 @@
-local config = require("suricata.config")
-
 filename = "lua-stats.log"
 
 function init (args)
@@ -9,7 +7,7 @@ function init (args)
 end
 
 function setup (args)
-   file = assert(io.open(config.log_path() .. "/" .. filename, "w"))
+   file = assert(io.open(SCLogPath() .. "/" .. filename, "w"))
 end
 
 function log(args)

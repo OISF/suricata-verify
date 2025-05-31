@@ -1,4 +1,5 @@
 local packet = require "suricata.packet"
+local config = require "suricata.config"
 
 -- simple SCPacketTuple log test
 name = "scpacket-tuple.log"
@@ -10,7 +11,7 @@ function init(args)
 end
 
 function setup(args)
-    filename = SCLogPath() .. "/" .. name
+    filename = config.log_path() .. "/" .. name
     file = assert(io.open(filename, "a"))
     SCLogInfo("Lua SCPacketTuple Log Filename " .. filename)
     packets = 0
