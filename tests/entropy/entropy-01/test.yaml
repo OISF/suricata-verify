@@ -7,11 +7,13 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 1
+        metadata.entropy.file_data: 4.150007324019584
   - filter:
       count: 1
       match:
         event_type: alert
         alert.signature_id: 2
+        metadata.entropy.file_data: 4.150007324019584
   - filter:
       count: 0
       match:
@@ -22,6 +24,7 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 4
+        metadata.entropy.file_data: 4.150007324019584
   - filter:
       count: 0
       match:
@@ -37,6 +40,7 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 7
+        metadata.entropy.file_data: 4.150007324019584
   - filter:
       count: 0
       match:
@@ -47,3 +51,13 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 10
+        metadata.entropy.file_data: 4.150007324019584
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_ip: 10.92.95.2
+        dest_ip: 10.92.67.138
+        flow.pkts_toserver: 5
+        flow.pkts_toclient: 5
+        metadata.entropy.file_data: 4.150007324019584
