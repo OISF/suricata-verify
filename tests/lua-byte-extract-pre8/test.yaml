@@ -1,7 +1,11 @@
 pcap: ../flowbit-oring/input.pcap
 
 requires:
-  min-version: 8
+  min-version: 7
+  lt-version: 8
+
+  features:
+    - HAVE_LUA
 
 args:
    - --set default-rule-path=${TEST_DIR}
