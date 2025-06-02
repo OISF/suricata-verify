@@ -17,16 +17,16 @@ function log(args)
     f = flow.get()
     ts = f:timestring_legacy()
     ipver, srcip, dstip, proto, sp, dp = f:tuple()
-    data, data_open, data_close = SCStreamingBuffer()
+    local stream = args["stream"]
     filename = filepath .. "/" .. proto .. "-" .. srcip .. "-" .. dstip .. "-" .. sp .. "-" .. dp
 
     file_mode = "a"
-    if (data_open == true) then
+    if (stream["open"] == true) then
         file_mode = "w"
     end
 
     file = assert(io.open(filename, file_mode))
-    file:write (data)
+    file:write (stream["data"])
     file:flush()
     file.close(file)
 end

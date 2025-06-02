@@ -17,8 +17,8 @@ function log(args)
     f = flow.get()
     ts = f:timestring_legacy()
     ipver, srcip, dstip, proto, sp, dp = f:tuple()
-    data, data_open, data_close = SCStreamingBuffer()
-    logger.notice("called with data_open " .. tostring(data_open) .. " data_close " .. tostring(data_close));
+    local stream = args["stream"]
+    logger.notice("called with data_open " .. tostring(stream["open"]) .. " data_close " .. tostring(stream["close"]) .. " to_server " .. tostring(stream["to_server"]) .. " to_client " .. tostring(stream["to_client"]));
     filename = filepath .. "/http-" .. proto .. "-" .. srcip .. "-" .. dstip .. "-" .. sp .. "-" .. dp
 
     file_mode = "a"
@@ -27,7 +27,7 @@ function log(args)
     end
 
     file = assert(io.open(filename, file_mode))
-    file:write (data)
+    file:write (stream["data"])
     file:flush()
     file.close(file)
 end
