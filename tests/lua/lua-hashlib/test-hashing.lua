@@ -1,6 +1,7 @@
 local hashlib = require("suricata.hashlib")
 local dns = require("suricata.dns")
 local logger = require("suricata.log")
+local util = require("suricata.util")
 
 local expected_sha256 = "080bdfdfcd8c2c7fce747f9be4603ced6253caac70894ad89d605309588c60f6"
 local expected_sha1 = "00f495ffd50c8b5ef3645f61486dae496db0fe2e"
@@ -128,6 +129,13 @@ function test_md5(name)
 end
 
 function match(args)
+   -- Thread test.
+   local thread = util.thread_info()
+   assert(thread["name"]:match("^W"))
+   assert(thread.name:match("^W"))
+   assert(thread["group_name"] == "Detect")
+   assert(thread.group_name == "Detect")
+
    local tx = dns.get_tx()
    local rrname = tx:rrname()
 
