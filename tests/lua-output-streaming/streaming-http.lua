@@ -3,10 +3,7 @@ local logger = require("suricata.log")
 local config = require "suricata.config"
 
 function init (args)
-    local needs = {}
-    needs["type"] = "streaming"
-    needs["protocol"] = "http"
-    return needs
+    return {streaming = "http"}
 end
 
 function setup (args)

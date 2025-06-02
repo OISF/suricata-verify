@@ -2,10 +2,7 @@ local flow = require("suricata.flow")
 local config = require("suricata.config")
 
 function init (args)
-    local needs = {}
-    needs["type"] = "streaming"
-    needs["filter"] = "tcp"
-    return needs
+    return {streaming = "tcp"}
 end
 
 function setup (args)
