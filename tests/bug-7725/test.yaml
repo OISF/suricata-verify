@@ -1,0 +1,60 @@
+requires:
+  min-version: 8
+
+args:
+- -k none
+- --simulate-ips
+- --set stream.midstream=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 60000000
+        pkt_src: wire/pcap
+        proto: IP-in-IP
+        src_ip: 10.0.0.94
+        dest_ip: 10.1.0.237
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 60000001
+        pkt_src: ipv4 tunnel
+        proto: ICMP
+        src_ip: 192.168.0.94
+        dest_ip: 192.168.0.237
+        tunnel.src_ip: 10.0.0.94
+        tunnel.dest_ip: 10.1.0.237
+        tunnel.proto: IP-in-IP
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        alert.signature_id: 60000001
+        pkt_src: ipv4 tunnel
+        proto: ICMP
+  - filter:
+      count: 2
+      match:
+        event_type: drop
+        pkt_src: ipv4 tunnel
+        proto: ICMP
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        proto: IP-in-IP
+        src_ip: 10.0.0.94
+        dest_ip: 10.1.0.237
+        flow.alerted: true
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        proto: ICMP
+        src_ip: 192.168.0.94
+        dest_ip: 192.168.0.237
+        flow.alerted: true
+        flow.action: drop
