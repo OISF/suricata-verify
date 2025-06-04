@@ -48,7 +48,7 @@ import platform
 
 VALIDATE_EVE = False
 WIN32 = sys.platform == "win32"
-LINUX = sys.platform.startswith("linux")
+MP = not WIN32
 suricata_yaml = "suricata.yaml" if WIN32 else "./suricata.yaml"
 
 # Determine the Suricata binary
@@ -59,7 +59,7 @@ else:
 
 PROC_TIMEOUT=300
 
-if LINUX:
+if MP:
     manager = mp.Manager()
     lock = mp.Lock()
     failedLogs = manager.list()
@@ -1132,7 +1132,7 @@ def main():
                         help="Clean up output directories of passing tests")
     parser.add_argument("--no-validation", action="store_true", help="Disable EVE validation")
     parser.add_argument("patterns", nargs="*", default=[])
-    if LINUX:
+    if MP:
         parser.add_argument("-j", type=int, default=min(8, mp.cpu_count()),
                         help="Number of jobs to run")
     args = parser.parse_args()
@@ -1218,7 +1218,7 @@ def main():
     # Sort alphabetically.
     tests.sort()
 
-    if LINUX and args.j > 1:
+    if MP and args.j > 1:
         run_mp(args.j, tests, dirpath, args, cwd, suricata_config)
     else:
         run_single(tests, dirpath, args, cwd, suricata_config)
