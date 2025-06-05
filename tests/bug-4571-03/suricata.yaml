@@ -1,0 +1,24 @@
+%YAML 1.1
+---
+
+stats:
+  enabled: yes
+  interval: 8
+
+logging:
+  default-log-level: notice
+  default-output-filter:
+  outputs:
+  - console:
+      enabled: yes
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular #regular|syslog|unix_dgram|unix_stream|redis
+      filename: eve.json
+      types:
+        - alert
+        - drop:
+            alerts: yes
+        - flow
