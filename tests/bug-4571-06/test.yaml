@@ -1,0 +1,44 @@
+requires:
+  min-version: 8
+
+args:
+- -k none
+- --simulate-ips
+- --set stream.midstream=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        proto: TCP
+        ip_v: 4
+        pkt_src: ipv6 tunnel
+        src_ip: 10.1.0.1
+        dest_ip: 10.1.0.2
+        tunnel.src_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:7334
+        tunnel.dest_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:7335
+        tunnel.proto: IP-in-IP
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        proto: TCP
+        ip_v: 4
+        src_ip: 10.1.0.1
+        dest_ip: 10.1.0.2
+        flow.alerted: true
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        proto: IP-in-IP
+        ip_v: 6
+        src_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:7334
+        dest_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:7335
+        flow.alerted: false
+  - filter:
+      count: 2
+      match:
+        event_type: flow

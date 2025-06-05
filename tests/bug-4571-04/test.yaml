@@ -1,0 +1,45 @@
+requires:
+  min-version: 8
+
+args:
+- -k none
+- --simulate-ips
+- --set stream.midstream=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pkt_src: wire/pcap
+        proto: TCP
+        pkt_src: ipv4 tunnel
+        src_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:7334
+        dest_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:7335
+        tunnel.src_ip: 10.1.0.1
+        tunnel.dest_ip: 10.1.0.2
+        tunnel.proto: IPv6
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        proto: IPv6
+        src_ip: 10.1.0.1
+        dest_ip: 10.1.0.2
+        ip_v: 4
+        flow.alerted: false
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        proto: TCP
+        ip_v: 6
+        src_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:7334
+        dest_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:7335
+        flow.alerted: true
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.decoder.ipv6_in_ipv4: 1
