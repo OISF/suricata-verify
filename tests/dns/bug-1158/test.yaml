@@ -23,8 +23,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAO1kAFE5TE9QTjFFN09RN1lYSDk
       dns.answers[0].rrname: AAAAAO1kQA.=auth.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -52,8 +52,8 @@ checks:
       event_type: dns
       pcap_cnt: 2
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -72,8 +72,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvOBgAABAA
       dns.answers[0].rrname: hvOBgAABAEI5ODFGMjk4MEMyRTFFOEZDREI1MEZGRTA2OEIxQzMwODcyQTlBQjc.=auth.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -101,8 +101,8 @@ checks:
       event_type: dns
       pcap_cnt: 4
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -121,8 +121,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvP1kF5BAA
       dns.answers[0].rrname: hvP1kF5BAHNzaA.=connect.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -150,8 +150,8 @@ checks:
       event_type: dns
       pcap_cnt: 6
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -170,8 +170,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAABGFNTSC0yLjAtT3BlblNTSF81LjVwMSBEZWJpYW4tNitzcXVlZXplMg
       dns.answers[0].rrname: hvMAAAABBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -204,8 +204,8 @@ checks:
       event_type: dns
       pcap_cnt: 8
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -509,8 +509,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAACGAAAAwwKFGdhVAbbSHrj0XO0W/RFatoAAAB+ZGlmZmllLWhlbGxtYW
       dns.answers[0].rrname: hvMAAQACBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -568,13 +568,13 @@ checks:
       event_type: dns
       pcap_cnt: 29
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAADGDI1Ni1jYmMsYXJjZm91cixyaWpuZGFlbC1jYmNAbHlzYXRvci5saX
       dns.answers[0].rrname: hvMAAAADCFNTSC0yLjAtT3BlblNTSF82LjBwMSBEZWJpYW4tNA0K.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -627,13 +627,13 @@ checks:
       event_type: dns
       pcap_cnt: 30
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAEGDYwLGhtYWMtcmlwZW1kMTYwQG9wZW5zc2guY29tLGhtYWMtc2hhMS
       dns.answers[0].rrname: hvMAAAAEBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -686,8 +686,8 @@ checks:
       event_type: dns
       pcap_cnt: 31
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -736,8 +736,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAFEA
       dns.answers[0].rrname: hvMAAAAFCAAABPQIFCP3jBGyCsqKjf9o1jmtOwgAAAC3ZWNkaC1zaGEyLW5pc3R.wMjU2LGVjZGgtc2hhMi1uaXN0cDM4NCxlY2RoLXNoYTItbmlzdHA1MjEsZGlmZm.llLWhlbGxtYW4tZ3JvdXAtZXhjaGFuZ2Utc2hhMjU2LGRpZmZp.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -765,13 +765,13 @@ checks:
       event_type: dns
       pcap_cnt: 35
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAGEA
       dns.answers[0].rrname: hvMAAAAGBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -799,13 +799,13 @@ checks:
       event_type: dns
       pcap_cnt: 36
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAHEA
       dns.answers[0].rrname: hvMAAAAHCGUtaGVsbG1hbi1ncm91cC1leGNoYW5nZS1zaGExLGRpZmZpZS1oZWx.sbWFuLWdyb3VwMTQtc2hhMSxkaWZmaWUtaGVsbG1hbi1ncm91cDEtc2hhMQAAAT.pzc2gtcnNhLWNlcnQtdjAxQG9wZW5zc2guY29tLHNzaC1yc2Et.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -833,13 +833,13 @@ checks:
       event_type: dns
       pcap_cnt: 37
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAIEA
       dns.answers[0].rrname: hvMAAAAIBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -867,13 +867,13 @@ checks:
       event_type: dns
       pcap_cnt: 38
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAJEA
       dns.answers[0].rrname: hvMAAAAJCGNlcnQtdjAwQG9wZW5zc2guY29tLHNzaC1yc2EsZWNkc2Etc2hhMi1.uaXN0cDI1Ni1jZXJ0LXYwMUBvcGVuc3NoLmNvbSxlY2RzYS1zaGEyLW5pc3RwMz.g0LWNlcnQtdjAxQG9wZW5zc2guY29tLGVjZHNhLXNoYTItbmlz.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -901,8 +901,8 @@ checks:
       event_type: dns
       pcap_cnt: 39
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -921,8 +921,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAKEA
       dns.answers[0].rrname: hvMAAAAKBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -950,13 +950,13 @@ checks:
       event_type: dns
       pcap_cnt: 41
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAALEA
       dns.answers[0].rrname: hvMAAAALCHRwNTIxLWNlcnQtdjAxQG9wZW5zc2guY29tLHNzaC1kc3MtY2VydC1.2MDFAb3BlbnNzaC5jb20sc3NoLWRzcy1jZXJ0LXYwMEBvcGVuc3NoLmNvbSxlY2.RzYS1zaGEyLW5pc3RwMjU2LGVjZHNhLXNoYTItbmlzdHAzODQs.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -984,8 +984,8 @@ checks:
       event_type: dns
       pcap_cnt: 42
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -1004,8 +1004,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAANEA
       dns.answers[0].rrname: hvMAAAANCGVjZHNhLXNoYTItbmlzdHA1MjEsc3NoLWRzcwAAAJ1hZXMxMjgtY3R.yLGFlczE5Mi1jdHIsYWVzMjU2LWN0cixhcmNmb3VyMjU2LGFyY2ZvdXIxMjgsYW.VzMTI4LWNiYywzZGVzLWNiYyxibG93ZmlzaC1jYmMsY2FzdDEy.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -1033,13 +1033,13 @@ checks:
       event_type: dns
       pcap_cnt: 44
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAMEA
       dns.answers[0].rrname: hvMAAAAMBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -1067,8 +1067,8 @@ checks:
       event_type: dns
       pcap_cnt: 45
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -1087,8 +1087,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAOGAAAAJQIHwAAAIEA3kn8kGmZTDedK2Vj79N++uZ4Xusd0KErCQqsJy
       dns.answers[0].rrname: hvMAAAAOBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -1131,8 +1131,8 @@ checks:
       event_type: dns
       pcap_cnt: 47
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -1196,8 +1196,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAPGAAAArwHIQAAARcAAAAHc3NoLXJzYQAAAAMBAAEAAAEBAMeZsgTSPF
       dns.answers[0].rrname: hvMAAAAPCDgtY2JjLGFlczE5Mi1jYmMsYWVzMjU2LWNiYyxhcmNmb3VyLHJpam5.kYWVsLWNiY0BseXNhdG9yLmxpdS5zZQAAAJ1hZXMxMjgtY3RyLGFlczE5Mi1jdH.IsYWVzMjU2LWN0cixhcmNmb3VyMjU2LGFyY2ZvdXIxMjgsYWVz.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -1240,13 +1240,13 @@ checks:
       event_type: dns
       pcap_cnt: 52
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAQGIRArGzGzvCoATKDPTgtff/srH5ymzbNg0od9vzz4aW8Wr8Tmhh8Hr
       dns.answers[0].rrname: hvMAAAAQBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -1304,13 +1304,13 @@ checks:
       event_type: dns
       pcap_cnt: 53
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAARGHmmtcnk3f+Sdke7PQIZOINdGizzHBLu7ItZSOa3Sfc66H+ayaARMf
       dns.answers[0].rrname: hvMAAAARCDEyOC1jYmMsM2Rlcy1jYmMsYmxvd2Zpc2gtY2JjLGNhc3QxMjgtY2J.jLGFlczE5Mi1jYmMsYWVzMjU2LWNiYyxhcmNmb3VyLHJpam5kYWVsLWNiY0BseX.NhdG9yLmxpdS5zZQAAAKdobWFjLW1kNSxobWFjLXNoYTEsdW1h.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -1353,13 +1353,13 @@ checks:
       event_type: dns
       pcap_cnt: 54
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAASGOOTR9NjSUnRhPcUi8LCTvkQlmYrM+Hu9yoyMqR93pNxpgs5RzR4IH
       dns.answers[0].rrname: hvMAAAASCGMtNjRAb3BlbnNzaC5jb20saG1hYy1zaGEyLTI1NixobWFjLXNoYTI.tMjU2LTk2LGhtYWMtc2hhMi01MTIsaG1hYy1zaGEyLTUxMi05NixobWFjLXJpcG.VtZDE2MCxobWFjLXJpcGVtZDE2MEBvcGVuc3NoLmNvbSxobWFj.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -1397,8 +1397,8 @@ checks:
       event_type: dns
       pcap_cnt: 55
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -1447,8 +1447,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAATGNsETPiAXDCPSqttwQTxlKfcbeUws4sTuR3619TSQK3ER/ENcT1ZQP
       dns.answers[0].rrname: hvMAAAATCC1zaGExLTk2LGhtYWMtbWQ1LTk2AAAAp2htYWMtbWQ1LGhtYWMtc2h.hMSx1bWFjLTY0QG9wZW5zc2guY29tLGhtYWMtc2hhMi0yNTYsaG1hYy1zaGEyLT.I1Ni05NixobWFjLXNoYTItNTEyLGhtYWMtc2hhMi01MTItOTYs.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -1481,8 +1481,8 @@ checks:
       event_type: dns
       pcap_cnt: 59
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -1501,8 +1501,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAUGID6Ry6+OsQx+C0gWhSicpwJRsW6Not/u1nTWJIxQeVq3YzSkq09md
       dns.answers[0].rrname: hvMAAAAUCGhtYWMtcmlwZW1kMTYwLGhtYWMtcmlwZW1kMTYwQG9wZW5zc2guY29.tLGhtYWMtc2hhMS05NixobWFjLW1kNS05NgAAABpub25lLHpsaWJAb3BlbnNzaC.5jb20semxpYgAAABpub25lLHpsaWJAb3BlbnNzaC5jb20semxp.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -1535,13 +1535,13 @@ checks:
       event_type: dns
       pcap_cnt: 61
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAVEA
       dns.answers[0].rrname: hvMAAAAVCGIAAAAAAAAAAAAAAAAAAAAAAAAAAAA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -1569,13 +1569,13 @@ checks:
       event_type: dns
       pcap_cnt: 62
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAXEA
       dns.answers[0].rrname: hvMAAwAXCAAAABQGIgAABAAAAAQAAAAgAAAAAAAAAA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -1603,13 +1603,13 @@ checks:
       event_type: dns
       pcap_cnt: 63
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAWEA
       dns.answers[0].rrname: hvMAAgAWBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -1637,13 +1637,13 @@ checks:
       event_type: dns
       pcap_cnt: 64
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAaEA
       dns.answers[0].rrname: hvMABgAaBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -1671,13 +1671,13 @@ checks:
       event_type: dns
       pcap_cnt: 65
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAbEA
       dns.answers[0].rrname: hvMABwAbBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -1705,13 +1705,13 @@ checks:
       event_type: dns
       pcap_cnt: 66
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAYEA
       dns.answers[0].rrname: hvMABAAYBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -1739,13 +1739,13 @@ checks:
       event_type: dns
       pcap_cnt: 67
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAeEA
       dns.answers[0].rrname: hvMACgAeBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -1773,13 +1773,13 @@ checks:
       event_type: dns
       pcap_cnt: 68
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAfEA
       dns.answers[0].rrname: hvMACwAfCJpX6DB9O+5TQ+oIfbIAAAAAAAA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -1807,13 +1807,13 @@ checks:
       event_type: dns
       pcap_cnt: 69
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAhEA
       dns.answers[0].rrname: hvMADQAhCAAAAAwKFQAAAAAAAAAAAAA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -1841,13 +1841,13 @@ checks:
       event_type: dns
       pcap_cnt: 70
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAiEA
       dns.answers[0].rrname: hvMADgAiCA9HZU8tQch3tlBA02t6sZzFinsHVFjV9fsbIgJzGV6aC9IX8jmSF82.xjb4dW8dzrA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -1875,13 +1875,13 @@ checks:
       event_type: dns
       pcap_cnt: 71
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAgEA
       dns.answers[0].rrname: hvMADAAgBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -1909,13 +1909,13 @@ checks:
       event_type: dns
       pcap_cnt: 72
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAZEA
       dns.answers[0].rrname: hvMABQAZBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -1943,8 +1943,8 @@ checks:
       event_type: dns
       pcap_cnt: 73
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -1963,8 +1963,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAcEA
       dns.answers[0].rrname: hvMACAAcBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -1992,13 +1992,13 @@ checks:
       event_type: dns
       pcap_cnt: 75
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAdEA
       dns.answers[0].rrname: hvMACQAdCAAAAIwGIAAAAIAx3itE7XsxfNFkKSwpm/QL2R+3hW5GnOrZviY9/TR.O7d2QlxOeCwmGsxERu0+5DKpF6kwJroS1n8v8wLvqu3jSeOjVnYb7Fo3jRoLT3z.mxMiqSuKTuBNWXb5QoROHUYVRZIqMC+OtncdVw0LG0/FO/Kq8n.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -2026,8 +2026,8 @@ checks:
       event_type: dns
       pcap_cnt: 76
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -2046,8 +2046,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAjEA
       dns.answers[0].rrname: hvMADwAjCDvIMWnWlrLs3njbinEmXNQVYiJ1Hf0sRyNE7D/1NF1b8clSdB/dmtu.UbGQcz7UrbBHNGJWtlVUBLpj6DTggRC0.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -2075,8 +2075,8 @@ checks:
       event_type: dns
       pcap_cnt: 78
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -2095,8 +2095,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAkEA
       dns.answers[0].rrname: hvMAEAAkBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -2124,13 +2124,13 @@ checks:
       event_type: dns
       pcap_cnt: 80
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAmEA
       dns.answers[0].rrname: hvMAEgAmBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -2158,13 +2158,13 @@ checks:
       event_type: dns
       pcap_cnt: 81
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAlEA
       dns.answers[0].rrname: hvMAEQAlBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -2192,8 +2192,8 @@ checks:
       event_type: dns
       pcap_cnt: 82
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -2212,8 +2212,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAnEA
       dns.answers[0].rrname: hvMAEwAnBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -2241,8 +2241,8 @@ checks:
       event_type: dns
       pcap_cnt: 85
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -2321,8 +2321,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAoEA
       dns.answers[0].rrname: hvMAFAAoBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -2350,13 +2350,13 @@ checks:
       event_type: dns
       pcap_cnt: 92
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAApEA
       dns.answers[0].rrname: hvMAFQApCOmk2dTdJciDeU1HxaGwOxqdUoJGVho6Jcrgg3EXVwhzTkpRmB3Xrlz.lp2FAtTgUIZC5aeEQm7x/NitPsl8n+xyl8BtH2fraIRJb3eGrIteLsXobanq4+P.pJZNPyaIW2oKX3+ZSx3BKNpSkJpD232RvTt1J7dNuhqFQgFcnd.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -2384,13 +2384,13 @@ checks:
       event_type: dns
       pcap_cnt: 93
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAqEA
       dns.answers[0].rrname: hvMAFgAqBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -2418,13 +2418,13 @@ checks:
       event_type: dns
       pcap_cnt: 94
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAArEA
       dns.answers[0].rrname: hvMAFwArCMfOP+frB4IA0L7UWQjJpzeyMOo.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -2452,13 +2452,13 @@ checks:
       event_type: dns
       pcap_cnt: 95
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAsEA
       dns.answers[0].rrname: hvMAGAAsBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -2486,8 +2486,8 @@ checks:
       event_type: dns
       pcap_cnt: 96
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -2506,8 +2506,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAtGNEqCE4KP20kGH0Clf+C26xKJFc1tpe2553spzE6/gT1
       dns.answers[0].rrname: hvMAGQAtBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -2535,8 +2535,8 @@ checks:
       event_type: dns
       pcap_cnt: 98
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -2615,8 +2615,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAuGFbHXVzzlvr34msuFy05F6bRUXIcwwA8xil02gNhXcy5QxKpCfwU7t
       dns.answers[0].rrname: hvMAGgAuBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -2649,8 +2649,8 @@ checks:
       event_type: dns
       pcap_cnt: 104
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -2789,8 +2789,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAvGK4Pd1EjONdQFOqx0Q1qpvfSn2lYEI7DYZltX8uuYTGkCVNl04z+Bx
       dns.answers[0].rrname: hvMAGwAvCIkrV/ReccpWoXylVptppBSwm4rQVj+LUzMpFyro3rmKmtRhPMMj0V1.cj60bkoYzh0QlrH6vAMPPSOm7RzOWJNTchkHY5KGt+pyYHPD9I6/81p1PCZuPXi.XMBHf6s08VExh7KxEtR8jggl/dxizgPmqbsBFw1yAsoWmDeEHj.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -2828,8 +2828,8 @@ checks:
       event_type: dns
       pcap_cnt: 114
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -2848,8 +2848,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAwGObgemu5HuKM+ERWwdANnQBVfFsBeFOJ5lnCfusRXljFGecnHD7b1j
       dns.answers[0].rrname: hvMAHAAwBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -2907,13 +2907,13 @@ checks:
       event_type: dns
       pcap_cnt: 116
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAxGOJC4G7AI5IRq8VFCBirtrwtfAdGD2M1KW4j9XQe6O+B6oUgWqHGXY
       dns.answers[0].rrname: hvMAHQAxCMctAA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -2956,8 +2956,8 @@ checks:
       event_type: dns
       pcap_cnt: 117
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -2976,8 +2976,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAyGOaJz8MoysNCf8COwS29ZF3s2AqPMfigTqkImNZJUam+WEKERcm6w3
       dns.answers[0].rrname: hvMAHgAyBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -3010,8 +3010,8 @@ checks:
       event_type: dns
       pcap_cnt: 119
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -3030,8 +3030,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAA8EA
       dns.answers[0].rrname: hvMAKAA8BA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -3059,13 +3059,13 @@ checks:
       event_type: dns
       pcap_cnt: 122
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAAzEA
       dns.answers[0].rrname: hvMAHwAzBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -3093,13 +3093,13 @@ checks:
       event_type: dns
       pcap_cnt: 123
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAA0EA
       dns.answers[0].rrname: hvMAIAA0CIUaLlwuNSK5phv3q0D7jN6FjRu9RhxF2jLcd4ePd/Ssv/fMHo1x7lZ.IJnb9FnEAoCBZUQqizMnd8d+FTgkJK7USPgmxOyR63Yy6sNxUuGdIvZ2Kd8OWaG.qrHQleDgvLDVxhdkeZ4jOUkbqywhagjgn+6LosU/HVT0V2Oql1.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -3127,13 +3127,13 @@ checks:
       event_type: dns
       pcap_cnt: 124
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAA1EA
       dns.answers[0].rrname: hvMAIQA1BA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -3161,13 +3161,13 @@ checks:
       event_type: dns
       pcap_cnt: 125
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAA9EA
       dns.answers[0].rrname: hvMAKQA9BA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -3195,8 +3195,8 @@ checks:
       event_type: dns
       pcap_cnt: 126
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -3215,8 +3215,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAA2EA
       dns.answers[0].rrname: hvMAIgA2CCeD1WxPA+m6eHkF1n4qobRCBC/O73OvopuCyJypzQ25p3ZMZeGznpo.Ugpn1L9G8f6H8rrjflBw9YW6C5VxOgiByMyvi1C8xpbuu19dr/b78i9BWGXlzHB.dai5EtV2d2YHxl6AjuP7vZNbkgVL99AScD38jT145YVJuQ2v2j.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -3244,13 +3244,13 @@ checks:
       event_type: dns
       pcap_cnt: 128
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAA3EA
       dns.answers[0].rrname: hvMAIwA3BA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -3278,13 +3278,13 @@ checks:
       event_type: dns
       pcap_cnt: 129
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAA4EA
       dns.answers[0].rrname: hvMAJAA4CIA3u9zI4HdwAkw2T+n7SYuJHT590+/Y/WkV2jlx6OOhrYYBrH+fF/x.LeqpHbkkYohzQd/aIDDnUnhr+xtyHzrK4Chm5Q9UJmpATyFkU2wWdLs6S3sTeji.sy9fNH+znOgkge5l3POd3slPeZcbLITaDsTaHWEnrwDLMIQ9lw.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -3312,13 +3312,13 @@ checks:
       event_type: dns
       pcap_cnt: 130
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAA5EA
       dns.answers[0].rrname: hvMAJQA5BA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -3346,13 +3346,13 @@ checks:
       event_type: dns
       pcap_cnt: 131
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAA6EA
       dns.answers[0].rrname: hvMAJgA6CNgjb+jJ6jrjge2Jq6S6yufEuid5p1tRS8WmR2IHxwpt6vjhkRJFI8o.9XnSTflh5C6a068gKqhfPSR4M2a/Fo0+L4l+m5yIvRoc.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -3380,8 +3380,8 @@ checks:
       event_type: dns
       pcap_cnt: 132
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -3400,8 +3400,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAA7EA
       dns.answers[0].rrname: hvMAJwA7BA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -3429,8 +3429,8 @@ checks:
       event_type: dns
       pcap_cnt: 134
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -3449,8 +3449,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAA/EA
       dns.answers[0].rrname: hvMAKwA/BA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -3478,13 +3478,13 @@ checks:
       event_type: dns
       pcap_cnt: 136
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAABAEA
       dns.answers[0].rrname: hvMALABABA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -3512,13 +3512,13 @@ checks:
       event_type: dns
       pcap_cnt: 137
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAAA+EA
       dns.answers[0].rrname: hvMAKgA+BA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -3546,13 +3546,13 @@ checks:
       event_type: dns
       pcap_cnt: 138
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAABBEA
       dns.answers[0].rrname: hvMALQBBBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -3580,8 +3580,8 @@ checks:
       event_type: dns
       pcap_cnt: 139
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -3600,8 +3600,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAABCEA
       dns.answers[0].rrname: hvMALgBCBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -3629,8 +3629,8 @@ checks:
       event_type: dns
       pcap_cnt: 141
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -3649,8 +3649,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAABDEA
       dns.answers[0].rrname: hvMALwBDBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -3678,8 +3678,8 @@ checks:
       event_type: dns
       pcap_cnt: 143
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -3698,8 +3698,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAABEEA
       dns.answers[0].rrname: hvMAMABEBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -3727,8 +3727,8 @@ checks:
       event_type: dns
       pcap_cnt: 145
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -3747,8 +3747,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAABFEA
       dns.answers[0].rrname: hvMAMQBFBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -3776,8 +3776,8 @@ checks:
       event_type: dns
       pcap_cnt: 147
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -3796,8 +3796,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAABGEA
       dns.answers[0].rrname: hvMAMgBGBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -3825,8 +3825,8 @@ checks:
       event_type: dns
       pcap_cnt: 149
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -3845,8 +3845,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAABHEA
       dns.answers[0].rrname: hvMAMwBHBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -3874,8 +3874,8 @@ checks:
       event_type: dns
       pcap_cnt: 151
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -3894,8 +3894,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAABIEA
       dns.answers[0].rrname: hvMANABIBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -3923,8 +3923,8 @@ checks:
       event_type: dns
       pcap_cnt: 153
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -3943,8 +3943,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAABJEA
       dns.answers[0].rrname: hvMANQBJBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -3972,8 +3972,8 @@ checks:
       event_type: dns
       pcap_cnt: 155
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -3992,8 +3992,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAABKEA
       dns.answers[0].rrname: hvMANgBKBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -4021,8 +4021,8 @@ checks:
       event_type: dns
       pcap_cnt: 157
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -4041,8 +4041,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAABLEA
       dns.answers[0].rrname: hvMANwBLBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -4070,8 +4070,8 @@ checks:
       event_type: dns
       pcap_cnt: 159
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -4090,8 +4090,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAABMEA
       dns.answers[0].rrname: hvMAOABMBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -4119,8 +4119,8 @@ checks:
       event_type: dns
       pcap_cnt: 161
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:
@@ -4139,8 +4139,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.30.28.94
-      dest_port: 53
+      dest_ip: 10.30.28.90
+      dest_port: 43246
       dns.answers[0].rdata: AhvMAAABNEA
       dns.answers[0].rrname: hvMAOQBNBA.srv.tunnel.com
       dns.answers[0].rrtype: TXT
@@ -4168,8 +4168,8 @@ checks:
       event_type: dns
       pcap_cnt: 163
       proto: UDP
-      src_ip: 10.30.28.90
-      src_port: 43246
+      src_ip: 10.30.28.94
+      src_port: 53
 - filter:
     count: 1
     match:

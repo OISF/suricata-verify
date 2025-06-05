@@ -126,10 +126,10 @@ checks:
       event_type: dns
       pcap_cnt: 7
       proto: TCP
-      src_ip: 10.16.1.11
-      src_port: 36926
-      dest_ip: 9.9.9.9
-      dest_port: 53
+      dest_ip: 10.16.1.11
+      dest_port: 36926
+      src_ip: 9.9.9.9
+      src_port: 53
       dns.answers[0].rdata: 35.212.0.44
       dns.answers[0].rrname: suricata.io
       dns.answers[0].rrtype: A
@@ -168,10 +168,10 @@ checks:
       event_type: dns
       pcap_cnt: 10
       proto: TCP
-      src_ip: 10.16.1.11
-      src_port: 36926
-      dest_ip: 9.9.9.9
-      dest_port: 53
+      dest_ip: 10.16.1.11
+      dest_port: 36926
+      src_ip: 9.9.9.9
+      src_port: 53
       dns.answers[0].rdata: 192.0.78.190
       dns.answers[0].rrname: oisf.net
       dns.answers[0].rrtype: A
@@ -215,10 +215,10 @@ checks:
       event_type: dns
       pcap_cnt: 12
       proto: TCP
-      src_ip: 10.16.1.11
-      src_port: 36926
-      dest_ip: 9.9.9.9
-      dest_port: 53
+      dest_ip: 10.16.1.11
+      dest_port: 36926
+      src_ip: 9.9.9.9
+      src_port: 53
       dns.answers[0].rdata: 15.197.148.33
       dns.answers[0].rrname: suricata.org
       dns.answers[0].rrtype: A

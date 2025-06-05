@@ -241,8 +241,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 2.2.2.2
-      dest_port: 53
+      dest_ip: 1.1.1.1
+      dest_port: 5333
       dns.answers[0].rdata: 127.0.0.1
       dns.answers[0].rrname: suricata.io
       dns.answers[0].rrtype: A
@@ -261,8 +261,8 @@ checks:
       pcap_cnt: 2
       pkt_src: wire/pcap
       proto: UDP
-      src_ip: 1.1.1.1
-      src_port: 5333
+      src_ip: 2.2.2.2
+      src_port: 53
 - filter:
     count: 1
     match:

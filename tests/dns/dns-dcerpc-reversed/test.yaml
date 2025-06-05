@@ -22,10 +22,10 @@ checks:
         event_type: dns
         dns.type: response
         dns.answers[0].rrtype: A
-        src_ip: "172.28.255.122"
-        src_port: 54824
-        dest_ip: "192.168.1.12"
-        dest_port: 53
+        src_ip: "192.168.1.12"
+        src_port: 53
+        dest_ip: "172.28.255.122"
+        dest_port: 54824
 
   - filter:
       count: 1
