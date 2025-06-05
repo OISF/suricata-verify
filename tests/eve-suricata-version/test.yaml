@@ -18,7 +18,7 @@ checks:
       count: 5
       match:
         event_type: dns
-        src_ip: 10.16.1.11
+        dest_ip: 10.16.1.11
         has-key: suricata_version
         dns.type: response
   - filter:

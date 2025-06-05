@@ -12,7 +12,7 @@ checks:
   - filter:
       count: 1
       match:
-        src_ip: "10.16.1.11"
-        dest_ip: "8.8.4.4"
+        src_ip: "8.8.4.4"
+        dest_ip: "10.16.1.11"
         event_type: dns
         dns.type: response

@@ -35,8 +35,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.16.1.1
-      dest_port: 53
+      dest_ip: 10.16.1.11
+      dest_port: 60922
       dns.answers[0].rdata: 34.197.178.240
       dns.answers[0].rrname: textsecure-service-ca.whispersystems.org
       dns.answers[0].rrtype: A
@@ -55,13 +55,13 @@ checks:
       event_type: dns
       pcap_cnt: 4
       proto: UDP
-      src_ip: 10.16.1.11
-      src_port: 60922
+      src_ip: 10.16.1.1
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 10.16.1.1
-      dest_port: 53
+      dest_ip: 10.16.1.11
+      dest_port: 52345
       dns.answers[0].rdata: v=spf1 include:_spf.google.com ~all
       dns.answers[0].rrname: google.com
       dns.answers[0].rrtype: TXT
@@ -80,8 +80,8 @@ checks:
       event_type: dns
       pcap_cnt: 2
       proto: UDP
-      src_ip: 10.16.1.11
-      src_port: 52345
+      src_ip: 10.16.1.1
+      src_port: 53
 - filter:
     count: 1
     match:
