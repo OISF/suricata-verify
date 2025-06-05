@@ -7,4 +7,25 @@ checks:
   - filter:
       count: 1
       match:
+        pcap_cnt: 1
+        event_type: dns
+        src_ip: 10.16.1.11
+        dest_ip: 8.8.8.8
+        dns.type: request
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 2
+        event_type: alert
         alert.signature_id: 5
+        src_ip: 8.8.8.8
+        dest_ip: 10.16.1.11
+        dns.type: response
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 2
+        event_type: dns
+        src_ip: 8.8.8.8
+        dest_ip: 10.16.1.11
+        dns.type: response
