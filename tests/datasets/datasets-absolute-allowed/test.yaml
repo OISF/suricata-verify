@@ -3,11 +3,6 @@ pcap: ../../datasets/datasets-parent-path/one-packet.pcap
 args:
   - -vvv
 
-# Due to differences between user-mode and system-mode, these rules
-# will actually fail. Instead we're testing to make sure we got past
-# the check for absolute filenames.
-exit-code: 1
-
 checks:
   - filter:
       count: 1
