@@ -40,8 +40,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 192.168.42.129
-      dest_port: 53
+      dest_ip: 192.168.42.150
+      dest_port: 55597
       dns.answers[0].rdata: programme-tv.net.edgesuite.net
       dns.answers[0].rrname: static.programme-tv.net
       dns.answers[0].rrtype: CNAME
@@ -75,13 +75,13 @@ checks:
       event_type: dns
       pcap_cnt: 3
       proto: UDP
-      src_ip: 192.168.42.150
-      src_port: 55597
+      src_ip: 192.168.42.129
+      src_port: 53
 - filter:
     count: 1
     match:
-      dest_ip: 192.168.42.129
-      dest_port: 53
+      dest_ip: 192.168.42.150
+      dest_port: 55597
       dns.answers[0].rdata: programme-tv.net.edgesuite.net
       dns.answers[0].rrname: static.programme-tv.net
       dns.answers[0].rrtype: CNAME
@@ -115,8 +115,8 @@ checks:
       event_type: dns
       pcap_cnt: 4
       proto: UDP
-      src_ip: 192.168.42.150
-      src_port: 55597
+      src_ip: 192.168.42.129
+      src_port: 53
 - filter:
     count: 1
     match:

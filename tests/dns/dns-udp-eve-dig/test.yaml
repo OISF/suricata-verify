@@ -26,8 +26,8 @@ checks:
 - filter:
     count: 1
     match:
-      dest_ip: 10.16.1.1
-      dest_port: 53
+      dest_ip: 10.16.1.11
+      dest_port: 41805
       dns.answers[0].rdata: suricata-ids.org
       dns.answers[0].rrname: www.suricata-ids.org
       dns.answers[0].rrtype: CNAME
@@ -56,5 +56,5 @@ checks:
       event_type: dns
       pcap_cnt: 2
       proto: UDP
-      src_ip: 10.16.1.11
-      src_port: 41805
+      src_ip: 10.16.1.1
+      src_port: 53

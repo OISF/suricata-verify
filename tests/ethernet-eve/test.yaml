@@ -16,8 +16,8 @@ checks:
       count: 5
       match:
         event_type: dns
-        src_ip: 10.16.1.11
-        ether.src_mac: d8:cb:8a:ed:a1:46
+        dest_ip: 10.16.1.11
+        ether.src_mac: 00:15:17:0d:06:f7
         dns.type: response
   - filter:
       count: 0
