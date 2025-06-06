@@ -47,8 +47,10 @@ import traceback
 import platform
 
 VALIDATE_EVE = False
+# Windows and macOS don't support the mp logic below.
 WIN32 = sys.platform == "win32"
-MP = not WIN32
+DARWIN = sys.platform == "darwin"
+MP = not WIN32 and not DARWIN
 suricata_yaml = "suricata.yaml" if WIN32 else "./suricata.yaml"
 
 # Determine the Suricata binary
