@@ -1,0 +1,22 @@
+requires:
+  min-version: 8
+
+pcap: ../datajson-01-ip/input.pcap
+
+args:
+ - -k none --set datasets.enabled=yes
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        alert.context.src_ip.test: success
+        alert.context.bad_host.year: 2005
+        alert.context.src_ip.ip: "10.16.1.11"
+        alert.context.bad_host.host: "www.testmyids.com"
