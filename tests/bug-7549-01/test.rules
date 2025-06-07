@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"byte_jump varname test sig"; content:"hi there"; byte_extract:1,4,rpkt_len; http.connection;byte_jump:rpkt_len,0; isdataat:1; classtype:bad-unknown; sid:1;)

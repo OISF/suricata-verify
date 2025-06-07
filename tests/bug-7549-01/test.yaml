@@ -1,0 +1,9 @@
+requires:
+  min-version: 8
+
+checks:
+  - shell:
+        args: grep "Unknown byte_extract var seen.*rpkt_len" stderr | wc -l | xargs
+        expect: 1
+
+exit-code: 1

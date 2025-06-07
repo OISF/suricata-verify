@@ -1,0 +1,11 @@
+pcap: ../bug-7549-01/input.pcap
+
+requires:
+  min-version: 8
+
+checks:
+  - shell:
+        args: grep "Unknown byte_extract var seen.*rpkt_len" stderr | wc -l | xargs
+        expect: 0
+
+exit-code: 0
