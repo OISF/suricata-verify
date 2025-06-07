@@ -1,0 +1,22 @@
+pcap: ../../datasets/datasets-parent-path/one-packet.pcap
+
+requires:
+  min-version: 8
+  lambda: sys.platform == "win32"
+
+args:
+  - -vvv
+
+checks:
+  - filter:
+      count: 1
+      match:
+        engine.message: "Allowing absolute filename for dataset rule: C:\Windows\Temp\dns-seen.txt"
+  - filter:
+      count: 1
+      match:
+        engine.message: "Allowing absolute filename for dataset rule: C:\Windows\Temp\dns-seen-save.txt"
+  - filter:
+      count: 1
+      match:
+        engine.message: "Allowing absolute filename for dataset rule: C:\Windows\Temp\..\Temp\dns-seen.txt"
