@@ -4,6 +4,10 @@ on:
   - push
   - pull_request
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   
   pcapng-check:
@@ -150,3 +154,57 @@ jobs:
       - name: Running suricata-verify
         working-directory: suricata
         run: python3 ../run.py --quiet
+
+  macos:
+    name: macOS
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        branch:
+          - master
+          - main-7.0.x
+    steps:
+      - name: Install dependencies
+        run: |
+         brew install \
+          autoconf \
+          automake \
+          cbindgen \
+          curl \
+          hiredis \
+          hwloc \
+          jansson \
+          jq \
+          libmagic \
+          libnet \
+          libtool \
+          libyaml \
+          pcre2 \
+          pkg-config \
+          python \
+          rust \
+          xz
+      - uses: actions/checkout@v3
+      - name: Create Python virtual environment
+        run: python3 -m venv ./testenv
+      - name: Install PyYAML
+        run: |
+          . ./testenv/bin/activate
+          pip install pyyaml
+      - run: |
+          . ./testenv/bin/activate
+          python3 ./run.py --self-test
+      - run: git clone https://github.com/OISF/suricata -b ${{ matrix.branch }}
+      - run: git clone https://github.com/OISF/libhtp suricata/libhtp
+      - name: Build Suricata
+        working-directory: suricata
+        run: |
+          ./autogen.sh
+          CPATH="$HOMEBREW_PREFIX/include:$CPATH" LIBRARY_PATH="$HOMEBREW_PREFIX/lib:$LIBRARY_PATH" PATH="/opt/homebrew/opt/libtool/libexec/gnubin:$PATH" CFLAGS="${DEFAULT_CFLAGS}" ./configure --enable-warnings --enable-unittests --prefix="$HOME/.local/"
+          CPATH="$HOMEBREW_PREFIX/include:$CPATH" LIBRARY_PATH="$HOMEBREW_PREFIX/lib:$LIBRARY_PATH" PATH="/opt/homebrew/opt/libtool/libexec/gnubin:$PATH" make -j2
+      - name: Running suricata-verify
+        working-directory: suricata
+        run: |
+          . ../testenv/bin/activate
+          python3 ../run.py --quiet
