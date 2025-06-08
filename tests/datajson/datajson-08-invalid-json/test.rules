@@ -1,1 +1,1 @@
-alert http any any -> any any (flow:established,to_server; ip.src; dataset:isset,bip,type ipv6,load ip.lst,format json, enrichment_key ip, value_key ip; sid:1;)
+alert http any any -> any any (flow:established,to_server; ip.src; dataset:isset,bip,type ipv6,load ip.lst,format json, context_key ip, value_key ip; sid:1;)
