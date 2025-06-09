@@ -1,0 +1,1 @@
+alert http any any -> any any (flow:established,to_server; http.host; content:"testmyids.com"; ip.src; dataset:isset,src_ip,type ipv4,load src.lst,format json, context_key src_ip, value_key ip; sid:1;)
