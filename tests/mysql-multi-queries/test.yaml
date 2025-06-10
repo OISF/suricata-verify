@@ -1,0 +1,61 @@
+requires:
+  min-version: 8
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      dest_ip: 172.16.10.104
+      dest_port: 3306
+      pcap_cnt: 14
+      event_type: mysql
+      mysql.affected_rows: 0
+      mysql.command: SET NAMES utf8mb4
+      mysql.tls: false
+      mysql.version: 8.0.32
+      proto: TCP
+      src_ip: 172.16.10.222
+      src_port: 42074
+- filter:
+    count: 1
+    match:
+      dest_ip: 172.16.10.104
+      dest_port: 3306
+      event_type: mysql
+      mysql.command: SELECT VERSION()
+      mysql.rows[0]: 8.0.32
+      mysql.tls: false
+      mysql.version: 8.0.32
+      proto: TCP
+      src_ip: 172.16.10.222
+      src_port: 42074
+- filter:
+    count: 1
+    match:
+      dest_ip: 172.16.10.104
+      dest_port: 3306
+      pcap_cnt: 20
+      event_type: mysql
+      mysql.affected_rows: 0
+      mysql.command: ping
+      mysql.tls: false
+      mysql.version: 8.0.32
+      proto: TCP
+      src_ip: 172.16.10.222
+      src_port: 42074
+- filter:
+    count: 1
+    match:
+      dest_ip: 172.16.10.104
+      dest_port: 3306
+      event_type: mysql
+      mysql.command: SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='sentinel_flow_admin'
+      mysql.rows[0]: sentinel_flow_admin
+      mysql.tls: false
+      mysql.version: 8.0.32
+      proto: TCP
+      src_ip: 172.16.10.222
+      src_port: 42074

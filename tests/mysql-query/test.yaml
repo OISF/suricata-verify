@@ -1,0 +1,22 @@
+requires:
+  min-version: 8
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: mysql
+      mysql.version: 8.0.32
+      mysql.tls: false
+      mysql.command: "SELECT VERSION()"
+      mysql.rows[0]: "8.0.32"
+- filter:
+    count: 1
+    match:
+      event_type: mysql
+      mysql.version: 8.0.32
+      mysql.tls: false
+      mysql.command: "ping"
