@@ -1,0 +1,6 @@
+# input pcap contains a query to http://home.regit.org/?arg=dGhpc2lzYXRlc3QK
+# "dGhpc2lzYXRlc3QK" is "thisisatest\n"
+alert tcp any any -> any any (msg:"from_base64: no-decode [mode rfc4648]"; flow:to_server,established;  http.uri; content:"/?arg="; from_base64: set_error; absent;  sid:1; rev:1;)
+alert tcp any any -> any any (msg:"from_base64: no-decode with or_else [mode rfc4648]"; flow:to_server,established;  http.uri; content:"/?arg="; from_base64: set_error; absent: or_else; content: "foobar";  sid:2; rev:1;)
+alert http any any -> any any (msg:"from_base64: decode with or_else [mode rfc4648]"; http.uri; content:"/?arg=dGhpc2lzYXRlc3QK"; from_base64: offset 10; absent: or_else; content:"sisatest"; sid:3; rev:1;)
+alert http any any -> any any (msg:"from_base64: no-decode with content check"; file.data; content:"To Linux and beyond"; from_base64: set_error; content:"This will not match"; sid:4; rev:1;)
