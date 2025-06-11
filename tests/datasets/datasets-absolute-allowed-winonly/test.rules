@@ -1,0 +1,3 @@
+alert dns any any -> any any (dns.query; dataset: isnotset, dns-seen, type string, state C:\Windows\Temp\dns-seen.txt; sid:1; rev:1;)
+alert dns any any -> any any (dns.query; dataset: isnotset, dns-seen-save, type string, save C:\Windows\Temp\dns-seen-save.txt; sid:2; rev:1;)
+alert dns any any -> any any (dns.query; dataset: isnotset, dns-seen-parent, type string, state C:\Windows\Temp\..\Temp\dns-seen2.txt; sid:3; rev:1;)

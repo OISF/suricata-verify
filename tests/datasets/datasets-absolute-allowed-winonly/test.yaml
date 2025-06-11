@@ -1,0 +1,19 @@
+pcap: ../../datasets/datasets-parent-path/one-packet.pcap
+
+requires:
+  min-version: 8
+  lambda: sys.platform == "win32"
+
+args:
+  - -vvv
+
+checks:
+  - shell:
+      args: grep "Allowing absolute filename for dataset rule" eve.json | grep "dns-seen.txt" | wc -l 
+      expect: 1
+  - shell:
+      args: grep "Allowing absolute filename for dataset rule" eve.json | grep "dns-seen-save.txt" | wc -l 
+      expect: 1
+  - shell:
+      args: grep "Allowing absolute filename for dataset rule" eve.json | grep "dns-seen2.txt" | wc -l 
+      expect: 1
