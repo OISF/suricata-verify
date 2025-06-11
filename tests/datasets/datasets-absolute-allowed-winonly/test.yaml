@@ -1,0 +1,33 @@
+pcap: ../../datasets/datasets-parent-path/one-packet.pcap
+
+requires:
+  min-version: 8
+  lambda: sys.platform == "win32"
+
+args:
+  - -vvv
+
+checks:
+  - filter:
+      filename: eve.json
+      count: 3
+      match:
+        engine.message.__startswith: "Allowing absolute filename for dataset rule"
+  - filter:
+      filename: eve.json
+      count: 1
+      match:
+        engine.message.__startswith: "Allowing absolute filename for dataset rule"
+        engine.message.__endswith: "dns-seen.txt"
+  - filter:
+      filename: eve.json
+      count: 1
+      match:
+        engine.message.__startswith: "Allowing absolute filename for dataset rule"
+        engine.message.__endswith: "dns-seen-save.txt"
+  - filter:
+      filename: eve.json
+      count: 1
+      match:
+        engine.message.__startswith: "Allowing absolute filename for dataset rule"
+        engine.message.__endswith: "dns-seen2.txt"
