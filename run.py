@@ -172,7 +172,7 @@ def pipe_reader(fileobj, output=None, verbose=False, utf8_errors=[]):
             try:
                 line = line.decode().strip()
             except:
-                self.utf8_errors.append("Invalid line")
+                utf8_errors.append("Invalid line")
             print(line)
 
 
