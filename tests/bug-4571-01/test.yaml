@@ -1,0 +1,41 @@
+requires:
+  min-version: 8
+
+args:
+- -k none
+- --simulate-ips
+- --set stream.midstream=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pkt_src: wire/pcap
+        proto: TCP
+        pkt_src: ipv4 tunnel
+        src_ip: 10.1.0.3
+        dest_ip: 10.1.0.4
+        tunnel.src_ip: 10.1.0.1
+        tunnel.dest_ip: 10.1.0.2
+        tunnel.proto: IP-in-IP
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        proto: IP-in-IP
+        src_ip: 10.1.0.1
+        dest_ip: 10.1.0.2
+        flow.alerted: false
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        proto: TCP
+        src_ip: 10.1.0.3
+        dest_ip: 10.1.0.4
+        flow.alerted: true
+  - shell:
+      args: grep 'decoder.ipv4_in_ipv4' stats.log | wc -l
+      expect: 1
