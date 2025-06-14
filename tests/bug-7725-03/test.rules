@@ -1,0 +1,2 @@
+alert ip any any -> 10.0.0.0/8 any (msg:"IP-in-IP Test rule 1 - outer layer"; classtype:misc-activity; sid:60000000; rev:1;)
+drop ip any any -> 192.168.0.0/16 any (msg:"IP-in-IP Test rule 2 - inner layer"; classtype:misc-activity; sid:60000001; rev:1;)

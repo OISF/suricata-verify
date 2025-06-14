@@ -1,6 +1,12 @@
 %YAML 1.1
 ---
 
+decoder:
+  ipv4:
+    ipip:
+      enabled: false
+      track-parent-flow: false
+
 stats:
   enabled: yes
   interval: 8
@@ -22,6 +28,7 @@ outputs:
         - drop:
             alerts: yes
         - flow
+        - stats
   - stats:
       enabled: yes
       filename: stats.log
