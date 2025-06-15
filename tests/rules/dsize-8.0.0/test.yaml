@@ -1,0 +1,115 @@
+requires:
+    min-version: 8.0.0
+    pcap: false
+
+args:
+    - --engine-analysis
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 1
+      app_proto: "http_any"
+      requirements[0]: "no_payload"
+      requirements[1]: "flow"
+      pkt_engines[0].name: "packet"
+      pkt_engines[0].is_mpm: false
+      type: "pkt"
+      lists.packet.matches[0].name: "dsize"
+      lists.packet.matches[0].dsize.equal: 0
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 2
+      app_proto: "http_any"
+      requirements[0]: "payload"
+      requirements[1]: "flow"
+      pkt_engines[0].name: "packet"
+      pkt_engines[0].is_mpm: false
+      type: "pkt"
+      lists.packet.matches[0].name: "dsize"
+      lists.packet.matches[0].dsize.gt: 0
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 3
+      app_proto: "http_any"
+      requirements[0]: "payload"
+      requirements[1]: "flow"
+      pkt_engines[0].name: "packet"
+      pkt_engines[0].is_mpm: false
+      type: "pkt"
+      lists.packet.matches[0].name: "dsize"
+      lists.packet.matches[0].dsize.gte: 4096
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 4
+      app_proto: "http_any"
+      requirements[0]: "payload"
+      requirements[1]: "flow"
+      pkt_engines[0].name: "packet"
+      pkt_engines[0].is_mpm: false
+      type: "pkt"
+      lists.packet.matches[0].name: "dsize"
+      lists.packet.matches[0].dsize.range.min: 0
+      lists.packet.matches[0].dsize.range.max: 159
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 5
+      app_proto: "http_any"
+      requirements[0]: "flow"
+      requirements[1]: "real_pkt"
+      pkt_engines[0].name: "packet"
+      pkt_engines[0].is_mpm: false
+      type: "pkt"
+      lists.packet.matches[0].name: "dsize"
+      lists.packet.matches[0].dsize.negated_range.min: 0
+      lists.packet.matches[0].dsize.negated_range.max: 159
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 6
+      app_proto: "http_any"
+      requirements[0]: "flow"
+      requirements[1]: "real_pkt"
+      pkt_engines[0].name: "packet"
+      pkt_engines[0].is_mpm: false
+      type: "pkt"
+      lists.packet.matches[0].name: "dsize"
+      lists.packet.matches[0].dsize.lt: 100
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 7
+      app_proto: "http_any"
+      requirements[0]: "flow"
+      requirements[1]: "real_pkt"
+      pkt_engines[0].name: "packet"
+      pkt_engines[0].is_mpm: false
+      type: "pkt"
+      lists.packet.matches[0].name: "dsize"
+      lists.packet.matches[0].dsize.lte: 100
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 8
+      app_proto: "http_any"
+      requirements[0]: "payload"
+      requirements[1]: "flow"
+      requirements[2]: "real_pkt"
+      pkt_engines[0].name: "packet"
+      pkt_engines[0].is_mpm: false
+      type: "pkt"
+      lists.packet.matches[0].name: "dsize"
+      lists.packet.matches[0].dsize.diff: 0
