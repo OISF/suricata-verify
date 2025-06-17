@@ -27,14 +27,6 @@ checks:
       alert.signature_id: 3
       tls.sni: raw.githubusercontent.com
 - filter:
-    # version 7 does not use suricata.yaml stream-tx-log-limit
-    lt-version: 8
-    count: 24
-    match:
-      event_type: alert
-      alert.signature_id: 3
-      tls.sni: raw.githubusercontent.com
-- filter:
     count: 1
     match:
       event_type: drop
