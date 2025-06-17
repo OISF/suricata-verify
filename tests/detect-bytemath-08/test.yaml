@@ -1,0 +1,14 @@
+pcap: ../detect-bytemath-01/input.pcap
+
+requires:
+  min-version: 8
+
+args:
+- --strict-rule-keywords
+
+exit-code: 1
+
+checks:
+  - shell:
+     args: grep "Unknown byte_extract var seen in byte_test - content-length" suricata.log | wc -l | xargs
+     expect: 1

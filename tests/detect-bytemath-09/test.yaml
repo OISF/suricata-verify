@@ -1,0 +1,12 @@
+
+checks:
+  - shell:
+     min-version: 8
+     args: grep "Warning. detect-byte. Using byte variable from a different buffer may produce indeterminate results; variable. \"content-length\"" suricata.log | wc -l | xargs
+     expect: 1
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 44412999
