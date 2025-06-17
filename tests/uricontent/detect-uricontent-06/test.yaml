@@ -29,7 +29,7 @@ checks:
       event_type: alert
       alert.signature_id: 5
 - filter:
-    lt-version: 7
+    version: 7
     count: 2
     match:
       event_type: alert
