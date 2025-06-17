@@ -72,43 +72,6 @@ checks:
       src_ip: 1.1.1.1
       src_port: 5333
       tx_id: 0
-
-- filter:
-    lt-version: 8
-    count: 1
-    match:
-      alert.action: allowed
-      alert.category: Generic Protocol Command Decode
-      alert.gid: 1
-      alert.rev: 1
-      alert.severity: 3
-      alert.signature: SURICATA DNS Invalid opcode
-      alert.signature_id: 2240007
-      app_proto: dns
-      dest_ip: 2.2.2.2
-      dest_port: 53
-      direction: to_server
-      dns.query[0].id: 1
-      dns.query[0].opcode: 9
-      dns.query[0].rrname: suricata.io
-      dns.query[0].rrtype: A
-      dns.query[0].tx_id: 0
-      dns.query[0].type: query
-      event_type: alert
-      flow.bytes_toclient: 0
-      flow.bytes_toserver: 71
-      flow.dest_ip: 2.2.2.2
-      flow.dest_port: 53
-      flow.pkts_toclient: 0
-      flow.pkts_toserver: 1
-      flow.src_ip: 1.1.1.1
-      flow.src_port: 5333
-      pcap_cnt: 1
-      pkt_src: wire/pcap
-      proto: UDP
-      src_ip: 1.1.1.1
-      src_port: 5333
-      tx_id: 0
 - filter:
     count: 1
     match:
@@ -167,46 +130,6 @@ checks:
       dns.answers[0].rrtype: A
       dns.type: response
       dns.version: 3
-      event_type: alert
-      flow.bytes_toclient: 98
-      flow.bytes_toserver: 71
-      flow.dest_ip: 2.2.2.2
-      flow.dest_port: 53
-      flow.pkts_toclient: 1
-      flow.pkts_toserver: 1
-      flow.src_ip: 1.1.1.1
-      flow.src_port: 5333
-      pcap_cnt: 2
-      pkt_src: wire/pcap
-      proto: UDP
-      src_ip: 2.2.2.2
-      src_port: 53
-      tx_id: 1
-- filter:
-    requires:
-      lt-version: 8
-    count: 1
-    match:
-      alert.action: allowed
-      alert.category: Generic Protocol Command Decode
-      alert.gid: 1
-      alert.rev: 1
-      alert.severity: 3
-      alert.signature: SURICATA DNS Invalid opcode
-      alert.signature_id: 2240007
-      app_proto: dns
-      dest_ip: 1.1.1.1
-      dest_port: 5333
-      direction: to_client
-      dns.answer.flags: c800
-      dns.answer.id: 1
-      dns.answer.opcode: 9
-      dns.answer.qr: true
-      dns.answer.rcode: NOERROR
-      dns.answer.rrname: suricata.io
-      dns.answer.rrtype: A
-      dns.answer.type: answer
-      dns.answer.version: 2
       event_type: alert
       flow.bytes_toclient: 98
       flow.bytes_toserver: 71
