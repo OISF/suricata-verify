@@ -23,21 +23,18 @@ checks:
   # sid 7 and the other is sid 9.
   - filter:
       requires:
-        min-version: 7
         lt-version: 8
       count: 2
       match:
         event_type: alert
   - filter:
       requires:
-        min-version: 7
         lt-version: 8
       count: 1
       match:
         alert.signature_id: 7
   - filter:
       requires:
-        min-version: 7
         lt-version: 8
       count: 1
       match:
@@ -45,7 +42,6 @@ checks:
 
   - filter:
       requires:
-        min-version: 7
         lt-version: 8
       count: 1
       match:

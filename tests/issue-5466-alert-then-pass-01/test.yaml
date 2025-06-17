@@ -26,7 +26,6 @@ checks:
       match:
         event_type: flow
   - filter:
-      min-version: 7
       count: 1
       match:
         event_type: flow

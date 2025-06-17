@@ -22,7 +22,6 @@ checks:
       payload_length: 40
 - filter:
     count: 1
-    min-version: 7.0.7
     match:
       event_type: alert
       alert.signature_id: 1
@@ -37,7 +36,6 @@ checks:
       payload_length: 80
 - filter:
     count: 1
-    min-version: 7.0.7
     match:
       event_type: alert
       alert.signature_id: 1
@@ -52,7 +50,6 @@ checks:
       payload_length: 120
 - filter:
     count: 1
-    min-version: 7.0.7
     match:
       event_type: alert
       alert.signature_id: 1
@@ -67,7 +64,6 @@ checks:
       payload_length: 136
 - filter:
     count: 1
-    min-version: 7.0.7
     match:
       event_type: alert
       alert.signature_id: 2

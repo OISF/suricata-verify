@@ -10,7 +10,6 @@ exit-code: 1
 
 checks:
   - filter:
-      min-version: 8
       filename: suricata.json
       count: 1
       match:

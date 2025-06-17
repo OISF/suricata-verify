@@ -10,12 +10,10 @@ args:
 
 checks:
   - filter:
-      min-version: 7
       count: 60
       match:
         event_type: smb
   - filter:
-      min-version: 7
       count: 1
       match:
         event_type: smb

@@ -37,7 +37,6 @@ checks:
 # Generated checks below.
       
 - filter:
-    min-version: 8
     count: 1
     match:
       alert.action: allowed
@@ -106,8 +105,6 @@ checks:
       src_ip: 1.1.1.1
       src_port: 5333
 - filter:
-    requires:
-      min-version: 8
     count: 1
     match:
       alert.action: allowed

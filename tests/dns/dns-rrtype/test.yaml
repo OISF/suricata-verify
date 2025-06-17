@@ -5,8 +5,6 @@ pcap: ../dns-eve-empty-format/input.pcap
 
 checks:
   - filter:
-      requires:
-        min-version: 8
       count: 1
       match:
         alert.signature_id: 1

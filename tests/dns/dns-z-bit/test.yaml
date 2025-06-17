@@ -12,8 +12,6 @@ checks:
       dns.type: request
       dns.z: true
 - filter:
-    requires:
-      min-version: 8
     count: 1
     match:
       event_type: alert
