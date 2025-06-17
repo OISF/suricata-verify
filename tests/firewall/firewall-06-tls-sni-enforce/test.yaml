@@ -20,7 +20,6 @@ checks:
       event_type: alert
 - filter:
     # check for https://redmine.openinfosecfoundation.org/issues/7350
-    min-version: 8
     count: 4
     match:
       event_type: alert

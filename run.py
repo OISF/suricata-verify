@@ -140,6 +140,9 @@ class UnsatisfiedRequirementError(Exception):
 class ImpossibleRequirementError(Exception):
     pass
 
+class UnnecessaryRequirementError(Exception):
+    pass
+
 class TerminatePoolError(Exception):
     pass
 
@@ -327,6 +330,11 @@ def check_filter_test_version_compat(requires, test_version):
                 if not is_version_compatible(version=requires["lt-version"], suri_version=parse_suricata_version(test_version["min"]), expr="lt"):
                     raise ImpossibleRequirementError(
                         "test requires min {} check requires lt-version {}".format(test_version["min"], requires["lt-version"]))
+        elif key == "min-version":
+            if "min" in test_version:
+                if requires["min-version"] == test_version["min"]:
+                    raise UnnecessaryRequirementError(
+                        "test already requires min {} not needed for the check {}".format(test_version["min"], requires["min-version"]))
 
 def check_requires(requires, suricata_config: SuricataConfig):
     suri_version = suricata_config.version

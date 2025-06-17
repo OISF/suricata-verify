@@ -72,7 +72,6 @@ checks:
       stats.exception_policy.app_layer.error.pass_packet: 1
       stats.exception_policy.app_layer.error.drop_packet: 0
 - filter:
-    min-version: 8
     count: 1
     match:
       event_type: flow
