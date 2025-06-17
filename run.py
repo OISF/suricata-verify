@@ -137,6 +137,9 @@ class TestError(Exception):
 class UnsatisfiedRequirementError(Exception):
     pass
 
+class ImpossibleRequirementError(Exception):
+    pass
+
 class TerminatePoolError(Exception):
     pass
 
@@ -315,6 +318,15 @@ class SuricataConfig:
     def has_feature(self, feature):
         return feature in self.features
 
+
+def check_filter_test_version_compat(requires, test_version):
+    for key in requires:
+        # TODO more tests, including linter tests of redundant min-version
+        if key == "lt-version":
+            if "min" in test_version:
+                if not is_version_compatible(version=requires["lt-version"], suri_version=parse_suricata_version(test_version["min"]), expr="lt"):
+                    raise ImpossibleRequirementError(
+                        "test requires min {} check requires lt-version {}".format(test_version["min"], requires["lt-version"]))
 
 def check_requires(requires, suricata_config: SuricataConfig):
     suri_version = suricata_config.version
@@ -517,11 +529,12 @@ class StatsCheck:
 
 class FilterCheck:
 
-    def __init__(self, config, outdir, suricata_config):
+    def __init__(self, config, outdir, suricata_config, test_version):
         self.config = config
         self.outdir = outdir
         self.suricata_config = suricata_config
         self.suri_version = suricata_config.version
+        self.test_version = test_version
 
     def run(self):
         requires = self.config.get("requires", {})
@@ -534,6 +547,7 @@ class FilterCheck:
             requires["min-version"] = min_version
         if lt_version is not None:
             requires["lt-version"] = lt_version
+        check_filter_test_version_compat(requires, self.test_version)
         feature = self.config.get("feature")
         if feature is not None:
             requires["features"] = [feature]
@@ -602,6 +616,8 @@ class TestRunner:
         self.force = force
         self.output = outdir
         self.quiet = quiet
+        # version requirements for test, to check compatibility with checks requirements
+        self.version = {}
 
         # The name is just the directory name.
         self.name = os.path.basename(self.directory)
@@ -674,6 +690,15 @@ class TestRunner:
     def check_requires(self):
         requires = self.config.get("requires", {})
         check_requires(requires, self.suricata_config)
+        for key in requires:
+            if key == "min-version":
+                self.version["min"] = requires["min-version"]
+            elif key == "lt-version":
+                self.version["lt"] = requires["lt-version"]
+            elif key == "gt-version":
+                self.version["gt"] = requires["gt-version"]
+            elif key == "version":
+                self.version["eq"] = requires["version"]
 
         # Check if a pcap is required or not. By default a pcap is
         # required unless a "command" has been provided.
@@ -831,7 +856,7 @@ class TestRunner:
     @handle_exceptions
     def perform_filter_checks(self, check, count, test_num, test_name):
         count = FilterCheck(check, self.output,
-                self.suricata_config).run()
+                self.suricata_config, self.version).run()
         return count
 
     @handle_exceptions
