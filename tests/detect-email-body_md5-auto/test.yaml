@@ -1,0 +1,18 @@
+requires:
+  min-version: 9
+
+pcap: ../bug-3616-smtp/input.pcap
+
+args:
+  - -k none --set stream.inline=true
+
+checks:
+- filter:
+    count: 0
+    match:
+      event_type: smtp
+      has-key: email.body_md5
+- filter:
+    count: 2
+    match:
+      event_type: smtp
