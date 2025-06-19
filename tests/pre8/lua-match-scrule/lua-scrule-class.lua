@@ -1,6 +1,5 @@
 function init(args)
-    local needs = {}
-    return needs
+    return {}
 end
 
 function match(args)

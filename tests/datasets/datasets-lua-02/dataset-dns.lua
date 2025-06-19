@@ -4,8 +4,7 @@ local dns = require("suricata.dns")
 local logger = require("suricata.log")
 
 function init (args)
-    local needs = {}
-    return needs
+    return {}
 end
 
 function thread_init (args)
