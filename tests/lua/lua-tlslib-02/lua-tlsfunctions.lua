@@ -1,9 +1,7 @@
 local tls = require("suricata.tls")
 
 function init (args)
-    local needs = {}
-    -- needs["tls"] = true
-    return needs
+    return {}
 end
 
 function match(args)

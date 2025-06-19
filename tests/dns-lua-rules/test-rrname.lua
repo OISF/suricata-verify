@@ -1,8 +1,7 @@
 local dns = require("suricata.dns")
 
 function init (args)
-   local needs = {}
-   return needs
+   return {}
 end
 
 function match(args)

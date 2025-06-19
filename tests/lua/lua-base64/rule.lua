@@ -8,8 +8,7 @@ local expected_base64_nopad = "d3d3LnN1cmljYXRhLWlkcy5vcmc"
 local input_base64_with_spaces = "d3 d3 Ln N1 cm lj YX Rh LW lk cy 5v cm c="
 
 function init (args)
-   local needs = {}
-   return needs
+   return {}
 end
 
 function match(args)

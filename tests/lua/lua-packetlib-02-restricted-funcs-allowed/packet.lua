@@ -2,8 +2,7 @@ local packet = require "suricata.packet"
 local logger = require("suricata.log")
 
 function init (args)
-    local needs = {}
-    return needs
+    return {}
 end
 
 function match (args)
