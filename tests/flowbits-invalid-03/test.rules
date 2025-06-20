@@ -1,0 +1,1 @@
+alert http any any -> any any (msg: "Illegal flowbit set + toggle combination"; http.method; content:"GET"; flowbits:set,fb1; flowbits:toggle,fb1; sid:111;)
