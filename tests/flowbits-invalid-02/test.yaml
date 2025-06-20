@@ -1,0 +1,16 @@
+requires:
+  min-version: 9
+
+pcap: false
+
+exit-code: 1
+
+args:
+  - --engine-analysis
+
+checks:
+  - filter:
+      count: 1
+      match:
+        log_level: Error
+        engine.message: "invalid flowbit command combination in the same signature: unset and isnotset"
