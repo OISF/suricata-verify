@@ -48,7 +48,7 @@ checks:
         event_type: flow
         flow.action: drop
   - filter:
-      min-version: 8
+      min-version: 7.0.12
       count: 1
       match:
         event_type: stats
@@ -62,3 +62,10 @@ checks:
         flow.exception_policy[0].policy: "pass_packet"
         flow.exception_policy[1].target: "app_layer_error"
         flow.exception_policy[1].policy: "ignore"
+  - filter:
+      min-version: 7.0.12
+      count: 1
+      match:
+        event_type: stats
+        stats.exception_policy.tcp.reassembly.pass_packet: 1
+        not-has-key: stats.exception_policy.app_layer.error

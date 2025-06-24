@@ -48,10 +48,12 @@ checks:
         event_type: flow
         flow.action: drop
   - filter:
+      min-version: 7.0.12
       count: 1
       match:
         event_type: stats
         stats.ips.drop_reason.stream_reassembly: 1
+        stats.exception_policy.tcp.reassembly.drop_flow: 1
   - filter:
       min-version: 8
       count: 1

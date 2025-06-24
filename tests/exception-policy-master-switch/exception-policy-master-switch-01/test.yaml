@@ -43,7 +43,7 @@ checks:
         flow.exception_policy[0].target: "stream_midstream"
         flow.exception_policy[0].policy: "drop_flow"
   - filter:
-      min-version: 8
+      min-version: 7.0.12
       count: 1
       match:
         event_type: stats

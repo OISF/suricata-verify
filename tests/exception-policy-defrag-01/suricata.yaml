@@ -22,6 +22,10 @@ outputs:
         - flow
         - stats
 
+stats:
+  exception-policy:
+    global-stats: true
+
 action-order:
   - pass
   - drop

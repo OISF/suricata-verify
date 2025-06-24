@@ -39,7 +39,7 @@ checks:
         event_type: stats
         stats.ips.drop_reason.defrag_memcap: 1
   - filter:
-      min-version: 8
+      min-version: 7.0.12
       count: 1
       match:
         event_type: stats

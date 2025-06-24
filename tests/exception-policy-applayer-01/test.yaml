@@ -53,12 +53,13 @@ checks:
         event_type: stats
         stats.ips.drop_reason.applayer_error: 1
   - filter:
-      min-version: 8
+      min-version: 7.0.12
       count: 1
       match:
         event_type: stats
         stats.exception_policy.app_layer.error.drop_flow: 1
         stats.exception_policy.app_layer.error.pass_flow: 0
+        not-has-key: stats.app_layer.error.tls.exception_policy.drop_flow
   - filter:
       min-version: 8
       count: 1

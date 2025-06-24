@@ -25,3 +25,9 @@ checks:
         event_type: flow
         flow.exception_policy[0].target: "stream_midstream"
         flow.exception_policy[0].policy: "reject"
+  - filter:
+      min-version: 7.0.12
+      count: 1
+      match:
+        event_type: stats
+        stats.exception_policy.tcp.midstream.reject: 1
