@@ -1,6 +1,10 @@
 %YAML 1.1
 ---
 
+stats:
+  exception-policy:
+    global-stats: true
+
 outputs:
   - eve-log:
       enabled: yes
@@ -20,6 +24,7 @@ outputs:
             flows: all       # start or all: 'start' logs only a single drop
                              # per flow direction. All logs each dropped pkt.
         - flow
+        - stats
 action-order:
   - pass
   - drop

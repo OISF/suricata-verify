@@ -37,4 +37,5 @@ stats:
   enabled: yes
   interval: 8
   exception-policy:
+    global-stats: true
     per-app-proto-errors: true
