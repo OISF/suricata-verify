@@ -4,6 +4,8 @@
 stats:
   enabled: yes
   interval: 8
+  exception-policy:
+    global-stats: true
 
 outputs:
   - eve-log:

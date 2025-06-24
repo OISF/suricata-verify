@@ -41,3 +41,10 @@ checks:
         flow.exception_policy[0].policy: "pass_flow"
         flow.exception_policy[1].target: "app_layer_error"
         flow.exception_policy[1].policy: "ignore"
+  - filter:
+      min-version: 7.0.12
+      count: 1
+      match:
+        event_type: stats
+        stats.exception_policy.tcp.reassembly.pass_flow: 1
+        not-has-key: stats.app_layer.error.tls.exception_policy

@@ -3,6 +3,8 @@
 
 stats:
   enabled: yes
+  exception-policy:
+    global-stats: true
 
 outputs:
   - eve-log:

@@ -1,6 +1,9 @@
 %YAML 1.1
 ---
 
+stats:
+  enabled: true
+
 outputs:
   - eve-log:
       enabled: yes
@@ -23,6 +26,7 @@ outputs:
               header: X-Forwarded-For
         - flow
         - http
+        - stats
         - drop:
             alerts: yes
             flows: all

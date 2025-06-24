@@ -34,3 +34,7 @@ outputs:
        filename: stats.log
        append: yes
 
+stats:
+  exception-policy:
+    global-stats: true
+
