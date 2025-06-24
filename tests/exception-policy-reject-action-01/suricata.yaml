@@ -5,8 +5,9 @@ outputs:
   - eve-log:
       enabled: yes
       types:
-        - alert:
-        - flow
+        - alert
+        - flow:
+            exception-policy: true
         - http
         - stats
         - drop:
