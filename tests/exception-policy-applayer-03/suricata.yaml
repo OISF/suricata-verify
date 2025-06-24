@@ -26,7 +26,8 @@ outputs:
             totals: yes
             threads: no
             deltas: no
-        - flow
+        - flow:
+            exception-policy: true
   - stats:
       enabled: yes
       filename: stats.log

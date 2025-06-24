@@ -10,7 +10,8 @@ outputs:
       enabled: yes
       types:
         - alert
-        - flow
+        - flow:
+            exception-policy: true
         - http
         - stats
   - stats:
