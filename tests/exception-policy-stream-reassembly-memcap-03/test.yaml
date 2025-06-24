@@ -31,7 +31,7 @@ checks:
         event_type: flow
         flow.state: bypassed
   - filter:
-      min-version: 8
+      min-version: 7.0.12
       count: 1
       match:
         event_type: flow

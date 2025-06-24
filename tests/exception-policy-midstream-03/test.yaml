@@ -25,7 +25,7 @@ checks:
         event_type: http
         dest_port: 80
   - filter:
-      min-version: 8
+      min-version: 7.0.12
       count: 1
       match:
         event_type: flow
