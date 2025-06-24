@@ -1,5 +1,5 @@
 requires:
-  min-version: 8
+  min-version: 7.0.11
   features:
     - DEBUG
 pcap: ../bittorrent-dht/input.pcap
@@ -66,6 +66,7 @@ checks:
       src_ip: 190.0.0.2
       src_port: 50000
 - filter:
+    min-version: 7.0.11
     count: 1
     match:
       event_type: stats
