@@ -1,0 +1,14 @@
+args:
+  - --set pcap-file.delete-when-done=non-alerts
+
+checks:
+  # Expect at least one alert generated
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+
+  # After run the temp pcap must still exist (alert present)
+  - shell:
+      args: test -f $TEST_DIR/input.pcap && echo exists || echo missing
+      expect: exists 
