@@ -1,0 +1,23 @@
+requires:
+  min-version: 8
+
+command: |
+  cp -f ${TEST_DIR}/input_origin.pcap ${TEST_DIR}/input.pcap && \
+  ${SRCDIR}/src/suricata \
+  -c ${TEST_DIR}/suricata.yaml \
+  -r ${TEST_DIR}/input.pcap \
+  -l ${OUTPUT_DIR} \
+  --set classification-file="${SRCDIR}/etc/classification.config" \
+  --set reference-config-file="${SRCDIR}/etc/reference.config"
+  
+checks:
+  # Expect no alerts generated
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+
+  # The input PCAP should have been deleted since no alerts were generated
+  - shell:
+      args: test -f $TEST_DIR/input.pcap && echo exists || echo missing
+      expect: missing 
