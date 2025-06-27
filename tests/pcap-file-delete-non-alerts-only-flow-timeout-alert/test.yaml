@@ -1,0 +1,13 @@
+command: |
+  ${SRCDIR}/src/suricata       -c ${SRCDIR}/suricata.yaml       -S ${TEST_DIR}/test.rules       -r ${TEST_DIR}/input.pcap       -l ${OUTPUT_DIR}       --set pcap-file.delete-when-done=non-alerts       --set classification-file="${SRCDIR}/etc/classification.config"       --set reference-config-file="${SRCDIR}/etc/reference.config"
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1234
+
+  - shell:
+      args: test -f $TEST_DIR/input.pcap && echo exists || echo missing
+      expect: exists

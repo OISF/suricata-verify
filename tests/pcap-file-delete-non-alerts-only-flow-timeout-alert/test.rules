@@ -1,0 +1,2 @@
+alert tls any any -> any any (msg:"SERVER HELLO DATA - to_client"; flow:established,to_client; tls.random; content:"|54 b8 f7 73|"; bsize:>1; stream_size:server,>,1111; prefilter; sid:1234;)
+
