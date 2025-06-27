@@ -1,0 +1,7 @@
+%YAML 1.1
+---
+
+include: ../alert-testmyids/default.yaml
+
+pcap-file:
+  delete-non-alerts-only: true 

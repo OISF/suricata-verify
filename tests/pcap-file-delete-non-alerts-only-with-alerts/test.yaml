@@ -1,0 +1,16 @@
+command: |
+  ${SRCDIR}/src/suricata --pcap-file-delete -k none \
+      -c ${TEST_DIR}/suricata.yaml -l ${OUTPUT_DIR} \
+      -r ${TEST_DIR}/input.pcap -S ${TEST_DIR}/test.rules
+
+checks:
+  # Expect at least one alert generated
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+
+  # After run the temp pcap must still exist (alert present)
+  - shell:
+      args: test -f $TEST_DIR/input.pcap && echo exists || echo missing
+      expect: exists 
