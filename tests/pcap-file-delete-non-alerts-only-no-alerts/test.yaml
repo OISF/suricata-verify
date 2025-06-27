@@ -1,0 +1,23 @@
+requires:
+  min-version: 9
+
+pcap: false
+
+setup:
+  - script: cp -f $TEST_DIR/input.pcap.bak $TEST_DIR/input.pcap
+
+args:
+  - -r $TEST_DIR/input.pcap
+  - --set pcap-file.delete-when-done=non-alerts
+
+checks:
+  # Expect no alerts generated
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+
+  # The input PCAP should have been deleted since no alerts were generated
+  - shell:
+      args: test -f $TEST_DIR/input.pcap && echo exists || echo missing
+      expect: missing

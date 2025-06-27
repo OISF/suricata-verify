@@ -672,7 +672,8 @@ class TestRunner:
                         subprocess.check_call(
                             "%s" % setup[command],
                             shell=True,
-                            cwd=self.output)
+                            cwd=self.output,
+                            env=self.build_env())
 
     def check_unix_socket(self):
         if "unix-commands" in self.config:
