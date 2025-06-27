@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"HTTP Host testmyids.com"; content:"testmyids.com"; http_header; nocase; sid:2; rev:1;) 

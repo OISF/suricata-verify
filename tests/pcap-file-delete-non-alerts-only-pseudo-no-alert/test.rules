@@ -1,0 +1,2 @@
+# no alerts
+pass tls any any -> any any (msg:"pass"; flow:established; sid:999999;)

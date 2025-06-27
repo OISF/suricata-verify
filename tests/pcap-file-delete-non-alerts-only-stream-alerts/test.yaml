@@ -1,0 +1,16 @@
+requires:
+  min-version: 9
+
+args:
+  - --set pcap-file.delete-when-done=non-alerts
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1234
+
+  - shell:
+      args: test -f $TEST_DIR/input.pcap && echo exists || echo missing
+      expect: exists
