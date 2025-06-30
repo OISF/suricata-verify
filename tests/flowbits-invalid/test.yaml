@@ -1,0 +1,14 @@
+requires:
+  min-version: 8
+
+pcap: false
+
+args:
+  - --engine-analysis
+
+checks:
+  - filter:
+      count: 1
+      match:
+        log_level: Warning
+        engine.message: "Setting isset and set on the same flowbit in the same signature is unnecessary and will be disallowed soon"
