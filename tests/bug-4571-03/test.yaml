@@ -1,5 +1,5 @@
 requires:
-  min-version: 8
+  min-version: 7.0.11
 
 args:
 - -k none
@@ -14,7 +14,6 @@ checks:
         alert.signature_id: 1
         pkt_src: ipv6 tunnel
         proto: TCP
-        ip_v: 6
         src_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:8334
         dest_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:8335
         tunnel.src_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:7334
@@ -25,11 +24,41 @@ checks:
       match:
         event_type: flow
         proto: TCP
+        src_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:8334
+        dest_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:8335
+        flow.alerted: true
+  - filter:
+      count: 1
+      match:
+        proto: IPv6
+        src_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:7334
+        dest_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:7335
+  - filter:
+      min-version: 8
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pkt_src: ipv6 tunnel
+        proto: TCP
+        ip_v: 6
+        src_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:8334
+        dest_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:8335
+        tunnel.src_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:7334
+        tunnel.dest_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:7335
+        tunnel.proto: IPv6
+  - filter:
+      min-version: 8
+      count: 1
+      match:
+        event_type: flow
+        proto: TCP
         ip_v: 6
         src_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:8334
         dest_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:8335
         flow.alerted: true
   - filter:
+      min-version: 8
       count: 1
       match:
         proto: IPv6
