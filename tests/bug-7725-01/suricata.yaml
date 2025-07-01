@@ -26,4 +26,6 @@ outputs:
         - drop:
             alerts: yes
         - flow
-        - stats
+  - stats:
+      enabled: yes
+      filename: stats.log

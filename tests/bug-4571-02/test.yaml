@@ -1,5 +1,5 @@
 requires:
-  min-version: 8
+  min-version: 7.0.11
 
 args:
 - -k none
@@ -8,6 +8,18 @@ args:
 
 checks:
   - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pkt_src: wire/pcap
+        proto: TCP
+        pkt_src: wire/pcap
+        src_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:7334
+        dest_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:7335
+  - filter:
+      # ip_v field was introduced in Suricata 8
+      min-version: 8
       count: 1
       match:
         event_type: alert

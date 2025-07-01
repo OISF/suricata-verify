@@ -3,7 +3,7 @@
 
 decoder:
   ipv4:
-    enabled: true
+    enabled: false
 
 stats:
   enabled: yes
@@ -27,3 +27,6 @@ outputs:
             alerts: yes
         - flow
         - stats
+  - stats:
+      enabled: yes
+      filename: stats.log

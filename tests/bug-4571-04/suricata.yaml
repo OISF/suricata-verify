@@ -1,6 +1,10 @@
 %YAML 1.1
 ---
 
+decoder:
+  ipv4:
+    enabled: true
+
 stats:
   enabled: yes
   interval: 8

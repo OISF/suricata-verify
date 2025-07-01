@@ -1,5 +1,5 @@
 requires:
-  min-version: 8
+  min-version: 7.0.11
 
 args:
 - -k none
@@ -27,9 +27,27 @@ checks:
         proto: IPv6
         src_ip: 10.1.0.1
         dest_ip: 10.1.0.2
+        flow.alerted: false
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        proto: TCP
+        src_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:7334
+        dest_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:7335
+        flow.alerted: true
+  - filter:
+      min-version: 8
+      count: 1
+      match:
+        event_type: flow
+        proto: IPv6
+        src_ip: 10.1.0.1
+        dest_ip: 10.1.0.2
         ip_v: 4
         flow.alerted: false
   - filter:
+      min-version: 8
       count: 1
       match:
         event_type: flow
