@@ -1,0 +1,19 @@
+requires:
+  features:
+      - HAVE_MIMETYPE
+
+# disables checksum verification
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1337
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1338
