@@ -4,7 +4,7 @@ requires:
 
 # disables checksum verification
 args:
-- -k none
+- -k none --set outputs.1.eve-log.types.6.files.force-mimetype=yes
 
 checks:
   - filter:
@@ -17,3 +17,13 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 1338
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.mimetype: application/vnd.microsoft.portable-executable
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.mimetype: application/x-msdownload
