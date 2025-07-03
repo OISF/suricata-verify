@@ -1,0 +1,21 @@
+setup:
+  - script: cp ../input_origin.pcap ../input.pcap
+
+pcap: false
+
+command: |
+  ${SRCDIR}/src/suricata --pcap-file-delete -k none \
+      -c ${TEST_DIR}/suricata.yaml -l ${OUTPUT_DIR} \
+      -r ${TEST_DIR}/input.pcap -S ${TEST_DIR}/empty.rules
+
+checks:
+  # Expect no alerts generated
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+
+  # The input PCAP should have been deleted since no alerts were generated
+  - shell:
+      args: test -f $TEST_DIR/input.pcap && echo exists || echo missing
+      expect: missing 
