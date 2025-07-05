@@ -1,0 +1,89 @@
+requires:
+  min-version: 8.0.1
+
+pcap: ../entropy-01/input.pcap
+
+args:
+  - --set logging.entropy.make-unique=on
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        metadata.entropy.sid:1;buffer:file_data;instance:1: 4.137370175000773
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        metadata.entropy.sid:2;buffer:file_data;instance:1: 4.137370175000773
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
+        metadata.entropy.sid:4;buffer:file_data;instance:1: 4.137370175000773
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 5
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 6
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 7
+        metadata.entropy.sid:7;buffer:file_data;instance:1: 4.137370175000773
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 8
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 10
+        metadata.entropy.sid:10;buffer:file_data;instance:1: 4.150007324019584
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 10
+        metadata.entropy.sid:10;buffer:file_data;instance:1: 4.150007324019584
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 11
+        metadata.entropy.sid:11;buffer:file_data;instance:1: 4.137370175000773
+        metadata.entropy.sid:11;buffer:file_data;instance:2: 4.150007324019584
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_ip: 10.92.95.2
+        dest_ip: 10.92.67.138
+        flow.pkts_toserver: 5
+        flow.pkts_toclient: 5
+        metadata.entropy.sid:1;buffer:file_data;instance:1: 4.137370175000773
+        metadata.entropy.sid:2;buffer:file_data;instance:1: 4.137370175000773
+        metadata.entropy.sid:3;buffer:file_data;instance:1: 4.137370175000773
+        metadata.entropy.sid:4;buffer:file_data;instance:1: 4.137370175000773
+        metadata.entropy.sid:5;buffer:file_data;instance:1: 4.137370175000773
+        metadata.entropy.sid:6;buffer:file_data;instance:1: 4.137370175000773
+        metadata.entropy.sid:7;buffer:file_data;instance:1: 4.137370175000773
+        metadata.entropy.sid:8;buffer:file_data;instance:1: 4.137370175000773
+        metadata.entropy.sid:10;buffer:file_data;instance:1: 4.150007324019584
