@@ -469,8 +469,7 @@ class FileCompareCheck:
 
     def run(self):
         if WIN32:
-            print("skipping shell check on windows")
-            return True;
+            raise UnsatisfiedRequirementError("shell check not supported on Windows")
         expected = os.path.join(self.directory, self.config["expected"])
         filename = self.config["filename"]
         try:
@@ -505,8 +504,7 @@ class ShellCheck:
 
         try:
             if WIN32:
-                print("skipping shell check on windows")
-                return True;
+                raise UnsatisfiedRequirementError("shell check not supported on Windows")
             output = subprocess.check_output(self.config["args"], shell=True, env=self.env)
             if "expect" in self.config:
                 return str(self.config["expect"]) == output.decode().strip()
