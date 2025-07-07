@@ -1,0 +1,1 @@
+alert smtp any any -> any any (msg:"MIME Type Test"; file.mime_type; content:"pdf"; sid:1337; rev:1;)
