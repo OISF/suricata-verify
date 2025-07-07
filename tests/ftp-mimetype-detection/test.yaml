@@ -1,0 +1,19 @@
+requires:
+  features:
+      - HAVE_MIMETYPE
+
+# disables checksum verification
+args:
+- -k none --runmode=single --set outputs.1.eve-log.types.6.files.force-mimetype=yes
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1338
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.mimetype: application/pdf
