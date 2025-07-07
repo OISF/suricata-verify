@@ -208,3 +208,54 @@ jobs:
         run: |
           . ../testenv/bin/activate
           python3 ../run.py --quiet
+
+  windows:
+    name: Windows
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        branch:
+          - master
+          - main-7.0.x
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - name: Cache ~/.cargo
+        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57
+        with:
+          path: ~/.cargo/registry
+          key: cargo-registry
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: ucrt64
+          update: true
+          install: |
+            autoconf
+            automake
+            git
+            make
+            mingw-w64-ucrt-x86_64-cbindgen
+            mingw-w64-ucrt-x86_64-jansson
+            mingw-w64-ucrt-x86_64-jq
+            mingw-w64-ucrt-x86_64-libpcap
+            mingw-w64-ucrt-x86_64-libtool
+            mingw-w64-ucrt-x86_64-libyaml
+            mingw-w64-ucrt-x86_64-pcre2
+            mingw-w64-ucrt-x86_64-python-yaml
+            mingw-w64-ucrt-x86_64-rust
+            mingw-w64-ucrt-x86_64-toolchain
+            unzip
+      - uses: actions/checkout@v3
+      - run: git clone https://github.com/OISF/suricata -b ${{ matrix.branch }}
+      - run: git clone https://github.com/OISF/libhtp suricata/libhtp
+      - name: Build Suricata
+        working-directory: suricata
+        run: |
+          ./autogen.sh
+          ./configure
+          make -j3
+      - name: Running suricata-verify
+        working-directory: suricata
+        run: python3 ../run.py --quiet
