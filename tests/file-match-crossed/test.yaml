@@ -16,32 +16,26 @@ checks:
         event_type: alert
         alert.signature_id: 2
   - filter:
-      # Suricata 7 does not manage to decode the second file (its size is 0)
-      min-version: 8
       count: 1
       match:
         event_type: alert
         alert.signature_id: 3
   - filter:
-      min-version: 8
       count: 1
       match:
         event_type: alert
         alert.signature_id: 4
   - filter:
-      min-version: 8
       count: 1
       match:
         event_type: alert
         alert.signature_id: 5
   - filter:
-      min-version: 8
       count: 1
       match:
         event_type: alert
         alert.signature_id: 6
   - filter:
-      min-version: 8
       count: 1
       match:
         event_type: alert
