@@ -59,3 +59,9 @@ checks:
         event_type: flow
         app_proto: doh2
         app_proto_orig: http2
+  - filter:
+      min-version: 8.0.1
+      count: 0
+      match:
+        event_type: dns
+        not-has-key: dns
