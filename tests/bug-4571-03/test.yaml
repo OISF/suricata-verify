@@ -32,6 +32,7 @@ checks:
   - filter:
       count: 1
       match:
+        event_type: flow
         proto: IPv6
         ip_v: 6
         src_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:7334
