@@ -1,0 +1,42 @@
+requires:
+  min-version: 7.0.12
+
+pcap: ../bug-4571-03/ipv6_over_ipv6.pcap
+
+args:
+- -k none
+- --simulate-ips
+- --set stream.midstream=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pkt_src: ipv6 tunnel
+        proto: TCP
+        src_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:8334
+        dest_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:8335
+        tunnel.src_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:7334
+        tunnel.dest_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:7335
+        tunnel.proto: IPv6
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        proto: TCP
+        src_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:8334
+        dest_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:8335
+        flow.alerted: true
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        proto: IPv6
+        src_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:7334
+        dest_ip: 2001:0db8:85a3:0000:0000:8a2e:0370:7335
+  - filter:
+      count: 2
+      match:
+        event_type: flow
