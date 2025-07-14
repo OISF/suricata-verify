@@ -7,7 +7,7 @@ pcap-file:
 outputs:
   - eve-log:
       enabled: yes
-      filetype: regular #regular|syslog|unix_dgram|unix_stream|redis
+      filetype: regular
       filename: eve.json
       types:
         - alert

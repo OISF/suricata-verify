@@ -3,7 +3,7 @@ command: |
   ${SRCDIR}/src/suricata \
   -c ${TEST_DIR}/suricata.yaml \
   -r ${TEST_DIR}/input.pcap \
-  -l ${TEST_DIR}/output \
+  -l ${OUTPUT_DIR} \
   --set classification-file="${SRCDIR}/etc/classification.config" \
   --set reference-config-file="${SRCDIR}/etc/reference.config"
   
