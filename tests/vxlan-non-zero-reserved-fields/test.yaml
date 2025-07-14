@@ -1,0 +1,25 @@
+requires:
+  min-version: 8
+
+args:
+  - --set decoder.vxlan.enabled=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_port: 51252
+        dest_port: 80
+        flow.pkts_toserver: 5
+        flow.pkts_toclient: 5
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        dest_port: 4789
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.decoder.vxlan: 10
