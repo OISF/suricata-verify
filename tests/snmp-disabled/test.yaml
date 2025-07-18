@@ -1,0 +1,11 @@
+args:
+  - -k none
+
+pcap: ../snmp-v2c-get/SNMPv2c_get_requests.pcap
+
+checks:
+ - filter:
+     count: 0
+     match:
+       event_type: flow
+       app_proto: snmp
