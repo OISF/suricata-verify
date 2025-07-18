@@ -1,0 +1,17 @@
+requires:
+  min-version: 8
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      community_id: 1:IJQHtzXv/tXud3FtXIufkDsfEd4=
+      dest_ip: 192.168.0.254
+      dest_port: 3306
+      event_type: flow
+      proto: TCP
+      src_ip: 192.168.0.254
+      src_port: 56162

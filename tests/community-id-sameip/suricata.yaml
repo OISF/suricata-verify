@@ -1,0 +1,10 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      community-id: true
+      community-id-seed: 1
+      types:
+        - flow
