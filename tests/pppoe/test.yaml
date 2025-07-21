@@ -1,0 +1,8 @@
+requires:
+  min-version: 8
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
