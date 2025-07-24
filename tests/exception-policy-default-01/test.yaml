@@ -29,3 +29,9 @@ checks:
         event_type: flow
         not-has-key: flow.exception_policy[0].target
         not-has-key: flow.exception_policy[0].policy
+  - filter:
+      min-version: 7.0.12
+      count: 1
+      match:
+        event_type: stats
+        not-has-key: stats.exception_policy

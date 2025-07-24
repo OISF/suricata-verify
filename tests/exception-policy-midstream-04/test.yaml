@@ -20,7 +20,7 @@ checks:
     match:
       event_type: http
 - filter:
-    min-version: 8
+    min-version: 7.0.12
     count: 1
     match:
       event_type: stats

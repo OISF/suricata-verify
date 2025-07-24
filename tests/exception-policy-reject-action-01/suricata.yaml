@@ -8,6 +8,11 @@ outputs:
         - alert:
         - flow
         - http
+        - stats
         - drop:
             alerts: yes
             flows: all
+
+stats:
+  exception-policy:
+    global-stats: true
