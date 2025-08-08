@@ -361,6 +361,11 @@ def check_requires(requires, suricata_config: SuricataConfig, test_dir=None):
                 if not suricata_config.has_feature(feature):
                     raise UnsatisfiedRequirementError(
                         "requires feature %s" % (feature))
+        elif key == "skip-features":
+            for feature in requires["skip-features"]:
+                if suricata_config.has_feature(feature):
+                    raise UnsatisfiedRequirementError(
+                        "requires feature %s to be skipped" % (feature))
         elif key == "env":
             for env in requires["env"]:
                 if not env in os.environ:

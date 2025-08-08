@@ -72,6 +72,10 @@ requires:
     # Restrict the test to builds with HAVE_LUA.
     - HAVE_LUA
 
+  # Requires specific features to not be present
+  skip-features:
+    - HAVE_LUA
+
   # Require that one or more files exist in the Suricata source directory
   files:
 	- src/detect-ipaddr.c
