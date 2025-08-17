@@ -1,0 +1,1 @@
+alert smtp any any -> any any (msg:"Decode User value";frame:smtp.command_line; from_base64; content:"galunt"; sid:1;)
