@@ -1,0 +1,22 @@
+requires:
+  min-version: 8.0.1
+
+pcap: ../smtp-long-DATA-line/input.pcap
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+         event_type: alert
+         alert.signature_id: 1
+         frame.payload: "WjJGc2RXNTANCg=="
+
+  - filter:
+      count: 1
+      match:
+         event_type: alert
+         alert.signature_id: 1
+         frame.payload: "WjJGc2RXNTA="
