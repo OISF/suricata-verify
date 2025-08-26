@@ -1,2 +1,6 @@
 alert icmp any any -> any any (itype:8; sid:1;)
 alert icmp any any -> any any (itype:8; prefilter; sid:2;)
+
+alert icmp any any -> any any (itype: <= 8; prefilter; sid:3;)
+alert icmp any any -> any any (itype: >= 8; prefilter; sid:4;)
+alert icmp any any -> any any (itype: != 0; prefilter; sid:5;)
