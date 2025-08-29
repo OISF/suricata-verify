@@ -13,7 +13,8 @@ outputs:
             payload-printable: yes
             packet: yes
             http: yes
-        - flow
+        - flow:
+            exception-policy: true
         - http
         - stats
   - stats:

@@ -61,7 +61,7 @@ checks:
         stats.exception_policy.app_layer.error.pass_flow: 0
         not-has-key: stats.app_layer.error.tls.exception_policy.drop_flow
   - filter:
-      min-version: 8
+      min-version: 7.0.12
       count: 1
       match:
         event_type: flow

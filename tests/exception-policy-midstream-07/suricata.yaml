@@ -8,7 +8,8 @@ outputs:
       filename: eve.json
       types:
         - alert
-        - flow
+        - flow:
+            exception-policy: true
         - smb
         - drop:
             alerts: yes

@@ -25,7 +25,8 @@ outputs:
               mode: extra-data
               deployment: reverse
               header: X-Forwarded-For
-        - flow
+        - flow:
+            exception-policy: true
         - http
         - stats
         - drop:
