@@ -13,19 +13,16 @@ checks:
         event_type: alert
         alert.signature_id: 2
   - filter:
-      min-version: 8.0.1
       count: 150
       match:
         event_type: alert
         alert.signature_id: 3
   - filter:
-      min-version: 8.0.1
       count: 75
       match:
         event_type: alert
         alert.signature_id: 4
   - filter:
-      min-version: 8.0.1
       count: 75
       match:
         event_type: alert
