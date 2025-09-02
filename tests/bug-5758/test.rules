@@ -1,0 +1,1 @@
+alert tls any any -> any any (tls.sni; content:"ftp.nluug.nl"; sid:1;)
