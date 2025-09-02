@@ -1,0 +1,14 @@
+requires:
+  min-version: 7
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: http
+      http.url: /test_lastline_blocking
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
