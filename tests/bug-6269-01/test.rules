@@ -1,0 +1,1 @@
+alert http any any -> any any (http.uri; content:"/test_lastline_blocking"; sid:1;)
