@@ -35,3 +35,30 @@ checks:
     match:
       event_type: smtp
       email.received[2]: "from smtp.relay2.com (smtp.relay2.com [10.0.0.20]) by smtp.destination.com with ESMTP id final123; Thu, 10 Apr 2025 12:02:00 -0000"
+- filter:
+    count: 1
+    match:
+      event_type: smtp
+      email.received.__len: 3
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 10
+      # we do not have a way to log email.received in alerts
+      # see https://redmine.openinfosecfoundation.org/issues/7696
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 11
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 20
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 21
