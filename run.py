@@ -1158,8 +1158,9 @@ def build_eve_validator():
     env = os.environ.copy()
     if "CARGO_BUILD_TARGET" in env:
         del env["CARGO_BUILD_TARGET"]
+    cargo = env.get("CARGO", "cargo")
     subprocess.check_call(
-            "cargo build --release", cwd=os.path.join(TOPDIR, "eve-validator"),
+            "{} build --release".format(cargo), cwd=os.path.join(TOPDIR, "eve-validator"),
             shell=True, env=env)
 
 def main():
