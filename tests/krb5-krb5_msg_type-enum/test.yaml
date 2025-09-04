@@ -1,0 +1,30 @@
+requires:
+  # TODO should likely be 9
+  min-version: 8.0.1
+
+args:
+- -k none
+
+pcap: ../krb5-krb5_msg_type/input.pcap 
+
+checks:
+- filter:
+    count: 8
+    match:
+      event_type: alert
+      alert.signature_id: 10
+
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 11
+
+- filter:
+    count: 9
+    match:
+      event_type: alert
+      alert.signature_id: 30
+
+
+
