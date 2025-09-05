@@ -1,0 +1,3 @@
+alert http any any -> any any (http.method; content:"POST"; sid:1;)
+# w/o threshold to track each event
+alert tcp any any -> any any (msg:"SURICATA STREAM 3way handshake excessive different SYNs"; stream-event:3whs_syn_flood; classtype:protocol-command-decode; sid:2210063; rev:2;)
