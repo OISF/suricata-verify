@@ -1,0 +1,14 @@
+requires:
+  min-version: 8
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: http
+      http.url: /
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      tcp.state: closed
