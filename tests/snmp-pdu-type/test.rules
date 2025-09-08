@@ -1,0 +1,2 @@
+alert snmp any any -> any any (msg:"SNMP Test Rule"; snmp.pdu_type: get_next_request; sid:1; rev:1;)
+alert snmp any any -> any any (msg:"SNMP Test Rule"; snmp.pdu_type: 1; sid:2; rev:1;)

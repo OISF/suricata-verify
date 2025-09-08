@@ -1,0 +1,19 @@
+requires:
+  min-version: 9
+
+pcap: ../snmp-v2c-get/SNMPv2c_get_requests.pcap
+
+checks:
+ - filter:
+     count: 1
+     match:
+       event_type: alert
+       alert.signature_id: 1
+       snmp.pdu_type: get_next_request
+
+ - filter:
+     count: 1
+     match:
+       event_type: alert
+       alert.signature_id: 2
+       snmp.pdu_type: get_next_request
