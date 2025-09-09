@@ -1,0 +1,44 @@
+requires:
+  min-version: 9
+
+args:
+- -k none
+- --set stream.midstream=true
+- --set app-layer.protocols.nfs.enabled=yes
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        app_proto: nfs
+        alert.signature_id: 1
+        nfs.procedure: WRITE
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        app_proto: nfs
+        alert.signature_id: 2
+        nfs.procedure: WRITE
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        app_proto: nfs
+        alert.signature_id: 3
+        nfs.procedure: WRITE
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        app_proto: nfs
+        alert.signature_id: 4
+        nfs.procedure: WRITE
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        app_proto: nfs
+        alert.signature_id: 5
+        nfs.procedure: WRITE

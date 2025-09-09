@@ -1,0 +1,10 @@
+# 2 matches for generic write
+alert nfs any any -> any any (flow:to_server; nfs_procedure:WRITE; sid:1;)
+# 1 for write v4
+alert nfs any any -> any any (flow:to_server; nfs_procedure:WRITE; nfs_version:3; sid:2;)
+# 1 for write v3
+alert nfs any any -> any any (flow:to_server; nfs_procedure:WRITE; nfs_version:4; sid:3;)
+# numeric value for write v3
+alert nfs any any -> any any (flow:to_server; nfs_procedure:7; nfs_version:3; sid:4;)
+# numeric value for write v4
+alert nfs any any -> any any (flow:to_server; nfs_procedure:38; nfs_version:4; sid:5;)
