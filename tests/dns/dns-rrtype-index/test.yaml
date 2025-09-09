@@ -1,0 +1,21 @@
+requires:
+  min-version: 8.0.1
+
+pcap: ../dns-eve-empty-format/input.pcap
+
+checks:
+  - filter:
+      count: 3
+      match:
+        alert.signature_id: 1
+        event_type: alert
+  - filter:
+      count: 3
+      match:
+        alert.signature_id: 2
+        event_type: alert
+  - filter:
+      count: 4
+      match:
+        alert.signature_id: 3
+        event_type: alert
