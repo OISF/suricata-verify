@@ -26,8 +26,9 @@ jobs:
       fail-fast: false
       matrix:
         branch:
-          - master
+          - main
           - main-7.0.x
+          - main-8.0.x
     steps:
       - name: Install dependencies
         run: |
@@ -96,8 +97,9 @@ jobs:
       fail-fast: false
       matrix:
         branch:
-          - master
+          - main
           - main-7.0.x
+          - main-8.0.x
     steps:
       - name: Install dependencies
         run: |
@@ -162,8 +164,9 @@ jobs:
       fail-fast: false
       matrix:
         branch:
-          - master
+          - main
           - main-7.0.x
+          - main-8.0.x
     steps:
       - name: Install dependencies
         run: |
@@ -216,8 +219,9 @@ jobs:
       fail-fast: false
       matrix:
         branch:
-          - master
+          - main
           - main-7.0.x
+          - main-8.0.x
     defaults:
       run:
         shell: msys2 {0}
