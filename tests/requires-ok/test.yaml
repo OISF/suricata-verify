@@ -5,10 +5,25 @@ pcap: ../eve-metadata/testmyids.pcap
 
 checks:
 
+  # Check that for Suricata >= 9.0.0 we have one alert and that alert is sid 900.
+  - filter:
+      requires:
+        min-version: 9
+      count: 2
+      match:
+        event_type: alert
+  - filter:
+      requires:
+        min-version: 9
+      count: 1
+      match:
+        alert.signature_id: 900
+
   # Check that for Suricata >= 8.0.0 we have one alert and that alert is sid 8.
   - filter:
       requires:
         min-version: 8
+        lt-version: 9
       count: 1
       match:
         event_type: alert
@@ -46,16 +61,27 @@ checks:
       count: 1
       match:
         event_type: stats
-        stats.detect.engines[0].rules_skipped: 6
+        stats.detect.engines[0].rules_skipped: 7
         stats.detect.engines[0].rules_loaded: 2
         stats.detect.engines[0].rules_failed: 0
 
   - filter:
       requires:
         min-version: 8
+        lt-version: 9
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.engines[0].rules_skipped: 8
+        stats.detect.engines[0].rules_loaded: 1
+        stats.detect.engines[0].rules_failed: 0
+
+  - filter:
+      requires:
+        min-version: 9
       count: 1
       match:
         event_type: stats
         stats.detect.engines[0].rules_skipped: 7
-        stats.detect.engines[0].rules_loaded: 1
+        stats.detect.engines[0].rules_loaded: 2
         stats.detect.engines[0].rules_failed: 0

@@ -1,8 +1,8 @@
 # Rule for Suricata >= 7 and < 8.
 alert http any any -> any any (msg:"TEST Suricata >= 7 and < 8"; content:"uid=0"; requires: version >= 7 < 8; sid:7; rev:1;)
 
-# Rule for Suricata >= 7.0.3 but less than 8... Or >= 8.0.1
-alert http any any -> any any (content:"uid=0"; requires: version >= 7.0.3 < 8 | >= 8.0.99; sid:9; rev:1;)
+# Rule for Suricata >= 7.0.3 but less than 8... or beyond 9
+alert http any any -> any any (content:"uid=0"; requires: version >= 7.0.3 < 8 | >= 9.0.99; sid:9; rev:1;)
 
 # Rule for Suricata >= 8, with pretty useless check for sid keyword.
 alert http any any -> any any (msg:"TEST Suricata >= 8"; content:"uid=0"; requires: version >= 8.0.0, keyword sid; sid:8; rev:1;)
@@ -16,3 +16,7 @@ alert vxlan any any -> any any (requires: version >= 10; sid:1;)
 alert udp any any -> any any (vxlan_vni:10; requires: version >= 10; sid:2;)
 alert http any any => any any (requires: version >= 10; sid:3;)
 alert tcp any any -> any any (frame:smtp.not_supported; requires: version >= 10; sid:4;)
+
+# Rule for Suricata >= 9, with pretty useless check for sid keyword.
+alert http any any -> any any (msg:"TEST Suricata >= 9"; content:"uid=0"; requires: version >= 9.0.0, keyword sid; sid:900; rev:1;)
+
