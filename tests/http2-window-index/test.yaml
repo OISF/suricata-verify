@@ -1,0 +1,54 @@
+requires:
+  min-version: 9
+
+pcap: ../http2-keywords/input.pcap
+
+# disables checksum verification
+args:
+  - -k none
+
+checks:
+  # Check that there is one file event with content range.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
+  - filter:
+      count: 28
+      match:
+        event_type: alert
+        alert.signature_id: 5
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 6
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 7
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 8
+        http.http2.stream_id: 5
+  - filter:
+      # 28 + 1
+      count: 29
+      match:
+        event_type: alert
+        alert.signature_id: 9
+  - filter:
+      count: 34
+      match:
+        event_type: alert
+        alert.signature_id: 10
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 11
+        http.http2.stream_id: 5

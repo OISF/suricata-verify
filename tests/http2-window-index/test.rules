@@ -1,0 +1,16 @@
+# happens once
+alert http2 any any -> any any (http2.window:32768; sid:4; rev:1;)
+# happens many times because many txs do not have any http2.window
+alert http2 any any -> any any (http2.window:32768,all; sid:5; rev:1;)
+# does not happen as tx is 3 has http2.window:32768 and http2.window:32767
+alert http2 any any -> any any (http2.window:32768,all1; sid:6; rev:1;)
+# matches (range is exclusive)
+alert http2 any any -> any any (http2.window:32766-32769,all1; sid:7; rev:1;)
+# matches for stream id 5
+alert http2 any any -> any any (http2.window:>36000,nb>1; sid:8; rev:1;)
+# happens many times because many txs do not have any http2.window
+alert http2 any any -> any any (http2.window:32768,or_absent; sid:9; rev:1;)
+# tx does not have (at least) 3 windows
+alert http2 any any -> any any (http2.window:123,oob_or 2; sid:10; rev:1;)
+
+alert http2 any any -> any any (http2.window:>36000,nb>1,1:-1; sid:11; rev:1;)
