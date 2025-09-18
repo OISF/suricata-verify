@@ -11,16 +11,12 @@ checks:
         event_type: anomaly
 # check gzip decompresser
   - filter:
-      requires:
-        features: [HTTP2_DECOMPRESSION]
       count: 1
       match:
         event_type: fileinfo
         fileinfo.size: 639
 # check brotli decompresser
   - filter:
-      requires:
-        features: [HTTP2_DECOMPRESSION]
       count: 1
       match:
         event_type: fileinfo
