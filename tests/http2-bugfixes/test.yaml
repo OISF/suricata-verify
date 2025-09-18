@@ -30,3 +30,9 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 10
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 11
+        http.http2.request.priority: 255

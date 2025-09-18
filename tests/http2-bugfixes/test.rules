@@ -1,1 +1,3 @@
 alert http2 any any -> any any (http.cookie; content:"VISITOR"; sid:10;)
+
+alert http2 any any -> any any (http2.priority: >250; sid:11;)
