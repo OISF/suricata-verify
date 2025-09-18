@@ -1,0 +1,14 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+pcap: ../mqtt-connect-rules/mqtt5_pub_jpeg.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
