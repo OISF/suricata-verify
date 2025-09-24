@@ -1,0 +1,30 @@
+requires:
+  min-version: 9
+
+pcap: ../dnp3-eve/input.pcap
+
+checks:
+  - filter:
+      count: 2
+      match:
+        alert.signature_id: 1
+        dnp3.response.iin.indicators[0]: device_restart
+        checks:
+  - filter:
+      count: 2
+      match:
+        alert.signature_id: 2
+        dnp3.response.iin.indicators[0]: device_restart
+  - filter:
+      count: 2
+      match:
+        alert.signature_id: 3
+  - filter:
+      count: 2
+      match:
+        alert.signature_id: 4
+        dnp3.response.iin.indicators[0]: device_restart
+  - filter:
+      count: 0
+      match:
+        alert.signature_id: 5

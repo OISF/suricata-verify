@@ -1,0 +1,19 @@
+# Should match.
+alert dnp3 any any -> any any (msg:"DNP3 ind test_restart string"; \
+      dnp3.ind:device_restart; sid:1; rev:1;)
+
+# Should match.
+alert dnp3 any any -> any any (msg:"DNP3 ind test_restart num"; \
+      dnp3.ind:0x8000; sid:2; rev:1;)
+
+# Should match.
+alert dnp3 any any -> any any (msg:"DNP3 ind not zero"; \
+      dnp3.ind:!0; sid:3; rev:1;)
+
+alert dnp3 any any -> any any (msg:"DNP3 ind test_restart multi"; \
+      dnp3.ind:device_restart,!need_time; sid:4; rev:1;)
+
+# Should not match.
+alert dnp3 any any -> any any (msg:"DNP3 ind need_time"; \
+      dnp3.ind:need_time; sid:5; rev:1;)
+
