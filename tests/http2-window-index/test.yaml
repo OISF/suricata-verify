@@ -52,3 +52,9 @@ checks:
         event_type: alert
         alert.signature_id: 11
         http.http2.stream_id: 5
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 12
+        http.http2.stream_id: 5
