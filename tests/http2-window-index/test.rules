@@ -14,3 +14,5 @@ alert http2 any any -> any any (http2.window:32768,or_absent; sid:9; rev:1;)
 alert http2 any any -> any any (http2.window:123,oob_or 2; sid:10; rev:1;)
 
 alert http2 any any -> any any (http2.window:>36000,nb>1,1:-1; sid:11; rev:1;)
+
+alert http2 any any -> any any (http2.window:count>5; sid:12; rev:1;)
