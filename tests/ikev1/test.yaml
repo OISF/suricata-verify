@@ -10,6 +10,7 @@ checks:
   - filter:
       count: 1
       match:
+        pcap_cnt: 4
         event_type: ike
         ike.init_spi: "e47a591fd057587f"
         ike.resp_spi: "a00b8ef0902bb8ec"
