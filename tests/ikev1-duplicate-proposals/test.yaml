@@ -1,0 +1,10 @@
+requires:
+  min-version: 9.0.0
+
+checks:
+  - filter:
+      count: 1
+      match:
+        ike.version: 2
+        ike.ikev1.client.proposals[3]: {"key": "sa_life_duration", "value": "Unknown", "raw": 86400}
+        ike.ikev1.client.proposals[7]: {"key": "sa_life_duration", "value": "Unknown", "raw": 65535}
