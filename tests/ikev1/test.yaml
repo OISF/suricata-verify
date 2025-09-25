@@ -8,6 +8,8 @@ checks:
         app_proto: ike
 
   - filter:
+      requires:
+        lt-version: 9.0.0
       count: 1
       match:
         pcap_cnt: 4
@@ -21,3 +23,23 @@ checks:
         ike.alg_hash: "HashSha"
         ike.alg_dh: "GroupAlternate1024BitModpGroup"
         ike.alg_auth: "AuthPreSharedKey"
+
+  - filter:
+      requires:
+        min-version: 9.0.0
+      count: 1
+      match:
+        pcap_cnt: 4
+        event_type: ike
+        ike.version: 2
+        ike.init_spi: "e47a591fd057587f"
+        ike.resp_spi: "a00b8ef0902bb8ec"
+        ike.exchange_type: 2
+        ike.ikev1.client.nonce_payload: "89d7c8fbf94b515b521d5d9589c2602021e1a709"
+        ike.ikev1.server.nonce_payload: "15b688421ed5c3dd92d3b86e47a76f0d39cc09e0"
+        ike.attributes[0].value: "EncAesCbc"
+        ike.attributes[2].value: "HashSha"
+        ike.attributes[3].value: "GroupAlternate1024BitModpGroup"
+        ike.attributes[4].value: "AuthPreSharedKey"
+        ike.attributes[5]: {"key": "sa_life_type", "value": "LifeTypeSeconds", "raw": 1}
+        ike.attributes[6]: {"key": "sa_life_duration", "value": "Unknown", "raw": 86400}
