@@ -1,0 +1,33 @@
+requires:
+  min-version: 8
+
+args:
+- --set app-layer.protocols.socks.tcp.detection-ports.dp=9200
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: socks
+        socks.auth_methods.request[0]: "No authentication"
+        socks.auth_methods.request[1]: "No authentication"
+        socks.auth_methods.response: "No authentication"
+  - filter:
+      count: 1
+      match:
+        event_type: socks
+        socks.connect.domain: "eternityms33k74r7iuuxfda4sqsiei3o3lbtr5cpalf6f4skszpruad.onion"
+        socks.connect.port: 80
+        socks.connect.response: "Success"
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.url: "/stld/2ed742b9631a445a90864552c8b213a9?u=YWRtaW4%3D&p=VVNFUi1QQw%3D%3D&i=ODQuMTcuNDguMTgy&co=R2VybWFueSAoREUp&ci=RnJhbmtmdXJ0IGFtIE1haW4%3D&t=Y2hyaWJvdHM%3D"
+        http.status: 200
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: http
+        app_proto_orig: socks
