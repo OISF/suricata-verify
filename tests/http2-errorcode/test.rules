@@ -1,0 +1,2 @@
+alert http2 any any -> any any (http2.errorcode:PROTOCOLERROR; sid:1;)
+alert http2 any any -> any any (http2.errorcode:!NOERROR; sid:2;)
