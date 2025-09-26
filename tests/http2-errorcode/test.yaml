@@ -1,0 +1,25 @@
+requires:
+  min-version: 9
+
+# disables checksum verification
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        http.http2.request.error_code: INTERNALERROR
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        http.http2.request.error_code: INTERNALERROR
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 3

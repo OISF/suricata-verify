@@ -1,0 +1,6 @@
+alert http2 any any -> any any (http2.errorcode:INTERNAL_ERROR; sid:1;)
+alert http2 any any -> any any (http2.errorcode:!NO_ERROR; sid:2;)
+# no match
+alert http2 any any -> any any (http2.errorcode:HTTP_1_1_REQUIRED; sid:3;)
+# new format
+alert http2 any any -> any any (http2.errorcode:HTTP11_REQUIRED; sid:4;)
