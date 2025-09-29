@@ -1,0 +1,14 @@
+requires:
+  min-version: 9
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: fileinfo
+      fileinfo.filename: related.patch
+      fileinfo.size: 34224
+      fileinfo.sha256: 359641873610597882317aee0f72104ed54fe8aa82d6fa323a5418e4529bd3b9
