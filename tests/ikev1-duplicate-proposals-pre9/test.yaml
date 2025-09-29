@@ -1,0 +1,12 @@
+requires:
+  min-version: 8.0.2
+  lt-version: 9
+
+pcap: ../ikev1-duplicate-proposals/generated.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        ike.ikev1.client.proposals[3]: {"key": "sa_life_duration", "value": "Unknown", "raw": 86400}
+        ike.ikev1.client.proposals[7]: {"key": "sa_life_duration", "value": "Unknown", "raw": 65535}

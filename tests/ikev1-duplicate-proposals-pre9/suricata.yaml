@@ -1,0 +1,12 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: true
+      filetype: regular
+      filename: eve.json
+      types:
+        - ike:
+            object-attributes: true
+       
