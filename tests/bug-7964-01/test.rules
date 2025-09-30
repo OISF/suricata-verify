@@ -1,0 +1,1 @@
+alert pkthdr any any -> any any (msg:"SURICATA IPv4-in-IPv6 invalid protocol"; decode-event:ipv6.ipv4_in_ipv6_wrong_version; classtype:protocol-command-decode; sid:2200083; rev:2;)

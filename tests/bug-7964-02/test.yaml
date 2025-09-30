@@ -1,0 +1,23 @@
+requires:
+  min-version: 9
+
+args:
+- -k none
+- --set stream.midstream=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2200085
+        proto: IPv6
+        ip_v: 6
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.decoder.pkts: 1
+        stats.decoder.invalid: 1
+        stats.decoder.ipv6: 1
+        stats.decoder.event.ipv6.ipv6_in_ipv6_wrong_version: 1
