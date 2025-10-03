@@ -1,5 +1,3 @@
-requires:
-    min-version: 8
 
 args:
 - -k none
@@ -16,6 +14,16 @@ checks:
       decoder.unknown_ethertype: 1
   - filter:
       count: 1
+      min-version: 9
+      match:
+        event_type: anomaly
+        ether.ether_type: 64439
+        anomaly.type: decode
+        anomaly.event: decoder.ethernet.unknown_ethertype
+  - filter:
+      count: 1
+      min-version: 8
+      lt-version: 9
       match:
         event_type: anomaly
         ether.ether_type: 47099
