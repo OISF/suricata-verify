@@ -1,0 +1,12 @@
+requires:
+  min-version: 9
+
+pcap: ../issue-3277-nfsv2-filestore/nfsv2.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        app_proto: nfs
+        alert.signature_id: 1
