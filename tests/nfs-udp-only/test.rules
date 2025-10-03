@@ -1,0 +1,1 @@
+alert nfs any any -> any any (msg:"FILE store in NFS"; filestore; sid:1; rev:1;)
