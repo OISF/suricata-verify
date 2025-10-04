@@ -3,8 +3,13 @@ requires:
 
 checks:
 - filter:
+    lt-version: 9
     count: 5
-    # count: 56
+    match:
+      event_type: pop3
+- filter:
+    min-version: 9
+    count: 56
     match:
       event_type: pop3
 
@@ -44,21 +49,23 @@ checks:
       pop3.request.command: "LIST"
       pop3.response.success: true
 
-# Bug with sawp_pop3 causing early exit
-# - filter:
-#     count: 1
-#     match:
-#       pop3.request.command: "RSET"
-#       pop3.response.success: true
+- filter:
+    min-version: 9
+    count: 1
+    match:
+      pop3.request.command: "RSET"
+      pop3.response.success: true
 
-# - filter:
-#     count: 1
-#     match:
-#       pop3.request.command: "UIDL"
-#       pop3.response.success: true
+- filter:
+    min-version: 9
+    count: 1
+    match:
+      pop3.request.command: "UIDL"
+      pop3.response.success: true
 
-# - filter:
-#     count: 49
-#     match:
-#       pop3.request.command: "TOP"
-#       pop3.response.success: true
+- filter:
+    min-version: 9
+    count: 49
+    match:
+      pop3.request.command: "TOP"
+      pop3.response.success: true
