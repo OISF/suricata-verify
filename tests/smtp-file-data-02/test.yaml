@@ -45,7 +45,7 @@ checks:
       event_type: alert
       files[0].filename: NEWS.txt
       files[0].gaps: false
-      # files[0].size: 10807 TODO min-version 8
+      files[0].size: 10807
       files[0].state: CLOSED
       files[0].stored: false
       files[0].tx_id: 0
