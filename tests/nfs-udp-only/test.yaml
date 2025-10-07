@@ -1,5 +1,5 @@
 requires:
-  min-version: 9
+  min-version: 8.0.2
 
 pcap: ../issue-3277-nfsv2-filestore/nfsv2.pcap
 
