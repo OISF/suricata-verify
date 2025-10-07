@@ -1,0 +1,62 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+- filter:
+    count: 2
+    match:
+      event_type: flow
+      app_proto: pop3
+
+- filter:
+    count: 1
+    match:
+      pop3.request.command: "PASS"
+      pop3.response.success: true
+      pop3.response.status: "OK"
+
+- filter:
+    count: 1
+    match:
+      pop3.request.command: "PASS"
+      pop3.response.success: false
+      pop3.response.header: "the password incorrect"
+      pop3.response.status: "ERR"
+
+- filter:
+    count: 1
+    match:
+      pop3.request.command: "LIST"
+      pop3.request.args: []
+      pop3.response.success: true
+      pop3.response.status: "OK"
+      pop3.response.header: "5 21639"
+      pop3.response.data[0]: "1 247"
+      pop3.response.data[1]: "2 6668"
+      pop3.response.data[2]: "3 6668"
+      pop3.response.data[3]: "4 1388"
+      pop3.response.data[4]: "5 6668"
+
+- filter:
+    count: 1
+    match:
+      pop3.request.command: "UIDL"
+      pop3.request.args: []
+      pop3.response.success: true
+      pop3.response.status: "OK"
+      pop3.response.header: ""
+      pop3.response.data[0]: "1 test.tt.com.cmailserver.1"
+      pop3.response.data[1]: "2 test.tt.com.cmailserver.2"
+      pop3.response.data[2]: "3 test.tt.com.cmailserver.3"
+      pop3.response.data[3]: "4 test.tt.com.cmailserver.4"
+      pop3.response.data[4]: "5 test.tt.com.cmailserver.5"
+
+- filter:
+    count: 2
+    match:
+      pop3.request.command: "QUIT"
+      pop3.response.success: true
+      pop3.response.status: "OK"

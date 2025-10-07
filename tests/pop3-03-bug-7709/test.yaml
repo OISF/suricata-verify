@@ -1,0 +1,39 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+- filter:
+    count: 2
+    match:
+      event_type: flow
+      app_proto: pop3
+
+- filter:
+    count: 1
+    match:
+      pop3.request.command: "PASS"
+      pop3.response.success: true
+      pop3.response.status: "OK"
+
+- filter:
+    count: 1
+    match:
+      pop3.request.command: "PASS"
+      pop3.response.success: false
+      pop3.response.header: "the password incorrect"
+      pop3.response.status: "ERR"
+
+- filter:
+    count: 1
+    match:
+      pop3.request.command: "LIST"
+
+- filter:
+    count: 1
+    match:
+      pop3.request.command: "QUIT"
+      pop3.response.success: true
+      pop3.response.status: "OK"
