@@ -46,6 +46,7 @@ import yaml
 import traceback
 import platform
 import signal
+import time
 
 VALIDATE_EVE = False
 WIN32 = sys.platform == "win32"
@@ -810,7 +811,21 @@ class TestRunner:
 
                 p = subprocess.Popen(
                     args, shell=shell, cwd=self.directory, env=env,
-                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid)
+
+                if "live" in self.config:
+                    argsl = ["tcpreplay", "-i", self.config["live"]]
+                    pcaps = glob.glob(os.path.join(self.directory, "*.pcap"))
+                    pcaps += glob.glob(os.path.join(self.directory, "*.pcapng"))
+                    if len(pcaps) > 1:
+                        raise TestError("More than 1 pcap file found")
+                    argsl.append(pcaps[0])
+                    time.sleep(1)
+                    pl = subprocess.Popen(
+                        argsl, shell=shell, cwd=self.directory, env=env,
+                        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    time.sleep(1)
+                    os.killpg(os.getpgid(p.pid), signal.SIGTERM)
 
                 # used to get a return value from the threads
                 self.utf8_errors=[]
@@ -982,7 +997,9 @@ class TestRunner:
         args += ["-c", self.get_suricata_yaml_path()]
 
         # Find pcaps.
-        if "pcap" in self.config:
+        if "live" in self.config:
+            args += ["-i", self.config["live"]]
+        elif "pcap" in self.config:
             pcap_path = os.path.join(self.directory, self.config["pcap"])
             if not os.path.exists(pcap_path):
                 raise TestError("PCAP filename does not exist: {}".format(self.config["pcap"]))

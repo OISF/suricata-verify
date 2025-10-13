@@ -1,0 +1,27 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert
+        - flow
+
+decoder:
+  vxlan:
+    enabled: true
+    ports: 4789
+  tunnels:
+    - id: 1
+      type: vxlan
+      src: 192.168.1.3
+      dst: 192.168.1.2
+      session: 123
+
+af-packet:
+  - interface: default
+    xdp-mode: soft
+    bypass: yes

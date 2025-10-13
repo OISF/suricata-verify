@@ -1,0 +1,37 @@
+requires:
+  min-version: 9
+  os: linux
+  # TODO run as root, or at least sufficient privileges for XDP
+  features:
+    - EBPF
+
+live: lo
+
+args:
+  - --set af-packet.0.xdp-filter-file=${SRCDIR}/ebpf/xdp_filter.bpf
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        tunnel_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        tunnel_id: 1
+  - filter:
+      count: 2
+      match:
+        event_type: flow
+        tunnel_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        tunnel_id: 1
+        flow.state: bypassed
+        flow.bypass: capture
