@@ -3,6 +3,8 @@ requires:
   os: linux
   features:
     - EBPF
+  files:
+    - ebpf/xdp_filter.bpf
 
 args:
   - --set af-packet.0.xdp-filter-file=${SRCDIR}/ebpf/xdp_filter.bpf
