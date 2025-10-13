@@ -4,6 +4,8 @@ requires:
   # TODO run as root, or at least sufficient privileges for XDP
   features:
     - EBPF
+  files:
+    - ebpf/xdp_filter.bpf
 
 live: lo
 
