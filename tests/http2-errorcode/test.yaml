@@ -1,5 +1,5 @@
 requires:
-  min-version: 9
+  min-version: 8.0.2
 
 # disables checksum verification
 args:
@@ -13,6 +13,7 @@ checks:
         alert.signature_id: 1
         http.http2.request.error_code: INTERNALERROR
   - filter:
+      min-version: 9
       count: 2
       match:
         event_type: alert
