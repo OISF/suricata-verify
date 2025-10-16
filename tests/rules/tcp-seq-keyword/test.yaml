@@ -7,6 +7,7 @@ args:
 
 checks:
 - filter:
+    lt-version: 9.0
     filename: rules.json
     count: 1
     match:
@@ -14,8 +15,24 @@ checks:
       lists.packet.matches[0].name: "tcp.seq"
       lists.packet.matches[0].seq.number: 624
 - filter:
+    lt-version: 9.0
     filename: rules.json
     count: 1
     match:
         id: 2
         lists.packet.matches[0].seq.number: 723833
+- filter:
+    min-version: 9.0
+    filename: rules.json
+    count: 1
+    match:
+      id: 1
+      lists.packet.matches[0].name: "tcp.seq"
+      lists.packet.matches[0].seq.equal: 624
+- filter:
+    min-version: 9.0
+    filename: rules.json
+    count: 1
+    match:
+        id: 2
+        lists.packet.matches[0].seq.equal: 723833
