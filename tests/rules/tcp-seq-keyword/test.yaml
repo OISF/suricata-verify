@@ -1,5 +1,5 @@
 requires:
-    min-version: 8.0
+    min-version: 9.0
     pcap: false
 
 args:
@@ -12,10 +12,10 @@ checks:
     match:
       id: 1
       lists.packet.matches[0].name: "tcp.seq"
-      lists.packet.matches[0].seq.number: 624
+      lists.packet.matches[0].seq.equal: 624
 - filter:
     filename: rules.json
     count: 1
     match:
         id: 2
-        lists.packet.matches[0].seq.number: 723833
+        lists.packet.matches[0].seq.equal: 723833

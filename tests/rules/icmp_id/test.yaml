@@ -1,5 +1,5 @@
 requires:
-    min-version: 8.0
+    min-version: 9.0
     pcap: false
 
 args:
@@ -12,4 +12,4 @@ checks:
     match:
       id: 1
       lists.packet.matches[0].name: "icmp_id"
-      lists.packet.matches[0].id.number: 2
+      lists.packet.matches[0].id.equal: 2
