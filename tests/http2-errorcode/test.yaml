@@ -1,5 +1,5 @@
 requires:
-  min-version: 8.0.2
+  min-version: 7.0.13
 
 # disables checksum verification
 args:
