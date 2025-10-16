@@ -1,0 +1,27 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      types:
+        - stats:
+  - pcap-log:
+      enabled: yes
+      filename: log.pcap.%n-%t-%i
+      compression: none
+      mode: multi
+      limit: 4mb
+      ts-format: usec
+      bpf-filter: tcp and not port 443
+
+# Enable enging logging to JSON so we can verify it.
+logging:
+  outputs:
+    - console:
+        enabled: yes
+    - file:
+        enabled: yes
+        level: perf
+        filename: eve.json
+        type: json
