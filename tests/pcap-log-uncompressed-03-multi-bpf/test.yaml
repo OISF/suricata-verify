@@ -1,0 +1,18 @@
+requires:
+  min-version: 9
+      
+pcap: ../bug-2482-01/proxyCONNECT_443.pcap
+
+args:
+  - --runmode=single
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.pcap_log.written: 38
+        stats.pcap_log.filtered_bpf: 14063
+  - shell:
+      args: find . -type f -name 'log.pcap.1-1523389*.*-*' | wc -l | xargs
+      expect: 1
