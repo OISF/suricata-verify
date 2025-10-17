@@ -1,0 +1,23 @@
+args:
+  - -k none
+
+requires:
+  min-version: 8
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: http
+      http.http_method: POST
+      http.http_user_agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.2792.79
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 13
+    match:
+      event_type: alert
+      alert.signature_id: 2210063
