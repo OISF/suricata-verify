@@ -1,0 +1,30 @@
+args:
+- --set stream.midstream=true
+- --set stream.async-oneside=false
+
+pcap: ../stream-async-6063-cli-01/http-request-header-async-cli.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        proto: TCP
+        flow.pkts_toserver: 5
+        flow.pkts_toclient: 0
+        flow.bytes_toserver: 696
+        flow.bytes_toclient: 0
+        flow.age: 0
+        flow.state: new
+        flow.reason: shutdown
+        flow.alerted: false
+        tcp.tcp_flags: '1b'
+        tcp.tcp_flags_tc: '00'
+        tcp.tcp_flags_ts: '1b'
+        tcp.fin: true
+        tcp.psh: true
+        tcp.ack: true
+        tcp.syn: true
+        tcp.state: syn_sent
+        tcp.ts_max_regions: 1
+        tcp.tc_max_regions: 1

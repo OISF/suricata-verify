@@ -1,0 +1,50 @@
+args:
+- --set stream.midstream=true
+- --set stream.async-oneside=false
+
+pcap: ../../../alert-testmyids-async/input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 80
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        src_port: 80
+        dest_port: 54186
+        anomaly.app_proto: http
+        anomaly.type: applayer
+        anomaly.event: "UNABLE_TO_MATCH_RESPONSE_TO_REQUEST"
+        anomaly.layer: proto_parser
+  - filter:
+      count: 1
+      match:
+        event_type: http
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        proto: TCP
+        app_proto: http
+        flow.pkts_toserver: 0
+        flow.pkts_toclient: 4
+        flow.bytes_toserver: 0
+        flow.bytes_toclient: 495
+        flow.age: 0
+        flow.state: established
+        flow.reason: shutdown
+        flow.alerted: true
+        tcp.tcp_flags: "1b"
+        tcp.tcp_flags_ts: "00"
+        tcp.tcp_flags_tc: "1b"
+        tcp.syn: true
+        tcp.fin: true
+        tcp.psh: true
+        tcp.ack: true
+        tcp.state: fin_wait1
+        tcp.ts_max_regions: 1
+        tcp.tc_max_regions: 1
