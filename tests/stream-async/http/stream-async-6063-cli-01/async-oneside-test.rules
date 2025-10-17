@@ -1,0 +1,4 @@
+alert http any any -> any any (msg:"request_header"; flow:established,to_server; http.request_header; content:"Connection|3a 20|"; classtype:bad-unknown; sid:1; rev:1;)
+alert http any any -> any any (msg:"response_header"; flow:established,to_client; http.response_header; content:"Connection|3a 20|"; classtype:bad-unknown; sid:2; rev:1;)
+alert http any any -> any any (msg:"request_header"; flow:established,to_server; http.request_header; content:"User-Agent|3a 20|"; classtype:bad-unknown; sid:3; rev:1;)
+alert http any any -> any any (msg:"response_header"; flow:established,to_client; http.response_header; content:"Date|3a 20|"; classtype:bad-unknown; sid:4; rev:1;)

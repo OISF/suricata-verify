@@ -1,0 +1,54 @@
+pcap: ../../../bug-2491-02/simple_http_download.onesided.nosyn.pcap
+
+args:
+- --set stream.async-oneside=false
+- --set stream.midstream=true
+- --set stream.midstream-policy=ignore
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        not-has-key: pcap_cnt
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        not-has-key: pcap_cnt
+  - filter:
+      count: 3
+      match:
+        event_type: http
+        not-has-key: pcap_cnt
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        proto: TCP
+        app_proto: http
+        flow.pkts_toserver: 11
+        flow.pkts_toclient: 0
+        flow.bytes_toserver: 1787
+        flow.bytes_toclient: 0
+        flow.age: 10
+        flow.state: established
+        flow.reason: shutdown
+        flow.alerted: true
+        tcp.tcp_flags: '19'
+        tcp.tcp_flags_ts: '19'
+        tcp.tcp_flags_tc: '00'
+        tcp.fin: true
+        tcp.psh: true
+        tcp.ack: true
+        tcp.state: close_wait
+        tcp.ts_max_regions: 1
+        tcp.tc_max_regions: 1
+
+
