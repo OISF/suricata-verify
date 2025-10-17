@@ -1,0 +1,51 @@
+args:
+- --set stream.midstream=true
+- --set stream.async-oneside=true
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        dest_port: 80
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        dest_port: 80
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        dest_port: 80
+        alert.signature_id: 3
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        dest_port: 80
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: http
+        proto: TCP
+        flow.pkts_toserver: 5
+        flow.pkts_toclient: 0
+        flow.bytes_toserver: 696
+        flow.bytes_toclient: 0
+        flow.age: 0
+        flow.state: established
+        flow.reason: shutdown
+        flow.alerted: true
+        tcp.tcp_flags: 1b
+        tcp.tcp_flags_tc: '00'
+        tcp.tcp_flags_ts: 1b
+        tcp.fin: true
+        tcp.psh: true
+        tcp.ack: true
+        tcp.syn: true
+        tcp.state: established
+        tcp.ts_max_regions: 1
+        tcp.tc_max_regions: 1
