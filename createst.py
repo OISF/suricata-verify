@@ -1,4 +1,4 @@
-#! /bin/python
+#! /usr/bin/env python3
 #
 # Copyright (C) 2019-2022 Open Information Security Foundation
 #
@@ -393,6 +393,8 @@ def parse_args():
                         help="Adds a suricata.yaml to the test")
     parser.add_argument("--features", default=None, metavar="<features>",
                         help="Adds specified features")
+    parser.add_argument("--set", default=None, action="append",
+                        help="Adds a suricata runtime option")                    
     # add arg to allow stdout only
     args = parser.parse_args()
 
@@ -421,6 +423,38 @@ def eve2test():
         return
     filter_event_type_params(eve_rules=content)
 
+    output_path = os.path.join(test_dir, "test.yaml")
+
+    with open(output_path, "r") as f:
+        test_data = yaml.safe_load(f)
+    if args.get("set"):
+        new_args = [f"--set {x}" for x in args["set"]]
+        if "args" in test_data:
+            test_data["args"].extend(new_args)
+        else:
+            test_data["args"] = new_args
+
+        features = ["HAVE_LIBJANSSON"]
+        if "features" in test_data:
+            for feat in features:
+                if feat not in test_data["features"]:
+                    test_data["features"].append(feat)
+        else:
+            test_data["features"] = features    
+
+    ordered_test_data = {}
+    if "args" in test_data:
+        ordered_test_data["args"] = test_data["args"]
+    if "features" in test_data:
+        ordered_test_data["features"] = test_data["features"]
+    if "checks" in test_data:
+        ordered_test_data["checks"] = test_data["checks"]
+
+    with open(output_path, "w") as f:
+        f.write("# *** Add configuration here ***\n\n")
+        yaml.dump(ordered_test_data, f, default_flow_style=False) 
+    logger.info(f" test.yaml created at {output_path}")           
+
 
 def generate_eve():
     """
@@ -435,6 +469,9 @@ def generate_eve():
         largs += ["-k", "none"]
     if args["midstream"]:
         largs += ["--set", "stream.midstream=true"]
+    if args.get("set"):
+        for opt in args["set"]:
+            largs += ["--set", opt]
     p = subprocess.Popen(
         largs, cwd=cwd, env=env,
         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
