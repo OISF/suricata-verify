@@ -73,7 +73,7 @@ jobs:
                 software-properties-common \
                 zlib1g \
                 zlib1g-dev
-      - run: cargo install --force --debug cbindgen
+      - run: cargo install --locked --force --debug cbindgen
       - run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
       - uses: actions/checkout@v3
       - run: python3 ./run.py --self-test
@@ -141,7 +141,7 @@ jobs:
                 sudo \
                 which \
                 zlib-devel
-      - run: cargo install --force --debug cbindgen
+      - run: cargo install --locked --force --debug cbindgen
       - run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
       - uses: actions/checkout@v3
       - run: python3 ./run.py --self-test
