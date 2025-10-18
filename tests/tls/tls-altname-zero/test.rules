@@ -1,0 +1,2 @@
+alert tls any any -> any any (msg:"Glupteba TROJAN"; flow:to_client; tls.subjectaltname; content:"server15.xn--j1ahhq.xn--p1ai"; content: "xn--j1ahhq.xn--p1ai"; sid:1;)
+

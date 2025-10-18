@@ -3,7 +3,7 @@ args:
 - --runmode=single
 - --set stream.midstream=true
 
-pcap: ../alert-max/alert-max-append-higher-priority
+pcap: ../alert-max/alert-max-append-higher-priority/input.pcap
 
 checks:
 # Subtest 1

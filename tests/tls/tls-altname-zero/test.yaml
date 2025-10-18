@@ -1,0 +1,24 @@
+requires:
+  min-version: 8.0.1
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      dest_ip: 72.16.54.30
+      dest_port: 443
+      event_type: tls
+      pcap_cnt: 9
+      proto: TCP
+      src_ip: 192.168.134.106
+      src_port: 23481
+      tls.fingerprint: 8d:97:4b:41:04:3f:55:37:d0:58:90:a4:13:3b:7b:85:c6:46:81:cb
+      tls.issuerdn: C=US, O=Let's Encrypt, CN=R3
+      tls.notafter: '2023-03-01T06:47:30'
+      tls.notbefore: '2022-12-01T06:47:31'
+      tls.serial: 03:DE:23:89:7E:97:FB:86:8E:7C:C5:53:09:FE:AE:D0:AE:20
+      tls.subject: CN=xn--j1ahhq.xn--p1ai
+      tls.version: TLSv1

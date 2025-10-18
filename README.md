@@ -141,7 +141,7 @@ checks:
       # as the test level requires above.
       requires:
         features:
-          - HTTP2_DECOMPRESSION
+          - HAVE_JA4
 
       # The number of records this filter should match.
       count: 1
