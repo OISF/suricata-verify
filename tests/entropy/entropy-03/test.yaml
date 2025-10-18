@@ -1,0 +1,11 @@
+requires:
+    min-version: 8.0.1
+
+pcap: ../entropy-01/input.pcap
+
+checks:
+    - filter:
+        count: 1
+        match:
+          event_type: http
+          metadata.entropy.content: 4.137370175000773
