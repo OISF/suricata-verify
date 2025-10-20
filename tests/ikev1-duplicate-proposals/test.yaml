@@ -1,5 +1,5 @@
 requires:
-  min-version: 8.0.0
+  min-version: 7.0.13
 
 checks:
   - filter:
@@ -12,7 +12,6 @@ checks:
         ike.ikev1.client.proposals[7]: {"key": "sa_life_duration", "value": "Unknown", "raw": 65535}
   - filter:
       requires:
-        #min-version: 8.0.0
         lt-version: 9.0.0
       count: 1
       match:
