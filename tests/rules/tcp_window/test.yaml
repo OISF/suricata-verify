@@ -1,5 +1,5 @@
 requires:
-    min-version: 8.0
+    min-version: 9.0
     pcap: false
 
 args:
@@ -12,8 +12,7 @@ checks:
     match:
       id: 1
       lists.packet.matches[0].name: "tcp.window"
-      lists.packet.matches[0].window.size: 30336
-      lists.packet.matches[0].window.negated: false
+      lists.packet.matches[0].window.equal: 30336
 
 - filter:
     filename: rules.json
@@ -21,5 +20,4 @@ checks:
     match:
       id: 2
       lists.packet.matches[0].name: "tcp.window"
-      lists.packet.matches[0].window.size: 1024
-      lists.packet.matches[0].window.negated: true
+      lists.packet.matches[0].window.diff: 1024
