@@ -1,0 +1,67 @@
+requires:
+  min-version: 8.0
+  pcap: false
+
+args:
+  - --engine-analysis
+
+checks:
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1
+        lists.postmatch.matches[0].name: "flowint"
+        lists.postmatch.matches[0].flowint.cmd: "add"
+        lists.postmatch.matches[0].flowint.var: "usernamecount"
+        lists.postmatch.matches[0].flowint.value: 1
+
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 2
+        lists.postmatch.matches[0].name: "flowint"
+        lists.postmatch.matches[0].flowint.cmd: "set"
+        lists.postmatch.matches[0].flowint.var: "usernamecount"
+        lists.postmatch.matches[0].flowint.value: 10
+
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 3
+        lists.packet.matches[0].name: "flowint"
+        lists.packet.matches[0].flowint.cmd: "eq"
+        lists.packet.matches[0].flowint.var: "usernamecount"
+        lists.packet.matches[0].flowint.value: 5
+
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 4
+        lists.packet.matches[0].name: "flowint"
+        lists.packet.matches[0].flowint.cmd: "gt"
+        lists.packet.matches[0].flowint.var: "usernamecount"
+        lists.packet.matches[0].flowint.value: 10
+
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 5
+        lists.packet.matches[0].name: "flowint"
+        lists.packet.matches[0].flowint.cmd: "lt"
+        lists.packet.matches[0].flowint.var: "usernamecount"
+        lists.packet.matches[0].flowint.value: 2
+
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 6
+        lists.packet.matches[0].name: "flowint"
+        lists.packet.matches[0].flowint.cmd: "ne"
+        lists.packet.matches[0].flowint.var: "usernamecount"
+        lists.packet.matches[0].flowint.value: 20

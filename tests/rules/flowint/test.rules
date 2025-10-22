@@ -1,0 +1,6 @@
+alert tcp any any -> any any (msg:"Add 1 to usernamecount"; content:"jonkman"; flowint:usernamecount,+,1; noalert; sid:1;)
+alert tcp any any -> any any (msg:"Set usernamecount to 10"; flowint:usernamecount,=,10; noalert; sid:2;)
+alert tcp any any -> any any (msg:"Compare usernamecount == 5"; flowint:usernamecount,==,5; sid:3;)
+alert tcp any any -> any any (msg:"Compare usernamecount > 10"; flowint:usernamecount,>,10; sid:4;)
+alert tcp any any -> any any (msg:"Compare usernamecount < 2"; flowint:usernamecount,<,2; sid:5;)
+alert tcp any any -> any any (msg:"Compare usernamecount != 20"; flowint:usernamecount,!=,20; sid:6;)
