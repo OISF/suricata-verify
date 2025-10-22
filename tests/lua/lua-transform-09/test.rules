@@ -1,0 +1,2 @@
+alert http any any -> any any (msg: "test ip cdr script"; flow:established; ip.src; luaxform: transform.lua, 0xffffff00; content:"10.20.48.0/24";sid: 1;)
+alert http any any -> any any (msg: "test ip cdr script"; flow:established; ip.dst; luaxform: transform.lua, 0xffff0000; content:"10.50.0.0/16";sid: 2;)
