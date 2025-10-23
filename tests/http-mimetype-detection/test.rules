@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"MIME Type Test"; file.mime_type; content:"png"; sid:1337; rev:1;)
