@@ -1,0 +1,16 @@
+requires:
+  min-version: 9.0.0
+  pcap: true
+
+args:
+  - --engine-analysis
+
+checks:
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1
+        lists.packet.matches[0].name: "ttl"
+        lists.packet.matches[0].ttl.equal: 0
+        
