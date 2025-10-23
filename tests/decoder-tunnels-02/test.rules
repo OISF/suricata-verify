@@ -1,0 +1,3 @@
+alert udp any any -> any any (content: "pxng"; sid:1; bypass;)
+alert udp any any -> any any (content: "pang"; sid: 2;)
+
