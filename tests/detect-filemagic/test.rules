@@ -1,0 +1,11 @@
+alert tcp any any -> any any (filemagic:"PDF"; sid:1;)
+alert tcp any any -> any any (filemagic:"pdf"; sid:2;)
+alert tcp any any -> any any (filemagic:"pDf"; sid:3;)
+
+alert tcp any any -> any any (filemagic:!"VERSION 1.6"; sid:4;)
+alert tcp any any -> any any (filemagic:!"version 1.6"; sid:5;)
+alert tcp any any -> any any (filemagic:!"vErSiOn 1.6"; sid:6;)
+
+alert tcp any any -> any any (filemagic:!"VERSION 1.5"; sid:7;)
+alert tcp any any -> any any (filemagic:!"version 1.5"; sid:8;)
+alert tcp any any -> any any (filemagic:!"vErSiOn 1.5"; sid:9;)
