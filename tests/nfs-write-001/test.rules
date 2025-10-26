@@ -1,0 +1,1 @@
+alert nfs any any -> any any (msg:"NFSv2 WRITE - FILE store"; filestore; sid:1; rev:1;)
