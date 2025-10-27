@@ -1,0 +1,2 @@
+## Expect 1 alert after 1 distinct destination port (unique_on dst_port, count 1)
+alert tcp any any -> 1.1.1.1 any (msg:"DF distinct dst_port"; flags:S; flow:stateless; detection_filter: track by_dst, count 1, seconds 60, unique_on dst_port; sid:100001; rev:1;)
