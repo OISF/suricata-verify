@@ -1,0 +1,13 @@
+requires:
+  min-version: 9.0
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.version: 2
+        nfs.procedure: STATFS
