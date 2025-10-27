@@ -1,0 +1,16 @@
+requires:
+  min-version: 9
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 100001
+
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.thresholds.bitmap_alloc_fail: 0
+        stats.detect.thresholds.bitmap_memuse: 8192
