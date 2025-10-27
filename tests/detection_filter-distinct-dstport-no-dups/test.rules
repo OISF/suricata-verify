@@ -1,0 +1,1 @@
+alert tcp any any -> 1.1.1.1 any (msg:"DF distinct dst_port no dup"; flags:S; flow:stateless; detection_filter: track by_dst, count 3, seconds 60, unique_on dst_port; sid:100011; rev:1;)

@@ -1,0 +1,1 @@
+alert tcp any any -> 2.2.2.2 80 (msg:"DF distinct src_port"; flags:S; flow:stateless; detection_filter: track by_src, count 2, seconds 60, unique_on src_port; sid:100002; rev:1;)
