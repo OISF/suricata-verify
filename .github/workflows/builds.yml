@@ -31,17 +31,21 @@ jobs:
         run: |
           case '${{ github.event_name }}' in
             push)
-              firstCommit='${{ github.event.commits[0].id }}'
-              lastCommit='${{ github.event.commits[-1].id }}'
+              echo "$(echo '${{ toJson(github.event.commits) }}' | jq -r '.[0].id')"
+              echo "$(echo '${{ toJson(github.event.commits) }}' | jq -r '.[-1].id')"
+              firstCommit=${{ github.event.commits[0].id }}
+              lastCommit=${{ github.event.commits[-1].id }}
               ;;
             pull_request)
-              firstCommit='${{ github.event.base_ref }}'
-              lastCommit='${{ github.event.head_ref }}'
+              echo "${{ github.event.pull_request.head.sha }}"
+              echo "${{ github.event.pull_request.base.sha }}"
+              firstCommit=${{ github.event.pull_request.base.sha }}
+              lastCommit=${{ github.event.pull_request.head.sha }}
               ;;
           esac
-          fnames=$(git diff --name-only --diff-filter=d "${firstCommit}~1" "${lastCommit}")
-          echo fnames # STODO remove
-          echo fnames >> "$GITHUB_OUTPUT"
+          testnames=$(git diff --name-only --diff-filter=d "${firstCommit}~1" "${lastCommit}" | xargs dirname | sort -u | xargs -I {} basename "{}" | tr '\n' ' ')
+          echo "fnames='$testnames'" # STODO remove
+          echo "fnames='$testnames'" >> "$GITHUB_OUTPUT"
 
   ubuntu-22-04:
     name: Ubuntu 22.04
