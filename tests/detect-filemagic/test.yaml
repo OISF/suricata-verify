@@ -1,0 +1,22 @@
+requires:
+  features:
+    - MAGIC
+
+pcap: ../filemagic-flowbits/pdf-dl.pcap
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      match:
+        event_type: alert
+        alert.signature_id: 2
+      count: 1
+
+  - filter:
+      match:
+        event_type: alert
+        alert.signature_id: 3
+      count: 1
+        
