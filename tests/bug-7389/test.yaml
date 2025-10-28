@@ -1,0 +1,10 @@
+requires:
+  min-version: 9
+
+args:
+ - -vvvvvvvvvvv
+
+checks:
+    - shell:
+        args: grep "Running with verbose level 4" suricata.log | wc -l | xargs
+        expect: 1
