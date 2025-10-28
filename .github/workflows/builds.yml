@@ -18,10 +18,36 @@ jobs:
       - run: ./pcapng-check.sh
       - run: ./pcap-check.sh
 
+  isolate-tests:
+    name: Isolate relevant tests
+    runs-on: ubuntu-22.04
+    outputs:
+      test_names: ${{ steps.fetch_changed_files.fnames }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - id: fetch_changed_files
+        run: |
+          case '${{ github.event_name }}' in
+            push)
+              firstCommit='${{ github.event.commits[0].id }}'
+              lastCommit='${{ github.event.commits[-1].id }}'
+              ;;
+            pull_request)
+              firstCommit='${{ github.event.base_ref }}'
+              lastCommit='${{ github.event.head_ref }}'
+              ;;
+          esac
+          fnames=$(git diff --name-only --diff-filter=d "${firstCommit}~1" "${lastCommit}")
+          echo fnames # STODO remove
+          echo fnames >> "$GITHUB_OUTPUT"
+
   ubuntu-22-04:
     name: Ubuntu 22.04
     runs-on: ubuntu-22.04
     container: ubuntu:22.04
+    needs: isolate-tests
     strategy:
       fail-fast: false
       matrix:
@@ -87,7 +113,7 @@ jobs:
           make -j2
       - name: Running suricata-verify
         working-directory: suricata
-        run: python3 ../run.py --quiet --outdir /tmp/sv-output
+        run: python3 ../run.py ${{ needs.isolate-tests.outputs.test_names }} --quiet --outdir /tmp/sv-output
 
   almalinux:
     name: AlmaLinux 8
