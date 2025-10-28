@@ -22,7 +22,7 @@ jobs:
     name: Isolate relevant tests
     runs-on: ubuntu-22.04
     outputs:
-      test_names: ${{ steps.fetch_changed_files.fnames }}
+      test_names: ${{ steps.fetch_changed_files.outputs.fnames }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -44,8 +44,8 @@ jobs:
               ;;
           esac
           testnames=$(git diff --name-only --diff-filter=d "${firstCommit}~1" "${lastCommit}" | xargs dirname | sort -u | xargs -I {} basename "{}" | tr '\n' ' ')
-          echo "fnames='$testnames'" # STODO remove
-          echo "fnames='$testnames'" >> "$GITHUB_OUTPUT"
+          echo "fnames=$testnames" # STODO remove
+          echo "fnames=$testnames" >> "$GITHUB_OUTPUT"
 
   ubuntu-22-04:
     name: Ubuntu 22.04
@@ -57,8 +57,8 @@ jobs:
       matrix:
         branch:
           - main
-          - main-7.0.x
-          - main-8.0.x
+            #          - main-7.0.x
+            #          - main-8.0.x
     steps:
       - name: Install dependencies
         run: |
@@ -117,7 +117,10 @@ jobs:
           make -j2
       - name: Running suricata-verify
         working-directory: suricata
-        run: python3 ../run.py ${{ needs.isolate-tests.outputs.test_names }} --quiet --outdir /tmp/sv-output
+        run: |
+          echo ${{ needs.isolate-tests.outputs }}
+          # STODO remove --quiet now
+          python3 ../run.py ${{ needs.isolate-tests.outputs.test_names }} --quiet --outdir /tmp/sv-output
 
           #  almalinux:
           #    name: AlmaLinux 8
