@@ -1,12 +1,44 @@
-requires: {}
+requires:
+  min-version: 9
 args:
   - -k none
 pcap: ../issue-3277-nfsv2-filestore/nfsv2.pcap
 
 checks:
+  # Ensure we actually detect an NFSv2 WRITE response and mark it as a file transaction
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        app_proto: nfs
+        nfs.version: 2
+        nfs.procedure: WRITE
+        nfs.type: response
+        nfs.file_tx: true
+
+  # Ensure a fileinfo event is produced for the NFSv2 WRITE with correct content
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        app_proto: nfs
+        nfs.version: 2
+        nfs.procedure: WRITE
+        nfs.file_tx: true
+        fileinfo.state: CLOSED
+        fileinfo.stored: true
+        fileinfo.size: 6
+        # sha256("hallo\n") - actual data written in the pcap
+        fileinfo.sha256: 622cb3371c1a08096eaac564fb59acccda1fcdbe13a9dd10b486e6463c8c2525
+  # Rule-based alert should still trigger
   - filter:
       count: 1
       match:
         event_type: alert
         app_proto: nfs
         alert.signature_id: 1
+
+  # Verify a file was actually written to the filestore (content exists)
+  - shell:
+      args: find filestore -type f | xargs | wc -l
+      expect: 1
