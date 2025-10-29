@@ -139,6 +139,9 @@ class UnnecessaryRequirementError(Exception):
 class TerminatePoolError(Exception):
     pass
 
+class StrictRequirementUnmetError(Exception):
+    pass
+
 SuricataVersion = namedtuple(
     "SuricataVersion", ["major", "minor", "patch"])
 
@@ -1084,6 +1087,9 @@ def run_test(dirpath, args, cwd, suricata_config):
                 count_dict["failed"] += 1
                 failedLogs.append(dirpath)
         elif results["skipped"] > 0 and results["success"] == 0:
+            if args.strict:
+                print("ERR: cannot skip a test in strict mode")
+                raise TerminatePoolError()
             with lock:
                 count_dict["skipped"] += 1
         elif results["success"] > 0:
@@ -1096,6 +1102,9 @@ def run_test(dirpath, args, cwd, suricata_config):
                         print("ERR: Couldn't delete output dir in aggressive cleanup mode")
                         traceback.print_exc()
     except UnsatisfiedRequirementError as ue:
+        if args.strict:
+            print("ERR: cannot skip a test in strict mode")
+            raise StrictRequirementUnmetError()
         if not args.quiet:
             print("===> {}: SKIPPED: {}".format(os.path.basename(dirpath), ue))
         with lock:
@@ -1151,6 +1160,9 @@ def run_parallel(jobs, tests, args, cwd, suricata_config):
             executor.shutdown(wait=False)
             # Don't exit immediately - let the function return so summary can be printed
             return
+        except StrictRequirementUnmetError:
+            executor.shutdown(wait=False)
+            raise
         finally:
             executor_instance = None
 
@@ -1180,6 +1192,8 @@ def main():
                         help="Runs tests from custom directory")
     parser.add_argument("--exact", dest="exact", action="store_true",
                         help="Use supplied name to make an exact match")
+    parser.add_argument("--strict", dest="strict", action="store_true",
+                        help="Do a strict test, skipped tests would mean failure")
     parser.add_argument("--skip-tests", nargs="?", default=None,
                         help="Skip tests with a given pattern")
     parser.add_argument("--outdir", action="store",
@@ -1285,6 +1299,8 @@ def main():
         run_parallel(args.j, tests, args, cwd, suricata_config)
     except KeyboardInterrupt:
         print("\nInterrupted by user")
+        return 1
+    except Exception:
         return 1
 
     passed = count_dict["passed"]
