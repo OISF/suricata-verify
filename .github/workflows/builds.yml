@@ -28,6 +28,7 @@ jobs:
         with:
           fetch-depth: 0
       - id: fetch_changed_files
+        name: Getting changed test names
         run: |
           case '${{ github.event_name }}' in
             push)
@@ -118,9 +119,20 @@ jobs:
       - name: Running suricata-verify
         working-directory: suricata
         run: |
-          echo ${{ needs.isolate-tests.outputs }}
+          case "${{ needs.isolate-tests.outputs.test_names }}" in
+            *eve-validator*|*workflows*|*.*)
+              echo "PR diff shows a change was done in a base dir file, eve-validator/ or workflows/. Running all tests.."
+              final_tests=
+            ;;
+            *)
+              echo "PR diff shows a change was done in respective test dirs. Running $fnames"
+              final_tests=$(echo "--exact $fnames")
+            ;;
+          esac
+
+          echo "Final tests are: $final_tests"
           # STODO remove --quiet now
-          python3 ../run.py ${{ needs.isolate-tests.outputs.test_names }} --quiet --outdir /tmp/sv-output
+          python3 ../run.py $final_tests --quiet --outdir /tmp/sv-output
 
           #  almalinux:
           #    name: AlmaLinux 8
