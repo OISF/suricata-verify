@@ -9,7 +9,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  
+
   pcapng-check:
     name: PCAP Check
     runs-on: ubuntu-22.04
@@ -18,10 +18,41 @@ jobs:
       - run: ./pcapng-check.sh
       - run: ./pcap-check.sh
 
+  isolate-tests:
+    name: Isolate relevant tests
+    runs-on: ubuntu-22.04
+    outputs:
+      test_names: ${{ steps.fetch_changed_files.outputs.fnames }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - id: fetch_changed_files
+        name: Getting changed test names
+        run: |
+          case '${{ github.event_name }}' in
+            push)
+              firstCommit=$(echo '${{ toJson(github.event.commits) }}' | jq -r '.[0].id')
+              git fetch https://github.com/${{ github.repository }}.git master
+              lastCommit=$(git rev-parse origin/master)
+              echo $firstCommit
+              echo $lastCommit
+              ;;
+            pull_request)
+              firstCommit=${{ github.event.pull_request.base.sha }}
+              lastCommit=${{ github.event.pull_request.head.sha }}
+              echo $firstCommit
+              echo $lastCommit
+              ;;
+          esac
+          testnames=$(git diff --name-only --diff-filter=d "${firstCommit}~1" "${lastCommit}" | xargs dirname | sort -u | xargs -I {} basename "{}" | tr '\n' ' ')
+          echo "fnames=$testnames" >> "$GITHUB_OUTPUT"
+
   ubuntu-22-04:
     name: Ubuntu 22.04
     runs-on: ubuntu-22.04
     container: ubuntu:22.04
+    needs: isolate-tests
     strategy:
       fail-fast: false
       matrix:
@@ -87,7 +118,20 @@ jobs:
           make -j2
       - name: Running suricata-verify
         working-directory: suricata
-        run: python3 ../run.py --quiet --outdir /tmp/sv-output
+        run: |
+          case "${{ needs.isolate-tests.outputs.test_names }}" in
+            *eve-validator*|*workflows*|*.*)
+              echo "PR diff shows a change was done in a base dir file, eve-validator/ or workflows/. Running all tests.."
+              final_tests=
+            ;;
+            *)
+              echo "PR diff shows a change was done in respective test dirs. Running $fnames"
+              final_tests=$(echo "--exact $fnames")
+            ;;
+          esac
+
+          echo "Final tests are: $final_tests"
+          python3 ../run.py $final_tests --quiet --outdir /tmp/sv-output
 
   almalinux:
     name: AlmaLinux 8
