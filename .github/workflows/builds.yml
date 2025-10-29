@@ -1,7 +1,6 @@
 name: builds
 
 on:
-  - push
   - pull_request
 
 concurrency:
@@ -9,7 +8,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  
+
   pcapng-check:
     name: PCAP Check
     runs-on: ubuntu-22.04
@@ -18,10 +17,41 @@ jobs:
       - run: ./pcapng-check.sh
       - run: ./pcap-check.sh
 
+  isolate-tests:
+    name: Isolate relevant tests
+    runs-on: ubuntu-22.04
+    outputs:
+      test_names: ${{ steps.fetch_changed_files.outputs.args }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - id: fetch_changed_files
+        name: Getting changed test names
+        run: |
+          firstCommit=${{ github.event.pull_request.base.sha }}
+          lastCommit=${{ github.event.pull_request.head.sha }}
+          echo $firstCommit
+          echo $lastCommit
+          dirnames=$(git diff --name-only --diff-filter=d "${firstCommit}~1" "${lastCommit}" | xargs dirname)
+          echo "Dir names: $dirnames"
+          testnames=$($dirnames | sort -u | xargs -I {} basename "{}" | tr '\n' ' ')
+          echo "Test names: $testnames"
+          #          echo "fnames=$testnames" >> "$GITHUB_OUTPUT"
+          if [[ "$dirnames" == *"tests"* ]]; then
+              echo "PR diff shows a change was done in respective test dirs. Running $testnames"
+              final_tests=$(echo "--exact $testnames")
+          else
+              echo "PR diff shows a change was done in a base dir file, eve-validator/ or workflows/. Running all tests.."
+              final_tests=
+          fi
+          echo "args=$final_tests" >> "$GITHUB_OUTPUT"
+
   ubuntu-22-04:
     name: Ubuntu 22.04
     runs-on: ubuntu-22.04
     container: ubuntu:22.04
+    needs: isolate-tests
     strategy:
       fail-fast: false
       matrix:
@@ -87,7 +117,7 @@ jobs:
           make -j2
       - name: Running suricata-verify
         working-directory: suricata
-        run: python3 ../run.py --quiet --outdir /tmp/sv-output
+        run: python3 ../run.py ${{ needs.isolate-tests.outputs.args }} --quiet --outdir /tmp/sv-output
 
   almalinux:
     name: AlmaLinux 8
