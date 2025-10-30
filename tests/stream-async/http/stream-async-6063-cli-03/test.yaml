@@ -1,5 +1,7 @@
+pcap: ../../../bug-2491-02/simple_http_download.onesided.nosyn.pcap
+
 args:
-- --set stream.async-oneside=true
+- --set stream.async-oneside=false
 - --set stream.midstream=true
 - --set stream.midstream-policy=ignore
 
@@ -9,33 +11,22 @@ checks:
       match:
         event_type: alert
   - filter:
-      min-version: 8.0
       count: 1
       match:
         event_type: alert
         alert.signature_id: 1
-        pcap_cnt: 2
+        not-has-key: pcap_cnt
   - filter:
-      min-version: 8.0
       count: 1
       match:
         event_type: alert
         alert.signature_id: 2
-        pcap_cnt: 2
+        not-has-key: pcap_cnt
   - filter:
-      lt-version: 8.0
-      count: 1
+      count: 3
       match:
-        event_type: alert
-        alert.signature_id: 1
-        pcap_cnt: 11
-  - filter:
-      lt-version: 8.0
-      count: 1
-      match:
-        event_type: alert
-        alert.signature_id: 2
-        pcap_cnt: 11
+        event_type: http
+        not-has-key: pcap_cnt
   - filter:
       count: 1
       match:
