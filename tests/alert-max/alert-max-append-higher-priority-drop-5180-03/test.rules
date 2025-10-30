@@ -1,0 +1,11 @@
+# Engine-analysis' Internal id: 1
+alert tcp any any -> any any (msg:"Match rule 1"; dsize:>140; sid:1; rev:1;)
+# Engine-analysis' Internal id: 2
+alert http any any -> any any (msg:"Match rule 2"; http.host; content:"clients1.google"; sid:2; rev:1;)
+# Engine-analysis' Internal id: 3
+alert http any any -> any any (msg:"Match rule 3"; alert; http.method; bsize:3; sid:3; rev:1;)
+# Engine-analysis' Internal id: 4
+alert http any any -> any any (msg:"Match rule 4"; http.method; content:"GET"; sid:4;)
+# this one should not show in alert due to alert queue overflow
+# Engine-analysis' Internal id: 0
+drop http any any -> any any (msg:"Match and drop rule 5"; http.request_line; content:"GET /complete/search"; sid:5;)
