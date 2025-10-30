@@ -1,0 +1,14 @@
+requires:
+  min-version: 9
+
+args:
+ - -vvvvvvvvvvv
+
+checks:
+    - shell:
+        args: grep "Suricata-Main.*Config:" suricata.log | grep -v -e "Core dump size" -e "Landlock" -e "RWX pages" | wc -l | xargs
+        expect: 80
+
+    - shell:
+        args: grep "suricata.*extraneous" stdout | wc -l | xargs
+        expect: 1
