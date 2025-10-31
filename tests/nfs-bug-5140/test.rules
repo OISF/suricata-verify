@@ -1,0 +1,1 @@
+alert nfs any any -> any any (msg:"NFSv2 STATFS detected"; nfs.version:2; nfs.procedure:STATFS; sid:1; rev:1;)
