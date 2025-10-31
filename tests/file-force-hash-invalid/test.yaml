@@ -1,0 +1,17 @@
+requires:
+  min-version: 9
+
+command: |
+  ${SRCDIR}/src/suricata --set classification-file="${SRCDIR}/etc/classification.config" \
+      --set reference-config-file="${SRCDIR}/etc/reference.config" \
+      -l ${OUTPUT_DIR} -c "${TEST_DIR}/suricata.yaml" -T
+
+exit-code: 1
+
+checks:
+  - shell:
+      args: |
+        (grep -q "Invalid configuration: force-hash algorithm 'shanani' must be one of: md5, sha1, sha256" suricata.log || \
+         grep -q "Invalid configuration: force-hash algorithm 'shanani' must be one of: md5, sha1, sha256" stderr) && \
+        echo "Found expected error message"
+
