@@ -1,0 +1,17 @@
+requires:
+  min-version: 9
+
+pcap: false
+
+args:
+  - -T
+
+exit-code: 1
+
+checks:
+  - shell:
+      args: |
+        (grep -q "Invalid configuration: force-hash algorithm 'shanani' must be one of: md5, sha1, sha256" suricata.log || \
+         grep -q "Invalid configuration: force-hash algorithm 'shanani' must be one of: md5, sha1, sha256" stderr) && \
+        echo "Found expected error message"
+
