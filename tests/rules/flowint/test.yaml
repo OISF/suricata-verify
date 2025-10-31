@@ -1,0 +1,17 @@
+requires:
+    min-version: 9.0
+    pcap: false
+
+args:
+    - --engine-analysis
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 1
+      lists.postmatch.matches[0].name: "flowint"
+      lists.postmatch.matches[0].flowint.cmd: "unknown"
+      lists.postmatch.matches[0].flowint.var: "usernamecount"
+      lists.postmatch.matches[0].flowint.value: 1
