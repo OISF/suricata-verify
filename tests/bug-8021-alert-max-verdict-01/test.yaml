@@ -1,0 +1,73 @@
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.severity: 3
+      alert.signature_id: 8002101
+      event_type: alert
+      pcap_cnt: 1
+      verdict.action: alert
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.signature_id: 8002102
+      event_type: alert
+      pcap_cnt: 1
+      verdict.action: alert
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.signature_id: 8002103
+      event_type: alert
+      pcap_cnt: 1
+      verdict.action: alert
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.signature_id: 8002104
+      event_type: alert
+      pcap_cnt: 1
+      verdict.action: alert
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.signature_id: 8002105
+      event_type: alert
+      pcap_cnt: 1
+      verdict.action: alert
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.signature_id: 8002106
+      event_type: alert
+      pcap_cnt: 1
+      verdict.action: alert
+- filter:
+    count: 0
+    match:
+      alert.action: allowed
+      alert.signature_id: 8002107
+      event_type: alert
+      pcap_cnt: 1
+      verdict.action: alert
+- filter:
+    count: 0
+    match:
+      event_type: stats
+      stats.detect.engines.rules_loaded: 7
+      stats.detect.engines.rules_failed: 0
+      stats.detect.engines.rules_skipped: 0
+      stats.detect.alert: 6
+      stats.detect.alert_queue_overflow: 1
+      stats.detect.alerts_suppressed: 0
+
+
