@@ -1,0 +1,21 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      types:
+        - nfs
+        - files
+        - alert
+        - stats
+  - file-store:
+      version: 2
+      enabled: yes
+      force-filestore: yes
+      stream-depth: 0
+      
+app-layer:
+  protocols:
+    nfs:
+      enabled: yes
