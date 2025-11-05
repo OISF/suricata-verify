@@ -1,0 +1,114 @@
+requires:
+  min-version: 9.0
+  pcap: false
+
+args:
+  - --engine-analysis
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 1
+      lists.postmatch.matches[0].name: "xbits"
+      lists.postmatch.matches[0].xbits.cmd: "set"
+      lists.postmatch.matches[0].xbits.name: "xb1"
+      lists.postmatch.matches[0].xbits.track: "ip_src"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 2
+      lists.postmatch.matches[0].name: "xbits"
+      lists.postmatch.matches[0].xbits.cmd: "set"
+      lists.postmatch.matches[0].xbits.name: "xb2"
+      lists.postmatch.matches[0].xbits.track: "ip_dst"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 3
+      lists.packet.matches[0].name: "xbits"
+      lists.packet.matches[0].xbits.cmd: "isset"
+      lists.packet.matches[0].xbits.name: "xb1"
+      lists.packet.matches[0].xbits.track: "ip_src"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 4
+      lists.packet.matches[0].name: "xbits"
+      lists.packet.matches[0].xbits.cmd: "isset"
+      lists.packet.matches[0].xbits.name: "xb2"
+      lists.packet.matches[0].xbits.track: "ip_dst"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 5
+      lists.packet.matches[0].name: "xbits"
+      lists.packet.matches[0].xbits.cmd: "isnotset"
+      lists.packet.matches[0].xbits.name: "xb3"
+      lists.packet.matches[0].xbits.track: "ip_src"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 6
+      lists.postmatch.matches[0].name: "xbits"
+      lists.postmatch.matches[0].xbits.cmd: "unset"
+      lists.postmatch.matches[0].xbits.name: "xb1"
+      lists.postmatch.matches[0].xbits.track: "ip_src"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 7
+      lists.postmatch.matches[0].name: "xbits"
+      lists.postmatch.matches[0].xbits.cmd: "toggle"
+      lists.postmatch.matches[0].xbits.name: "xb2"
+      lists.postmatch.matches[0].xbits.track: "ip_dst"
+      lists.postmatch.matches[0].xbits.expire: 30
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 8
+      lists.packet.matches[0].name: "xbits"
+      lists.packet.matches[0].xbits.cmd: "isset"
+      lists.packet.matches[0].xbits.name: "xb4"
+      lists.packet.matches[0].xbits.track: "ip_pair"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 9
+      lists.postmatch.matches[0].name: "xbits"
+      lists.postmatch.matches[0].xbits.cmd: "set"
+      lists.postmatch.matches[0].xbits.name: "xb5"
+      lists.postmatch.matches[0].xbits.track: "ip_src"
+      lists.postmatch.matches[1].name: "xbits"
+      lists.postmatch.matches[1].xbits.cmd: "set"
+      lists.postmatch.matches[1].xbits.name: "xb6"
+      lists.postmatch.matches[1].xbits.track: "ip_dst"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 10
+      lists.postmatch.matches[0].name: "xbits"
+      lists.postmatch.matches[0].xbits.cmd: "set"
+      lists.postmatch.matches[0].xbits.name: "xb7"
+      lists.postmatch.matches[0].xbits.track: "ip_src"
+      lists.postmatch.matches[0].xbits.expire: 60
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 11
+      lists.postmatch.matches[0].name: "xbits"
+      lists.postmatch.matches[0].xbits.cmd: "set"
+      lists.postmatch.matches[0].xbits.name: "xb8"
+      lists.postmatch.matches[0].xbits.track: "ip_dst"
+      lists.postmatch.matches[0].xbits.expire: 300
