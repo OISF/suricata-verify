@@ -1,0 +1,82 @@
+# *** Add configuration here ***
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      dest_ip: 82.165.177.154
+      dest_port: 80
+      event_type: http
+      http.hostname: www.testmyids.com
+      http.http_content_type: text/html
+      http.http_method: GET
+      http.http_user_agent: curl/7.43.0
+      http.length: 39
+      http.protocol: HTTP/1.1
+      http.status: 200
+      http.url: /
+      ip_v: 4
+      pcap_cnt: 7
+      proto: TCP
+      src_ip: 10.16.1.11
+      src_port: 54186
+      tx_id: 0
+- filter:
+    count: 1
+    match:
+      app_proto: http
+      dest_ip: 10.16.1.11
+      dest_port: 54186
+      event_type: fileinfo
+      fileinfo.filename: /
+      fileinfo.gaps: false
+      fileinfo.size: 39
+      fileinfo.state: CLOSED
+      fileinfo.stored: false
+      fileinfo.tx_id: 0
+      http.hostname: www.testmyids.com
+      http.http_content_type: text/html
+      http.http_method: GET
+      http.http_user_agent: curl/7.43.0
+      http.length: 39
+      http.protocol: HTTP/1.1
+      http.status: 200
+      http.url: /
+      ip_v: 4
+      pcap_cnt: 9
+      proto: TCP
+      src_ip: 82.165.177.154
+      src_port: 80
+- filter:
+    count: 1
+    match:
+      app_proto: http
+      dest_ip: 82.165.177.154
+      dest_port: 80
+      event_type: flow
+      flow.age: 0
+      flow.alerted: false
+      flow.bytes_toclient: 495
+      flow.bytes_toserver: 425
+      flow.pkts_toclient: 4
+      flow.pkts_toserver: 6
+      flow.reason: shutdown
+      flow.state: closed
+      flow.tx_cnt: 1
+      ip_v: 4
+      proto: TCP
+      src_ip: 10.16.1.11
+      src_port: 54186
+      tcp.ack: true
+      tcp.fin: true
+      tcp.psh: true
+      tcp.state: closed
+      tcp.syn: true
+      tcp.tc_max_regions: 1
+      tcp.tcp_flags: 1b
+      tcp.tcp_flags_tc: 1b
+      tcp.tcp_flags_ts: 1b
+      tcp.ts_max_regions: 1
