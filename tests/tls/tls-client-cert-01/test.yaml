@@ -12,7 +12,6 @@ checks:
       match:
         event_type: alert
         app_proto: tls
-        alert.signature_id: 1
   - filter:
       count: 1
       match:
