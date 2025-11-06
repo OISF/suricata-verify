@@ -1,6 +1,7 @@
 name: builds
 
 on:
+  - push
   - pull_request
 
 concurrency:

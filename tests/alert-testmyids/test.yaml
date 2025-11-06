@@ -7,6 +7,7 @@ checks:
       count: 1
       match:
         event_type: alert
+        alert.signature_id: 2100498
 
   # Check how many lines were logged to fast.log.
   - shell:
