@@ -36,7 +36,7 @@ jobs:
             lastCommit=${{ github.event.pull_request.head.sha }}
             echo $firstCommit
             echo $lastCommit
-            dirnames=$(git diff --name-only --diff-filter=d "${firstCommit}" "${lastCommit}" | xargs dirname | sort -u | tr '\n' ' ')
+            dirnames=$(git diff --name-only --diff-filter=d "${firstCommit}" "${lastCommit}" | xargs dirname | grep "^tests/" | sort -u | tr '\n' ' ')
             echo "Dir names: $dirnames"
             testnames=$(echo "$dirnames" | tr ' ' '\n' | xargs -I {} basename "{}" | tr '\n' ' ')
             echo "Test names: $testnames"
