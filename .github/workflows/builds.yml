@@ -30,22 +30,22 @@ jobs:
       - id: fetch_changed_files
         name: Getting changed test names
         run: |
-          firstCommit=${{ github.event.pull_request.base.sha }}
-          lastCommit=${{ github.event.pull_request.head.sha }}
-          echo $firstCommit
-          echo $lastCommit
-          dirnames=$(git diff --name-only --diff-filter=d "${firstCommit}~1" "${lastCommit}" | xargs dirname)
-          echo "Dir names: $dirnames"
-          testnames=$($dirnames | sort -u | xargs -I {} basename "{}" | tr '\n' ' ')
-          echo "Test names: $testnames"
-          #          echo "fnames=$testnames" >> "$GITHUB_OUTPUT"
-          if [[ "$dirnames" == *"tests"* ]]; then
-              echo "PR diff shows a change was done in respective test dirs. Running $testnames"
-              final_tests=$(echo "--exact $testnames")
-          else
-              echo "PR diff shows a change was done in a base dir file, eve-validator/ or workflows/. Running all tests.."
-              final_tests=
-          fi
+          case '${{ github.event_name }}' in
+          pull_request)
+            firstCommit=${{ github.event.pull_request.base.sha }}
+            lastCommit=${{ github.event.pull_request.head.sha }}
+            echo $firstCommit
+            echo $lastCommit
+            dirnames=$(git diff --name-only --diff-filter=d "${firstCommit}" "${lastCommit}" | xargs dirname | sort -u | tr '\n' ' ')
+            echo "Dir names: $dirnames"
+            testnames=$(echo "$dirnames" | tr ' ' '\n' | xargs -I {} basename "{}" | tr '\n' ' ')
+            echo "Test names: $testnames"
+            if [[ "$dirnames" == *"tests"* ]]; then
+                echo "PR diff shows a change was done in test dirs. Running $testnames"
+                final_tests=$(echo "--exact $testnames")
+            fi
+            ;;
+          esac
           echo "args=$final_tests" >> "$GITHUB_OUTPUT"
 
   ubuntu-22-04:
