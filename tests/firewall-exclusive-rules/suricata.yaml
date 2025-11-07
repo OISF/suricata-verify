@@ -1,0 +1,31 @@
+%YAML 1.1
+---
+
+logging:
+  default-log-level: notice
+  outputs:
+  - console:
+      enabled: yes
+      # type: json
+  - file:
+      enabled: yes
+      level: info
+      filename: suricata.json
+      type: json
+  - syslog:
+      enabled: no
+      facility: local5
+      format: "[%i] <%d> -- "
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - stats
+
+default-rule-path: .
+
+rule-files:
+  - test.rules

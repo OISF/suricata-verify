@@ -1,0 +1,20 @@
+requires:
+  min-version: 9
+
+command: |
+  ${SRCDIR}/src/suricata --set classification-file="${SRCDIR}/etc/classification.config"    \
+      --set reference-config-file="${SRCDIR}/etc/reference.config" -l ${OUTPUT_DIR}         \
+      --set threshold-file="${SRCDIR}/threshold.config"                                   \
+      -c "./suricata.yaml" -r ../flowbit-oring/input.pcap \
+      -S "./extra.rules" --firewall-rules-exclusive=./fw-excl.rules
+
+# There should be no error if only firewall rules were loaded
+exit-code: 0
+
+checks:
+  - filter:
+      filename: suricata.json
+      count: 1
+      match:
+        event_type: "engine"
+

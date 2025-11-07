@@ -1,0 +1,2 @@
+alert tcp any any -> any any (msg:"Bad TCP rule"; content:"yolo";sid:123;)
+#alert udp any any -> any any (msg:"Bad UDP rule"; content:"olyo";sid: 234;)
