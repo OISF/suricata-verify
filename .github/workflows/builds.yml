@@ -34,9 +34,15 @@ jobs:
           pull_request)
             firstCommit=${{ github.event.pull_request.base.sha }}
             lastCommit=${{ github.event.pull_request.head.sha }}
-            dirnames=$(git diff --name-only --diff-filter=d "${firstCommit}" "${lastCommit}" | xargs dirname | grep "^tests/" | sort -u | tr '\n' ' ')
-            testnames=$(echo "$dirnames" | tr ' ' '\n' | xargs -I {} basename "{}" | tr '\n' ' ')
-            if [[ "$dirnames" == *"tests"* ]]; then
+            # Get names of all dirs changed in a PR
+            dirnames=$(git diff --name-only --diff-filter=d "${firstCommit}" "${lastCommit}" | xargs dirname)
+            echo "Dirnames: $dirnames"
+            # Check iff tests/ dir has changes
+            if [[ "$dirnames" == "tests/*" ]]; then
+                # Get all the tests dir paths from the root of the project
+                testdirnames=$(echo "$dirnames" | sort -u | tr '\n' ' ')
+                # Get the names of the innermost test dir
+                testnames=$(echo "$testdirnames" | tr ' ' '\n' | xargs -I {} basename "{}" | tr '\n' ' ')
                 echo "PR diff shows a change was done in test dirs. Running $testnames"
                 final_tests=$(echo "--exact $testnames")
             fi
