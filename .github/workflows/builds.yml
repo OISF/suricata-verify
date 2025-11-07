@@ -9,7 +9,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  
+
   pcapng-check:
     name: PCAP Check
     runs-on: ubuntu-22.04
@@ -18,10 +18,51 @@ jobs:
       - run: ./pcapng-check.sh
       - run: ./pcap-check.sh
 
+  isolate-tests:
+    name: Isolate relevant tests
+    runs-on: ubuntu-22.04
+    outputs:
+      test_names: ${{ steps.fetch_changed_files.outputs.args }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - id: fetch_changed_files
+        name: Getting changed test names
+        run: |
+          case '${{ github.event_name }}' in
+          pull_request)
+            firstCommit=${{ github.event.pull_request.base.sha }}
+            lastCommit=${{ github.event.pull_request.head.sha }}
+            # Get names of all dirs changed in a PR
+            dirnames=$(git diff --name-only "${firstCommit}" "${lastCommit}" | xargs dirname | sort -u)
+            echo "Dirnames: $dirnames"
+
+            # check iff tests/ dir has changed
+            only_tests=1
+            for dir in $dirnames; do
+                if [[ $dir != tests/* ]]; then
+                    echo "$dir is not tests/"
+                    only_tests=0
+                    break
+                fi
+            done
+
+            if [ $only_tests == 1 ]; then
+                # Get the names of the innermost test dir
+                testnames=$(echo "$dirnames" | xargs -I {} basename "{}" | tr '\n' ' ')
+                echo "PR diff shows a change was done in test dirs. Running $testnames"
+                final_tests=$(echo "--exact $testnames")
+            fi
+            ;;
+          esac
+          echo "args=$final_tests" >> "$GITHUB_OUTPUT"
+
   ubuntu-22-04:
     name: Ubuntu 22.04
     runs-on: ubuntu-22.04
     container: ubuntu:22.04
+    needs: isolate-tests
     strategy:
       fail-fast: false
       matrix:
@@ -87,12 +128,13 @@ jobs:
           make -j2
       - name: Running suricata-verify
         working-directory: suricata
-        run: python3 ../run.py --quiet --outdir /tmp/sv-output
+        run: python3 ../run.py ${{ needs.isolate-tests.outputs.test_names }} --quiet --outdir /tmp/sv-output
 
   almalinux:
     name: AlmaLinux 8
     runs-on: ubuntu-latest
     container: almalinux:8
+    needs: isolate-tests
     strategy:
       fail-fast: false
       matrix:
@@ -155,11 +197,12 @@ jobs:
           make -j2
       - name: Running suricata-verify
         working-directory: suricata
-        run: python3 ../run.py --quiet
+        run: python3 ../run.py ${{ needs.isolate-tests.outputs.test_names }} --quiet
 
   macos:
     name: macOS
     runs-on: macos-latest
+    needs: isolate-tests
     strategy:
       fail-fast: false
       matrix:
@@ -210,11 +253,12 @@ jobs:
         working-directory: suricata
         run: |
           . ../testenv/bin/activate
-          python3 ../run.py --quiet
+          python3 ../run.py ${{ needs.isolate-tests.outputs.test_names }} --quiet
 
   windows:
     name: Windows
     runs-on: windows-latest
+    needs: isolate-tests
     strategy:
       fail-fast: false
       matrix:
@@ -262,4 +306,4 @@ jobs:
           make -j3
       - name: Running suricata-verify
         working-directory: suricata
-        run: python3 ../run.py --quiet
+        run: python3 ../run.py ${{ needs.isolate-tests.outputs.test_names }} --quiet
