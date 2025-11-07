@@ -38,7 +38,7 @@ jobs:
             dirnames=$(git diff --name-only --diff-filter=d "${firstCommit}" "${lastCommit}" | xargs dirname)
             echo "Dirnames: $dirnames"
             # Check iff tests/ dir has changes
-            if [[ "$dirnames" == "tests/*" ]]; then
+            if [[ "$dirnames" == tests/* ]]; then
                 # Get all the tests dir paths from the root of the project
                 testdirnames=$(echo "$dirnames" | sort -u | tr '\n' ' ')
                 # Get the names of the innermost test dir
