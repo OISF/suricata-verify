@@ -1,0 +1,18 @@
+requires:
+  min-version: 9
+
+pcap: ../../http2-range/http2-range.pcap
+
+args:
+  - -k none
+
+exit-code: 1
+
+checks:
+  - shell:
+      args: grep "Invalid subslice options; nbytes value cannot be 0" suricata.log| wc -l | xargs
+      expect: 2
+
+  - shell:
+      args: grep "Invalid subslice options; foobar not recognized" suricata.log| wc -l | xargs
+      expect: 1
