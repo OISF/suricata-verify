@@ -1,0 +1,7 @@
+## Accept: */*
+alert http any any -> any any (http.accept; content: "*/*";subslice: [2]; content: "*";sid:1;)
+## User-Agent: curl/7.64.1
+alert http any any -> any any (http.user_agent; content: "curl/7.64.1";subslice: [-6]; content: "7.64.1";sid:2;)
+alert http any any -> any any (http.user_agent; content: "curl/7.64.1";subslice: [-10,3]; content: "url";sid:3;)
+
+alert http any any -> any any (http.response_body; subslice: [28,14]; content: "EICAR-STANDARD";sid:4;)
