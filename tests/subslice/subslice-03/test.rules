@@ -1,0 +1,25 @@
+# Test negative offset exceeding buffer length with truncate
+## User-Agent: curl/7.64.1 (11 characters)
+
+# -20 exceeds buffer length (11), should be clamped to -11 (start at 0)
+# Expected: full buffer "curl/7.64.1"
+alert http any any -> any any (http.user_agent; content: "curl/7.64.1"; subslice: -20, truncate; content: "curl/7.64.1"; bsize: 11; startswith; endswith; sid:1;)
+
+# -20 with 5 bytes: should start at 0 and take 5 bytes
+# Expected: "curl/"
+alert http any any -> any any (http.user_agent; content: "curl/7.64.1"; subslice: -20, 5, truncate; content: "curl/"; bsize: 5; startswith; endswith; sid:2;)
+
+# -15 with 10 bytes: should start at 0 and take 10 bytes
+# Expected: "curl/7.64."
+alert http any any -> any any (http.user_agent; content: "curl/7.64.1"; subslice: -15, 10, truncate; content: "curl/7.64."; bsize: 10; startswith; endswith; sid:3;)
+
+# -12 (just over buffer) with truncate: should start at 0
+# Expected: full buffer "curl/7.64.1"
+alert http any any -> any any (http.user_agent; content: "curl/7.64.1"; subslice: -12, truncate; content: "curl/7.64.1"; bsize: 11; startswith; endswith; sid:4;)
+
+# Test without truncate - should fail (bsize: 0)
+alert http any any -> any any (http.user_agent; content: "curl/7.64.1"; subslice: -20; bsize: 0; sid:5;)
+
+# -100 with 3 bytes and truncate: should start at 0 and take 3 bytes
+# Expected: "cur"
+alert http any any -> any any (http.user_agent; content: "curl/7.64.1"; subslice: -100, 3, truncate; content: "cur"; bsize: 3; startswith; endswith; sid:6;)

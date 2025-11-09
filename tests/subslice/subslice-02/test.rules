@@ -1,0 +1,5 @@
+# offset + nbytes exceeds length, truncate=yes so expect partial buffer
+## User-Agent: curl/7.64.1
+alert http any any -> any any (http.user_agent; content: "curl/7.64.1";  subslice: 1,30, truncate; content: "url/7.64.1";  bsize: 10; sid:1;)
+alert http any any -> any any (http.user_agent; content: "curl/7.64.1";  subslice: 0,30, truncate; content: "curl/7.64.1"; bsize: 11; sid:2;)
+alert http any any -> any any (http.user_agent; content: "curl/7.64.1";  subslice: -6,30, truncate; content: "7.64.1"; bsize: 6; sid:3;)
