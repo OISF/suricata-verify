@@ -1,0 +1,1 @@
+alert http any any -> any any (flow:to_server; lua:test6.lua; sid:6;)
