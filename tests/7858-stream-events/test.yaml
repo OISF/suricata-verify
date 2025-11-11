@@ -1,0 +1,19 @@
+args:
+- --set stats.decoder-events=true
+- --set stats.stream-events=true
+
+requires:
+  min-version: 9.0
+
+pcap: ../bug-3286-02-linux-evasion/with_evasion_linux.pcap
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.stream.pkt_invalid_timestamp: 2
