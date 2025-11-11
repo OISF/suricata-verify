@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"Counting Usernames"; content:"jonkman"; flowint: usernamecount, +, 1; noalert; sid:1;)
