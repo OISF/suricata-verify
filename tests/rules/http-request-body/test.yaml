@@ -11,15 +11,15 @@ checks:
     count: 1
     match:
       id: 1
-      mpm.buffer: "file_data"
+      mpm.buffer: "http_client_body"
       mpm.pattern: "one"
       # checks that all engines are toclient
-      engines[0].name: "file_data"
-      engines[0].direction: "toclient"
+      engines[0].name: "http_client_body"
+      engines[0].direction: "toserver"
       engines[0].app_proto: "http2"
       engines[0].matches[0].name: "content"
-      engines[1].name: "file_data"
-      engines[1].direction: "toclient"
+      engines[1].name: "http_client_body"
+      engines[1].direction: "toserver"
       engines[1].app_proto: "http"
       engines[1].matches[0].name: "content"
       engines.__len: 2
@@ -28,13 +28,13 @@ checks:
     count: 1
     match:
       id: 2
-      # checks that all engines are toclient
-      engines[0].name: "file_data"
-      engines[0].direction: "toclient"
+      # checks that all engines are toserver
+      engines[0].name: "http_client_body"
+      engines[0].direction: "toserver"
       engines[0].app_proto: "http"
       engines[0].matches[0].name: "pcre"
-      engines[1].name: "file_data"
-      engines[1].direction: "toclient"
+      engines[1].name: "http_client_body"
+      engines[1].direction: "toserver"
       engines[1].app_proto: "http2"
       engines[1].matches[0].name: "pcre"
       engines.__len: 2
@@ -43,16 +43,16 @@ checks:
     count: 1
     match:
       id: 3
-      mpm.buffer: "file_data"
+      mpm.buffer: "http_client_body"
       mpm.pattern: "one"
-      # checks that all engines are toclient
-      engines[0].name: "file_data"
-      engines[0].direction: "toclient"
+      # checks that all engines are toserver
+      engines[0].name: "http_client_body"
+      engines[0].direction: "toserver"
       engines[0].app_proto: "http2"
       engines[0].matches[0].name: "content"
       engines[0].matches[1].name: "pcre"
-      engines[1].name: "file_data"
-      engines[1].direction: "toclient"
+      engines[1].name: "http_client_body"
+      engines[1].direction: "toserver"
       engines[1].app_proto: "http"
       engines[1].matches[0].name: "content"
       engines[1].matches[1].name: "pcre"
