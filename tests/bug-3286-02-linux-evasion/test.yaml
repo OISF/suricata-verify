@@ -1,6 +1,6 @@
 args:
 - --set stats.decoder-events=true
-#- --set stats.stream-events=true
+- --set stats.stream-events=true
 
 checks:
   - filter:
@@ -35,3 +35,8 @@ checks:
         event_type: http
         http.status: 200
         http.length: 14
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.stream.pkt_invalid_timestamp: 2
