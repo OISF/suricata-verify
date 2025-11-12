@@ -1,0 +1,37 @@
+requires:
+    min-version: 9
+
+args:
+- -k none --set decoder.l2tp.enabled=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+  - filter:
+      count: 2
+      match:
+        event_type: dns
+        pkt_src: "l2tp encapsulation"
+        dns.queries[0].rrname: suricata.io
+        dns.queries[0].rrtype: A
+  - filter:
+      count: 1
+      match:
+        src_ip: 10.10.10.1
+        dest_ip: 10.10.10.2
+        event_type: flow
+        proto: ICMP
+        icmp_code: 0
+        icmp_type: 8
+        response_icmp_code: 0
+        response_icmp_type: 0
+        flow.pkts_toserver: 4
+        flow.pkts_toclient: 4
+        flow.state: established
+        flow.reason: shutdown
+  - stats:
+      decoder.udp: 2
+      decoder.l2tp: 10
+      decoder.l2tp_unsupported: 0
