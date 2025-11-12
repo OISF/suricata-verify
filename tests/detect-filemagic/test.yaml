@@ -1,0 +1,23 @@
+requires:
+  min-version: 9.0.0
+  pcap: false
+
+args:
+  - --engine-analysis
+
+checks:
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1
+        engines[0].name: "file.magic"
+        engines[0].matches[0].content.pattern: "pdf"
+
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 2
+        engines[0].name: "file.magic"
+        engines[0].matches[0].content.pattern: "pdf"
