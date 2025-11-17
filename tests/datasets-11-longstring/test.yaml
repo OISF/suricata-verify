@@ -1,0 +1,10 @@
+requires:
+  min-version: 7.0.14
+
+args:
+  - --no-random --data-dir=${OUTPUT_DIR} -k none
+
+checks:
+  - file-compare:
+      filename: datasets.csv
+      expected: expected/datasets.csv

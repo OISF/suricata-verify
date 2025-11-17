@@ -1,0 +1,1 @@
+alert http any any -> any any (http.uri; dataset:set,uri-seen,type string,save datasets.csv; sid:1;)
