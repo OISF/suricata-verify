@@ -1,0 +1,1 @@
+alert tls any any -> any any (msg:"Null byte injection in issuer"; tls.cert_issuer; content:"C=US, O=Microsoft Corporation, CN=Microsoft RSA TL|00| CA 01"; sid:1;)
