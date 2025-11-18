@@ -1,0 +1,1 @@
+alert tls any any -> any any (msg:"Null byte injection in TLS Subject"; tls.cert_subject; content:"C=US, ST=WA, L=Redmond, O=Microsoft Corporat|00|on, OU=Microsoft Corporation, CN=go.microsoft.com"; sid:1;)
