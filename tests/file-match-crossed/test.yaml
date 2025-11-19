@@ -45,3 +45,16 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 8
+
+  - filter:
+      min-version: 9
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: c345c434702129224a0a3e89810a7ed2556718221c0d36fdb7e52b93fa732b00
+  - filter:
+      min-version: 9
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: 0605686b5f3a54d2fe07b3b6ed039779911f43ff079d7ff6fecbf4f75bf5ee10
