@@ -1,0 +1,119 @@
+requires:
+   version: 9
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      dest_ip: 2.2.2.2
+      dest_port: 110
+      event_type: pop3
+      ip_v: 4
+      pcap_cnt: 7
+      pop3.request.command: CAPA
+      pop3.response.data[0]: USER
+      pop3.response.data[1]: RESP-CODES
+      pop3.response.data[2]: EXPIRE 0
+      pop3.response.data[3]: LOGIN-DELAY 300
+      pop3.response.data[4]: TOP
+      pop3.response.data[5]: UIDL
+      pop3.response.data[6]: X-GOOGLE-RICO
+      pop3.response.data[7]: SASL PLAIN XOAUTH2 OAUTHBEARER
+      pop3.response.header: Capability list follows
+      pop3.response.status: OK
+      pop3.response.success: true
+      proto: TCP
+      src_ip: 1.1.1.1
+      src_port: 5555
+- filter:
+    count: 1
+    match:
+      dest_ip: 2.2.2.2
+      dest_port: 110
+      event_type: pop3
+      ip_v: 4
+      pcap_cnt: 11
+      pop3.request.args[0]: XOAUTH2
+      pop3.request.command: AUTH
+      pop3.response.header: ''
+      pop3.response.status: OK
+      pop3.response.success: true
+      proto: TCP
+      src_ip: 1.1.1.1
+      src_port: 5555
+- filter:
+    count: 1
+    match:
+      dest_ip: 2.2.2.2
+      dest_port: 110
+      event_type: pop3
+      ip_v: 4
+      pcap_cnt: 15
+      pop3.request.command: <SASL DATA>
+      pop3.response.header: Welcome.
+      pop3.response.status: OK
+      pop3.response.success: true
+      proto: TCP
+      src_ip: 1.1.1.1
+      src_port: 5555
+- filter:
+    count: 1
+    match:
+      dest_ip: 2.2.2.2
+      dest_port: 110
+      event_type: pop3
+      ip_v: 4
+      pcap_cnt: 19
+      pop3.request.command: STAT
+      pop3.response.header: 1 308661
+      pop3.response.status: OK
+      pop3.response.success: true
+      proto: TCP
+      src_ip: 1.1.1.1
+      src_port: 5555
+- filter:
+    count: 1
+    match:
+      dest_ip: 2.2.2.2
+      dest_port: 110
+      event_type: pop3
+      ip_v: 4
+      pcap_cnt: 23
+      pop3.request.command: LIST
+      pop3.response.data[0]: 1 308661
+      pop3.response.header: 1 messages (308661 bytes)
+      pop3.response.status: OK
+      pop3.response.success: true
+      proto: TCP
+      src_ip: 1.1.1.1
+      src_port: 5555
+- filter:
+    count: 1
+    match:
+      dest_ip: 2.2.2.2
+      dest_port: 110
+      event_type: pop3
+      ip_v: 4
+      pcap_cnt: 27
+      pop3.request.command: UIDL
+      pop3.response.data[0]: 1 GmailId123456789
+      pop3.response.header: ''
+      pop3.response.status: OK
+      pop3.response.success: true
+      proto: TCP
+      src_ip: 1.1.1.1
+      src_port: 5555
+- filter:
+    count: 1
+    match:
+      dest_ip: 2.2.2.2
+      dest_port: 110
+      event_type: pop3
+      ip_v: 4
+      pop3.request.command: QUIT
+      proto: TCP
+      src_ip: 1.1.1.1
+      src_port: 5555
