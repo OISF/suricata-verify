@@ -1,0 +1,14 @@
+flow default tcp 1.1.1.1:5555 > 2.2.2.2:110 (tcp.initialize; mss:9000;);
+default > (content:"CAPA\x0d\x0a";);
+default < (content:"+OK Capability list follows\x0d\x0aUSER\x0d\x0aRESP-CODES\x0d\x0aEXPIRE 0\x0d\x0aLOGIN-DELAY 300\x0d\x0aTOP\x0d\x0aUIDL\x0d\x0aX-GOOGLE-RICO\x0d\x0aSASL PLAIN XOAUTH2 OAUTHBEARER\x0d\x0a.\x0d\x0a";);
+default > (content:"AUTH XOAUTH2\x0d\x0a";);
+default < (content:"+ \x0d\x0a";);
+default > (content:"dXNlcj1qb2Uuc3BlZWRib2F0AWF1dGg9QmVhcmVyIEFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUEBAQ==\x0d\x0a";);
+default < (content:"+OK Welcome.\x0d\x0a";);
+default > (content:"STAT\x0d\x0a";);
+default < (content:"+OK 1 308661\x0d\x0a";);
+default > (content:"LIST\x0d\x0a";);
+default < (content:"+OK 1 messages (308661 bytes)\x0d\x0a1 308661\x0d\x0a.\x0d\x0a";);
+default > (content:"UIDL\x0d\x0a";);
+default < (content:"+OK\x0d\x0a1 GmailId123456789\x0d\x0a.\x0d\x0a";);
+default > (content:"QUIT\x0d\x0a";);
