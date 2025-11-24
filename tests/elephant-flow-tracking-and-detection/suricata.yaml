@@ -13,3 +13,4 @@ outputs:
       types:
         - flow
         - stats
+        - alert

@@ -10,6 +10,16 @@ checks:
   - filter:
       count: 1
       match:
+        alert.signature_id: 1
+
+  - filter:
+      count: 0
+      match:
+        alert.signature_id: 2
+
+  - filter:
+      count: 1
+      match:
         stats.flow.elephant: 1
 
   - filter:
