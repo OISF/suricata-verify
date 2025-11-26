@@ -1,0 +1,2 @@
+alert tcp any any -> any any (msg:"ToServer Elephant flow found!"; flow:to_server,elephant; sid:1;)
+alert tcp any any -> any any (msg:"ToClient Elephant flow found!"; flow:to_client,elephant; sid:2;)
