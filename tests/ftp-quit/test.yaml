@@ -1,0 +1,12 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+ - filter:
+     count: 1
+     match:
+       event_type: flow
+       app_proto: ftp
