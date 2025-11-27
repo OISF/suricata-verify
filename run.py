@@ -1192,6 +1192,9 @@ def run_parallel(jobs, tests, args, cwd, suricata_config):
             executor_instance = None
 
 def build_eve_validator():
+    progname = os.path.join(TOPDIR, "eve-validator", "target", "release", "eve-validator")
+    if os.path.exists(progname):
+        return
     env = os.environ.copy()
     if "CARGO_BUILD_TARGET" in env:
         del env["CARGO_BUILD_TARGET"]
