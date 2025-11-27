@@ -1295,10 +1295,10 @@ def main():
                 hasip = False
         if hasip:
             try:
-                pl = subprocess.check_call(["ip", "link", "show", suricata_config.interface, "up"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                pl = subprocess.check_call(["ip", "link", "set", suricata_config.interface, "up"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             except subprocess.CalledProcessError as ipl:
                 if ipl.returncode != 0:
-                    print("Interface is not up")
+                    print("Interface cannot be set to up")
                     return 1
     if args.testdir:
         tdir = os.path.abspath(args.testdir)
