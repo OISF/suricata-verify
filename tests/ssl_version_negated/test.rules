@@ -1,0 +1,5 @@
+alert tcp any any -> any any (ssl_version:!sslv3; sid: 1;)
+alert tcp any any -> any any (ssl_version:!tls1.3; sid:2;)
+alert tcp any any -> any any (ssl_version:tls1.0; sid:3;)
+# no match
+alert tcp any any -> any any (ssl_version:!tls1.0; sid:4;)
