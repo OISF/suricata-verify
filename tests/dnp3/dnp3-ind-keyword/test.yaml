@@ -9,7 +9,6 @@ checks:
       match:
         alert.signature_id: 1
         dnp3.response.iin.indicators[0]: device_restart
-        checks:
   - filter:
       count: 2
       match:
