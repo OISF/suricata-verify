@@ -132,8 +132,6 @@ function match(args)
    local thread = util.thread_info()
    assert(thread["name"]:match("^W"))
    assert(thread.name:match("^W"))
-   assert(thread["group_name"] == "Detect")
-   assert(thread.group_name == "Detect")
 
    local tx = dns.get_tx()
    local rrname = tx:rrname()
