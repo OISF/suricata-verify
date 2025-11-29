@@ -1,0 +1,7 @@
+# Given a HTTP GET pcap with single sided traffic, missing the first syn, syn/ack, and suricata 4.0.4 from PPA
+
+# This rule fires all the time
+alert http any any -> any any (msg: "ALERT http to_server"; flow:to_server; content: "GET /i/94/"; sid:1; rev:1;)
+
+# This one only fires with async-oneside set to *false*
+alert http any any -> any any (msg: "ALERT http established and to_server"; flow:to_server,established; content: "GET /i/94/"; sid: 2; rev:1;)
