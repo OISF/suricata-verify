@@ -25,29 +25,6 @@ local function count_bits(n)
     return count
 end
 
--- Convert IPv4 string + mask to CIDR notation
-local function ip_to_cidr2(ip_str, mask_hex)
-    if not ip_str or not mask_hex then return nil end
-
-    local mask = parse_mask(mask_hex)
-    if not mask then return nil end
-
-    local a, b, c, d = ip_str:match("(%d+)%.(%d+)%.(%d+)%.(%d+)")
-    if not a then return nil end
-
-    local ip = (tonumber(a) << 24) | (tonumber(b) << 16) | (tonumber(c) << 8) | tonumber(d)
-    local net = ip & mask
-    local bits = count_bits(mask)
-
-    return string.format("%d.%d.%d.%d/%d",
-        (net >> 24) & 0xFF,
-        (net >> 16) & 0xFF,
-        (net >> 8) & 0xFF,
-        net & 0xFF,
-        bits
-    )
-end
-
 -- Convert a 4-byte host-order IPv4 address and a mask to CIDR
 local function ip_to_cidr(ip_bytes, mask_hex)
     if not ip_bytes or #ip_bytes ~= 4 then return nil end
