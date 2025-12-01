@@ -1,5 +1,5 @@
 requires:
-   version: 9
+   version: 8
 
 args:
 - -k none
