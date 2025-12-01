@@ -3,12 +3,6 @@ requires:
 
 checks:
 - filter:
-    lt-version: 9
-    count: 5
-    match:
-      event_type: pop3
-- filter:
-    min-version: 9
     count: 56
     match:
       event_type: pop3
@@ -50,21 +44,18 @@ checks:
       pop3.response.success: true
 
 - filter:
-    min-version: 9
     count: 1
     match:
       pop3.request.command: "RSET"
       pop3.response.success: true
 
 - filter:
-    min-version: 9
     count: 1
     match:
       pop3.request.command: "UIDL"
       pop3.response.success: true
 
 - filter:
-    min-version: 9
     count: 49
     match:
       pop3.request.command: "TOP"
