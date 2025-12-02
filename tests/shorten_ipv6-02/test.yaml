@@ -1,0 +1,40 @@
+requires:
+  min-version: 9
+
+args:
+- -k none --set logging.ipv6-addr-shorten=no
+
+pcap: ../shorten_ipv6-01/input.pcap
+
+checks:
+- filter:
+    count: 1
+    match:
+      app_proto: http
+      dest_ip: fe80:0000:0000:0000:020c:29ff:faf2:ab42
+      dest_port: 80
+      event_type: alert
+      proto: TCP
+      src_port: 58307
+      src_ip: fe80:0000:0000:0000:020c:29ff:fef3:cf38
+
+- filter:
+    count: 1
+    match:
+      dest_ip: fe80:0000:0000:0000:020c:29ff:faf2:ab42
+      dest_port: 80
+      event_type: http
+      proto: TCP
+      src_ip: fe80:0000:0000:0000:020c:29ff:fef3:cf38
+      src_port: 58307
+
+- filter:
+    count: 1
+    match:
+      app_proto: http
+      dest_ip: fe80:0000:0000:0000:020c:29ff:faf2:ab42
+      dest_port: 80
+      event_type: flow
+      proto: TCP
+      src_ip: fe80:0000:0000:0000:020c:29ff:fef3:cf38
+      src_port: 58307
