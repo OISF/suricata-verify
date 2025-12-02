@@ -1,0 +1,11 @@
+# Match
+alert smtp any any -> any any (msg:"Test mime email received count 3"; email.received: count 3; sid:10;)
+alert smtp any any -> any any (msg:"Test mime email received count !2"; email.received: count !2; sid:11;)
+# No match
+alert smtp any any -> any any (msg:"Test mime email received count 0"; email.received: count 0; sid:20;)
+alert smtp any any -> any any (msg:"Test mime email received count <3"; email.received: count <3; sid:21;)
+
+# Match
+alert smtp any any -> any any (msg:"Test mime email received"; email.received: all; content:"from"; sid: 30;)
+alert smtp any any -> any any (msg:"Test mime email received"; email.received: all_or_absent; content:"from"; sid: 31;)
+alert smtp any any -> any any (msg:"Test mime email received"; email.received: nb 2; content:"relay1"; sid: 32;)
