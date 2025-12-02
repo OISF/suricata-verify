@@ -1,0 +1,12 @@
+requires:
+  min-version: 9
+
+pcap: ../compress_ipv6-01/input.pcap
+
+args:
+- -k none
+
+checks:
+  - file-compare:
+      filename: tcp-data.log
+      expected: expected/tcp-data.log

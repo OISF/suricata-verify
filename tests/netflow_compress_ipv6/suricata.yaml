@@ -1,0 +1,9 @@
+%YAML 1.1
+---
+outputs:
+  - eve-log:
+      enabled: true
+      ipv6-compress: yes
+
+      types:
+        - netflow
