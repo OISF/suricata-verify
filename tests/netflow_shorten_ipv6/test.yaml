@@ -1,0 +1,26 @@
+requires:
+  min-version: 9
+
+args:
+- -k none --set logging.ipv6-addr-shorten=yes
+
+checks:
+- filter:
+    count: 1
+    match:
+      app_proto: http
+      src_ip: fe80::20c:29ff:fef3:cf38
+      src_port: 58307
+      dest_ip: fe80::20c:29ff:faf2:ab42
+      dest_port: 80
+      event_type: netflow
+
+- filter:
+    count: 1
+    match:
+      app_proto: http
+      src_ip: fe80::20c:29ff:faf2:ab42
+      src_port: 80
+      dest_ip: fe80::20c:29ff:fef3:cf38
+      dest_port: 58307
+      event_type: netflow
