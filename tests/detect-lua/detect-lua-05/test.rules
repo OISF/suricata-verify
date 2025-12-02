@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"Lua test hook"; lua:test5.lua; sid:5;)
