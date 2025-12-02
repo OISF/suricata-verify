@@ -65,3 +65,10 @@ checks:
       match:
         event_type: dns
         not-has-key: dns
+  - filter:
+      min-version: 8.0.1
+      count: 2
+      match:
+        event_type: http
+        app_proto: doh2
+        app_proto_orig: http2
