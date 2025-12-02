@@ -1,0 +1,2 @@
+alert smb any any -> any any (msg:"MIME Type Test"; file.mime_type; content:"executable"; sid:1337; rev:1;)
+alert smb any any -> any any (msg:"MIME Type Test"; file.mime_type; content:"download"; sid:1338; rev:1;)
