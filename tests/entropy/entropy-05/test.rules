@@ -1,0 +1,1 @@
+alert tcp-pkt any any -> any any (msg:"Entropy segfault test"; entropy: value >= 6; sid:1;)
