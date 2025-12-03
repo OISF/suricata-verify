@@ -1,0 +1,20 @@
+requires:
+    min-version: 9
+
+args:
+- -k none --set decoder.l2tp.enabled=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+  - filter:
+      count: 4
+      match:
+        event_type: dhcp
+        pkt_src: "l2tp encapsulation"
+        vlan[0]: 3157
+  - stats:
+      decoder.l2tp: 135
+      decoder.l2tp_unsupported: 0
