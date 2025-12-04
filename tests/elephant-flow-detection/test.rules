@@ -1,0 +1,7 @@
+#alert tcp any any -> any any (msg:"ToServer Elephant flow found!"; flow.elephant:toserver; threshold: type backoff, track by_flow, count 1, multiplier 10000; sid:1;)
+#alert tcp any any -> any any (msg:"ToClient Elephant flow found!"; flow.elephant:toclient; threshold: type backoff, track by_flow, count 1, multiplier 10000; sid:2;)
+alert tcp any any -> any any (msg:"ToServer Elephant flow found!"; flow.elephant:toserver; prefilter; sid:1;)
+alert tcp any any -> any any (msg:"ToClient Elephant flow found!"; flow.elephant:toclient; sid:2;)
+alert tcp any any -> any any (msg:"ToClient Elephant flow found!"; flow.elephant:both; sid:3;)
+alert tcp any any -> any any (msg:"ToClient Elephant flow found!"; flow.elephant:either; sid:4;)
+
