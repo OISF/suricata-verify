@@ -1,0 +1,33 @@
+requires:
+  min-version: 9
+  pcap: false
+
+args:
+  - --engine-analysis
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      lists.packet.matches[0].name: "flow.elephant"
+      lists.packet.matches[0].flow_elephant.dir: "toserver"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      lists.packet.matches[0].name: "flow.elephant"
+      lists.packet.matches[0].flow_elephant.dir: "toclient"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      lists.packet.matches[0].name: "flow.elephant"
+      lists.packet.matches[0].flow_elephant.dir: "either"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      lists.packet.matches[0].name: "flow.elephant"
+      lists.packet.matches[0].flow_elephant.dir: "both"
+
