@@ -1,0 +1,52 @@
+pcap: ../tcp-urgp-09-oob-exceed-limit-inline/tcp-urgent-1byte-66k.pcap
+
+args:
+- --set stats.interval=3600
+
+requires:
+  min-version: 9
+
+checks:
+  - filter:
+      # toserver
+      count: 131711
+      match:
+        alert.signature_id: 1
+
+  - filter:
+      # toclient
+      count: 131702
+      match:
+        alert.signature_id: 2
+
+  - filter:
+      # both
+      count: 131702
+      match:
+        alert.signature_id: 3
+
+  - filter:
+      # either
+      count: 131711
+      match:
+        alert.signature_id: 4
+
+  - filter:
+      count: 1
+      match:
+        stats.flow.elephant_toserver: 1
+
+  - filter:
+      count: 1
+      match:
+        stats.flow.elephant_toclient: 1
+
+  - filter:
+      count: 1
+      match:
+        flow.elephant: true
+
+  - filter:
+      count: 1
+      match:
+        flow.elephant_direction: ["toserver", "toclient"]
