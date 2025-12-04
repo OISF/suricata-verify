@@ -4,6 +4,7 @@ args:
 - --set stats.interval=3600
 
 requires:
+  lt-version: 9
   min-version: 8
 
 checks:
