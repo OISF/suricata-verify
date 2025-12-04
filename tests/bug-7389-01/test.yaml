@@ -6,5 +6,5 @@ args:
 
 checks:
     - shell:
-        args: grep "Running with verbose level 4" suricata.log | wc -l | xargs
+        args: grep "Running with verbose level Debug" suricata.log | wc -l | xargs
         expect: 1
