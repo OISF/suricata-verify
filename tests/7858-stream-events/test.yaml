@@ -3,7 +3,7 @@ args:
 - --set stats.stream-events=true
 
 requires:
-  min-version: 8.0.3
+  min-version: 7.0.14
 
 pcap: ../bug-3286-02-linux-evasion/with_evasion_linux.pcap
 
