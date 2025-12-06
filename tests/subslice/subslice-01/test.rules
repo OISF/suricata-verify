@@ -1,0 +1,19 @@
+## Accept: */*
+alert http any any -> any any (http.accept; content: "*/*";subslice: 2; content: "*";sid:1;)
+
+# bsize
+## User-Agent: curl/7.64.1
+alert http any any -> any any (http.user_agent; content: "curl/7.64.1";  subslice: -6; content: "7.64.1"; bsize: 6; sid:2;)
+# startswith, endswith, bsize
+alert http any any -> any any (http.user_agent; content: "curl/7.64.1";  subslice: -10,3; content: "url"; startswith; endswith; bsize:3; sid:3;)
+alert http any any -> any any (http.response_body; subslice: 28,14; content: "EICAR-STANDARD"; bsize: 14;startswith; endswith; sid:4;)
+alert http any any -> any any (http.user_agent; content: "curl/7.64.1";subslice: -10,3; content: "url"; bsize: 3; startswith; endswith; sid:5;
+
+# add pcre
+alert http any any -> any any (http.user_agent; content: "curl/7.64.1"; subslice: -6; pcre:"/^([0-9\/\.]+)$/";content: "7.64.1"; bsize: 6; startswith; endswith; sid:6;)
+
+# empty buffer test: bsize:0 -- offset is past buffer length
+alert http any any -> any any (http.accept; content: "*/*";subslice: 9, 2; bsize:0; sid:7;)
+
+# offset + nbytes exceeds length, not truncating so buffer will be empty
+alert http any any -> any any (http.user_agent; content: "curl/7.64.1";  subslice: 0, 13 ; bsize: 0; sid:8;)
