@@ -1,0 +1,12 @@
+requires:
+  min-version: 9
+
+pcap: ../bug-7389-01/input.pcap
+
+args:
+ - -vvv
+
+checks:
+    - shell:
+        args: grep "Running with verbose level Config" suricata.log | wc -l | xargs
+        expect: 1

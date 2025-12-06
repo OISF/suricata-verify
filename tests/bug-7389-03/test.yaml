@@ -1,0 +1,14 @@
+requires:
+  min-version: 9
+  features:
+    - DEBUG
+
+pcap: ../bug-7389-01/input.pcap
+
+args:
+ - -vvvvvvvvvvv
+
+checks:
+    - shell:
+        args: grep "Running with verbose level Debug" suricata.log | wc -l | xargs
+        expect: 1
