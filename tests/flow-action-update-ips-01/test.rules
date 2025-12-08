@@ -1,0 +1,2 @@
+pass tcp $HOME_NET any -> $EXTERNAL_NET 80 (sid:1;)
+drop ip any any -> any any (msg:"DROP ALL"; flow:stateless; sid:2;)
