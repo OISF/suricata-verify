@@ -1,0 +1,1 @@
+alert ipv4 any any -> any any (msg:"SURICATA IPv4 invalid protocol"; decode-event:ipv4.unknown_protocol; classtype:protocol-command-decode; sid:1;)
