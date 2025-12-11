@@ -1,0 +1,12 @@
+requires:
+  pcap: false
+
+unix-commands:
+  - "add-hostbit fe80:0000:0000:0000:6600:6aff:fe5b:8f4a test 60"
+
+checks:
+- filter:
+    filename: sc.json
+    count: 1
+    match:
+      return: OK

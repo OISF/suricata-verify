@@ -57,6 +57,8 @@ if os.path.exists("src\\suricata.exe"):
 else:
     suricata_bin = "./src/suricata"
 
+suricatasc_bin = "./rust/target/release/suricatasc"
+
 PROC_TIMEOUT=300
 
 lock = threading.Lock()
@@ -616,6 +618,22 @@ class FilterCheck:
                     return False
         return True
 
+# called by threading.Timer if Suricata does not start fast enough
+def stop_wait_suricata_start():
+    raise TestError("Suricata did not start engine")
+
+# wait for suricata to be ready, to send unix-socket commands
+def grep_start_engine(p):
+    lines = b""
+    while True:
+        line = p.stdout.readline()
+        if not line:
+            break
+        lines += line
+        if b"Engine started" in line.rstrip():
+            return lines
+
+
 class TestRunner:
 
     def __init__(self, cwd, directory, outdir, suricata_config, verbose=False,
@@ -744,10 +762,25 @@ class TestRunner:
                 env[key] = str(self.config["env"][key])
         return env
 
+    def wait_suricata_start(self, p):
+        # timeout wait 2 second at most for Suricata to be ready
+        timer = threading.Timer(2, stop_wait_suricata_start)
+        timer.start()
+        try:
+            result = grep_start_engine(p)
+        finally:
+            timer.cancel()
+        return result
+
     def run(self, outdir):
         if not self.force:
             self.check_requires()
             self.check_skip()
+            if "unix-commands" in self.config:
+                if not HAS_SURICATA_SC:
+                    raise UnsatisfiedRequirementError("missing suricatasc")
+                if not self.suricata_config.has_feature("UNIX_SOCKET"):
+                    raise UnsatisfiedRequirementError("requires feature UNIX_SOCKET")
 
         if WIN32 and "setup" in self.config:
             raise UnsatisfiedRequirementError("test \"setup\" not supported on Windows")
@@ -763,6 +796,8 @@ class TestRunner:
             shell = True
         else:
             args = self.default_args()
+            if "unix-commands" in self.config:
+                args.append("--unix-socket")
 
         env = self.build_env()
 
@@ -811,6 +846,24 @@ class TestRunner:
                 p = subprocess.Popen(
                     args, shell=shell, cwd=self.directory, env=env,
                     stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+                if "unix-commands" in self.config:
+                    stdout.write(self.wait_suricata_start(p))
+                    f = open(os.path.join(self.output, "sc.json"), "w")
+                    for cmd in self.config["unix-commands"]:
+                        argsl = [os.path.join(self.cwd, suricatasc_bin), "-c", cmd]
+                        try:
+                            subprocess.check_call(
+                                argsl, shell=shell, cwd=self.directory, env=env,
+                                stdout=f, stderr=subprocess.PIPE)
+                        except:
+                            raise TestError("got non zero exit code for unix-socket command %s" % cmd);
+                    f.close()
+                    argsl = [os.path.join(self.cwd, suricatasc_bin), "-c", "shutdown"]
+                    subprocess.check_call(
+                                argsl, shell=shell, cwd=self.directory, env=env,
+                                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
 
                 # used to get a return value from the threads
                 self.utf8_errors=[]
@@ -1213,6 +1266,17 @@ def main():
         print("error: this is not a suricata source directory or " +
               "suricata is not built")
         return 1
+
+    global HAS_SURICATA_SC
+    global suricatasc_bin
+    cargo_build_target = os.environ.get("CARGO_BUILD_TARGET")
+    if cargo_build_target != None :
+        suricatasc_bin = "./rust/target/%s/release/suricatasc" % cargo_build_target
+    if os.path.exists(suricatasc_bin):
+        HAS_SURICATA_SC = True
+    else:
+        print("error: suricatasc binary is missing")
+        HAS_SURICATA_SC = False
 
     global VALIDATE_EVE
     if not WIN32 and not args.no_validation:
