@@ -1,0 +1,2 @@
+# just a random rule defining a hostbit
+alert icmp any any -> any any (itype:8; hostbits:isset,test,dst; sid:2;
