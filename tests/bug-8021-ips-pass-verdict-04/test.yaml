@@ -1,0 +1,25 @@
+pcap: ../bug-7414-decoder-event-01/ip_secopt.pcap
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2200005
+        verdict.action: "pass"
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.type: decode
+        anomaly.event: decoder.ipv4.opt_pad_required
+  - filter:
+      count: 2
+      match:
+        event_type: anomaly
+        anomaly.type: decode
+        anomaly.event: decoder.ipv4.opt_invalid_len
+  - filter:
+      count: 1
+      match:
+        event_type: flow

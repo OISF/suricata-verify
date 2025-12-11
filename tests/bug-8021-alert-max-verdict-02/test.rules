@@ -1,0 +1,7 @@
+alert tcp any any -> any any (msg:"issue8021 rule 1"; content:"PAYLOAD_TRIGGER"; sid:8002101; rev:1;)
+alert tcp any any -> any any (msg:"issue8021 rule 2"; content:"PAYLOAD_TRIGGER"; sid:8002102; rev:1;)
+alert tcp any any -> any any (msg:"issue8021 rule 3"; content:"PAYLOAD_TRIGGER"; sid:8002103; rev:1;)
+alert tcp any any -> any any (msg:"issue8021 rule 4"; content:"PAYLOAD_TRIGGER"; sid:8002104; rev:1;)
+alert tcp any any -> any any (msg:"issue8021 rule 5"; content:"PAYLOAD_TRIGGER"; sid:8002105; rev:1;)
+pass tcp any any -> any any (msg:"issue8021 rule 6"; alert; content:"PAYLOAD_TRIGGER"; sid:8002106; rev:1;)
+alert tcp any any -> any any (msg:"issue8021 rule 7"; content:"PAYLOAD_TRIGGER"; sid:8002107; rev:1;)

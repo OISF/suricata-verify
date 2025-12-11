@@ -1,0 +1,21 @@
+%YAML 1.1
+---
+
+# Configure the type of alert (and other) logging you would like.
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular #regular|syslog|unix_dgram|unix_stream|redis
+      filename: eve.json
+      ethernet: true
+      pcap-file: true
+
+      types:
+        - alert:
+            packet: yes              # enable dumping of packet (without stream segments)
+            verdict: yes
+        - anomaly:
+            types:
+              decode: yes
+              packethdr: yes
+        - flow
