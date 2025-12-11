@@ -616,6 +616,17 @@ class FilterCheck:
                     return False
         return True
 
+# wait for suricata to be ready, to send unix-socket commands
+def grep_start_engine(p, lines):
+    while True:
+        line = p.stdout.readline()
+        if not line:
+            break
+        lines += line
+        if b"Engine started" in line.rstrip():
+            return
+
+
 class TestRunner:
 
     def __init__(self, cwd, directory, outdir, suricata_config, verbose=False,
@@ -662,6 +673,18 @@ class TestRunner:
                             "%s" % setup[command],
                             shell=True,
                             cwd=self.output)
+
+    def check_unix_socket(self):
+        if "unix-commands" in self.config:
+            if HAS_SURICATA_SC is None:
+                raise UnsatisfiedRequirementError("skipping unix socket tests")
+            elif not HAS_SURICATA_SC:
+                raise UnsatisfiedRequirementError("missing suricatasc")
+            if not self.suricata_config.has_feature("UNIX_SOCKET"):
+                raise UnsatisfiedRequirementError("requires feature UNIX_SOCKET")
+            # 104 on MacOS, 108 on Linux
+            if len(os.path.join(self.output, "socket")) > 104:
+                raise UnsatisfiedRequirementError("requires shorter path for unix socket")
 
     def check_skip(self):
         if not "skip" in self.config:
@@ -744,11 +767,20 @@ class TestRunner:
                 env[key] = str(self.config["env"][key])
         return env
 
+    def wait_suricata_start(self, p, timeout):
+        lines = bytearray(b"")
+        t = threading.Thread(target=grep_start_engine, args=(p, lines))
+        t.start()
+        t.join(timeout)
+        if t.is_alive():
+            return None
+        return lines
+
     def run(self, outdir):
         if not self.force:
             self.check_requires()
             self.check_skip()
-
+            self.check_unix_socket()
         if WIN32 and "setup" in self.config:
             raise UnsatisfiedRequirementError("test \"setup\" not supported on Windows")
 
@@ -763,6 +795,8 @@ class TestRunner:
             shell = True
         else:
             args = self.default_args()
+            if "unix-commands" in self.config:
+                args.append("--unix-socket=%s" % os.path.join(self.output, "socket"))
 
         env = self.build_env()
 
@@ -811,6 +845,32 @@ class TestRunner:
                 p = subprocess.Popen(
                     args, shell=shell, cwd=self.directory, env=env,
                     stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+                if "unix-commands" in self.config:
+                    timeout = 2
+                    if "startup-timeout" in self.config:
+                        timeout = self.config["startup-timeout"]
+                    start = self.wait_suricata_start(p, timeout)
+                    if start is None:
+                        p.terminate()
+                        raise TestError("Suricata did not start engine before timeout")
+                    else:
+                        stdout.write(start)
+                    f = open(os.path.join(self.output, "sc.json"), "w")
+                    for cmd in self.config["unix-commands"]:
+                        argsl = [os.path.join(self.cwd, suricatasc_bin), os.path.join(self.output, "socket"), "-c", cmd]
+                        try:
+                            subprocess.check_call(
+                                argsl, shell=shell, cwd=self.directory, env=env,
+                                stdout=f, stderr=subprocess.PIPE, timeout=timeout)
+                        except:
+                            raise TestError("got non zero exit code for unix-socket command %s" % cmd);
+                    f.close()
+                    argsl = [os.path.join(self.cwd, suricatasc_bin), os.path.join(self.output, "socket"), "-c", "shutdown"]
+                    subprocess.check_call(
+                                argsl, shell=shell, cwd=self.directory, env=env,
+                                stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=timeout)
+
 
                 # used to get a return value from the threads
                 self.utf8_errors=[]
@@ -1182,6 +1242,8 @@ def main():
                         help="Use supplied name to make an exact match")
     parser.add_argument("--skip-tests", nargs="?", default=None,
                         help="Skip tests with a given pattern")
+    parser.add_argument("--skip-unix-socket", dest="skipunixsocket", action="store_true",
+                        help="Skips unix socket tests")
     parser.add_argument("--outdir", action="store",
                         help="Outputs to custom directory")
     parser.add_argument("--valgrind", dest="valgrind", action="store_true",
@@ -1234,6 +1296,24 @@ def main():
 
     # Create a SuricataConfig object that is passed to all tests.
     suricata_config = SuricataConfig(get_suricata_version())
+
+    global HAS_SURICATA_SC
+    HAS_SURICATA_SC = None
+    global suricatasc_bin
+    if not args.skipunixsocket:
+        sc_path = [".", "rust", "target", "release", "suricatasc"]
+        if "DEBUG" in suricata_config.features:
+            sc_path[3] = "debug"
+        cargo_build_target = os.environ.get("CARGO_BUILD_TARGET")
+        if cargo_build_target != None :
+            sc_path.insert(3, cargo_build_target)
+        suricatasc_bin = os.path.join(*sc_path)
+        if os.path.exists(suricatasc_bin):
+            HAS_SURICATA_SC = True
+        else:
+            HAS_SURICATA_SC = False
+            print("error: suricatasc binary is missing")
+
     suricata_config.valgrind = args.valgrind
     tdir = os.path.join(TOPDIR, "tests")
     if args.testdir:
