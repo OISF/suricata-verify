@@ -1,5 +1,5 @@
 requires:
-  min-version: 8.0.3
+  min-version: 7.0.14
 
 args:
   - -k none
