@@ -1,0 +1,101 @@
+requires:
+  min-version: 8.0
+
+args:
+- -k none
+- --runmode=single
+- --set stream.midstream=true
+- --simulate-ips
+
+checks:
+# Subtest 1
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 1
+# Subtest 2
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2
+# Subtest 3
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 3
+# Subtest 4
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 4
+# Subtest 5
+- filter:
+    count: 3
+    match:
+      event_type: alert
+      alert.signature_id: 5
+# Subtest 6
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 6
+# Subtest 7
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      pcap_cnt: 5
+      alert.signature_id: 1
+      verdict.action: drop
+# Subtest 8
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      pcap_cnt: 5
+      alert.signature_id: 2
+      verdict.action: drop
+# Subtest 9
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      pcap_cnt: 5
+      alert.signature_id: 3
+      verdict.action: drop
+# Subtest 10
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      pcap_cnt: 5
+      alert.signature_id: 6
+      verdict.action: drop
+# Subtest 11
+- filter:
+    count: 1
+    match:
+      event_type: drop
+      pcap_cnt: 5
+      drop.reason: rules
+# Subtest 12
+- filter:
+    count: 1
+    match:
+      event_type: drop
+      pcap_cnt: 6
+      drop.reason: "flow drop"
+# Subtest 13
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.decoder.pkts: 7
+      stats.detect.alert_queue_overflow: 1
+      stats.ips.accepted: 4
+      stats.ips.blocked: 3
