@@ -1,0 +1,18 @@
+requires:
+    min-version: 9
+
+pcap: ../quic-v2/input.pcap
+
+args:
+- --set app-layer.protocols.quic.encryption-handling=bypass
+- --set stream.reassembly.depth=1MB
+- --set stream.bypass=false
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+  - stats:
+      flow_bypassed.local_pkts: 13
+      flow_bypassed.local_bytes: 2634
