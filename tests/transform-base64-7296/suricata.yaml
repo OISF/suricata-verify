@@ -69,10 +69,6 @@ outputs:
       enabled: yes
       filename: /dev/null
       extended: yes
-  - tls-log:
-      enabled: yes
-      filename: /dev/null
-      extended: yes
   - file-store:
       version: 2
       enabled: yes
