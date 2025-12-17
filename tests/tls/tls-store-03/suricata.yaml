@@ -1,0 +1,13 @@
+%YAML 1.1
+---
+
+outputs:
+  - tls-log:
+      enabled: yes
+      filename: tls.log
+      append: yes
+      extended: yes
+  - tls-store:
+      enabled: yes
+      #certs-log-dir: certs # directory to store the certificates files
+
