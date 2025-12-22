@@ -1,0 +1,7 @@
+requires:
+  min-version: 9
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+  - -k none
+  - --set app-layer.protocols.http.libhtp.default-config.response-body-limit=0
