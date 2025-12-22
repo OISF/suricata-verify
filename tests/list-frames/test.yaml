@@ -1,0 +1,15 @@
+requires:
+  min-version: 9
+
+pcap: false
+
+args:
+ - --list-app-layer-frames
+
+checks:
+    - shell:
+        args: 'grep "tcp\: http1.response" stdout | wc -l | xargs'
+        expect: 1
+    - shell:
+        args: 'grep "udp\: mdns.pdu" stdout | wc -l | xargs'
+        expect: 1
