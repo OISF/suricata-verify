@@ -1,0 +1,1 @@
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"Test luaxform hello"; flow:established,from_server; file.data; luaxform:test.lua, hello 1, world 2; content:"Hello"; sid:380000027; rev:1;)
