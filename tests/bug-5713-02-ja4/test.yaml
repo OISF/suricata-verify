@@ -1,0 +1,18 @@
+requires:
+  min-version: 9
+  features:
+    - HAVE_JA4
+
+pcap: ../bug-5713-01/TLSv1-Extracted-MaliciousC2.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+        tls.version: "TLSv1"
+        tls.ja4: "t10i070600_c50f5591e341_ce66f3b797c1"

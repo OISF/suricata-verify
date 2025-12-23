@@ -1,0 +1,13 @@
+requires:
+  min-version: 9
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+        tls.version: "TLSv1"
