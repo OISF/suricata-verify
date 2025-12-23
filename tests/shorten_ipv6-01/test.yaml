@@ -2,7 +2,7 @@ requires:
   min-version: 9
 
 args:
-- -k none --set logging.ipv6-addr-shorten=yes
+- -k none --set global.ipv6-addr-shorten=yes
 
 checks:
 - filter:

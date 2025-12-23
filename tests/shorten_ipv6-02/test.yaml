@@ -2,7 +2,7 @@ requires:
   min-version: 9
 
 args:
-- -k none --set logging.ipv6-addr-shorten=no
+- -k none --set global.ipv6-addr-shorten=no
 
 pcap: ../shorten_ipv6-01/input.pcap
 
