@@ -1,7 +1,7 @@
 pcap: ../dns-reversed-tcp-1/dns.pcap
 
 requires:
-  min-version: 9
+  min-version: 8.0.3
 
 args:
   - --set stream.midstream=true
