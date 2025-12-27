@@ -1,0 +1,26 @@
+requires:
+  min-version: 8
+  features:
+    - DPDK
+
+# DPDK mode runs continuously, use timeout to stop after processing
+command: |
+  timeout --signal=TERM 5 ${SRCDIR}/src/suricata -c ${TEST_DIR}/suricata.yaml --dpdk -l ${TEST_DIR}/output -S ${TEST_DIR}/test.rules -k none -vvv; true
+
+# If segmented mbuf handling is broken, TLS parsing fails and alerts won't fire
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
