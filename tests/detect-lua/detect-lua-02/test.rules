@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"Lua test hook"; lua:test2.lua; sid:2;)
