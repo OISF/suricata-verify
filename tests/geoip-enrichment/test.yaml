@@ -1,0 +1,25 @@
+requires:
+  features:
+    - GeoIP2
+
+pcap: input.pcap
+
+checks:
+  # Check alert has geoip_dst with correct structure
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        has-key: geoip_dst
+        has-key: geoip_dst.ip
+        has-key: geoip_dst.geo.country_iso_code
+        geoip_dst.geo.country_iso_code: DE
+
+  # Check flow has geoip_dst enrichment
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        has-key: geoip_dst
+        geoip_dst.geo.country_iso_code: DE
