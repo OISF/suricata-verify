@@ -39,28 +39,28 @@ checks:
         direction: "to_server"
         stream_tcp.session.state: "syn_sent"
   - filter:
-      lt-version: 9
+      lt-version: 8.0.3
       count: 1
       match:
         event_type: tls
         tls.sni: "icloud.com"
         tls.version: "UNDETERMINED"
   - filter:
-      lt-version: 9
+      lt-version: 8.0.3
       count: 1
       match:
         event_type: tls
         tls.sni: "icloud.com"
         tls.version: "TLS 1.3"
   - filter:
-      min-version: 9
+      min-version: 8.0.3
       count: 0
       match:
         event_type: tls
         tls.sni: "icloud.com"
         tls.version: "UNDETERMINED"
   - filter:
-      min-version: 9
+      min-version: 8.0.3
       count: 2
       match:
         event_type: tls
