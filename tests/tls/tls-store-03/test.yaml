@@ -1,5 +1,5 @@
 requires:
-  lt-version: 9
+  lt-version: 8
 
 pcap: ../tls-cert-issuer/tls.pcap
 
