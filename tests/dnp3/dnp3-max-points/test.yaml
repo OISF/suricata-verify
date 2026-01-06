@@ -1,0 +1,14 @@
+requires:
+  min-version: 9.0.0
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        dnp3.type: request
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2270005
