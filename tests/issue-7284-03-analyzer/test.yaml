@@ -1,0 +1,15 @@
+requires:
+    pcap: false
+
+args:
+- --engine-analysis
+- --simulate-ips
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 2
+      type: pkt
+      flags[4]: "applayer"
