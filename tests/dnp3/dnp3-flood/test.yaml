@@ -1,5 +1,5 @@
 requires:
-  min-version: 9.0.0
+  min-version: 7.0.14
 
 checks:
   - filter:
