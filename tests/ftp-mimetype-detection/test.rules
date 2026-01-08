@@ -1,0 +1,1 @@
+alert ftp-data any any -> any any (msg:"MIME Type Test"; file.mime_type; content:"pdf"; sid:1338; rev:1;)
