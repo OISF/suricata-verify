@@ -1,0 +1,5 @@
+alert tcp any any -> any any (msg:"byte_math varname test sig"; \
+    ipv4.hdr; byte_extract:1,5,rpkt_len,relative; \
+    byte_math:bytes rpkt_len, offset 1, oper +, rvalue 102, result result_val; \
+    tcp.hdr; byte_test: 1, =, result_val, 1, relative; \
+    sid:1;)
