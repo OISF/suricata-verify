@@ -37,6 +37,16 @@ checks:
       tls.subject: CN=ubuntu
       tls.version: TLS 1.2
 - filter:
+    min-version: 8.0.1
+    count: 1
+    match:
+      app_proto: tls
+      app_proto_orig: pgsql
+      dest_ip: 192.168.50.12
+      dest_port: 5432
+      event_type: tls
+      pcap_cnt: 10
+- filter:
     count: 1
     match:
       app_proto: tls
