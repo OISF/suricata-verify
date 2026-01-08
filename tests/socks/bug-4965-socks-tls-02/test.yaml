@@ -1,0 +1,40 @@
+requires:
+  min-version: 8
+
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: socks
+        socks.auth_methods.request[0]: "No authentication"
+        socks.auth_methods.request[1]: "GSSAPI"
+        socks.auth_methods.request[2]: "Username/Password"
+        socks.auth_methods.response: "Username/Password"
+  - filter:
+      count: 1
+      match:
+        event_type: socks
+        socks.auth_userpass.user: proxyuser
+        socks.auth_userpass.pass: securepassword
+        socks.auth_userpass.response: "Success"
+  - filter:
+      count: 1
+      match:
+        event_type: socks
+        socks.connect.ipv4: 35.212.0.44
+        socks.connect.port: 443
+        socks.connect.response: "Success"
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+        tls.sni: suricata.io
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: tls
+        app_proto_orig: socks

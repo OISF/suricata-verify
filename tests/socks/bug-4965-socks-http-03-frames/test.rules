@@ -1,0 +1,2 @@
+alert socks any any -> any any (frame:pdu; content:"|05|"; startswith; sid:1;)
+alert socks any any -> any any (frame:connect.domain; content:"eternityms33k74r7iuuxfda4sqsiei3o3lbtr5cpalf6f4skszpruad.onion"; startswith; endswith; sid:2;)
