@@ -1,0 +1,45 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert
+
+dpdk:
+  eal-params:
+    proc-type: primary
+    vdev: net_pcap0,rx_pcap=input.pcap
+    no-huge:
+    m: 256
+
+  interfaces:
+    - interface: net_pcap0
+      threads: 1
+      promisc: true
+      checksum-checks: false
+      checksum-checks-offload: false
+      mtu: 256  # small MTU to force segmented mbufs
+      mempool-size: 1024
+      mempool-cache-size: auto
+      rx-descriptors: 256
+      tx-descriptors: 256
+      copy-mode: none
+      copy-iface: none
+
+threading:
+  set-cpu-affinity: yes
+  cpu-affinity:
+    - management-cpu-set:
+        cpu: [ 0 ]
+    - worker-cpu-set:
+        cpu: [ "all" ]
+        mode: "exclusive"
+
+app-layer:
+  protocols:
+    tls:
+      enabled: yes
