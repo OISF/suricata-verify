@@ -46,6 +46,7 @@ import yaml
 import traceback
 import platform
 import signal
+import time
 
 VALIDATE_EVE = False
 WIN32 = sys.platform == "win32"
@@ -279,6 +280,7 @@ class SuricataConfig:
         self.version = version
         self.features = set()
         self.config = {}
+        self.interface = None
         self.load_build_info()
 
     def load_build_info(self):
@@ -329,7 +331,7 @@ def check_filter_test_version_compat(requires, test_version):
                     raise UnnecessaryRequirementError(
                         "test already requires min {} not needed for the check {}".format(test_version["min"], requires["min-version"]))
 
-def check_requires(requires, suricata_config: SuricataConfig, test_dir=None):
+def check_requires(requires, suricata_config: SuricataConfig, suri_dir=None):
     suri_version = suricata_config.version
     for key in requires:
         if key == "min-version":
@@ -368,8 +370,8 @@ def check_requires(requires, suricata_config: SuricataConfig, test_dir=None):
                         "requires env var %s" % (env))
         elif key == "files":
             for filename in requires["files"]:
-                if test_dir and not os.path.isabs(filename):
-                    filename = os.path.join(test_dir, filename)
+                if suri_dir and not os.path.isabs(filename):
+                    filename = os.path.join(suri_dir, filename)
                 if not os.path.exists(filename):
                     raise UnsatisfiedRequirementError(
                         "requires file %s" % (filename))
@@ -502,7 +504,7 @@ class ShellCheck:
             shell_args["min-version"] = min_version
         if lt_version is not None:
             shell_args["lt-version"] = lt_version
-        check_requires(shell_args, self.suricata_config, self.script_cwd)
+        check_requires(shell_args, self.suricata_config)
 
         try:
             if WIN32:
@@ -561,7 +563,7 @@ class FilterCheck:
         feature = self.config.get("feature")
         if feature is not None:
             requires["features"] = [feature]
-        check_requires(requires, self.suricata_config, self.script_cwd)
+        check_requires(requires, self.suricata_config)
 
         if "filename" in self.config:
             json_filename = self.config["filename"]
@@ -701,7 +703,7 @@ class TestRunner:
 
     def check_requires(self):
         requires = self.config.get("requires", {})
-        check_requires(requires, self.suricata_config, self.directory)
+        check_requires(requires, self.suricata_config, self.cwd)
         for key in requires:
             if key == "min-version":
                 self.version["min"] = requires["min-version"]
@@ -743,6 +745,18 @@ class TestRunner:
             for key in self.config["env"]:
                 env[key] = str(self.config["env"][key])
         return env
+
+    def wait_suricata_start(self, p):
+        lines = b""
+        # TODO timeout wait 1 second at most for Suricata to be ready
+        while True:
+            line = p.stdout.readline()
+            if not line:
+                break
+            lines += line
+            if b"Engine started" in line.rstrip():
+                return lines
+        raise TestError("Suricata did not start engine for live test")
 
     def run(self, outdir):
         if not self.force:
@@ -810,7 +824,22 @@ class TestRunner:
 
                 p = subprocess.Popen(
                     args, shell=shell, cwd=self.directory, env=env,
-                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, start_new_session=True)
+
+                if self.suricata_config.interface != None:
+                    argsl = ["tcpreplay", "-i", self.suricata_config.interface]
+                    pcap = self.pcap_name()
+                    if pcap == None:
+                        raise TestError("live test needs a pcap")
+                    argsl.append(pcap)
+
+                    stdout.write(self.wait_suricata_start(p))
+                    pl = subprocess.check_call(
+                        argsl, shell=shell, cwd=self.directory, env=env,
+                        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    # TODO how to know Suricata completed ?
+                    time.sleep(1)
+                    p.terminate()
 
                 # used to get a return value from the threads
                 self.utf8_errors=[]
@@ -930,6 +959,20 @@ class TestRunner:
 
         return count
 
+    def pcap_name(self):
+        if "pcap" in self.config:
+            pcap_path = os.path.join(self.directory, self.config["pcap"])
+            if not os.path.exists(pcap_path):
+                raise TestError("PCAP filename does not exist: {}".format(self.config["pcap"]))
+            return pcap_path
+        # else
+        pcaps = glob.glob(os.path.join(self.directory, "*.pcap"))
+        if len(pcaps) > 1:
+            raise TestError("More than 1 pcap file found")
+        if pcaps:
+           return pcaps[0]
+        return None
+
     def default_args(self):
         args = []
         if self.suricata_config.valgrind:
@@ -982,18 +1025,12 @@ class TestRunner:
         args += ["-c", self.get_suricata_yaml_path()]
 
         # Find pcaps.
-        if "pcap" in self.config:
-            pcap_path = os.path.join(self.directory, self.config["pcap"])
-            if not os.path.exists(pcap_path):
-                raise TestError("PCAP filename does not exist: {}".format(self.config["pcap"]))
-            args += ["-r", os.path.realpath(pcap_path)]
+        if self.suricata_config.interface != None:
+            args += ["-i", self.suricata_config.interface]
         else:
-            pcaps = glob.glob(os.path.join(self.directory, "*.pcap"))
-            pcaps += glob.glob(os.path.join(self.directory, "*.pcapng"))
-            if len(pcaps) > 1:
-                raise TestError("More than 1 pcap file found")
-            if pcaps:
-                args += ["-r", pcaps[0]]
+            pcap = self.pcap_name()
+            if pcap != None:
+                args += ["-r", pcap]
 
         # Find rules.
         rules = sorted(glob.glob(os.path.join(self.directory, "*.rules")))
@@ -1155,6 +1192,9 @@ def run_parallel(jobs, tests, args, cwd, suricata_config):
             executor_instance = None
 
 def build_eve_validator():
+    progname = os.path.join(TOPDIR, "eve-validator", "target", "release", "eve-validator")
+    if os.path.exists(progname):
+        return
     env = os.environ.copy()
     if "CARGO_BUILD_TARGET" in env:
         del env["CARGO_BUILD_TARGET"]
@@ -1195,6 +1235,7 @@ def main():
     parser.add_argument("--aggressive-cleanup", dest="aggressivecleanup", action="store_true",
                         help="Clean up output directories of passing tests")
     parser.add_argument("--no-validation", action="store_true", help="Disable EVE validation")
+    parser.add_argument("--live", action="store", help="run live tests")
     parser.add_argument("patterns", nargs="*", default=[])
     parser.add_argument("-j", type=int, default=min(8, os.cpu_count()),
                         help="Number of jobs to run (threads)")
@@ -1235,7 +1276,30 @@ def main():
     # Create a SuricataConfig object that is passed to all tests.
     suricata_config = SuricataConfig(get_suricata_version())
     suricata_config.valgrind = args.valgrind
+    suricata_config.interface = args.live
     tdir = os.path.join(TOPDIR, "tests")
+    if args.live != None:
+        tdir = os.path.join(TOPDIR, "live")
+        try:
+            pl = subprocess.check_call(["tcpreplay", "-h"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        except subprocess.CalledProcessError as tcpr:
+            if tcpr.returncode != 1:
+                print("Live tests require tcpreplay")
+                return 1
+        hasip = True
+        try:
+            pl = subprocess.check_call(["ip", "a"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        except subprocess.CalledProcessError as ipl:
+            if ipl.returncode != 0:
+                print("Cannot test if interface is up with ip")
+                hasip = False
+        if hasip:
+            try:
+                pl = subprocess.check_call(["ip", "link", "set", suricata_config.interface, "up"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            except subprocess.CalledProcessError as ipl:
+                if ipl.returncode != 0:
+                    print("Interface cannot be set to up")
+                    return 1
     if args.testdir:
         tdir = os.path.abspath(args.testdir)
     # First gather the tests so we can run them in alphabetic order.
