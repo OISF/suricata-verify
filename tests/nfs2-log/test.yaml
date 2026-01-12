@@ -1,0 +1,23 @@
+requires:
+  min-version: 9
+
+pcap: ../nfs-bug-5140/nfsv2.pcap
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: nfs
+        nfs.version: 2
+        nfs.procedure: MKDIR
+        has-key: nfs.rename
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.version: 2
+        nfs.procedure: RENAME
+        has-key: nfs.rename
