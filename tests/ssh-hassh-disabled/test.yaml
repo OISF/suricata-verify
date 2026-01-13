@@ -1,0 +1,14 @@
+requires:
+  min-version: 9
+
+args:
+ - -k none
+
+pcap: ../ssh-hassh/input.pcap
+
+exit-code: 1
+
+checks:
+    - shell:
+        args: grep "hassh support is not enabled" stderr | wc -l | xargs
+        expect: 4

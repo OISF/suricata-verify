@@ -1,0 +1,16 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filename: eve.json
+      types:
+        - alert
+        - ssh
+
+app-layer:
+  # error-policy: ignore
+  protocols:
+    ssh:
+      hassh: no
