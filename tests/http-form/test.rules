@@ -1,0 +1,8 @@
+alert http1 any any -> any any (msg:"body not encoded"; http.form; content: "bodyparam1=value1" ; sid:1;)
+alert http1 any any -> any any (msg:"body encoded"; http.form; content: "bodyparam2=value2" ; sid:2;)
+alert http1 any any -> any any (msg:"uri not encoded"; http.form; content: "uriparam1=uv1" ; sid:3;)
+alert http1 any any -> any any (msg:"uri encoded"; http.form; content: "uriparam2=uv2" ; sid:4;)
+alert http2 any any -> any any (msg:"body not encoded"; http.form; content: "bodyparam1=value1" ; sid:5;)
+alert http2 any any -> any any (msg:"body encoded"; http.form; content: "bodyparam2=value2" ; sid:6;)
+alert http2 any any -> any any (msg:"uri not encoded"; http.form; content: "uriparam1=uv1" ; sid:7;)
+alert http2 any any -> any any (msg:"uri encoded"; http.form; content: "uriparam2=uv2" ; sid:8;)
