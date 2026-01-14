@@ -1275,8 +1275,14 @@ def main():
                 if args.exact:
                     if pattern == basename:
                         tests.append(dirpath)
-                elif basename.find(pattern) > -1:
-                    tests.append(dirpath)
+                else:
+                    if basename.find(pattern) > -1:
+                        tests.append(dirpath)
+                    else:
+                        # also check the parent dir of the test for pattern
+                        parent = os.path.basename(os.path.dirname(dirpath))
+                        if parent != "tests" and parent.find(pattern) > -1:
+                            tests.append(dirpath)
 
     # Sort alphabetically.
     tests.sort()
