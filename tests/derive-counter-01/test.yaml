@@ -1,0 +1,10 @@
+pcap: ../linktype-228/flow-test-01.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.decoder.tcp: 7
+        stats.decoder.avg_pkt_size: 63
+        stats.decoder.max_pkt_size: 157
