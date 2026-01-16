@@ -1,0 +1,3 @@
+#
+alert http any any -> any any (msg:"TEST"; content:"GET"; http_method; content:"/cgi-bin/cart32.exe"; http_raw_uri; sid:1; rev:1;)
+
