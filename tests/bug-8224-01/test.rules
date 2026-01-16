@@ -1,0 +1,1 @@
+drop http 172.31.10.37 any -> 18.180.192.156 any (app-layer-event:http.request_field_too_long; flow:established; msg:"HTTP Dropped - Request too long"; priority:1; sid:2; gid:1; rev:1;)

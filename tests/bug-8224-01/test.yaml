@@ -1,0 +1,16 @@
+requires:
+  min-version: 9
+
+args:
+  - --simulate-ips
+  - -k none
+  # disable exception policy to avoid dropping the flow before rules could match
+  - --set exception-policy=ignore
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        pcap_cnt: 19
