@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"ET OISF XOR Lua demonstration"; flow:established,to_server; lua:xor1.lua; classtype:misc-activity; rev:1; sid:1;)
