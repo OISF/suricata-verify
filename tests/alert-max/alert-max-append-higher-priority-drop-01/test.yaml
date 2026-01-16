@@ -1,0 +1,73 @@
+args:
+- -k none
+- --runmode=single
+- --set stream.midstream=true
+- --simulate-ips
+
+pcap: ../alert-max-append-higher-priority/input.pcap
+
+checks:
+# Sub-test 1
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+# Sub-test 2
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2
+# Sub-test 3
+- filter:
+    min-version: 8
+    # suricata 7 doesn't have this alert
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 3
+# Sub-test 4
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 4
+# Sub-test 5
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 5
+# Sub-test 6
+- filter:
+    # This currently fails for 8.0.x
+    count: 1
+    match:
+      event_type: drop
+      pcap_cnt: 1
+      drop.reason: rules
+# Sub-test 7
+- filter:
+    lt-version: 8.0
+    count: 1
+    match:
+      event_type: stats
+      stats.detect.alert_queue_overflow: 1
+      stats.detect.alert: 3
+      stats.decoder.pkts: 1
+      stats.ips.blocked: 1
+      stats.ips.accepted: 0
+      stats.ips.drop_reason.rules: 1
+# Sub-test 8
+- filter:
+    min-version: 8.0
+    count: 1
+    match:
+      event_type: stats
+      stats.detect.alert_queue_overflow: 1
+      stats.detect.alert: 3
+      stats.decoder.pkts: 1
+      stats.ips.blocked: 1
+      stats.ips.accepted: 0
+      stats.ips.drop_reason.rules: 1
