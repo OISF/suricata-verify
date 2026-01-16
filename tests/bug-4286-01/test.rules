@@ -1,0 +1,4 @@
+# not working, see bug 4286
+alert http any any -> any any (flow:established,to_server; content:"id="; depth:3; isdataat:!13,relative; http_cookie; sid:1;)
+alert http any any -> any any (flow:established,to_server; http.cookie; content:"id="; depth:3; isdataat:!13,relative; sid:2;)
+alert http any any -> any any (flow:established,to_server; content:"id="; depth:3; http_cookie; isdataat:!13,relative; sid:3;)
