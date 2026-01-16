@@ -1,0 +1,11 @@
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.http_method: CONNECT
+        http.url: /

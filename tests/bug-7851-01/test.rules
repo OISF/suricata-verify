@@ -1,0 +1,6 @@
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"Suspicious short host value - pcre and bsize"; flow:established,to_server; http.host; bsize:<3; pcre:"/^.{1,2}$/"; classtype:bad-unknown; sid:1; rev:1;)
+
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"Suspicious short host value - bsize"; flow:established,to_server; http.host; bsize:<3; classtype:bad-unknown; sid:2; rev:1;)
+
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"Suspicious short host value - pcre"; flow:established,to_server; http.host; pcre:"/^.{1,2}$/"; classtype:bad-unknown; sid:3; rev:1;)
+
