@@ -1,0 +1,21 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+  - --set stream.reassembly.toserver-chunk-size=15560
+
+checks:
+  - filter:
+      count: 7
+      match:
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 3
+
