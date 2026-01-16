@@ -3,6 +3,8 @@ args:
 - --runmode=single
 - --set stream.midstream=true
 
+pcap: ../../alert-max/alert-max-append-higher-priority/input.pcap
+
 checks:
 # Subtest 1
 - filter:
@@ -28,6 +30,7 @@ checks:
     match:
       event_type: alert
       alert.signature_id: 4
+      verdict.action: alert
 # Subtest 5
 - filter:
     count: 0
@@ -40,12 +43,14 @@ checks:
     match:
       event_type: alert
       alert.signature_id: 6
+      verdict.action: alert
 # Subtest 7
 - filter:
     count: 1
     match:
       event_type: alert
       alert.signature_id: 7
+      verdict.action: alert
 # Subtest 8
 - filter:
     count: 0
@@ -58,25 +63,19 @@ checks:
     match:
       event_type: stats
       stats.detect.alert_queue_overflow: 4
-# Subtest 10
+# Subtest 8
 - filter:
     count: 0
     match:
       event_type: alert
       alert.signature_id: 9
-# Subtest 11
-- filter:
-    count: 0
-    match:
-      event_type: alert
-      alert.signature_id: 10
-# Subtest 11
+# Subtest 8
 - filter:
     count: 0
     match:
       event_type: alert
       alert.signature_id: 11
-# Subtest 13
+# Subtest 8
 - filter:
     count: 0
     match:
