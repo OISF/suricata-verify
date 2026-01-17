@@ -1247,15 +1247,16 @@ def main():
         if dirpath == tdir:
             continue
         basename = os.path.basename(dirpath)
+        parent = dirpath.replace(tdir, "")
         if args.skip_tests:
             skip_tests_opt = False
             patterns = args.skip_tests.split(",")
             for pattern in patterns:
                 if args.exact:
-                    if pattern == basename:
+                    if pattern == parent or pattern == basename:
                         skip_tests_opt = True
                         break
-                elif basename.find(pattern) > -1:
+                elif parent.find(pattern) > -1:
                     skip_tests_opt = True
                     break
             if skip_tests_opt:
@@ -1273,9 +1274,10 @@ def main():
         else:
             for pattern in args.patterns:
                 if args.exact:
-                    if pattern == basename:
+                    if pattern == parent or pattern == basename:
                         tests.append(dirpath)
-                elif basename.find(pattern) > -1:
+                # also check the parent dir of the test for pattern
+                elif parent.find(pattern) > -1:
                     tests.append(dirpath)
 
     # Sort alphabetically.
