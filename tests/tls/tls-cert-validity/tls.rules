@@ -1,0 +1,2 @@
+alert tls any any -> any any (msg:"Stamus TLS"; tls_cert_notafter:>2015; sid:2; rev:1;)
+alert tls any any -> any any (msg:"Stamus TLS"; tls_cert_notbefore:<2025; sid:3; rev:1;)
