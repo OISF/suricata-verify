@@ -1,0 +1,14 @@
+requires:
+    min-version: 9
+
+pcap: ../detect-bytejump-01/input.pcap
+
+args:
+ - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1

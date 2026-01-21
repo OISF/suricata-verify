@@ -1,0 +1,5 @@
+# Jump value from payload will be 13 (dec) without
+# the bitmask; the bitmask reduces the jump value
+# to 6
+# payload; `Question?13When will the pandemic end?`
+alert tcp any any -> any any (msg:"Byte-jump test w/bitmask";content:"Question?"; byte_jump:2,0,relative,string,from_end,post_offset -26, bitmask 0; content:"ll the pandemic end";distance:0; sid:1;)
