@@ -12,4 +12,9 @@ PCAP
 ====
 
 PCAP is the result of extracting the http packets from a pcap representing a
-curl to the www.testmyids.com site.
+curl to the www.testmyids.com site, reused from test exception-policy-midstream-06 - input-http-ACK.pcap .
+
+Ticket
+======
+
+https://redmine.openinfosecfoundation.org/issues/5510
