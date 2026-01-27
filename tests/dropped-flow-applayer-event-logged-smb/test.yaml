@@ -12,15 +12,34 @@ checks:
       match:
         event_type: alert
   - filter:
+      min-version: 9
+      count: 0
+      match:
+        event_type: alert
+        pcap_cnt: 2
+  - filter:
+      min-version: 9
+      count: 0
+      match:
+        event_type: smb
+  - filter:
+      min-version: 9
+      count: 54
+      match:
+        event_type: drop
+  - filter:
+      lt-version: 8.0
       count: 1
       match:
         event_type: alert
         pcap_cnt: 2
   - filter:
+      lt-version: 8.0
       count: 1
       match:
         event_type: smb
   - filter:
+      lt-version: 8.0
       count: 53
       match:
         event_type: drop
