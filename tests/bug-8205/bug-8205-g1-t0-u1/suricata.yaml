@@ -1,0 +1,17 @@
+%YAML 1.1
+---
+
+app-layer:
+  protocols:
+    dns:
+      enabled: yes
+      tcp:
+        enabled: no
+      udp:
+        enabled: yes
+outputs:
+  - eve-log:
+      enabled: yes
+      types:
+        - dns
+

@@ -1,0 +1,22 @@
+requires:
+  min-version: 9
+
+pcap: ../../dns/dns-frames/input.pcap
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: dns
+        proto: UDP
+  - filter:
+      count: 2
+      match:
+        event_type: dns
+        proto: TCP
+  - shell:
+      args: |
+        grep -q "Warning: app-layer-detect-proto: Inconsistent global (FALSE) and respective ipproto (TRUE) settings found for alproto dns and ipproto tcp" stdout
+  - shell:
+      args: |
+        grep -q "Warning: app-layer-detect-proto: Inconsistent global (FALSE) and respective ipproto (TRUE) settings found for alproto dns and ipproto udp" stdout
