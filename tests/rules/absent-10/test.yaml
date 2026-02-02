@@ -1,0 +1,14 @@
+requires:
+  min-version: 9
+
+pcap: ../absent-04/empty.pcap
+
+args:
+  - --init-errors-fatal
+
+exit-code: 1
+
+checks:
+  - shell:
+      args: grep "error_or/must_error requires a transform that can fail" suricata.log | wc -l | xargs
+      expect: 1

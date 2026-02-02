@@ -1,0 +1,15 @@
+requires:
+  min-version: 8
+
+pcap: ../absent-04/empty.pcap
+
+args:
+  - --init-errors-fatal
+
+checks:
+  # or_else with non-failing transform (dotprefix) should load without errors
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
