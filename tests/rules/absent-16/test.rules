@@ -1,0 +1,2 @@
+# must_succeed without other keywords on the same buffer should fail to load
+alert http any any -> any any (msg:"must_succeed alone"; flow:established,to_server; http.uri; from_base64: mode strict; absent: must_succeed; sid:1;)

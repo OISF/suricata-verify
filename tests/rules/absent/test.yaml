@@ -13,7 +13,7 @@ checks:
       id: 6
       engines[2].name: "http_referer"
       engines[2].matches[0].name: "absent"
-      engines[2].matches[0].absent.or_else: true
+      engines[2].matches[0].absent.mode: "or_else"
       engines[2].matches[1].name: "content"
       engines[2].matches[1].content.negated: true
 - filter:
@@ -23,7 +23,7 @@ checks:
       id: 7
       engines[2].name: "http_referer"
       engines[2].matches[0].name: "absent"
-      engines[2].matches[0].absent.or_else: true
+      engines[2].matches[0].absent.mode: "or_else"
       engines[2].matches[1].name: "pcre"
       engines[2].matches[1].pcre.negated: true
 - filter:
@@ -33,5 +33,5 @@ checks:
       id: 8
       engines[2].name: "http_referer"
       engines[2].matches[0].name: "absent"
-      engines[2].matches[0].absent.or_else: false
+      engines[2].matches[0].absent.mode: "only"
       engines[2].matches.__len: 1
