@@ -1,0 +1,14 @@
+# pcap contains HTTP request with URI /?arg=Zm 9v Ym Fy
+# "Zm 9v Ym Fy" is "foobar" in RFC2045 mode but invalid in strict mode
+
+# error_or with strict mode: spaces cause decode error -> match via error_or
+alert http any any -> any any (msg:"error_or strict decode error"; flow:established,to_server; http.uri; content:"/?arg=Zm 9v Ym Fy"; from_base64: offset 6, mode strict; absent: error_or; content:"nomatch"; sid:1; rev:1;)
+
+# error_or with rfc2045 mode: decode succeeds -> match via content
+alert http any any -> any any (msg:"error_or rfc2045 content match"; flow:established,to_server; http.uri; content:"/?arg=Zm 9v Ym Fy"; from_base64: offset 6, mode rfc2045; absent: error_or; content:"foobar"; sid:2; rev:1;)
+
+# error_or with rfc2045 mode: decode succeeds but content doesn't match -> no alert
+alert http any any -> any any (msg:"error_or rfc2045 no match"; flow:established,to_server; http.uri; content:"/?arg=Zm 9v Ym Fy"; from_base64: offset 6, mode rfc2045; absent: error_or; content:"nomatch"; sid:3; rev:1;)
+
+# bare absent with strict mode: decode errors but bare absent only matches truly absent buffers -> no alert
+alert http any any -> any any (msg:"bare absent with decode error"; flow:established,to_server; http.uri; content:"/?arg=Zm 9v Ym Fy"; from_base64: offset 6, mode strict; absent; sid:4; rev:1;)

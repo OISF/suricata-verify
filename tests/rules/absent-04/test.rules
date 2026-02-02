@@ -1,0 +1,2 @@
+# error_or on a buffer without any transform should fail to load
+alert http any any -> any any (msg:"error_or without transform"; flow:established,to_server; http.uri; absent: error_or; content:"test"; sid:1;)
