@@ -1,0 +1,6 @@
+# or_else on a buffer with a transform that can fail should error;
+# use error_or instead
+alert http any any -> any any (msg:"or_else with from_base64 strict"; flow:established,to_server; http.uri; content:"test"; from_base64: offset 0, mode strict; absent: or_else; content:"nomatch"; sid:1;)
+
+# same check with default mode
+alert http any any -> any any (msg:"or_else with from_base64 default mode"; flow:established,to_server; http.uri; content:"test"; from_base64; absent: or_else; content:"nomatch"; sid:2;)
