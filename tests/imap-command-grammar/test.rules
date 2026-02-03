@@ -1,0 +1,8 @@
+alert imap any any -> any any (app-layer-event:imap.invalid_data; sid:1; rev:1;)
+alert imap any 42010 <> any any (flow:to_server,established; imap.request; content:"A5 NOOP"; startswith; endswith; sid:101; rev:1;)
+alert imap any 42010 <> any any (flow:to_server,established; imap.request; content:"Archive/%"; endswith; sid:102; rev:1;)
+alert imap any 42020 <> any any (flow:to_server,established; imap.request; content:"A5 NOOP"; startswith; endswith; sid:201; rev:1;)
+alert imap any 42020 <> any any (flow:to_server,established; imap.request; content:"+FLAGS |5c|Seen"; sid:202; rev:1;)
+alert imap any 42030 <> any any (flow:to_server,established; imap.request; content:"|5c 22|quoted|5c 22 20 5c 5c|folder"; sid:301; rev:1;)
+alert imap any 42030 <> any any (flow:to_client,established; imap.response; content:"a)b"; sid:302; rev:1;)
+alert imap any 42030 <> any any (flow:to_server,established; imap.request; content:"A3 NOOP"; startswith; endswith; sid:303; rev:1;)

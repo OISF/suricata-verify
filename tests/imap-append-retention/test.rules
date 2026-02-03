@@ -1,0 +1,5 @@
+alert imap any any -> any any (email.body; content:"APPEND-EARLY-MARKER"; sid:1; rev:1;)
+alert imap any any -> any any (email.body; content:"APPEND-LATE-MARKER"; sid:2; rev:1;)
+alert imap any any -> any any (requires: keyword email.body_md5; email.body_md5; content:"505b2d00041c3ceeb919c066b141981e"; sid:3; rev:1;)
+alert imap any any -> any any (requires: keyword email.body_md5; email.body_md5; content:"0fdac04f36286dff1cd2423c1cbf466e"; sid:4; rev:1;)
+alert imap any any -> any any (requires: keyword email.body_md5; email.body_md5; content:"d2eb5b41004d89af60f9d6a659410168"; sid:5; rev:1;)

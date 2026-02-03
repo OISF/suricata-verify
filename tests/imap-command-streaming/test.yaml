@@ -1,0 +1,438 @@
+requires:
+  min-version: 9
+args:
+  - -k none
+  - --set stream.inline=true
+  - --set app-layer.protocols.imap.enabled=yes
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 101
+        pcap_cnt: 5
+        direction: to_server
+        tx_id: 1
+        flow.src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 102
+        pcap_cnt: 7
+        direction: to_server
+        tx_id: 1
+        flow.src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 103
+        pcap_cnt: 7
+        direction: to_server
+        tx_id: 1
+        flow.src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 104
+        pcap_cnt: 11
+        direction: to_server
+        tx_id: 2
+        flow.src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 105
+        pcap_cnt: 15
+        direction: to_server
+        tx_id: 3
+        flow.src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 106
+        pcap_cnt: 17
+        direction: to_server
+        tx_id: 3
+        flow.src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 107
+        pcap_cnt: 19
+        direction: to_server
+        tx_id: 4
+        flow.src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: A1 APPEND INBOX {116}
+        imap.responses.__len: 2
+        imap.responses[0]: + Ready for literal
+        imap.responses[1]: A1 OK APPEND completed
+        src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 2
+        imap.requests[0]: A2 IDLE
+        imap.requests[1]: DONE
+        imap.responses.__len: 2
+        imap.responses[0]: + idling
+        imap.responses[1]: A2 OK IDLE completed
+        src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: A3 AUTHENTICATE X-TEST
+        imap.responses.__len: 3
+        imap.responses[0]: + first challenge
+        imap.responses[1]: + second challenge
+        imap.responses[2]: A3 NO AUTHENTICATE failed
+        src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: A4 NOOP
+        imap.responses[0]: A4 OK NOOP completed
+        src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 104
+        pcap_cnt: 25
+        direction: to_server
+        tx_id: 5
+        flow.src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 105
+        pcap_cnt: 30
+        direction: to_server
+        tx_id: 6
+        flow.src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 106
+        pcap_cnt: 33
+        direction: to_server
+        tx_id: 6
+        flow.src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 108
+        pcap_cnt: 37
+        direction: to_server
+        tx_id: 6
+        flow.src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 109
+        pcap_cnt: 39
+        direction: to_server
+        tx_id: 7
+        flow.src_port: 42010
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 104
+        flow.src_port: 42010
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 105
+        flow.src_port: 42010
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 106
+        flow.src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 108
+        flow.src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 2
+        imap.requests[0]: A5 IDLE
+        imap.requests[1]: DONE
+        imap.responses.__len: 2
+        imap.responses[0]: + idling
+        imap.responses[1]: A5 OK IDLE completed
+        src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: A6 AUTHENTICATE X-TEST
+        imap.responses.__len: 4
+        imap.responses[0]: + first challenge
+        imap.responses[1]: + second challenge
+        imap.responses[2]: + cancellation challenge
+        imap.responses[3]: A6 BAD AUTHENTICATE cancelled
+        src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: A7 NOOP
+        imap.responses[0]: A7 OK NOOP completed
+        src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 201
+        flow.src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 202
+        flow.src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A1 FETCH 1 BODY.PEEK[HEADER.FIELDS (SUBJECT FROM)]
+        imap.responses[1]: A1 OK FETCH completed
+        src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A2 NOOP
+        imap.responses[0]: A2 OK NOOP completed
+        src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 203
+        flow.src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 204
+        flow.src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 205
+        flow.src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 206
+        flow.src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A3 FETCH 1 BODY[]<0.128>
+        imap.responses[1]: A3 OK FETCH completed
+        src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A4 SELECT BODY[Archive]suffix
+        imap.responses[0]: A4 OK SELECT completed
+        src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A5 SELECT BODY[Archive
+        imap.responses[0]: A5 OK SELECT completed
+        src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A6 UID FETCH 1 body.peek[header.fields.not (TO)]<0.128>
+        imap.responses[1]: A6 OK FETCH completed
+        src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A7 FETCH 1 BODY[]
+        imap.responses[1]: A7 OK FETCH completed
+        src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A8 NOOP
+        imap.responses[0]: A8 OK NOOP completed
+        src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 301
+        flow.src_port: 42030
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 302
+        flow.src_port: 42030
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: A1 LOGIN <redacted>
+        imap.responses[0]: A1 OK LOGIN completed
+        src_port: 42030
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: A2 SELECT {5}
+        imap.responses.__len: 2
+        imap.responses[0]: + Ready for literal
+        imap.responses[1]: A2 OK [READ-WRITE] SELECT completed
+        src_port: 42030
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: A3 CREATE {3+}
+        imap.responses[0]: A3 OK CREATE completed
+        src_port: 42030
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 2
+        imap.requests[0]: A4 STATUS {5+}
+        imap.requests[1]: (MESSAGES UNSEEN)
+        imap.responses.__len: 2
+        imap.responses[0]: '* STATUS INBOX (MESSAGES 1 UNSEEN 0)'
+        imap.responses[1]: A4 OK STATUS completed
+        src_port: 42030
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A5 NOOP
+        imap.responses[0]: A5 OK NOOP completed
+        src_port: 42030
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 303
+        flow.src_port: 42030
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 2
+        imap.requests[0]: A6 SEARCH (SUBJECT {3}
+        imap.requests[1]: )
+        imap.responses.__len: 2
+        imap.responses[0]: + Ready for literal
+        imap.responses[1]: A6 OK SEARCH completed
+        src_port: 42030
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 3
+        imap.requests[0]: A7 SEARCH ((SUBJECT {4+}
+        imap.requests[1]: BODY {0+}
+        imap.requests[2]: )) UNSEEN
+        imap.responses[0]: A7 OK SEARCH completed
+        src_port: 42030
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A8 CREATE "{5+}"
+        imap.responses[0]: A8 OK CREATE completed
+        src_port: 42030
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A9 CREATE "{3}"
+        imap.responses[0]: A9 OK CREATE completed
+        src_port: 42030
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 2
+        imap.requests[0]: A10 RENAME {3+}
+        imap.requests[1]: '"{5+}"'
+        imap.responses[0]: A10 OK RENAME completed
+        src_port: 42030
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A11 NOOP
+        imap.responses[0]: A11 OK NOOP completed
+        src_port: 42030
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A12 SEARCH (SUBJECT {3}
+        imap.responses[0]: A12 NO SEARCH rejected
+        src_port: 42030
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A13 NOOP
+        imap.responses[0]: A13 OK NOOP completed
+        src_port: 42030
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - stats:
+      app_layer.error.imap.parser: 0

@@ -1,0 +1,2 @@
+# imap-line-too-long
+alert imap any 42010 <> any any (msg:"SURICATA IMAP line too long"; app-layer-event:imap.line_too_long; classtype:protocol-command-decode; sid:101; rev:1;)

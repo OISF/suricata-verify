@@ -1,0 +1,34 @@
+requires:
+  min-version: 9
+
+pcap: ../../imap/imap.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+  - --set app-layer.protocols.imap.enabled=yes
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
+  - filter:
+      count: 39
+      match:
+        event_type: drop
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.action: drop
+        flow.alerted: true
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.firewall.accepted: 4
+        stats.firewall.blocked: 39
+        stats.firewall.drop_reason.default_app_policy: 1
+        stats.firewall.drop_reason.flow_drop: 38
