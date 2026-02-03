@@ -1,0 +1,3 @@
+alert imap any any -> any any (msg:"IMAP first FETCH email body control"; flow:to_client,established; email.body; content:"FIRST-BODY-CONTROL-71A2"; sid:1; rev:1;)
+alert imap any any -> any any (msg:"IMAP second FETCH email body"; flow:to_client,established; email.body; content:"SECOND-BODY-ONLY-8E41"; sid:2; rev:1;)
+alert imap any any -> any any (msg:"IMAP second FETCH email subject"; flow:to_client,established; email.subject; content:"SECOND-SUBJECT-ONLY-9F52"; sid:3; rev:1;)

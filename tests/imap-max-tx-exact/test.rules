@@ -1,0 +1,1 @@
+alert imap any any -> any any (msg:"SURICATA IMAP too many transactions"; app-layer-event:imap.too_many_transactions; classtype:protocol-command-decode; sid:2244000; rev:1;)

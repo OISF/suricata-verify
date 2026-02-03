@@ -1,0 +1,1 @@
+alert imap any any -> any any (msg:"SURICATA IMAP body too large"; app-layer-event:imap.body_too_large; classtype:protocol-command-decode; sid:2244004; rev:1;)

@@ -1,0 +1,3 @@
+alert imap any any -> any any (msg:"IMAP retained early body"; email.body; content:"EARLY-IMAP-MARKER"; sid:1; rev:1;)
+alert imap any any -> any any (msg:"IMAP retained late body"; email.body; content:"LATE-IMAP-MARKER"; sid:2; rev:1;)
+

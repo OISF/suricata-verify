@@ -1,0 +1,49 @@
+requires:
+  min-version: 9
+
+args:
+  - --simulate-ips
+  - -k none
+  - --set app-layer.protocols.imap.enabled=yes
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: imap
+        anomaly.event: data_limit_reached
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2244006
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        direction: to_client
+        tx_id: 1
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        direction: to_client
+        tx_id: 2
+
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: "A2 NOOP"
+        imap.responses[0]: "A2 OK NOOP completed"
+
+  - filter:
+      count: 0
+      match:
+        event_type: drop

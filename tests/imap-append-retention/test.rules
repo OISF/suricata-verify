@@ -1,0 +1,2 @@
+alert imap any any -> any any (msg:"IMAP retained small APPEND body"; email.body; content:"APPEND-EARLY-MARKER"; sid:1; rev:1;)
+alert imap any any -> any any (msg:"IMAP discarded over-budget APPEND body"; email.body; content:"APPEND-LATE-MARKER"; sid:2; rev:1;)

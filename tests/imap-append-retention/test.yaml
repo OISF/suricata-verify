@@ -1,0 +1,39 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+  - --set app-layer.protocols.imap.enabled=yes
+  - --set stream.reassembly.depth=0
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: imap
+        anomaly.event: data_limit_reached
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.app_proto: imap
+        anomaly.event: body_too_large
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: "A2 APPEND INBOX {10485760+}"
+        imap.responses[0]: "A2 OK APPEND completed"
