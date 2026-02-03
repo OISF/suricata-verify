@@ -1,0 +1,22 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+  - --set app-layer.protocols.imap.enabled=yes
+
+checks:
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 9
+        event_type: imap
+        imap.requests[0].__len: 8192
+        imap.responses[0]: "A001 OK NOOP completed"
+
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: imap
+        anomaly.event: line_too_long
