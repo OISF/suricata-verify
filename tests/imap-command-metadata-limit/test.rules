@@ -1,0 +1,5 @@
+alert imap any any -> any any (app-layer-event:imap.invalid_data; sid:1; rev:1;)
+alert imap any [42010,42011,42012] <> any any (app-layer-event:imap.line_too_long; sid:101; rev:1;)
+alert imap any [42010,42011,42012] <> any any (flow:to_server,established; imap.request; content:"A9 NOOP"; startswith; endswith; sid:102; rev:1;)
+alert imap any [42010,42011,42012] <> any any (flow:to_server,established; imap.request; content:"SUBJECT secret"; startswith; endswith; sid:103; rev:1;)
+alert imap any 42020 <> any any (flow:to_server,established; imap.request; content:"A2 NOOP"; startswith; endswith; sid:201; rev:1;)

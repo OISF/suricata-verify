@@ -1,0 +1,4 @@
+alert imap any any -> any any (imap.request; content:"CAPABILITY"; nocase; sid:1; rev:1;)
+alert imap any any -> any any (imap.response; content:"OK IMAP server ready"; sid:2; rev:1;)
+alert imap any any -> any any (flow:to_client; frame:imap.pdu; content:"OK IMAP"; sid:15; rev:1;)
+alert imap any any -> any any (flow:to_server; frame:imap.pdu; content:"1 capability"; sid:16; rev:1;)
