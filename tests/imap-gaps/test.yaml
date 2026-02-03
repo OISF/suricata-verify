@@ -1,0 +1,170 @@
+requires:
+  min-version: 9
+args:
+  - -k none
+  - --set app-layer.protocols.imap.enabled=yes
+pcap: input.pcap
+
+checks:
+  # Greeting, A1 and A2 in each of the 11 flows, plus B3, B4 and the orphan
+  # replies of the commands cut by the gap on 42077, B1, B3 and B4 on 42079,
+  # and the orphan replies of the lost command on 42080 instead of its A1: no
+  # text became a command.
+  - filter:
+      count: 47
+      match:
+        event_type: imap
+  - filter:
+      count: 13
+      match:
+        event_type: imap
+        imap.requests[0]: A2 NOOP
+        imap.responses[0]: A2 OK NOOP completed
+  - filter:
+      count: 3
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: A1 APPEND INBOX {67}
+        imap.responses[0]: + Ready
+        imap.responses[1]: A1 OK APPEND completed
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42073
+        imap.requests[0]: A1 LOGIN <redacted>
+        imap.responses[0]: "* 3 EXISTS"
+        imap.responses[1]: A1 OK LOGIN completed
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A1 IDLE
+        imap.requests[1]: DONE
+        imap.responses[2]: A1 OK IDLE terminated
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A1 FETCH 1 BODY[]
+        imap.responses.__len: 2
+        imap.responses[0]: "* 1 FETCH (BODY[] {73})"
+        imap.responses[1]: A1 OK FETCH completed
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42076
+        imap.requests[0]: A1 IDLE
+        imap.requests[1]: DONE
+        imap.responses[0]: A1 OK IDLE terminated
+  # After a gap ending inside a line, the commands and replies that follow
+  # it in the same segment are still parsed.
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42077
+        imap.requests[0]: B3 LOGIN <redacted>
+        imap.responses[0]: B3 OK LOGIN completed
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42077
+        imap.requests[0]: B4 NOOP
+        imap.responses[0]: B4 OK NOOP completed
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42078
+        imap.requests[0]: A1 SEARCH TEXT x
+        imap.responses[0]: A1 OK SEARCH completed
+  # A request gap after a synchronizing literal that was given up is not
+  # taken for its octets: the commands after the gap are still parsed.
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42079
+        imap.requests.__len: 1
+        imap.requests[0]: A1 APPEND INBOX {40}
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42079
+        imap.requests[0]: B3 NOOP
+        imap.responses[0]: B3 OK NOOP completed
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42079
+        imap.requests[0]: B4 NOOP
+        imap.responses[0]: B4 OK NOOP completed
+  # After a gap losing the announcement of a literal, its text is skipped
+  # until a known command: only A2 has a request.
+  - filter:
+      count: 4
+      match:
+        event_type: imap
+        src_port: 42080
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42080
+        has-key: imap.requests
+  # After a response gap losing the announcement of a literal, its text is
+  # skipped until a known response: none of its lines is logged.
+  - filter:
+      count: 3
+      match:
+        event_type: imap
+        src_port: 42081
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42081
+        imap.requests[0]: A1 FETCH 1:2 (BODY[])
+        imap.responses.__len: 2
+        imap.responses[0]: "* 1 FETCH (BODY[] {7})"
+        imap.responses[1]: A1 OK FETCH completed
+  # A literal announced by AUTHENTICATE is given up once client data is taken
+  # as its SASL response: a later response gap does not make the commands
+  # after it literal octets.
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42082
+        imap.requests[0]: F2 LOGIN <redacted>
+        imap.responses[0]: F2 OK LOGIN completed
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42082
+        imap.requests[0]: F3 NOOP
+        imap.responses[0]: F3 OK NOOP completed
+  # The frame of a literal resumed after a gap ends with the literal.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+  - stats:
+      app_layer.error.imap.parser: 0

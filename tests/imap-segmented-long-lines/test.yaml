@@ -1,0 +1,42 @@
+requires:
+  min-version: 9
+args:
+  - -k none
+  - --set app-layer.protocols.imap.enabled=yes
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0].__len: 8192
+        imap.requests[0].__startswith: "A1 SEARCH () ()"
+        imap.responses[0].__len: 8192
+        imap.responses[0].__startswith: "* SEARCH 1 1"
+        imap.responses[1]: A1 OK SEARCH completed
+        imap.reply_truncated: true
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A2 SEARCH (SUBJECT {3+}
+        imap.requests[1].__len: 8192
+        imap.requests[1].__startswith: ") () ()"
+        imap.responses[0]: A2 OK SEARCH completed
+        not-has-key: imap.reply_truncated
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A3 NOOP
+        imap.responses[0]: A3 OK NOOP completed
+  # Only the two client lines: a truncated server line raises no event.
+  - filter:
+      count: 2
+      match:
+        event_type: anomaly
+        anomaly.app_proto: imap
+        anomaly.event: line_too_long
+  - stats:
+      app_layer.error.imap.parser: 0

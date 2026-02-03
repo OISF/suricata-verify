@@ -1,0 +1,2 @@
+alert imap any 42070 -> any any (frame:imap.pdu; content:"Hello world|0d 0a|"; endswith; sid:1; rev:1;)
+alert imap any any -> any 42075 (frame:imap.pdu; content:"plain text|0d 0a|"; endswith; sid:2; rev:1;)

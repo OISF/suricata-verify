@@ -1,0 +1,79 @@
+requires:
+  min-version: 9
+args:
+  - -k none
+  - --set app-layer.protocols.imap.enabled=yes
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 10
+      match:
+        event_type: imap
+        imap.requests[0].__startswith: T
+        imap.responses.__len: 501
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: T2 FETCH 2 (FLAGS)
+        imap.responses[0]: "* 2 FETCH (FLAGS ())"
+        imap.responses[499]: "* 2 FETCH (FLAGS ())"
+        imap.responses[500]: T2 OK FETCH completed
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0].__startswith: "R1 FETCH 1001,1003,"
+        imap.responses.__len: 2
+        imap.responses[0]: "* 1003 FETCH (FLAGS ())"
+        imap.responses[1]: R1 OK FETCH completed
+  - filter:
+      count: 32
+      match:
+        event_type: imap
+        imap.requests[0].__startswith: B
+        imap.responses.__len: 1
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A1 NOOP
+        imap.responses[0]: A1 OK NOOP completed
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0].__startswith: "L1 FETCH 1,2,3,"
+        imap.responses.__len: 2
+        imap.responses[0]: "* 2900 FETCH (FLAGS ())"
+        imap.responses[1]: L1 OK FETCH completed
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: O1 FETCH 1:5 (FLAGS)
+        imap.responses.__len: 2
+        imap.responses[0]: "* 99999999999 FETCH (FLAGS ())"
+        imap.responses[1]: O1 OK FETCH completed
+  # Response lines are inspected as they arrive: the rule matches on the
+  # first segment of T2's untagged responses, before its tagged reply (381).
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 368
+        imap.requests[0]: T2 FETCH 2 (FLAGS)
+  # Only the truncated L1 line raises an event.
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: line_too_long
+  - stats:
+      app_layer.error.imap.parser: 0

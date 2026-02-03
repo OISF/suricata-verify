@@ -1,0 +1,3 @@
+alert imap any any -> any any (app-layer-event:imap.data_limit_reached; sid:1; rev:1;)
+alert imap any any -> any any (flow:to_server,established; imap.request; content:"SEARCH TEXT hello"; endswith; sid:2; rev:1;)
+alert imap any any -> any any (flow:to_client,established; imap.response; content:"A1 OK [HIGHESTMODSEQ 715194045007] FETCH completed"; sid:3; rev:1;)

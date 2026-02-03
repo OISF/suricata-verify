@@ -1,0 +1,472 @@
+requires:
+  min-version: 9
+args:
+  - -k none
+  - --set app-layer.protocols.imap.enabled=yes
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: A1 APPEND INBOX {4}
+        imap.responses[0]: A1 NO APPEND rejected
+        src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 2
+        imap.requests[0]: A2 IDLE
+        imap.requests[1]: DONE
+        imap.responses.__len: 2
+        imap.responses[0]: + idling
+        imap.responses[1]: A2 OK IDLE completed
+        src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: A3 APPEND INBOX {4}
+        imap.responses[0]: A3 BAD APPEND rejected
+        src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 2
+        imap.requests[0]: A4 IDLE
+        imap.requests[1]: DONE
+        imap.responses.__len: 2
+        imap.responses[0]: + idling
+        imap.responses[1]: A4 OK IDLE completed
+        src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A5 APPEND INBOX {77}
+        imap.responses.__len: 2
+        imap.responses[0]: + Ready for literal
+        imap.responses[1]: A5 OK APPEND completed
+        src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A6 NOOP
+        imap.responses[0]: A6 OK NOOP completed
+        src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 101
+        flow.src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 102
+        flow.src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 201
+        flow.src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 2
+        imap.requests[0]: A1 SEARCH TEXT {3+}
+        imap.requests[1]: SUBJECT secret
+        imap.responses[1]: A1 OK SEARCH completed
+        src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: A2 LOGIN <redacted>
+        imap.responses[0]: A2 OK LOGIN completed
+        src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 301
+        flow.src_port: 42030
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 302
+        flow.src_port: 42030
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 303
+        flow.src_port: 42030
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.responses.__len: 2
+        imap.responses[0]: '* LIST () "/" {5}'
+        imap.responses[1]: A1 OK LIST completed
+        src_port: 42030
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A2 STATUS INBOX (MESSAGES)
+        imap.responses.__len: 2
+        imap.responses[0]: '* STATUS {5} (MESSAGES 1)'
+        imap.responses[1]: A2 OK STATUS completed
+        src_port: 42030
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A3 ID NIL
+        imap.responses.__len: 2
+        imap.responses[0]: '* ID ({4} {6})'
+        imap.responses[1]: A3 OK ID completed
+        src_port: 42030
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.responses.__len: 2
+        imap.responses[0]: '* LIST () "/" {7}'
+        imap.responses[1]: A4 OK LIST completed
+        src_port: 42030
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A5 NOOP
+        imap.responses.__len: 2
+        imap.responses[0]: '* OK still here {3}'
+        imap.responses[1]: A5 OK NOOP completed
+        src_port: 42030
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A6 NOOP
+        imap.responses.__len: 1
+        imap.responses[0]: A6 OK NOOP completed
+        src_port: 42030
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A7 FETCH 1 BODY[]
+        imap.responses.__len: 2
+        imap.responses[0]: '* 1 FETCH (BODY[] {21})'
+        imap.responses[1]: A7 OK FETCH completed
+        src_port: 42030
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: A1 LOGIN <redacted>
+        imap.responses[0]: A1 NO LOGIN failed
+        src_port: 42040
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: A2 AUTHENTICATE PLAIN <redacted>
+        imap.responses[0]: A2 NO AUTHENTICATE failed
+        src_port: 42040
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: A3 AUTHENTICATE XOAUTH2 <redacted>
+        imap.responses[0]: A3 NO AUTHENTICATE failed
+        src_port: 42040
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: A4 AUTHENTICATE PLAIN
+        imap.responses[0]: '+ '
+        imap.responses[1]: A4 NO AUTHENTICATE failed
+        src_port: 42040
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: A5 LOGIN <redacted>
+        imap.responses.__len: 3
+        imap.responses[0]: + continue
+        imap.responses[1]: + continue
+        imap.responses[2]: A5 NO LOGIN failed
+        src_port: 42040
+  - shell:
+      args: '! grep -Fq -e ''login-user-secret'' -e ''login-password-secret'' -e ''literal-login-user-secret'' -e ''literal-login-password-secret'' -e ''AHBsYWluLXVzZXItc2VjcmV0AHBsYWluLXBhc3N3b3JkLXNlY3JldA=='' -e ''dXNlcj1vYXV0aC11c2VyLXNlY3JldAFhdXRoPUJlYXJlciBvYXV0aC10b2tlbi1zZWNyZXQBAQ=='' -e ''Y29udGludWF0aW9uLXVzZXItc2VjcmV0AGNvbnRpbnVhdGlvbi1wYXNzd29yZC1zZWNyZXQ='' eve.json'
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: A1 APPEND INBOX ~{5+}
+        imap.responses[0]: A1 OK APPEND completed
+        src_port: 42050
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A2 APPEND INBOX UTF8 (~{5+}
+        imap.requests[1]: )
+        imap.responses[0]: A2 OK APPEND completed
+        src_port: 42050
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A3 NOOP
+        imap.responses[0]: A3 OK NOOP completed
+        src_port: 42050
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: A1 LOGIN <redacted>
+        imap.responses[0]: A1 OK LOGIN completed
+        src_port: 42060
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A2 SELECT private-folder
+        imap.responses[0]: A2 OK SELECT completed
+        src_port: 42060
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 601
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A3 XAUTH
+        imap.requests[1]: dGVzdA==
+        imap.responses[0]: + go
+        src_port: 42060
+  # Continuation lines of an unknown command are inspected.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 602
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A4 XFOO {3}
+        imap.requests[1]: eGZvbw==
+        imap.responses[1]: + more
+        src_port: 42060
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 603
+  # Bytes that are not valid UTF-8 are logged escaped, not replaced.
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42070
+        imap.requests[0]: 'A1 SELECT "caf\xe9"'
+        imap.responses[0]: '* OK [caf\xe9] opened'
+  # A literal the client is sending is still counted down after an early
+  # tagged reply: its text is not taken as commands.
+  - filter:
+      count: 3
+      match:
+        event_type: imap
+        src_port: 42080
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42080
+        imap.requests.__len: 1
+        imap.requests[0]: A1 APPEND INBOX {50+}
+        imap.responses[0]: A1 NO [OVERQUOTA] quota exceeded
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42080
+        imap.requests[0]: A2 NOOP
+        imap.responses[0]: A2 OK NOOP completed
+  # Without LITERAL+ in the capabilities of the server, the lines following a
+  # non-synchronizing literal are commands. Once it is offered they are
+  # literal octets.
+  - filter:
+      count: 7
+      match:
+        event_type: imap
+        src_port: 42090
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42090
+        imap.requests.__len: 1
+        imap.requests[0]: B1 LOGIN <redacted>
+        imap.responses[0]: B1 OK LOGIN completed
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42090
+        imap.requests[0]: B2 NOOP
+        imap.responses[0]: B2 OK NOOP completed
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42090
+        imap.requests.__len: 1
+        imap.requests[0]: B4 SEARCH TEXT {17+}
+        imap.responses[0]: B4 OK SEARCH completed
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42090
+        imap.requests[0]: B6 NOOP
+        imap.responses[0]: B6 OK NOOP completed
+  # Without a capability list a non-synchronizing literal is trusted until
+  # the command is answered with BAD: the lines that follow are commands.
+  - filter:
+      count: 4
+      match:
+        event_type: imap
+        src_port: 42100
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42100
+        imap.requests[0]: C2 LOGIN <redacted>
+        imap.responses[0]: C2 OK LOGIN completed
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42100
+        imap.requests[0]: C3 NOOP
+        imap.responses[0]: C3 OK NOOP completed
+  # A server offering LITERAL+ reads the literal whatever its reply.
+  - filter:
+      count: 3
+      match:
+        event_type: imap
+        src_port: 42110
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42110
+        imap.requests.__len: 1
+        imap.requests[0]: C1 APPEND INBOX {41+}
+        imap.responses[0]: C1 BAD invalid mailbox
+  # The data of a LOGIN literal whose continuation request was not seen may
+  # read as a command: it is logged redacted.
+  - filter:
+      count: 4
+      match:
+        event_type: imap
+        src_port: 42120
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42120
+        imap.requests.__len: 1
+        imap.requests[0]: <redacted>
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42120
+        imap.requests[0]: D2 NOOP
+        imap.responses[0]: D2 OK NOOP completed
+  # With both LOGIN literals unconfirmed, the lines stay redacted until a
+  # known command: the first is skipped as invalid, the second reads as a
+  # command.
+  - filter:
+      count: 4
+      match:
+        event_type: imap
+        src_port: 42140
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42140
+        imap.requests.__len: 1
+        imap.requests[0]: <redacted>
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42140
+        imap.requests[0]: G2 NOOP
+        imap.responses[0]: G2 OK NOOP completed
+  # A continuation request sent while the literal of an answered command is
+  # still counted is logged with the responses matching no command.
+  - filter:
+      count: 4
+      match:
+        event_type: imap
+        src_port: 42130
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42130
+        not-has-key: imap.requests
+        imap.responses[0]: + unexpected
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 901
+  # Only the user name line of the unconfirmed LOGIN literals is invalid.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        flow.src_port: 42140
+  - stats:
+      app_layer.error.imap.parser: 0
