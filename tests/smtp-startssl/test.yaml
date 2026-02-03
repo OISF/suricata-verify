@@ -11,3 +11,9 @@ checks:
       match:
         smtp.helo: "desktop.unx.ca"
         not-has-key: "email"
+  - filter:
+      min-version: 9
+      count: 1
+      match:
+        event_type: tls
+        app_proto_orig: smtp
