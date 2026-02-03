@@ -1,0 +1,26 @@
+args:
+- -k none
+
+requires:
+  min-version: 9
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+  - filter:
+      count: 0
+      match:
+        smtp.helo: "desktop.unx.ca"
+        not-has-key: "email"
+        app_proto: smtp
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+  - filter:
+      count: 0
+      match:
+        event_type: tls
+        app_proto_orig: smtp
