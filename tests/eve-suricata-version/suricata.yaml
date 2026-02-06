@@ -3,6 +3,7 @@
 
 outputs:
   - eve-log:
+      version: 2
       enabled: yes
       suricata-version: yes
       types:
