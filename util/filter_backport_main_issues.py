@@ -13,13 +13,8 @@ import json
 import os
 import re
 import sys
-import urllib.error
-import urllib.parse
-import urllib.request
 from typing import Any, Dict, List, Optional
 
-REDMINE_URL = 'https://redmine.openinfosecfoundation.org'
-REDMINE_API_KEY = os.environ.get('REDMINE_API_KEY')
 SURICATA_PR_PATTERN = re.compile(r"https://github\.com/OISF/suricata/pull/\d+")
 
 
@@ -62,53 +57,6 @@ def load_json(path: str) -> Dict[str, Any]:
         sys.exit(2)
     
     return data
-
-
-def get_headers() -> Dict[str, str]:
-    headers = {
-        'Content-Type': 'application/json',
-    }
-    if REDMINE_API_KEY:
-        headers['X-Redmine-API-Key'] = REDMINE_API_KEY
-    return headers
-
-
-def fetch_issue_journals(issue_id: int) -> Optional[List[Dict[str, Any]]]:
-    base_url = f"{REDMINE_URL}/issues/{issue_id}.json"
-    query = urllib.parse.urlencode({'include': 'journals'})
-    url = f"{base_url}?{query}"
-    request = urllib.request.Request(url, headers=get_headers())
-
-    try:
-        with urllib.request.urlopen(request, timeout=20) as response:
-            if response.status != 200:
-                print(f"Error fetching issue #{issue_id}: {response.status}", file=sys.stderr)
-                return None
-            payload = response.read().decode('utf-8')
-            issue = json.loads(payload).get('issue', {})
-    except (urllib.error.URLError, urllib.error.HTTPError) as exc:
-        print(f"Error fetching issue #{issue_id}: {exc}", file=sys.stderr)
-        return None
-    except json.JSONDecodeError as exc:
-        print(f"Error parsing JSON for issue #{issue_id}: {exc}", file=sys.stderr)
-        return None
-
-    journals = issue.get('journals', [])
-    if isinstance(journals, list):
-        return journals
-    return None
-
-
-def extract_last_suricata_pr_url(journals: List[Dict[str, Any]]) -> Optional[str]:
-    last_url = None
-    for journal in journals:
-        notes = journal.get('notes', '')
-        if not notes:
-            continue
-        matches = SURICATA_PR_PATTERN.findall(notes)
-        if matches:
-            last_url = matches[-1]
-    return last_url
 
 
 def subject_has_backport(subject: str, version: str) -> bool:
@@ -162,7 +110,6 @@ def main() -> int:
     args = parse_args()
     data = load_json(args.input)
     parents: List[Dict[str, Any]] = data.get('parent_issues', [])
-    
     qualifying = []
     for parent in parents:
         if not isinstance(parent, dict):
@@ -170,25 +117,13 @@ def main() -> int:
         if qualifies(parent, args.target):
             parent_id = parent.get('id')
             child_id = get_backport_child_id(parent, args.target)
-            if parent_id is not None and child_id is not None:
-                qualifying.append((parent_id, child_id))
-    
-    if not REDMINE_API_KEY:
-        print("Warning: REDMINE_API_KEY environment variable not set.", file=sys.stderr)
-        print("This may limit access to private issues.", file=sys.stderr)
+            pr_url = parent.get('last_suricata_pr')
+            if parent_id is not None and child_id is not None and pr_url:
+                qualifying.append((parent_id, child_id, pr_url))
 
-    for parent_id, child_id in qualifying:
-        journals = fetch_issue_journals(parent_id)
-        if journals is None:
-            continue
-        pr_url = extract_last_suricata_pr_url(journals)
-        if pr_url:
-            print(f"{parent_id} {child_id} {pr_url}")
-        else:
-            print(f"No Suricata PR URL found for issue #{parent_id}", file=sys.stderr)
-    
+    for parent_id, child_id, pr_url in qualifying:
+        print(f"{parent_id} {child_id} {pr_url}")
     return 0
-
 
 if __name__ == '__main__':
     sys.exit(main())

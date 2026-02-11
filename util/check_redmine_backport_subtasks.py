@@ -67,6 +67,24 @@ def get_open_backport_issues(limit: int = 100) -> list:
     
     return all_issues
 
+def get_last_suricata_pr(issue_id: int) -> Optional[str]:
+    """Fetch the last referenced Suricata PR URL from the issue journals."""
+    url = f'{REDMINE_URL}/issues/{issue_id}.json?include=journals'
+    response = requests.get(url, headers=get_headers())
+    if response.status_code != 200:
+        return None
+    issue = response.json().get('issue', {})
+    journals = issue.get('journals', [])
+    pr_url = None
+    for journal in journals:
+        notes = journal.get('notes', '')
+        # Look for Suricata PR URLs
+        if notes is not None:
+            urls = [u for u in notes.split() if u.startswith('https://github.com/OISF/suricata/pull/')]
+            if urls:
+                pr_url = urls[-1]  # last one in this journal
+    return pr_url
+
 def get_issue_details(issue_id: int) -> Optional[dict]:
     """Fetch detailed information for a specific issue."""
     url = f'{REDMINE_URL}/issues/{issue_id}.json'
@@ -140,21 +158,29 @@ def main():
                     parent_issue = group['parent']
                     children = group['children']
                     
+                    # TODO add a field being the last referenced suricata PR (in case of in review/resolved) and rewrite filter_backport_main_issues.py so that it does not need redmine access anymore
                     parent_entry = {
                         'id': parent_id,
                         'subject': parent_issue['subject'] if parent_issue else None,
                         'status': parent_issue['status']['name'] if parent_issue else None,
                         'url': f"{REDMINE_URL}/issues/{parent_id}",
+                        'last_suricata_pr': None,
                         'backport_subtasks': []
                     }
-                    
+                    # Add last_suricata_pr for parent if status is in review/resolved
+                    if parent_issue and parent_issue['status']['name'] in ('In Review', 'Resolved'):
+                        parent_entry['last_suricata_pr'] = get_last_suricata_pr(parent_id)
                     for child in children:
                         child_entry = {
                             'id': child['id'],
                             'subject': child['subject'],
                             'status': child['status']['name'],
-                            'url': f"{REDMINE_URL}/issues/{child['id']}"
+                            'url': f"{REDMINE_URL}/issues/{child['id']}",
+                            'last_suricata_pr': None
                         }
+                        # Add last_suricata_pr for child if status is in review/resolved
+                        if child['status']['name'] in ('In Review', 'Resolved'):
+                            child_entry['last_suricata_pr'] = get_last_suricata_pr(child['id'])
                         parent_entry['backport_subtasks'].append(child_entry)
                     
                     result['parent_issues'].append(parent_entry)
@@ -165,8 +191,11 @@ def main():
                         'id': issue['id'],
                         'subject': issue['subject'],
                         'status': issue['status']['name'],
-                        'url': f"{REDMINE_URL}/issues/{issue['id']}"
+                        'url': f"{REDMINE_URL}/issues/{issue['id']}",
+                        'last_suricata_pr': None
                     }
+                    if issue['status']['name'] in ('In Review', 'Resolved'):
+                        standalone_entry['last_suricata_pr'] = get_last_suricata_pr(issue['id'])
                     result['standalone_issues'].append(standalone_entry)
                 
                 json.dump(result, f, indent=2)
