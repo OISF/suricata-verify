@@ -1,0 +1,64 @@
+requires:
+  min-version: 9
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        proto: "IGMP"
+        rgmp.type: 255
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        proto: "IGMP"
+        rgmp.type: 255
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 4
+  - filter:
+      count: 6
+      match:
+        event_type: alert
+        alert.signature_id: 5
+        proto: "IGMP"
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 6
+        proto: "IGMP"
+  - filter:
+      count: 6
+      match:
+        event_type: alert
+        alert.signature_id: 7
+        proto: "IGMP"
+  - filter:
+      count: 6
+      match:
+        event_type: alert
+        alert.signature_id: 7
+        proto: "IGMP"
+        igmp.version: 3
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 8
+        proto: "IGMP"
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.decoder.igmp: 6

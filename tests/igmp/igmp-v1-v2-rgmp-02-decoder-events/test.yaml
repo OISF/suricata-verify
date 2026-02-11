@@ -1,0 +1,29 @@
+requires:
+  min-version: 9
+
+pcap: ../igmp-v1-v2-rgmp-01/wireshark-wiki-IGMP-dataset.pcap
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2200127
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2200128
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2200129
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.decoder.igmp: 147
+        stats.decoder.event.igmp.pkt_too_small: 0
+        stats.decoder.event.igmp.v3_pkt_too_small: 0
+        stats.decoder.event.igmp.malformed: 0

@@ -1,0 +1,4 @@
+# IGMP
+alert igmp any any -> any any (msg:"SURICATA IGMP packet too small"; decode-event:igmp.pkt_too_small; classtype:protocol-command-decode; sid:2200127; rev:1;)
+alert igmp any any -> any any (msg:"SURICATA IGMPv3 packet too small"; decode-event:igmp.v3_pkt_too_small; classtype:protocol-command-decode; sid:2200128; rev:1;)
+alert igmp any any -> any any (msg:"SURICATA IGMP malformed packet"; decode-event:igmp.malformed; classtype:protocol-command-decode; sid:2200129; rev:1;)

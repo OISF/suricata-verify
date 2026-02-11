@@ -1,0 +1,8 @@
+alert igmp any any -> 224.0.0.25 any (msg:"RGMP Hello"; igmp.hdr; content:"|ff|"; startswith; ttl:1; sid:1;)
+alert igmp any any -> 224.0.0.25 any (msg:"RGMP Hello"; igmp.type:0xff; ttl:1; sid:2;)
+alert igmp any any -> any any (msg:"IGMP with payload"; dsize:>0; sid:3;)
+alert igmp any any -> any any (msg:"IGMP with ttl > 1"; ttl:>1; sid:4;)
+alert igmp any any -> any any (msg:"IGMP with router alert"; ipopts:rtralt; sid:5;)
+alert igmp any any -> any any (msg:"IGMP w/o router alert"; ipv4.hdr; content:!"|94 04 00 00|"; offset:20; sid:6;)
+alert igmp any any -> any any (msg:"IGMP good csum"; igmp-csum:valid; sid:7;)
+alert igmp any any -> any any (msg:"IGMP bad csum"; igmp-csum:invalid; sid:8;)
