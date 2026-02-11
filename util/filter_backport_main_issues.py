@@ -141,32 +141,49 @@ def qualifies(parent: Dict[str, Any], target: str) -> bool:
         return needs_7 and not needs_8
     return needs_8
 
+def get_backport_child_id(parent: Dict[str, Any], target: str) -> Optional[int]:
+    children = parent.get('backport_subtasks', [])
+    if not isinstance(children, list):
+        return None
+    
+    version = '7.0.x' if target == '7' else '8.0.x'
+    for child in children:
+        if not isinstance(child, dict):
+            continue
+        subject = child.get('subject', '')
+        if subject_has_backport(subject, version):
+            child_id = child.get('id')
+            if isinstance(child_id, int):
+                return child_id
+    return None
+
 
 def main() -> int:
     args = parse_args()
     data = load_json(args.input)
     parents: List[Dict[str, Any]] = data.get('parent_issues', [])
     
-    qualifying_ids = []
+    qualifying = []
     for parent in parents:
         if not isinstance(parent, dict):
             continue
         if qualifies(parent, args.target):
             parent_id = parent.get('id')
-            if parent_id is not None:
-                qualifying_ids.append(parent_id)
+            child_id = get_backport_child_id(parent, args.target)
+            if parent_id is not None and child_id is not None:
+                qualifying.append((parent_id, child_id))
     
     if not REDMINE_API_KEY:
         print("Warning: REDMINE_API_KEY environment variable not set.", file=sys.stderr)
         print("This may limit access to private issues.", file=sys.stderr)
 
-    for parent_id in qualifying_ids:
+    for parent_id, child_id in qualifying:
         journals = fetch_issue_journals(parent_id)
         if journals is None:
             continue
         pr_url = extract_last_suricata_pr_url(journals)
         if pr_url:
-            print(f"{parent_id} {pr_url}")
+            print(f"{parent_id} {child_id} {pr_url}")
         else:
             print(f"No Suricata PR URL found for issue #{parent_id}", file=sys.stderr)
     
