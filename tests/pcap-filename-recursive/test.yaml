@@ -1,0 +1,34 @@
+requires:
+  min-version: 7
+
+pcap: .
+
+args:
+- --pcap-file-recursive
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_filename.__endswith: "alert.pcap"
+
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        pcap_filename.__endswith: "http.pcap"
+
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        pcap_filename.__endswith: "http.pcap"
+
+  # Verify Flow event (generated at shutdown/timeout)
+  # still points to the correct pcap file (http.pcap), NOT the last processed file.
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        pcap_filename.__endswith: "http.pcap"
