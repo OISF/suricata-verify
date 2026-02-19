@@ -34,7 +34,7 @@ checks:
     # suricata 7 doesn't show this alert.
     # if we don't drop the flow, it matches against the stream
     # (pkt_srt: stream (flow timeout))
-    min-version: 9
+    min-version: 8.0.4
     count: 1
     match:
       event_type: alert
@@ -65,7 +65,7 @@ checks:
       verdict.action: drop
 # Sub-test 6
 - filter:
-    min-version: 9
+    min-version: 8.0.4
     count: 0
     match:
       event_type: alert
@@ -96,7 +96,7 @@ checks:
 - filter:
     # as suricata 7 won't have a match for sid 3,
     # the overflow check fails for 7
-    min-version: 9
+    min-version: 8.0.4
     count: 1
     match:
       event_type: stats

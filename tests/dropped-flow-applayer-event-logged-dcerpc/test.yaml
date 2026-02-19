@@ -7,7 +7,7 @@ args:
 
 checks:
   - filter:
-      min-version: 9
+      min-version: 8.0.4
       count: 0
       match:
         pcap_cnt: 2
@@ -17,13 +17,13 @@ checks:
       match:
         event_type: alert
   - filter:
-      min-version: 9
+      min-version: 8.0.4
       count: 0
       match:
         pcap_cnt: 2
         event_type: smb
   - filter:
-      min-version: 9
+      min-version: 8.0.4
       count: 20
       match:
         event_type: drop
