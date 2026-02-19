@@ -28,7 +28,7 @@ checks:
 # Sub-test 3
 - filter:
     # as with drop-5180-01 test, 7.0.x doesn't show this alert
-    min-version: 9
+    min-version: 8.0.4
     count: 1
     match:
       event_type: alert
@@ -51,7 +51,7 @@ checks:
       alert.signature_id: 5
 # Sub-test 6
 - filter:
-    min-version: 9
+    min-version: 8.0.4
     lt-version: 8.0.4
     gt-version: 8.0.4
     count: 1
@@ -66,7 +66,7 @@ checks:
       flow.action: drop
 # Sub-test 8
 - filter:
-    min-version: 9
+    min-version: 8.0.4
     count: 1
     match:
       event_type: stats
