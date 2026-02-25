@@ -1,0 +1,16 @@
+requires:
+  min-version: 9
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pkt_src: vxlan encapsulation
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        pkt_src: "wire/pcap"
