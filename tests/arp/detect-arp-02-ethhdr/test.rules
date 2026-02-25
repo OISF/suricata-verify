@@ -1,0 +1,1 @@
+alert ether any any -> any any (ether.hdr; content:"|08 06|"; offset:12; depth:2; sid:1;)
