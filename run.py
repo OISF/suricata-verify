@@ -461,6 +461,9 @@ def rule_is_version_compatible(rulefile, suri_version):
 class FileCompareCheck:
 
     def __init__(self, config, directory, cwd):
+        for key in config:
+            if key not in ["requires", "filename", "expected"]:
+                raise Exception("Unexpected key in file-compare check: {}".format(key))
         self.config = config
         self.directory = directory
         self.cwd = cwd
