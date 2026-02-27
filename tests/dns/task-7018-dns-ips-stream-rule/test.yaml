@@ -32,7 +32,8 @@ checks:
       src_ip: 10.16.1.11
       src_port: 36926
 - filter:
-    lt-version: 8
+    requires:
+      lt-version: 8
     count: 1
     match:
       event_type: alert
@@ -55,7 +56,8 @@ checks:
       dns.query[0].type: query
 - filter:
     # DNS has only v3 logging for alerts in 8
-    min-version: 8
+    requires:
+      min-version: 8
     count: 1
     match:
       event_type: alert
@@ -102,7 +104,8 @@ checks:
       dns.type: answer
       dns.version: 2
 - filter:
-    lt-version: 8
+    requires:
+      lt-version: 8
     count: 1
     match:
       event_type: alert
@@ -129,7 +132,8 @@ checks:
       dns.answer.type: answer
       dns.answer.version: 2
 - filter:
-    min-version: 8
+    requires:
+      min-version: 8
     count: 1
     match:
       event_type: alert
@@ -168,7 +172,8 @@ checks:
       src_port: 36926
 - filter:
     # This check is about an undesirable behavior cf redmine ticket #7004
-    lt-version: 8
+    requires:
+      lt-version: 8
     count: 1
     match:
       event_type: alert
@@ -191,7 +196,8 @@ checks:
       dns.query[0].tx_id: 2
 - filter:
     # This check is about an undesirable behavior cf redmine ticket #7004
-    min-version: 8
+    requires:
+      min-version: 8
     count: 1
     match:
       event_type: alert
@@ -212,7 +218,8 @@ checks:
       dns.queries[0].rrname: oisf.net
       dns.queries[0].rrtype: A
 - filter:
-    lt-version: 8
+    requires:
+      lt-version: 8
     count: 1
     match:
       event_type: alert
@@ -238,7 +245,8 @@ checks:
       dns.answer.type: answer
       dns.answer.version: 2
 - filter:
-    min-version: 8
+    requires:
+      min-version: 8
     count: 1
     match:
       event_type: alert
@@ -290,7 +298,8 @@ checks:
       dns.type: answer
       dns.version: 2
 - filter:
-    lt-version: 8
+    requires:
+      lt-version: 8
     count: 1
     match:
       event_type: alert
@@ -311,7 +320,8 @@ checks:
       dns.query[0].tx_id: 4
       dns.query[0].type: query
 - filter:
-    min-version: 8
+    requires:
+      min-version: 8
     count: 1
     match:
       event_type: alert

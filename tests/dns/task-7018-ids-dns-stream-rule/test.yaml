@@ -26,7 +26,8 @@ checks:
       src_ip: 10.16.1.11
       src_port: 36926
 - filter:
-    lt-version: 8
+    requires:
+      lt-version: 8
     count: 1
     match:
       event_type: alert
@@ -48,7 +49,8 @@ checks:
       dns.query[0].tx_id: 0
       dns.query[0].type: query
 - filter:
-    min-version: 8
+    requires:
+      min-version: 8
     count: 1
     match:
       event_type: alert
@@ -94,7 +96,8 @@ checks:
       src_ip: 10.16.1.11
       src_port: 36926
 - filter:
-    lt-version: 8
+    requires:
+      lt-version: 8
     count: 1
     match:
       event_type: alert
@@ -121,7 +124,8 @@ checks:
       dns.answer.type: answer
       dns.answer.version: 2
 - filter:
-    min-version: 8
+    requires:
+      min-version: 8
     count: 1
     match:
       event_type: alert

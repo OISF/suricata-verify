@@ -11,7 +11,8 @@ checks:
         engine.message: "invalid formatting to content keyword: value must be double quoted 'content'"
 
   - filter:
-      min-version: 7
+      requires:
+        min-version: 7
       count: 3
       match:
         event_type: engine

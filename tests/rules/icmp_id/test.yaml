@@ -7,7 +7,8 @@ args:
 
 checks:
 - filter:
-    lt-version: 9.0
+    requires:
+      lt-version: 9.0
     filename: rules.json
     count: 1
     match:
@@ -15,7 +16,8 @@ checks:
       lists.packet.matches[0].name: "icmp_id"
       lists.packet.matches[0].id.number: 2
 - filter:
-    min-version: 9.0
+    requires:
+      min-version: 9.0
     filename: rules.json
     count: 1
     match:

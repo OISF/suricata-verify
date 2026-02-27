@@ -5,7 +5,8 @@ pcap: ../tls-store-02/tls-client-auth.pcap
 
 checks:
   - filter:
-      min-version: 8
+      requires:
+        min-version: 8
       count: 1
       match:
         event_type: tls
@@ -22,7 +23,8 @@ checks:
         tls.client.notbefore: '2018-04-14T20:55:27'
         tls.client.notafter: '2018-05-14T20:55:27'
   - filter:
-      min-version: 7.0.8
+      requires:
+        min-version: 7.0.8
       count: 1
       match:
         event_type: tls

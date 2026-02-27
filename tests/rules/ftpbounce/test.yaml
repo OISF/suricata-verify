@@ -7,7 +7,8 @@ args:
 
 checks:
 - filter:
-    lt-version: 8
+    requires:
+      lt-version: 8
     filename: rules.json
     count: 1
     match:
@@ -16,7 +17,8 @@ checks:
       engines[0].direction: "toserver"
       engines[0].matches[0].name: "ftpbounce"
 - filter:
-    min-version: 8
+    requires:
+      min-version: 8
     filename: rules.json
     count: 1
     match:

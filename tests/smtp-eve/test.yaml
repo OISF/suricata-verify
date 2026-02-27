@@ -113,7 +113,8 @@ checks:
       tcp.tcp_flags_tc: 1b
       tcp.tcp_flags_ts: 1b
 - filter:
-    min-version: 8
+    requires:
+      min-version: 8
     count: 0
     match:
       event_type: anomaly

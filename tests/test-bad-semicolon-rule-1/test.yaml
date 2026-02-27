@@ -11,7 +11,8 @@ checks:
         engine.message: "bad option value formatting (possible missing semicolon) for keyword content: '\"AA\" depth:20'"
 
   - filter:
-      min-version: 7
+      requires:
+        min-version: 7
       count: 3
       match:
         event_type: engine

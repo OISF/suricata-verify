@@ -12,7 +12,8 @@ checks:
 
 - filter:
     count: 1
-    min-version: 8
+    requires:
+      min-version: 8
     match:
       event_type: alert
       alert.signature_id: 1

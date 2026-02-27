@@ -11,7 +11,8 @@ checks:
         engine.message: "Invalid unescaped double quote within content section."
 
   - filter:
-      min-version: 7
+      requires:
+        min-version: 7
       count: 3
       match:
         event_type: engine

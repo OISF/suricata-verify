@@ -7,7 +7,8 @@ exit-code: 1
 
 checks:
   - filter:
-      min-version: 8
+      requires:
+        min-version: 8
       filename: suricata.json
       count: 1
       match:
@@ -16,7 +17,8 @@ checks:
         engine.message.__find: "bad base64 encoding ua-seen"
         engine.module: "debug"
   - filter:
-      lt-version: 8
+      requires:
+        lt-version: 8
       filename: suricata.json
       count: 1
       match:

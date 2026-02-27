@@ -11,7 +11,8 @@ checks:
         engine.message: "Invalid hex code in content - |01 10 0j|, hex j. Invalidating signature."
 
   - filter:
-      min-version: 7
+      requires:
+        min-version: 7
       count: 3
       match:
         event_type: engine

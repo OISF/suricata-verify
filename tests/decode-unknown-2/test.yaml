@@ -14,7 +14,8 @@ checks:
       decoder.unknown_ethertype: 1
   - filter:
       count: 1
-      min-version: 8.0.2
+      requires:
+        min-version: 8.0.2
       match:
         event_type: anomaly
         ether.ether_type: 64439
@@ -22,8 +23,9 @@ checks:
         anomaly.event: decoder.ethernet.unknown_ethertype
   - filter:
       count: 1
-      min-version: 8
-      lt-version: 8.0.2
+      requires:
+        min-version: 8
+        lt-version: 8.0.2
       match:
         event_type: anomaly
         ether.ether_type: 47099

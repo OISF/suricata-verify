@@ -6,18 +6,21 @@ args:
 
 checks:
   - filter:
-      min-version: 7
+      requires:
+        min-version: 7
       count: 0
       match:
         event_type: alert
   - filter:
-      min-version: 7
+      requires:
+        min-version: 7
       count: 1
       match:
         event_type: drop
         drop.reason: stream midstream
   - filter:
-      min-version: 7
+      requires:
+        min-version: 7
       count: 9
       match:
         event_type: drop
@@ -27,7 +30,8 @@ checks:
         event_type: flow
         flow.state: bypassed
   - filter:
-      min-version: 7
+      requires:
+        min-version: 7
       count: 1
       match:
         event_type: flow
@@ -37,22 +41,25 @@ checks:
       match:
         event_type: http
   - filter:
-      min-version: 7.0.12
+      requires:
+        min-version: 7.0.12
       count: 1
       match:
         event_type: flow
         flow.exception_policy[0].target: "stream_midstream"
         flow.exception_policy[0].policy: "drop_flow"
   - filter:
-      min-version: 8
+      requires:
+        min-version: 8
       count: 1
       match:
         event_type: stats
         stats.exception_policy.tcp.midstream.drop_flow: 1
   # in Suricata 7, the exception policy stats counters can be disabled
   - filter:
-      min-version: 7.0.12
-      lt-version: 8
+      requires:
+        min-version: 7.0.12
+        lt-version: 8
       count: 1
       match:
         event_type: stats

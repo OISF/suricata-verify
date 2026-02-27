@@ -71,7 +71,8 @@ checks:
       dest_ip: 192.168.100.230
       dest_port: 20
 - filter:
-    min-version: 8
+    requires:
+      min-version: 8
     count: 1
     match:
       app_proto: ftp-data

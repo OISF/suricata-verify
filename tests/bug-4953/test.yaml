@@ -3,12 +3,14 @@ args:
 
 checks:
   - filter:
-      min-version: 6
+      requires:
+        min-version: 6
       count: 3
       match:
         event_type: fileinfo
   - filter:
-      min-version: 6
+      requires:
+        min-version: 6
       count: 1
       match:
         event_type: fileinfo
@@ -25,7 +27,8 @@ checks:
         fileinfo.state: CLOSED
         fileinfo.size: 676
   - filter:
-      min-version: 6
+      requires:
+        min-version: 6
       count: 1
       match:
         event_type: fileinfo

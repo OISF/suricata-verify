@@ -21,7 +21,8 @@ checks:
 
   # Look for anomaly event.
   - filter:
-      min-version: 7
+      requires:
+        min-version: 7
       count: 1
       match:
         event_type: anomaly
@@ -29,14 +30,16 @@ checks:
 
   # Look for app-layer alert.
   - filter:
-      min-version: 7
+      requires:
+        min-version: 7
       count: 1
       match:
         event_type: alert
         alert.signature_id: 2232000
   # Alert has app-layer details.
   - filter:
-      min-version: 8
+      requires:
+        min-version: 8
       count: 1
       match:
         event_type: alert

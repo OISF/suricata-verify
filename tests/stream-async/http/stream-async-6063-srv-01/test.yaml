@@ -34,7 +34,8 @@ checks:
         anomaly.event: UNABLE_TO_MATCH_RESPONSE_TO_REQUEST
         anomaly.layer: proto_parser
   - filter:
-      min-version: 8
+      requires:
+        min-version: 8
       count: 1
       match:
         event_type: flow
@@ -62,7 +63,8 @@ checks:
         tcp.ts_max_regions: 1
         tcp.tc_max_regions: 1
   - filter:
-      lt-version: 8
+      requires:
+        lt-version: 8
       count: 1
       match:
         event_type: flow

@@ -296,7 +296,8 @@ checks:
       src_ip: 190.0.0.1
       src_port: 40000
 - filter:
-    min-version: 8
+    requires:
+      min-version: 8
     count: 1
     match:
       bittorrent_dht.request.id: 6162636465666768696a30313233343536373839
@@ -312,7 +313,8 @@ checks:
       src_port: 20000
       ip_v: 4
 - filter:
-    min-version: 8
+    requires:
+      min-version: 8
     count: 1
     match:
       anomaly.app_proto: bittorrent-dht

@@ -6,7 +6,8 @@ args:
 
 checks:
   - filter:
-      min-version: 8
+      requires:
+        min-version: 8
       count: 1
       match:
         proto: TCP
@@ -16,7 +17,8 @@ checks:
         sip.version: "SIP/2.0"
         sip.request_line: "REGISTER sip:sip.cybercity.dk SIP/2.0"
   - filter:
-      min-version: 8
+      requires:
+        min-version: 8
       count: 1
       match:
         proto: TCP
@@ -26,7 +28,8 @@ checks:
         sip.reason: "Unauthorized"
         sip.response_line: "SIP/2.0 401 Unauthorized"
   - filter:
-      min-version: 8
+      requires:
+        min-version: 8
       count: 1
       match:
         event_type: stats

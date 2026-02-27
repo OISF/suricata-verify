@@ -5,7 +5,8 @@ args:
 
 checks:
   - filter:
-      min-version: 7
+      requires:
+        min-version: 7
       count: 1
       match:
         alert.xff: 10.3.3.3

@@ -5,7 +5,8 @@ args:
 
 checks:
 - filter:
-    min-version: 6
+    requires:
+      min-version: 6
     count: 1445
     match:
       event_type: dcerpc

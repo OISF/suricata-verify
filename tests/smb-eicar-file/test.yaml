@@ -12,7 +12,8 @@ checks:
   # Check for something in the files array, which is an array of
   # fileinfo objects.
   - filter:
-      min-version: 6.0.0
+      requires:
+        min-version: 6.0.0
       count: 1
       match:
         event_type: alert

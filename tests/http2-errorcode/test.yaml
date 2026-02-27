@@ -13,7 +13,8 @@ checks:
         alert.signature_id: 1
         http.http2.request.error_code: INTERNALERROR
   - filter:
-      min-version: 9
+      requires:
+        min-version: 9
       count: 2
       match:
         event_type: alert

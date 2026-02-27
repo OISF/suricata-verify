@@ -31,7 +31,8 @@ checks:
         alert.signature_id: 5
         pcap_cnt: 10
   - filter:
-      min-version: 6.0.0  
+      requires:
+        min-version: 6.0.0  
       count: 1
       match:
         dcerpc.response: RESPONSE
