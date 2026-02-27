@@ -483,6 +483,9 @@ class FileCompareCheck:
 class ShellCheck:
 
     def __init__(self, config, env, suricata_config, output_dir, test_dir):
+        for key in config:
+            if key not in ["requires", "args", "expect"]:
+                raise Exception("Unexpected key in shell check: {}".format(key))
         self.config = config
         self.env = env
         self.suricata_config = suricata_config
@@ -490,19 +493,10 @@ class ShellCheck:
         self.script_cwd = test_dir
 
     def run(self):
-        shell_args = {}
         if not self.config or "args" not in self.config:
             raise TestError("shell check missing args")
-        req_version = self.config.get("version")
-        min_version = self.config.get("min-version")
-        lt_version = self.config.get("lt-version")
-        if req_version is not None:
-            shell_args["version"] = req_version
-        if min_version is not None:
-            shell_args["min-version"] = min_version
-        if lt_version is not None:
-            shell_args["lt-version"] = lt_version
-        check_requires(shell_args, self.suricata_config, self.script_cwd)
+        requires = self.config.get("requires", {})
+        check_requires(requires, self.suricata_config, self.script_cwd)
 
         try:
             if WIN32:

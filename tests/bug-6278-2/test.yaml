@@ -10,4 +10,5 @@ checks:
   - shell:
       args: grep -c 'no user name was provided - ensure it is specified either in the configuration file (run-as.user) or in command-line arguments (--user)' stderr
       expect: 1
-      min-version: 7
+      requires:
+        min-version: 7
