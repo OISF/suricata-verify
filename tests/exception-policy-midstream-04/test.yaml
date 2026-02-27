@@ -20,13 +20,15 @@ checks:
     match:
       event_type: http
 - filter:
-    min-version: 7.0.12
+    requires:
+      min-version: 7.0.12
     count: 1
     match:
       event_type: stats
       stats.exception_policy.tcp.midstream.pass_flow: 2
 - filter:
-    min-version: 7.0.12
+    requires:
+      min-version: 7.0.12
     count: 1
     match:
       event_type: flow

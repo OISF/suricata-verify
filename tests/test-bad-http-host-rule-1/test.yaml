@@ -5,13 +5,15 @@ checks:
   # check that we have the following entries in eve.json
   # match 1 specific rule load failure reason
   - filter:
-      min-version: 7
+      requires:
+        min-version: 7
       count: 1
       match:
         event_type: engine
         engine.message: "rule 1111: A pattern with uppercase characters detected for http.host. The hostname buffer is normalized to lowercase, please specify a lowercase pattern."
   - filter:
-      min-version: 7
+      requires:
+        min-version: 7
       count: 3
       match:
         event_type: engine

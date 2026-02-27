@@ -1,6 +1,7 @@
 checks:
   - filter:
-      min-version: 8
+      requires:
+        min-version: 8
       count: 1
       match:
         event_type: sip
@@ -9,7 +10,8 @@ checks:
         sip.version: "SIP/2.0"
         sip.request_line: "REGISTER sip:sip.cybercity.dk SIP/2.0"
   - filter:
-      min-version: 8
+      requires:
+        min-version: 8
       count: 1
       match:
         event_type: sip

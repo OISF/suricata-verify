@@ -18,7 +18,8 @@ checks:
       match:
         event_type: drop
   - filter:
-      min-version: 7
+      requires:
+        min-version: 7
       count: 1
       match:
         event_type: flow

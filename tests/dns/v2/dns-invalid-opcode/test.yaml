@@ -40,7 +40,8 @@ checks:
 # Generated checks below.
       
 - filter:
-    min-version: 8
+    requires:
+      min-version: 8
     count: 1
     match:
       alert.action: allowed
@@ -77,7 +78,8 @@ checks:
       tx_id: 0
 
 - filter:
-    lt-version: 8
+    requires:
+      lt-version: 8
     count: 1
     match:
       alert.action: allowed

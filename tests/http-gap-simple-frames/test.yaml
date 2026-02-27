@@ -71,7 +71,8 @@ checks:
         frame.direction: toserver
         frame.tx_id: 0
   - filter:
-      min-version: 8
+      requires:
+        min-version: 8
       count: 1
       match:
         event_type: alert

@@ -7,7 +7,8 @@ args:
 
 checks:
 - filter:
-    lt-version: 9.0
+    requires:
+      lt-version: 9.0
     filename: rules.json
     count: 1
     match:
@@ -16,7 +17,8 @@ checks:
       lists.packet.matches[0].window.size: 30336
       lists.packet.matches[0].window.negated: false
 - filter:
-    lt-version: 9.0
+    requires:
+      lt-version: 9.0
     filename: rules.json
     count: 1
     match:
@@ -26,7 +28,8 @@ checks:
       lists.packet.matches[0].window.negated: true
 
 - filter:
-    min-version: 9.0
+    requires:
+      min-version: 9.0
     filename: rules.json
     count: 1
     match:
@@ -34,7 +37,8 @@ checks:
       lists.packet.matches[0].name: "tcp.window"
       lists.packet.matches[0].window.equal: 30336
 - filter:
-    min-version: 9.0
+    requires:
+      min-version: 9.0
     filename: rules.json
     count: 1
     match:

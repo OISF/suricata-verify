@@ -64,7 +64,8 @@ checks:
       src_port: 41662
 # check to ensure there's no empty request (Bug #7647)
 - filter:
-    min-version: 8
+    requires:
+      min-version: 8
     count: 1
     match:
       dest_ip: 192.168.1.74

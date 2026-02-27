@@ -7,21 +7,24 @@ args:
 
 checks:
   - filter:
-      min-version: 8
+      requires:
+        min-version: 8
       count: 1
       match:
         event_type: flow
         app_proto: tls
         app_proto_tc: smtp
   - filter:
-      version: 7
+      requires:
+        version: 7
       count: 1
       match:
         event_type: flow
         app_proto: tls
         # no smtp probin parser in 7
   - filter:
-      version: 7
+      requires:
+        version: 7
       count: 1
       match:
         event_type: anomaly

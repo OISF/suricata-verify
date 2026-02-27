@@ -11,7 +11,8 @@ checks:
     match:
       event_type: alert
 - filter:
-    min-version: 8
+    requires:
+      min-version: 8
     count: 1
     match:
       event_type: alert

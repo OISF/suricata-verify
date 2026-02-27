@@ -60,7 +60,8 @@ checks:
         app_proto: doh2
         app_proto_orig: http2
   - filter:
-      min-version: 8.0.1
+      requires:
+        min-version: 8.0.1
       count: 0
       match:
         event_type: dns

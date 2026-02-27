@@ -8,7 +8,8 @@ pcap: ../alert-max/alert-max-append-higher-priority/input.pcap
 checks:
 # Subtest 1
 - filter:
-    min-version: 7
+    requires:
+      min-version: 7
     count: 1
     match:
       event_type: alert
@@ -16,7 +17,8 @@ checks:
       verdict.action: alert
 # Subtest 2
 - filter:
-    min-version: 7
+    requires:
+      min-version: 7
     count: 1
     match:
       event_type: alert
@@ -24,7 +26,8 @@ checks:
       verdict.action: pass
 # Subtest 3
 - filter:
-    min-version: 7
+    requires:
+      min-version: 7
     count: 1
     match:
       event_type: alert
@@ -32,7 +35,8 @@ checks:
       verdict.action: pass
 # Subtest 4
 - filter:
-    min-version: 7
+    requires:
+      min-version: 7
     count: 0
     match:
       event_type: alert

@@ -67,19 +67,22 @@ checks:
       src_ip: 10.16.1.4
       src_port: 68
 - filter:
-    min-version: 7
+    requires:
+      min-version: 7
     count: 1
     match:
       event_type: alert
       alert.signature_id: 1
 - filter:
-    min-version: 7
+    requires:
+      min-version: 7
     count: 1
     match:
       event_type: alert
       alert.signature_id: 2
 - filter:
-    min-version: 7
+    requires:
+      min-version: 7
     count: 1
     match:
       event_type: alert

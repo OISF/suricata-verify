@@ -11137,7 +11137,8 @@ checks:
       src_ip: 139.25.22.2
       src_port: 3296
 - filter:
-    min-version: 7
+    requires:
+      min-version: 7
     count: 1
     match:
       app_proto: failed
@@ -11199,7 +11200,8 @@ checks:
       src_ip: 139.25.22.2
       src_port: 3298
 - filter:
-    min-version: 7
+    requires:
+      min-version: 7
     count: 1
     match:
       app_proto: failed
@@ -11261,7 +11263,8 @@ checks:
       src_ip: 139.25.22.2
       src_port: 722
 - filter:
-    min-version: 7
+    requires:
+      min-version: 7
     count: 1
     match:
       app_proto: failed
@@ -11323,7 +11326,8 @@ checks:
       src_ip: 139.25.22.2
       src_port: 1022
 - filter:
-    min-version: 7
+    requires:
+      min-version: 7
     count: 1
     match:
       app_proto: nfs
@@ -11385,7 +11389,8 @@ checks:
       src_ip: 139.25.22.2
       src_port: 3295
 - filter:
-    min-version: 7
+    requires:
+      min-version: 7
     count: 1
     match:
       app_proto: failed
@@ -11447,7 +11452,8 @@ checks:
       src_ip: 139.25.22.2
       src_port: 3299
 - filter:
-    min-version: 7
+    requires:
+      min-version: 7
     count: 1
     match:
       app_proto: failed
@@ -11509,7 +11515,8 @@ checks:
       src_ip: 139.25.22.2
       src_port: 3297
 - filter:
-    min-version: 7
+    requires:
+      min-version: 7
     count: 1
     match:
       app_proto: failed
@@ -11571,7 +11578,8 @@ checks:
       src_ip: 139.25.22.2
       src_port: 706
 - filter:
-    min-version: 7
+    requires:
+      min-version: 7
     count: 1
     match:
       app_proto: failed

@@ -7,7 +7,8 @@ checks:
         app_proto: rfb
 
   - filter:
-      min-version: 7
+      requires:
+        min-version: 7
       count: 1
       match:
         event_type: rfb

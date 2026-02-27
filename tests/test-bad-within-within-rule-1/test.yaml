@@ -11,7 +11,8 @@ checks:
         engine.message: "can't use multiple withins for the same content."
 
   - filter:
-      min-version: 7
+      requires:
+        min-version: 7
       count: 3
       match:
         event_type: engine

@@ -14,14 +14,16 @@ checks:
         engine.message: "Invalid hex code in content - |l0 01 01|, hex l. Invalidating signature."
 
   - filter:
-      min-version: 7
+      requires:
+        min-version: 7
       count: 4
       match:
         event_type: engine
         engine.module: detect
 
   - filter:
-      min-version: 7.0
+      requires:
+        min-version: 7.0
       count: 1
       match:
         event_type: engine

@@ -11,7 +11,8 @@ checks:
         engine.message: "can't have a relative keyword set along with 'fast_pattern:only;'."
 
   - filter:
-      min-version: 7
+      requires:
+        min-version: 7
       count: 3
       match:
         event_type: engine

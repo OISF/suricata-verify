@@ -9,28 +9,32 @@ checks:
       match:
         event_type: alert
   - filter:
-      min-version: 8.0
+      requires:
+        min-version: 8.0
       count: 1
       match:
         event_type: alert
         alert.signature_id: 1
         pcap_cnt: 2
   - filter:
-      min-version: 8.0
+      requires:
+        min-version: 8.0
       count: 1
       match:
         event_type: alert
         alert.signature_id: 2
         pcap_cnt: 2
   - filter:
-      lt-version: 8.0
+      requires:
+        lt-version: 8.0
       count: 1
       match:
         event_type: alert
         alert.signature_id: 1
         pcap_cnt: 11
   - filter:
-      lt-version: 8.0
+      requires:
+        lt-version: 8.0
       count: 1
       match:
         event_type: alert
@@ -59,5 +63,3 @@ checks:
         tcp.state: close_wait
         tcp.ts_max_regions: 1
         tcp.tc_max_regions: 1
-
-

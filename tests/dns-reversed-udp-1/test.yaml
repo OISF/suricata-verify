@@ -7,14 +7,14 @@ args:
 checks:
 
   - filter:
-      comment: request
+      # request
       count: 0
       match:
         event_type: dns
         dns.type: query
 
   - filter:
-      comment: response
+      # response
       count: 1
       match:
         event_type: dns

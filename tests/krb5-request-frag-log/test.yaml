@@ -13,7 +13,7 @@ checks:
         event_type: alert
         alert.signature_id: 2
   - filter:
-      comment: authentication service (AS) response
+      # authentication service (AS) response
       count: 1
       match:
         event_type: krb5
@@ -23,7 +23,7 @@ checks:
         krb5.sname: krbtgt/dom.test.lo.com
 
   - filter:
-      comment: ticket granting service (TGS) reponse
+      # ticket granting service (TGS) reponse
       count: 1
       match:
         event_type: krb5

@@ -7,7 +7,8 @@ args:
 
 checks:
 - filter:
-    lt-version: 9.0
+    requires:
+      lt-version: 9.0
     filename: rules.json
     count: 1
     match:
@@ -15,14 +16,16 @@ checks:
       lists.packet.matches[0].name: "tcp.ack"
       lists.packet.matches[0].ack.number: 782
 - filter:
-    lt-version: 9.0
+    requires:
+      lt-version: 9.0
     filename: rules.json
     count: 1
     match:
       id: 2
       lists.packet.matches[0].ack.number: 15
 - filter:
-    lt-version: 9.0
+    requires:
+      lt-version: 9.0
     filename: rules.json
     count: 1
     match:
@@ -30,7 +33,8 @@ checks:
       lists.packet.matches[0].name: "tcp.ack"
       lists.packet.matches[0].ack.number: 437528
 - filter:
-    min-version: 9.0
+    requires:
+      min-version: 9.0
     filename: rules.json
     count: 1
     match:
@@ -38,14 +42,16 @@ checks:
       lists.packet.matches[0].name: "tcp.ack"
       lists.packet.matches[0].ack.equal: 782
 - filter:
-    min-version: 9.0
+    requires:
+      min-version: 9.0
     filename: rules.json
     count: 1
     match:
       id: 2
       lists.packet.matches[0].ack.equal: 15
 - filter:
-    min-version: 9.0
+    requires:
+      min-version: 9.0
     filename: rules.json
     count: 1
     match:
