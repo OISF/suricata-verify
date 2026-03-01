@@ -1,0 +1,24 @@
+pcap: ../bug-8336-01-default-track-only/input.pcap
+
+requires:
+  features:
+    - HAVE_JA3
+  min-version: 9
+
+args:
+  - -k none
+  - --set app-layer.protocols.tls.encryption-handling=bypass
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 8336001
+
+  # Expected to fail on affected versions: sid 8336002 does not alert in IDS+bypass.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 8336002
