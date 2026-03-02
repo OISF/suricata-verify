@@ -1,5 +1,5 @@
 requires:
-  version: 8
+  min-version: 8
   pcap: false
 
 exit-code: 1

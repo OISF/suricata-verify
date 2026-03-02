@@ -1,5 +1,5 @@
 requires:
-  version: 8
+  min-version: 8
 
 pcap: ../../ftp/ftp-too-long-response/ftp-too-long-response.pcap
 

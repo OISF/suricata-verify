@@ -1,7 +1,7 @@
 pcap: ../../bug-3519/input.pcap
 
 requires:
-  version: 8
+  min-version: 8
 
 exit-code: 1
 

@@ -1,7 +1,7 @@
 pcap: ../../ftp-epsv/input.pcap
 
 requires:
-  version: 8
+  min-version: 8
 
 checks:
 
