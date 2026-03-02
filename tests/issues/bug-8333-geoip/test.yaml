@@ -1,0 +1,29 @@
+requires:
+  min-version: 9
+  features:
+    - GeoIP2
+
+args:
+  - --simulate-ips
+  - -k none
+  - --set geoip-database=./test.mmdb
+
+checks:
+  # Should pass, but we actually have 1.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 8333002
+
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.action: blocked
+
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.ips.blocked: 0

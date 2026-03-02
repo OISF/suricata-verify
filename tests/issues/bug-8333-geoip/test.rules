@@ -1,0 +1,2 @@
+pass ssh any any -> any 22 (msg:"bug8333 pass ssh traffic"; geoip:any,FR,DE; sid:8333001; rev:1;)
+drop ip any any -> any any (msg:"bug8333 drop established catch all"; flow:established,to_server; sid:8333002; rev:1;)
