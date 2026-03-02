@@ -1,0 +1,29 @@
+requires:
+  min-version: 9
+
+pcap: ../bug-8333-geoip/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+  - --set reputation-categories-file=${TEST_DIR}/categories.txt
+  - --set reputation-files.0=${TEST_DIR}/iprep.list
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 8333012
+
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.action: blocked
+
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.ips.blocked: 0
