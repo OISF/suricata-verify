@@ -10,7 +10,6 @@ command: |
 
 checks:
     - shell:
-        version: 7
         args: |-
           grep "Warning: detect: decode-event keyword no longer supports event \"decoder.udp.hlen_invalid\"" suricata.log | wc -l
         expect: 1
