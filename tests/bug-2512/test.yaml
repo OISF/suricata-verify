@@ -1,6 +1,3 @@
-args:
-- --set stream.async-oneside=true
-
 checks:
   - filter:
       count: 1
