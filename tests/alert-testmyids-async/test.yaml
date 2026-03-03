@@ -16,3 +16,12 @@ checks:
       match:
         event_type: http
         dest_port: 80
+  - filter:
+      requires:
+        min-version: 9.0
+      count: 1
+      match:
+        event_type: stats
+        stats.flow.total: 1
+        stats.tcp.async_stream: 1
+
