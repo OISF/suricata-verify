@@ -7,4 +7,11 @@ checks:
       match:
         event_type: http
         http.url: secure-assets.rubiconproject.com:443
+  - filter:
+      requires:
+        min-version: 9
+      count: 1
+      match:
+        event_type: stats
+        stats.tcp.async_sessions: 0
 
