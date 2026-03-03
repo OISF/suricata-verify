@@ -1,5 +1,8 @@
 # *** Add configuration here ***
 
+requires:
+  min-version: 9
+
 args:
 - -k none
 
