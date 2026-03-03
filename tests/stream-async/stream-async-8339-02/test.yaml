@@ -1,0 +1,20 @@
+requires:
+  min-version: 9
+
+args:
+- --set stream.midstream=true
+- --set stream.async-oneside=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        tcp.state: fin_wait1
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.flow.tcp: 1
+        stats.tcp.midstream_pickups: 1
+        stats.tcp.async_sessions: 1
