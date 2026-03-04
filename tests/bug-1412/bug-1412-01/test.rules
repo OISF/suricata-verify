@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"Cross-buffer byte_extract test aggregate"; flow:established,to_client; http.header.raw; content:"Content-Length: "; byte_extract:2,0,content_len,relative,string,dec; file_data; content:"test"; byte_test:1,>,content_len,0,relative; sid:1;)
