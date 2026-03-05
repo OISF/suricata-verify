@@ -1,5 +1,5 @@
 requires:
-  min-version: 8.0.4
+  min-version: 7.0.16
   features:
     - QA_SIMULATION
 
