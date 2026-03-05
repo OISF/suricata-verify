@@ -1,0 +1,6 @@
+alert imap any any -> any any (msg:"IMAP CAPABILITY command"; imap.request; content:"CAPABILITY"; sid:1; rev:1;)
+alert imap any any -> any any (msg:"IMAP server ready"; imap.response; content:"OK IMAP server ready"; sid:2; rev:1;)
+alert imap any any -> any any (msg:"IMAP email Body"; flow:to_client; imap.email.body; content:"Hello"; imap.email.direction:to_client;sid:3; rev:1;)
+alert imap any any -> any any (msg:"IMAP email header name and value"; flow:to_client; imap.email.header; content:"from:"; content:"digitalinvestigator"; sid:4; rev:1;)
+alert imap any any -> any any (msg:"IMAP email header name only"; flow:to_client; imap.email.header.name; content:"subject"; sid:5; rev:1;)
+alert imap any any -> any any (msg:"IMAP value only"; imap.email.header.value; content:"Thunderbird"; sid:6; rev:1;)

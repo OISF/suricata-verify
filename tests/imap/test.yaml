@@ -1,0 +1,176 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+pcap: imap.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 5
+        event_type: imap 
+        imap.responses[0]: "* OK IMAP server ready H mimap14 96217"
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 8
+        event_type: imap 
+        imap.requests[0]: "1 CAPABILITY"
+        imap.responses[0]: "* CAPABILITY IMAP4rev1 CHILDREN ENABLE ID IDLE LIST-EXTENDED LIST-STATUS LITERAL+ MOVE NAMESPACE QUOTA SASL-IR SORT THREAD=ORDEREDSUBJECT UIDPLUS UNSELECT WITHIN STARTTLS AUTH=LOGIN AUTH=PLAIN"
+        imap.responses[1]: "1 OK CAPABILITY completed"
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 12
+        event_type: imap 
+        imap.requests[0]: "2 AUTHENTICATE plain"
+        imap.requests[1]: "AGRpZ2l0YWxpbnZlc3RpZ2F0b3JAbmV0d29ya3NpbXMuY29tAG5hcGllcjEyMw=="
+        imap.responses[0]: "+ "
+        imap.responses[1]: "2 OK AUTHENTICATE completed"
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 14
+        event_type: imap 
+        imap.requests[0]: "3 ID (\"name\" \"Thunderbird\" \"version\" \"17.0.8\")"
+        imap.responses[0]: "3 OK ID completed"
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 16
+        event_type: imap 
+        imap.requests[0]: "4 SELECT Sent"
+        imap.responses[0]: "* 1 EXISTS"
+        imap.responses[1]: "* 1 RECENT"
+        imap.responses[2]: "* FLAGS (\\Answered \\Flagged \\Deleted \\Seen \\Draft)"
+        imap.responses[3]: "* OK [PERMANENTFLAGS (\\Answered \\Flagged \\Draft \\Deleted \\Seen \\*)] Unlimited"
+        imap.responses[4]: "* OK [UIDNEXT 2] Predicted next UID"
+        imap.responses[5]: "* OK [UIDVALIDITY 1377199071] UIDs valid"
+        imap.responses[6]: "4 OK [READ-WRITE] SELECT completed"
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 18
+        event_type: imap 
+        imap.requests[0]: "5 getquotaroot Sent"
+        imap.responses[0]: "* QUOTAROOT Sent \"\""
+        imap.responses[1]: "* QUOTA \"\" (STORAGE 5 2048000 MESSAGE 2 40000)"
+        imap.responses[2]: "5 OK GETQUOTAROOT completed"
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 20
+        event_type: imap 
+        imap.requests[0]: "6 UID fetch 1:* (FLAGS)"
+        imap.responses[0]: "* 1 FETCH (UID 1 FLAGS (\\Recent \\Seen))"
+        imap.responses[1]: "6 OK UID FETCH completed"
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 24
+        event_type: imap 
+        imap.requests[0]: "7 UID fetch 1 (UID RFC822.SIZE FLAGS BODY.PEEK[HEADER.FIELDS (From To Cc Bcc Subject Date Message-ID Priority X-Priority References Newsgroups In-Reply-To Content-Type)])"
+        imap.responses[0]: "* 1 FETCH (UID 1 RFC822.SIZE 452 FLAGS (\\Recent \\Seen) BODY[HEADER.FIELDS (FROM TO CC BCC SUBJECT DATE MESSAGE-ID PRIORITY X-PRIORITY REFERENCES NEWSGROUPS IN-REPLY-TO CONTENT-TYPE)] {275})"
+        imap.responses[1]: "7 OK UID FETCH completed"
+        imap.email.direction: "to_client"
+        imap.email.headers.to: "w.buchanan@napier.ac.uk"
+        imap.email.headers.cc: "w_j_buchanan@hotmail.com"
+        imap.email.headers.subject: "Testing"
+        imap.email.headers.message_id: "<521663E3.7090401@networksims.com>"
+        imap.email.headers.content_type: "text/plain; charset=ISO-8859-1; format=flowed"
+        imap.email.headers.from: "DI <digitalinvestigator@networksims.com>"
+        imap.email.headers.date: "Thu, 22 Aug 2013 20:17:55 +0100"
+        imap.email.body: ""
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 28
+        event_type: imap
+        imap.requests[0]: "8 UID fetch 1 (UID RFC822.SIZE BODY.PEEK[])"
+        imap.responses[0]: "* 1 FETCH (UID 1 RFC822.SIZE 452 BODY[] {452})"
+        imap.responses[1]: "8 OK UID FETCH completed"
+        imap.email.direction: "to_client"
+        imap.email.headers.to: "w.buchanan@napier.ac.uk"
+        imap.email.headers.from: "DI <digitalinvestigator@networksims.com>"
+        imap.email.headers.subject: "Testing"
+        imap.email.headers.mime_version: "1.0"
+        imap.email.headers.content_transfer_encoding: "7bit"
+        imap.email.headers.message_id: "<521663E3.7090401@networksims.com>"
+        imap.email.headers.content_type: "text/plain; charset=ISO-8859-1; format=flowed"
+        imap.email.headers.cc: "w_j_buchanan@hotmail.com"
+        imap.email.headers.user_agent: "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:17.0) Gecko/20130801 Thunderbird/17.0.8"
+        imap.email.headers.date: "Thu, 22 Aug 2013 20:17:55 +0100"
+        imap.email.body: "Hello ... how are you?\r\n\r\nBill.\r\n"
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 33
+        event_type: imap 
+        imap.requests[0]: "9 IDLE"
+        imap.requests[1]: "DONE"
+        imap.responses[0]: "+ idling"
+        imap.responses[1]: "9 OK IDLE completed"
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 35
+        event_type: imap 
+        imap.requests[0]: "10 NOOP"
+        imap.responses[0]: "10 OK NOOP completed"
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 41
+        event_type: imap 
+        imap.requests[0]: "11 IDLE"
+        imap.requests[1]: "DONE"
+        imap.responses[0]: "+ idling"
+        imap.responses[1]: "11 OK IDLE completed"
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 41
+        event_type: imap 
+        imap.requests[0]: "12 CLOSE"
+        imap.responses[0]: "12 OK CLOSE completed"
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 41
+        event_type: imap 
+        imap.requests[0]: "13 LOGOUT"
+        imap.responses[0]: "* BYE Server logging out"
+        imap.responses[1]: "13 OK LOGOUT completed"
+  - filter:
+        count: 1
+        match:
+          event_type: alert
+          alert.signature_id: 1
+  - filter:
+        count: 1
+        match:
+          event_type: alert
+          alert.signature_id: 2
+  - filter:
+        count: 1
+        match:
+          event_type: alert
+          alert.signature_id: 3
+  - filter:
+        count: 2
+        match:
+          event_type: alert
+          alert.signature_id: 4
+  - filter:
+        count: 2
+        match:
+          event_type: alert
+          alert.signature_id: 5
+  - filter:
+        count: 2
+        match:
+          event_type: alert
+          alert.signature_id: 6
