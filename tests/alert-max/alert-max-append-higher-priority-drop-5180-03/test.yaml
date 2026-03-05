@@ -7,9 +7,6 @@ args:
 checks:
 # Sub-test 1
 - filter:
-    requires:
-      lt-version: 8.0.4
-      gt-version: 8.0.4
     count: 1
     match:
       event_type: alert
@@ -18,9 +15,6 @@ checks:
       verdict.action: drop
 # Sub-test 2
 - filter:
-    requires:
-      lt-version: 8.0.4
-      gt-version: 8.0.4
     count: 1
     match:
       event_type: alert
@@ -57,8 +51,6 @@ checks:
 - filter:
     requires:
       min-version: 8.0.4
-      lt-version: 8.0.4
-      gt-version: 8.0.4
     count: 1
     match:
       event_type: drop

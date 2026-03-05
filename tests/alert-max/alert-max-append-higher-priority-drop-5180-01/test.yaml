@@ -9,9 +9,6 @@ pcap: ../alert-max-append-higher-priority/input.pcap
 checks:
 # Sub-test 1
 - filter:
-    requires:
-      lt-version: 8.0.4
-      gt-version: 8.0.4
     count: 1
     match:
       event_type: alert
@@ -21,9 +18,6 @@ checks:
       verdict.action: drop
 # Sub-test 2
 - filter:
-    requires:
-      lt-version: 8.0.4
-      gt-version: 8.0.4
     count: 1
     match:
       event_type: alert
@@ -84,9 +78,6 @@ checks:
       alert.signature_id: 5
 # Sub-test 8
 - filter:
-    requires:
-      lt-version: 8.0.4
-      gt-version: 8.0.4
     count: 1
     match:
       event_type: drop
