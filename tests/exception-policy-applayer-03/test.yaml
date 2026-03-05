@@ -1,6 +1,6 @@
 requires:
   #min-version: 7.0.12 temporary change
-  min-version: 8.0.4
+  min-version: 7.0.15
   features:
     - QA_SIMULATION
 pcap: ../bittorrent-dht/input.pcap
