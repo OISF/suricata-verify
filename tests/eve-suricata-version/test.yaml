@@ -64,4 +64,8 @@ checks:
         event_type: fileinfo
         dest_ip: 192.168.118.10
         has-key: suricata_version
-
+  - filter:
+      min-version: 9
+      count: 53
+      match:
+        has-key: v
