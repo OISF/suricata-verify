@@ -1,0 +1,67 @@
+requires:
+  pcap: false
+
+args:
+- --simulate-ips
+- --engine-analysis
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    min-version: 7
+    match:
+      raw: "pass tcp $HOME_NET any -> $EXTERNAL_NET 80 (sid:1;)"
+      id: 1
+      requirements: []
+      type: "like_ip_only"
+      flags[0]: "sp_any"
+      flags[1]: "noalert"
+      flags[2]: "toserver"
+      flags[3]: "toclient"
+- filter:
+    filename: rules.json
+    count: 1
+    min-version: 7
+    match:
+      id: 2
+      raw: "drop ip any any -> any any (msg:\"DROP ALL\"; flow:stateless; sid:2;)"
+      requirements[0]: flow
+      type: "pkt"
+      flags[0]: "src_any"
+      flags[1]: "dst_any"
+      flags[2]: "sp_any"
+      flags[3]: "dp_any"
+      flags[4]: "toserver"
+      flags[5]: "toclient"
+      pkt_engines[0].name: "packet"
+      pkt_engines[0].is_mpm: false
+      lists.packet.matches[0].name: "flow"
+- filter:
+    filename: rules.json
+    count: 1
+    lt-version: 7
+    match:
+      raw: "pass tcp $HOME_NET any -> $EXTERNAL_NET 80 (sid:1;)"
+      id: 1
+      requirements: []
+      flags[0]: "sp_any"
+      flags[1]: "toserver"
+      flags[2]: "toclient"
+- filter:
+    filename: rules.json
+    count: 1
+    lt-version: 7
+    match:
+      id: 2
+      raw: "drop ip any any -> any any (msg:\"DROP ALL\"; flow:stateless; sid:2;)"
+      requirements[0]: flow
+      flags[0]: "src_any"
+      flags[1]: "dst_any"
+      flags[2]: "sp_any"
+      flags[3]: "dp_any"
+      flags[4]: "toserver"
+      flags[5]: "toclient"
+      pkt_engines[0].name: "packet"
+      pkt_engines[0].is_mpm: false
+      lists.packet.matches[0].name: "flow"
