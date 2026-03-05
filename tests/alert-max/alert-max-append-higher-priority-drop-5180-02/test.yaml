@@ -7,18 +7,12 @@ args:
 checks:
 # Subtest 1
 - filter:
-    requires:
-      lt-version: 8.0.4
-      gt-version: 8.0.4
     count: 0
     match:
       event_type: alert
       alert.signature_id: 1
 # Subtest 2
 - filter:
-    requires:
-      lt-version: 8.0.4
-      gt-version: 8.0.4
     count: 1
     match:
       event_type: alert
@@ -28,9 +22,6 @@ checks:
       verdict.action: drop
 # Subtest 3
 - filter:
-    requires:
-      lt-version: 8.0.4
-      gt-version: 8.0.4
     count: 1
     match:
       event_type: alert
@@ -41,18 +32,12 @@ checks:
 # Subtest 4
 # Matches, but not enough space in packet alert queue
 - filter:
-    requires:
-      lt-version: 8.0.4
-      gt-version: 8.0.4
     count: 0
     match:
       event_type: alert
       alert.signature_id: 4
 # Subtest 5
 - filter:
-    requires:
-      lt-version: 8.0.4
-      gt-version: 8.0.4
     count: 1
     match:
       event_type: alert
@@ -63,18 +48,12 @@ checks:
 # Subtest 6
 # Matches, but not enough space in packet alert queue
 - filter:
-    requires:
-      lt-version: 8.0.4
-      gt-version: 8.0.4
     count: 0
     match:
       event_type: alert
       alert.signature_id: 6
 # Subtest 7
 - filter:
-    requires:
-      lt-version: 8.0.4
-      gt-version: 8.0.4
     count: 1
     match:
       event_type: drop
@@ -82,9 +61,6 @@ checks:
       drop.reason: rules
 # Subtest 8
 - filter:
-    requires:
-      lt-version: 8.0.4
-      gt-version: 8.0.4
     count: 1
     match:
       event_type: drop
@@ -92,18 +68,12 @@ checks:
       drop.reason: "flow drop"
 # Subtest 9
 - filter:
-    requires:
-      lt-version: 8.0.4
-      gt-version: 8.0.4
     count: 1
     match:
       event_type: flow
       flow.action: "drop"
 # Subtest 10
 - filter:
-    requires:
-      lt-version: 8.0.4
-      gt-version: 8.0.4
     count: 1
     match:
       event_type: stats

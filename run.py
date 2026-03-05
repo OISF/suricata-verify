@@ -339,12 +339,20 @@ def check_requires(requires, suricata_config: SuricataConfig, test_dir=None):
                 raise UnsatisfiedRequirementError(
                         "requires at least version {}".format(min_version))
         elif key == "lt-version":
+            if "gt-version" in requires:
+                if not Version().is_lt(parse_suricata_version(requires["gt-version"]), parse_suricata_version(requires["lt-version"])):
+                    raise ImpossibleRequirementError(
+                        "test has both lt-version {} and gt-version {}".format(requires["lt-version"], requires["gt-version"]))
             lt_version = requires["lt-version"]
             if not is_version_compatible(version=lt_version,
                     suri_version=suri_version, expr="lt"):
                 raise UnsatisfiedRequirementError(
                         "for version less than {}".format(lt_version))
         elif key == "gt-version":
+            if "lt-version" in requires:
+                if not Version().is_lt(parse_suricata_version(requires["gt-version"]), parse_suricata_version(requires["lt-version"])):
+                    raise ImpossibleRequirementError(
+                        "test has both lt-version {} and gt-version {}".format(requires["lt-version"], requires["gt-version"]))
             gt_version = requires["gt-version"]
             if not is_version_compatible(version=gt_version,
                     suri_version=suri_version, expr="gt"):
