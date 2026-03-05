@@ -1,0 +1,15 @@
+%YAML 1.1
+---
+
+# Configure the type of alert (and other) logging you would like.
+outputs:
+  # Extensible Event Format (nicknamed EVE) event log in JSON format
+  - eve-log:
+      enabled: yes
+      filetype: regular #regular|syslog|unix_dgram|unix_stream|redis
+      filename: eve.json
+      types:
+        - alert:
+            payload: yes             # enable dumping payload in Base64
+            payload-printable: yes   # enable dumping payload in printable (lossy) format
+            packet: yes              # enable dumping of packet (without stream segments)
