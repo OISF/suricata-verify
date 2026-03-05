@@ -1,0 +1,22 @@
+args:
+  - -k none
+  - --set vars.address-groups.TEST_1=[127.0.0.1]
+  - --set vars.address-groups.TEST_2=[127.0.0.1,::1/128]
+  - --set vars.address-groups.TEST_3=[::1/128]
+
+checks:
+  - filter:
+      count: 9
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 9
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 9
+      match:
+        event_type: alert
+        alert.signature_id: 3
