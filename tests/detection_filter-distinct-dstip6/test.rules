@@ -1,0 +1,2 @@
+## Expect 1 alert after seeing >1 distinct destination IPv6 addresses (unique_on dst_ip, count 1)
+alert ip any any -> any any (msg:"DF distinct dst_ip IPv6"; detection_filter: track by_src, count 1, seconds 60, unique_on dst_ip; sid:100025; rev:1;)
