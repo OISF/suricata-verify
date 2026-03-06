@@ -50,6 +50,7 @@ import signal
 VALIDATE_EVE = False
 WIN32 = sys.platform == "win32"
 suricata_yaml = "suricata.yaml" if WIN32 else "./suricata.yaml"
+SURICATACTL_BIN = None
 
 # Determine the Suricata binary
 if os.path.exists("src\\suricata.exe"):
@@ -160,6 +161,19 @@ def parse_suricata_version(buf, expr=None):
 def get_suricata_version():
     output = subprocess.check_output([suricata_bin, "-V"])
     return parse_suricata_version(output)
+
+def find_suricatactl_path(cwd, suricata_config):
+    binary = "suricatactl.exe" if WIN32 else "suricatactl"
+    path = [cwd, "rust", "target", "release", binary]
+    if "DEBUG" in suricata_config.features:
+        path[3] = "debug"
+    cargo_build_target = os.environ.get("CARGO_BUILD_TARGET")
+    if cargo_build_target:
+        path.insert(3, cargo_build_target)
+    candidate = os.path.join(*path)
+    if os.path.exists(candidate):
+        return candidate
+    return None
 
 
 def pipe_reader(fileobj, output=None, verbose=False, utf8_errors=[]):
@@ -920,6 +934,9 @@ class TestRunner:
                 if check_output != 0:
                     raise TestError("Invalid JSON schema")
 
+            if r == 0:
+                self.validate_test_suricata_yaml(env)
+
             if not check_value["failure"] and not check_value["skipped"]:
                 if not self.quiet:
                     if os.path.basename(os.path.dirname(self.directory)) != "tests":
@@ -1090,6 +1107,27 @@ class TestRunner:
             return os.path.join(self.directory, "suricata.yaml")
         return os.path.join(self.cwd, "suricata.yaml")
 
+    def validate_test_suricata_yaml(self, env):
+        if SURICATACTL_BIN is None:
+            return
+
+        test_yaml = os.path.join(self.directory, "suricata.yaml")
+        if not os.path.exists(test_yaml):
+            return
+
+        result = subprocess.run(
+            [SURICATACTL_BIN, "config", "validate", test_yaml],
+            cwd=self.cwd,
+            env=env,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.PIPE)
+        if result.returncode != 0:
+            stderr = result.stderr.decode("utf-8", errors="replace").strip()
+            message = "suricatactl config validate failed for {}".format(test_yaml)
+            if stderr:
+                message = "{}: {}".format(message, stderr)
+            raise TestError(message)
+
     def start_reader(self, input, output):
         t = threading.Thread(
             target=pipe_reader, args=(input, output, self.verbose, self.utf8_errors))
@@ -1223,6 +1261,7 @@ def build_eve_validator():
 def main():
     global TOPDIR
     global args
+    global SURICATACTL_BIN
 
     if not check_deps():
         return 1
@@ -1293,6 +1332,10 @@ def main():
 
     # Create a SuricataConfig object that is passed to all tests.
     suricata_config = SuricataConfig(get_suricata_version())
+    if suricata_config.version.major >= 9:
+        SURICATACTL_BIN = find_suricatactl_path(cwd, suricata_config)
+        if SURICATACTL_BIN is None:
+            print("Warning: suricatactl binary is missing; suricata.yaml schema validation will not be performed.")
 
     global HAS_SURICATA_SC
     HAS_SURICATA_SC = None
