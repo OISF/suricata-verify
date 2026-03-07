@@ -1,0 +1,19 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        dest_ip: 239.255.255.250
+        dest_port: 1900
+        app_proto: failed
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.app_layer.flow.sip_udp: 0
