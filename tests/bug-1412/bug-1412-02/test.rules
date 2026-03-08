@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"Cross-buffer byte_extract test: http.request_line -> http.header"; flow:established,to_server; http.request_line; content:"GET /"; byte_extract:1,0,uri_len,relative,string,dec; http.header; content:"Host"; isdataat:uri_len,relative; sid:1;)

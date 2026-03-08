@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"Cross-buffer byte_extract test: http.uri -> file_data"; flow:established,to_server; http.uri; content:"/upload/"; byte_extract:2,0,data_size,relative,string,dec; file_data; content:"data="; isdataat:data_size,relative; sid:1;)
