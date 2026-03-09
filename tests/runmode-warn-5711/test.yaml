@@ -1,0 +1,13 @@
+requires:
+  min-version: 9
+
+pcap: false
+command: |
+  ${SRCDIR}/src/suricata -S ${TEST_DIR}/blah.rules
+
+exit-code: 1
+
+checks:
+  - shell:
+      args: grep "Please specify a runmode or capture option. Use --list-runmodes to see available runmodes." stdout | wc -l
+      expect: 1
