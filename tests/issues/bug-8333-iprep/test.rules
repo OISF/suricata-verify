@@ -1,0 +1,2 @@
+pass ssh any any -> any 22 (msg:"bug8333 iprep pass ssh traffic"; iprep:dst,test,>,0; sid:8333011; rev:1;)
+drop ip any any -> any any (msg:"bug8333 iprep drop established catch all"; flow:established,to_server; sid:8333012; rev:1;)
