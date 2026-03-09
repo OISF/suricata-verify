@@ -1,0 +1,16 @@
+requires:
+    min-version: 9
+
+args:
+- -k none --set decoder.l2tp.enabled=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+  - stats:
+      decoder.tcp: 0
+      decoder.udp: 9
+      decoder.l2tp: 9
+      decoder.l2tp_unsupported: 9
