@@ -856,9 +856,6 @@ class TestRunner:
                     pl = subprocess.check_call(
                         argsl, shell=shell, cwd=self.directory, env=env,
                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                    # TODO how to know Suricata completed ?
-                    time.sleep(1)
-                    p.terminate()
 
                 if "unix-commands" in self.config:
                     timeout = 2

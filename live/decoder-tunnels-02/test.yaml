@@ -3,11 +3,12 @@ requires:
   os: linux
   features:
     - EBPF
+    - AFPACKET_TEST_REPLAY
   files:
     - ebpf/xdp_filter.bpf
 
 args:
-  - --set af-packet.0.xdp-filter-file=${SRCDIR}/ebpf/xdp_filter.bpf
+  - --set af-packet.0.xdp-filter-file=${SRCDIR}/ebpf/xdp_filter.bpf --set af-packet.0.max-packets=3
 
 checks:
   - filter:
