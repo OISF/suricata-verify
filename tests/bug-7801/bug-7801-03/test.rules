@@ -1,0 +1,1 @@
+alert http any any => any any (msg:"Bidirectional: byte_extract from http.host (toserver) -> isdataat in http.stat_msg (toclient)"; flow:established; http.host; content:"len"; byte_extract:2,0,host_val,relative,string,dec; http.stat_msg; content:"O"; isdataat:!host_val,relative; sid:1;)
