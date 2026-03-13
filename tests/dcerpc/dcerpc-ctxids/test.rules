@@ -1,0 +1,6 @@
+alert dcerpc any any -> any any (\
+msg:"Test dcom_admin_hostname OK";\
+dcerpc.iface:00020400-0000-0000-c000-000000000046;\
+dcerpc.opnum:6;\
+sid:1;\
+)
