@@ -1,0 +1,38 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none --set stream.midstream=true
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: dcerpc
+        dcerpc.req.opnum: 24  
+  # multi PDU support
+  - filter:
+      count: 2
+      match:
+        event_type: dcerpc
+        dcerpc.req.opnum: 27
+  - filter:
+      count: 2
+      match:
+        event_type: dcerpc
+        dcerpc.req.opnum: 31
+  - filter:
+      count: 2
+      match:
+        event_type: dcerpc
+        dcerpc.req.opnum: 2
+  - filter:
+      count: 4
+      match:
+        event_type: dcerpc
+        dcerpc.req.opnum: 0
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.app_layer.error.dcerpc_tcp.parser: 0
