@@ -10,12 +10,12 @@ checks:
       match:
         event_type: dcerpc
         dcerpc.req.opnum: 24  
-  # needs multi PDU support see https://redmine.openinfosecfoundation.org/issues/7154
-  #- filter:
-      #count: 2
-      #match:
-      #  event_type: dcerpc
-      #  dcerpc.req.opnum: 27
+  # multi PDU support
+  - filter:
+      count: 2
+      match:
+        event_type: dcerpc
+        dcerpc.req.opnum: 27
   - filter:
       count: 2
       match:
