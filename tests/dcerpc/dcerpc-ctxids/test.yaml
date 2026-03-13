@@ -1,0 +1,21 @@
+requires:
+  min-version: 9
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 3
+    match:
+      event_type: dcerpc
+      dcerpc.interfaces[5].uuid: 00020400-0000-0000-c000-000000000046
+      dcerpc.req.opnum: 6
+- filter:
+    # both sides match
+    count: 6
+    match:
+      event_type: alert
+      alert.signature_id: 1
+      dcerpc.interfaces[5].uuid: 00020400-0000-0000-c000-000000000046
+      dcerpc.req.opnum: 6
