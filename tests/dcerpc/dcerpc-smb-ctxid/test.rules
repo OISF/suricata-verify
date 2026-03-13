@@ -1,0 +1,6 @@
+alert dcerpc any any -> any any (\
+msg:"Test at_admin_failed_deprecated OK";\
+dcerpc.iface:1ff70682-0a51-30e8-076d-740be8cee98b;\
+dcerpc.opnum:0;\
+sid:1;\
+)
