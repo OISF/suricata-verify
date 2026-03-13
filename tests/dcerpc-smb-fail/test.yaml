@@ -6,7 +6,13 @@ args:
 checks:
 - filter:
     requires:
-      min-version: 6
+      min-version: 9
+    count: 1450
+    match:
+      event_type: dcerpc
+- filter:
+    requires:
+      lt-version: 9
     count: 1445
     match:
       event_type: dcerpc
