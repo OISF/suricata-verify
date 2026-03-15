@@ -1,0 +1,16 @@
+# Test: File too small (edge case)
+# Validates that files smaller than 64 bytes are NOT detected as PE
+
+
+checks:
+  # Verify that NO alert is generated for file that's too small
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+
+  # Verify fast.log is empty (no alerts)
+  - shell:
+      args: test ! -s fast.log && echo "0" || cat fast.log | wc -l
+      expect: 0

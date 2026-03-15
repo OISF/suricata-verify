@@ -1,0 +1,13 @@
+# Test executable.windows_pe.dll_characteristics keyword (all PEs are 0x8500)
+
+# Should match: exact value 0x8500
+alert http any any -> any any ( msg:"TEST dll_characteristics exact 0x8500"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, dll_characteristics 0x8500; sid:80; rev:1;)
+
+# Should NOT match: DYNAMIC_BASE (ASLR) 0x0040 - our PEs don't have this
+alert http any any -> any any ( msg:"TEST dll_characteristics is 0x0040"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, dll_characteristics 0x0040; sid:81; rev:1;)
+
+# Should match: range
+alert http any any -> any any ( msg:"TEST dll_characteristics >0x8000"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, dll_characteristics >0x8000; sid:82; rev:1;)
+
+# Should match: exact decimal
+alert http any any -> any any ( msg:"TEST dll_characteristics exact 34048"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, dll_characteristics 34048; sid:83; rev:1;)
