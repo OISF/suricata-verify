@@ -1,0 +1,13 @@
+# Test executable.size keyword (SizeOfImage: 512, 1024, 512, 4096, 2048)
+
+# Test 1: Detect PE files larger than 1000 bytes (matches: 1024, 4096, 2048 = 3)
+alert http any any -> any any ( msg:"TEST executable.size >1000"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, size >1000; sid:10; rev:1;)
+
+# Test 2: Detect PE files larger than 100KB (none match = 0)
+alert http any any -> any any ( msg:"TEST executable.size >100000"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, size >100000; sid:11; rev:1;)
+
+# Test 3: Detect PE files in range 1000-1000000 (matches: 1024, 4096, 2048 = 3)
+alert http any any -> any any ( msg:"TEST executable.size range 1000-1000000"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, size 1000-1000000; sid:12; rev:1;)
+
+# Test 4: Detect PE files larger than 100MB (none match = 0)
+alert http any any -> any any ( msg:"TEST executable.size >100000000 (negative)"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, size >100000000; sid:13; rev:1;)

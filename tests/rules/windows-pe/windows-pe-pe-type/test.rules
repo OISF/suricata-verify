@@ -1,0 +1,11 @@
+# Test windows_pe pe_type keyword
+# All test PEs are PE32 (magic=0x10b)
+
+# Match: pe_type pe32 (all 5 PEs match)
+alert http any any -> any any ( msg:"TEST pe_type pe32"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: pe_type pe32; sid:1; rev:1;)
+
+# No match: pe_type pe32+ (none match, all are PE32)
+alert http any any -> any any ( msg:"TEST pe_type pe32+"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: pe_type pe32+; sid:2; rev:1;)
+
+# No match: pe_type pe64 (alias for pe32+, none match)
+alert http any any -> any any ( msg:"TEST pe_type pe64"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: pe_type pe64; sid:3; rev:1;)
