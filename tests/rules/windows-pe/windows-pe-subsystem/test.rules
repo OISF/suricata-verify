@@ -1,0 +1,13 @@
+# Test windows_pe keyword subsystem option (all PEs are subsystem 3, Console)
+
+# Test 1: Detect GUI applications (subsystem 2, none match)
+alert http any any -> any any ( msg:"TEST windows_pe subsystem GUI (2)"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, subsystem 2; sid:50; rev:1;)
+
+# Test 2: Detect Console applications (subsystem 3, all match)
+alert http any any -> any any ( msg:"TEST windows_pe subsystem Console (3)"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, subsystem 3; sid:51; rev:1;)
+
+# Test 3: Detect Native/Driver (subsystem 1, none match)
+alert http any any -> any any ( msg:"TEST windows_pe subsystem Native (1) negative"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, subsystem 1; sid:52; rev:1;)
+
+# Test 4: Detect Console (subsystem 3, all match)
+alert http any any -> any any ( msg:"TEST windows_pe subsystem Console (3) duplicate"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, subsystem 3; sid:53; rev:1;)
