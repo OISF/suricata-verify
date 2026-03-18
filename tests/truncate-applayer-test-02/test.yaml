@@ -6,35 +6,35 @@ args:
 checks:
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.5
     count: 2
     match:
       event_type: alert
       alert.signature_id: 1
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.5
     count: 2
     match:
       event_type: alert
       alert.signature_id: 2
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.5
     count: 0
     match:
       event_type: flow
       flow.exception_policy[0].target: app_layer_error
 - filter:
     requires:
-      lt-version: 9
+      lt-version: 8.0.5
     count: 1
     match:
       event_type: alert
       alert.signature_id: 1
 - filter:
     requires:
-      lt-version: 9
+      lt-version: 8.0.5
     count: 1
     match:
       event_type: alert
