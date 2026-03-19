@@ -22,3 +22,10 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 2
+  - filter:
+      requires:
+        min-version: 9
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 3
