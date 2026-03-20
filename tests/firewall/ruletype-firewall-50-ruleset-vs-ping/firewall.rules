@@ -1,0 +1,5 @@
+drop:packet icmp:pre_flow any any -> any any (itype:8; icode:1; sid:100; noalert;)
+accept:packet icmp:all any any -> any any (itype:8; icode:0; msg:"Ping!"; flow:to_server; alert; sid:101;)
+accept:packet icmp:all any any -> any any (itype:0; icode:0; msg:"Pong!"; flow:to_client,established; alert; sid:102;)
+
+# Implicit drop all else
