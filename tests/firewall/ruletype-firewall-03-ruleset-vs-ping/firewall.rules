@@ -1,4 +1,4 @@
-accept:flow icmp:flow_start $HOME_NET any -> $HOME_NET any (itype:8; msg:"Ping!"; alert; sid:101;)
+accept:flow icmp:flow_start $HOME_NET any -> $HOME_NET any (itype:8; icode:0; msg:"Ping!"; alert; sid:101;)
 
 drop:flow tls:client_hello_done $HOME_NET any -> 172.16.0.0/12 any (ja3.hash; content:"e7eca2baf4458d095b7f45da28c16c34"; msg:"Drop naughty JA3"; sid:102;)
 
