@@ -1,0 +1,8 @@
+# pcrexform does not match -> error_or matches on error
+alert http any any -> any any (msg:"error_or pcrexform no match"; http.request_line; pcrexform:"(XXXNOMATCHXXX)"; absent: error_or; content:"nomatch"; sid:1;)
+
+# pcrexform matches and content matches -> error_or falls through, content matches
+alert http any any -> any any (msg:"error_or pcrexform content match"; http.request_line; pcrexform:"[a-zA-Z]+\s+(.*)\s+HTTP"; absent: error_or; content:"/z4d4kWk.jpg"; sid:2;)
+
+# pcrexform matches but content does not match -> no alert
+alert http any any -> any any (msg:"error_or pcrexform no content match"; http.request_line; pcrexform:"[a-zA-Z]+\s+(.*)\s+HTTP"; absent: error_or; content:"XXXNOMATCHXXX"; sid:3;)
