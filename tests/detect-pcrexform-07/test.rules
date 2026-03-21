@@ -1,0 +1,5 @@
+# pcrexform that matches the request line -> no error -> must_error should NOT alert
+alert http any any -> any any (msg:"pcrexform match no error"; http.request_line; pcrexform:"[a-zA-Z]+\s+(.*)\s+HTTP"; absent: must_error; sid:1;)
+
+# pcrexform that does NOT match the request line -> error -> must_error should alert
+alert http any any -> any any (msg:"pcrexform no match error"; http.request_line; pcrexform:"(XXXNOMATCHXXX)"; absent: must_error; sid:2;)
