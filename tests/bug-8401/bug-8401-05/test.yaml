@@ -1,0 +1,21 @@
+requires:
+  min-version: 9
+
+args:
+  - --runmode=single
+
+pcap: ../bug-8401-02/input.pcap
+
+checks:
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+
+  # The bucket for each entry depends on a hash seed chosen at random
+  # on every run, so only the entry count is checked.
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.thresholds.entries: 5
