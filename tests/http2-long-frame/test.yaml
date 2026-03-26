@@ -1,0 +1,22 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: long_frame_data
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.url: /malware/payload.exe
