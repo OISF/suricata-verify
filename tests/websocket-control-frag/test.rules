@@ -1,0 +1,1 @@
+alert websocket any any -> any any (msg:"MALWARE"; websocket.payload; content:"MALWARE_DOWNLOAD cmd.exe /c powershell"; sid:1; rev:1;)
