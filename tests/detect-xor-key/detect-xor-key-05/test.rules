@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"XOR relative byte_extract rejected"; http.request_body; content:"|42|"; byte_extract:1,0,xor_key,relative; xor:var "xor_key"; content:"test"; sid:1;)

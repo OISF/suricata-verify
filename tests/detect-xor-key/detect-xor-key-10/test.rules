@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"XOR byte_extract not immediately before xor"; http.request_body; byte_extract:1,0,xor_key; content:"|42|"; xor:offset 1,var "xor_key"; content:"password"; sid:1;)

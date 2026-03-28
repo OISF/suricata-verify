@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"XOR invalid offset value"; http.request_body; byte_extract:1,0,xor_key; xor:offset abc,"xor_key"; content:"test"; sid:1;)
