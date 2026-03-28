@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"XOR key offset out of bounds"; http.request_body; xor:var 1 200; content:"password"; sid:1;)
