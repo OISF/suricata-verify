@@ -1,0 +1,2 @@
+alert http any any -> any any (msg:"XOR variable key1 at offset 0"; http.request_body; xor:offset 1,extract 1 0; content:"hello"; sid:1;)
+alert http any any -> any any (msg:"XOR variable key2 at offset 6"; http.request_body; xor:offset 7,extract 1 6; content:"world"; sid:2;)
