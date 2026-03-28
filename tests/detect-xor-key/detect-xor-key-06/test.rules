@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"XOR extra whitespace in offset"; http.request_body; xor:offset   1,  var 1 0; content:"password"; sid:1;)
