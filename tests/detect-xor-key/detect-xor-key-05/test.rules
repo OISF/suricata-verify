@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"XOR var missing offset rejected"; http.request_body; xor:var 1; content:"test"; sid:1;)

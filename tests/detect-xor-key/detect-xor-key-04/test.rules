@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"XOR var zero nbytes rejected"; http.request_body; xor:var 0 0; content:"test"; sid:1;)
