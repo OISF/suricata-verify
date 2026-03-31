@@ -1,0 +1,7 @@
+alert sctp any any -> any any (sctp.hdr; content:"|01 00 00 20|"; sid:1;)
+alert sctp any any -> any any (sctp.chunk_type:2; sid:2;)
+alert sctp any any -> any any (sctp.chunk_cnt:1; sid:3;)
+alert sctp any any -> any any (sctp.vtag:3559606418; sid:4;)
+alert sctp any any -> any any (sctp.has_init; sid:5;)
+alert sctp any any -> any any (sctp.has_data; sid:6;)
+alert sctp any any -> any any (sctp.data; content:"|01 00 03 01|"; sid:7;)
