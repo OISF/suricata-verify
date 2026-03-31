@@ -1,0 +1,18 @@
+requires:
+  min-version: 9
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2239001
+      proto: SCTP
+      src_ip: 10.0.0.1
+      dest_ip: 10.0.0.2
+      src_port: 0
+      dest_port: 0
+      pcap_cnt: 1
