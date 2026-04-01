@@ -99,5 +99,5 @@ checks:
       event_type: stats
       stats.ips.accepted: 3
       stats.ips.blocked: 6
-      stats.ips.drop_reason.default_app_policy: 1
+      stats.ips.drop_reason.firewall.default_app_policy: 1
       stats.ips.drop_reason.flow_drop: 5

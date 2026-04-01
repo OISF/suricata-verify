@@ -38,6 +38,6 @@ checks:
       stats.ips.accepted: 3
       stats.ips.blocked: 7
       stats.ips.drop_reason.pre_flow_hook: 0
-      stats.ips.drop_reason.default_packet_policy: 0
-      stats.ips.drop_reason.default_app_policy: 1
+      stats.ips.drop_reason.firewall.default_packet_policy: 0
+      stats.ips.drop_reason.firewall.default_app_policy: 1
       stats.ips.drop_reason.flow_drop: 6

@@ -93,4 +93,5 @@ checks:
       event_type: stats
       stats.ips.accepted: 9
       stats.ips.blocked: 1
-      stats.ips.drop_reason.rules: 1
+      stats.ips.drop_reason.firewall.rules: 1
+      stats.detect.firewall.discarded_alerts: 5

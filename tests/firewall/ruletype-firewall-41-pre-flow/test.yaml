@@ -38,5 +38,7 @@ checks:
       event_type: stats
       stats.ips.accepted: 0
       stats.ips.blocked: 13
-      stats.ips.drop_reason.pre_flow_hook: 13
-      stats.ips.drop_reason.default_packet_policy: 0
+      stats.ips.drop_reason.firewall.default_packet_policy: 0
+      stats.ips.drop_reason.firewall.pre_flow_hook: 13
+      stats.ips.drop_reason.firewall.rules: 0
+      stats.detect.firewall.discarded_alerts: 0

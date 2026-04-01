@@ -18,7 +18,7 @@ checks:
     match:
       event_type: drop
       alert.signature_id: 100
-      drop.reason: "rules"
+      drop.reason: "firewall rules"
 - filter:
     count: 9
     match:
@@ -39,5 +39,6 @@ checks:
       event_type: stats
       stats.ips.accepted: 0
       stats.ips.blocked: 10
-      stats.ips.drop_reason.rules: 1
+      stats.ips.drop_reason.firewall.rules: 1
       stats.ips.drop_reason.flow_drop: 9
+      stats.detect.firewall.discarded_alerts: 0

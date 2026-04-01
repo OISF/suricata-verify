@@ -117,6 +117,8 @@ checks:
       event_type: stats
       stats.ips.accepted: 8
       stats.ips.blocked: 54
-      stats.ips.drop_reason.default_app_policy: 1
+      stats.ips.drop_reason.firewall.default_app_policy: 1
+      stats.ips.drop_reason.firewall.rules: 0
       stats.ips.drop_reason.rules: 1
       stats.ips.drop_reason.flow_drop: 52
+      stats.detect.firewall.discarded_alerts: 1

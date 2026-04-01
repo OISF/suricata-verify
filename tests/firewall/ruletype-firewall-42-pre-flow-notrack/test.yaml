@@ -35,4 +35,4 @@ checks:
       stats.ips.accepted: 13
       stats.ips.blocked: 0
       stats.ips.drop_reason.pre_flow_hook: 0
-      stats.ips.drop_reason.default_packet_policy: 0
+      stats.ips.drop_reason.firewall.default_packet_policy: 0

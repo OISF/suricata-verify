@@ -86,6 +86,6 @@ checks:
       stats.ips.accepted: 5
       stats.ips.rejected: 1
       stats.ips.blocked: 56
-      stats.ips.drop_reason.default_app_policy: 0
-      stats.ips.drop_reason.rules: 1
+      stats.ips.drop_reason.firewall.default_app_policy: 0
+      stats.ips.drop_reason.firewall.rules: 1
       stats.ips.drop_reason.flow_drop: 56
