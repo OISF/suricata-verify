@@ -1,0 +1,4 @@
+alert dns any any -> any any (dns.query; content: "www.gstatic.com"; sid:20; )
+alert doh2 any any -> any any (dns.query; content: "www.gstatic.com"; sid:21; )
+alert http2 any any -> any any (http.request_header; content:"authority|3a 20|dns.google"; sid:30; )
+alert doh2 any any -> any any (http.request_header; content:"authority|3a 20|dns.google"; sid:31; )
