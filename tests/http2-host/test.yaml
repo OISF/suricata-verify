@@ -1,0 +1,16 @@
+requires:
+  min-version: 9
+
+pcap: ../http2-compression-bug/input.pcap
+
+args:
+  - -k none
+  - --simulate-ips
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 740000
+        pcap_cnt: 9
