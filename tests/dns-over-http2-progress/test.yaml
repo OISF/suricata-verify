@@ -1,0 +1,20 @@
+requires:
+  min-version: 9
+
+pcap: ../dns-over-http2/dns_over_https.pcap
+
+# disables checksum verification
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 30
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 31
