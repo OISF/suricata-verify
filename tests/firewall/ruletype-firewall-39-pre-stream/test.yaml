@@ -34,6 +34,20 @@ checks:
       tcp.tcp_flags: "00"
       flow.alerted: true
 - filter:
+    requires:
+      lt-version: 9
+    count: 1
+    match:
+      event_type: stats
+      stats.ips.accepted: 0
+      stats.ips.blocked: 13
+      stats.ips.drop_reason.default_packet_policy: 0
+      stats.ips.drop_reason.pre_stream_hook: 1
+      stats.ips.drop_reason.flow_drop: 11
+      stats.ips.drop_reason.stream_midstream: 1
+- filter:
+    requires:
+      min-version: 9
     count: 1
     match:
       event_type: stats

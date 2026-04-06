@@ -29,6 +29,18 @@ checks:
     match:
       event_type: flow
 - filter:
+    requires:
+      lt-version: 9
+    count: 1
+    match:
+      event_type: stats
+      stats.ips.accepted: 13
+      stats.ips.blocked: 0
+      stats.ips.drop_reason.pre_flow_hook: 0
+      stats.ips.drop_reason.default_packet_policy: 0
+- filter:
+    requires:
+      min-version: 9
     count: 1
     match:
       event_type: stats
