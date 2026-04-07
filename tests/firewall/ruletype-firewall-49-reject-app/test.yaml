@@ -65,6 +65,16 @@ checks:
     match:
       verdict.action: drop
 - filter:
+    requires:
+      min-version: 9
+    count: 4
+    match:
+      verdict.action: drop
+      verdict.reject_target: to_client
+      verdict.reject[0]: tcp-reset
+- filter:
+    requires:
+      lt-version: 9
     count: 4
     match:
       verdict.action: drop
