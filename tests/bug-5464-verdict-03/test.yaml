@@ -32,6 +32,8 @@ checks:
         drop.reason: rules
         verdict.action: drop
   - filter:
+      requires:
+        lt-version: 9
       count: 1
       match:
         event_type: alert
@@ -39,10 +41,31 @@ checks:
         verdict.reject-target: to_client
         verdict.reject: [icmp-prohib]
   - filter:
+      requires:
+        min-version: 9
+      count: 1
+      match:
+        event_type: alert
+        verdict.action: drop
+        verdict.reject_target: to_client
+        verdict.reject: [icmp-prohib]
+  - filter:
+      requires:
+        lt-version: 9
       count: 1
       match:
         event_type: drop
         drop.reason: rules
         verdict.action: drop
         verdict.reject-target: to_client
+        verdict.reject: [icmp-prohib]
+  - filter:
+      requires:
+        min-version: 9
+      count: 1
+      match:
+        event_type: drop
+        drop.reason: rules
+        verdict.action: drop
+        verdict.reject_target: to_client
         verdict.reject: [icmp-prohib]
