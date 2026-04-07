@@ -9,6 +9,8 @@ pcap:  ../flowbit-oring/input.pcap
 
 checks:
   - filter:
+      requires:
+        lt-version: 9
       count: 1
       match:
         event_type: alert
@@ -18,6 +20,19 @@ checks:
         verdict.reject-target: to_server
         verdict.reject: ["tcp-reset"]
   - filter:
+      requires:
+        min-version: 9
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 1
+        verdict.action: drop
+        verdict.reject_target: to_server
+        verdict.reject: ["tcp-reset"]
+  - filter:
+      requires:
+        lt-version: 9
       count: 1
       match:
         event_type: alert
@@ -27,12 +42,35 @@ checks:
         verdict.reject-target: to_server
         verdict.reject: ["tcp-reset"]
   - filter:
+      requires:
+        min-version: 9
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        pcap_cnt: 1
+        verdict.action: drop
+        verdict.reject_target: to_server
+        verdict.reject: ["tcp-reset"]
+  - filter:
+      requires:
+        lt-version: 9
       count: 1
       match:
         event_type: drop
         pcap_cnt: 1
         verdict.action: drop
         verdict.reject-target: to_server
+        verdict.reject: ["tcp-reset"]
+  - filter:
+      requires:
+        min-version: 9
+      count: 1
+      match:
+        event_type: drop
+        pcap_cnt: 1
+        verdict.action: drop
+        verdict.reject_target: to_server
         verdict.reject: ["tcp-reset"]
   - filter:
       count: 0
