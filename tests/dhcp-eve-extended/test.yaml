@@ -75,6 +75,14 @@ checks:
       alert.signature_id: 1
 - filter:
     requires:
+      min-version: 9
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+      dhcp.type: reply
+- filter:
+    requires:
       min-version: 7
     count: 1
     match:
