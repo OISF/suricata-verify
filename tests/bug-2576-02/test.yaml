@@ -9,4 +9,8 @@ checks:
       match:
         event_type: fileinfo
         fileinfo.md5: 090fe607a5be1228362614ccaa088577
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
 
