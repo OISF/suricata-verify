@@ -189,7 +189,8 @@ def handle_exceptions(func):
                 print("===> {}: Sub test #{}: SKIPPED : {}".format(kwargs["test_name"], kwargs["test_num"], ue))
             kwargs["count"]["skipped"] += 1
         except Exception as err:
-            raise TestError("Internal runtime error: {}".format(err))
+            test_path = os.path.relpath(args[0].directory, args[0].cwd)
+            raise TestError("Internal runtime error: \"{}\"  with test.yaml, check #{}. Full test path: {}.".format(err, kwargs["test_num"], test_path))
         else:
             if result:
               kwargs["count"]["success"] += 1
