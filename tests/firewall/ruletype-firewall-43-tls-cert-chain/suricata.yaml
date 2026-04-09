@@ -1,0 +1,32 @@
+%YAML 1.1
+---
+
+vars:
+  # more specific is better for alert accuracy and performance
+  address-groups:
+    HOME_NET: "[192.168.0.0/16,10.0.0.0/8,172.16.0.0/12]"
+
+    EXTERNAL_NET: "!$HOME_NET"
+
+
+# Global stats configuration
+stats:
+  enabled: yes
+  interval: 8
+
+# Configure the type of alert (and other) logging you would like.
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular #regular|syslog|unix_dgram|unix_stream|redis
+      filename: eve.json
+      types:
+          - stats
+          - flow
+          - alert:
+              verdict: yes
+          - tls:
+              extended: yes     # enable this for extended logging information
+          - drop:
+              alerts: yes      # log alerts that caused drops
+              flows: all       # start or all: 'start' logs only a single drop
