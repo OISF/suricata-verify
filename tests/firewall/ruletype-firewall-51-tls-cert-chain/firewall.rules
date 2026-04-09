@@ -1,0 +1,18 @@
+# allow session setup
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; alert; sid:1021;)
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET 443 (flow:established; alert; sid:1022;)
+
+accept:hook tls:server_in_progress $EXTERNAL_NET any -> $HOME_NET any (alert; sid:107;)
+accept:hook tls:server_hello $EXTERNAL_NET any -> $HOME_NET any (alert; sid:108;)
+accept:flow tls:server_cert_done $EXTERNAL_NET any -> $HOME_NET any (tls.cert_chain_len:>2; sid:106; msg:"TLS certs chain length check"; alert;)
+
+accept:hook tls:server_hello_done $EXTERNAL_NET any -> $HOME_NET any (alert; sid:109;)
+
+drop:flow tls:client_hello_done $HOME_NET any -> $EXTERNAL_NET any (tls.version:1.0; msg:"TLS 1.0 not allowed"; sid:102;)
+drop:flow tls:server_hello_done $EXTERNAL_NET any -> $HOME_NET any (tls.version:1.0; msg:"TLS 1.0 not allowed"; sid:103;)
+
+# if we accept the full flow at this point, we don't get to evaluate sid 106
+accept:hook tls:client_in_progress $HOME_NET any -> $EXTERNAL_NET any (alert; sid:105;)
+accept:packet tls:client_hello_done $HOME_NET any -> $EXTERNAL_NET any (tls.sni; content:"www.google.com"; sid:104; alert;)
+
+# Implicit drop all else
