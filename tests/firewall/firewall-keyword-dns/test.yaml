@@ -1,0 +1,33 @@
+requires:
+  min-version: 8
+
+pcap: ../../dns/dns-eve/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+# dns.opcode:0 matches all 4 DNS requests (all are standard queries)
+- filter:
+    count: 4
+    match:
+      event_type: alert
+      alert.signature_id: 1
+# datarep matches 3 queries (client-cf.dropbox.com x2 + block.dropbox.com)
+- filter:
+    count: 3
+    match:
+      event_type: alert
+      alert.signature_id: 2
+- filter:
+    count: 0
+    match:
+      event_type: drop
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.ips.accepted: 7
+      stats.ips.blocked: 1
+      stats.ips.drop_reason.default_packet_policy: 1

@@ -1,0 +1,15 @@
+# Test dns.opcode and datarep keywords in firewall mode
+# dns-eve PCAP: 4 DNS queries (3 dropbox, 1 codemonkey.net), all standard queries (opcode 0)
+
+# Accept all UDP packets
+accept:hook udp:all any any -> any any (sid:100;)
+
+# Test dns.opcode: match standard query (opcode 0) and alert
+accept:hook dns:request_started any any -> any any (dns.opcode:0; alert; sid:1;)
+
+# Test datarep: match DNS query against reputation list
+accept:hook dns:request_complete any any -> any any (dns.query; datarep:dns_rep,>,0,load dns_rep.rep,type string; alert; sid:2;)
+
+# Accept response hooks
+accept:hook dns:response_started any any -> any any (sid:201;)
+accept:hook dns:response_complete any any -> any any (sid:202;)

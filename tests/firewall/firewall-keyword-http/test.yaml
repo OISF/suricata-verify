@@ -1,0 +1,33 @@
+requires:
+  min-version: 8
+
+pcap: ../../flowbit-oring/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+# pcre + urilen match on URI "/" at request_line hook
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+# dataset matches user-agent "curl/7.43.0" at request_headers hook
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2
+# No drops - all hooks covered
+- filter:
+    count: 0
+    match:
+      event_type: drop
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.ips.accepted: 10
+      stats.ips.blocked: 0

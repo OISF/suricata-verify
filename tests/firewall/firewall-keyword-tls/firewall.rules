@@ -1,0 +1,21 @@
+# Test tls.cert_chain_len keyword in firewall mode
+# tls-certs-alert PCAP: TLS handshake with 3 certificates in chain
+
+# Accept TCP session setup
+accept:hook tcp:all any any -> any any (sid:100;)
+
+# Accept TLS client states
+accept:hook tls:client_in_progress any any -> any any (sid:101;)
+accept:hook tls:client_hello_done any any -> any any (sid:102;)
+accept:hook tls:client_cert_done any any -> any any (sid:103;)
+accept:hook tls:client_handshake_done any any -> any any (sid:104;)
+
+# Accept TLS server states
+accept:hook tls:server_in_progress any any -> any any (sid:201;)
+accept:hook tls:server_hello any any -> any any (sid:202;)
+
+# Test tls.cert_chain_len: match cert chain with 3 certs
+accept:flow tls:server_cert_done any any -> any any (tls.cert_chain_len:3; alert; sid:1;)
+
+accept:hook tls:server_hello_done any any -> any any (sid:204;)
+accept:hook tls:server_handshake_done any any -> any any (sid:205;)

@@ -1,0 +1,26 @@
+requires:
+  min-version: 8
+
+pcap: ../../detect-itype-prefilter/icmpv4-ping.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+# icode:0 matches all 150 ICMP packets (75 echo req + 75 echo reply, all code 0)
+- filter:
+    count: 150
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 0
+    match:
+      event_type: drop
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.ips.accepted: 150
+      stats.ips.blocked: 0
