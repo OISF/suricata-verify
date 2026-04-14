@@ -1,0 +1,10 @@
+accept:hook udp:all $HOME_NET any <> $HOME_NET 161 (alert; sid:1;)
+
+accept:hook snmp:request_started $HOME_NET any -> $HOME_NET 161 (sid:11;)
+accept:hook snmp:request_complete $HOME_NET any -> $HOME_NET 161 (snmp.version:2; snmp.pdu_type:get_request; snmp.community; content:"[R0_C@cti!]"; alert; sid:12;)
+accept:hook snmp:request_complete $HOME_NET any -> $HOME_NET 161 (snmp.version:2; snmp.pdu_type:get_next_request; snmp.community; content:"[R0_C@cti!]"; alert; sid:13;)
+
+accept:hook snmp:response_started $HOME_NET 161 -> $HOME_NET any (sid:21;)
+accept:hook snmp:response_complete $HOME_NET 161 -> $HOME_NET any (snmp.version:2; snmp.pdu_type:response; alert; sid:22;)
+
+# Implicit drop all else
