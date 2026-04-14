@@ -49,6 +49,22 @@ checks:
         event_type: drop
         pcap_cnt: 4
 
-  - stats:
-      ips.accepted: 3
-      ips.blocked: 1
+  - filter:
+      requires:
+        lt-version: 9
+      count: 1
+      match:
+        event_type: stats
+        stats.ips.accepted: 3
+        stats.ips.blocked: 1
+        stats.ips.drop_reason.default_app_policy: 1
+  - filter:
+      requires:
+        min-version: 9
+      count: 1
+      match:
+        stats.ips.accepted: 3
+        stats.ips.blocked: 0
+        stats.firewall.accepted: 3
+        stats.firewall.blocked: 1
+        stats.firewall.drop_reason.default_app_policy: 1

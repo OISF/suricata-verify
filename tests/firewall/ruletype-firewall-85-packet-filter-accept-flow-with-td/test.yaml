@@ -20,3 +20,5 @@ checks:
       event_type: stats
       stats.ips.accepted: 10
       stats.ips.blocked: 0
+      stats.firewall.accepted: 10
+      stats.firewall.blocked: 0

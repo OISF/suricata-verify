@@ -43,5 +43,7 @@ checks:
     match:
       event_type: stats
       stats.ips.accepted: 3
-      stats.ips.rejected: 59
-      stats.ips.drop_reason.default_packet_policy: 59
+      stats.ips.rejected: 0
+      stats.firewall.accepted: 3
+      stats.firewall.rejected: 59
+      stats.firewall.drop_reason.default_packet_policy: 59
