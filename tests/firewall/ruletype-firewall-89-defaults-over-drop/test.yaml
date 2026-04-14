@@ -22,4 +22,5 @@ checks:
         event_type: drop
         pcap_cnt: 4
   - stats:
-      ips.blocked: 7
+      ips.blocked: 0
+      firewall.blocked: 7

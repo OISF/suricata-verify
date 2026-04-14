@@ -17,7 +17,7 @@ checks:
     count: 42
     match:
       event_type: drop
-      drop.reason: "flow drop"
+      drop.reason: "firewall flow drop"
 - filter:
     count: 1
     match:
@@ -30,8 +30,10 @@ checks:
       event_type: stats
       stats.app_layer.flow.tls: 1
       stats.flow.total: 1
-      stats.ips.accepted: 19
-      stats.ips.blocked: 43
-      stats.ips.drop_reason.flow_drop: 42
-      stats.ips.drop_reason.rules: 1
       stats.decoder.pkts: 62
+      stats.ips.accepted: 19
+      stats.ips.blocked: 0
+      stats.firewall.accepted: 19
+      stats.firewall.blocked: 43
+      stats.firewall.drop_reason.flow_drop: 42
+      stats.firewall.drop_reason.rules: 1

@@ -30,4 +30,6 @@ checks:
       event_type: stats
       stats.ips.accepted: 8
       stats.ips.blocked: 0
-      stats.ips.drop_reason.default_packet_policy: 0
+      stats.firewall.accepted: 8
+      stats.firewall.blocked: 0
+      stats.firewall.drop_reason.default_packet_policy: 0
