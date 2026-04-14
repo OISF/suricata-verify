@@ -52,4 +52,7 @@ checks:
 
   - stats:
       ips.accepted: 3
-      ips.blocked: 1
+      ips.blocked: 0
+      firewall.accepted: 3
+      firewall.blocked: 1
+      firewall.drop_reason.default_app_policy: 1
