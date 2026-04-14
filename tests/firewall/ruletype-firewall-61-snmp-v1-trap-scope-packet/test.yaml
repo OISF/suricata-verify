@@ -55,4 +55,10 @@ checks:
     match:
       event_type: stats
       stats.app_layer.error.snmp.parser: 1
-      stats.ips.drop_reason.rules: 1
+      stats.ips.drop_reason.rules: 0
+      stats.ips.drop_reason.applayer_error: 1
+      stats.ips.accepted: 6
+      stats.ips.blocked: 5
+      stats.firewall.accepted: 11
+      stats.firewall.blocked: 1
+      stats.firewall.drop_reason.rules: 1

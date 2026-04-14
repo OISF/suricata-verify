@@ -23,7 +23,10 @@ checks:
     match:
       event_type: stats
       stats.ips.accepted: 3
-      stats.ips.blocked: 59
-      stats.ips.drop_reason.default_app_policy: 1
-      stats.ips.drop_reason.default_packet_policy: 0
-      stats.ips.drop_reason.flow_drop: 58
+      stats.ips.blocked: 0
+      stats.ips.drop_reason.flow_drop: 0
+      stats.firewall.accepted: 3
+      stats.firewall.blocked: 59
+      stats.firewall.drop_reason.default_app_policy: 1
+      stats.firewall.drop_reason.default_packet_policy: 0
+      stats.firewall.drop_reason.flow_drop: 58
