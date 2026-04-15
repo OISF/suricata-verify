@@ -1,0 +1,10 @@
+accept:hook udp:all $HOME_NET any <> $HOME_NET 162 (alert; sid:1;)
+
+accept:hook snmp:request_started $HOME_NET any -> $HOME_NET 162 (sid:11;)
+accept:hook snmp:request_complete $HOME_NET any -> $HOME_NET 162 (snmp.version:1; snmp.pdu_type:trap_v1; snmp.trap_type:coldstart; alert; sid:12;)
+accept:hook snmp:request_complete $HOME_NET any -> $HOME_NET 162 (snmp.version:1; snmp.pdu_type:trap_v1; snmp.trap_type:warmstart; alert; sid:13;)
+accept:hook snmp:request_complete $HOME_NET any -> $HOME_NET 162 (snmp.version:1; snmp.pdu_type:trap_v1; snmp.trap_type:linkdown; alert; sid:14;)
+accept:hook snmp:request_complete $HOME_NET any -> $HOME_NET 162 (snmp.version:1; snmp.pdu_type:trap_v1; snmp.trap_type:linkup; alert; sid:15;)
+accept:hook snmp:request_complete $HOME_NET any -> $HOME_NET 162 (snmp.version:1; snmp.pdu_type:trap_v1; snmp.trap_type:authenticationfailure; alert; sid:16;)
+
+# Implicit drop all else

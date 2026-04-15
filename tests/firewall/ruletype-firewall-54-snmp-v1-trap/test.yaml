@@ -1,0 +1,56 @@
+requires:
+  min-version: 9
+
+args:
+  - --simulate-ips
+
+checks:
+- filter:
+    count: 7
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 12
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 13
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 14
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 15
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 16
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 17
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.pkts_toserver: 12
+      flow.pkts_toclient: 0
+      flow.state: "new"
+      flow.alerted: true
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.app_layer.error.snmp.parser: 1
+      stats.ips.drop_reason.rules: 1
