@@ -1,3 +1,4 @@
+# ntp.version
 alert ntp any any -> any any (msg:"NTPv4 packet"; ntp.version:4; sid:1; rev:1;)
 alert ntp any any -> any any (msg:"NTPv3 packet"; ntp.version:3; sid:2; rev:1;)
 alert ntp any any -> any any (msg:"NTP version greater than 4"; ntp.version:>4; sid:3; rev:1;)
@@ -9,3 +10,16 @@ alert ntp any any -> any any (msg:"NTPv4 request"; flow:to_server; ntp.version:4
 alert ntp any any -> any any (msg:"NTPv4 reply"; flow:to_client; ntp.version:4; sid:9; rev:1;)
 alert ntp any any -> any any (msg:"NTPv3 request"; flow:to_server; ntp.version:3; sid:10; rev:1;)
 alert ntp any any -> any any (msg:"NTPv3 reply"; flow:to_client; ntp.version:3; sid:11; rev:1;)
+
+# ntp.stratum
+alert ntp any any -> any any (msg:"NTP stratum 0"; ntp.stratum:0; sid:12; rev:1;)
+alert ntp any any -> any any (msg:"NTP stratum 2"; ntp.stratum:2; sid:13; rev:1;)
+alert ntp any any -> any any (msg:"NTP stratum greater than 2"; ntp.stratum:>2; sid:14; rev:1;)
+alert ntp any any -> any any (msg:"NTP stratum less than 2"; ntp.stratum:<2; sid:15; rev:1;)
+alert ntp any any -> any any (msg:"NTP stratum greater or equal to 2"; ntp.stratum:>=2; sid:16; rev:1;)
+alert ntp any any -> any any (msg:"NTP stratum greater than 0"; ntp.stratum:>0; sid:17; rev:1;)
+alert ntp any any -> any any (msg:"NTP stratum less than 1"; ntp.stratum:<1; sid:18; rev:1;)
+alert ntp any any -> any any (msg:"NTP stratum 0 request"; flow:to_server; ntp.stratum:0; sid:19; rev:1;)
+alert ntp any any -> any any (msg:"NTP stratum 2 reply"; flow:to_client; ntp.stratum:2; sid:20; rev:1;)
+alert ntp any any -> any any (msg:"NTP stratum 2 request"; flow:to_server; ntp.stratum:2; sid:21; rev:1;)
+alert ntp any any -> any any (msg:"NTP stratum 0 reply"; flow:to_client; ntp.stratum:0; sid:22; rev:1;)

@@ -23,6 +23,20 @@ checks:
         ntp.version: 4
 
   - filter:
+      # 2 NTP request events at stratum 0.
+      count: 2
+      match:
+        event_type: ntp
+        ntp.stratum: 0
+
+  - filter:
+      # 2 NTP reply events at stratum 2.
+      count: 2
+      match:
+        event_type: ntp
+        ntp.stratum: 2
+
+  - filter:
       count: 2
       match:
         event_type: alert
@@ -87,3 +101,80 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 11
+
+  - filter:
+      # Should see stratum 0 on both requests.
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 12
+
+  - filter:
+      # Should see stratum 2 on both replies.
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 13
+
+  - filter:
+      # Should see no stratum greater than 2.
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 14
+
+  - filter:
+      # Should see only stratum values below 2 on requests.
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 15
+
+  - filter:
+      # Should see stratum 2 on both reply events.
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 16
+
+  - filter:
+      # Should see only replies with stratum greater than 0.
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 17
+
+  - filter:
+      # Should see only requests with stratum less than 1.
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 18
+
+  - filter:
+      # Should see stratum 0 only to_server.
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 19
+
+  - filter:
+      # Should see stratum 2 only to_client.
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 20
+
+  - filter:
+      # Should see no to_server with stratum 2.
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 21
+
+  - filter:
+      # Should see no to_client with stratum 0.
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 22
