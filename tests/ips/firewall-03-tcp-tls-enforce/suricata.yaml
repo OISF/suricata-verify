@@ -22,6 +22,7 @@ outputs:
       filetype: regular #regular|syslog|unix_dgram|unix_stream|redis
       filename: eve.json
       types:
+        - stats
         - alert:
             # payload: yes             # enable dumping payload in Base64
             # payload-buffer-size: 4kb # max size of payload buffer to output in eve-log
