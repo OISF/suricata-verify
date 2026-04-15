@@ -21,3 +21,10 @@ checks:
     match:
       event_type: tls
       tls.subject: C=FR, ST=IDF, L=Paris, O=Stamus, CN=SELKS
+- filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      event_type: stats
+      not-has-key: stats.firewall
