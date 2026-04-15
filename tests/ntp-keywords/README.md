@@ -1,7 +1,7 @@
 Test
 ====
 
-Test alerts with the `ntp.version` keyword.
+Test alerts with the `ntp.version` and `ntp.stratum` keywords.
 
 PCAP
 ----
@@ -11,3 +11,5 @@ exchanges:
 
 - one NTPv4 request/reply pair
 - one NTPv3 request/reply pair
+- requests at stratum 0
+- replies at stratum 2
