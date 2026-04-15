@@ -1,0 +1,89 @@
+requires:
+  min-version: 9
+
+checks:
+  - filter:
+      # 4 NTP events.
+      count: 4
+      match:
+        event_type: ntp
+
+  - filter:
+      # 2 NTP v3 events.
+      count: 2
+      match:
+        event_type: ntp
+        ntp.version: 3
+
+  - filter:
+      # 2 NTP v4 events.
+      count: 2
+      match:
+        event_type: ntp
+        ntp.version: 4
+
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1
+
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 2
+
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 3
+
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 4
+
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 5
+
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 6
+
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 7
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 8
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 10
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 11
