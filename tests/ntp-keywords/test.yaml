@@ -37,6 +37,20 @@ checks:
         ntp.stratum: 2
 
   - filter:
+      # 2 NTP client mode events.
+      count: 2
+      match:
+        event_type: ntp
+        ntp.mode: 3
+
+  - filter:
+      # 2 NTP server mode events.
+      count: 2
+      match:
+        event_type: ntp
+        ntp.mode: 4
+
+  - filter:
       count: 2
       match:
         event_type: alert
@@ -178,3 +192,35 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 22
+
+  - filter:
+      # Should see both client mode packets.
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 23
+        ntp.mode: 3
+
+  - filter:
+      # Should see both server mode packets.
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 24
+        ntp.mode: 4
+
+  - filter:
+      # Numeric mode 3 should match both client packets.
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 25
+        ntp.mode: 3
+
+  - filter:
+      # Negated server mode should match only client packets.
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 26
+        ntp.mode: 3
