@@ -1,0 +1,51 @@
+requires:
+  min-version: 9
+
+#pcap: ../../snmp-v2c-get/SNMPv2c_get_requests.pcap
+pcap: ../../ntp-keywords/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 13
+        ntp.version: 4
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 14
+        ntp.version: 3
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 21
+        ntp.version: 4
+
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 22
+
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        pcap_cnt: 4
+
+  - stats:
+      ips.accepted: 3
+      ips.blocked: 1
