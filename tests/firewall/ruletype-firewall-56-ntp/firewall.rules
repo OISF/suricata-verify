@@ -1,0 +1,21 @@
+accept:hook udp:all $HOME_NET any <> $HOME_NET 123 (alert; sid:1;)
+
+accept:hook ntp:request_started $HOME_NET any -> $HOME_NET 123 (sid:11;)
+accept:hook ntp:request_complete $HOME_NET any -> $HOME_NET 123 (\
+    ntp.version:4; ntp.stratum:0; ntp.mode:client;\
+    ntp.reference_id; content:"|00 00 00 00|"; alert; sid:13;)
+accept:hook ntp:request_complete $HOME_NET any -> $HOME_NET 123 (\
+    ntp.version:3; ntp.stratum:0; ntp.mode:client;\
+    ntp.reference_id; content:"|00 00 00 00|"; alert; sid:14;)
+
+accept:hook ntp:response_started $HOME_NET 123 -> $HOME_NET any (sid:20;)
+accept:hook ntp:response_complete $HOME_NET 123 -> $HOME_NET any (\
+    ntp.version:4; ntp.stratum:2; ntp.mode:server; ntp.reference_id;\
+    content:"LOCL"; alert; sid:21;)
+
+# Effectively drop version 3 responses that don't have a reference of LOCX.
+accept:hook ntp:response_complete $HOME_NET 123 -> $HOME_NET any (\
+    ntp.version:3; ntp.stratum:2; ntp.mode:server; ntp.reference_id;\
+    content:"LOCX"; alert; sid:22;)
+
+# Implicit drop all else
