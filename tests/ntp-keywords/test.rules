@@ -29,3 +29,11 @@ alert ntp any any -> any any (msg:"NTP client mode"; ntp.mode:client; sid:23; re
 alert ntp any any -> any any (msg:"NTP server mode"; ntp.mode:server; sid:24; rev:1;)
 alert ntp any any -> any any (msg:"NTP mode 3"; ntp.mode:3; sid:25; rev:1;)
 alert ntp any any -> any any (msg:"NTP not server mode"; ntp.mode:!server; sid:26; rev:1;)
+
+# ntp.reference_id
+alert ntp any any -> any any (msg:"NTP reference ID LOCL"; ntp.reference_id; content:"LOCL"; sid:27; rev:1;)
+alert ntp any any -> any any (msg:"NTP reference ID zero"; ntp.reference_id; content:"|00 00 00 00|"; sid:28; rev:1;)
+alert ntp any any -> any any (msg:"NTP reference ID LOCL reply"; flow:to_client; ntp.reference_id; content:"LOCL"; sid:29; rev:1;)
+alert ntp any any -> any any (msg:"NTP reference ID LOCL request"; flow:to_server; ntp.reference_id; content:"LOCL"; sid:30; rev:1;)
+alert ntp any any -> any any (msg:"NTP reference ID zero request"; flow:to_server; ntp.reference_id; content:"|00 00 00 00|"; sid:31; rev:1;)
+alert ntp any any -> any any (msg:"NTP reference ID zero reply"; flow:to_client; ntp.reference_id; content:"|00 00 00 00|"; sid:32; rev:1;)
