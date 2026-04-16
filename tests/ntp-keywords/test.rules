@@ -23,3 +23,9 @@ alert ntp any any -> any any (msg:"NTP stratum 0 request"; flow:to_server; ntp.s
 alert ntp any any -> any any (msg:"NTP stratum 2 reply"; flow:to_client; ntp.stratum:2; sid:20; rev:1;)
 alert ntp any any -> any any (msg:"NTP stratum 2 request"; flow:to_server; ntp.stratum:2; sid:21; rev:1;)
 alert ntp any any -> any any (msg:"NTP stratum 0 reply"; flow:to_client; ntp.stratum:0; sid:22; rev:1;)
+
+# ntp.mode
+alert ntp any any -> any any (msg:"NTP client mode"; ntp.mode:client; sid:23; rev:1;)
+alert ntp any any -> any any (msg:"NTP server mode"; ntp.mode:server; sid:24; rev:1;)
+alert ntp any any -> any any (msg:"NTP mode 3"; ntp.mode:3; sid:25; rev:1;)
+alert ntp any any -> any any (msg:"NTP not server mode"; ntp.mode:!server; sid:26; rev:1;)
