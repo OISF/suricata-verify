@@ -1,7 +1,8 @@
 Test
 ====
 
-Test alerts with the `ntp.version` and `ntp.stratum` keywords.
+Test alerts with the `ntp.version`, `ntp.stratum`, `ntp.mode`, and
+`ntp.reference_id` keywords.
 
 PCAP
 ----
@@ -11,5 +12,5 @@ exchanges:
 
 - one NTPv4 request/reply pair
 - one NTPv3 request/reply pair
-- requests at stratum 0
-- replies at stratum 2
+- requests at stratum 0 with a zero reference ID
+- replies at stratum 2 with a `LOCL` reference ID

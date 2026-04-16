@@ -51,6 +51,20 @@ checks:
         ntp.mode: 4
 
   - filter:
+      # 2 NTP events with a zero reference ID.
+      count: 2
+      match:
+        event_type: ntp
+        ntp.reference_id: "00:00:00:00"
+
+  - filter:
+      # 2 NTP events with a LOCL reference ID.
+      count: 2
+      match:
+        event_type: ntp
+        ntp.reference_id: "4c:4f:43:4c"
+
+  - filter:
       count: 2
       match:
         event_type: alert
@@ -224,3 +238,49 @@ checks:
         event_type: alert
         alert.signature_id: 26
         ntp.mode: 3
+
+  - filter:
+      # Should see LOCL on both replies.
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 27
+        ntp.reference_id: "4c:4f:43:4c"
+
+  - filter:
+      # Should see a zero reference ID on both requests.
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 28
+        ntp.reference_id: "00:00:00:00"
+
+  - filter:
+      # LOCL should match only to_client.
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 29
+        ntp.reference_id: "4c:4f:43:4c"
+
+  - filter:
+      # Should see no to_server packets with LOCL.
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 30
+
+  - filter:
+      # Zero reference ID should match only to_server.
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 31
+        ntp.reference_id: "00:00:00:00"
+
+  - filter:
+      # Should see no to_client packets with a zero reference ID.
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 32
