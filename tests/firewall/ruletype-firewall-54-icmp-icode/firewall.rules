@@ -1,0 +1,8 @@
+# Test icode keyword in firewall mode
+# ICMP PCAP has echo requests (type 8, code 0) and echo replies (type 0, code 0)
+
+# Accept all ICMP packets with icode:0 (all packets match)
+accept:hook icmp:all any any -> any any (icode:0; alert; sid:1;)
+
+# Drop everything else
+drop:packet ip:all any any -> any any (sid:999;)
