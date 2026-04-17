@@ -1,0 +1,26 @@
+# Test pcre, urilen, and dataset keywords in firewall mode
+# flowbit-oring PCAP: single HTTP GET / to testmyids.com, user-agent curl/7.43.0
+
+# Accept TCP session setup
+accept:hook tcp:all any any -> any any (sid:100;)
+
+# Accept request_started to allow app-layer processing
+accept:hook http1:request_started any any -> any any (sid:101;)
+
+# Test pcre: match URI "/" with regex (request_line hook)
+# Test urilen: URI "/" has length 1 (request_line hook)
+accept:hook http1:request_line any any -> any any (http.uri; pcre:"/^\//"; urilen:1; alert; sid:1;)
+
+# Test dataset: match user-agent against loaded dataset (request_headers hook)
+accept:hook http1:request_headers any any -> any any (http.user_agent; dataset:isset,ua-seen,type string,load ua-seen.csv; alert; sid:2;)
+
+# Accept remaining request/response hooks
+accept:hook http1:request_body any any -> any any (sid:104;)
+accept:hook http1:request_trailer any any -> any any (sid:105;)
+accept:hook http1:request_complete any any -> any any (sid:106;)
+accept:hook http1:response_started any any -> any any (sid:201;)
+accept:hook http1:response_line any any -> any any (sid:202;)
+accept:hook http1:response_headers any any -> any any (sid:203;)
+accept:hook http1:response_body any any -> any any (sid:204;)
+accept:hook http1:response_trailer any any -> any any (sid:205;)
+accept:hook http1:response_complete any any -> any any (sid:206;)
