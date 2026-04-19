@@ -1,0 +1,14 @@
+requires:
+  min-version: 9
+
+pcap: ../bug-4482-01/input.pcap
+
+checks:
+  # Both detect-event rules load and parse without error.  The events
+  # themselves (resource exhaustion inside the detect engine) cannot be
+  # triggered by replaying a pcap, so 0 alerts is expected.  Suricata
+  # reaching this check at all proves the rules were accepted.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
