@@ -1,0 +1,12 @@
+requires:
+  min-version: 9
+
+pcap: ../bug-4482-01/input.pcap
+
+checks:
+  # All 13 file decoder event rules load without error (no alerts expected
+  # since SWF decompression is not enabled and no file_data rule triggers it)
+  - filter:
+      count: 0
+      match:
+        event_type: alert
