@@ -1,0 +1,10 @@
+pcap: false
+
+
+command: |
+  ${SRCDIR}/src/suricata --set classification-file="${TEST_DIR}/classification.config" -l ${OUTPUT_DIR} -c ${SRCDIR}/suricata.yaml -T
+
+checks:
+  - shell:
+      args: grep "Notice: suricata: Configuration provided was successfully loaded" suricata.log
+      expect: 1
