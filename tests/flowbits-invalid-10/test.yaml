@@ -13,4 +13,4 @@ checks:
       count: 1
       match:
         log_level: Error
-        engine.message: "invalid flowbit command combination in the same signature: isset and isnotset"
+        engine.message: "invalid flowbit command combination in the same signature: isnotset and isset"
