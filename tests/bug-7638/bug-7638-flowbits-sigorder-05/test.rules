@@ -1,0 +1,7 @@
+# The ONLY valid order is 1,2,3,4. sid 4 is a depth-1 neighbour of the
+# source (sid 1) but also depends on sid 3 at depth 2, so a BFS emits
+# sid 4 before sid 3 (order 1,4,2,3 or 1,2,4,3), breaking the 3->4 edge.
+alert http any any -> any any (msg:"S1 set A"; flowbits:isset,S; flowbits:set,A; sid:1;)
+alert http any any -> any any (msg:"S2 isset A set B"; flowbits:isset,A; flowbits:set,B; sid:2;)
+alert http any any -> any any (msg:"S3 isset B set C"; flowbits:isset,B; flowbits:set,C; sid:3;)
+alert http any any -> any any (msg:"S4 isset A,C set D"; flowbits:isset,A; flowbits:isset,C; flowbits:set,D; sid:4;)
