@@ -4,6 +4,7 @@
 # Accept all UDP packets
 accept:hook udp:all any any -> any any (sid:100;)
 
+accept:hook dns:request_started any any -> any any (sid:999;)
 # Test datarep: match DNS query against reputation list
 accept:hook dns:request_complete any any -> any any (dns.query; datarep:dns_rep,>,0,load dns_rep.rep,type string; alert; sid:1;)
 
