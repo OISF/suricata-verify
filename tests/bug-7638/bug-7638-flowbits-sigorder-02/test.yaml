@@ -1,0 +1,16 @@
+requires:
+    min-version: 9
+
+pcap: false
+
+args:
+  - --engine-analysis
+
+exit-code: 1
+
+checks:
+  - filter:
+      count: 1
+      match:
+        log_level: Error
+        engine.message: "Flowbits signatures that are unsatisfiable at runtime found: 12, 10"
