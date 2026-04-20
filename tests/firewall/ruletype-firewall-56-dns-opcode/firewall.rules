@@ -4,6 +4,7 @@
 # Accept all UDP packets
 accept:hook udp:all any any -> any any (sid:100;)
 
+accept:hook dns:request_started any any -> any any (sid:999;)
 # Test dns.opcode: match standard query (opcode 0) and alert
 accept:hook dns:request_complete any any -> any any (dns.opcode:0; alert; sid:1;)
 
