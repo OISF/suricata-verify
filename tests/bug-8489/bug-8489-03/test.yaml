@@ -1,0 +1,37 @@
+requires:
+  min-version: 9
+
+# After the transaction limit is exceeded, the flow must continue to
+# process subsequent commands — the anomaly should not halt parsing.
+# Sends a burst of three PWDs with max-tx=1 (two of them trigger the
+# limit), then a CWD after a response; the CWD must still be logged.
+args:
+  - -k none --set app-layer.protocols.ftp.max-tx=1
+
+checks:
+  # banner, USER, PASS, PWD, PWD, PWD, CWD
+  - filter:
+      count: 7
+      match:
+        event_type: ftp
+
+  # CWD after the excess burst confirms the flow keeps parsing.
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: CWD
+
+  # Each excess PWD creation force-closes an older in-flight tx and
+  # tags it with the event.
+  - filter:
+      count: 2
+      match:
+        event_type: anomaly
+        anomaly.event: too_many_transactions
+
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 3
