@@ -1,0 +1,26 @@
+requires:
+  min-version: 8
+
+args:
+  - -k none --set app-layer.protocols.ftp.max-tx=10
+
+checks:
+  # All six transactions are logged: banner, USER, PASS, NOOP, PWD, TYPE.
+  - filter:
+      count: 6
+      match:
+        event_type: ftp
+
+  # Transaction count stays well below the configured limit: no anomaly
+  # event and no alert for too_many_transactions.
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.event: too_many_transactions
+
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 3
