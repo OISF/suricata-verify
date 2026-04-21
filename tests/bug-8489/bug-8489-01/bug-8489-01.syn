@@ -1,0 +1,7 @@
+flow default tcp 1.1.1.1:5555 > 2.2.2.2:21 (tcp.initialize; mss:9000;);
+default < (content:"220 (Ftp Server)\x0d\x0a";);
+default > (content:"USER user\x0d\x0a";);
+default < (content:"331 Please specify the password.\x0d\x0a";);
+default > (content:"PASS password\x0d\x0a";);
+default < (content:"230 Login successful.\x0d\x0a";);
+default > (content:"PWD\x0d\x0aPWD\x0d\x0a";);
