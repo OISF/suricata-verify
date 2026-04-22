@@ -1,5 +1,5 @@
 requires:
-  min-version: 9
+  min-version: 8.0.5
 
 pcap: ../../snmp-v2c-get/SNMPv2c_get_requests.pcap
 
