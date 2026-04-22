@@ -1,5 +1,5 @@
 requires:
-  min-version: 9
+  min-version: 8.0.5
 
 pcap: ../ruletype-firewall-54-snmp-v1-trap/public-wiresharkwiki-c06-snmpv1-trap-app-r1-1-12.pcap
 

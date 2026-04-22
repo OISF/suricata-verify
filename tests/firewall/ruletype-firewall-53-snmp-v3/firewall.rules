@@ -1,8 +1,8 @@
 accept:hook udp:all 127.0.0.1 any <> 127.0.0.1 161 (alert; sid:1;)
 
 accept:hook snmp:request_started 127.0.0.1 any -> 127.0.0.1 161 (sid:11;)
-accept:hook snmp:request_complete 127.0.0.1 any -> 127.0.0.1 161 (snmp.version:3; snmp.pdu_type:get_request; alert; sid:12;)
-accept:hook snmp:request_complete 127.0.0.1 any -> 127.0.0.1 161 (snmp.version:3; snmp.pdu_type:get_bulk_request; alert; sid:13;)
+accept:hook snmp:request_complete 127.0.0.1 any -> 127.0.0.1 161 (snmp.version:3; snmp.pdu_type:0; alert; sid:12;)
+accept:hook snmp:request_complete 127.0.0.1 any -> 127.0.0.1 161 (snmp.version:3; snmp.pdu_type:5; alert; sid:13;)
 
 accept:hook snmp:response_started 127.0.0.1 161 -> 127.0.0.1 any (sid:21;)
 accept:hook snmp:response_complete 127.0.0.1 161 -> 127.0.0.1 any (snmp.version:3; snmp.usm; content:"Auth"; pcre:"/noAuthUser/"; alert; sid:22;)
