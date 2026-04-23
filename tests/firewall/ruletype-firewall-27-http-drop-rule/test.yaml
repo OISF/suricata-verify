@@ -44,32 +44,32 @@ checks:
       event_type: alert
       alert.signature_id: 106
 - filter:
-    count: 1
+    count: 0
     match:
       event_type: alert
       alert.signature_id: 201
 - filter:
-    count: 1
+    count: 0
     match:
       event_type: alert
       alert.signature_id: 202
 - filter:
-    count: 1
+    count: 0
     match:
       event_type: alert
       alert.signature_id: 203
 - filter:
-    count: 1
+    count: 0
     match:
       event_type: alert
       alert.signature_id: 204
 - filter:
-    count: 1
+    count: 0
     match:
       event_type: alert
       alert.signature_id: 205
 - filter:
-    count: 1
+    count: 0
     match:
       event_type: alert
       alert.signature_id: 206
@@ -84,13 +84,14 @@ checks:
       event_type: flow
       flow.pkts_toserver: 6
       flow.pkts_toclient: 4
-      flow.state: "closed"
+      flow.state: "established"
       flow.alerted: true
-      not-has-key: flow.action
+      flow.action: "drop"
 - filter:
     count: 1
     match:
       event_type: stats
-      stats.ips.accepted: 9
-      stats.ips.blocked: 1
+      stats.ips.accepted: 3
+      stats.ips.blocked: 7
       stats.ips.drop_reason.rules: 1
+      stats.ips.drop_reason.flow_drop: 6
