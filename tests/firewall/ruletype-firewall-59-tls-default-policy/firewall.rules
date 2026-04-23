@@ -1,0 +1,5 @@
+accept:hook tcp:all any any -> any any (sid:100;)
+
+accept:hook tls:client_in_progress any any -> any any (sid:101;)
+accept:hook tls:client_hello_done any any -> any any (lua:test.lua; sid:102;)
+accept:flow tls:client_hello_done any any -> any any (lua:!test.lua; sid:103;)
