@@ -24,6 +24,6 @@ drop:flow tls:server_hello_done $HOME_NET any -> $EXTERNAL_NET any (tls.version:
 # should not match, pcap is to google
 accept:flow tls:client_hello_done $HOME_NET any -> $EXTERNAL_NET any (tls.sni; content:"www.bing.com"; sid:104; alert;)
 # allow tls before client hello is done.
-accept:packet tls:client_in_progress $HOME_NET any -> $EXTERNAL_NET any (alert; sid:105;)
+accept:hook tls:client_in_progress $HOME_NET any -> $EXTERNAL_NET any (alert; sid:105;)
 
 # default drop
