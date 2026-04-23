@@ -26,7 +26,7 @@ checks:
       event_type: alert
       alert.signature_id: 1022
 - filter:
-    count: 7
+    count: 3
     match:
       event_type: alert
       alert.signature_id: 1023
@@ -51,7 +51,7 @@ checks:
       event_type: alert
       alert.signature_id: 105
 - filter:
-    count: 53
+    count: 57
     match:
       event_type: drop
 - filter:
@@ -67,7 +67,7 @@ checks:
     count: 1
     match:
       event_type: stats
-      stats.ips.accepted: 9
-      stats.ips.blocked: 53
+      stats.ips.accepted: 5
+      stats.ips.blocked: 57
       stats.ips.drop_reason.default_app_policy: 1
-      stats.ips.drop_reason.flow_drop: 52
+      stats.ips.drop_reason.flow_drop: 56
