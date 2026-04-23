@@ -1,0 +1,29 @@
+requires:
+  min-version: 9
+
+pcap: ../../dns/dns-eve/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+  - --set default-rule-path=${TEST_DIR}
+
+checks:
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 8
+    match:
+      event_type: drop
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.ips.accepted: 0
+      stats.ips.blocked: 8
+      stats.ips.drop_reason.default_app_policy: 4
+      stats.ips.drop_reason.default_packet_policy: 0
+      stats.ips.drop_reason.flow_drop: 4

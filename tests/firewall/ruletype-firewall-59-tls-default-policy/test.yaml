@@ -1,0 +1,29 @@
+requires:
+  min-version: 9
+
+pcap: ../../tls/tls-client-hello-frag-01/dump_mtu300.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+  - --set default-rule-path=${TEST_DIR}
+
+checks:
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 0
+    match:
+      event_type: drop
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.ips.accepted: 62
+      stats.ips.blocked: 0
+      stats.ips.drop_reason.default_app_policy: 0
+      stats.ips.drop_reason.default_packet_policy: 0
+      stats.ips.drop_reason.flow_drop: 0
