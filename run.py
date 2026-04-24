@@ -305,6 +305,10 @@ class SuricataConfig:
         self.version = version
         self.features = set()
         self.config = {}
+        # we can use a single real interface
+        self.interface = None
+        # or a veth pair
+        self.interface_rx = None
         self.load_build_info()
 
     def load_build_info(self):
@@ -523,6 +527,9 @@ class TestRunner:
             return None
         return lines
 
+    def terminate_process(self, p, delay):
+        p.terminate()
+
     def run(self, outdir):
         if not self.force:
             self.check_requires()
@@ -591,7 +598,37 @@ class TestRunner:
 
                 p = subprocess.Popen(
                     args, shell=shell, cwd=self.directory, env=env,
-                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, start_new_session=self.suricata_config.interface != None)
+
+                if self.suricata_config.interface != None:
+                    argsl = ["tcpreplay"]
+                    if "tcpreplay_args" in self.config:
+                        for arg in self.config["tcpreplay_args"]:
+                            argsl += re.split(r"\s", arg)
+                    argsl += ["-i", self.suricata_config.interface]
+                    pcap = self.pcap_name()
+                    if pcap == None:
+                        p.terminate()
+                        raise TestError("replay test needs a pcap")
+                    argsl.append(pcap)
+
+                    start_res = self.wait_suricata_start(p, 2)
+                    if start_res is None:
+                        p.terminate()
+                        raise TestError("Suricata did not start engine before timeout")
+                    else:
+                        stdout.write(start_res)
+                    subprocess.check_call(
+                        argsl, shell=shell, cwd=self.directory, env=env,
+                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+                if "timeout" in self.config:
+                    delay = self.config["timeout"]
+                    timer = threading.Timer(delay, self.terminate_process, (p, delay))
+                    timer.start()
+                elif self.suricata_config.interface != None:
+                    p.terminate()
+                    raise TestError("replay test needs a timeout")
 
                 if "unix-commands" in self.config:
                     timeout = 2
@@ -758,6 +795,20 @@ class TestRunner:
 
         return count
 
+    def pcap_name(self):
+        if "pcap" in self.config:
+            pcap_path = os.path.join(self.directory, self.config["pcap"])
+            if not os.path.exists(pcap_path):
+                raise TestError("PCAP filename does not exist: {}".format(self.config["pcap"]))
+            return pcap_path
+        # else
+        pcaps = glob.glob(os.path.join(self.directory, "*.pcap"))
+        if len(pcaps) > 1:
+            raise TestError("More than 1 pcap file found")
+        if pcaps:
+           return pcaps[0]
+        return None
+
     def default_args(self):
         args = []
         if self.suricata_config.valgrind:
@@ -810,18 +861,14 @@ class TestRunner:
         args += ["-c", self.get_suricata_yaml_path()]
 
         # Find pcaps.
-        if "pcap" in self.config:
-            pcap_path = os.path.join(self.directory, self.config["pcap"])
-            if not os.path.exists(pcap_path):
-                raise TestError("PCAP filename does not exist: {}".format(self.config["pcap"]))
-            args += ["-r", os.path.realpath(pcap_path)]
+        if self.suricata_config.interface_rx != None:
+            args += ["-i", self.suricata_config.interface_rx]
+        elif self.suricata_config.interface != None:
+            args += ["-i", self.suricata_config.interface]
         else:
-            pcaps = glob.glob(os.path.join(self.directory, "*.pcap"))
-            pcaps += glob.glob(os.path.join(self.directory, "*.pcapng"))
-            if len(pcaps) > 1:
-                raise TestError("More than 1 pcap file found")
-            if pcaps:
-                args += ["-r", pcaps[0]]
+            pcap = self.pcap_name()
+            if pcap != None:
+                args += ["-r", pcap]
 
         # Find rules.
         if "rules" in self.config:
@@ -1028,6 +1075,7 @@ def main():
     parser.add_argument("--aggressive-cleanup", dest="aggressivecleanup", action="store_true",
                         help="Clean up output directories of passing tests")
     parser.add_argument("--no-validation", action="store_true", help="Disable EVE validation")
+    parser.add_argument("--replay", action="store", nargs="?", const="", help="run tcpreplay tests")
     parser.add_argument("patterns", nargs="*", default=[])
     parser.add_argument("-j", type=int, default=min(8, os.cpu_count()),
                         help="Number of jobs to run (threads)")
@@ -1088,7 +1136,44 @@ def main():
             print("error: suricatasc binary is missing")
 
     suricata_config.valgrind = args.valgrind
+    suricata_config.interface = args.replay
     tdir = os.path.join(TOPDIR, "tests")
+    if args.replay != None:
+        # We use one interface, so we cannot have parallel jobs
+        if "-j" in sys.argv[1:]:
+            print("warning: replay tests cannot run in parallel, do not use -j")
+        args.j = 1
+        tdir = os.path.join(TOPDIR, "replay")
+        try:
+            subprocess.check_call(["tcpreplay --version"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        except subprocess.CalledProcessError as tcpr:
+            print("Replay tests require tcpreplay")
+            return 1
+        try:
+            subprocess.check_call(["ip a"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        except subprocess.CalledProcessError as ipl:
+            print("Cannot run ip a for replay tests")
+            return 1
+        if args.replay == "":
+            suricata_config.interface = "sv_"+str(os.getpid())
+            suricata_config.interface_rx = suricata_config.interface+"_rx"
+            suricata_config.interface = suricata_config.interface+"_tx"
+            try:
+                subprocess.check_call(["ip", "link", "add", suricata_config.interface, "type", "veth", "peer", "name", suricata_config.interface_rx], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            except subprocess.CalledProcessError as ipl:
+                print("Cannot create dummy interface")
+                return 1
+            try:
+                subprocess.check_call(["ip", "link", "set", suricata_config.interface_rx, "up"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            except subprocess.CalledProcessError as ipl:
+                print("Rx Interface cannot be set to up")
+                return 1
+        try:
+            subprocess.check_call(["ip", "link", "set", suricata_config.interface, "up"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        except subprocess.CalledProcessError as ipl:
+            print("Interface cannot be set to up")
+            return 1
+
     if args.testdir:
         tdir = os.path.abspath(args.testdir)
     # First gather the tests so we can run them in alphabetic order.
@@ -1140,8 +1225,12 @@ def main():
         run_parallel(args.j, tests, args, cwd, suricata_config)
     except KeyboardInterrupt:
         print("\nInterrupted by user")
+        if args.replay == "":
+            subprocess.check_call(["ip", "link", "delete", suricata_config.interface], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         return 1
 
+    if args.replay == "":
+        subprocess.check_call(["ip", "link", "delete", suricata_config.interface], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     passed = count_dict["passed"]
     failed = count_dict["failed"]
     skipped = count_dict["skipped"]
