@@ -37,7 +37,7 @@ def check_requires(
     requires,
     suricata_config,
     is_version_compatible,
-    test_dir=None,
+    suri_dir=None,
     version_is_lt=None,
     eval_globals=None,
     unsatisfied_error=UnsatisfiedRequirementError,
@@ -99,8 +99,8 @@ def check_requires(
                     raise unsatisfied_error("requires env var {}".format(env))
         elif key == "files":
             for filename in requires["files"]:
-                if test_dir and not os.path.isabs(filename):
-                    filename = os.path.join(test_dir, filename)
+                if suri_dir and not os.path.isabs(filename):
+                    filename = os.path.join(suri_dir, filename)
                 if not os.path.exists(filename):
                     raise unsatisfied_error("requires file {}".format(filename))
         elif key == "script":
