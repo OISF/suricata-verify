@@ -23,6 +23,21 @@ For Unix socket tests, the path to `suricatasc` can be overridden with the
 SURICATASC=/path/to/suricatasc ../path/to/suricata-tests/run.py
 ```
 
+### Replay Tests
+
+Replay tests are like regular tests except, instead of feeding the pcap
+directly to suricata, the pcap is replayed by tcpreplay on an interface
+where Suricata listens to (using a veth pair created for each run).
+
+They require a `timeout` value in their `test.yaml` to know when to
+terminate Suricata.
+
+These tests are in the `replay` directory and are run by
+
+```
+../path/to/suricata-verify/run.py --replay
+```
+
 ## Adding a New Test
 
 - Create a directory that is the name of the new test.
