@@ -1,0 +1,24 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert
+        - flow
+
+decoder:
+  tunnels:
+    - id: 1
+      type: erspan2
+      src: 192.168.1.4
+      dst: 192.168.1.2
+      session: 321
+    - id: 2
+      type: vxlan
+      src: 192.168.1.3
+      dst: 192.168.1.2
+      session: 123
