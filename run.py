@@ -329,7 +329,7 @@ def check_filter_test_version_compat(requires, test_version):
                     raise UnnecessaryRequirementError(
                         "test already requires min {} not needed for the check {}".format(test_version["min"], requires["min-version"]))
 
-def check_requires(requires, suricata_config: SuricataConfig, test_dir=None):
+def check_requires(requires, suricata_config: SuricataConfig, suri_dir=None):
     suri_version = suricata_config.version
     for key in requires:
         if key == "min-version":
@@ -376,8 +376,8 @@ def check_requires(requires, suricata_config: SuricataConfig, test_dir=None):
                         "requires env var %s" % (env))
         elif key == "files":
             for filename in requires["files"]:
-                if test_dir and not os.path.isabs(filename):
-                    filename = os.path.join(test_dir, filename)
+                if suri_dir and not os.path.isabs(filename):
+                    filename = os.path.join(suri_dir, filename)
                 if not os.path.exists(filename):
                     raise UnsatisfiedRequirementError(
                         "requires file %s" % (filename))
@@ -721,7 +721,7 @@ class TestRunner:
 
     def check_requires(self):
         requires = self.config.get("requires", {})
-        check_requires(requires, self.suricata_config, self.directory)
+        check_requires(requires, self.suricata_config, self.cwd)
         for key in requires:
             if key == "min-version":
                 self.version["min"] = requires["min-version"]
