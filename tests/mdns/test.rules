@@ -1,3 +1,8 @@
 alert mdns any any -> any any (mdns.queries.rrname; content: "_apple"; sid:1;)
 alert mdns any any -> any any (mdns.answers.rrname; content: "Mac"; sid:2;)
 alert mdns any any -> any any (mdns.response.rrname; content: "John’s iMac._companion-link._tcp.local"; sid:3;)
+
+# Same rules should also load with alert ip prefix
+alert ip any any -> any any (mdns.queries.rrname; content: "_apple"; requires: version >= 9; sid:11;)
+alert ip any any -> any any (mdns.answers.rrname; content: "Mac"; requires: version >= 9; sid:12;)
+alert ip any any -> any any (mdns.response.rrname; content: "John’s iMac._companion-link._tcp.local"; requires: version >= 9; sid:13;)
