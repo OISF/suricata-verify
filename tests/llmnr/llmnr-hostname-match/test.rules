@@ -1,0 +1,4 @@
+alert llmnr any any -> any any (llmnr.queries.rrname; content:"malicious-c2"; nocase; sid:1; rev:1;)
+alert llmnr any any -> any any (llmnr.answers.rrname; content:"malicious-c2.local"; nocase; sid:2; rev:1;)
+alert llmnr any any -> any any (llmnr.queries.rrname; content:"workstation01"; nocase; sid:3; rev:1;)
+alert llmnr any any -> any any (llmnr.response.rrname; content:"malicious-c2"; nocase; sid:4; rev:1;)

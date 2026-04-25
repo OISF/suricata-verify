@@ -1,0 +1,5 @@
+alert llmnr any any -> any any (llmnr.authorities.rrname; content:"local"; sid:1; rev:1;)
+alert llmnr any any -> any any (llmnr.authorities.rrname; content:"local"; sid:2; rev:1;)
+alert llmnr any any -> any any (llmnr.additionals.rrname; content:"ns.local"; sid:3; rev:1;)
+alert llmnr any any -> any any (llmnr.queries.rrname; content:"testhost.local"; sid:4; rev:1;)
+alert llmnr any any -> any any (llmnr.answers.rrname; content:"server.local"; sid:5; rev:1;)

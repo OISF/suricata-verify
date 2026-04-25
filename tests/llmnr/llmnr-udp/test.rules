@@ -1,0 +1,3 @@
+alert llmnr any any -> any any (flow:to_server; sid:1; rev:1;)
+alert llmnr any any -> any any (flow:to_server; content:"hs2011"; nocase; sid:2; rev:1;)
+alert llmnr any any -> any any (flow:to_client; sid:3; rev:1;)

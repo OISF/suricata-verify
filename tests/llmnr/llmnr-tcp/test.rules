@@ -1,0 +1,2 @@
+alert llmnr any any -> any any (flow:to_server; llmnr.queries.rrname; content:"workstation"; sid:1; rev:1;)
+alert llmnr any any -> any any (flow:to_client; llmnr.answers.rrname; content:"workstation"; sid:2; rev:1;)

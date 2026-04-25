@@ -1,0 +1,37 @@
+requires:
+  min-version: 9.0.0
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: llmnr
+        proto: TCP
+  - filter:
+      count: 1
+      match:
+        event_type: llmnr
+        proto: TCP
+        src_ip: 192.168.1.100
+        src_port: 49152
+        dest_ip: 192.168.1.200
+        dest_port: 5355
+        llmnr.type: request
+        llmnr.id: 43981
+        llmnr.opcode: 0
+        llmnr.queries[0].rrname: test
+        llmnr.queries[0].rrtype: a
+  - filter:
+      count: 1
+      match:
+        event_type: llmnr
+        proto: TCP
+        llmnr.type: response
+        llmnr.id: 43981
+        llmnr.queries[0].rrname: test
+        llmnr.queries[0].rrtype: a
+        llmnr.answers[0].rrname: test
+        llmnr.answers[0].a: 192.168.1.10
