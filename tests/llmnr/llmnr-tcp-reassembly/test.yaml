@@ -1,0 +1,42 @@
+requires:
+  min-version: 8.0.0
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: llmnr
+        proto: TCP
+  - filter:
+      count: 1
+      match:
+        event_type: llmnr
+        proto: TCP
+        src_ip: 192.168.1.100
+        src_port: 49152
+        dest_ip: 192.168.1.200
+        dest_port: 5355
+        llmnr.type: request
+        llmnr.id: 43981
+        llmnr.flags: "0"
+        llmnr.opcode: 0
+        llmnr.queries[0].rrname: test
+        llmnr.queries[0].rrtype: A
+  - filter:
+      count: 1
+      match:
+        event_type: llmnr
+        proto: TCP
+        llmnr.type: response
+        llmnr.id: 43981
+        llmnr.flags: "8000"
+        llmnr.queries[0].rrname: test
+        llmnr.queries[0].rrtype: A
+        llmnr.answers[0].rrname: test
+        llmnr.answers[0].rrtype: A
+        llmnr.answers[0].ttl: 30
+        llmnr.answers[0].rdata: 192.168.1.10
+        llmnr.grouped.A[0]: 192.168.1.10
