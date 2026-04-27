@@ -1,0 +1,123 @@
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      src_ip: 10.173.48.13
+      src_port: 2906
+      dest_ip: 88.82.6.134
+      dest_port: 6303
+      event_type: alert
+      proto: SCTP
+      pcap_cnt: 1
+      alert.signature_id: 1
+      sctp.vtag: 0
+      sctp.chunk_types[0]: 1
+      sctp.chunk_cnt: 1
+      sctp.has_init: true
+      sctp.has_data: false
+      sctp.has_abort: false
+- filter:
+    count: 1
+    match:
+      src_ip: 88.82.6.134 
+      src_port: 6303
+      dest_ip: 10.173.48.13
+      dest_port: 2906
+      event_type: alert
+      proto: SCTP
+      pcap_cnt: 2
+      alert.signature_id: 2
+      sctp.vtag: 3714634557
+      sctp.chunk_types[0]: 2
+      sctp.chunk_cnt: 1
+      sctp.has_init_ack: true
+      sctp.has_data: false
+      sctp.has_abort: false
+- filter:
+    count: 1
+    match:
+      src_ip: 10.173.48.13
+      src_port: 2906
+      dest_ip: 88.82.6.134
+      dest_port: 6303
+      event_type: alert
+      proto: SCTP
+      pcap_cnt: 3
+      alert.signature_id: 3
+      sctp.vtag: 3559606418
+      sctp.chunk_types[0]: 10
+      sctp.chunk_cnt: 1
+      sctp.has_init: false
+      sctp.has_data: false
+      sctp.has_abort: false
+- filter:
+    count: 1
+    match:
+      src_ip: 10.173.48.13
+      src_port: 2906
+      dest_ip: 88.82.6.134
+      dest_port: 6303
+      event_type: alert
+      proto: SCTP
+      pcap_cnt: 3
+      alert.signature_id: 4
+      sctp.vtag: 3559606418
+      sctp.chunk_types[0]: 10
+      sctp.chunk_cnt: 1
+      sctp.has_init: false
+      sctp.has_data: false
+      sctp.has_abort: false
+- filter:
+    count: 1
+    match:
+      src_ip: 10.173.48.13
+      src_port: 2906
+      dest_ip: 88.82.6.134
+      dest_port: 6303
+      event_type: alert
+      proto: SCTP
+      pcap_cnt: 1
+      alert.signature_id: 5
+      sctp.vtag: 0
+      sctp.chunk_types[0]: 1
+      sctp.chunk_cnt: 1
+      sctp.has_init: true
+      sctp.has_data: false
+      sctp.has_abort: false
+- filter:
+    count: 1
+    match:
+      src_ip: 88.82.6.134 
+      src_port: 6303
+      dest_ip: 10.173.48.13
+      dest_port: 2906
+      event_type: alert
+      proto: SCTP
+      pcap_cnt: 15
+      alert.signature_id: 6
+      sctp.vtag: 3714634557 
+      sctp.chunk_types[0]: 3
+      sctp.chunk_cnt: 4
+      sctp.has_init: false
+      sctp.has_data: true
+      sctp.has_abort: false
+- filter:
+    count: 1
+    match:
+      src_ip: 10.173.48.13
+      src_port: 2906
+      dest_ip: 88.82.6.134
+      dest_port: 6303
+      event_type: alert
+      proto: SCTP
+      pcap_cnt: 5
+      alert.signature_id: 7
+      sctp.vtag: 3559606418
+      sctp.chunk_types[0]: 0
+      sctp.chunk_cnt: 1
+      sctp.has_init: false
+      sctp.has_data: true
+      sctp.has_abort: false
