@@ -10,6 +10,38 @@ pcap: false
 
 checks:
 - filter:
+    min-version: 9
+    filename: rules.json
+    count: 1
+    match:
+      flags:
+      - src_any
+      - dst_any
+      - sp_any
+      - noalert
+      - need_packet
+      - toserver
+      id: 9901001
+      lists:
+        packet:
+          matches:
+          - name: tcp.flags
+        postmatch:
+          matches:
+          - flowbits:
+              cmd: set
+              names:
+              - tls_tracker
+            name: flowbits
+      pkt_engines:
+      - is_mpm: false
+        name: packet
+      requirements:
+      - tcp_flags_syn
+      - real_pkt
+      type: pkt
+- filter:
+    lt-version: 9
     filename: rules.json
     count: 1
     match:
