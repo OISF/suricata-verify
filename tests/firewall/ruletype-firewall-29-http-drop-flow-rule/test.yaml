@@ -14,11 +14,21 @@ checks:
       event_type: alert
       alert.signature_id: 100
 - filter:
+    requires:
+      lt-version: 9
     count: 1
     match:
       event_type: drop
       alert.signature_id: 100
       drop.reason: "rules"
+- filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      event_type: drop
+      alert.signature_id: 100
+      drop.reason: "firewall rules"
 - filter:
     count: 9
     match:
@@ -34,6 +44,8 @@ checks:
       flow.alerted: true
       flow.action: drop
 - filter:
+    requires:
+      lt-version: 9
     count: 1
     match:
       event_type: stats
@@ -41,3 +53,14 @@ checks:
       stats.ips.blocked: 10
       stats.ips.drop_reason.rules: 1
       stats.ips.drop_reason.flow_drop: 9
+- filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      event_type: stats
+      stats.ips.accepted: 0
+      stats.ips.blocked: 10
+      stats.ips.drop_reason.firewall.rules: 1
+      stats.ips.drop_reason.flow_drop: 9
+      stats.detect.firewall.discarded_alerts: 0

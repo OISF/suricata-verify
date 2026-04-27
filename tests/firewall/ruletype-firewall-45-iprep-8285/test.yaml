@@ -26,6 +26,8 @@ checks:
       event_type: flow
       dest_ip: 82.165.177.154
 - filter:
+    requires:
+      lt-version: 9
     count: 1
     match:
       event_type: stats
@@ -36,3 +38,17 @@ checks:
       stats.ips.drop_reason.default_app_policy: 0
       stats.ips.drop_reason.rules: 1
       stats.ips.drop_reason.flow_drop: 6
+- filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      event_type: stats
+      stats.ips.accepted: 3
+      stats.ips.blocked: 7
+      stats.ips.drop_reason.pre_flow_hook: 0
+      stats.ips.drop_reason.firewall.default_packet_policy: 0
+      stats.ips.drop_reason.firewall.default_app_policy: 0
+      stats.ips.drop_reason.firewall.rules: 1
+      stats.ips.drop_reason.flow_drop: 6
+      stats.detect.firewall.discarded_alerts: 1
