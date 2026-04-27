@@ -44,6 +44,15 @@ Or to run a single test:
   tests such as restricting features required for the test, and
   validating output.
 
+- Add a README.md file indicating:
+
+  - What's the test purpose
+  - Where the PCAP comes from
+  - RedMine ticket number (if that exists)
+
+- Optional: If the provided PCAP was created with script(s), add those to the
+  test, too.
+
 ## Example test.yaml
 
 ```
