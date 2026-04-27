@@ -1,0 +1,12 @@
+# *** Add configuration here ***
+
+requires:
+  min-version: 9
+
+args:
+- -k none
+
+checks:
+- shell:
+    args: grep '"payload_printable":".*\.\.\.\.\.\.\.\..*"' eve.json | wc -l | xargs
+    expect: 0
