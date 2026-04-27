@@ -1,0 +1,24 @@
+%YAML 1.1
+---
+
+include: ../../etc/suricata-4.0.3.yaml
+
+# Stock include uses ./output/suricata.log; with -l on the test output dir that
+# becomes output/output/suricata.log. suricata-verify parses engine checks from
+# JSON lines (type: json), not plain text.
+logging:
+  outputs:
+    - console:
+        enabled: yes
+    - file:
+        enabled: yes
+        level: info
+        filename: suricata.log
+        type: json
+    - syslog:
+        enabled: no
+
+security:
+  lua:
+    allow-rules: true
+    max-bytes: 20000

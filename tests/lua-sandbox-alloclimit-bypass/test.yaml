@@ -1,0 +1,37 @@
+requires:
+  min-version: 9
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+
+# Bug: LuaAlloc ptr==NULL path does not check alloc_limit.
+# A single large string.rep(400000) allocation bypasses security.lua.max-bytes=20000.
+#
+# On affected versions (e.g. 8.0.4, 7.0.15, 9.0.0-dev before fix):
+#   - alert 9000001 fires (script ran successfully)
+#   - stats.detect.lua.memory_limit_errors == 0 (limit never enforced)
+#
+# Expected behavior after fix:
+#   - engine: memory limit exceeded
+#   - stats.detect.lua.errors == 1, memory_limit_errors == 1
+#   - no alert (script blocked by limit)
+
+checks:
+  - filter:
+      filename: suricata.log
+      count: 1
+      match:
+        engine.message.__startswith: "Lua script failed to run successfully: memory limit exceeded"
+
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.lua.errors: 1
+        stats.detect.lua.memory_limit_errors: 1
+
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 9000001
