@@ -1,0 +1,38 @@
+mode: [nfq]
+
+before: |
+  cp firewall.rules ${OUTDIR}/firewall.rules
+
+client: |
+  id=$(podman build -q --network=host client)
+
+  podman run --cap-add=NET_RAW --rm --network ns:/var/run/netns/client ${id} bash -lc '
+    if ping -c 1 10.200.0.1; then
+        echo "error: ping should have failed" > /dev/stderr
+        exit 1
+    fi
+  '
+
+  cp firewall2.rules ${OUTDIR}/firewall.rules
+  ${SURICATASC} -c reload-rules ${OUTDIR}/suricata.socket
+  
+  podman run --cap-add=NET_RAW --rm --network ns:/var/run/netns/client ${id} bash -lc '
+    ping -c 1 10.200.0.1
+  '
+
+checks:
+  - stats:
+      decoder.icmpv4: 3
+
+      # I'm not sure about these 2 yet. We've tried to create a closed
+      # network, but I'm not sure if any unexpected packets could
+      # still creep in.
+      ips.accepted: 2
+      ips.blocked: 1
+
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        proto: ICMP
+        alert.action: allowed
