@@ -1,0 +1,11 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none --set stream.midstream=true
+
+checks:
+  - filter:
+      count: 16
+      match:
+        event_type: dcerpc
