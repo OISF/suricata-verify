@@ -1,0 +1,26 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none --set app-layer.protocols.ftp.max-tx=1
+
+checks:
+  # Five transactions are logged: banner, USER, PASS, and both PWDs. The
+  # flow keeps parsing after the limit is exceeded; the event is raised
+  # on the oldest in-flight transaction rather than halting curr_tx.
+  - filter:
+      count: 5
+      match:
+        event_type: ftp
+
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: too_many_transactions
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
