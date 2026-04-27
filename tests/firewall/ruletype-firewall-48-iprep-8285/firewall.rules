@@ -4,4 +4,5 @@ accept:hook tcp:all any any -> any any (sid:100;)
 
 # default drop
 
+accept:hook http1:request_started any any -> any any (sid:997;)
 accept:flow http1:request_line any any -> any any (sid:999; alert; iprep:dst,test,>,0;)

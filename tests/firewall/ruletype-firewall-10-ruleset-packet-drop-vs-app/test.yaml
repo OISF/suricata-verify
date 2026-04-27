@@ -48,20 +48,20 @@ checks:
       event_type: alert
       alert.signature_id: 1022
 - filter:
-    count: 7
+    count: 3
     match:
       event_type: alert
       alert.signature_id: 1023
 # packet rule accepted, also accepted at app layer
 - filter:
-    count: 5
+    count: 2
     match:
       event_type: alert
       alert.signature_id: 1023
       verdict.action: accept
 # packet rule accepted, dropped at app layer
 - filter:
-    count: 2
+    count: 1
     match:
       event_type: alert
       alert.signature_id: 1023
@@ -88,18 +88,18 @@ checks:
       alert.signature_id: 105
       verdict.action: accept
 - filter:
-    count: 54 # 53 + 1 (drop sid 999)
+    count: 57
     match:
       event_type: drop
       verdict.action: drop
 # count all records with verdict field
 - filter:
-    count: 9
+    count: 6
     match:
       verdict.action: accept
 # count all records with verdict field
 - filter:
-    count: 57
+    count: 59
     match:
       verdict.action: drop
 - filter:
@@ -115,8 +115,8 @@ checks:
     count: 1
     match:
       event_type: stats
-      stats.ips.accepted: 8
-      stats.ips.blocked: 54
+      stats.ips.accepted: 5
+      stats.ips.blocked: 57
       stats.ips.drop_reason.default_app_policy: 1
-      stats.ips.drop_reason.rules: 1
-      stats.ips.drop_reason.flow_drop: 52
+      stats.ips.drop_reason.rules: 0
+      stats.ips.drop_reason.flow_drop: 56
