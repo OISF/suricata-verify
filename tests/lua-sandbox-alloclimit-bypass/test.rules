@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"LUA ALLOCLIMIT BYPASS"; lua:lua_mem_oneshot.lua; sid:9000001; rev:1;)
