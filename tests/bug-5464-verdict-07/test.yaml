@@ -9,9 +9,20 @@ args:
 
 checks:
   - filter:
+      requires:
+        lt-version: 9
       count: 2
       match:
         event_type: alert
         verdict.action: alert
         verdict.reject-target: to_client
+        verdict.reject: [icmp-prohib]
+  - filter:
+      requires:
+        min-version: 9
+      count: 2
+      match:
+        event_type: alert
+        verdict.action: alert
+        verdict.reject_target: to_client
         verdict.reject: [icmp-prohib]
