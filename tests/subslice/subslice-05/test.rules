@@ -1,0 +1,25 @@
+# Test negative nbytes exceeding buffer length with truncate
+## User-Agent: curl/7.64.1 (11 characters)
+
+# Excessive negative nbytes with truncate: end clamped to 0, produces empty buffer
+alert http any any -> any any (http.user_agent; content: "curl/7.64.1"; subslice: 0, -30, truncate; bsize: 0; sid:1;)
+
+# Moderate negative nbytes: ends 8 bytes from end (position 3), produces "cur"
+alert http any any -> any any (http.user_agent; content: "curl/7.64.1"; subslice: 0, -8, truncate; content: "cur"; bsize: 3; startswith; endswith; sid:2;)
+
+# Moderate negative nbytes: ends 6 bytes from end (position 5), produces "curl/"
+alert http any any -> any any (http.user_agent; content: "curl/7.64.1"; subslice: 0, -6, truncate; content: "curl/"; bsize: 5; startswith; endswith; sid:3;)
+
+# Combined excessive negative offset and negative nbytes with truncate
+# offset: -20 (clamped to 0), nbytes: -30 (end clamped to 0), produces empty buffer
+alert http any any -> any any (http.user_agent; content: "curl/7.64.1"; subslice: -20, -30, truncate; bsize: 0; sid:4;)
+
+# Negative offset with moderate negative nbytes
+# offset: -11 (start at 0), nbytes: -6 (end at position 5), produces "curl/"
+alert http any any -> any any (http.user_agent; content: "curl/7.64.1"; subslice: -11, -6, truncate; content: "curl/"; bsize: 5; startswith; endswith; sid:5;)
+
+# Test without truncate - should fail (bsize: 0) with excessive negative nbytes
+alert http any any -> any any (http.user_agent; content: "curl/7.64.1"; subslice: 0, -30; bsize: 0; sid:6;)
+
+# Normal negative nbytes without truncate should work
+alert http any any -> any any (http.user_agent; content: "curl/7.64.1"; subslice: 0, -6; content: "curl/"; bsize: 5; startswith; endswith; sid:7;)
