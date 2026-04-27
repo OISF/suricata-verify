@@ -1,0 +1,43 @@
+# Detect PE that imports ws2_32.dll (Winsock) - common in malware for C2 comms
+# Should match malware_imports.exe only (1 alert)
+alert http any any -> any any (msg:"PE imports WS2_32.dll"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: ws2_32.dll; sid:1; rev:1;)
+
+# Detect PE that imports wininet.dll (HTTP/FTP) - common in downloaders/RATs
+# Should match malware_imports.exe only (1 alert)
+alert http any any -> any any (msg:"PE imports WININET.dll"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: wininet.dll; sid:2; rev:1;)
+
+# Detect PE that imports kernel32.dll - both PEs have it (2 alerts)
+alert http any any -> any any (msg:"PE imports KERNEL32.dll"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: kernel32.dll; sid:3; rev:1;)
+
+# Negative test: import that doesn't exist in either PE (0 alerts)
+alert http any any -> any any (msg:"PE imports URLMON.dll"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: urlmon.dll; sid:4; rev:1;)
+
+# Combined: x86 arch + ws2_32 import — only malware PE matches (1 alert)
+alert http any any -> any any (msg:"x86 PE with Winsock"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, ws2_32.dll; sid:5; rev:1;)
+
+# Detect PE that imports advapi32.dll (registry/crypto) - malware PE only (1 alert)
+alert http any any -> any any (msg:"PE imports ADVAPI32.dll"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: advapi32.dll; sid:6; rev:1;)
+
+# Detect PE that imports user32.dll - benign PE only (1 alert)
+alert http any any -> any any (msg:"PE imports USER32.dll"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: user32.dll; sid:7; rev:1;)
+
+# Multi-DLL: ws2_32 AND wininet — only malware PE has both (1 alert)
+alert http any any -> any any (msg:"PE imports WS2_32 and WININET"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: ws2_32.dll, wininet.dll; sid:8; rev:1;)
+
+# Multi-DLL negative: ws2_32 AND user32 — no single PE has both (0 alerts)
+alert http any any -> any any (msg:"PE imports WS2_32 and USER32"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: ws2_32.dll, user32.dll; sid:9; rev:1;)
+
+# Combined: arch x86 + two DLL imports — malware PE only (1 alert)
+alert http any any -> any any (msg:"x86 PE with WS2_32+WININET"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, ws2_32.dll, wininet.dll; sid:10; rev:1;)
+
+# Combined: arch x86 + three DLL imports — malware PE only (1 alert)
+alert http any any -> any any (msg:"x86 PE with WS2_32+WININET+ADVAPI32"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, ws2_32.dll, wininet.dll, advapi32.dll; sid:11; rev:1;)
+
+# Combined: wrong arch + valid DLL — no match (0 alerts), both PEs are x86 not x86_64
+alert http any any -> any any (msg:"x64 PE with WS2_32"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86_64, ws2_32.dll; sid:12; rev:1;)
+
+# Combined: subsystem + multi-DLL — malware PE is console (subsystem 3) with ws2_32+advapi32 (1 alert)
+alert http any any -> any any (msg:"Console PE with WS2_32+ADVAPI32"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: subsystem 3, ws2_32.dll, advapi32.dll; sid:13; rev:1;)
+
+# Combined: sections + DLL — both PEs have 2 sections and kernel32 (2 alerts)
+alert http any any -> any any (msg:"2-section PE with KERNEL32"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: sections 2, kernel32.dll; sid:14; rev:1;)
