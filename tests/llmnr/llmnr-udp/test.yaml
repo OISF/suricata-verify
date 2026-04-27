@@ -1,0 +1,42 @@
+requires:
+  min-version: 8.0.0
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: llmnr
+        proto: UDP
+  - filter:
+      count: 1
+      match:
+        event_type: llmnr
+        proto: UDP
+        src_ip: 192.168.10.233
+        src_port: 54022
+        dest_ip: 224.0.0.252
+        dest_port: 5355
+        llmnr.type: request
+        llmnr.id: 49985
+        llmnr.flags: "0"
+        llmnr.opcode: 0
+        llmnr.queries[0].rrname: hs2011
+        llmnr.queries[0].rrtype: A
+  - filter:
+      count: 1
+      match:
+        event_type: llmnr
+        proto: UDP
+        llmnr.type: response
+        llmnr.id: 49985
+        llmnr.flags: "8000"
+        llmnr.queries[0].rrname: hs2011
+        llmnr.queries[0].rrtype: A
+        llmnr.answers[0].rrname: HS2011
+        llmnr.answers[0].rrtype: A
+        llmnr.answers[0].ttl: 30
+        llmnr.answers[0].rdata: 192.168.10.101
+        llmnr.grouped.A[0]: 192.168.10.101
