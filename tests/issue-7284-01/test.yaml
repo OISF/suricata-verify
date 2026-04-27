@@ -1,0 +1,26 @@
+pcap: ../tls/tls-random/input.pcap
+
+args:
+- -k none
+- --simulate-ips
+- --set detect.pass-applayer-flow-action=false
+
+checks:
+- filter:
+    count: 6
+    match:
+      event_type: alert
+      alert.signature_id: 3
+- filter:
+    count: 5
+    match:
+      event_type: drop
+- filter:
+    count: 1
+    match:
+      event_type: tls
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      not-has-key: flow.action
