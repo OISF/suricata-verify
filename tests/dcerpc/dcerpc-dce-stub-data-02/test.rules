@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"DCERPC stub data match"; dce_stub_data; content:"|42 42 42 42|"; sid:1;)
