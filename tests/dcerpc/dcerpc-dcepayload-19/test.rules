@@ -1,0 +1,2 @@
+alert tcp any any -> any any (msg:"DcePayloadTest19 sig1"; dce_stub_data; content:"|5c 00 5c 00 31|"; distance:0; byte_jump:2,0,relative; byte_test:2,=,46,0,relative,dce; sid:1;)
+alert tcp any any -> any any (msg:"DcePayloadTest19 sig2"; dce_stub_data; content:"|5c 00 5c 00 31|"; distance:0; byte_jump:2,2,relative; byte_test:2,=,14080,0,relative; sid:2;)
