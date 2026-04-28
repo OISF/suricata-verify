@@ -1,0 +1,1 @@
+alert dns any any -> any any (dce_stub_data; content:"0"; sid:1;)
