@@ -1,0 +1,37 @@
+args:
+- -k none --set stream.inline=true
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+      pcap_cnt: 4
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2
+      pcap_cnt: 8
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 3
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 3
+      pcap_cnt: 12
