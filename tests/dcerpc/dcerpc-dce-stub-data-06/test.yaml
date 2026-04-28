@@ -1,0 +1,6 @@
+args:
+- --init-errors-fatal
+
+pcap: false
+
+exit-code: 1
