@@ -10,7 +10,5 @@ checks:
       count: 1
       match:
         event_type: stats
-        has-key: stats.memcap.pressure_max
-        has-key: stats.memcap.pressure
-        not-has-key: stats.memcap_pressure_max
-        not-has-key: stats.memcap_pressure
+        has-key: [stats.memcap.pressure_max, stats.memcap.pressure]
+        not-has-key: [stats.memcap_pressure_max, stats.memcap_pressure]

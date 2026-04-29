@@ -585,13 +585,25 @@ class FilterCheck:
     def match(self, event):
         for key, expected in self.config["match"].items():
             if key == "has-key":
-                val = find_value(expected, event)
-                if val is None:
-                    return False
+                if isinstance(expected, list):
+                    for item in expected:
+                        val = find_value(item, event)
+                        if val is None:
+                            return False
+                else:
+                    val = find_value(expected, event)
+                    if val is None:
+                        return False
             elif key == "not-has-key":
-                val = find_value(expected, event)
-                if val is not None:
-                    return False
+                if isinstance(expected, list):
+                    for item in expected:
+                        val = find_value(item, event)
+                        if val is not None:
+                            return False
+                else:
+                    val = find_value(expected, event)
+                    if val is not None:
+                        return False
             else:
                 val = find_value(key, event)
                 if key.endswith("__find"):
