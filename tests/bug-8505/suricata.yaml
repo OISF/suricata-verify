@@ -1,0 +1,6 @@
+%YAML 1.1
+---
+
+engine-analysis:
+  rules-fast-pattern: no
+  rules: no
