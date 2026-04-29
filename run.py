@@ -1399,5 +1399,25 @@ def main():
         return 1
     return 0
 
+def check_duplicate_keys(loader: yaml.SafeLoader, node):
+    ret =  loader.construct_mapping(node)
+    keys = []
+    for key_node, value_node in node.value:
+        if key_node.value in keys:
+            raise yaml.constructor.ConstructorError(
+                f"Duplicate key '{key_node.value}' found",
+                key_node.start_mark,
+                "Each key must be unique in YAML mapping",
+                key_node.start_mark
+            )
+        keys.append(key_node.value)
+    return ret
+
+
+yaml.SafeLoader.add_constructor(
+    yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
+    check_duplicate_keys
+)
+
 if __name__ == "__main__":
     sys.exit(main())

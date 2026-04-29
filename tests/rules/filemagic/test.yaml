@@ -27,7 +27,6 @@ checks:
       engines[0].name: "file.magic"
       engines[0].matches[0].name: "content"
       engines[0].matches[0].content.relative_next: true
-      engines[0].name: "file.magic"
       engines[0].matches[1].name: "content"
       engines[0].matches[1].content.within: 8
 - filter:
