@@ -1,0 +1,11 @@
+%YAML 1.1
+---
+
+reputation-categories-file: cats.txt
+
+reputation-files:
+  - iprep.list
+
+engine-analysis:
+  # enables printing reports for each rule
+  rules: yes
