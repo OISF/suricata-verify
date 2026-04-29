@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"SURICATA STREAM Packet with invalid timestamp"; stream-event:pkt_invalid_timestamp; classtype:protocol-command-decode; sid:2210044; rev:2;)
