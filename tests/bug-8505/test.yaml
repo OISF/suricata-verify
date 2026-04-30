@@ -1,4 +1,5 @@
 requires:
   pcap: false
+  min-version: 9
 args:
   - --engine-analysis
