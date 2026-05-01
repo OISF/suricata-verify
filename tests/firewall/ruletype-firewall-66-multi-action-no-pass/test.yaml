@@ -1,0 +1,37 @@
+requires:
+  min-version: 9
+
+pcap: ../../flowbit-oring/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+# pcre + urilen match on URI "/" at request_line hook
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 101
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 999
+# No drops - all hooks covered
+- filter:
+    count: 0
+    match:
+      event_type: drop
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.ips.accepted: 10
+      stats.ips.blocked: 0
