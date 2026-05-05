@@ -1,0 +1,6 @@
+accept:packet arp:all any any -> any any (sid:1;)
+
+accept:hook tcp:all any any <> any any (sid:10;)
+accept:hook http1:request_started any any -> any any (sid:500;)
+accept:hook http1:request_line any any -> any any (sid:501;)
+accept:flow http1:request_headers any any -> any any (http.host; content:"testmyids.com"; sid:502;)
