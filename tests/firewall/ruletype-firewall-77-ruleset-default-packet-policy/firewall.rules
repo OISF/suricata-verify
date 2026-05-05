@@ -1,0 +1,10 @@
+# Packet rules
+
+# accept outgoing ping and the returning pongs
+accept:flow icmp:flow_start $HOME_NET any -> $HOME_NET any (itype:8; msg:"Ping!"; alert; sid:1011;)
+# allow session setup
+accept:packet tcp:all $HOME_NET any <> $EXTERNAL_NET 443 (flow:not_established; alert; sid:1021;)
+# some exception test
+accept:flow tcp:all $HOME_NET any <> 1.2.3.4 443 (flow:established; alert; sid:1022;)
+
+# default drop
