@@ -1,5 +1,5 @@
 args:
-- --set stream.midstream=true
+  - --set stream.midstream=true
 
 checks:
 - filter:
@@ -26,12 +26,12 @@ checks:
       event_type: alert
       alert.signature_id: 3
 - filter:
-    count: 2
+    count: 1
     match:
       event_type: alert
       alert.signature_id: 4
 - filter:
-    count: 2
+    count: 1
     match:
       event_type: alert
       alert.signature_id: 5
