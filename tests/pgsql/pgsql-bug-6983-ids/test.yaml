@@ -16,5 +16,4 @@ checks:
     match:
       event_type: alert
       alert.signature_id: 1
-      not-has-key: flow
-      not-has-key: pgsql
+      not-has-key: [flow, pgsql]

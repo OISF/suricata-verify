@@ -28,10 +28,4 @@ checks:
       count: 1
       match:
         event_type: tls
-        has-key: tls.certificate
-        has-key: tls.chain
-        has-key: tls.client.subject
-        has-key: tls.client.issuerdn
-        has-key: tls.client.fingerprint
-        has-key: tls.client.chain
-        has-key: tls.client.certificate
+        has-key: [tls.certificate, tls.chain, tls.client.subject, tls.client.issuerdn, tls.client.fingerprint, tls.client.chain, tls.client.certificate]

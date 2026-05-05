@@ -585,13 +585,25 @@ class FilterCheck:
     def match(self, event):
         for key, expected in self.config["match"].items():
             if key == "has-key":
-                val = find_value(expected, event)
-                if val is None:
-                    return False
+                if isinstance(expected, list):
+                    for item in expected:
+                        val = find_value(item, event)
+                        if val is None:
+                            return False
+                else:
+                    val = find_value(expected, event)
+                    if val is None:
+                        return False
             elif key == "not-has-key":
-                val = find_value(expected, event)
-                if val is not None:
-                    return False
+                if isinstance(expected, list):
+                    for item in expected:
+                        val = find_value(item, event)
+                        if val is not None:
+                            return False
+                else:
+                    val = find_value(expected, event)
+                    if val is not None:
+                        return False
             else:
                 val = find_value(key, event)
                 if key.endswith("__find"):
@@ -1398,6 +1410,26 @@ def main():
     if failed > 0:
         return 1
     return 0
+
+def check_duplicate_keys(loader: yaml.SafeLoader, node):
+    ret =  loader.construct_mapping(node)
+    keys = []
+    for key_node, value_node in node.value:
+        if key_node.value in keys:
+            raise yaml.constructor.ConstructorError(
+                f"Duplicate key '{key_node.value}' found",
+                key_node.start_mark,
+                "Each key must be unique in YAML mapping",
+                key_node.start_mark
+            )
+        keys.append(key_node.value)
+    return ret
+
+
+yaml.SafeLoader.add_constructor(
+    yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
+    check_duplicate_keys
+)
 
 if __name__ == "__main__":
     sys.exit(main())
