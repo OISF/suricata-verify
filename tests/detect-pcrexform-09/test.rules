@@ -1,0 +1,3 @@
+# or_else with pcrexform (a transform that can fail) should error;
+# use error_or instead
+alert http any any -> any any (msg:"or_else with pcrexform"; http.request_line; pcrexform:"[a-zA-Z]+\s+(.*)\s+HTTP"; absent: or_else; content:"test"; sid:1;)

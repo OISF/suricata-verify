@@ -1,0 +1,2 @@
+# must_error without a failing transform should fail to load
+alert http any any -> any any (msg:"must_error without transform"; flow:established,to_server; http.uri; absent: must_error; sid:1;)
