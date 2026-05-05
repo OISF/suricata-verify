@@ -1,0 +1,37 @@
+requires:
+  min-version: 9
+
+pcap: ../../tls/tls-client-hello-frag-01/dump_mtu300.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 110
+- filter:
+    count: 42
+    match:
+      event_type: drop
+      drop.reason: "flow drop"
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      app_proto: tls
+      flow.action: drop
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.app_layer.flow.tls: 1
+      stats.flow.total: 1
+      stats.ips.accepted: 19
+      stats.ips.blocked: 43
+      stats.ips.drop_reason.flow_drop: 42
+      stats.ips.drop_reason.rules: 1
+      stats.decoder.pkts: 62
