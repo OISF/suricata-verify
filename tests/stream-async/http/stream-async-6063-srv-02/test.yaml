@@ -90,3 +90,14 @@ checks:
         tcp.state: fin_wait1
         tcp.ts_max_regions: 1
         tcp.tc_max_regions: 1
+  - filter:
+      requires:
+        min-version: 9
+      count: 1
+      match:
+        event_type: stats
+        stats.tcp.synack: 1
+        stats.tcp.async_stream: 0
+        stats.tcp.midstream_pickups: 1
+        stats.app_layer.flow.http: 0
+        stats.flow.tcp: 1
