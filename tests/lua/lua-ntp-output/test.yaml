@@ -1,0 +1,12 @@
+requires:
+  min-version: 9
+
+pcap: ../../ntp-keywords/input.pcap
+
+args:
+  - --runmode=single
+
+checks:
+  - file-compare:
+      filename: lua-ntp.log
+      expected: expected/lua-ntp.log

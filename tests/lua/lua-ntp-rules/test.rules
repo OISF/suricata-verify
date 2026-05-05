@@ -1,0 +1,3 @@
+alert ntp any any -> any any (msg:"TEST NTP LUA v4"; ntp.version:>=3; lua:test-v4.lua; sid:1; rev:1;)
+alert ntp any any -> any any (msg:"TEST NTP LUA v3"; ntp.version:>=3; lua:test-v3.lua; sid:2; rev:1;)
+alert ntp any any -> any any (msg:"TEST NTP LUA no match"; ntp.version:>=3; lua:test-no-match.lua; sid:3; rev:1;)

@@ -1,0 +1,24 @@
+pcap: ../../ntp-keywords/input.pcap
+
+requires:
+  min-version: 9
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 3
