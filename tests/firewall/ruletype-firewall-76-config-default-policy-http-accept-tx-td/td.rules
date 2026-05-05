@@ -1,0 +1,2 @@
+alert http any any -> any any (http.host; content:"testmyids"; sid:5000;)
+alert http any any -> any any (msg:"GPL ATTACK_RESPONSE id check returned root"; http.response_body; content:"uid=0|28|root|29|"; sid:2100498; rev:7;)

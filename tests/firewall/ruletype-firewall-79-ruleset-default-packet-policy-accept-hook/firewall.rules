@@ -1,0 +1,8 @@
+# Packet rules
+
+# should not match
+accept:hook tcp:all any any -> any any (flags:RF; sid:1;)
+
+# default packet policy: accept:hook
+
+# no app rules, so drop ?
