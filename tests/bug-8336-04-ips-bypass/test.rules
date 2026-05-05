@@ -1,0 +1,6 @@
+alert tls any any -> any any (msg:"8336 JA3 match, set flowbit"; flow:established,to_server; ja3.hash; content:"fae0e5d973c96ae1888b99538efa0363"; flowbits:set,JA3_MATCH; sid:8336001; rev:1;)
+
+alert tls any any -> any any (msg:"8336 JA3S match, check JA3 flowbit"; flow:established,to_client; ja3s.hash; content:"907bf3ecef1c987c889946b737b43de8"; flowbits:isset,JA3_MATCH; sid:8336002; rev:1;)
+
+alert tls any any => any any (msg:"8336 JA3S match, check JA3 flowbit"; ja3.hash; content:"fae0e5d973c96ae1888b99538efa0363"; ja3s.hash; content:"907bf3ecef1c987c889946b737b43de8"; fast_pattern; sid:8336003; rev:1;)
+alert tls any any => any any (msg:"8336 JA3S match, check JA3 flowbit"; ja3.hash; content:"fae0e5d973c96ae1888b99538efa0363"; fast_pattern; ja3s.hash; content:"907bf3ecef1c987c889946b737b43de8"; sid:8336004; rev:1;)
