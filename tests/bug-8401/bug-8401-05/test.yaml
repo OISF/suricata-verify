@@ -1,0 +1,20 @@
+requires:
+  min-version: 9
+
+args:
+  - --runmode=single
+
+pcap: ../bug-8401-02/input.pcap
+
+checks:
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.thresholds.max_bucket_depth: 5
+        stats.detect.thresholds.avg_bucket_depth: 5
