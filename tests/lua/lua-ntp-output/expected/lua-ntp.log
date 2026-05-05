@@ -1,0 +1,4 @@
+NTP version=4 mode=3 stratum=0 reference_id=00:00:00:00
+NTP version=4 mode=4 stratum=2 reference_id=4c:4f:43:4c
+NTP version=3 mode=3 stratum=0 reference_id=00:00:00:00
+NTP version=3 mode=4 stratum=2 reference_id=4c:4f:43:4c
