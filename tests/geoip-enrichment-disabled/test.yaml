@@ -1,0 +1,34 @@
+requires:
+  features:
+    - GeoIP2
+
+pcap: input.pcap
+
+checks:
+  # Verify NO alerts have geoip_dst when enrichment is disabled
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        has-key: geoip_dst
+
+  # Verify NO alerts have geoip_src when enrichment is disabled
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        has-key: geoip_src
+
+  # Verify NO flows have geoip_dst when enrichment is disabled
+  - filter:
+      count: 0
+      match:
+        event_type: flow
+        has-key: geoip_dst
+
+  # Verify NO flows have geoip_src when enrichment is disabled
+  - filter:
+      count: 0
+      match:
+        event_type: flow
+        has-key: geoip_src
