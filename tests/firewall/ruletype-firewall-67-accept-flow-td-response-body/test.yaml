@@ -1,0 +1,28 @@
+requires:
+  min-version: 9
+
+pcap: ../../flowbit-oring/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+# This does alert.
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 5000
+# We expect this to alert, but it isn't.
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2100498
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.ips.accepted: 10
+      stats.ips.blocked: 0
