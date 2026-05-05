@@ -34,6 +34,8 @@ checks:
       flow.pkts_toclient: 1
       not-has-key: flow.action
 - filter:
+    requires:
+      lt-version: 9
     count: 1
     match:
       event_type: stats
@@ -41,3 +43,17 @@ checks:
       stats.ips.blocked: 10
       stats.ips.drop_reason.default_packet_policy: 10
       stats.ips.drop_reason.default_app_policy: 0
+      stats.ips.drop_reason.rules: 0
+- filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      event_type: stats
+      stats.ips.accepted: 2
+      stats.ips.blocked: 10
+      stats.ips.drop_reason.firewall.default_packet_policy: 10
+      stats.ips.drop_reason.firewall.default_app_policy: 0
+      stats.ips.drop_reason.firewall.rules: 0
+      stats.ips.drop_reason.rules: 0
+      stats.detect.firewall.discarded_alerts: 0
