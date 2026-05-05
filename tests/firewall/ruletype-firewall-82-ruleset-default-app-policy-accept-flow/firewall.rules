@@ -1,0 +1,5 @@
+# Packet rules
+
+# default packet policy: accept:hook
+
+# no app rules, so drop
