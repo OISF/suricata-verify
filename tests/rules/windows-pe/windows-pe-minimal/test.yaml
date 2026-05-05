@@ -1,0 +1,16 @@
+# Test: Minimal valid PE file (edge case)
+# Validates detection of minimal 100-byte PE structure
+
+
+checks:
+  # Verify that we get an alert for the minimal PE file
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+
+  # Verify the alert is in fast.log
+  - shell:
+      args: cat fast.log | grep -c "Minimal Windows PE detected"
+      expect: 1

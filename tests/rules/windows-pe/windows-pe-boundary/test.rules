@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"Boundary Windows PE detected"; flow:established,to_client; file.data; content:"MZ"; depth:2; content:"PE|00 00|"; distance:0; windows_pe; sid:1; rev:1;)
