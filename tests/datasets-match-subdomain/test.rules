@@ -1,0 +1,2 @@
+alert dns any any -> any any (dns.query; dotprefix; dataset:isset,blocked-domains,type string,match subdomain,load domains.lst; sid:1; rev:1;)
+alert dns any any -> any any (dns.query; dotprefix; dataset:isset,blocked-domains-json,type string,match subdomain,load domains.json,format ndjson,value_key domain,context_key domain; sid:2; rev:1;)
