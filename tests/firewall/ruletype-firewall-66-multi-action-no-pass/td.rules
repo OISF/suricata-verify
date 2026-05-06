@@ -1,0 +1,2 @@
+# Should not match due to pass rule in fw
+alert http any any -> any any (http.uri; pcre:"/^\//"; urilen:1; alert; sid:999;)

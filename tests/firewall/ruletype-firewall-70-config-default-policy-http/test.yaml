@@ -22,76 +22,59 @@ checks:
     count: 1
     match:
       event_type: alert
-      alert.signature_id: 999
+      alert.signature_id: 103
 - filter:
-    count: 0
-    match:
-      event_type: alert
-      alert.signature_id: 102
-- filter:
-    count: 0
-    match:
-      event_type: alert
-      alert.signature_id: 104
-- filter:
-    count: 0
-    match:
-      event_type: alert
-      alert.signature_id: 105
-- filter:
-    count: 0
+    count: 1
     match:
       event_type: alert
       alert.signature_id: 106
 - filter:
-    count: 0
+    count: 1
     match:
       event_type: alert
       alert.signature_id: 201
 - filter:
-    count: 0
+    count: 1
     match:
       event_type: alert
       alert.signature_id: 202
 - filter:
-    count: 0
+    count: 1
     match:
       event_type: alert
       alert.signature_id: 203
 - filter:
-    count: 0
+    count: 1
     match:
       event_type: alert
       alert.signature_id: 204
 - filter:
-    count: 0
+    count: 1
     match:
       event_type: alert
       alert.signature_id: 205
 - filter:
-    count: 0
+    count: 1
     match:
       event_type: alert
       alert.signature_id: 206
 - filter:
-    count: 1
+    count: 0
     match:
       event_type: drop
-      alert.signature_id: 999
 - filter:
     count: 1
     match:
       event_type: flow
       flow.pkts_toserver: 6
       flow.pkts_toclient: 4
-      flow.state: "established"
+      flow.state: "closed"
       flow.alerted: true
-      flow.action: "drop"
 - filter:
     count: 1
     match:
       event_type: stats
-      stats.ips.accepted: 3
-      stats.ips.blocked: 7
-      stats.ips.drop_reason.rules: 1
-      stats.ips.drop_reason.flow_drop: 6
+      stats.ips.accepted: 10
+      stats.ips.blocked: 0
+      stats.ips.drop_reason.default_app_policy: 0
+      stats.ips.drop_reason.flow_drop: 0

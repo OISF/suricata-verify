@@ -5,11 +5,10 @@ accept:hook tcp:all any any -> any any (sid:100;)
 
 
 accept:hook http1:request_started any any -> any any (alert; sid:101;)
-drop:flow http1:request_line any any -> any any (sid:999; alert;)
-accept:hook http1:request_line any any -> any any (http.method; content:"GET"; alert; sid:102;)
+# default accept:hook for http1:request_line
 accept:hook http1:request_headers any any -> any any (alert; sid:103;)
-accept:hook http1:request_body any any -> any any (alert; sid:104;)
-accept:hook http1:request_trailer any any -> any any (alert; sid:105;)
+# default accept:hook for http1:request_body
+# default accept:hook for http1:request_trailer
 accept:hook http1:request_complete any any -> any any (alert; sid:106;)
 
 accept:hook http1:response_started any any -> any any (alert; sid:201;)

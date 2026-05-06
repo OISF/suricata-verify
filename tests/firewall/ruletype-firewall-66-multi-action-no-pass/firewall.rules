@@ -1,0 +1,7 @@
+# Accept TCP session setup
+accept:hook tcp:all any any -> any any (sid:100;)
+
+# Accept request_started to allow app-layer processing
+accept:hook,alert http1:request_started any any -> any any (sid:101;)
+
+accept:flow,alert http1:request_line any any -> any any (http.uri; pcre:"/^\//"; urilen:1; alert; sid:1;)

@@ -1,7 +1,7 @@
 requires:
-  min-version: 8
+  min-version: 9
   features:
-    - HAVE_JA3
+    - LIBNET1.1
 
 pcap: ../../tls/tls-client-hello-frag-01/dump_mtu300.pcap
 
@@ -10,13 +10,6 @@ args:
   - -k none
 
 checks:
-- filter:
-    count: 1
-    match:
-      event_type: alert
-      alert.signature_id: 999
-      alert.action: blocked
-      pcap_cnt: 6
 - filter:
     count: 1
     match:
@@ -32,21 +25,11 @@ checks:
       pcap_cnt: 6
       verdict.action: drop
 - filter:
-    count: 0
-    match:
-      event_type: alert
-      alert.signature_id: 1011
-- filter:
     count: 3
     match:
       event_type: alert
       alert.signature_id: 1021
       verdict.action: accept
-- filter:
-    count: 0
-    match:
-      event_type: alert
-      alert.signature_id: 1022
 - filter:
     count: 3
     match:
@@ -66,32 +49,6 @@ checks:
       event_type: alert
       alert.signature_id: 1023
       verdict.action: drop
-- filter:
-    count: 0
-    match:
-      event_type: alert
-      alert.signature_id: 102
-- filter:
-    count: 0
-    match:
-      event_type: alert
-      alert.signature_id: 103
-- filter:
-    count: 0
-    match:
-      event_type: alert
-      alert.signature_id: 104
-- filter:
-    count: 1
-    match:
-      event_type: alert
-      alert.signature_id: 105
-      verdict.action: accept
-- filter:
-    count: 57
-    match:
-      event_type: drop
-      verdict.action: drop
 # count all records with verdict field
 - filter:
     count: 6
@@ -102,6 +59,12 @@ checks:
     count: 59
     match:
       verdict.action: drop
+- filter:
+    count: 3
+    match:
+      verdict.action: drop
+      verdict.reject_target: to_client
+      verdict.reject[0]: tcp-reset
 - filter:
     count: 1
     match:
@@ -116,7 +79,8 @@ checks:
     match:
       event_type: stats
       stats.ips.accepted: 5
-      stats.ips.blocked: 57
+      stats.ips.rejected: 1
+      stats.ips.blocked: 56
       stats.ips.drop_reason.default_app_policy: 1
       stats.ips.drop_reason.rules: 0
       stats.ips.drop_reason.flow_drop: 56

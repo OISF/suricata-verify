@@ -1,0 +1,12 @@
+accept:hook udp:all $HOME_NET any <> $HOME_NET 162 (alert; sid:1;)
+
+accept:hook snmp:request_started $HOME_NET any -> $HOME_NET 162 (sid:11;)
+accept:packet snmp:request_complete $HOME_NET any -> $HOME_NET 162 (snmp.version:1; snmp.pdu_type:trap_v1; snmp.trap_type:coldstart; alert; sid:12;)
+accept:packet snmp:request_complete $HOME_NET any -> $HOME_NET 162 (snmp.version:1; snmp.pdu_type:trap_v1; snmp.trap_type:warmstart; alert; sid:13;)
+accept:packet snmp:request_complete $HOME_NET any -> $HOME_NET 162 (snmp.version:1; snmp.pdu_type:trap_v1; snmp.trap_type:linkdown; alert; sid:14;)
+accept:packet snmp:request_complete $HOME_NET any -> $HOME_NET 162 (snmp.version:1; snmp.pdu_type:trap_v1; snmp.trap_type:linkup; alert; sid:15;)
+accept:packet snmp:request_complete $HOME_NET any -> $HOME_NET 162 (snmp.version:1; snmp.pdu_type:trap_v1; snmp.trap_type:authenticationfailure; alert; sid:16;)
+# catch all to override drop:flow as default policy
+drop:packet snmp:request_complete $HOME_NET any -> $HOME_NET 162 (snmp.version:1; snmp.pdu_type:trap_v1; alert; sid:17;)
+
+# Implicit drop all else
