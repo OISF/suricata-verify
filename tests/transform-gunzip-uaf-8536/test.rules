@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"gunzip UAF repro"; http.uri; content:"/"; fast_pattern; from_base64: offset 1; gunzip: max-size 8192; content:"A"; sid:1000001; rev:2;)
