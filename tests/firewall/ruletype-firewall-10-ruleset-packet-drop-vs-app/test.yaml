@@ -18,6 +18,16 @@ checks:
       alert.action: blocked
       pcap_cnt: 6
 - filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 999
+      alert.engine: td
+      alert.action: blocked
+      pcap_cnt: 6
+- filter:
     count: 1
     match:
       event_type: alert

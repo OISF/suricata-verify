@@ -8,6 +8,12 @@ checks:
       match:
         event_type: alert
 
+  # Check that alert.engine is not logged when not in firewall mode.
+  - filter:
+      count: 0
+      match:
+        has-key: alert.engine
+
   # Check how many lines were logged to fast.log.
   - shell:
       args: cat fast.log | wc -l | xargs
