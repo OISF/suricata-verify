@@ -1,0 +1,19 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # SID 1 uses a dummy interface UUID. A missing PFC_FIRST_FRAG flag should not cause a match.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+
+  # SID 2 matches the real UUID. There are two connections with opnum 42 in the PCAP.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
