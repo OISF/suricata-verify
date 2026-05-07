@@ -1,0 +1,2 @@
+alert dcerpc any any -> any any (msg:"RAW DCERPC fake UUID + opnum 42 (BUG: should NOT match but DOES)"; flow:established,to_server; dcerpc.iface:22222222-2222-2222-2222-222222222222; dcerpc.opnum:42; sid:1;)
+alert dcerpc any any -> any any (msg:"RAW DCERPC real EPM UUID + opnum 42 (positive control)"; flow:established,to_server; dcerpc.iface:e1af8308-5d1f-11c9-91a4-08002b14a0fa; dcerpc.opnum:42; sid:2;)
