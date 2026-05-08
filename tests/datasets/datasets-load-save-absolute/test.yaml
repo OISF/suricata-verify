@@ -1,0 +1,29 @@
+requires:
+  min-version: 9
+
+  # Likely to fail on win32, so disable until testing can be done.
+  lambda: sys.platform != "win32"
+
+pcap: ../../datasets-05-state/input.pcap
+
+# Use JSON engine logging.
+args:
+  - --set logging.outputs.1.file.type=json
+
+setup:
+  - script: |
+      rm -f /tmp/suricata-verify-datasets-load-save-absolute-runtime.csv
+
+# Suricata should exit with an error on the test rule.
+exit-code: 1
+
+checks:
+  - filter:
+      filename: suricata.log
+      count: 1
+      match:
+        engine.message: "Absolute paths not allowed: /tmp/suricata-verify-datasets-load-save-absolute-runtime.csv"
+  - shell:
+      args: |
+        # Save file must not have been created.
+        test ! -e /tmp/suricata-verify-datasets-load-save-absolute-runtime.csv
