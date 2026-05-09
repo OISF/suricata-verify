@@ -1,0 +1,14 @@
+%YAML 1.1
+---
+
+stream:
+  midstream: false
+  midstream-policy: bypass
+
+outputs:
+  - eve-log:
+      enabled: true
+      filename: eve.json
+      types:
+        - flow
+        - netflow
