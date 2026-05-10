@@ -1,5 +1,5 @@
 requires:
-  min-version: 9
+  min-version: 8.0.5
 
 # After the transaction limit is exceeded, the flow must continue to
 # process subsequent commands — the anomaly should not halt parsing.
