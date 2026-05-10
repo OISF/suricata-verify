@@ -1,0 +1,13 @@
+requires:
+  features:
+    - HAVE_LUA
+  min-version: 7
+  lt-version: 8.0
+
+pcap: ../tls-issuer-zero/input.pcap
+
+args:
+- -k none
+- --set security.lua.allow-rules=true
+
+# An exit code of 0 is good enough for success, no other checks required.
