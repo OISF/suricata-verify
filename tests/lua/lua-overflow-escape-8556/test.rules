@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"PoC - Lua sandbox escape"; lua:exploit.lua; sid:1; rev:1;)
