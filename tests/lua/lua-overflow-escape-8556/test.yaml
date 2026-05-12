@@ -1,0 +1,19 @@
+requires:
+  min-version: 9
+
+pcap: ../lua-transform-01/test.pcap
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+  - --set logging.outputs.1.file.type=json
+
+exit-code: 1
+
+checks:
+  - filter:
+      filename: suricata.log
+      count: 1
+      match:
+        event_type: engine
+        engine.message.__find: "too many flowints registered"
