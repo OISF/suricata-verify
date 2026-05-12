@@ -1,0 +1,14 @@
+args:
+  - --set flow.hash-size=1
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9100001
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 9100002
