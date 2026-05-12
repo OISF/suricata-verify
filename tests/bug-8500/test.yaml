@@ -1,6 +1,6 @@
 requires:
   pcap: false
-  min-version: 9
+  min-version: 8.0.5
 
 args:
 - --engine-analysis
