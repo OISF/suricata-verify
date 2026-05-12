@@ -1,0 +1,2 @@
+alert ipv4 any any -> any any (msg:"hashaf ippair set xbit on IPv4"; content:"SETFLOW"; xbits:set,hashaf.ippair,track ip_pair; sid:9100011; rev:1;)
+alert ipv6 any any -> any any (msg:"BUG: IPv6 reused IPv4 IPPair"; content:"HITFLOW"; xbits:isset,hashaf.ippair,track ip_pair; sid:9100012; rev:1;)
