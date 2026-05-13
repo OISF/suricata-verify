@@ -19,7 +19,7 @@ checks:
       pcap_cnt: 6
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.5
     count: 1
     match:
       event_type: alert
@@ -97,6 +97,15 @@ checks:
       event_type: alert
       alert.signature_id: 105
       verdict.action: accept
+- filter:
+    requires:
+      min-version: 8.0.5
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 105
+      verdict.action: accept
+      alert.engine: fw
 - filter:
     count: 54 # 53 + 1 (drop sid 999)
     match:
