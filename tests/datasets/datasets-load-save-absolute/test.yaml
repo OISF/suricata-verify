@@ -1,5 +1,5 @@
 requires:
-  min-version: 9
+  min-version: 8.0.5
 
   # Likely to fail on win32, so disable until testing can be done.
   lambda: sys.platform != "win32"
