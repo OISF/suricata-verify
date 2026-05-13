@@ -1,6 +1,6 @@
 requires:
   os: linux
-  min-version: 9
+  min-version: 8.0.5
 
 command: |
   timeout -k 5s 30s ${SRCDIR}/src/suricata --init-errors-fatal \
