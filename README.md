@@ -190,6 +190,12 @@ checks:
         # Eg. "ftp":{"reply":["Opening BINARY mode data connection for temp.txt (1164 bytes).","Transfer complete."], }
         ftp.reply.__contains: 'Transfer complete.'
 
+  - stats:
+      # Check values in the last stats event in eve.json. Keys are relative to
+      # the stats object. Values must match exactly.
+      decoder.pkts: 42
+      decoder.ethernet: 42
+
   - shell:
       # A simple shell check. If the command exits with a non-0 exit code the
       # check will fail. The script is run in the output directory of the
