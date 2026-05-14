@@ -54,6 +54,7 @@ checks:
       stats.ips.accepted: 0
       stats.ips.blocked: 12
       stats.ips.drop_reason.stream_midstream: 1
+      stats.ips.drop_reason.exception_policy_flow_drop: 11
       stats.firewall.accepted: 12
       stats.firewall.blocked: 1
       stats.firewall.drop_reason.default_packet_policy: 0
