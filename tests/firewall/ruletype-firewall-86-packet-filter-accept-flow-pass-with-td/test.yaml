@@ -1,0 +1,27 @@
+requires:
+  min-version: 9
+
+pcap: ../../flowbit-oring/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- filter:
+    # no match expected due to `accept:flow,pass:flow`
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 100001
+- filter:
+    # no match expected due to `accept:flow,pass:flow`
+    count: 0
+    match:
+      event_type: drop
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.ips.accepted: 10
+      stats.ips.blocked: 0

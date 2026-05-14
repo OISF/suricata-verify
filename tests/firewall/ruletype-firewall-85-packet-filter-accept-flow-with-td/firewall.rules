@@ -1,0 +1,4 @@
+accept:packet arp:all any any -> any any (sid:200;)
+
+accept:hook tcp:all any any <> any 80 (flow:not_established; sid:1021;)
+accept:flow tcp:all any any <> any 80 (flow:established; sid:1023;)
