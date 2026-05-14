@@ -1,0 +1,1 @@
+alert tcp-pkt any any -> any 80 (flow:to_server,established; content:"GET"; startswith; sid:100001;)

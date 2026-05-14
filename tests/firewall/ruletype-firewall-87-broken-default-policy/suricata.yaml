@@ -1,0 +1,23 @@
+%YAML 1.1
+---
+
+# Global stats configuration
+stats:
+  enabled: yes
+  interval: 8
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - stats
+        - alert
+        - drop
+        - flow
+
+firewall:
+  policies:
+    http:
+      request-started: [ "accept:foo" ]
