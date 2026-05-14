@@ -32,11 +32,21 @@ checks:
       pcap_cnt: 28
       drop.reason: "stream midstream"
 - filter:
+    requires:
+      lt-version: 9
     count: 1
     match:
       event_type: drop
       pcap_cnt: 29
       drop.reason: "flow drop"
+- filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      event_type: drop
+      pcap_cnt: 29
+      drop.reason: "exception policy flow drop"
 - filter:
     count: 26
     match:
