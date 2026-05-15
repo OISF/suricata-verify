@@ -1,0 +1,35 @@
+%YAML 1.1
+---
+
+stats:
+  enabled: yes
+  interval: 8
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - stats
+        - alert
+        - drop
+        - flow
+        - http
+
+firewall:
+  policies:
+    packet-filter: ["accept:hook"]
+    http:
+      request-started: ["accept:hook"]
+      request-line: ["accept:hook"]
+      request-headers: ["accept:hook"]
+      request-body: ["accept:hook"]
+      request-trailer: ["accept:hook"]
+      request-complete: ["accept:tx"]
+      response-started: ["accept:hook"]
+      response-line: ["accept:hook"]
+      response-headers: ["accept:hook"]
+      response-body: ["accept:hook"]
+      response-trailer: ["accept:hook"]
+      response-complete: ["accept:hook"]
