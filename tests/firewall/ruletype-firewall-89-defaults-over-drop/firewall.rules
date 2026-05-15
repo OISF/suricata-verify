@@ -1,0 +1,3 @@
+accept:hook tcp:all any any -> any any (sid:100;)
+
+drop:flow http1:request_line any any -> any any (http.uri; content:"/bar"; alert; sid:5002;)
