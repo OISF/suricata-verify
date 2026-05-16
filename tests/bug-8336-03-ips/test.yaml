@@ -3,7 +3,7 @@ pcap: ../bug-8336-01-default-track-only/input.pcap
 requires:
   features:
     - HAVE_JA3
-  min-version: 9
+  min-version: 8.0.5
 
 args:
   - -k none
