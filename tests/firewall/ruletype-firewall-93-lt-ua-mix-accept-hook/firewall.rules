@@ -1,0 +1,7 @@
+# Packet rules
+
+accept:hook tcp:all any any -> any any (sid:100;)
+# default drop
+
+accept:hook http1:request_line any any -> any any (http.method; content:"GET"; alert; sid:9998;)
+accept:hook http1:<request_headers any any -> any any (http.user_agent; content:"curl"; alert; sid:9999;)
