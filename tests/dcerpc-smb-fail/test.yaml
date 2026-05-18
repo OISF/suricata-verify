@@ -47,3 +47,67 @@ checks:
     count: 1
     match:
       event_type: stats
+- filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      event_type: dcerpc
+      dcerpc.interfaces[0].service: "netlogon"
+      dcerpc.interfaces[0].procedure: "NetrServerPasswordSet2"
+- filter:
+    requires:
+      min-version: 9
+    count: 719
+    match:
+      event_type: dcerpc
+      dcerpc.interfaces[0].service: "netlogon"
+      dcerpc.interfaces[0].procedure: "NetrServerAuthenticate2"
+- filter:
+    requires:
+      min-version: 9
+    count: 719
+    match:
+      event_type: dcerpc
+      dcerpc.interfaces[0].service: "netlogon"
+      dcerpc.interfaces[0].procedure: "NetrServerReqChallenge"
+- filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      event_type: dcerpc
+      dcerpc.interfaces[0].service: "drsuapi"
+      dcerpc.interfaces[0].procedure: "DRSDomainControllerInfo"
+- filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      event_type: dcerpc
+      dcerpc.interfaces[0].service: "drsuapi"
+      dcerpc.interfaces[0].procedure: "DRSGetNCChanges"
+- filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      event_type: dcerpc
+      dcerpc.interfaces[0].service: "drsuapi"
+      dcerpc.interfaces[0].procedure: "DRSCrackNames"
+- filter:
+    requires:
+      min-version: 9
+    count: 2
+    match:
+      event_type: dcerpc
+      dcerpc.interfaces[0].service: "drsuapi"
+      dcerpc.interfaces[0].procedure: "DRSBind"
+- filter:
+    requires:
+      min-version: 9
+    count: 2
+    match:
+      event_type: dcerpc
+      dcerpc.interfaces[0].service: "epmapper"
+      dcerpc.interfaces[0].procedure: "ept_map"
