@@ -18,3 +18,69 @@ checks:
         dcerpc.request: REQUEST
         dcerpc.interfaces[0].uuid: "367abb81-9844-35f1-ad32-98f038001003"
         dcerpc.call_id: 20
+
+  - filter:
+      requires:
+        min-version: 9
+      count: 6
+      match:
+        event_type: dcerpc
+        dcerpc.interfaces[0].service: "svcctl"
+        dcerpc.interfaces[0].procedure: "CloseServiceHandle"
+  - filter:
+      requires:
+        min-version: 9
+      count: 3
+      match:
+        event_type: dcerpc
+        dcerpc.interfaces[0].service: "svcctl"
+        dcerpc.interfaces[0].procedure: "OpenServiceW"
+  - filter:
+      requires:
+        min-version: 9
+      count: 2
+      match:
+        event_type: dcerpc
+        dcerpc.interfaces[0].service: "svcctl"
+        dcerpc.interfaces[0].procedure: "OpenSCManagerW"
+  - filter:
+      requires:
+        min-version: 9
+      count: 1
+      match:
+        event_type: dcerpc
+        dcerpc.interfaces[0].service: "svcctl"
+        dcerpc.interfaces[0].procedure: "ControlService"
+  - filter:
+      requires:
+        min-version: 9
+      count: 1
+      match:
+        event_type: dcerpc
+        dcerpc.interfaces[0].service: "svcctl"
+        dcerpc.interfaces[0].procedure: "DeleteService"
+  - filter:
+      requires:
+        min-version: 9
+      count: 1
+      match:
+        event_type: dcerpc
+        dcerpc.interfaces[0].service: "svcctl"
+        dcerpc.interfaces[0].procedure: "CreateServiceWOW64W"
+  - filter:
+      requires:
+        min-version: 9
+      count: 4
+      match:
+        event_type: dcerpc
+        dcerpc.interfaces[0].service: "svcctl"
+        dcerpc.interfaces[0].procedure: "QueryServiceStatus"
+  - filter:
+      requires:
+        min-version: 9
+      count: 1
+      match:
+        event_type: dcerpc
+        dcerpc.interfaces[0].service: "svcctl"
+        dcerpc.interfaces[0].procedure: "StartServiceW"
+
