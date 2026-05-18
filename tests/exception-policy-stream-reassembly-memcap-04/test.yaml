@@ -1,6 +1,6 @@
 requires:
   min-version: 7.0.16
-  lt-version: 9
+  lt-version: 8.0.6
   features:
     - QA_SIMULATION
 pcap: ../tls/tls-certs-alert/input.pcap

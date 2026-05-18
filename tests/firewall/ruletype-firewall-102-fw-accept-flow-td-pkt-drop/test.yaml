@@ -1,5 +1,5 @@
 requires:
-  min-version: 9
+  min-version: 8.0.6
 
 pcap: ../../tls/tls-client-hello-frag-01/dump_mtu300.pcap
 
