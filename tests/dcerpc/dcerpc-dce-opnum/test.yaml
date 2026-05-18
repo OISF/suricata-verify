@@ -29,3 +29,11 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 3
+  - filter:
+      requires:
+        min-version: 9
+      count: 1
+      match:
+        event_type: dcerpc
+        dcerpc.interfaces[0].service: "mgmt"
+        dcerpc.interfaces[0].procedure: "inq_princ_name"

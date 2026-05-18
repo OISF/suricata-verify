@@ -35,3 +35,28 @@ checks:
       event_type: alert
       alert.signature_id: 3
       pcap_cnt: 16
+- filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      event_type: dcerpc
+      dcerpc.interfaces[0].service: "winreg"
+      dcerpc.interfaces[0].procedure: "OpenLocalMachine"
+- filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      event_type: dcerpc
+      dcerpc.interfaces[0].service: "winreg"
+      dcerpc.interfaces[0].procedure: "BaseRegOpenKey"
+- filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      event_type: dcerpc
+      dcerpc.interfaces[0].service: "winreg"
+      dcerpc.interfaces[0].procedure: "BaseRegSetValue"
+
