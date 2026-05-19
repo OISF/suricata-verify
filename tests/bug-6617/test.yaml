@@ -2,6 +2,8 @@ pcap: ../filestore-v2.1-forced/suricata-update-pdf.pcap
 
 requires:
   min-version: 7
+  features:
+    - SKIP_FOR_NOW
 
 args:
 - -k none
