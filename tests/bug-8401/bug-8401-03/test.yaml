@@ -1,0 +1,19 @@
+requires:
+  min-version: 9
+
+args:
+  - --runmode=single
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.thresholds.max_bucket_depth: 0
+        stats.detect.thresholds.avg_bucket_depth: 0
