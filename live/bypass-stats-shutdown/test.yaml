@@ -1,0 +1,21 @@
+requires:
+  min-version: 8
+  os: linux
+  features:
+    - AF_PACKET
+files:
+  - ebpf/bypass_filter.bpf
+  
+args:
+- --set af-packet.0.ebpf-filter-file=${SRCDIR}/ebpf/bypass_filter.bpf
+- --set af-packet.0.bypass=yes
+- --set flow-timeouts.tcp.bypassed=100
+
+live-shutdown-after: 5
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: stats
+        not-has-key: stats.flow_bypassed.pkts
