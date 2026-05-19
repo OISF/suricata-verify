@@ -1,0 +1,13 @@
+alert imap any any -> any any (imap.request; content:"CAPABILITY"; sid:1; rev:1;)
+alert imap any any -> any any (imap.response; content:"OK IMAP server ready"; sid:2; rev:1;)
+alert imap any any -> any any (email.body; content:"Hello"; sid:3; rev:1;)
+alert imap any any -> any any (email.header; content:"from:"; content:"digitalinvestigator"; sid:4; rev:1;)
+alert imap any any -> any any (email.header.name; content:"subject"; sid:5; rev:1;)
+alert imap any any -> any any (email.header.value; content:"Thunderbird"; sid:6; rev:1;)
+alert imap any any -> any any (email.from; content:"digitalinvestigator"; sid:7; rev:1;)
+alert imap any any -> any any (email.to; content:"napier"; sid:8; rev:1;)
+alert imap any any -> any any (email.cc; content:"hotmail"; sid:9; rev:1;)
+alert imap any any -> any any (email.command; content:"fetch"; sid:10; rev:1;)
+alert imap any any -> any any (flow:to_client; frame:pdu; content:"OK IMAP"; sid:11; rev:1;)
+alert imap any any -> any any (flow:to_server; frame:pdu; content:"1 capability"; sid:12; rev:1;)
+
