@@ -1,0 +1,107 @@
+mode: [afp]
+
+before: |
+  cp ${TESTDIR}/firewall1.rules ${OUTDIR}/firewall.rules
+
+  # It can take a while to build containers the first time which
+  # means the client or server script could start early. So we'll
+  # build both containers here.
+  podman build --iidfile=${OUTDIR}/server.iid --network=host server
+  podman build --iidfile=${OUTDIR}/client.iid --network=host client
+
+server: |
+  podman run --rm --cap-add=NET_RAW --network ns:/var/run/netns/server \
+      -v ${OUTDIR}:/out:rw \
+      $(cat ${OUTDIR}/server.iid) \
+      /server.sh
+
+client: |
+  errors="no"
+
+  iid=$(cat ${OUTDIR}/client.iid)
+  run() {
+    echo "Running: $@"
+    podman run --rm --cap-add=NET_RAW --network ns:/var/run/netns/client ${iid} "$@"
+  }
+
+  # Curl request should not succeed.
+  echo "Running curl..."
+  if run timeout --kill-after=30 --preserve-status 15 curl -O http://10.200.0.1/index.html; then
+    echo "error: curl should not have completed successfully"
+    errors="yes"
+  fi
+
+  # Wget request should succeed.
+  echo "Running wget..."
+  if ! run timeout --kill-after=30 --preserve-status 15 wget http://10.200.0.1/index.html; then
+    echo "error: wget should have completed successfully"
+    errors="yes"
+  fi
+
+  # Ping should not succeed.
+  echo "Running ping..."
+  if run ping -c 10 10.200.0.1; then
+    echo "error: ping should have failed"
+    errors="yes"
+  fi
+
+  cp ${TESTDIR}/firewall2.rules ${OUTDIR}/firewall.rules
+  ${SURICATASC} -c reload-rules ${OUTDIR}/suricata.socket
+
+  # Give stats some time to get updated. Is this needed?
+  sleep 10
+
+  # Wget request should succeed.
+  if ! run timeout --kill-after=30 --preserve-status 15 wget http://10.200.0.1/index.html; then
+    echo "error: wget should have completed successfully"
+    errors="yes"
+  fi
+
+  if [ "${errors}" = "yes" ]; then
+    exit 1
+  fi
+
+checks:
+  - filter:
+      count: 2
+      match:
+        alert.signature_id: 101
+
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 102
+
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 201
+
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 202
+
+  # Accepted packets should be non-0.
+  - shell:
+      args: |
+        n=$(jq -c 'select(.event_type == "stats")' ./eve.json | tail -n1 | jq '.stats.ips.accepted')
+        test "${n}" -ne 0
+
+  # Blocked packets should be 10 or more.
+  - shell:
+      args: |
+        n=$(jq -c 'select(.event_type == "stats")' ./eve.json | tail -n1 | jq '.stats.ips.blocked')
+        test "${n}" -gt 9
+
+  # Kernel packets should be non-0.
+  - shell:
+      args: |
+        n=$(jq -c 'select(.event_type == "stats")' ./eve.json | tail -n1 | jq '.stats.capture.kernel_packets')
+        test "${n}" -ne 0
+
+  # We should not have seen any pings on the server side packet capture.
+  - shell:
+      args: |
+        pings=$(jq -c '.[]' ./tshark-server.json|jq 'select(._source.layers.icmp."icmp.type"=="8")'|wc -l)
+        test "${pings}" -eq 0

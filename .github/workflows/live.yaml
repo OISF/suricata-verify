@@ -1,0 +1,108 @@
+name: Live Tests
+
+on:
+  workflow_dispatch:
+  push:
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  DEBIAN_FRONTEND: "noninteractive"
+
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:24.04
+      options: --privileged
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+
+      - name: Install dependencies
+        run: |
+          apt update
+          apt install -y \
+            autoconf \
+            automake \
+            build-essential \
+            cargo \
+            cbindgen \
+            ethtool \
+            fuse-overlayfs \
+            git \
+            inetutils-ping \
+            iproute2 \
+            iptables \
+            jq \
+            libcap-ng-dev \
+            libcap-ng0 \
+            libevent-dev \
+            libhiredis-dev \
+            libjansson-dev \
+            liblua5.1-dev \
+            libmagic-dev \
+            libnet1-dev \
+            libnetfilter-queue-dev \
+            libnetfilter-queue1 \
+            libnfnetlink-dev \
+            libnfnetlink0 \
+            libnss3-dev \
+            libpcap-dev \
+            libpcre2-dev \
+            libpcre3 \
+            libpcre3-dev \
+            libssl-dev \
+            libtool \
+            libyaml-0-2 \
+            libyaml-dev \
+            make \
+            podman \
+            procps \
+            python3 \
+            python3-yaml \
+            rustc \
+            slirp4netns \
+            software-properties-common \
+            uidmap \
+            zlib1g \
+            zlib1g-dev
+
+      - run: |
+          apt-get install -y caddy tshark
+
+      - name: Enable Podman in Docker
+        run: |
+          cat > /etc/containers/containers.conf <<'EOF'
+          [containers]
+          cgroups = "disabled"
+          events_logger = "file"
+          EOF
+
+      - name: Clone Suricata
+        run: |
+          git clone https://github.com/OISF/suricata
+
+      - name: Build Suricata
+        working-directory: suricata
+        run: |
+          ./autogen.sh
+          ./configure --enable-nfqueue --enable-debug
+          make -j$(nproc)
+
+      - name: Run live tests
+        run: |
+          ../live/run.py run
+        working-directory: suricata
+
+      - name: Upload live test outputs artifact on failure
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
+        with:
+          name: live-test-output
+          path: live/tests/**/output/**
+          if-no-files-found: ignore
