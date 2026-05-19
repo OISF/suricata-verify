@@ -42,7 +42,6 @@ checks:
       engines[1].matches[2].name: "content"
 - filter:
     filename: rules.json
-    filename: rules.json
     count: 1
     match:
       id: 3

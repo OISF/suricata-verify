@@ -28,8 +28,7 @@ checks:
       count: 1
       match:
         event_type: flow
-        not-has-key: flow.exception_policy[0].target
-        not-has-key: flow.exception_policy[0].policy
+        not-has-key: ["flow.exception_policy[0].target", "flow.exception_policy[0].policy"]
   - filter:
     #min-version: 7.0.12 temporary removal
       count: 1

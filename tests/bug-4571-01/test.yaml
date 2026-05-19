@@ -12,7 +12,6 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 1
-        pkt_src: wire/pcap
         proto: TCP
         pkt_src: ipv4 tunnel
         src_ip: 10.1.0.3
