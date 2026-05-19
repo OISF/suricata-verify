@@ -1,0 +1,10 @@
+min-version: 9
+
+pcap: ../detect-xor-key-01/input.pcap
+args:
+  - -k none
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert

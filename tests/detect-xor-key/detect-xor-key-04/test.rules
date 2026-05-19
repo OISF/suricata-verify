@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"XOR nonexistent variable"; http.request_body; xor:var "no_such_var"; content:"test"; sid:1;)
