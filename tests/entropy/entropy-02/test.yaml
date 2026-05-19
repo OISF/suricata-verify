@@ -1,0 +1,93 @@
+requires:
+  min-version: 9
+
+pcap: ../entropy-01/input.pcap
+
+args:
+  - --set logging.entropy.make-unique=on
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        metadata.entropy[0]: {"sid":1,"buffer":"file_data","instance":1,"value":4.137370175000773}
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        metadata.entropy[1]: {"sid":2,"buffer":"file_data","instance":1,"value":4.137370175000773}
+
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 3
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
+        metadata.entropy[3]: {"sid":4,"buffer":"file_data","instance":1,"value":4.137370175000773}
+
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 5
+
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 6
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 7
+        metadata.entropy[6]: {"sid":7,"buffer":"file_data","instance":1,"value":4.137370175000773}
+
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 8
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 10
+        metadata.entropy[8]: {"sid":10,"buffer":"file_data","instance":1,"value":4.150007324019584}
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 11
+        metadata.entropy[9]: {"sid":11,"buffer":"file_data","instance":1,"value":4.137370175000773}
+        metadata.entropy[10]: {"sid":11,"buffer":"file_data","instance":2,"value":4.150007324019584}
+
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_ip: 10.92.95.2
+        dest_ip: 10.92.67.138
+        flow.pkts_toserver: 5
+        flow.pkts_toclient: 5
+        metadata.entropy[0]: {"sid":1,"buffer":"file_data","instance":1,"value":4.137370175000773}
+        metadata.entropy[1]: {"sid":2,"buffer":"file_data","instance":1,"value":4.137370175000773}
+        metadata.entropy[2]: {"sid":3,"buffer":"file_data","instance":1,"value":4.137370175000773}
+        metadata.entropy[3]: {"sid":4,"buffer":"file_data","instance":1,"value":4.137370175000773}
+        metadata.entropy[4]: {"sid":5,"buffer":"file_data","instance":1,"value":4.137370175000773}
+        metadata.entropy[5]: {"sid":6,"buffer":"file_data","instance":1,"value":4.137370175000773}
+        metadata.entropy[6]: {"sid":7,"buffer":"file_data","instance":1,"value":4.137370175000773}
+        metadata.entropy[7]: {"sid":8,"buffer":"file_data","instance":1,"value":4.137370175000773}
+        metadata.entropy[8]: {"sid":10,"buffer":"file_data","instance":1,"value":4.150007324019584}
