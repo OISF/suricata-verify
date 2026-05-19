@@ -1,5 +1,5 @@
 requires:
-  min-version: 9
+    min-version: 9
 
 pcap: false
 
@@ -13,4 +13,4 @@ checks:
       count: 1
       match:
         log_level: Error
-        engine.message: "invalid flowbit command combination in the same signature: toggle and unset"
+        engine.message.__find: "Cyclic dependency found between flowbits from signatures"
