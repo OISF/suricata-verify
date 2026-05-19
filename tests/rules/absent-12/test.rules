@@ -1,0 +1,10 @@
+# must_error cross-buffer with a transform on the following buffer
+
+# strict decode error -> must_error matches; dotprefix + content on http.host matches -> alert
+alert http any any -> any any (msg:"must_error then transform match"; flow:established,to_server; http.uri; content:"/?arg=Zm 9v Ym Fy"; from_base64: offset 6, mode strict; absent: must_error; http.host; dotprefix; content:".localhost"; endswith; sid:1; rev:1;)
+
+# rfc2045 decode succeeds -> must_error fails -> no alert
+alert http any any -> any any (msg:"must_error then transform no error"; flow:established,to_server; http.uri; content:"/?arg=Zm 9v Ym Fy"; from_base64: offset 6, mode rfc2045; absent: must_error; http.host; dotprefix; content:".localhost"; endswith; sid:2; rev:1;)
+
+# strict decode error -> must_error matches; dotprefix + content on http.host does not match -> no alert
+alert http any any -> any any (msg:"must_error then transform host miss"; flow:established,to_server; http.uri; content:"/?arg=Zm 9v Ym Fy"; from_base64: offset 6, mode strict; absent: must_error; http.host; dotprefix; content:".evil.com"; endswith; sid:3; rev:1;)

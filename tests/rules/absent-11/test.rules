@@ -1,0 +1,12 @@
+# must_error on one buffer, content on another buffer (cross-buffer)
+
+# strict mode: decode error on http.uri -> must_error matches;
+# http.host content matches -> alert
+alert http any any -> any any (msg:"must_error cross-buffer alert"; flow:established,to_server; http.uri; content:"/?arg=Zm 9v Ym Fy"; from_base64: offset 6, mode strict; absent: must_error; http.host; content:"localhost"; sid:1; rev:1;)
+
+# rfc2045 mode: decode succeeds on http.uri -> must_error does not match -> no alert
+alert http any any -> any any (msg:"must_error cross-buffer no error"; flow:established,to_server; http.uri; content:"/?arg=Zm 9v Ym Fy"; from_base64: offset 6, mode rfc2045; absent: must_error; http.host; content:"localhost"; sid:2; rev:1;)
+
+# strict mode: decode error on http.uri -> must_error matches;
+# http.host content does not match -> no alert
+alert http any any -> any any (msg:"must_error cross-buffer host miss"; flow:established,to_server; http.uri; content:"/?arg=Zm 9v Ym Fy"; from_base64: offset 6, mode strict; absent: must_error; http.host; content:"evil.com"; sid:3; rev:1;)

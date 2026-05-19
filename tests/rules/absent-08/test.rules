@@ -1,0 +1,2 @@
+# or_else with a non-failing transform should load successfully
+alert dns any any -> any any (msg:"or_else with dotprefix"; dns.query; dotprefix; absent: or_else; content:".example.com"; sid:1;)

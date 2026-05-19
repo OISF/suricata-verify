@@ -1,0 +1,14 @@
+# When from_base64 fails, the original buffer is preserved.
+# Content keywords match against the original (un-decoded) data.
+
+# SID 1: decode fails, content found in original data -- should alert
+alert http any any -> any any (msg:"from_base64 error passthrough match"; \
+    flow:established,to_server; http.request_body; from_base64; content:"not-base64"; sid:1; rev:1;)
+
+# SID 2: decode succeeds, content found in decoded data -- should alert
+alert http any any -> any any (msg:"from_base64 success content match"; \
+    flow:established,to_server; http.request_body; from_base64; content:"decoded-content"; sid:2; rev:1;)
+
+# SID 3: decode fails, content NOT in original data -- should not alert
+alert http any any -> any any (msg:"from_base64 error no match"; \
+    flow:established,to_server; http.request_body; from_base64; content:"missing"; sid:3; rev:1;)
