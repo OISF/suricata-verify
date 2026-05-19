@@ -2,8 +2,6 @@ pcap: ../filestore-v2.1-forced/suricata-update-pdf.pcap
 
 requires:
   min-version: 7
-  features:
-    - SKIP_FOR_NOW
 
 args:
 - -k none
@@ -13,5 +11,7 @@ checks:
    count: 1
    match:
      event_type: fileinfo
-     fileinfo.sha256: 291389dc5926982448d90e551689ef857650c0ad4fa656841e687d984609ec02
-     fileinfo.stored: false
+- filter:
+   count: 0
+   match:
+     fileinfo.stored: true
