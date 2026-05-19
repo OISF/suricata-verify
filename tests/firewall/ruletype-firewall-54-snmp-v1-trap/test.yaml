@@ -49,6 +49,8 @@ checks:
       flow.state: "new"
       flow.alerted: true
 - filter:
+    requires:
+      lt-version: 9
     count: 1
     match:
       event_type: stats

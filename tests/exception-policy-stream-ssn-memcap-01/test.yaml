@@ -23,10 +23,12 @@ checks:
         event_type: drop
         drop.reason: "stream memcap"
   - filter:
+      requires:
+        min-version: 9
       count: 31
       match:
         event_type: drop
-        drop.reason: "flow drop"
+        drop.reason: "exception policy flow drop"
   - filter:
       count: 0
       match:
@@ -48,10 +50,13 @@ checks:
         flow.action: drop
   - filter:
     #min-version: 7 temporary removal
+      requires:
+        min-version: 9
       count: 1
       match:
         event_type: stats
         stats.ips.drop_reason.stream_memcap: 1
+        stats.ips.drop_reason.exception_policy_flow_drop: 31
   - filter:
     #min-version: 7.0.12 temporary removal
       count: 1
