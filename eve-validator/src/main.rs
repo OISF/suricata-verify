@@ -48,8 +48,7 @@ fn validate_instances(instances: &[PathBuf], schema: PathBuf, quiet: bool) -> Bo
     match JSONSchema::compile(&schema_json) {
         Ok(schema) => {
             for instance in instances {
-                let instance_path_name = instance.to_str().unwrap();
-                let file = File::open(instance_path_name)?;
+                let file = File::open(instance)?;
                 let reader = BufReader::new(file);
                 let deserializer = serde_json::Deserializer::from_reader(reader);
                 let iterator = deserializer.into_iter::<serde_json::Value>();
@@ -62,7 +61,7 @@ fn validate_instances(instances: &[PathBuf], schema: PathBuf, quiet: bool) -> Bo
                         Err(errors) => {
                             success = false;
                             success_i = false;
-                            println!("{} - INVALID. Errors:", instance_path_name);
+                            println!("{} - INVALID. Errors:", instance.display());
                             for (i, e) in errors.enumerate() {
                                 println!("{}.{} {}", i + 1, e.instance_path, e);
                             }
@@ -70,7 +69,7 @@ fn validate_instances(instances: &[PathBuf], schema: PathBuf, quiet: bool) -> Bo
                     }
                 }
                 if success_i && !quiet {
-                    println!("{} - VALID", instance_path_name);
+                    println!("{} - VALID", instance.display());
                 }
             }
         }
