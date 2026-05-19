@@ -1,0 +1,45 @@
+requires:
+  min-version: 9.0.0
+
+checks:
+# Packet 4 is a DHCP OFFER carrying Option Overload (52) value 2, which
+# means the BOOTP sname field holds extra options. The fix exposes
+# dns_servers and routers parsed out of sname.
+- filter:
+    count: 1
+    match:
+      event_type: dhcp
+      pcap_cnt: 4
+      dhcp.dhcp_type: offer
+      dhcp.dns_servers[0]: 10.100.0.2
+      dhcp.routers[0]: 10.100.0.2
+
+# Packet 7 is a DHCP ACK with the same overloaded sname options.
+- filter:
+    count: 1
+    match:
+      event_type: dhcp
+      pcap_cnt: 7
+      dhcp.dhcp_type: ack
+      dhcp.dns_servers[0]: 10.100.0.2
+      dhcp.routers[0]: 10.100.0.2
+
+# Sanity check that the parallel non-overloaded OFFER and ACK in the
+# same pcap still surface their inline option values unchanged.
+- filter:
+    count: 1
+    match:
+      event_type: dhcp
+      pcap_cnt: 3
+      dhcp.dhcp_type: offer
+      dhcp.dns_servers[0]: 10.100.0.1
+      dhcp.routers[0]: 10.100.0.1
+
+- filter:
+    count: 1
+    match:
+      event_type: dhcp
+      pcap_cnt: 8
+      dhcp.dhcp_type: ack
+      dhcp.dns_servers[0]: 10.100.0.1
+      dhcp.routers[0]: 10.100.0.1
