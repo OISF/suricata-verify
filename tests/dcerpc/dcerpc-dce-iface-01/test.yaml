@@ -17,4 +17,6 @@ checks:
         event_type: dcerpc
         dcerpc.request: REQUEST
         dcerpc.interfaces[0].uuid: "367abb81-9844-35f1-ad32-98f038001003"
+        dcerpc.interfaces[0].service: "svcctl"
+        dcerpc.interfaces[0].procedure: "CloseServiceHandle"
         dcerpc.call_id: 20
