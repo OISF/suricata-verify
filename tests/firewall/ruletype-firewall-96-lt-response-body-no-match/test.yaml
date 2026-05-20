@@ -1,0 +1,13 @@
+requires:
+  min-version: 9
+
+pcap: ../../flowbit-oring/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+  - stats:
+      ips.accepted: 5
+      ips.blocked: 5
