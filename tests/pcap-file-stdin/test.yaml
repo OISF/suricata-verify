@@ -1,0 +1,24 @@
+requires:
+  min-version: 9
+
+# Override the default invocation to feed input.pcap to Suricata via stdin
+# instead of via -r path. /dev/stdin is non-seekable, which is the path the
+# fix on OISF/suricata PR #15384 exercises. Without that fix InitPcapFile
+# calls setvbuf on the FILE underlying the pcap handle after libpcap has
+# already consumed the pcap header, glibc cannot recover on a non-seekable
+# fd, and the first pcap_next_ex returns -1.
+command: |
+  cat ${TEST_DIR}/input.pcap | ${SRCDIR}/src/suricata \
+      -c ${SRCDIR}/suricata.yaml \
+      -r /dev/stdin \
+      -S ${TEST_DIR}/test.rules \
+      -l ${OUTPUT_DIR} \
+      --set classification-file="${SRCDIR}/etc/classification.config" \
+      --set reference-config-file="${SRCDIR}/etc/reference.config"
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1

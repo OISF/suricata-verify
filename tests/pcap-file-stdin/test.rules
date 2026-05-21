@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"BUG8464 pcap-file stdin payload"; content:"BUG8464-pcap-file-stdin-regress"; sid:1; rev:1;)
