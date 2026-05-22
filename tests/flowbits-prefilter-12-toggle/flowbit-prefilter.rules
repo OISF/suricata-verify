@@ -1,5 +1,5 @@
-alert tcp any any -> any any (flow:to_client; content:"HTTP"; flowbits:toggle,rare; flowbits:toggle,common; sid:11;)
-alert tcp any any -> any any (dsize:10; flowbits:set,never; flowbits:toggle,common; sid:12;)
+alert tcp any any -> any any (flow:to_client; content:"HTTP"; flowbits:set,rare; flowbits:set,common; sid:11;)
+alert tcp any any -> any any (dsize:10; flowbits:set,never; flowbits:unset,common; sid:12;)
 alert tcp any any -> any any (flowbits:isset,never; sid:21;)
 alert tcp any any -> any any (flowbits:isset,common; prefilter; dsize:259; sid:22;)
 alert tcp any any -> any any (flowbits:isset,never; prefilter; dsize:10; sid:23;)
