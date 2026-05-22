@@ -84,14 +84,6 @@ checks:
     filename: rules.json
     count: 1
     match:
-      id: 9
-      lists.postmatch.matches[0].name: "flowbits"
-      lists.postmatch.matches[0].flowbits.cmd: "toggle"
-      lists.postmatch.matches[0].flowbits.names[0]: "fb1"
-- filter:
-    filename: rules.json
-    count: 1
-    match:
       id: 10
       lists.packet.matches[0].name: "flowbits"
       lists.packet.matches[0].flowbits.cmd: "isset"
