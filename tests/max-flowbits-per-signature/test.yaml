@@ -1,0 +1,13 @@
+requires:
+  min-version: 9
+
+pcap: ../flowbit-oring/input.pcap
+
+exit-code: 1
+
+checks:
+  - filter:
+      count: 1
+      match:
+        log_level: Error
+        engine.message: "rule 1: too many flowbits (max 2 per signature)"
