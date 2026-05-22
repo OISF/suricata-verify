@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"Exact host /32"; ip.src; dataset:isset,host32,type cidr,load host32.lst; sid:1;)
