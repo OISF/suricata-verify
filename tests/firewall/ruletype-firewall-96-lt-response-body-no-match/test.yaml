@@ -10,4 +10,6 @@ args:
 checks:
   - stats:
       ips.accepted: 5
-      ips.blocked: 5
+      ips.blocked: 0
+      firewall.accepted: 5
+      firewall.blocked: 5

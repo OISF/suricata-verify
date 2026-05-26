@@ -36,6 +36,10 @@ checks:
       stats.ips.accepted: 62
       stats.ips.blocked: 0
       stats.ips.rejected: 0
-      stats.ips.drop_reason.default_packet_policy: 0
-      stats.ips.drop_reason.default_app_policy: 0
       stats.ips.drop_reason.flow_drop: 0
+      stats.firewall.accepted: 62
+      stats.firewall.blocked: 0
+      stats.firewall.rejected: 0
+      stats.firewall.drop_reason.default_packet_policy: 0
+      stats.firewall.drop_reason.default_app_policy: 0
+      stats.firewall.drop_reason.flow_drop: 0

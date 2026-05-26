@@ -134,4 +134,4 @@ checks:
       stats.firewall.blocked: 7
       stats.firewall.drop_reason.rules: 1
       stats.firewall.drop_reason.flow_drop: 6
-      stats.firewall.discarded_alerts: 5
+      stats.firewall.discarded_alerts: 0
