@@ -1,1 +1,1 @@
-drop:flow tcp:flow_start any any -> any any (flags:S; sid:100;)
+drop:flow tcp:flow_start any any -> any any (flags:S; alert; sid:100;)
