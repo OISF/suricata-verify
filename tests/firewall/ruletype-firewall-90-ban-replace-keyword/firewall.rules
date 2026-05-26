@@ -1,0 +1,2 @@
+# should error out, as 'replace' is not allowed in firewall mode
+accept:hook http1:request_started any any -> any any (msg:"Test replace keyword with firewall rules or mode"; content:"foo"; replace:"bar"; sid:2000001;)
