@@ -1,0 +1,4 @@
+accept:hook udp:all any any -> any any (sid:100;)
+
+# Accept DNS requests for dropbox.
+accept:hook dns:request_complete any any -> any any (dns.query; content:"dropbox"; sid:102;)

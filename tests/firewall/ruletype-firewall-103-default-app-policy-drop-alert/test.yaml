@@ -1,0 +1,27 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+
+- filter:
+    count: 1
+    match:
+      event_type: drop
+      pcap_cnt: 3
+      drop.reason: "default app policy"
+
+- stats:
+    ips.blocked: 2
+    ips.accepted: 2
+
+- filter:
+    count: 1
+    match:
+      event_type: alert
+
