@@ -1,0 +1,2 @@
+# should error out, as 'replace' is not allowed in firewall mode
+alert http any any -> any any (msg:"Test replace keyword with firewall rules"; content:"foo"; replace:"bar"; sid:2000001;)

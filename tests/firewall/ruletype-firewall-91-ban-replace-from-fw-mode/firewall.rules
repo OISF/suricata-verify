@@ -1,0 +1,1 @@
+accept:hook tcp:all any any -> any any (msg:"Simple firewall rule."; sid: 1;)
