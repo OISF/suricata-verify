@@ -1,0 +1,14 @@
+# Packet rules
+
+accept:flow,pass:flow tcp:all $HOME_NET any <> $EXTERNAL_NET 443 (flow:established; dsize:>64; sid:1024;)
+# allow session setup
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET 443 (flow:not_established; sid:1021;)
+# allow rest of the flow to 
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET 443 (flow:established; sid:1023;)
+
+# default drop
+
+
+# App-layer rules
+
+# no rules needed due to sid 1024 accept:flow
