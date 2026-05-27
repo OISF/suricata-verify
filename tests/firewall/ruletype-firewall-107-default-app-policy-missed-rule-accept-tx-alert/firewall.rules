@@ -1,0 +1,6 @@
+accept:hook tcp:all any any -> any any (sid:100;)
+
+# Our PCAP has a GET, so this fast_pattern selects this as a candidate.
+# However, this PCAP does not have a POST, so it never matches.
+# We expect the default policy to take over, which is accept:tx,alert.
+accept:hook http1:request_line any any -> any any (http.method; content:"GET"; fast_pattern; content:"POST"; sid:102;)
