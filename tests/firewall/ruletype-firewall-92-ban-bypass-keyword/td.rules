@@ -1,0 +1,2 @@
+# should error out, as 'bypass' is not allowed in firewall mode
+alert http any any -> any any (msg:"Test bypass keyword with firewall mode"; bypass; sid:2000001;)
