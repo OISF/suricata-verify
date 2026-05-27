@@ -1,0 +1,1 @@
+accept:hook,alert http1:request_started any any -> any any (sid:101;)
