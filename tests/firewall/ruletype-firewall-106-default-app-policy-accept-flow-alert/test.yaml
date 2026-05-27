@@ -1,0 +1,16 @@
+requires:
+  min-version: 9
+
+pcap: ../../flowbit-oring/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+
+# We should have one http request.
+- filter:
+    count: 1
+    match:
+      event_type: http
