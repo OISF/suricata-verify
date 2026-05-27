@@ -1,0 +1,11 @@
+# pcap contains HTTP request with URI /?arg=Zm 9v Ym Fy
+# "Zm 9v Ym Fy" is "foobar" in RFC2045 mode but invalid in strict mode
+
+# must_succeed with rfc2045 mode: decode succeeds, content matches -> alert
+alert http any any -> any any (msg:"must_succeed rfc2045 content match"; flow:established,to_server; http.uri; content:"/?arg=Zm 9v Ym Fy"; from_base64: offset 6, mode rfc2045; absent: must_succeed; content:"foobar"; sid:1;)
+
+# must_succeed with strict mode: decode fails -> no match
+alert http any any -> any any (msg:"must_succeed strict decode error no match"; flow:established,to_server; http.uri; content:"/?arg=Zm 9v Ym Fy"; from_base64: offset 6, mode strict; absent: must_succeed; content:"foobar"; sid:2;)
+
+# must_succeed with rfc2045 mode: decode succeeds but content does not match -> no alert
+alert http any any -> any any (msg:"must_succeed rfc2045 content no match"; flow:established,to_server; http.uri; content:"/?arg=Zm 9v Ym Fy"; from_base64: offset 6, mode rfc2045; absent: must_succeed; content:"nomatch"; sid:3;)

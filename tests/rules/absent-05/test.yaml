@@ -10,5 +10,5 @@ exit-code: 1
 
 checks:
   - shell:
-      args: grep "error_or/must_error requires a transform that can fail" suricata.log | wc -l | xargs
+      args: grep "requires a transform that can fail" suricata.log | wc -l | xargs
       expect: 1
