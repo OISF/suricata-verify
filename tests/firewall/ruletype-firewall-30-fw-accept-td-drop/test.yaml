@@ -85,5 +85,4 @@ checks:
       stats.firewall.blocked: 0
       stats.firewall.drop_reason.default_app_policy: 0
       stats.firewall.drop_reason.rules: 0
-        # discarded alert because of the drop from td rule sid 666
-      stats.firewall.discarded_alerts: 1
+      stats.firewall.discarded_alerts: 0

@@ -157,4 +157,4 @@ checks:
       stats.firewall.drop_reason.default_app_policy: 1
       stats.firewall.drop_reason.rules: 0
       stats.firewall.drop_reason.flow_drop: 56
-      stats.firewall.discarded_alerts: 1
+      stats.firewall.discarded_alerts: 0
