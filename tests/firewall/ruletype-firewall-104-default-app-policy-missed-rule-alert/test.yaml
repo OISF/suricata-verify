@@ -1,0 +1,26 @@
+requires:
+  min-version: 9
+
+pcap: ../../flowbit-oring/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+
+# We see the first drop.
+- filter:
+    count: 1
+    match:
+      event_type: drop
+      pcap_cnt: 4
+      drop.reason: "firewall default app policy"
+
+# But we do not see this alert that we expect to see.
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      pcap_cnt: 4
+      alert.signature_id: 2201001
