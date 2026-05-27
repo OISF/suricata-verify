@@ -1,0 +1,2 @@
+# No explicit app firewall rule is needed for this test. The HTTP request uses
+# the configured request-started default policy.
