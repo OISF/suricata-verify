@@ -1,0 +1,15 @@
+requires:
+  min-version: 9
+
+pcap: ../../tls/tls-random/input.pcap
+
+args:
+  - --simulate-ips
+  - -v
+exit-code: 1
+
+checks:
+  - shell:
+      args: grep "keyword 'bypass' is not allowed in firewall mode" stderr | wc -l
+      expect: 1
+
