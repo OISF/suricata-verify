@@ -1,0 +1,22 @@
+requires:
+  min-version: 9
+
+pcap: ../../flowbit-oring/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+# We should see an alert for SID 101.
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 101
+# Should see a default packet policy alert for each packet.
+- filter:
+    count: 10
+    match:
+      event_type: alert
+      alert.signature_id: 2201000
