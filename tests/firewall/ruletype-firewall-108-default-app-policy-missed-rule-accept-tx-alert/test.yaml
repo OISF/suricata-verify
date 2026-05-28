@@ -1,0 +1,34 @@
+requires:
+  min-version: 9
+
+pcap: ../../flowbit-oring/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 102
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 103
+
+# We should see the default policy alert.
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2201001
+
+# The HTTP transaction should still be logged.
+- filter:
+    count: 1
+    match:
+      event_type: http

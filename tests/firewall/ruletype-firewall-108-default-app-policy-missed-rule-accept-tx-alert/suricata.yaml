@@ -1,0 +1,28 @@
+%YAML 1.1
+---
+
+stats:
+  enabled: yes
+  interval: 8
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - stats
+        - alert
+        - flow
+        - http
+        - drop:
+            alerts: yes
+            flows: all
+
+firewall:
+  policies:
+    http:
+      request-started: ["accept:hook"]
+      request-line:
+        - "accept:tx"
+        - "alert"
