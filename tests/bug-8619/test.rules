@@ -1,0 +1,1 @@
+pass udp 192.168.0.0/16 any -> any any (msg:"pass udp"; sid:1; rev:1;)
