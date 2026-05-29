@@ -1,0 +1,30 @@
+requires:
+  min-version: 9.0.0
+
+# Companion to dhcp-option-52-overload. That test exercises Option 52 with
+# value 2 (sname-only) on an OFFER/ACK pair plus a benign control flow.
+# This test exercises Option 52 with value 3 (both sname and file) on a
+# single DHCP DISCOVER, using PRIV_bootp-both_overload.pcap from the
+# Wireshark sample collection
+# (https://wiki.wireshark.org/SampleCaptures) -- the canonical reference
+# capture for BOOTP option overload.
+#
+# The Wireshark sample only carries Option 56 (DHCP Message) inside the
+# overloaded sname and file fields, and the EVE DHCP logger does not
+# currently emit Option 56, so this test does not assert on the
+# overloaded-area content itself. It does assert that the parser cleanly
+# processes a real-world overload=3 packet without dropping the event
+# and that the inline-option fields still surface correctly -- a
+# regression guard for the Option 52 overload code path.
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: dhcp
+      pcap_cnt: 1
+      dhcp.type: request
+      dhcp.dhcp_type: discover
+      dhcp.id: 2888761343
+      dhcp.client_mac: 00:00:6c:82:dc:4e
+      dhcp.lease_time: 3600
