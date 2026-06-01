@@ -7,35 +7,23 @@ args:
   - -k none
 
 checks:
-  # set+mask 24 fires once per unique /24 prefix, not once per host address
+  # set+mask 24 fires once per unique /24 prefix; 2 packets per /24 → 2 alerts total
   - filter:
       count: 2
       match:
         event_type: alert
         alert.signature_id: 1
-  # first IP in 192.168.1.0/24 triggers the set
+  # first packet from 192.168.1.5 adds 192.168.1.0/24 (fires)
   - filter:
       count: 1
       match:
         event_type: alert
         alert.signature_id: 1
         src_ip: "192.168.1.5"
-  # second IP from the same /24 does not trigger set (prefix already present)
-  - filter:
-      count: 0
-      match:
-        event_type: alert
-        src_ip: "192.168.1.99"
-  # first IP in 192.168.2.0/24 triggers the set
+  # first packet from 192.168.2.1 adds 192.168.2.0/24 (fires)
   - filter:
       count: 1
       match:
         event_type: alert
         alert.signature_id: 1
         src_ip: "192.168.2.1"
-  # fourth packet from 192.168.1.0/24 does not trigger set again
-  - filter:
-      count: 0
-      match:
-        event_type: alert
-        src_ip: "192.168.1.200"

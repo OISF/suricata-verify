@@ -5,6 +5,7 @@ pcap: ../datasets-cidr-01-ipv4-isset/input-ipv4.pcap
 
 args:
   - -k none
+  - --set default-rule-path=.
 
 checks:
   # sid:1 (isset) fires for RFC1918 sources: 192.168.1.5, 10.0.0.50, 172.17.0.1
