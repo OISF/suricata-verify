@@ -65,10 +65,6 @@ outputs:
         - flow
         - netflow
         - metadata
-  - http-log:
-      enabled: yes
-      filename: /dev/null
-      extended: yes
   - file-store:
       version: 2
       enabled: yes
