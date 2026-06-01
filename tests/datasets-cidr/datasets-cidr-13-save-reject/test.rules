@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"CIDR with save"; ip.src; dataset:isset,my-cidr,type cidr,save out.lst; sid:1;)

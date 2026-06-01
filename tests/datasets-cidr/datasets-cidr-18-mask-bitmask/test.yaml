@@ -1,0 +1,37 @@
+requires:
+  min-version: 9
+
+pcap: ../datasets-cidr-15-mask/input.pcap
+
+args:
+  - -k none
+
+checks:
+  # mask 0xffffff00 is the IPv4 bitmask for /24; behavior identical to mask 24
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_ip: "192.168.1.5"
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        src_ip: "192.168.1.99"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_ip: "192.168.2.1"
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        src_ip: "192.168.1.200"
