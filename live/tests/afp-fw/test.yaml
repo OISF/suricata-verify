@@ -1,0 +1,108 @@
+environment: inline
+
+requires:
+  command:
+    - jq
+    - podman
+
+args:
+  - --af-packet
+
+before: |
+  cp ${TESTDIR}/firewall1.rules ${OUTDIR}/firewall.rules
+
+  # It can take a while to build containers the first time which
+  # means the client or server script could start early. So we'll
+  # build both containers here.
+  podman build --iidfile=${OUTDIR}/server.iid --network=host server
+  podman build --iidfile=${OUTDIR}/client.iid --network=host client
+
+server: |
+  podman run --rm --cap-add=NET_RAW --network ns:/var/run/netns/server \
+      -v ${OUTDIR}:/out:rw \
+      $(cat ${OUTDIR}/server.iid) \
+      /server.sh
+
+client: |
+  errors="no"
+
+  iid=$(cat ${OUTDIR}/client.iid)
+  run() {
+    echo "Running: $@"
+    podman run --rm --cap-add=NET_RAW --network ns:/var/run/netns/client ${iid} "$@"
+  }
+
+  # Curl request should not succeed.
+  echo "Running curl..."
+  if run timeout --kill-after=1 --preserve-status 2 curl -O http://10.200.0.1/index.html; then
+    echo "error: curl should not have completed successfully"
+    errors="yes"
+  fi
+
+  # Wget request should succeed.
+  echo "Running wget..."
+  if ! run timeout --kill-after=1 --preserve-status 2 wget http://10.200.0.1/index.html; then
+    echo "error: wget should have completed successfully"
+    errors="yes"
+  fi
+
+  # Ping should not succeed.
+  echo "Running ping..."
+  if run ping -c 10 -i 0.05 -W 1 10.200.0.1; then
+    echo "error: ping should have failed"
+    errors="yes"
+  fi
+
+  cp ${TESTDIR}/firewall2.rules ${OUTDIR}/firewall.rules
+  ${SURICATASC} -c reload-rules ${OUTDIR}/suricata.socket
+
+  # Wget request should succeed.
+  if ! run timeout --kill-after=1 --preserve-status 2 wget http://10.200.0.1/index.html; then
+    echo "error: wget should have completed successfully"
+    errors="yes"
+  fi
+
+  if [ "${errors}" = "yes" ]; then
+    exit 1
+  fi
+
+checks:
+  - filter:
+      count: 2
+      match:
+        alert.signature_id: 101
+
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 102
+
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 201
+
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 202
+
+  - stats:
+      firewall.accepted: 25
+
+  # ICMPv6 neighbor traffic is timing-sensitive, so assert firewall accounting
+  # instead of exact blocked/captured packet totals.
+  - shell:
+      args: |
+        jq -e -s '
+          [.[] | select(.event_type == "stats") | .stats][-1] as $stats
+          | ($stats.firewall.accepted + $stats.firewall.blocked) as $verdicts
+          | ($stats.firewall.blocked > 0)
+            and ($stats.capture.kernel_packets == $verdicts)
+        ' ./eve.json >/dev/null
+
+  # We should not have seen any pings on the server side packet capture.
+  - shell:
+      args: |
+        pings=$(jq -c '.[]' ./tshark-server.json|jq 'select(._source.layers.icmp."icmp.type"=="8")'|wc -l)
+        test "${pings}" -eq 0

@@ -1,0 +1,107 @@
+# NFQUEUE firewall test: default-drop with accept rules for HTTP, then a
+# rule reload swaps in a second rule set.
+#
+# Ports qa/live/netns/nfq-fw-netns-route.sh from the Suricata repo. Uses the
+# L3 firewall rule variants (no ARP rule) because NFQUEUE operates at layer 3.
+environment: nfq
+
+requires:
+  command:
+    - jq
+    - podman
+
+args:
+  - -q 0
+
+before: |
+  cp ${TESTDIR}/firewall1.rules ${OUTDIR}/firewall.rules
+
+  # It can take a while to build containers the first time which means
+  # the client or server script could start early. So build both here.
+  podman build --iidfile=${OUTDIR}/server.iid --network=host server
+  podman build --iidfile=${OUTDIR}/client.iid --network=host client
+
+server: |
+  podman run --rm --cap-add=NET_RAW --network ns:/var/run/netns/server \
+      -v ${OUTDIR}:/out:rw \
+      $(cat ${OUTDIR}/server.iid) \
+      /server.sh
+
+client: |
+  errors="no"
+
+  iid=$(cat ${OUTDIR}/client.iid)
+  run() {
+    echo "Running: $@"
+    podman run --rm --cap-add=NET_RAW --network ns:/var/run/netns/client ${iid} "$@"
+  }
+
+  # Curl request should not succeed (its user-agent is not accepted, so the
+  # response is dropped) but it still triggers the request_line alert.
+  echo "Running curl..."
+  if run timeout --kill-after=1 --preserve-status 5 curl -O http://10.200.0.1/index.html; then
+    echo "error: curl should not have completed successfully"
+    errors="yes"
+  fi
+
+  # Wget request should succeed.
+  echo "Running wget..."
+  if ! run timeout --kill-after=1 --preserve-status 5 wget http://10.200.0.1/index.html; then
+    echo "error: wget should have completed successfully"
+    errors="yes"
+  fi
+
+  # Ping should not succeed (default drop, ICMP is not accepted).
+  echo "Running ping..."
+  if run ping -c 10 -i 0.2 -W 1 10.200.0.1; then
+    echo "error: ping should have failed"
+    errors="yes"
+  fi
+
+  cp ${TESTDIR}/firewall2.rules ${OUTDIR}/firewall.rules
+  ${SURICATASC} -c reload-rules ${OUTDIR}/suricata.socket
+
+  # Wget request should succeed.
+  echo "Running wget..."
+  if ! run timeout --kill-after=1 --preserve-status 5 wget http://10.200.0.1/index.html; then
+    echo "error: wget should have completed successfully"
+    errors="yes"
+  fi
+
+  if [ "${errors}" = "yes" ]; then
+    exit 1
+  fi
+
+checks:
+  # First rule set: curl + wget both hit the request_line rule (sid 101),
+  # only wget matches the user-agent rule (sid 102).
+  - filter:
+      count: 2
+      match:
+        alert.signature_id: 101
+
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 102
+
+  # Second rule set (after reload): wget hits sid 201 and sid 202.
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 201
+
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 202
+
+  - stats:
+      firewall.accepted.__gt: 0
+      firewall.blocked.__gte: 10
+
+  # We should not have seen any ICMP echo requests on the server.
+  - shell:
+      args: |
+        pings=$(jq -c '.[]' ./tshark-server.json|jq 'select(._source.layers.icmp."icmp.type"=="8")'|wc -l)
+        test "${pings}" -eq 0
