@@ -1,0 +1,1 @@
+alert http any any -> any any (flow:established,to_server; http.host; dataset:isset,bad_sha256,type sha256,load bad.lst,format ndjson,context_key extra,value_key value; sid:1;)

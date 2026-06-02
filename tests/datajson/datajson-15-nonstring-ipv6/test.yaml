@@ -1,0 +1,20 @@
+requires:
+  min-version: 9
+
+# The crash is at dataset load time, before any packet is read; the pcap is
+# irrelevant. Reuse the one shipped with datajson-01-ip.
+pcap: ../datajson-01-ip/input.pcap
+
+args:
+ - -k none --set datasets.enabled=yes
+
+# value_key points at a non-string JSON node (ipv6 case). Pre-fix this
+# dereferenced a NULL from json_string_value() and crashed (SIGSEGV). After the
+# fix the entry is rejected via FatalErrorOnInit; with suricata-verify's
+# --init-errors-fatal this is a clean exit 1 (not a crash).
+exit-code: 1
+
+checks:
+  - shell:
+      args: grep -c "failed to get value because it is not a string" suricata.log | xargs
+      expect: 1
