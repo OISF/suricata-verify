@@ -1,0 +1,28 @@
+# This test runs in NFQ mode.
+environment: nfq
+
+requires:
+  command:
+    - podman
+
+args:
+  - -q 0
+
+server: |
+  id=$(podman build -q --network=host server)
+  podman run --rm \
+    --stop-timeout=0 \
+    --network ns:/var/run/netns/server \
+    ${id}
+
+client: |
+  id=$(podman build -q --network=host client)
+  podman run --rm --network ns:/var/run/netns/client ${id} curl -s http://10.200.0.1
+
+checks:
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 2100498
+  - stats:
+      app_layer.tx.http: 1

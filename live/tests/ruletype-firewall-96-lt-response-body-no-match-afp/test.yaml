@@ -1,0 +1,43 @@
+environment: inline
+
+requires:
+  min-version: 9
+  command:
+    - podman
+
+args:
+  - --af-packet
+
+before: |
+  cp ${TESTDIR}/firewall.rules ${OUTDIR}/firewall.rules
+  podman build --iidfile=${OUTDIR}/server.iid --network=host server
+  podman build --iidfile=${OUTDIR}/client.iid --network=host client
+
+server: |
+  podman run --rm \
+    --stop-timeout=0 \
+    --network ns:/var/run/netns/server \
+    $(cat ${OUTDIR}/server.iid)
+
+client: |
+  cd ${OUTDIR}
+
+  if podman run --rm --network ns:/var/run/netns/client \
+      -v ${OUTDIR}:/out:rw \
+      $(cat ${OUTDIR}/client.iid) \
+      timeout --kill-after=1 --preserve-status 2 \
+        curl -sS --retry-connrefused --retry 20 --retry-delay 0 \
+          --output /out/response.txt http://10.200.0.1/; then
+    echo "error: curl should not have completed successfully"
+    exit 1
+  fi
+
+checks:
+  - filter:
+      count: 0
+      match:
+        alert.signature_id: 998
+
+  - stats:
+      app_layer.tx.http: 1
+      firewall.drop_reason.default_app_policy: 1
