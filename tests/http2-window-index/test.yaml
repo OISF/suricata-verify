@@ -15,7 +15,7 @@ checks:
         event_type: alert
         alert.signature_id: 4
   - filter:
-      count: 28
+      count: 13
       match:
         event_type: alert
         alert.signature_id: 5
@@ -37,12 +37,12 @@ checks:
         http.http2.stream_id: 5
   - filter:
       # 28 + 1
-      count: 29
+      count: 14
       match:
         event_type: alert
         alert.signature_id: 9
   - filter:
-      count: 34
+      count: 19
       match:
         event_type: alert
         alert.signature_id: 10
