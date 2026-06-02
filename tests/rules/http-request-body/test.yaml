@@ -24,6 +24,26 @@ checks:
       engines[1].matches[0].name: "content"
       engines.__len: 2
 - filter:
+    # in 9, http2 comes first with a lower progress
+    requires:
+      min-version: 9
+    filename: rules.json
+    count: 1
+    match:
+      id: 2
+      # checks that all engines are toserver
+      engines[0].name: "http_client_body"
+      engines[0].direction: "toserver"
+      engines[0].app_proto: "http2"
+      engines[0].matches[0].name: "pcre"
+      engines[1].name: "http_client_body"
+      engines[1].direction: "toserver"
+      engines[1].app_proto: "http"
+      engines[1].matches[0].name: "pcre"
+      engines.__len: 2
+- filter:
+    requires:
+      lt-version: 9
     filename: rules.json
     count: 1
     match:

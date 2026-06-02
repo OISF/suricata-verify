@@ -24,6 +24,25 @@ checks:
       engines[1].matches[0].name: "content"
       engines.__len: 2
 - filter:
+    requires:
+      min-version: 9
+    filename: rules.json
+    count: 1
+    match:
+      id: 2
+      # checks that all engines are toclient
+      engines[0].name: "file_data"
+      engines[0].direction: "toclient"
+      engines[0].app_proto: "http2"
+      engines[0].matches[0].name: "pcre"
+      engines[1].name: "file_data"
+      engines[1].direction: "toclient"
+      engines[1].app_proto: "http"
+      engines[1].matches[0].name: "pcre"
+      engines.__len: 2
+- filter:
+    requires:
+      lt-version: 9
     filename: rules.json
     count: 1
     match:
