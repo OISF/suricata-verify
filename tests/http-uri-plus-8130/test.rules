@@ -1,0 +1,26 @@
+# rules on uri path
+# no special encoding
+alert http any any -> any any ( http.uri; content: "/toto" ; sid:1;)
+# percent encoding in uri path
+# need to url_decode for http2
+alert http any any -> any any ( http.uri; url_decode; content: "tata" ; sid:2;)
+# percent encoding in uri path, plus means plus in path
+# need to url_decode for http2
+alert http any any -> any any ( http.uri; url_decode: only_decode_plus_after_query; content: "toto+tata" ; sid:3;)
+
+# rules on uri query
+# unencoded param value pair
+alert http any any -> any any ( http.uri; content: "param=value" ; sid:10;)
+# raw undecoded
+alert http any any -> any any ( http.uri.raw; content: "&enc=after+sp%61ce" ; sid:11;)
+# encoded value
+alert http any any -> any any ( http.uri; url_decode; content: "space" ; sid:12;)
+# encoded value with plus as space
+alert http any any -> any any ( http.uri; url_decode; content: "enc=after space" ; sid:13;)
+
+# percent encoding in uri path, plus is plus in path even after url_decode
+# but plus in query is decoded
+alert http any any -> any any ( http.uri; url_decode: only_decode_plus_after_query; content: "toto+tata"; content: "after space"; sid:20;)
+
+# Should not match
+alert http any any -> any any ( http.uri; url_decode: only_decode_plus_after_query; content: "toto tata"; sid:21;)
