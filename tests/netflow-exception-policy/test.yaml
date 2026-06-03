@@ -1,0 +1,20 @@
+requires:
+  min-version: 9.0.0
+
+checks:
+# The midstream packet trips stream.midstream-policy = bypass, which
+# sets applied_exception_policy on the flow. Both the flow event and the
+# netflow event should report the same exception_policy entry.
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.exception_policy[0].target: stream_midstream
+      flow.exception_policy[0].policy: bypass
+
+- filter:
+    count: 1
+    match:
+      event_type: netflow
+      netflow.exception_policy[0].target: stream_midstream
+      netflow.exception_policy[0].policy: bypass
