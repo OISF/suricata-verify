@@ -1,0 +1,12 @@
+requires:
+  min-version: 9
+
+pcap: ../firewall/ruletype-firewall-54-snmp-v1-trap/public-wiresharkwiki-c06-snmpv1-trap-app-r1-1-12.pcap 
+
+checks:
+ - filter:
+     count: 7
+     match:
+       event_type: alert
+       alert.signature_id: 1
+       snmp.trap_oid: "1.3.6.1.4.1.4.1.2.21"
