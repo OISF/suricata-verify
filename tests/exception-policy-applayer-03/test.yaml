@@ -77,3 +77,12 @@ checks:
       event_type: flow
       flow.exception_policy[0].target: "app_layer_error"
       flow.exception_policy[0].policy: "pass_packet"
+# Same exception_policy must also surface on the netflow event. NetFlow
+# records are per-direction, so a bidirectional flow emits two events
+# (to-server and to-client), each carrying the exception_policy.
+- filter:
+    count: 2
+    match:
+      event_type: netflow
+      netflow.exception_policy[0].target: "app_layer_error"
+      netflow.exception_policy[0].policy: "pass_packet"

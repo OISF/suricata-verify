@@ -28,6 +28,8 @@ outputs:
             deltas: no
         - flow:
             exception-policy: true
+        - netflow:
+            exception-policy: true
   - stats:
       enabled: yes
       filename: stats.log
