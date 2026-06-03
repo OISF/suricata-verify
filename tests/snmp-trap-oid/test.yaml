@@ -10,3 +10,9 @@ checks:
        event_type: alert
        alert.signature_id: 1
        snmp.trap_oid: "1.3.6.1.4.1.4.1.2.21"
+ - filter:
+     count: 7
+     match:
+       event_type: alert
+       alert.signature_id: 2
+       snmp.trap_address: "127.0.0.1"
