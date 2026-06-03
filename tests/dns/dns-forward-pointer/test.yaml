@@ -1,0 +1,58 @@
+requires:
+  min-version: 8
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        app_proto: dns
+        direction: to_server
+        pcap_cnt: 1
+        dns.queries[0].rrname: codemonkey.net
+        dns.queries[0].rrtype: A
+        dns.queries[1].rrname: codemonkey.net
+        dns.queries[1].rrtype: A
+        dns.type: request
+  - filter:
+      count: 1
+      match:
+        event_type: dns
+        pcap_cnt: 1
+        src_ip: 10.16.1.11
+        src_port: 51721
+        dest_ip: 8.8.8.8
+        dest_port: 53
+        proto: UDP
+        dns.id: 36356
+        dns.queries[0].rrname: codemonkey.net
+        dns.queries[0].rrtype: A
+        dns.queries[1].rrname: codemonkey.net
+        dns.queries[1].rrtype: A
+        dns.type: request
+  - filter:
+      count: 1
+      match:
+        event_type: dns
+        pcap_cnt: 2
+        src_ip: 8.8.8.8
+        src_port: 53
+        dest_ip: 10.16.1.11
+        dest_port: 51721
+        proto: UDP
+        dns.answers[0].rdata: 152.53.82.239
+        dns.answers[0].rrname: codemonkey.net
+        dns.answers[0].rrtype: A
+        dns.answers[0].ttl: 300
+        dns.queries[0].rrname: codemonkey.net
+        dns.queries[0].rrtype: A
+        dns.type: response
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.app_layer.error.dns_udp.parser: 0

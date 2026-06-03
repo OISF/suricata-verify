@@ -1,0 +1,1 @@
+alert dns any any -> any any (msg:"DNS forward pointer query accepted"; dns.queries.rrname; content:"codemonkey.net"; sid:1; rev:1;)
