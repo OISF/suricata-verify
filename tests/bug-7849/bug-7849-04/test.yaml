@@ -1,0 +1,24 @@
+requires:
+    min-version: 9
+
+args:
+- -k none
+
+checks:
+  # The unknown ethertype reported is the inner RARP value (0x8035), not
+  # the outer VLAN tag ethertype (0x8100).
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.type: decode
+        anomaly.event: decoder.ethernet.unknown_ethertype
+        anomaly.ether_type: "0x8035"
+  # The VLAN unknown-type event carries the same inner ethertype.
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.type: decode
+        anomaly.event: decoder.vlan.unknown_type
+        anomaly.ether_type: "0x8035"

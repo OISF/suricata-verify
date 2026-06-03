@@ -1,0 +1,14 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filename: eve.json
+      filetype: regular
+      ethernet: yes
+      ethertype-hex: yes
+      types:
+        - anomaly:
+            types:
+                decode: yes
