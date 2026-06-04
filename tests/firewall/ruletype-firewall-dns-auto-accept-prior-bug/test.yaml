@@ -1,0 +1,51 @@
+requires:
+  min-version: 9
+
+pcap: ../../dns/dns-eve/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+  # sid:102 should fire for DNS queries containing "dropbox" (request_complete)
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 102
+
+  # sid:202 should fire for DNS responses containing "dropbox" (response_complete)
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 202
+
+  # Non-dropbox queries should be dropped at the app-layer default policy
+  # (not at the packet layer).
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+        drop.reason: "firewall default packet policy"
+
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        drop.reason: "firewall default app policy"
+
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        drop.reason: "firewall flow drop"
+
+  # Firewall stats: accepted > 0 (packets passed the firewall for matching flows)
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.firewall.accepted: 6
+        stats.firewall.blocked: 2
