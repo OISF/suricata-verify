@@ -1,6 +1,6 @@
 requires:
   # May affect older versions.
-  min-version: 9
+  min-version: 8.0.5
 
 args:
   # Lower the LDAP live-transaction cap so a small pcap can demonstrate the
