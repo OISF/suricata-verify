@@ -1,0 +1,69 @@
+requires:
+  min-version: 9.0.0
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        llmnr.type: request
+        llmnr.id: 49985
+        llmnr.opcode: 0
+        llmnr.queries[0].rrname: hs2011
+        llmnr.queries[0].rrtype: a
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        llmnr.type: request
+        llmnr.id: 49985
+        llmnr.opcode: 0
+        llmnr.queries[0].rrname: hs2011
+        llmnr.queries[0].rrtype: a
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+        llmnr.type: response
+        llmnr.id: 49985
+        llmnr.opcode: 0
+        llmnr.queries[0].rrname: hs2011
+        llmnr.queries[0].rrtype: a
+        llmnr.answers[0].rrname: HS2011
+        llmnr.answers[0].a: 192.168.10.101
+  - filter:
+      count: 2
+      match:
+        event_type: llmnr
+        proto: UDP
+  - filter:
+      count: 1
+      match:
+        event_type: llmnr
+        proto: UDP
+        src_ip: 192.168.10.233
+        src_port: 54022
+        dest_ip: 224.0.0.252
+        dest_port: 5355
+        llmnr.type: request
+        llmnr.id: 49985
+        llmnr.opcode: 0
+        llmnr.queries[0].rrname: hs2011
+        llmnr.queries[0].rrtype: a
+  - filter:
+      count: 1
+      match:
+        event_type: llmnr
+        proto: UDP
+        llmnr.type: response
+        llmnr.id: 49985
+        llmnr.queries[0].rrname: hs2011
+        llmnr.queries[0].rrtype: a
+        llmnr.answers[0].rrname: HS2011
+        llmnr.answers[0].a: 192.168.10.101

@@ -1,0 +1,23 @@
+requires:
+  min-version: 9.0.0
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: llmnr
+        proto: UDP
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: llmnr
+        anomaly.event: "invalid_opcode"

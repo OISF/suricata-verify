@@ -1,0 +1,13 @@
+requires:
+  min-version: 7.0.16
+
+args:
+- -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        app_proto: dnp3
+        alert.signature_id: 2270007

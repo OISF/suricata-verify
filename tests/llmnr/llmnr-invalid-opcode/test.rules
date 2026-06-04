@@ -1,0 +1,1 @@
+alert llmnr any any -> any any (app-layer-event:llmnr.invalid_opcode; sid:1; rev:1;)

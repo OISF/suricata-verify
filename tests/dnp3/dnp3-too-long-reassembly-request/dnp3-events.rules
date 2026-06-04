@@ -1,0 +1,4 @@
+# DNP3 too-long reassembly decoder event.
+alert dnp3 any any -> any any (msg:"SURICATA DNP3 Too long reassembly"; \
+      app-layer-event:dnp3.too_long_reassembly; \
+      classtype:protocol-command-decode; sid:2270007; rev:1;)

@@ -1,0 +1,12 @@
+requires:
+  min-version: 7.0.16
+
+pcap: defrag-af-confusion-spray-h8.pcap
+
+args:
+  - --set defrag.hash-size=8
+
+# Just a stat checks. The failure case is a crash.
+checks:
+  - stats:
+      decoder.pkts: 16384

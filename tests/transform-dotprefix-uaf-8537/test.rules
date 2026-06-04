@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"dotprefix HTTP host UAF repro"; http.host; to_lowercase; dotprefix; content:"."; sid:1000004; rev:1;)

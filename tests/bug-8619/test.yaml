@@ -1,0 +1,28 @@
+requires:
+  # May affect older versions.
+  min-version: 9
+
+args:
+  # Lower the LDAP live-transaction cap so a small pcap can demonstrate the
+  # leak. Once transactions stop being freed they pile up past this cap and
+  # the parser emits the "too_many_transactions" event.
+  - -k none --set app-layer.protocols.ldap.max-tx=4
+
+pcap: cldap-leak.pcap
+
+checks:
+  # The pass rule passes the flow, so subsequent packets skip detection and
+  # FLOW_SGH_TOCLIENT is never set. Under the bug,
+  # AppLayerParserTransactionsCleanup keeps delaying cleanup of the completed
+  # LDAP transactions for the lifetime of the flow. They accumulate in the
+  # parser, exceed ldap.max-tx, and the parser raises "too_many_transactions".
+  #
+  # With cleanup working correctly the completed transactions are freed as
+  # they finish, the cap is never reached, and no such anomaly is logged.
+  # This test therefore FAILS on the buggy code and PASSES once fixed.
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.app_proto: ldap
+        anomaly.event: too_many_transactions

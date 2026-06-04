@@ -1,0 +1,16 @@
+requires:
+  os: linux
+  min-version: 8.0.5
+
+command: |
+  timeout -k 5s 30s ${SRCDIR}/src/suricata --init-errors-fatal \
+      -l ${OUTPUT_DIR} -c ${SRCDIR}/suricata.yaml \
+      -r ${TEST_DIR}/input.pcap --disable-detection -k none --runmode single
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.defrag.ipv4.reassembled: 1
+        stats.defrag.ipv4.fragments: 3
