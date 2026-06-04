@@ -1,0 +1,22 @@
+# Bug reproduction: accept:flow dns:<state (auto-accept prior hooks) breaks
+# packet:filter for all traffic when DNS uses the "<" modifier.
+#
+# This is the same logical intent as test-23 (dns-per-hook) but using the "<"
+# auto-accept-prior syntax. Test-23 uses explicit per-state rules and works.
+# This test uses dns:< and is expected to FAIL (bug) — the packet:filter
+# accept rules stop matching server->client UDP packets, causing drops.
+#
+# The same pcap (dns/dns-eve/input.pcap) is used. If the bug is fixed, the
+# expected behavior matches test-23: DNS queries with "dropbox" are accepted,
+# others hit the default drop.
+
+# Packet layer: accept all UDP and TCP (same pattern as working tests)
+accept:hook udp:all any any -> any any (sid:100;)
+accept:hook tcp:all any any <> any any (flow:not_established; sid:1000;)
+accept:hook tcp:all any any <> any any (flow:established; sid:1001;)
+
+# DNS app-layer: auto-accept prior states with "<" and a keyword match.
+# This is equivalent to test-23's 4 explicit per-state rules, but using the
+# compact form that should auto-accept request_started and response_started.
+accept:flow dns:<request_complete any any -> any any (dns.query; content:"dropbox"; alert; sid:102;)
+accept:flow dns:<response_complete any any -> any any (dns.response.rrname; content:"dropbox"; alert; sid:202;)

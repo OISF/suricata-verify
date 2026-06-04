@@ -1,0 +1,57 @@
+# Bug reproduction test: accept:flow dns:<state breaks packet:filter.
+#
+# Uses the same pcap as test-23 (dns-per-hook). If the bug is present, the
+# packet:filter accept rule (udp:all) fails to match, causing all DNS
+# queries to be dropped at the packet layer. The expected (correct) behavior
+# if the bug were fixed is: "dropbox" queries are accepted and alerted by
+# sids 102/202, non-dropbox queries hit the default app-layer drop.
+#
+# With the bug present, ALL packets are dropped at the packet layer (because
+# the dns:< expansion with IPPROTO_TCP hardcoded in detect-engine-prefilter.c
+# corrupts the signature group heads), so:
+#   - No alerts for sid 102 or 202
+#   - Drops for all packets with reason "firewall default packet policy"
+#
+# The checks below describe the EXPECTED (correct) behavior once fixed.
+# With the bug present, this test will FAIL.
+
+requires:
+  min-version: 9
+
+pcap: ../../dns/dns-eve/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+  # sid:102 should fire for DNS queries containing "dropbox" (request_complete)
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 102
+
+  # sid:202 should fire for DNS responses containing "dropbox" (response_complete)
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 202
+
+  # Non-dropbox queries should be dropped at the app-layer default policy
+  # (not at the packet layer). If we see "firewall default packet policy"
+  # drops, the bug is present.
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+        drop.reason: "firewall default packet policy"
+
+  # Firewall stats: accepted > 0 (packets passed the firewall for matching flows)
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.firewall.accepted: 6
+        stats.firewall.blocked: 2
