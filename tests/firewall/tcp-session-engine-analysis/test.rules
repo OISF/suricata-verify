@@ -1,0 +1,4 @@
+alert tcp any any -> any any (msg:"tcp.session setup only"; tcp.session:setup; sid:1;)
+alert tcp any any -> any any (msg:"tcp.session setup+established"; tcp.session:setup,established; sid:2;)
+alert tcp any any -> any any (msg:"tcp.session closing only"; tcp.session:closing; sid:3;)
+alert tcp any any -> any any (msg:"tcp.session all phases"; tcp.session:setup,established,closing; sid:4;)
