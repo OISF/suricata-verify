@@ -1,0 +1,3 @@
+# Drop rule with detection_filter should override the accept rule
+drop:flow tcp:flow_start any any -> any any (flags:S,12; detection_filter:track by_src, count 100, seconds 1; alert; msg:"SYN flood mitigation"; sid:1002;)
+accept:hook tcp:flow_start any any -> any any (tcp.session:setup,established; sid:1001;)

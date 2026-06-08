@@ -1,0 +1,2 @@
+# Accept all TCP — decode event should still fire for malformed packets
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (tcp.session:setup,established; sid:1001;)

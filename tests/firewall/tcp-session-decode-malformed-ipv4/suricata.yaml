@@ -1,0 +1,55 @@
+%YAML 1.1
+---
+
+default-log-dir: .
+
+vars:
+  address-groups:
+    HOME_NET: "[192.0.2.0/24]"
+    EXTERNAL_NET: "!$HOME_NET"
+  port-groups:
+    HTTP_PORTS: "80"
+    SSH_PORTS: "22"
+    SHELLCODE_PORTS: "!80"
+
+firewall: true
+
+stats:
+  enabled: yes
+  interval: 8
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert:
+            tagged-packets: no
+            metadata: no
+        - drop:
+            alerts: yes
+            flows: all
+        - flow
+        - anomaly:
+            enabled: yes
+            types:
+              decode: yes
+              stream: no
+              applayer: no
+        - stats:
+            totals: yes
+            threads: no
+            deltas: no
+
+logging:
+  default-log-level: notice
+  outputs:
+    - console:
+        enabled: yes
+
+action-order:
+  - pass
+  - drop
+  - reject
+  - alert
