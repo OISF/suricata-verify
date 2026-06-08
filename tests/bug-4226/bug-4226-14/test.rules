@@ -1,0 +1,10 @@
+# A lone content whose length equals an exact bsize is flagged startswith and
+# endswith, except where that would be wrong.
+# sid 1: nocase content; flagged.
+# sid 2: offset:0; flagged.
+# sid 3: negated content; not flagged.
+# sid 4: depth from a byte_extract variable; not flagged.
+alert dns any any -> any any (msg:"nocase"; dns.query; content:"ABC"; nocase; bsize:3; sid:1;)
+alert dns any any -> any any (msg:"offset zero"; dns.query; content:"abc"; offset:0; bsize:3; sid:2;)
+alert dns any any -> any any (msg:"negated"; dns.query; content:!"abc"; bsize:3; sid:3;)
+alert dns any any -> any any (msg:"variable depth"; dns.query; byte_extract:1,0,n; content:"abc"; depth:n; bsize:3; sid:4;)
