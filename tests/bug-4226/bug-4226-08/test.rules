@@ -1,0 +1,15 @@
+# A buffer may carry more than one bsize, and the buffer must satisfy them all.
+# When those bounds share no common length the signature can never match, so it
+# is rejected at load. Two differing exact bsizes and a lower bound above an
+# upper bound are both unsatisfiable, in either keyword order.
+alert dns any any -> any any (msg:"two exacts, tight first"; dns.query; content:"abc"; bsize:15; bsize:27; sid:1;)
+alert dns any any -> any any (msg:"two exacts, tight last"; dns.query; content:"abc"; bsize:27; bsize:15; sid:2;)
+alert dns any any -> any any (msg:"lower above upper"; dns.query; content:"abc"; bsize:>20; bsize:<10; sid:3;)
+alert dns any any -> any any (msg:"upper below lower"; dns.query; content:"abc"; bsize:<10; bsize:>20; sid:4;)
+# Sets one step past the valid ones in bug-4226-13. Ranges are exclusive, so
+# bsize:5<>20 allows 6 to 19.
+alert dns any any -> any any (msg:"no length left"; dns.query; content:"abc"; bsize:>9; bsize:<10; sid:5;)
+alert dns any any -> any any (msg:"exact at exclusive upper bound"; dns.query; content:"abc"; bsize:10; bsize:<10; sid:6;)
+alert dns any any -> any any (msg:"lower above upper"; dns.query; content:"abc"; bsize:>=11; bsize:<=10; sid:7;)
+alert dns any any -> any any (msg:"exact at range end"; dns.query; content:"abc"; bsize:5<>20; bsize:20; sid:8;)
+alert dns any any -> any any (msg:"exact outside range"; dns.query; content:"abc"; bsize:5<>20; bsize:25; sid:9;)

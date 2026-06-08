@@ -1,0 +1,38 @@
+requires:
+    min-version: 9
+    pcap: false
+
+args:
+    - --engine-analysis
+    - --set engine-analysis.rules=yes
+
+# A content that gets the depth is dumped once per dns_query inspect engine
+# (doh2 and dns), and once more in the mpm object when it is the fast pattern.
+checks:
+    # sid 1: bsize:<=8 is an upper bound
+    - shell:
+        args: grep -o '"depth":8' rules.json | wc -l | xargs
+        expect: 3
+
+    # sid 2: the variable's index (0) is still there, not the bound
+    - shell:
+        args: grep -o '"depth":200' rules.json | wc -l | xargs
+        expect: 0
+    - shell:
+        args: grep -o '"depth":0' rules.json | wc -l | xargs
+        expect: 3
+
+    # sid 3: only the one-byte content gets the depth; the ten-byte content is
+    # the fast pattern and has none
+    - shell:
+        args: grep -o '"depth":5' rules.json | wc -l | xargs
+        expect: 2
+
+    # sid 4: only the first content gets the depth
+    - shell:
+        args: grep -o '"depth":9' rules.json | wc -l | xargs
+        expect: 3
+
+    - shell:
+        args: grep -o '"depth":' rules.json | wc -l | xargs
+        expect: 11

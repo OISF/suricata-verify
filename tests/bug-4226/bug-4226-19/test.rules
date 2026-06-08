@@ -1,0 +1,5 @@
+# Two instances of dns.query in one rule, each with its own bsize. Each
+# instance gets the depth of its own bound, and the rule matches the
+# "google.com" query (bug-4226-02, sid 8) because both instances are checked
+# against it.
+alert dns any any -> any any (msg:"two instances"; dns.query; content:"google.com"; bsize:10; dns.query; content:"google"; bsize:<20; sid:1;)

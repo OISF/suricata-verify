@@ -1,0 +1,43 @@
+requires:
+    min-version: 9
+    pcap: false
+
+args:
+    - --engine-analysis
+    - --set engine-analysis.rules=yes
+
+# All four rules load. The smallest upper bound is used as the depth; a content
+# is dumped three times (two dns_query inspect engines and the mpm object).
+checks:
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 1
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 2
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 3
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 4
+    - shell:
+        args: grep '"id":1,' rules.json | grep -o '"depth":11' | wc -l | xargs
+        expect: 3
+    - shell:
+        args: grep '"id":2,' rules.json | grep -o '"depth":10' | wc -l | xargs
+        expect: 3
+    - shell:
+        args: grep '"id":3,' rules.json | grep -o '"depth":10' | wc -l | xargs
+        expect: 3
+    - shell:
+        args: grep '"id":4,' rules.json | grep -o '"depth":10' | wc -l | xargs
+        expect: 3

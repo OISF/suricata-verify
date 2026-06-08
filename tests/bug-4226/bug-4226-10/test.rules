@@ -1,0 +1,10 @@
+# Contents the bsize depth is not applied to, and bsize:<=N as an upper bound.
+# sid 1: bsize:<=8 gives the content a depth of 8.
+# sid 2: depth comes from a byte_extract variable and is left alone.
+# sid 3: the second content is longer than the bound, so it gets no depth; the
+#        first content does.
+# sid 4: the second content starts past the bound, so it gets no depth.
+alert dns any any -> any any (msg:"less-than-or-equal -> depth"; dns.query; content:"abc"; bsize:<=8; sid:1;)
+alert dns any any -> any any (msg:"variable depth kept"; dns.query; byte_extract:1,0,n; content:"abc"; depth:n; bsize:<200; sid:2;)
+alert dns any any -> any any (msg:"content longer than bound"; dns.query; content:"a"; content:"bbbbbbbbbb"; bsize:5; sid:3;)
+alert dns any any -> any any (msg:"offset past bound"; dns.query; content:"a"; content:!"b"; offset:10; bsize:9; sid:4;)
