@@ -1,0 +1,10 @@
+# The rules of bug-4226-02 under the AC pattern matcher instead of Hyperscan.
+# AC enforces the depth itself, so this covers the other matcher code path.
+# sids 1-5 match; sids 6 and 7 do not.
+alert dns any any -> any any (msg:"bsize exact"; dns.query; content:"google.com"; bsize:10; sid:1;)
+alert dns any any -> any any (msg:"bsize less-than"; dns.query; content:"google.com"; bsize:<25; sid:2;)
+alert dns any any -> any any (msg:"bsize range"; dns.query; content:"google.com"; bsize:8<>20; sid:3;)
+alert dns any any -> any any (msg:"bsize greater-than"; dns.query; content:"google.com"; bsize:>8; sid:4;)
+alert dns any any -> any any (msg:"bsize partial content"; dns.query; content:"google"; bsize:10; sid:5;)
+alert dns any any -> any any (msg:"bsize length mismatch"; dns.query; content:"goog"; bsize:5; sid:6;)
+alert dns any any -> any any (msg:"bsize exact, content not at start"; dns.query; content:"oogle.com"; bsize:9; sid:7;)

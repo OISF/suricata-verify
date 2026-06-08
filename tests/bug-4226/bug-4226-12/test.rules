@@ -1,0 +1,21 @@
+# Limits of the depth taken from bsize.
+# sid 1: 65535 is the largest bound that fits in a depth.
+# sid 2: 65536 does not fit, so no depth.
+# sid 3: the second content ends exactly at the bound (offset 7 + 3 bytes),
+#        so both contents get the depth.
+# sid 4: the second content ends one byte past the bound, so only the first
+#        content gets the depth.
+# sid 5: a depth larger than the bound is lowered to it.
+# sid 6: a depth smaller than the bound is kept.
+# sid 7: the offset comes from a byte_extract variable; no depth.
+# sid 8: each buffer gets the bound of its own bsize.
+# sid 9: a packet buffer (tcp.hdr) gets the depth like an app-layer buffer.
+alert dns any any -> any any (msg:"largest depth"; dns.query; content:"abc"; bsize:65535; sid:1;)
+alert dns any any -> any any (msg:"bound too large"; dns.query; content:"abc"; bsize:65536; sid:2;)
+alert dns any any -> any any (msg:"ends at bound"; dns.query; content:"a"; content:"abc"; offset:7; bsize:10; sid:3;)
+alert dns any any -> any any (msg:"ends past bound"; dns.query; content:"a"; content:"abc"; offset:8; bsize:10; sid:4;)
+alert dns any any -> any any (msg:"larger depth lowered"; dns.query; content:"abc"; depth:20; bsize:10; sid:5;)
+alert dns any any -> any any (msg:"smaller depth kept"; dns.query; content:"abc"; depth:5; bsize:10; sid:6;)
+alert dns any any -> any any (msg:"variable offset"; dns.query; byte_extract:1,0,n; content:"abc"; offset:n; bsize:10; sid:7;)
+alert http any any -> any any (msg:"two buffers"; http.uri; content:"/abc"; bsize:<20; http.host; content:"x.yz"; bsize:<30; sid:8;)
+alert tcp any any -> any any (msg:"packet buffer"; tcp.hdr; content:"|80|"; offset:12; bsize:32; sid:9;)

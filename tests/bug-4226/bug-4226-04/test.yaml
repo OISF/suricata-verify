@@ -1,0 +1,14 @@
+requires:
+    min-version: 9
+    pcap: false
+
+args:
+    - --engine-analysis
+    - --set engine-analysis.rules=yes
+
+# Sids 1 and 2 each carry the suggestion note once; the other five rules carry
+# none, so the total is 2.
+checks:
+    - shell:
+        args: grep -o "pins a single content" rules.json | wc -l | xargs
+        expect: 2

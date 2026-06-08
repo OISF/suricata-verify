@@ -1,0 +1,8 @@
+# The engine starts and matches with rules whose contents the bsize depth is
+# not applied to. The dns.query buffer is "google.com" (10 bytes).
+# sid 1: plain bsize rule, matches.
+# sid 2: depth from a byte_extract variable (first byte 'g' = 103), matches.
+# sid 3: second content is longer than the bsize bound; loads, never matches.
+alert dns any any -> any any (msg:"bsize exact"; dns.query; content:"google.com"; bsize:10; sid:1;)
+alert dns any any -> any any (msg:"variable depth"; dns.query; byte_extract:1,0,n; content:"google"; depth:n; bsize:<200; sid:2;)
+alert dns any any -> any any (msg:"content longer than bound"; dns.query; content:"goo"; content:"google.com.example"; bsize:10; sid:3;)
