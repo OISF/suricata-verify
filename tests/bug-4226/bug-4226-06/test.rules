@@ -1,0 +1,7 @@
+# An exact bsize equal to a lone content's length means the content fills the
+# buffer, so it is marked startswith+endswith. The marking must NOT happen for
+# a shorter content, a non-exact bsize, or a buffer with more than one content.
+alert dns any any -> any any (msg:"exact equals content length"; dns.query; content:"google.com"; bsize:10; sid:1;)
+alert dns any any -> any any (msg:"content shorter than exact bsize"; dns.query; content:"google"; bsize:10; sid:2;)
+alert dns any any -> any any (msg:"non-exact bsize"; dns.query; content:"google.com"; bsize:<11; sid:3;)
+alert dns any any -> any any (msg:"more than one content"; dns.query; content:"goog"; content:"le.com"; bsize:10; sid:4;)
