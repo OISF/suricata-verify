@@ -1,0 +1,48 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.detect.engines[0].rules_loaded: 1
+      stats.detect.engines[0].rules_failed: 0
+
+- filter:
+    count: 1
+    match:
+      event_type: drop
+      drop.reason: "stream error"
+
+- filter:
+    count: 1
+    match:
+      event_type: anomaly
+      anomaly.type: stream
+      anomaly.event: stream.3whs_wrong_seq_wrong_ack
+
+- filter:
+    count: 1
+    match:
+      event_type: drop
+
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.ips.blocked: 1
+      stats.ips.drop_reason.stream_error: 1
+      stats.firewall.blocked: 0
+      stats.firewall.drop_reason.rules: 0
+
+- filter:
+    count: 0
+    match:
+      event_type: alert

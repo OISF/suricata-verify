@@ -1,0 +1,46 @@
+requires:
+  min-version: 9
+  pcap: false
+
+args:
+  - --engine-analysis
+
+checks:
+  # sid:1 — tcp.session:setup
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1
+        lists.packet.matches[0].name: "tcp.session"
+        lists.packet.matches[0].tcp_session.phases[0]: "setup"
+
+  # sid:2 — tcp.session:setup,established
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 2
+        lists.packet.matches[0].name: "tcp.session"
+        lists.packet.matches[0].tcp_session.phases[0]: "setup"
+        lists.packet.matches[0].tcp_session.phases[1]: "established"
+
+  # sid:3 — tcp.session:closing
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 3
+        lists.packet.matches[0].name: "tcp.session"
+        lists.packet.matches[0].tcp_session.phases[0]: "closing"
+
+  # sid:4 — tcp.session:setup,established,closing
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 4
+        lists.packet.matches[0].name: "tcp.session"
+        lists.packet.matches[0].tcp_session.phases[0]: "setup"
+        lists.packet.matches[0].tcp_session.phases[1]: "established"
+        lists.packet.matches[0].tcp_session.phases[2]: "closing"

@@ -1,0 +1,49 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.detect.engines[0].rules_loaded: 2
+      stats.detect.engines[0].rules_failed: 0
+
+- filter:
+    count: 100
+    match:
+      event_type: alert
+      alert.signature_id: 1002
+
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 1001
+
+- filter:
+    count: 100
+    match:
+      event_type: drop
+      alert.signature_id: 1002
+      drop.reason: "firewall rules"
+
+- filter:
+    count: 100
+    match:
+      event_type: flow
+      flow.action: drop
+
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.firewall.accepted: 100
+      stats.firewall.blocked: 100
+      stats.firewall.drop_reason.rules: 100
