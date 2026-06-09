@@ -1,0 +1,44 @@
+requires:
+  min-version: 9
+
+pcap:
+  ../bug-8621-01/input.pcap
+
+# Issue 8621: a single-direction DHCP transaction must only be inspected in
+# the direction it was seen. The toserver rule may only match the request
+# and the toclient rule may only match the reply. Before the fix the
+# transactions lacked the per-direction SKIP_INSPECT bits, so the reply tx
+# was also inspected toserver (and the request tx toclient), letting the
+# directional rules fire on the wrong transaction.
+checks:
+  # The toserver rule matches the request exactly once.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        dhcp.type: request
+
+  # The toclient rule matches the reply exactly once.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        dhcp.type: reply
+
+  # The toserver rule never fires on the reply transaction.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        dhcp.type: reply
+
+  # The toclient rule never fires on the request transaction.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        dhcp.type: request
