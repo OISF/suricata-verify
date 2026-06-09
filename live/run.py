@@ -2,6 +2,8 @@
 
 # Script to prepare live IPS namespace labs for Suricata testing.
 
+from __future__ import annotations
+
 import argparse
 import fcntl
 import glob
