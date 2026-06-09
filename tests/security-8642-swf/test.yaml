@@ -1,0 +1,21 @@
+requires:
+  min-version: 9
+  features:
+    - ASAN
+
+args:
+  - --set app-layer.protocols.http.libhtp.default-config.swf-decompression.enabled=yes
+  - --set app-layer.protocols.http.libhtp.default-config.swf-decompression.decompress-depth=4294967295
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9000001
+
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.app_layer.flow.http: 1
