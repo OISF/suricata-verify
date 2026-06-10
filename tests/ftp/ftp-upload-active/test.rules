@@ -1,0 +1,13 @@
+# For uploads, ftpdata_command:stor matches in the to_server direction for
+# active and passive modes.
+alert ftp-data any any -> any any (msg:"ftpdata stor"; flow:established,to_server; \
+	ftpdata_command:stor; sid:10;)
+
+# This rule matches an upload in active mode, but not passive.
+alert ftp-data any any -> any any (msg:"ftpdata filedata"; flow:to_client; file_data; content:"root"; sid:20;)
+
+# This rule matches an upload in passive mode, but not active.
+alert ftp-data any any -> any any (msg:"ftpdata filedata"; flow:to_server; file_data; content:"root"; sid:30;)
+
+# This rule matches in active or passive modes as its not directional.
+alert ftp-data any any -> any any (msg:"ftpdata filedata"; file_data; content:"root"; sid:40;)

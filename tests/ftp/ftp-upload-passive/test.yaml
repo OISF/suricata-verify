@@ -1,0 +1,52 @@
+rules: ../ftp-upload-active/test.rules
+
+pcap: input.pcap
+
+args:
+  - --runmode=single
+
+checks:
+
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 10
+
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 20
+
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 30
+
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 40
+      ftp_data.command: "STOR"
+      ftp_data.filename: "index.html"
+      app_proto: ftp-data
+
+- filter:
+    count: 1
+    match:
+      event_type: ftp
+      src_ip: "172.23.0.3"
+      dest_ip: "172.23.0.2"
+      ftp.command: "USER"
+
+- filter:
+    count: 1
+    match:
+      event_type: ftp_data
+      src_ip: "172.23.0.3"
+      dest_ip: "172.23.0.2"
+      ftp_data.command: "STOR"
+      ftp_data.filename: "index.html"
