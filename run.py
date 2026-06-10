@@ -1065,7 +1065,16 @@ class TestRunner:
                 args += ["-r", pcaps[0]]
 
         # Find rules.
-        rules = sorted(glob.glob(os.path.join(self.directory, "*.rules")))
+        if "rules" in self.config:
+            if not self.config["rules"]:
+                rules = []
+            else:
+                rule_path = os.path.join(self.directory, self.config["rules"])
+                if not os.path.exists(rule_path):
+                    raise TestError("Rules filename does not exist: {}".format(self.config["rules"]))
+                rules = [os.path.realpath(rule_path)]
+        else:
+            rules = sorted(glob.glob(os.path.join(self.directory, "*.rules")))
         if not rules:
             args.append("--disable-detection")
         elif len(rules) == 1:
