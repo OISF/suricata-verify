@@ -1,0 +1,6 @@
+accept:hook tcp:all any any -> any any (sid:1;)
+accept:tx,alert http2:stream:<request_closed any any -> any any (sid:13;)
+accept:tx,alert http2:stream:<request_complete any any -> any any (sid:14;)
+
+accept:tx,alert http2:global:<request_complete any any -> any any (sid:20;)
+accept:tx,alert http2:global:<response_complete any any -> any any (sid:21;)
