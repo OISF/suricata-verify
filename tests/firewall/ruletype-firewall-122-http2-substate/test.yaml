@@ -1,0 +1,32 @@
+requires:
+  min-version: 9
+
+pcap: ../../http2-userinfo-authority/http2_userinfo_in_authority_1.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- filter:
+    count: 0
+    match:
+      event_type: drop
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 21
+      pcap_cnt: 4
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 20
+      pcap_cnt: 5
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 10
+      pcap_cnt: 7
