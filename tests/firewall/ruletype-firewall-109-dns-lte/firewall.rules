@@ -1,0 +1,8 @@
+# Packet layer: accept all UDP and TCP (same pattern as working tests)
+accept:hook udp:all any any -> any any (sid:100;)
+accept:hook tcp:all any any <> any any (flow:not_established; sid:1000;)
+accept:hook tcp:all any any <> any any (flow:established; sid:1001;)
+
+# DNS app-layer: auto-accept prior states with "<" and a keyword match.
+accept:tx dns:<request_complete any any -> any any (dns.query; content:"dropbox"; alert; sid:102;)
+accept:tx dns:<response_complete any any -> any any (dns.response.rrname; content:"dropbox"; alert; sid:202;)
