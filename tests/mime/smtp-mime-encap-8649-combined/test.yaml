@@ -1,0 +1,36 @@
+# smtp-mime-encap-combined — regression test
+
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+  # raw stream rule — always fires
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9000100
+
+  # file.data rule must fire : encoding reset, inner body decoded as Plain
+  # failed on 8.0.5: base64 encoding leak causes mis-decode, content not matched
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9000101
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9000102
+
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: malware.exe
+        fileinfo.state: CLOSED

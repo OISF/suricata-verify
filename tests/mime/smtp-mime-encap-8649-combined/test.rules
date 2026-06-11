@@ -1,0 +1,3 @@
+alert smtp any any -> any any (msg:"TEST-R6-I7-H1 raw-stream payload"; content:"EICAR-MIME-BYPASS-TEST-PAYLOAD"; nocase; sid:9000100; rev:1;)
+alert smtp any any -> any any (msg:"TEST-R6-I7-H1 Path-A file.data payload"; file.data; content:"EICAR-MIME-BYPASS-TEST-PAYLOAD"; nocase; sid:9000101; rev:1;)
+alert smtp any any -> any any (msg:"TEST-R6-I7-H1 Path-B file.name malware.exe"; file.name; content:"malware.exe"; nocase; sid:9000102; rev:1;)
