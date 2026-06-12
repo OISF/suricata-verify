@@ -1,0 +1,17 @@
+%YAML 1.1
+---
+
+vars:
+  address-groups:
+    HOME_NET: "[192.168.0.0/16]"
+    EXTERNAL_NET: "!$HOME_NET"
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filename: eve.json
+      types:
+        - alert
+
+defrag:
+  prealloc: ~   # YAML null
