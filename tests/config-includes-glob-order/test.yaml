@@ -1,0 +1,43 @@
+requires:
+  min-version: 9
+  # Glob support in include: is not merged yet (OISF/suricata#15574), so a
+  # min-version alone can't gate this test. Probe the source tree for the
+  # glob(3) expansion code instead and skip on builds that don't have it,
+  # the same way the eve-alert-metadata tests probe for METADATA_DEFAULTS.
+  script:
+    - grep globfree src/conf-yaml-loader.c > /dev/null
+
+pcap: false
+
+# Run suricata against glob.yaml explicitly rather than shipping a suricata.yaml.
+# suricata-verify always runs `suricata -c <test>/suricata.yaml --dump-config`
+# during test setup (before the min-version check), so a glob include in
+# suricata.yaml would make that setup step fail on Suricata versions without
+# glob support. Using a separate config exercised via `command:` keeps setup on
+# the default suricata.yaml and only runs the glob config on a supported build.
+command: |
+  ${SRCDIR}/src/suricata -c ${TEST_DIR}/glob.yaml -l ${OUTPUT_DIR} --dump-config
+
+checks:
+  # Every globbed drop-in file is included, not just one: the unique marker key
+  # from each of 01/50/99-order.yaml is present in the merged config.
+  - shell:
+      args: grep '^glob-order-seen-01 = present' stdout | wc -l
+      expect: 1
+  - shell:
+      args: grep '^glob-order-seen-50 = present' stdout | wc -l
+      expect: 1
+  - shell:
+      args: grep '^glob-order-seen-99 = present' stdout | wc -l
+      expect: 1
+
+  # Ordering is deterministic: glob(3) returns matches sorted, so the files are
+  # included in ascending numeric-prefix order. Include order is observable in
+  # --dump-config output because the config tree preserves insertion order, so
+  # the distinct per-file marker keys must appear in sorted-filename order.
+  # The test does not exercise override-on-duplicate-keys (each file uses a
+  # unique key on purpose). What this pins is just the sort order, which is
+  # what the numbered conf.d-style drop-in convention relies on in practice.
+  - shell:
+      args: grep -o '^glob-order-seen-[0-9][0-9]' stdout | tr '\n' ' '
+      expect: glob-order-seen-01 glob-order-seen-50 glob-order-seen-99
