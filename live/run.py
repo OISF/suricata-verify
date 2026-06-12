@@ -1785,7 +1785,9 @@ def do_run(
     tags: list[str] | None = None,
 ) -> bool:
     """Run tests. Returns True if all tests passed."""
-    all_passed = True
+    passed = 0
+    failed = 0
+    failing_tests = []
     selected_tags = {tag.strip().lower() for tag in (tags or []) if tag.strip()}
     script_dir = os.path.dirname(os.path.realpath(__file__))
     tests_dir = os.path.join(script_dir, "tests")
@@ -1802,7 +1804,8 @@ def do_run(
                 test_tags = get_test_tags(root)
             except ValueError as err:
                 print(f"ERROR: {err}", file=sys.stderr)
-                all_passed = False
+                failed += 1
+                failing_tests.append(test_name)
                 continue
             if not selected_tags.issubset(test_tags):
                 continue
@@ -1814,13 +1817,15 @@ def do_run(
         environment = config.get("environment")
         if not isinstance(environment, str):
             print(f"ERROR: invalid environment in {test_yaml}: {environment!r}", file=sys.stderr)
-            all_passed = False
+            failed += 1
+            failing_tests.append(test_name)
             continue
         if only_environment and environment != only_environment:
             continue
         if environment not in UP_FUNCS:
             print(f"ERROR: unknown environment '{environment}' in {test_yaml}", file=sys.stderr)
-            all_passed = False
+            failed += 1
+            failing_tests.append(f"{environment}/{test_name}")
             continue
 
         requires = config.get("requires", {}) or {}
@@ -1831,7 +1836,8 @@ def do_run(
             continue
         except ValueError as err:
             print(f"ERROR: {test_yaml}: {err}", file=sys.stderr)
-            all_passed = False
+            failed += 1
+            failing_tests.append(f"{environment}/{test_name}")
             continue
 
         failures = run_test(test_name, environment, config, script_dir, root)
@@ -1841,13 +1847,25 @@ def do_run(
             failures, warnings = run_checks(config, output_dir, environment, script_dir, root)
         ok = not failures
         log_test_step(environment, test_name, "OK" if ok else "FAIL")
-        if not ok:
-            all_passed = False
+        if ok:
+            passed += 1
+        else:
+            failed += 1
+            failing_tests.append(f"{environment}/{test_name}")
         for msg in warnings:
             print(f"  {msg}")
         for msg in failures:
             print(f"  {msg}")
-    return all_passed
+
+    print("")
+    print(f"PASS: {passed}")
+    print(f"FAIL: {failed}")
+    if failing_tests:
+        print("")
+        print("Failing tests:")
+        for test in failing_tests:
+            print(f"- {test}")
+    return failed == 0
 
 
 def main() -> None:
