@@ -1,0 +1,38 @@
+requires:
+  min-version: 9
+
+pcap: ../../ftp/ftp-download-active/input.pcap
+
+args:
+  - --simulate-ips
+  - --runmode=single
+  - -k none
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 4000
+
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 4010
+
+  # The ftp-data:response_started alert should never happen
+  - filter:
+      count: 0
+      match:
+        alert.signature_id: 5000
+
+  # The ftp-data:response_completed alert should never happen
+  - filter:
+      count: 0
+      match:
+        alert.signature_id: 5010
+
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
