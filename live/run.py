@@ -1754,10 +1754,24 @@ def run_test(
     return failures
 
 
+def get_mode_requires(requires: dict, mode: str) -> dict:
+    """Return test requirements with implicit mode-specific features."""
+    if mode != "nfq" or not isinstance(requires, dict):
+        return requires
+
+    mode_requires = dict(requires)
+    features = list(mode_requires.get("features", []))
+    if "NFQ" not in features:
+        features.append("NFQ")
+    mode_requires["features"] = features
+    return mode_requires
+
+
 def check_test_requires(
     requires: dict, mode: str, script_dir: str, config: dict, test_dir: str
 ) -> None:
     """Validate test-level requirements before setting up namespaces."""
+    requires = get_mode_requires(requires, mode)
     check_required_commands(requires)
     if not (set(requires) - {"commands"}):
         return
@@ -1780,6 +1794,7 @@ def do_run(
     """Run tests. Returns True if all tests passed."""
     passed = 0
     failed = 0
+    skipped = 0
     failing_tests = []
     selected_tags = {tag.strip().lower() for tag in (tags or []) if tag.strip()}
     script_dir = os.path.dirname(os.path.realpath(__file__))
@@ -1824,6 +1839,7 @@ def do_run(
             try:
                 check_test_requires(requires, mode, script_dir, config, root)
             except UnsatisfiedRequirementError as err:
+                skipped += 1
                 log_test_step(mode, test_name, f"SKIP: {err}")
                 continue
             except ValueError as err:
@@ -1854,6 +1870,7 @@ def do_run(
     print("")
     print(f"PASS: {passed}")
     print(f"FAIL: {failed}")
+    print(f"SKIP: {skipped}")
     if failing_tests:
         print("")
         print("Failing tests:")
