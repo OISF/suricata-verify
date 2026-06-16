@@ -36,7 +36,8 @@ name created are:
 ## Test Requirements
 
 Tests can declare required host commands in `test.yaml`. If any command
-is missing, the test is skipped.
+is missing, the test is skipped. Tests run in the NFQ environment also
+implicitly require Suricata's `NFQ` build feature.
 
 ```
 requires:

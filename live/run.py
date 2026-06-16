@@ -1763,8 +1763,29 @@ def run_test(
     return failures
 
 
+def get_environment_requires(requires: dict, environment: str) -> dict:
+    """ Get requirements, taking the environment into consideration.
+
+    For example, a test can't depend on NFQ, but NFQ is required to run tests in
+    the NFQ environment, so slip NFQ into the requirements as needed.
+
+    Adding this requirement here keeps NFQ-specific build checks out of
+    otherwise generic test definitions.
+    """
+    if environment != "nfq" or not isinstance(requires, dict):
+        return requires
+
+    environment_requires = dict(requires)
+    features = list(environment_requires.get("features", []))
+    if "NFQ" not in features:
+        features.append("NFQ")
+    environment_requires["features"] = features
+    return environment_requires
+
+
 def check_test_requires(requires: dict, environment: str, test_dir: str) -> None:
     """Validate test-level requirements before setting up namespaces."""
+    requires = get_environment_requires(requires, environment)
     check_required_commands(requires)
     if not (set(requires) - {"command"}):
         return
@@ -1787,6 +1808,7 @@ def do_run(
     """Run tests. Returns True if all tests passed."""
     passed = 0
     failed = 0
+    skipped = 0
     failing_tests = []
     selected_tags = {tag.strip().lower() for tag in (tags or []) if tag.strip()}
     script_dir = os.path.dirname(os.path.realpath(__file__))
@@ -1832,6 +1854,7 @@ def do_run(
         try:
             check_test_requires(requires, environment, root)
         except UnsatisfiedRequirementError as err:
+            skipped += 1
             log_test_step(environment, test_name, f"SKIP: {err}")
             continue
         except ValueError as err:
@@ -1860,6 +1883,7 @@ def do_run(
     print("")
     print(f"PASS: {passed}")
     print(f"FAIL: {failed}")
+    print(f"SKIP: {skipped}")
     if failing_tests:
         print("")
         print("Failing tests:")
