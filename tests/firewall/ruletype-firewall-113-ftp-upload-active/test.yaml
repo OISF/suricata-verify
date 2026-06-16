@@ -1,0 +1,44 @@
+requires:
+  min-version: 9
+
+pcap: ../../ftp/ftp-upload-active/input.pcap
+
+args:
+  - --simulate-ips
+  - --runmode=single
+
+checks:
+
+  # ftp-data:request_started never reach in active upload mode
+  - filter:
+      count: 0
+      match:
+        alert.signature_id: 4000
+
+  # ftp-data:request_complete never reach in active upload mode
+  - filter:
+      count: 0
+      match:
+        alert.signature_id: 4010
+
+  - filter:
+      count: 1
+      match:
+        event_type: ftp_data
+        ftp_data.command: STOR
+
+  # ftpdata_command: stor matches in ftp-data:response_started
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 5000
+
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 5010
+
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
