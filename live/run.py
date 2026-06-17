@@ -938,7 +938,7 @@ class ServerScript:
     stdout_thread: threading.Thread
     stderr_thread: threading.Thread
 
-    def wait_for_start(self, grace_period: float = 0.5) -> bool:
+    def wait_for_start(self, grace_period: float = 1.0) -> bool:
         """Return True if the script stays alive for a brief startup window."""
         deadline = time.monotonic() + grace_period
         while time.monotonic() < deadline:
