@@ -1,0 +1,39 @@
+requires:
+  min-version: 9
+
+pcap: ../../ftp/ftp-upload-passive/input.pcap
+
+args:
+  - --simulate-ips
+  - --runmode=single
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: ftp_data
+        ftp_data.command: STOR
+
+  # ftpdata_command: stor matches in ftp-data:request_started
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 4000
+
+  # ftpdata_command: nlst matches in ftp-data:response_started
+  - filter:
+      count: 2
+      match:
+        alert.signature_id: 4010
+
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+
+  # There should be no drops.
+  - filter:
+      count: 0
+      match:
+        event_type: drop
