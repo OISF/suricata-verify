@@ -6,7 +6,16 @@ args:
 
 checks:
   - filter:
+      requires:
+        lt-version: 9
       count: 1
+      match:
+        event_type: ftp_data
+
+  - filter:
+      requires:
+        min-version: 9
+      count: 2
       match:
         event_type: ftp_data
 
