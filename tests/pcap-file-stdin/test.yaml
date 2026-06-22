@@ -1,5 +1,5 @@
 requires:
-  min-version: 9
+  min-version: 8.0.6
 
 # Override the default invocation to feed input.pcap to Suricata via stdin
 # instead of via -r path. /dev/stdin is non-seekable, which is the path the
