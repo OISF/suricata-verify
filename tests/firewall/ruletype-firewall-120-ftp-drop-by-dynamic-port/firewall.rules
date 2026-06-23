@@ -1,0 +1,3 @@
+# This is a bit silly, but drop all negotiated dynamic ports above 1024.
+drop:flow,alert ftp:response_complete any any -> any any (sid: 2000; \
+  ftp.dynamic_port: >1024;)
