@@ -1,0 +1,52 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - --runmode=single
+  - -k none
+
+checks:
+
+  - filter:
+      count: 2
+      match:
+        event_type: ftp_data
+        ftp_data.command: LIST
+        not-has-key: ftp_data.filename
+
+  - filter:
+      count: 2
+      match:
+        event_type: ftp_data
+        ftp_data.command: MLSD
+        not-has-key: ftp_data.filename
+
+  # One active data-channel request for each listing command.
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 4100
+
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 4101
+
+  # One passive data-channel response for each listing command.
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 5100
+
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 5101
+
+  - filter:
+      count: 0
+      match:
+        event_type: drop

@@ -1,0 +1,36 @@
+# Allow all TCP handshakes.
+accept:hook tcp:all any any -> any any (flow:not_established; sid:1000;)
+accept:hook tcp:all any any <> any any (flow:established; sid:1001;)
+
+# Allow all FTP control-channel transactions.
+accept:hook ftp:request_started any any -> any any (sid:2000;)
+accept:hook ftp:request_complete any any -> any any (sid:2010;)
+
+accept:hook ftp:response_started any any -> any any (sid:3000;)
+accept:hook ftp:response_complete any any -> any any (sid:3010;)
+
+# Accept the already supported data-channel commands so the pcap can complete.
+accept:flow ftp-data:request_started any any -> any any (sid:4000; \
+    ftpdata_command:stor;)
+accept:flow ftp-data:request_started any any -> any any (sid:4001; \
+    ftpdata_command:nlst;)
+accept:flow ftp-data:request_started any any -> any any (sid:4002; \
+    ftpdata_command:retr;)
+
+accept:flow ftp-data:response_started any any -> any any (sid:5000; \
+    ftpdata_command:stor;)
+accept:flow ftp-data:response_started any any -> any any (sid:5001; \
+    ftpdata_command:nlst;)
+accept:flow ftp-data:response_started any any -> any any (sid:5002; \
+    ftpdata_command:retr;)
+
+# LIST and MLSD are listing commands and do not use file storage.
+accept:flow,alert ftp-data:request_started any any -> any any (sid:4100; \
+    ftpdata_command:list;)
+accept:flow,alert ftp-data:request_started any any -> any any (sid:4101; \
+    ftpdata_command:mlsd;)
+
+accept:flow,alert ftp-data:response_started any any -> any any (sid:5100; \
+    ftpdata_command:list;)
+accept:flow,alert ftp-data:response_started any any -> any any (sid:5101; \
+    ftpdata_command:mlsd;)
