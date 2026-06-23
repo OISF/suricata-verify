@@ -1,0 +1,43 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - --runmode=single
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: STOU
+
+  - filter:
+      count: 1
+      match:
+        event_type: ftp_data
+        ftp_data.command: STOU
+        ftp_data.filename: <stou>
+
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 5201
+        ftp_data.command: STOU
+        ftp_data.filename: <stou>
+
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        ftp_data.command: STOU
+        ftp_data.filename: <stou>
+        fileinfo.filename: <stou>
+
+  - filter:
+      count: 0
+      match:
+        event_type: drop
