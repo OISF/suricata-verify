@@ -3,6 +3,15 @@ accept:hook tcp:all any any -> any any (flow:not_established; sid:1000;)
 accept:hook tcp:all any any <> any any (flow:established; sid:1001;)
 
 accept:hook ftp:request_started any any -> any any (sid:2000;)
+
+# Make sure a reply is received for the PASS command.
+accept:hook ftp:request_complete any any -> any any (sid:2015; \
+  xbits:set,fw.ftp.pass,track tx; \
+  ftp.command; content:"PASS";)
+accept:hook,alert ftp:response_started any any -> any any (sid: 2016; \
+  xbits:isset,fw.ftp.pass,track tx; \
+  ftp.reply_received: yes;)
+
 accept:hook ftp:request_complete any any -> any any (sid:2010;)
 
 accept:hook ftp:response_started any any -> any any (sid:3000;)

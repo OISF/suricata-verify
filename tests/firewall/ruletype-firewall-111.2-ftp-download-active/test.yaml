@@ -37,3 +37,10 @@ checks:
       count: 0
       match:
         event_type: drop
+
+  # Make sure we go our ftp.reply_received alert.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2016
