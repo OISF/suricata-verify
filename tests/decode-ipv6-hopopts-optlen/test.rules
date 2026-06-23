@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"IPv6 hop-by-hop option length runs past option area"; decode-event:ipv6.exthdr_invalid_optlen; sid:1;)
