@@ -280,7 +280,10 @@ class SuricataConfig:
         self.version = version
         self.features = set()
         self.config = {}
+        # we can use a single real interface
         self.interface = None
+        # or a veth pair
+        self.interface_rx = None
         self.load_build_info()
 
     def load_build_info(self):
@@ -1082,7 +1085,9 @@ class TestRunner:
         args += ["-c", self.get_suricata_yaml_path()]
 
         # Find pcaps.
-        if self.suricata_config.interface != None:
+        if self.suricata_config.interface_rx != None:
+            args += ["-i", self.suricata_config.interface_rx]
+        elif self.suricata_config.interface != None:
             args += ["-i", self.suricata_config.interface]
         else:
             pcap = self.pcap_name()
@@ -1377,11 +1382,19 @@ def main():
                 return 1
         if args.live == "":
             suricata_config.interface = "sv_"+str(os.getpid())
+            suricata_config.interface_rx = suricata_config.interface+"_rx"
+            suricata_config.interface = suricata_config.interface+"_tx"
             try:
-                pl = subprocess.check_call(["ip", "link", "add", suricata_config.interface, "type", "dummy"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                pl = subprocess.check_call(["ip", "link", "add", suricata_config.interface, "type", "veth", "peer", "name", suricata_config.interface_rx], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             except subprocess.CalledProcessError as ipl:
                 if ipl.returncode != 0:
                     print("Cannot create dummy interface")
+                    return 1
+            try:
+                pl = subprocess.check_call(["ip", "link", "set", suricata_config.interface_rx, "up"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            except subprocess.CalledProcessError as ipl:
+                if ipl.returncode != 0:
+                    print("Rx Interface cannot be set to up")
                     return 1
         try:
             pl = subprocess.check_call(["ip", "link", "set", suricata_config.interface, "up"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -1446,11 +1459,11 @@ def main():
     except KeyboardInterrupt:
         print("\nInterrupted by user")
         if args.live == "":
-            subprocess.check_call(["ip", "link", "delete", suricata_config.interface, "type", "dummy"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            subprocess.check_call(["ip", "link", "delete", suricata_config.interface], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         return 1
 
     if args.live == "":
-        subprocess.check_call(["ip", "link", "delete", suricata_config.interface, "type", "dummy"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subprocess.check_call(["ip", "link", "delete", suricata_config.interface], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     passed = count_dict["passed"]
     failed = count_dict["failed"]
     skipped = count_dict["skipped"]
