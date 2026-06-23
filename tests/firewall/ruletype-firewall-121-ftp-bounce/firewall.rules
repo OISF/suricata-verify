@@ -1,0 +1,3 @@
+# Drop FTP bounce attempts.
+drop:flow,alert ftp:request_complete any any -> any any (sid:2000; \
+  ftpbounce;)
