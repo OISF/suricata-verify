@@ -25,6 +25,20 @@ checks:
         ftp_data.filename: "all-data-ipv4-active-stor-appe.txt"
 
   - filter:
+      count: 1
+      match:
+        event_type: ftp_data
+        ftp_data.command: STOU
+        ftp_data.filename: "all-data-ipv4-passive-stou.txt"
+
+  - filter:
+      count: 1
+      match:
+        event_type: ftp_data
+        ftp_data.command: STOU
+        ftp_data.filename: "all-data-ipv4-active-stou.txt"
+
+  - filter:
       count: 2
       match:
         event_type: ftp_data
@@ -49,6 +63,18 @@ checks:
       count: 1
       match:
         alert.signature_id: 5200
+
+  # One passive data-channel request for STOU.
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 4201
+
+  # One active data-channel response for STOU.
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 5201
 
   # One active data-channel request for each listing command.
   - filter:

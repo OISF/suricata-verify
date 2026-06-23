@@ -31,6 +31,13 @@ accept:flow,alert ftp-data:request_started any any -> any any (sid:4200; \
 accept:flow,alert ftp-data:response_started any any -> any any (sid:5200; \
     ftpdata_command:appe;)
 
+# STOU is an upload command and may omit a filename.
+accept:flow,alert ftp-data:request_started any any -> any any (sid:4201; \
+    ftpdata_command:stou;)
+
+accept:flow,alert ftp-data:response_started any any -> any any (sid:5201; \
+    ftpdata_command:stou;)
+
 # LIST and MLSD are listing commands and do not use file storage.
 accept:flow,alert ftp-data:request_started any any -> any any (sid:4100; \
     ftpdata_command:list;)
