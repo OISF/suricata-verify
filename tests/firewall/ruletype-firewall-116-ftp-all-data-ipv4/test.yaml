@@ -11,6 +11,20 @@ args:
 checks:
 
   - filter:
+      count: 1
+      match:
+        event_type: ftp_data
+        ftp_data.command: APPE
+        ftp_data.filename: "all-data-ipv4-passive-stor-appe.txt"
+
+  - filter:
+      count: 1
+      match:
+        event_type: ftp_data
+        ftp_data.command: APPE
+        ftp_data.filename: "all-data-ipv4-active-stor-appe.txt"
+
+  - filter:
       count: 2
       match:
         event_type: ftp_data
@@ -23,6 +37,18 @@ checks:
         event_type: ftp_data
         ftp_data.command: MLSD
         not-has-key: ftp_data.filename
+
+  # One passive data-channel request for APPE.
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 4200
+
+  # One active data-channel response for APPE.
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 5200
 
   # One active data-channel request for each listing command.
   - filter:
