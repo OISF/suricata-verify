@@ -1,5 +1,6 @@
 requires:
   min-version: 8.0.6
+  lt-version: 9
 
 pcap: ../../ftp/ftp-upload-passive/input.pcap
 
