@@ -4,9 +4,15 @@ accept:hook tcp:all any any <> any any (flow:established; sid:1001;)
 
 # Allow all FTP control-channel transactions.
 accept:hook ftp:request_started any any -> any any (sid:2000;)
+
 accept:hook ftp:request_complete any any -> any any (sid:2010;)
 
 accept:hook ftp:response_started any any -> any any (sid:3000;)
+#
+# Test for ftp.reply
+accept:hook,alert ftp:response_complete any any -> any any (sid:2015; \
+  ftp.reply; content: "ftpd.lk2m3y98";)
+
 accept:hook ftp:response_complete any any -> any any (sid:3010;)
 
 # In active mode the server initiates the data TCP flow. For an upload command,

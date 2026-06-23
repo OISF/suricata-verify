@@ -41,3 +41,10 @@ checks:
       count: 0
       match:
         event_type: drop
+
+  # Make sure we got our ftp.reply alert.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2015
