@@ -1,0 +1,23 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+pcap: sip-body-large.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        frame.type: "request.body"
+        frame.length: 65536
+        frame.complete: true
+        frame.direction: toserver
+  - filter:
+      count: 1
+      match:
+        event_type: sip
+        sip.method: INVITE
