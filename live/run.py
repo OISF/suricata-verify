@@ -1204,13 +1204,13 @@ def check_required_commands(requires: dict) -> None:
     """Validate host command requirements from a requires mapping."""
     if not isinstance(requires, dict):
         raise ValueError("requires must be a mapping")
-    commands = requires.get("commands", [])
+    commands = requires.get("command", [])
     if commands is None:
         return
     if not isinstance(commands, list) or any(
         not isinstance(command, str) for command in commands
     ):
-        raise ValueError("requires.commands must be an array of strings")
+        raise ValueError("requires.command must be an array of strings")
     for command in commands:
         if shutil.which(command) is None:
             raise UnsatisfiedRequirementError(f"requires command {command}")
@@ -1246,7 +1246,7 @@ def check_requires(
             for feature in requires["features"]:
                 if not suricata_config.has_feature(feature):
                     raise UnsatisfiedRequirementError(f"requires feature {feature}")
-        elif key == "commands":
+        elif key == "command":
             pass
         elif key == "env":
             for env in requires["env"]:
@@ -1773,7 +1773,7 @@ def check_test_requires(
     """Validate test-level requirements before setting up namespaces."""
     requires = get_mode_requires(requires, mode)
     check_required_commands(requires)
-    if not (set(requires) - {"commands"}):
+    if not (set(requires) - {"command"}):
         return
 
     output_dir = os.path.join(test_dir, "output", mode)
