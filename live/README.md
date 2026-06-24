@@ -37,7 +37,7 @@ require Suricata's `NFQ` build feature.
 
 ```
 requires:
-  commands:
+  command:
     - podman
     - curl
 ```

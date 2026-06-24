@@ -2,7 +2,7 @@ mode: [afp, nfq]
 
 requires:
   min-version: 9
-  commands:
+  command:
     - podman
 
 before: |
