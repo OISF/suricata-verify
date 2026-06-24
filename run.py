@@ -38,18 +38,21 @@ import argparse
 import yaml
 import glob
 import re
-import json
 import unittest
 from concurrent.futures import ThreadPoolExecutor
 from collections import namedtuple
 import threading
-import filecmp
 import subprocess
 import yaml
 import traceback
-import platform
 import signal
 
+from lib.checks import (
+    FileCompareCheck,
+    FilterCheck,
+    ShellCheck,
+    StatsCheck,
+)
 from lib.requires import (
     ImpossibleRequirementError,
     UnsatisfiedRequirementError,
@@ -348,49 +351,6 @@ def check_requires(requires, suricata_config: SuricataConfig, suri_dir=None):
     )
 
 
-def find_value(name, obj):
-    """Find the value in an object for a field specified by name.
-
-    Example names:
-      event_type
-      alert.signature_id
-      smtp.rcpt_to[0]
-    """
-    parts = name.split(".")
-    for part in parts:
-
-        if part == "__len":
-            # Get the length of the object. Return -1 if the object is
-            # not a type that has a length (numbers).
-            try:
-                return len(obj)
-            except:
-                return -1
-        if part in ["__contains", "__find", "__startswith", "__endswith"]:
-            # Return full object, caller will handle the special match logic.
-            break
-        name = None
-        index = None
-        m = re.match(r"^(.*)\[(\d+)\]$", part)
-        if m:
-            name = m.group(1)
-            index = m.group(2)
-        else:
-            name = part
-
-        if not name in obj:
-            return None
-        obj = obj[name]
-
-        if index is not None:
-            try:
-                obj = obj[int(index)]
-            except:
-                return None
-
-    return obj
-
-
 def is_version_compatible(version, suri_version, expr):
     config_version = parse_suricata_version(version, expr)
     version_obj = Version()
@@ -406,163 +366,14 @@ def rule_is_version_compatible(rulefile, suri_version):
     # default is true
     return True
 
-class FileCompareCheck:
+def check_result_or_raise(result):
+    if result.failures:
+        raise TestError("\n".join(result.failures))
+    return True
 
-    def __init__(self, config, directory, cwd):
-        for key in config:
-            if key not in ["requires", "filename", "expected"]:
-                raise Exception("Unexpected key in file-compare check: {}".format(key))
-        self.config = config
-        self.directory = directory
-        self.cwd = cwd
 
-    def run(self):
-        if WIN32:
-            raise UnsatisfiedRequirementError("shell check not supported on Windows")
-        expected = os.path.join(self.directory, self.config["expected"])
-        filename = self.config["filename"]
-        if self.cwd and not os.path.isabs(filename):
-            filename = os.path.join(self.cwd, filename)
-        try:
-            if filecmp.cmp(expected, filename):
-                return True
-            else:
-                raise TestError("%s %s \nFAILED: verification failed" % (expected, filename))
-        except Exception as err:
-            raise TestError("file-compare check failed with exception: %s" % (err))
-
-class ShellCheck:
-
-    def __init__(self, config, env, suricata_config, output_dir, test_dir):
-        for key in config:
-            if key not in ["requires", "args", "expect"]:
-                raise Exception("Unexpected key in shell check: {}".format(key))
-        self.config = config
-        self.env = env
-        self.suricata_config = suricata_config
-        self.cwd = output_dir
-        self.script_cwd = test_dir
-
-    def run(self):
-        if not self.config or "args" not in self.config:
-            raise TestError("shell check missing args")
-        requires = self.config.get("requires", {})
-        check_requires(requires, self.suricata_config, self.script_cwd)
-
-        try:
-            if WIN32:
-                raise UnsatisfiedRequirementError("shell check not supported on Windows")
-            output = subprocess.check_output(self.config["args"], shell=True, env=self.env, cwd=self.cwd)
-            if "expect" in self.config:
-                return str(self.config["expect"]) == output.decode().strip()
-            return True
-        except subprocess.CalledProcessError as err:
-            raise TestError("Shell command failed: {} -> {}".format(
-                self.config, err.output))
-
-class StatsCheck:
-
-    def __init__(self, config, outdir):
-        self.config = config
-        self.outdir = outdir
-
-    def run(self):
-        stats = None
-        eve_json_path = os.path.join(self.outdir, "eve.json")
-        with open(eve_json_path, "r") as fileobj:
-            for line in fileobj:
-                event = json.loads(line)
-                if event["event_type"] == "stats":
-                    stats = event["stats"]
-        for key in self.config:
-            val = find_value(key, stats)
-            if val != self.config[key]:
-                raise TestError("stats.%s: expected %s; got %s" % (
-                    key, str(self.config[key]), str(val)))
-        return True
-
-class FilterCheck:
-
-    def __init__(self, config, outdir, suricata_config, test_version, script_cwd=None):
-        for key in config:
-            if key not in ["count", "match", "filename", "requires"]:
-                raise Exception("Unexpected key in filter check: {}".format(key))
-        self.config = config
-        self.outdir = outdir
-        self.suricata_config = suricata_config
-        self.suri_version = suricata_config.version
-        self.test_version = test_version
-        self.script_cwd = script_cwd
-
-    def run(self):
-        requires = self.config.get("requires", {})
-        check_filter_test_version_compat(requires, self.test_version)
-        check_requires(requires, self.suricata_config, self.script_cwd)
-
-        if "filename" in self.config:
-            json_filename = self.config["filename"]
-            if not os.path.isabs(json_filename):
-                json_filename = os.path.join(self.outdir, json_filename)
-        else:
-            json_filename = os.path.join(self.outdir, "eve.json")
-        if not os.path.exists(json_filename):
-            raise TestError("%s does not exist" % (json_filename))
-
-        count = 0
-        with open(json_filename, "r", encoding="utf-8") as fileobj:
-            for line in fileobj:
-                event = json.loads(line)
-                if self.match(event):
-                    count += 1
-        if count == self.config["count"]:
-            return True
-        if "comment" in self.config:
-            raise TestError("%s: expected %d, got %d" % (
-                self.config["comment"], self.config["count"], count))
-        raise TestError("expected %d matches; got %d for filter %s" % (
-            self.config["count"], count, str(self.config)))
-
-    def match(self, event):
-        for key, expected in self.config["match"].items():
-            if key == "has-key":
-                if isinstance(expected, list):
-                    for item in expected:
-                        val = find_value(item, event)
-                        if val is None:
-                            return False
-                else:
-                    val = find_value(expected, event)
-                    if val is None:
-                        return False
-            elif key == "not-has-key":
-                if isinstance(expected, list):
-                    for item in expected:
-                        val = find_value(item, event)
-                        if val is not None:
-                            return False
-                else:
-                    val = find_value(expected, event)
-                    if val is not None:
-                        return False
-            else:
-                val = find_value(key, event)
-                if key.endswith("__find"):
-                    if val.find(expected) < 0:
-                        return False
-                elif key.endswith("__contains"):
-                    if not expected in val:
-                        return False
-                elif key.endswith("__startswith"):
-                    if not val.startswith(expected):
-                        return False
-                elif key.endswith("__endswith"):
-                    if not val.endswith(expected):
-                        return False
-                elif val != expected:
-                    if str(val) == str(expected):
-                        print("Different types but same string", type(val), val, type(expected), expected)
-                    return False
-        return True
+def print_type_mismatch(val, expected):
+    print("Different types but same string", type(val), val, type(expected), expected)
 
 # wait for suricata to be ready, to send unix-socket commands
 def grep_start_engine(p, lines):
@@ -890,24 +701,45 @@ class TestRunner:
 
     @handle_exceptions
     def perform_filter_checks(self, check, count, test_num, test_name):
-        count = FilterCheck(check, self.output,
-                self.suricata_config, self.version, self.directory).run()
-        return count
+        result = FilterCheck(
+            check,
+            self.output,
+            suricata_config=self.suricata_config,
+            test_dir=self.directory,
+            require_checker=check_requires,
+            test_version=self.version,
+            version_compat_checker=check_filter_test_version_compat,
+            type_mismatch_callback=print_type_mismatch,
+        ).run()
+        return check_result_or_raise(result)
 
     @handle_exceptions
     def perform_shell_checks(self, check, count, test_num, test_name):
-        count = ShellCheck(check, self.build_env(), self.suricata_config, self.output, self.directory).run()
-        return count
+        result = ShellCheck(
+            check,
+            self.build_env(),
+            self.output,
+            suricata_config=self.suricata_config,
+            test_dir=self.directory,
+            require_checker=check_requires,
+            windows=WIN32,
+        ).run()
+        return check_result_or_raise(result)
 
     @handle_exceptions
     def perform_stats_checks(self, check, count, test_num, test_name):
-        count = StatsCheck(check, self.output).run()
-        return count
+        result = StatsCheck(check, self.output).run()
+        return check_result_or_raise(result)
 
     @handle_exceptions
     def perform_file_compare_checks(self, check, count, test_num, test_name):
-        count = FileCompareCheck(check, self.directory, self.output).run()
-        return count
+        result = FileCompareCheck(
+            check,
+            self.directory,
+            self.output,
+            windows=WIN32,
+        ).run()
+        return check_result_or_raise(result)
 
     def reset_count(self, dictionary):
         for k in dictionary.keys():
