@@ -6,7 +6,7 @@
 mode: [nfq]
 
 requires:
-  commands:
+  command:
     - jq
     - podman
 

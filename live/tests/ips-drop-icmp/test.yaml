@@ -5,7 +5,7 @@
 mode: [afp, nfq]
 
 requires:
-  commands:
+  command:
     - jq
     - podman
 

@@ -1,7 +1,7 @@
 mode: [afp]
 
 requires:
-  commands:
+  command:
     - jq
     - podman
 
