@@ -17,6 +17,9 @@ import string
 import shutil
 import subprocess
 import sys
+
+sys.dont_write_bytecode = True
+
 import tempfile
 import threading
 import time
@@ -25,6 +28,17 @@ from dataclasses import dataclass
 from typing import IO
 
 import yaml
+
+SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+VERIFY_DIR = os.path.dirname(SCRIPT_DIR)
+if VERIFY_DIR not in sys.path:
+    sys.path.insert(0, VERIFY_DIR)
+
+from lib.requires import (
+    UnsatisfiedRequirementError,
+    check_required_commands as check_common_required_commands,
+    check_requires as check_common_requires,
+)
 
 CLIENT_NS = "client"
 SERVER_NS = "server"
@@ -1037,10 +1051,6 @@ def start_background_script(
     )
 
 
-class UnsatisfiedRequirementError(Exception):
-    pass
-
-
 SuricataVersion = namedtuple("SuricataVersion", ["major", "minor", "patch"])
 
 
@@ -1201,86 +1211,20 @@ def is_version_compatible(
 
 
 def check_required_commands(requires: dict) -> None:
-    """Validate host command requirements from a requires mapping."""
-    if not isinstance(requires, dict):
-        raise ValueError("requires must be a mapping")
-    commands = requires.get("command", [])
-    if commands is None:
-        return
-    if not isinstance(commands, list) or any(
-        not isinstance(command, str) for command in commands
-    ):
-        raise ValueError("requires.command must be an array of strings")
-    for command in commands:
-        if shutil.which(command) is None:
-            raise UnsatisfiedRequirementError(f"requires command {command}")
+    check_common_required_commands(requires)
 
 
 def check_requires(
-    requires: dict, suricata_config: SuricataConfig, test_dir: str | None = None
+    requires: dict, suricata_config: SuricataConfig, suri_dir: str | None = None
 ) -> None:
-    check_required_commands(requires)
-    suri_version = suricata_config.version
-    for key in requires:
-        if key == "min-version":
-            min_version = requires["min-version"]
-            if not is_version_compatible(min_version, suri_version, "gte"):
-                raise UnsatisfiedRequirementError(
-                    f"requires at least version {min_version}"
-                )
-        elif key == "lt-version":
-            lt_version = requires["lt-version"]
-            if not is_version_compatible(lt_version, suri_version, "lt"):
-                raise UnsatisfiedRequirementError(f"for version less than {lt_version}")
-        elif key == "gt-version":
-            gt_version = requires["gt-version"]
-            if not is_version_compatible(gt_version, suri_version, "gt"):
-                raise UnsatisfiedRequirementError(
-                    f"for version greater than {gt_version}"
-                )
-        elif key == "version":
-            req_version = requires["version"]
-            if not is_version_compatible(req_version, suri_version, "equal"):
-                raise UnsatisfiedRequirementError(f"only for version {req_version}")
-        elif key == "features":
-            for feature in requires["features"]:
-                if not suricata_config.has_feature(feature):
-                    raise UnsatisfiedRequirementError(f"requires feature {feature}")
-        elif key == "command":
-            pass
-        elif key == "env":
-            for env in requires["env"]:
-                if env not in os.environ:
-                    raise UnsatisfiedRequirementError(f"requires env var {env}")
-        elif key == "files":
-            for filename in requires["files"]:
-                if test_dir and not os.path.isabs(filename):
-                    filename = os.path.join(test_dir, filename)
-                if not os.path.exists(filename):
-                    raise UnsatisfiedRequirementError(f"requires file {filename}")
-        elif key == "script":
-            for script in requires["script"]:
-                try:
-                    subprocess.check_call(f"{script}", shell=True)
-                except Exception as err:
-                    raise UnsatisfiedRequirementError(
-                        f"requires script returned false: {err}"
-                    ) from err
-        elif key == "pcap":
-            pass
-        elif key == "lambda":
-            if not eval(requires["lambda"]):
-                raise UnsatisfiedRequirementError(requires["lambda"])
-        elif key == "os":
-            cur_platform = platform.system().lower()
-            if not cur_platform.startswith(requires["os"].lower()):
-                raise UnsatisfiedRequirementError(requires["os"])
-        elif key == "arch":
-            cur_arch = platform.machine().lower()
-            if not cur_arch.startswith(requires["arch"].lower()):
-                raise UnsatisfiedRequirementError(requires["arch"])
-        else:
-            raise ValueError(f"unknown requires type: {key}")
+    check_common_requires(
+        requires,
+        suricata_config,
+        is_version_compatible,
+        suri_dir,
+        eval_globals=globals(),
+        include_script_error=True,
+    )
 
 
 def find_value(name: str, obj: object) -> object | None:
@@ -1782,7 +1726,7 @@ def check_test_requires(
     suricata_config = get_suricata_config(
         mode, script_dir, config, test_dir, output_dir, test_include
     )
-    check_requires(requires, suricata_config, test_dir)
+    check_requires(requires, suricata_config, os.getcwd())
 
 
 def do_run(

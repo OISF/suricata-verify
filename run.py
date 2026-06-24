@@ -25,6 +25,9 @@
 from __future__ import print_function
 
 import sys
+
+sys.dont_write_bytecode = True
+
 import os
 import os.path
 import subprocess
@@ -46,6 +49,12 @@ import yaml
 import traceback
 import platform
 import signal
+
+from lib.requires import (
+    ImpossibleRequirementError,
+    UnsatisfiedRequirementError,
+    check_requires as check_common_requires,
+)
 
 VALIDATE_EVE = False
 WIN32 = sys.platform == "win32"
@@ -125,12 +134,6 @@ class SelfTest(unittest.TestCase):
         self.assertTrue(comp.is_lt(SuricataVersion(6, 0, 0), SuricataVersion(7, 0, 0)))
 
 class TestError(Exception):
-    pass
-
-class UnsatisfiedRequirementError(Exception):
-    pass
-
-class ImpossibleRequirementError(Exception):
     pass
 
 class UnnecessaryRequirementError(Exception):
@@ -329,83 +332,20 @@ def check_filter_test_version_compat(requires, test_version):
                     raise UnnecessaryRequirementError(
                         "test already requires min {} not needed for the check {}".format(test_version["min"], requires["min-version"]))
 
-def check_requires(requires, suricata_config: SuricataConfig, test_dir=None):
-    suri_version = suricata_config.version
-    for key in requires:
-        if key == "min-version":
-            min_version = requires["min-version"]
-            if not is_version_compatible(version=min_version,
-                    suri_version=suri_version, expr="gte"):
-                raise UnsatisfiedRequirementError(
-                        "requires at least version {}".format(min_version))
-        elif key == "lt-version":
-            if "gt-version" in requires:
-                if not Version().is_lt(parse_suricata_version(requires["gt-version"]), parse_suricata_version(requires["lt-version"])):
-                    raise ImpossibleRequirementError(
-                        "test has both lt-version {} and gt-version {}".format(requires["lt-version"], requires["gt-version"]))
-            lt_version = requires["lt-version"]
-            if not is_version_compatible(version=lt_version,
-                    suri_version=suri_version, expr="lt"):
-                raise UnsatisfiedRequirementError(
-                        "for version less than {}".format(lt_version))
-        elif key == "gt-version":
-            if "lt-version" in requires:
-                if not Version().is_lt(parse_suricata_version(requires["gt-version"]), parse_suricata_version(requires["lt-version"])):
-                    raise ImpossibleRequirementError(
-                        "test has both lt-version {} and gt-version {}".format(requires["lt-version"], requires["gt-version"]))
-            gt_version = requires["gt-version"]
-            if not is_version_compatible(version=gt_version,
-                    suri_version=suri_version, expr="gt"):
-                raise UnsatisfiedRequirementError(
-                        "for version great than {}".format(gt_version))
-        elif key == "version":
-            req_version = requires["version"]
-            if not is_version_compatible(version=req_version,
-                    suri_version=suri_version, expr="equal"):
-                raise UnsatisfiedRequirementError(
-                        "only for version {}".format(req_version))
-        elif key == "features":
-            for feature in requires["features"]:
-                if not suricata_config.has_feature(feature):
-                    raise UnsatisfiedRequirementError(
-                        "requires feature %s" % (feature))
-        elif key == "env":
-            for env in requires["env"]:
-                if not env in os.environ:
-                    raise UnsatisfiedRequirementError(
-                        "requires env var %s" % (env))
-        elif key == "files":
-            for filename in requires["files"]:
-                if test_dir and not os.path.isabs(filename):
-                    filename = os.path.join(test_dir, filename)
-                if not os.path.exists(filename):
-                    raise UnsatisfiedRequirementError(
-                        "requires file %s" % (filename))
-        elif key == "script":
-            # This is run for the current directory (the Suricata
-            # source directory).
-            for script in requires["script"]:
-                try:
-                    subprocess.check_call("%s" % script, shell=True)
-                except:
-                    raise UnsatisfiedRequirementError(
-                        "requires script returned false")
-        elif key == "pcap":
-            # A valid requires argument, but not verified here.
-            pass
-        elif key == "lambda":
-            if not eval(requires["lambda"]):
-                raise UnsatisfiedRequirementError(requires["lambda"])
-        elif key == "os":
-            cur_platform = platform.system().lower()
-            if not cur_platform.startswith(requires["os"].lower()):
-                raise UnsatisfiedRequirementError(requires["os"])
-        elif key == "arch":
-            cur_arch = platform.machine().lower()
-            if not cur_arch.startswith(requires["arch"].lower()):
-                raise UnsatisfiedRequirementError(requires["arch"])
-        else:
-            raise Exception("unknown requires types: %s" % (key))
+def check_requires(requires, suricata_config: SuricataConfig, suri_dir=None):
+    check_common_requires(
+        requires,
+        suricata_config,
+        is_version_compatible,
+        suri_dir,
+        version_is_lt=lambda left, right: Version().is_lt(
+            parse_suricata_version(left), parse_suricata_version(right)
+        ),
+        eval_globals=globals(),
+        unknown_error=Exception,
+        unknown_message="unknown requires types: {key}",
+        gt_message="for version great than {version}",
+    )
 
 
 def find_value(name, obj):
@@ -733,7 +673,7 @@ class TestRunner:
 
     def check_requires(self):
         requires = self.config.get("requires", {})
-        check_requires(requires, self.suricata_config, self.directory)
+        check_requires(requires, self.suricata_config, self.cwd)
         for key in requires:
             if key == "min-version":
                 self.version["min"] = requires["min-version"]
