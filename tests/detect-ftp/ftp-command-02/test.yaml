@@ -1,6 +1,8 @@
 pcap: ../../bug-3519/input.pcap
 
 requires:
+  command:
+    - xargs
   min-version: 8
 
 exit-code: 1

@@ -1064,23 +1064,6 @@ def check_args_fail():
             check_args['fail'] = 1
 
 
-def check_deps():
-    try:
-        cmd = "jq --version > nil" if WIN32 else "jq --version > /dev/null 2>&1"
-        subprocess.check_call(cmd, shell=True)
-    except:
-        print("error: jq is required")
-        return False
-
-    try:
-        cmd = "echo suricata | xargs > nil" if WIN32 else "echo | xargs > /dev/null 2>&1"
-        subprocess.check_call(cmd, shell=True)
-    except:
-        print("error: xargs is required")
-        return False
-
-    return True
-
 def run_test(dirpath, args, cwd, suricata_config):
     with lock:
         if check_args['fail'] == 1 or shutdown_requested:
@@ -1184,9 +1167,6 @@ def build_eve_validator():
 def main():
     global TOPDIR
     global args
-
-    if not check_deps():
-        return 1
 
     parser = argparse.ArgumentParser(description="Verification test runner.")
     parser.add_argument("-v", dest="verbose", action="store_true")

@@ -1,4 +1,6 @@
 requires:
+  command:
+    - xargs
   min-version: 9
 
 pcap: ../../http2-range/http2-range.pcap

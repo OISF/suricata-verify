@@ -1,6 +1,8 @@
 pcap: ../bug-7549-01/input.pcap
 
 requires:
+  command:
+    - xargs
   min-version: 8
 
 checks:

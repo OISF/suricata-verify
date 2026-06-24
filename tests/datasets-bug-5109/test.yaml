@@ -1,3 +1,7 @@
+requires:
+  command:
+    - xargs
+
 pcap: ../flowbit-oring/input.pcap
 
 exit-code: 0

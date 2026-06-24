@@ -1,3 +1,7 @@
+requires:
+  command:
+    - xargs
+
 checks:
 
   - shell:

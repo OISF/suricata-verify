@@ -1,4 +1,6 @@
 requires:
+  command:
+    - xargs
   pcap: false
   min-version: 8
 

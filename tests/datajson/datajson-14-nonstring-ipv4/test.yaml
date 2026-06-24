@@ -1,4 +1,6 @@
 requires:
+  command:
+    - xargs
   min-version: 8.0.6
 
 # The crash is at dataset load time, before any packet is read; the pcap is
