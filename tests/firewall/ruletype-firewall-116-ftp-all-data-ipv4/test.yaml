@@ -102,3 +102,11 @@ checks:
       count: 0
       match:
         event_type: drop
+
+  # This PCAP uses STOU with a client provided filename. Check
+  # that we record this filename.
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: all-data-ipv4-active-stou.txt
