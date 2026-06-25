@@ -870,7 +870,7 @@ class TestRunner:
                     stdout=subprocess.PIPE, stderr=subprocess.PIPE, start_new_session=True)
 
                 if self.suricata_config.interface != None:
-                    argsl = ["tcpreplay", "-t", "-i", self.suricata_config.interface]
+                    argsl = ["tcpreplay", "-i", self.suricata_config.interface]
                     pcap = self.pcap_name()
                     if pcap == None:
                         raise TestError("live test needs a pcap")
