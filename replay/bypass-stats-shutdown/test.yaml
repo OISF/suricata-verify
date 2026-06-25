@@ -1,0 +1,18 @@
+requires:
+  min-version: 9
+  os: linux
+  features:
+    - EBPF
+  files:
+    - ebpf/xdp_filter.bpf
+
+args:
+  - --set af-packet.0.xdp-filter-file=${SRCDIR}/ebpf/xdp_filter.bpf
+
+timeout: 2
+
+checks:
+  - stats:
+      flow_bypassed.pkts: 99
+      flow_bypassed.bytes: 15337
+      flow_bypassed.closed: 2
