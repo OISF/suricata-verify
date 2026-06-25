@@ -790,6 +790,9 @@ class TestRunner:
             return None
         return lines
 
+    def terminate_process(self, p, delay):
+        p.terminate()
+
     def run(self, outdir):
         if not self.force:
             self.check_requires()
@@ -875,6 +878,11 @@ class TestRunner:
                     pl = subprocess.check_call(
                         argsl, shell=shell, cwd=self.directory, env=env,
                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+                if "timeout" in self.config:
+                    delay = self.config["timeout"]
+                    timer = threading.Timer(delay, self.terminate_process, (p, delay))
+                    timer.start()
 
                 if "unix-commands" in self.config:
                     timeout = 2
