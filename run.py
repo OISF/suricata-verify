@@ -46,6 +46,7 @@ import yaml
 import traceback
 import platform
 import signal
+import time
 
 VALIDATE_EVE = False
 WIN32 = sys.platform == "win32"
@@ -789,6 +790,15 @@ class TestRunner:
             return None
         return lines
 
+    def shutdown_suricata(self, delay, p):
+        if self.verbose:
+            print("Shutting down Suricata after %d second(s)" % delay)
+        try:
+            p.terminate()
+        except Exception as err:
+            print("ERR: Couldn't shutdown suricata after timeout")
+            traceback.print_exc()
+
     def run(self, outdir):
         if not self.force:
             self.check_requires()
@@ -874,6 +884,12 @@ class TestRunner:
                     pl = subprocess.check_call(
                         argsl, shell=shell, cwd=self.directory, env=env,
                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+                if "live-shutdown-after" in self.config:
+                    delay = self.config["live-shutdown-after"]
+                    timer = threading.Timer(delay, self.shutdown_suricata, (delay, p))
+                    timer.daemon = True
+                    timer.start()
 
                 if "unix-commands" in self.config:
                     timeout = 2
