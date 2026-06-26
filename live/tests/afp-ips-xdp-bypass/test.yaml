@@ -1,0 +1,61 @@
+environment: inline
+
+requires:
+  command:
+    - python3
+  features:
+    - XDP
+  files:
+    - ebpf/xdp_filter.bpf
+
+args:
+  - --af-packet
+
+before: |
+  set -e
+  # include.yaml can only expand ${OUTDIR}/${TESTDIR}; stage the XDP object there.
+  cp ${SRCDIR}/ebpf/xdp_filter.bpf ${OUTDIR}/xdp_filter.bpf
+
+server: |
+  exec ip netns exec server python3 ${TESTDIR}/server.py ${OUTDIR}/server.json
+
+client: |
+  exec ip netns exec client python3 ${TESTDIR}/client.py
+
+checks:
+  # We should see sid 1 on the BYPASS flow.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        metadata.flowbits[0]: "bypassed"
+
+  # SID 2 should match once on the non-bypassed flow.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+
+  # We should have one flow on port 7000 marked as bypassed by capture
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        dest_port: 7000
+        flow.state: bypassed
+        flow.bypass: capture
+
+  # We should have one flow on port 7000 marked as closed.
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        dest_port: 7000
+        flow.state: closed
+        not-has-key: flow.bypass
+
+  # One flow should be marked as bypassed in the stats.
+  - stats:
+      flow.end.state.capture_bypassed: 1
