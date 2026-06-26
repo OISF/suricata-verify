@@ -1,0 +1,33 @@
+requires:
+  min-version: 9
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      alert.signature_id: 3
+      event_type: alert
+- filter:
+    count: 1
+    match:
+      alert.signature_id: 2
+      event_type: alert
+- filter:
+    count: 1
+    match:
+      alert.signature_id: 1
+      event_type: alert
+- filter:
+    count: 1
+    match:
+      event_type: http
+      http.http_method: GET
+      http.http_user_agent: Suricata Testing
+      http.protocol: HTTP/1.1
+      http.url: /flowboss.html
+      metadata.flowbits[0]: '1'
+      metadata.flowbits[1]: '2'
+      metadata.flowbits[2]: '3'
