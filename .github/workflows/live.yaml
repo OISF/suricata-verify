@@ -32,6 +32,7 @@ jobs:
             build-essential \
             cargo \
             cbindgen \
+            clang \
             ethtool \
             fuse-overlayfs \
             git \
@@ -58,6 +59,7 @@ jobs:
             libpcre3-dev \
             libssl-dev \
             libtool \
+            libxdp-dev \
             libyaml-0-2 \
             libyaml-dev \
             make \
@@ -91,7 +93,7 @@ jobs:
         working-directory: suricata
         run: |
           ./autogen.sh
-          ./configure --enable-nfqueue --enable-debug
+          ./configure --enable-nfqueue --enable-debug --enable-ebpf --enable-ebpf-build
           make -j$(nproc)
 
       - name: Run live tests
