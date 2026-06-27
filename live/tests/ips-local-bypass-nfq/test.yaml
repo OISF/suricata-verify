@@ -1,0 +1,61 @@
+environment: nfq
+
+requires:
+  command:
+    - python3
+
+args:
+  - -q 0
+
+# No `before` script and no capture-bypass configuration: this test uses the
+# plain NFQUEUE ruleset. When the `bypass` rule keyword fires, Suricata has no
+# capture-bypass callback to hand the flow off to, so it uses its own local
+# bypass instead. Unlike capture bypass, the packets keep arriving in
+# Suricata's userspace; they just skip detection.
+
+server: |
+  exec ip netns exec server python3 ${TESTDIR}/server.py ${OUTDIR}/server.json
+
+client: |
+  exec ip netns exec client python3 ${TESTDIR}/client.py
+
+checks:
+  # We should see sid 1 on the BYPASS flow, with the bypass flowbit set.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        metadata.flowbits[0]: "bypassed"
+
+  # SID 2 should match once, on the non-bypassed (control) flow only. On the
+  # bypassed flow the TRIPWIRE payload still reaches Suricata, but the flow is
+  # locally bypassed so it skips detection and must not match there.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+
+  # We should have one flow on port 7000 reported local-bypassed (handled by
+  # Suricata itself), not capture-bypassed (offloaded to the kernel/NIC).
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        dest_port: 7000
+        flow.state: bypassed
+        flow.bypass: local
+
+  # The control flow on port 7000 should be reported closed.
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        dest_port: 7000
+        flow.state: closed
+        not-has-key: flow.bypass
+
+  # One flow should be marked as local-bypassed in the stats.
+  - stats:
+      flow.end.state.local_bypassed: 1
