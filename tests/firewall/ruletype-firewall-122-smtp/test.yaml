@@ -1,0 +1,28 @@
+requires:
+  min-version: 9
+
+pcap: smtp-only.pcap
+
+args:
+  - --simulate-ips
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        smtp.mail_from: <gurpartap@patriots.in>
+        smtp.rcpt_to[0]: <raj_deol2002in@yahoo.co.in>
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2010
+        smtp.mail_from: <gurpartap@patriots.in>
+
+  # There should be no drops in this test.
+  - filter:
+      count: 0
+      match:
+        event_type: drop
