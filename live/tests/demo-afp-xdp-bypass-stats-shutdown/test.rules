@@ -1,0 +1,1 @@
+alert ip4 any any -> any any (msg:"Dropping all IPv4 traffic"; bypass; sid:1; rev:1;)
