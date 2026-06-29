@@ -1,0 +1,38 @@
+environment: tap
+
+requires:
+  command:
+    - python3
+  features:
+    - XDP
+  files:
+    - ebpf/xdp_filter.bpf
+
+args:
+  - --af-packet
+
+before: |
+  set -e
+  # include.yaml can only expand ${OUTDIR}/${TESTDIR}; stage the XDP object there.
+  cp ${SRCDIR}/ebpf/xdp_filter.bpf ${OUTDIR}/xdp_filter.bpf
+
+server: |
+  exec ip netns exec server python3 ${TESTDIR}/server.py ${OUTDIR}/server.json
+
+client: |
+  exec ip netns exec client python3 ${TESTDIR}/client.py
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        dest_port: 7000
+        flow.state: bypassed
+        flow.bypass: capture
+
+  - stats:
+      flow.end.state.capture_bypassed: 1
+      flow_bypassed.local_capture_pkts.__gt: 0
+      flow_bypassed.local_capture_bytes.__gt: 0
