@@ -1,0 +1,9 @@
+# Allow all TCP handshakes and established packets.
+accept:hook tcp:all any any -> any any (flow:not_established; sid:1000;)
+accept:hook tcp:all any any <> any any (flow:established; sid:1001;)
+
+# Initial SMTP firewall coverage using an existing SMTP pcap.
+accept:hook smtp:request_started any any -> any any (sid:2000;)
+accept:hook,alert smtp:request_complete any any -> any any (sid:2010;)
+accept:hook smtp:response_started any any -> any any (sid:3000;)
+accept:hook smtp:response_complete any any -> any any (sid:3010;)
