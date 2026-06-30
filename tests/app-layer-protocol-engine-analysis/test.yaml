@@ -12,7 +12,7 @@ checks:
     count: 1
     match:
       id: 1
-      lists.packet.matches[0].app_layer_protocol.protocols: "dns"
+      lists.packet.matches[0].app_layer_protocol.protocols[0]: "dns"
       lists.packet.matches[0].app_layer_protocol.mode: "direction"
       lists.packet.matches[0].app_layer_protocol.negated: false
 # multi value with mode qualifier
@@ -21,7 +21,8 @@ checks:
     count: 1
     match:
       id: 2
-      lists.packet.matches[0].app_layer_protocol.protocols: "unknown,tls"
+      lists.packet.matches[0].app_layer_protocol.protocols[0]: "unknown"
+      lists.packet.matches[0].app_layer_protocol.protocols[1]: "tls"
       lists.packet.matches[0].app_layer_protocol.mode: "either"
       lists.packet.matches[0].app_layer_protocol.negated: false
 # negated multi value (http umbrella expands to http1/http2)
@@ -30,5 +31,8 @@ checks:
     count: 1
     match:
       id: 3
-      lists.packet.matches[0].app_layer_protocol.protocols: "http,tls,http2,http_any"
+      lists.packet.matches[0].app_layer_protocol.protocols[0]: "http"
+      lists.packet.matches[0].app_layer_protocol.protocols[1]: "tls"
+      lists.packet.matches[0].app_layer_protocol.protocols[2]: "http2"
+      lists.packet.matches[0].app_layer_protocol.protocols[3]: "http_any"
       lists.packet.matches[0].app_layer_protocol.negated: true
