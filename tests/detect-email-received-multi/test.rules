@@ -1,0 +1,6 @@
+# Match
+alert smtp any any -> any any (msg:"Test mime email received"; email.received: all; content:"from"; sid: 30;)
+alert smtp any any -> any any (msg:"Test mime email received"; email.received: all_or_absent; content:"from"; sid: 31;)
+alert smtp any any -> any any (msg:"Test mime email received"; email.received: matches 2; content:"relay1"; sid: 32;)
+alert smtp any any -> any any (msg:"Test mime email received"; email.received: index 1; content:"relay1"; sid: 33;)
+alert smtp any any -> any any (msg:"Test mime email received"; email.received: any_or_absent; content:!"notseen"; sid: 34;)
