@@ -196,6 +196,12 @@ checks:
         # Check if a string is contained within a JSON list.
         # Eg. "ftp":{"reply":["Opening BINARY mode data connection for temp.txt (1164 bytes).","Transfer complete."], }
         ftp.reply.__contains: 'Transfer complete.'
+  - filter:
+      # Check line number of an entry
+      count: 1
+      match:
+        __lineno: 5
+        alert.signature_id: 15
 
   - stats:
       # Check values in the last stats event in eve.json. Keys are relative to
