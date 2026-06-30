@@ -1,0 +1,38 @@
+requires:
+  min-version: 9
+
+pcap: ../ruletype-firewall-122-smtp/smtp-simple-session.pcap
+
+args:
+  - --simulate-ips
+
+checks:
+  # Check that MAIL FROM was accepted.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1998
+        smtp.mail_from: <alice@example.com>
+
+  # Check that RCPT TO was not accepted.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1999
+
+  # Dropping before the SMTP transaction completes does not result in an SMTP
+  # event type, so use that as our test.
+  - filter:
+      count: 0
+      match:
+        event_type: smtp
+
+  # Check we have firewall blocks
+  #
+  # Note that this is the same as the MAIL FROM block test, as we don't
+  # actually start dropping until we enter data and do the final from/rcpt
+  # validation.
+  - stats:
+      firewall.blocked: 11
