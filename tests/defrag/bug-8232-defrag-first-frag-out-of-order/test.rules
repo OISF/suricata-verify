@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"BUG8232 reassembled tcp payload"; content:"BUG8232-defrag-rb-key-underflow-regress"; sid:1; rev:1;)
