@@ -1,6 +1,5 @@
 requires:
   min-version: 8.0.6
-  lt-version: 9
 
 pcap: ../../ftp/ftp-upload-passive/input.pcap
 
@@ -22,24 +21,19 @@ checks:
       match:
         alert.signature_id: 4000
 
+  # ftpdata_command: nlst matches in ftp-data:response_started
   - filter:
-      count: 1
+      count: 2
       match:
         alert.signature_id: 4010
-
-  # ftp-data:response_started never reach in passive upload mode
-  - filter:
-      count: 0
-      match:
-        alert.signature_id: 5000
-
-  # ftp-data:response_completed never reach in passive upload mode
-  - filter:
-      count: 0
-      match:
-        alert.signature_id: 5010
 
   - filter:
       count: 1
       match:
         event_type: fileinfo
+
+  # There should be no drops.
+  - filter:
+      count: 0
+      match:
+        event_type: drop

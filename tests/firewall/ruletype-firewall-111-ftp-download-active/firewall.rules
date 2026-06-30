@@ -3,19 +3,21 @@ accept:hook tcp:all any any -> any any (flow:not_established; sid:1000;)
 accept:hook tcp:all any any <> any any (flow:established; sid:1001;)
 
 accept:hook ftp:request_started any any -> any any (sid:2000;)
+
+# Make sure a reply is received for the PASS command.
+accept:hook ftp:request_complete any any -> any any (sid:2015; \
+  xbits:set,fw.ftp.pass,track tx; \
+  ftp.command; content:"PASS";)
+accept:hook,alert ftp:response_started any any -> any any (sid: 2016; \
+  xbits:isset,fw.ftp.pass,track tx; \
+  ftp.reply_received: yes;)
+
 accept:hook ftp:request_complete any any -> any any (sid:2010;)
 
 accept:hook ftp:response_started any any -> any any (sid:3000;)
 accept:hook ftp:response_complete any any -> any any (sid:3010;)
 
-# For a single download, this alerts once with command data and once without.
-#
-# This requires a fix to the ftpdata_command keyword to remove the
-# directionality abstraction.
-accept:hook,alert ftp-data:request_started any any -> any any (sid:4000; \
+accept:flow,alert ftp-data:request_started any any -> any any (sid:4000; \
 	ftpdata_command: retr;)
-accept:hook,alert ftp-data:request_complete any any -> any any (sid:4010;)
-
-# In active FTP, there is never any response.
-accept:hook,alert ftp-data:response_started any any -> any any (sid:5000;)
-accept:hook,alert ftp-data:response_complete any any -> any any (sid:5010;)
+accept:flow,alert ftp-data:request_started any any -> any any (sid:4002; \
+	ftpdata_command: nlst;)

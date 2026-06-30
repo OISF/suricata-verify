@@ -1,6 +1,5 @@
 requires:
   min-version: 8.0.6
-  lt-version: 9
 
 pcap: ../../ftp/ftp-upload-active/input.pcap
 
@@ -10,23 +9,18 @@ args:
 
 checks:
 
-  # ftp-data:request_started never reach in active upload mode
-  - filter:
-      count: 0
-      match:
-        alert.signature_id: 4000
-
-  # ftp-data:request_complete never reach in active upload mode
-  - filter:
-      count: 0
-      match:
-        alert.signature_id: 4010
-
   - filter:
       count: 1
       match:
         event_type: ftp_data
         ftp_data.command: STOR
+
+  # This pcap has 2 NLST commands.
+  - filter:
+      count: 2
+      match:
+        event_type: ftp_data
+        ftp_data.command: NLST
 
   # ftpdata_command: stor matches in ftp-data:response_started
   - filter:
@@ -37,9 +31,15 @@ checks:
   - filter:
       count: 1
       match:
-        alert.signature_id: 5010
+        event_type: fileinfo
 
   - filter:
-      count: 1
+      count: 2
       match:
-        event_type: fileinfo
+        alert.signature_id: 4002
+
+  # There should be no drops.
+  - filter:
+      count: 0
+      match:
+        event_type: drop
