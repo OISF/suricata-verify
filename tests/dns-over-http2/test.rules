@@ -2,6 +2,17 @@ alert http2 any any -> any any (http.uri; content: "/dns"; sid:10; )
 alert doh2 any any -> any any (http.uri; content: "/dns"; sid:11; )
 alert dns any any -> any any (dns.query; content: "www.gstatic.com"; sid:20; )
 alert doh2 any any -> any any (dns.query; content: "www.gstatic.com"; sid:21; )
+alert dns any any -> any any (dns.queries.rrname; content: "www.gstatic.com"; sid:22; )
+alert doh2 any any -> any any (dns.queries.rrname; content: "www.gstatic.com"; sid:23; )
 alert http2 any any -> any any (http2.frametype:6; sid:30; )
 alert doh2 any any -> any any (http2.frametype:6; sid:31; )
 alert doh2 any any -> any any (dns.opcode: 0; http.host; content: "dns.google"; sid:40; )
+
+alert dns any any -> any any (dns.answers.rrname; content: "nav-edge.smartscreen.microsoft.com"; sid:50; )
+alert doh2 any any -> any any (dns.answers.rrname; content: "nav-edge.smartscreen.microsoft.com"; sid:51; )
+
+alert dns any any -> any any (dns.authorities.rrname; content: "westeurope.cloudapp.azure.com"; sid:60; )
+alert doh2 any any -> any any (dns.authorities.rrname; content: "westeurope.cloudapp.azure.com"; sid:61; )
+
+alert dns any any -> any any (dns.additionals.rrname; absent; sid:70; )
+alert doh2 any any -> any any (dns.additionals.rrname; absent; sid:71; )
