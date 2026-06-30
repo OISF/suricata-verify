@@ -1,0 +1,14 @@
+requires:
+    min-version: 9
+    pcap: false
+
+args:
+    - --list-keywords=json:dnp3_func
+
+checks:
+- filter:
+    filename: stdout
+    count: 1
+    match:
+      dnp3_func.enum_values.confirm: 0
+      dnp3_func.features[0]: "enum uint"
