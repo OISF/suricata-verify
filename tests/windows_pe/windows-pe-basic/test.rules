@@ -1,0 +1,7 @@
+# Test basic executable keyword detection
+# Should match all 5 PE files in the PCAP
+
+alert http any any -> any any ( msg:"TEST executable detection"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86; sid:1; rev:1;)
+
+# Negative test - should not match (requires non-PE content)
+alert http any any -> any any ( msg:"TEST executable negative"; flow:established,to_client; file.data; content:"NOTPE"; startswith; windows_pe: arch x86; sid:2; rev:1;)
