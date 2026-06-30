@@ -1,7 +1,7 @@
 requires:
   min-version: 9
 
-pcap: smtp-only.pcap
+pcap: smtp-simple-session.pcap
 
 args:
   - --simulate-ips
@@ -11,17 +11,19 @@ checks:
       count: 1
       match:
         event_type: smtp
-        smtp.mail_from: <gurpartap@patriots.in>
-        smtp.rcpt_to[0]: <raj_deol2002in@yahoo.co.in>
+        smtp.mail_from: <alice@example.com>
+        smtp.rcpt_to[0]: <bob@example.com>
 
   - filter:
       count: 1
       match:
         event_type: alert
-        alert.signature_id: 2010
-        smtp.mail_from: <gurpartap@patriots.in>
+        alert.signature_id: 1998
+        smtp.mail_from: <alice@example.com>
 
-  # There should be no drops in this test.
+        # RCPT TO not available yet.
+        #smtp.rcpt_to[0]: <bob@example.com>
+
   - filter:
       count: 0
       match:
