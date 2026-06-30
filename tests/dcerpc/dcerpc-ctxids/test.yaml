@@ -19,3 +19,28 @@ checks:
       alert.signature_id: 1
       dcerpc.interfaces[0].uuid: 00020400-0000-0000-c000-000000000046
       dcerpc.req.opnum: 6
+- filter:
+    requires:
+      min-version: 9
+    count: 8
+    match:
+      event_type: dcerpc
+      dcerpc.interfaces[0].service: "IRemUnknown2"
+      dcerpc.interfaces[0].procedure: "RemRelease"
+- filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      event_type: dcerpc
+      dcerpc.interfaces[0].service: "IRemoteSCMActivator"
+      dcerpc.interfaces[0].procedure: "RemoteGetClassObject"
+- filter:
+    requires:
+      min-version: 9
+    count: 26
+    match:
+      event_type: dcerpc
+      dcerpc.interfaces[0].service: "IRemUnknown2"
+      dcerpc.interfaces[0].procedure: "RemQueryInterface"
+
