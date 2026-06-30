@@ -1,11 +1,13 @@
 requires:
-  min-version: 8.0.6
+  min-version: 7.0.17
 
 args:
   - -k none
 
 checks:
   - filter:
+      requires:
+        min-version: 8.0.6
       count: 1
       match:
         event_type: alert
@@ -14,6 +16,8 @@ checks:
   # FAILS on 8.0.5: CWD not detected via app-layer after APP_LAYER_ERROR
   - filter:
       count: 1
+      requires:
+        min-version: 8.0.6
       match:
         event_type: alert
         alert.signature_id: 7002
