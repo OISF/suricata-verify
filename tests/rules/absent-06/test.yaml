@@ -1,0 +1,33 @@
+requires:
+  min-version: 8
+
+pcap: ../../from_base64-02/input.pcap
+
+args:
+  - -k none
+
+checks:
+  # error_or with strict mode base64 - spaces cause decode error, should alert
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # error_or with rfc2045 mode - decode succeeds, content matches, should alert
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  # error_or with rfc2045 mode - decode succeeds but content doesn't match, should NOT alert
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  # bare absent with decode error - bare absent only matches truly absent buffers, not errors
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 4

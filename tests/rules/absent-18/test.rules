@@ -1,0 +1,11 @@
+# pcap contains HTTP download of a PDF file.
+# The file magic string (e.g. "PDF document...") contains spaces and non-base64
+# characters, so from_base64: mode strict fails.
+
+# must_error: decode fails -> error flag set -> must_error matches
+alert http any any -> any any (msg:"absent: must_error on invalid base64 file magic"; \
+    file.magic; from_base64: mode strict; absent: must_error; sid:1;)
+
+# must_succeed: decode fails -> error flag set -> no match
+alert http any any -> any any (msg:"absent: must_succeed no match on invalid base64 file magic"; \
+    file.magic; from_base64: mode strict; absent: must_succeed; content:"x"; sid:2;)

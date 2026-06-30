@@ -1,0 +1,11 @@
+# Test 1: error_or with invalid base64 - should match due to transform error
+alert http any any -> any any (msg:"Test 1: error_or with invalid base64 error"; \
+    flow:established,to_server; http.request_body; from_base64; absent: error_or; content:"fail"; sid:1;)
+
+# Test 2: error_or with valid base64 and matching content - should match due to content
+alert http any any -> any any (msg:"Test 2: error_or with malicious content"; \
+    flow:established,to_server; http.request_body; from_base64; absent: error_or; content:"malicious"; sid:2;)
+
+# Test 3: error_or with valid base64 but no matching content - should only match on error
+alert http any any -> any any (msg:"Test 3: error_or no match on content"; \
+    flow:established,to_server; http.request_body; from_base64; absent: error_or; content:"nomatch"; sid:3;)

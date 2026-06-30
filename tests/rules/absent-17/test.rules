@@ -1,0 +1,15 @@
+# pcap contains HTTP download with filename /a/expl/2008.mp4
+# The filename contains '.' which is not valid strict base64, so from_base64: mode strict fails.
+
+# must_error: decode fails -> error flag set -> must_error matches
+alert http any any -> any any (msg:"absent: must_error on invalid base64 filename"; \
+    file.name; from_base64: mode strict; absent: must_error; sid:1;)
+
+# error_or: decode fails -> error_or matches on error flag (content not evaluated)
+alert http any any -> any any (msg:"absent: error_or matches on transform error in filename"; \
+    file.name; from_base64: mode strict; absent: error_or; content:"x"; sid:2;)
+
+# must_succeed: decode fails -> error flag set -> no match
+alert http any any -> any any (msg:"absent: must_succeed no match on invalid base64 filename"; \
+    file.name; from_base64: mode strict; absent: must_succeed; content:"x"; sid:3;)
+

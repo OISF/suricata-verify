@@ -1,0 +1,2 @@
+# error_or on a buffer with a transform that cannot fail should fail to load
+alert dns any any -> any any (msg:"error_or with non-failing transform"; dns.query; dotprefix; absent: error_or; content:".example.com"; sid:1;)

@@ -1,0 +1,2 @@
+# must_error with a transform and content on the same buffer should fail
+alert http any any -> any any (msg:"must_error with transform and content"; http.uri; from_base64: mode strict; dotprefix; absent: must_error; content:"test"; sid:1;)
