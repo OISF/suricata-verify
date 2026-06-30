@@ -1,0 +1,35 @@
+requires:
+    min-version: 9
+    pcap: false
+
+args:
+    - --engine-analysis
+    - --set engine-analysis.rules=yes
+
+# Each content is dumped three times in rules.json (rule, mpm, prefilter), so
+# the per-bsize depth appears three times. bsize:>8 (sid:4) yields no upper
+# bound, so it contributes no depth; the total count proves it added none.
+checks:
+    - shell:
+        args: grep -o '"depth":10' rules.json | wc -l | xargs
+        expect: 3
+
+    - shell:
+        args: grep -o '"depth":26' rules.json | wc -l | xargs
+        expect: 3
+
+    - shell:
+        args: grep -o '"depth":34' rules.json | wc -l | xargs
+        expect: 3
+
+    - shell:
+        args: grep -o '"depth":' rules.json | wc -l | xargs
+        expect: 9
+
+    # The optimization is attributed in the analysis notes: each of the three
+    # bounded rules carries the note twice (content dumped per match list),
+    # and bsize:>8 (sid:4) contributes none.
+    - shell:
+        args: grep -o "applied as a 'depth'" rules.json | wc -l | xargs
+        expect: 6
+

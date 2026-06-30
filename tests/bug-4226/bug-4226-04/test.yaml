@@ -1,0 +1,15 @@
+requires:
+    min-version: 9
+    pcap: false
+
+args:
+    - --engine-analysis
+    - --set engine-analysis.rules=yes
+
+# The two pinned rules (sids 1 and 2) each carry the suggestion note twice
+# (content dumped per match list); the four other shapes carry none, so the
+# total count of 4 proves the heuristic stays quiet on the negatives.
+checks:
+    - shell:
+        args: grep -o "pins a single content" rules.json | wc -l | xargs
+        expect: 4
