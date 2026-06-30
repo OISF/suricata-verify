@@ -1,0 +1,12 @@
+# The entropy value is 4.137370175000773
+alert http any any -> any any (msg:"entropy simple test"; file.data; entropy: value > 4; sid:1;)
+alert http any any -> any any (msg:"entropy simple test"; file.data; entropy: value >= 4; sid:2;)
+alert http any any -> any any (msg:"entropy simple test"; file.data; entropy: value >= 5; sid:3;)
+alert http any any -> any any (msg:"entropy simple test"; file.data; entropy: value 4-5; sid:4;)
+alert http any any -> any any (msg:"entropy simple test"; file.data; entropy: value !4-5; sid:5;)
+alert http any any -> any any (msg:"entropy simple test"; file.data; entropy: value < 4; sid:6;)
+alert http any any -> any any (msg:"entropy simple test"; file.data; entropy: value != 4; sid:7;)
+alert http any any -> any any (msg:"entropy simple test"; file.data; entropy: value = 4; sid:8;)
+# The entropy value is 4.150007324019584
+alert http any any -> any any (msg:"entropy simple test"; file.data; entropy: offset 10, value > 4.14; sid:10;)
+
