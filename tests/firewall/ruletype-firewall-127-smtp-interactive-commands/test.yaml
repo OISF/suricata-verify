@@ -1,0 +1,34 @@
+requires:
+  min-version: 9
+
+pcap: smtp-interactive.pcap
+
+args:
+  - --simulate-ips
+
+checks:
+  # The sender was validated despite the interactive command chatter.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1998
+        smtp.mail_from: <alice@example.com>
+
+  # The full transaction completed and was logged.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        smtp.mail_from: <alice@example.com>
+        smtp.rcpt_to[0]: <bob@example.com>
+
+  # Nothing was dropped.
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+
+  - stats:
+      firewall.accepted: 31
+      firewall.blocked: 0
