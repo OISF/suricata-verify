@@ -1,5 +1,5 @@
 requires:
-  min-version: 9
+  min-version: 8
   features:
     - LIBNET1.1
 
@@ -60,10 +60,20 @@ checks:
     match:
       verdict.action: drop
 - filter:
+    requires:
+      min-version: 9
     count: 3
     match:
       verdict.action: drop
       verdict.reject_target: to_client
+      verdict.reject[0]: tcp-reset
+- filter:
+    requires:
+      lt-version: 9
+    count: 3
+    match:
+      verdict.action: drop
+      verdict.reject-target: to_client
       verdict.reject[0]: tcp-reset
 - filter:
     count: 1

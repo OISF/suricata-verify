@@ -1,0 +1,9 @@
+# Regression for in-place transform aliasing with a variable XOR key (Issue 8671).
+#
+# xor:"00" is an identity transform; its only purpose is to force the inspection
+# buffer to run the *following* transform in place (inspect == buf). The
+# variable-key xor then reads its key from offset 0 and decodes from offset 0,
+# so the key byte lies inside the decoded region. If the key bytes are read
+# directly from the aliased buffer, decoding corrupts the key mid-pass and
+# "infected" is never recovered. The engine must copy the key before decoding.
+alert http any any -> any any (msg:"XOR in-place overlapping variable key"; http.request_body; xor:"00"; xor:extract 1 0; content:"infected"; sid:1;)

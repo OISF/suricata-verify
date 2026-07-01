@@ -1,0 +1,8 @@
+# conf-null-defrag — regression test
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+exit-code: 0

@@ -1,0 +1,36 @@
+requires:
+  min-version: 8.0.6
+
+pcap: ../../ftp/ftp-download-active/input.pcap
+
+args:
+  - --simulate-ips
+  - --runmode=single
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2000
+
+  # We should only see one FTP transaction, that is the banner as the USER command
+  # didn't finish
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+
+  # Make sure its the banner that was logged.
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.reply[0]: FTP Sandbox Ready.
+
+  # Should not make it to ftp-data.
+  - filter:
+      count: 0
+      match:
+        event_type: ftp_data

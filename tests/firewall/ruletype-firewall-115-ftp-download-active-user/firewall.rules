@@ -1,0 +1,41 @@
+# Allow all TCP handshakes.
+accept:hook tcp:all any any -> any any (flow:not_established; sid:1000;)
+accept:hook tcp:all any any <> any any (flow:established; sid:1001;)
+
+# Allow FTP requests to start so the complete hook can inspect the command.
+accept:hook ftp:request_started any any -> any any (sid:2000;)
+
+# Only allow USER bob at the request complete hook.
+accept:hook,alert ftp:request_complete any any -> any any (sid:2010; \
+	ftp.command; content:"USER"; \
+	ftp.command_data; content:"bob";)
+
+# Allow the other expected types.
+accept:hook,alert ftp:request_complete any any -> any any (sid:2020; \
+  xbits:set,fw.ftp.pass,track tx; \
+	ftp.command; content:"PASS";)
+accept:hook,alert ftp:response_complete any any -> any any (sid:2021; \
+  xbits:isset,fw.ftp.pass,track tx; \
+  ftp.completion_code; content:"230";)
+
+accept:hook,alert ftp:request_complete any any -> any any (sid:2030; \
+	ftp.command; content:"TYPE";)
+accept:hook,alert ftp:request_complete any any -> any any (sid:2040; \
+  xbits:set,fw.ftp.port,track tx; \
+	ftp.command; content:"PORT";)
+
+# Test that ftp.mode works in firewall mode.
+accept:hook,alert ftp:response_complete any any -> any any (sid:2042; \
+  xbits:isset,fw.ftp.port,track tx; \
+  ftp.mode:active;)
+
+accept:hook,alert ftp:request_complete any any -> any any (sid:2050; \
+	ftp.command; content:"NLST";)
+accept:hook,alert ftp:request_complete any any -> any any (sid:2060; \
+	ftp.command; content:"RETR";)
+accept:hook,alert ftp:request_complete any any -> any any (sid:2070; \
+	ftp.command; content:"QUIT";)
+
+# Allow all responses.
+accept:hook ftp:response_started any any -> any any (sid:3000;)
+accept:hook ftp:response_complete any any -> any any (sid:3010;)

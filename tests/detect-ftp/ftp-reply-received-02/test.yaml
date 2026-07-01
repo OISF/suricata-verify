@@ -1,20 +1,19 @@
 requires:
-  min-version: 8
+  min-version: 8.0.6
 
 pcap: ../../ftp/ftp-too-long-response/ftp-too-long-response.pcap
 
 checks:
 
+# every request has a response -> no alert
   - filter:
-      count: 1
+      count: 0
       match:
         event_type: alert
-        ftp.reply_received: "no"
         alert.signature_id: 1
 
   - filter:
-      count: 1
+      count: 0
       match:
         event_type: alert
-        ftp.reply_received: "no"
         alert.signature_id: 2

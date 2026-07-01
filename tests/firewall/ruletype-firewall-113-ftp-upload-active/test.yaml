@@ -1,0 +1,45 @@
+requires:
+  min-version: 8.0.6
+
+pcap: ../../ftp/ftp-upload-active/input.pcap
+
+args:
+  - --simulate-ips
+  - --runmode=single
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: ftp_data
+        ftp_data.command: STOR
+
+  # This pcap has 2 NLST commands.
+  - filter:
+      count: 2
+      match:
+        event_type: ftp_data
+        ftp_data.command: NLST
+
+  # ftpdata_command: stor matches in ftp-data:response_started
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 5000
+
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+
+  - filter:
+      count: 2
+      match:
+        alert.signature_id: 4002
+
+  # There should be no drops.
+  - filter:
+      count: 0
+      match:
+        event_type: drop

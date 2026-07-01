@@ -1,0 +1,42 @@
+%YAML 1.1
+---
+
+stats:
+  enabled: yes
+  interval: 8
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - stats
+        - flow
+        - alert
+        - ftp
+        - files
+        - drop:
+            alerts: yes
+            flows: all
+
+firewall:
+  policies:
+    packet-filter:
+      - "accept:hook"
+
+    ftp:
+      request-started:
+        - "accept:hook"
+      request-complete:
+        - "accept:hook"
+      response-started:
+        - "accept:hook"
+      response-complete:
+        - "accept:hook"
+
+    ftp-data:
+      request-started:
+        - "accept:flow"
+      response-started:
+        - "accept:flow"

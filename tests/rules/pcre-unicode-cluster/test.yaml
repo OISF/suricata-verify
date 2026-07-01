@@ -1,0 +1,16 @@
+requires:
+    min-version: 9
+    pcap: false
+
+skip:
+    - feature: FUZZ
+
+args:
+    - --engine-analysis
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      notes[0]: "pcre with \\X (Unicode extended grapheme cluster) may be slow"

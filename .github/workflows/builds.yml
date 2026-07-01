@@ -124,6 +124,8 @@ jobs:
         run: git clone https://github.com/OISF/libhtp suricata/libhtp
       - name: Build Suricata
         working-directory: suricata
+        env:
+          CFLAGS: "-g -O1 -fsanitize=address -fno-omit-frame-pointer"
         run: |
           ./autogen.sh
           ./configure --enable-lua --enable-debug-validation --enable-qa-simulation
@@ -199,6 +201,7 @@ jobs:
           ./autogen.sh
           ./configure --enable-lua --enable-debug-validation --enable-qa-simulation
           make -j2
+
       - name: Running suricata-verify
         working-directory: suricata
         run: python3 ../run.py ${{ needs.isolate-tests.outputs.test_names }} --quiet
