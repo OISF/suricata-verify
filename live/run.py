@@ -7,7 +7,6 @@ from __future__ import annotations
 import argparse
 import fcntl
 import glob
-import json
 import os
 import platform
 import re
@@ -17,6 +16,9 @@ import string
 import shutil
 import subprocess
 import sys
+
+sys.dont_write_bytecode = True
+
 import tempfile
 import threading
 import time
@@ -25,6 +27,20 @@ from dataclasses import dataclass
 from typing import IO
 
 import yaml
+
+SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+VERIFY_DIR = os.path.dirname(SCRIPT_DIR)
+if VERIFY_DIR not in sys.path:
+    sys.path.insert(0, VERIFY_DIR)
+
+from lib.common import (
+    FilterCheck,
+    ShellCheck,
+    StatsCheck,
+    UnsatisfiedRequirementError,
+    check_required_commands as check_common_required_commands,
+    check_requires as check_common_requires,
+)
 
 CLIENT_NS = "client"
 SERVER_NS = "server"
@@ -66,13 +82,6 @@ MODE_LABELS = {
 
 verbose = False
 suricata_config_cache = {}
-
-COMPARISON_OPERATORS = {
-    "__gt": ">",
-    "__gte": ">=",
-    "__lt": "<",
-    "__lte": "<=",
-}
 
 RUNNER_LOCK_PATH = "/tmp/suricata-verify-live.lock"
 
@@ -253,13 +262,14 @@ def run(
 ) -> subprocess.CompletedProcess[str]:
     kwargs: dict[str, object] = {
         "check": True,
-        "text": True,
+        "universal_newlines": True,
     }
     if quiet:
         kwargs["stdout"] = subprocess.DEVNULL
         kwargs["stderr"] = subprocess.DEVNULL
     elif capture:
-        kwargs["capture_output"] = True
+        kwargs["stdout"] = subprocess.PIPE
+        kwargs["stderr"] = subprocess.PIPE
     return subprocess.run(cmd, **kwargs)
 
 
@@ -1037,10 +1047,6 @@ def start_background_script(
     )
 
 
-class UnsatisfiedRequirementError(Exception):
-    pass
-
-
 SuricataVersion = namedtuple("SuricataVersion", ["major", "minor", "patch"])
 
 
@@ -1201,353 +1207,20 @@ def is_version_compatible(
 
 
 def check_required_commands(requires: dict) -> None:
-    """Validate host command requirements from a requires mapping."""
-    if not isinstance(requires, dict):
-        raise ValueError("requires must be a mapping")
-    commands = requires.get("command", [])
-    if commands is None:
-        return
-    if not isinstance(commands, list) or any(
-        not isinstance(command, str) for command in commands
-    ):
-        raise ValueError("requires.command must be an array of strings")
-    for command in commands:
-        if shutil.which(command) is None:
-            raise UnsatisfiedRequirementError(f"requires command {command}")
+    check_common_required_commands(requires)
 
 
 def check_requires(
-    requires: dict, suricata_config: SuricataConfig, test_dir: str | None = None
+    requires: dict, suricata_config: SuricataConfig, suri_dir: str | None = None
 ) -> None:
-    check_required_commands(requires)
-    suri_version = suricata_config.version
-    for key in requires:
-        if key == "min-version":
-            min_version = requires["min-version"]
-            if not is_version_compatible(min_version, suri_version, "gte"):
-                raise UnsatisfiedRequirementError(
-                    f"requires at least version {min_version}"
-                )
-        elif key == "lt-version":
-            lt_version = requires["lt-version"]
-            if not is_version_compatible(lt_version, suri_version, "lt"):
-                raise UnsatisfiedRequirementError(f"for version less than {lt_version}")
-        elif key == "gt-version":
-            gt_version = requires["gt-version"]
-            if not is_version_compatible(gt_version, suri_version, "gt"):
-                raise UnsatisfiedRequirementError(
-                    f"for version greater than {gt_version}"
-                )
-        elif key == "version":
-            req_version = requires["version"]
-            if not is_version_compatible(req_version, suri_version, "equal"):
-                raise UnsatisfiedRequirementError(f"only for version {req_version}")
-        elif key == "features":
-            for feature in requires["features"]:
-                if not suricata_config.has_feature(feature):
-                    raise UnsatisfiedRequirementError(f"requires feature {feature}")
-        elif key == "command":
-            pass
-        elif key == "env":
-            for env in requires["env"]:
-                if env not in os.environ:
-                    raise UnsatisfiedRequirementError(f"requires env var {env}")
-        elif key == "files":
-            for filename in requires["files"]:
-                if test_dir and not os.path.isabs(filename):
-                    filename = os.path.join(test_dir, filename)
-                if not os.path.exists(filename):
-                    raise UnsatisfiedRequirementError(f"requires file {filename}")
-        elif key == "script":
-            for script in requires["script"]:
-                try:
-                    subprocess.check_call(f"{script}", shell=True)
-                except Exception as err:
-                    raise UnsatisfiedRequirementError(
-                        f"requires script returned false: {err}"
-                    ) from err
-        elif key == "pcap":
-            pass
-        elif key == "lambda":
-            if not eval(requires["lambda"]):
-                raise UnsatisfiedRequirementError(requires["lambda"])
-        elif key == "os":
-            cur_platform = platform.system().lower()
-            if not cur_platform.startswith(requires["os"].lower()):
-                raise UnsatisfiedRequirementError(requires["os"])
-        elif key == "arch":
-            cur_arch = platform.machine().lower()
-            if not cur_arch.startswith(requires["arch"].lower()):
-                raise UnsatisfiedRequirementError(requires["arch"])
-        else:
-            raise ValueError(f"unknown requires type: {key}")
-
-
-def find_value(name: str, obj: object) -> object | None:
-    """Find the value in an object for a field specified by name.
-
-    Example names:
-      event_type
-      alert.signature_id
-      smtp.rcpt_to[0]
-    """
-    parts = name.split(".")
-    for part in parts:
-        if part == "__len":
-            try:
-                return len(obj)
-            except Exception:
-                return -1
-
-        if part in [
-            "__contains",
-            "__find",
-            "__startswith",
-            "__endswith",
-            *COMPARISON_OPERATORS.keys(),
-        ]:
-            break
-
-        index = None
-        m = re.match(r"^(.*)\[(\d+)\]$", part)
-        if m:
-            name = m.group(1)
-            index = m.group(2)
-        else:
-            name = part
-
-        if not isinstance(obj, dict) or name not in obj:
-            return None
-        obj = obj[name]
-
-        if index is not None:
-            try:
-                obj = obj[int(index)]
-            except Exception:
-                return None
-
-    return obj
-
-
-def get_comparison_operator(key: str) -> str | None:
-    """Return the comparison operator suffix from a check key, if present."""
-    suffix = key.rsplit(".", 1)[-1]
-    if suffix in COMPARISON_OPERATORS:
-        return suffix
-    return None
-
-
-def compare_values(actual: object, expected: object, operator: str) -> bool:
-    """Compare two numeric values using a comparison operator suffix."""
-    if isinstance(actual, bool) or isinstance(expected, bool):
-        return False
-    if not isinstance(actual, (int, float)) or not isinstance(
-        expected, (int, float)
-    ):
-        return False
-    if operator == "__gt":
-        return actual > expected
-    if operator == "__gte":
-        return actual >= expected
-    if operator == "__lt":
-        return actual < expected
-    if operator == "__lte":
-        return actual <= expected
-    raise ValueError(f"unknown comparison operator: {operator}")
-
-
-class StatsCheck:
-    """Check values in the last stats event of eve.json."""
-
-    def __init__(self, config: dict, output_dir: str) -> None:
-        self.config = config
-        self.output_dir = output_dir
-
-    def run(self) -> list[str]:
-        """Return a list of failure messages (empty on success)."""
-        eve_json_path = os.path.join(self.output_dir, "eve.json")
-        if not os.path.exists(eve_json_path):
-            return [f"eve.json not found: {eve_json_path}"]
-
-        stats = None
-        with open(eve_json_path) as f:
-            for line in f:
-                try:
-                    event = json.loads(line)
-                    if event.get("event_type") == "stats":
-                        stats = event["stats"]
-                except json.JSONDecodeError:
-                    pass
-
-        if stats is None:
-            return ["no stats event found in eve.json"]
-
-        failures = []
-        for key, expected in self.config.items():
-            val = find_value(key, stats)
-            operator = get_comparison_operator(key)
-            if operator is not None:
-                if not compare_values(val, expected, operator):
-                    symbol = COMPARISON_OPERATORS[operator]
-                    failures.append(
-                        f"stats.{key}: expected {symbol} {expected}; got {val}"
-                    )
-            elif val != expected:
-                failures.append(f"stats.{key}: expected {expected}; got {val}")
-        return failures
-
-
-class ShellCheck:
-    """Run a shell command in the test output directory."""
-
-    def __init__(
-        self,
-        config: dict,
-        env: dict[str, str],
-        output_dir: str,
-        suricata_config: SuricataConfig,
-        test_dir: str | None = None,
-    ) -> None:
-        for key in config:
-            if key not in ["requires", "args", "expect"]:
-                raise ValueError(f"Unexpected key in shell check: {key}")
-        if "args" not in config:
-            raise ValueError("shell check missing args")
-        self.config = config
-        self.env = env
-        self.output_dir = output_dir
-        self.suricata_config = suricata_config
-        self.test_dir = test_dir
-
-    def run(self) -> tuple[list[str], list[str]]:
-        warnings = []
-        requires = self.config.get("requires", {})
-        try:
-            check_requires(requires, self.suricata_config, self.test_dir)
-        except UnsatisfiedRequirementError as err:
-            warnings.append(f"SKIP: shell check skipped: {err}")
-            return [], warnings
-
-        result = subprocess.run(
-            ["bash", "-c", self.config["args"]],
-            cwd=self.output_dir,
-            env=self.env,
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-        if result.returncode != 0:
-            details = []
-            if result.stdout.strip():
-                details.append(f"stdout={result.stdout.strip()!r}")
-            if result.stderr.strip():
-                details.append(f"stderr={result.stderr.strip()!r}")
-            suffix = f" ({', '.join(details)})" if details else ""
-            return [
-                f"shell command failed with exit code {result.returncode}: {self.config['args']!r}{suffix}"
-            ], warnings
-
-        if "expect" in self.config:
-            output = result.stdout.strip()
-            if str(self.config["expect"]) != output:
-                return [
-                    f"shell check expected {self.config['expect']!r}; got {output!r}"
-                ], warnings
-
-        return [], warnings
-
-
-class FilterCheck:
-    """Filter JSON lines output and count matching events."""
-
-    def __init__(
-        self,
-        config: dict,
-        output_dir: str,
-        suricata_config: SuricataConfig,
-        test_dir: str | None = None,
-    ) -> None:
-        for key in config:
-            if key not in ["count", "match", "filename", "requires", "comment"]:
-                raise ValueError(f"Unexpected key in filter check: {key}")
-        if "count" not in config:
-            raise ValueError("filter check missing count")
-        if "match" not in config:
-            raise ValueError("filter check missing match")
-        self.config = config
-        self.output_dir = output_dir
-        self.suricata_config = suricata_config
-        self.test_dir = test_dir
-
-    def run(self) -> tuple[list[str], list[str]]:
-        warnings = []
-        requires = self.config.get("requires", {})
-        try:
-            check_requires(requires, self.suricata_config, self.test_dir)
-        except UnsatisfiedRequirementError as err:
-            warnings.append(f"SKIP: filter check skipped: {err}")
-            return [], warnings
-
-        if "filename" in self.config:
-            json_filename = self.config["filename"]
-            if not os.path.isabs(json_filename):
-                json_filename = os.path.join(self.output_dir, json_filename)
-        else:
-            json_filename = os.path.join(self.output_dir, "eve.json")
-
-        if not os.path.exists(json_filename):
-            return [f"{json_filename} does not exist"], warnings
-
-        count = 0
-        try:
-            with open(json_filename, "r", encoding="utf-8") as fileobj:
-                for line in fileobj:
-                    event = json.loads(line)
-                    if self.match(event):
-                        count += 1
-        except Exception as err:
-            return [f"filter check failed for {json_filename}: {err}"], warnings
-
-        if count == self.config["count"]:
-            return [], warnings
-        if "comment" in self.config:
-            return [
-                f"{self.config['comment']}: expected {self.config['count']}, got {count}"
-            ], warnings
-        return [
-            f"expected {self.config['count']} matches; got {count} for filter {self.config}"
-        ], warnings
-
-    def match(self, event: dict) -> bool:
-        for key, expected in self.config["match"].items():
-            if key == "has-key":
-                if find_value(expected, event) is None:
-                    return False
-            elif key == "not-has-key":
-                if find_value(expected, event) is not None:
-                    return False
-            else:
-                val = find_value(key, event)
-                if key.endswith("__find"):
-                    if val is None or str(val).find(str(expected)) < 0:
-                        return False
-                elif key.endswith("__contains"):
-                    if val is None or expected not in val:
-                        return False
-                elif key.endswith("__startswith"):
-                    if val is None or not str(val).startswith(str(expected)):
-                        return False
-                elif key.endswith("__endswith"):
-                    if val is None or not str(val).endswith(str(expected)):
-                        return False
-                else:
-                    operator = get_comparison_operator(key)
-                    if operator is not None:
-                        if not compare_values(val, expected, operator):
-                            return False
-                    elif val != expected:
-                        return False
-        return True
+    check_common_requires(
+        requires,
+        suricata_config,
+        is_version_compatible,
+        suri_dir,
+        eval_globals=globals(),
+        include_script_error=True,
+    )
 
 
 def run_checks(
@@ -1567,7 +1240,9 @@ def run_checks(
 
     for i, check in enumerate(config.get("checks", []), start=1):
         if "stats" in check:
-            failures.extend(StatsCheck(check["stats"], output_dir).run())
+            result = StatsCheck(check["stats"], output_dir).run()
+            failures.extend(result.failures)
+            warnings.extend(result.warnings)
         if "filter" in check or "shell" in check:
             try:
                 if suricata_config is None:
@@ -1575,21 +1250,29 @@ def run_checks(
                         mode, script_dir, config, test_dir, output_dir, test_include
                     )
                 if "filter" in check:
-                    check_failures, check_warnings = FilterCheck(
-                        check["filter"], output_dir, suricata_config, test_dir
+                    result = FilterCheck(
+                        check["filter"],
+                        output_dir,
+                        suricata_config=suricata_config,
+                        test_dir=test_dir,
+                        require_checker=check_requires,
+                        skip_as_warning=True,
                     ).run()
-                    failures.extend(check_failures)
-                    warnings.extend(check_warnings)
+                    failures.extend(result.failures)
+                    warnings.extend(result.warnings)
                 if "shell" in check:
-                    check_failures, check_warnings = ShellCheck(
+                    result = ShellCheck(
                         check["shell"],
                         build_test_env(test_dir, output_dir),
                         output_dir,
-                        suricata_config,
-                        test_dir,
+                        suricata_config=suricata_config,
+                        test_dir=test_dir,
+                        require_checker=check_requires,
+                        skip_as_warning=True,
+                        use_bash=True,
                     ).run()
-                    failures.extend(check_failures)
-                    warnings.extend(check_warnings)
+                    failures.extend(result.failures)
+                    warnings.extend(result.warnings)
             except Exception as err:
                 check_type = "filter" if "filter" in check else "shell"
                 failures.append(f"{check_type} check #{i} failed: {err}")
@@ -1789,7 +1472,7 @@ def check_test_requires(
     suricata_config = get_suricata_config(
         mode, script_dir, config, test_dir, output_dir, test_include
     )
-    check_requires(requires, suricata_config, test_dir)
+    check_requires(requires, suricata_config, os.getcwd())
 
 
 def do_run(
