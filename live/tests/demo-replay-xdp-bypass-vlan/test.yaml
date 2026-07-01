@@ -1,0 +1,28 @@
+environment: tap
+
+requires:
+  min-version: 9
+  os: linux
+  command:
+    - tcpreplay
+  features:
+    - XDP
+  files:
+    - ebpf/xdp_filter.bpf
+
+args:
+  - --af-packet
+
+before: |
+  set -e
+  # include.yaml can only expand ${OUTDIR}/${TESTDIR}; stage the XDP object there.
+  cp ${SRCDIR}/ebpf/xdp_filter.bpf ${OUTDIR}/xdp_filter.bpf
+
+client: |
+  set -e
+  ip netns exec dut tcpreplay -q -i br0 ${TESTDIR}/input.pcap
+  sleep 2
+
+checks:
+  - stats:
+      capture.kernel_packets.__gte: 100
