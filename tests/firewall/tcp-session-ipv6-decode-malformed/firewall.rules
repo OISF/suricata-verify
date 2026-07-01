@@ -1,0 +1,2 @@
+# Accept all TCP — IPv6 decode event should still fire for malformed packets
+accept:flow tcp:all any any -> any any (tcp.session:setup,established; sid:9201;)

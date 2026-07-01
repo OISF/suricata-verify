@@ -1,0 +1,51 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.detect.engines[0].rules_loaded: 1
+      stats.detect.engines[0].rules_failed: 0
+
+- filter:
+    count: 1
+    match:
+      event_type: anomaly
+      anomaly.type: decode
+      anomaly.event: decoder.ipv4.opt_invalid_len
+
+- filter:
+    count: 1
+    match:
+      event_type: anomaly
+      anomaly.type: decode
+      anomaly.event: decoder.ipv4.opt_pad_required
+
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.decoder.invalid: 1
+
+- filter:
+    count: 2
+    match:
+      event_type: anomaly
+      anomaly.type: decode
+
+- filter:
+    count: 0
+    match:
+      event_type: drop
+
+- shell:
+    args: "python3 -c \"import json; d=json.load(open('firewall.json')); print(d.get('keyword_info',{}).get('1001',{}).get('tcp_session',[]))\""
+    expect: "['setup', 'established']"
