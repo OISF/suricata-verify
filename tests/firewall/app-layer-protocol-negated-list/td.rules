@@ -1,0 +1,11 @@
+# Rule under test: negated multi-value NOR semantics
+alert ip any any <> any any (msg:"negated multi-value !tls|http"; app-layer-protocol:!tls|http; sid:9001;)
+
+# Positive control: only DNS
+alert ip any any <> any any (msg:"positive control dns only"; app-layer-protocol:dns; sid:9002;)
+
+# Negative control: only TLS
+alert ip any any <> any any (msg:"negative control tls only"; app-layer-protocol:tls; sid:9003;)
+
+# Negative control: only HTTP
+alert ip any any <> any any (msg:"negative control http only"; app-layer-protocol:http; sid:9004;)
