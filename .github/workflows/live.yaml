@@ -70,6 +70,7 @@ jobs:
             rustc \
             slirp4netns \
             software-properties-common \
+            tcpreplay \
             uidmap \
             zlib1g \
             zlib1g-dev
