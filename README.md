@@ -40,6 +40,9 @@ Or to run a single test:
 
 - Add any rules required to ${dir}/test.rules.
 
+  If the rules are already available in another test directory, they can be
+  referenced from test.yaml with `rules: ../other-test/test.rules`.
+
 - Add a *test.yaml* descriptor file to add further control to your
   tests such as restricting features required for the test, and
   validating output.
@@ -134,6 +137,10 @@ pre-check: |
 # Provide a pcap filename. A falsey value like false or empty is equivalent to setting
 # "pcap: false" in the requires section.
 pcap: input.pcap
+
+# Provide a rules filename. Relative paths are resolved from the test
+# directory. Not needed if test contains one and only one rule file.
+rules: test.rules
 
 # Test for a specific exit code. By default a test will fail if the
 # exit code is anything other than 0, however sometimes we may be

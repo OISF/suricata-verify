@@ -1,2 +1,5 @@
 alert krb5 any any -> any any (msg:"KRB5 TGS-REQ"; flow:to_server,established; krb5_msg_type:12; sid:1;)
 alert krb5 any any -> any any (msg:"KRB5 AS-REQ"; flow:to_server,established; krb5_msg_type:10; sid:2;)
+
+alert krb5 any any -> any any (msg:"KRB5 error"; krb5_err_code:!0; requires: version >= 9; sid:3;)
+alert krb5 any any -> any any (msg:"KRB5 error"; krb5_err_code:25; sid:4;)

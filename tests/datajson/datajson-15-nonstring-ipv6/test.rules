@@ -1,0 +1,1 @@
+alert http any any -> any any (flow:established,to_server; ip.src; dataset:isset,bad_ipv6,type ipv6,load bad.lst,format ndjson,context_key extra,value_key value; sid:1;)

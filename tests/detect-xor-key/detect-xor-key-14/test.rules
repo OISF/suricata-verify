@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"XOR variable key http.uri"; http.uri; xor:offset 2,extract 1 1; content:"path"; sid:1;)

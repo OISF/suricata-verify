@@ -69,3 +69,15 @@ checks:
         krb5.encryption: "<none>"
         krb5.weak_encryption: false
 
+  - filter:
+      requires:
+        min-version: 9
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4

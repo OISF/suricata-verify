@@ -1,0 +1,34 @@
+requires:
+  min-version: 9
+
+# Issue 8621: each DHCP datagram is its own standalone, single-direction
+# transaction. Before the fix the transactions were created with both
+# SKIP_INSPECT bits clear, so every tx was inspected -- and could alert --
+# in both directions. A request and a reply must therefore each alert once,
+# not twice.
+checks:
+  # Exactly two DHCP alerts for the two datagrams: one per transaction,
+  # not one per direction.
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1
+
+  # The request (toserver) datagram alerts exactly once.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 1
+        dhcp.type: request
+
+  # The reply (toclient) datagram alerts exactly once.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 2
+        dhcp.type: reply

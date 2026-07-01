@@ -1,0 +1,1 @@
+alert ip any any -> any any (pcre:"/dummy_alt|\X++h/"; sid:8;)

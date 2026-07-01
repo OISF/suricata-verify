@@ -1,0 +1,5 @@
+# Drop non-anonymous FTP USER commands.
+drop:flow,alert ftp:request_complete any any -> any any ( \
+    ftp.command; content:"USER"; \
+    ftp.command_data; content:!"anonymous"; nocase; startswith; \
+    sid:2000;)

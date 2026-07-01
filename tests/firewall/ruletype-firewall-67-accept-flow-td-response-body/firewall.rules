@@ -1,4 +1,4 @@
-accept:packet arp:all any any -> any any (sid:1;)
+#accept:packet arp:all any any -> any any (sid:1;)
 
 accept:hook tcp:all any any <> any any (sid:10;)
 accept:hook http1:request_started any any -> any any (sid:500;)

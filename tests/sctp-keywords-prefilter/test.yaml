@@ -1,0 +1,35 @@
+requires:
+  min-version: 9
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+      pcap_cnt: 1
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2
+      pcap_cnt: 2
+- filter:
+    count: 14
+    match:
+      event_type: alert
+      alert.signature_id: 3
+- filter:
+    count: 7
+    match:
+      event_type: alert
+      alert.signature_id: 4
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 5
+      pcap_cnt: 5
