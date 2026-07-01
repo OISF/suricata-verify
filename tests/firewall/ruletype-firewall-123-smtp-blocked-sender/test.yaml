@@ -1,0 +1,19 @@
+requires:
+  min-version: 9
+
+pcap: ../ruletype-firewall-122-smtp/smtp-simple-session.pcap
+
+args:
+  - --simulate-ips
+
+checks:
+  # I'm not sure if this is correct, but currently, dropping early in MAIL FROM
+  # does not result in an SMTP event type, so use that as our test.
+  - filter:
+      count: 0
+      match:
+        event_type: smtp
+
+  # Check we have firewall blocks
+  - stats:
+      firewall.blocked: 11
