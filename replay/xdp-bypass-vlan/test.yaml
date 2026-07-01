@@ -1,0 +1,21 @@
+requires:
+  min-version: 9
+  os: linux
+  features:
+    - EBPF
+  files:
+    - ebpf/xdp_filter.bpf
+
+args:
+  - --set af-packet.0.xdp-filter-file=${SRCDIR}/ebpf/xdp_filter.bpf
+  - --set af-packet.0.max-packets=100
+
+tcpreplay_args:
+  - -q
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: stats
+        stats.flow_bypassed.pkts: 0
