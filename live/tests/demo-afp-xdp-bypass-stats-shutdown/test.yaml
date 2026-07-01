@@ -1,0 +1,39 @@
+mode: [ids]
+
+requires:
+  command:
+    - python3
+  features:
+    - XDP
+  files:
+    - ebpf/xdp_filter.bpf
+
+before: |
+  set -e
+  # include.yaml can only expand ${OUTDIR}/${TESTDIR}; stage the XDP object there.
+  cp ${SRCDIR}/ebpf/xdp_filter.bpf ${OUTDIR}/xdp_filter.bpf
+
+server: |
+  exec ip netns exec server python3 ${TESTDIR}/server.py ${OUTDIR}/server.json
+
+client: |
+  exec ip netns exec client python3 ${TESTDIR}/client.py
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        dest_port: 7000
+        flow.bypassed.pkts_toserver.__gt: 0
+        flow.bypassed.pkts_toclient.__gt: 0
+        flow.bypassed.bytes_toserver.__gt: 0
+        flow.bypassed.bytes_toclient.__gt: 0
+        flow.state: bypassed
+        flow.bypass: capture
+
+  - stats:
+      flow.end.state.capture_bypassed: 1
+      flow_bypassed.pkts.__gt: 0
+      flow_bypassed.bytes.__gt: 0

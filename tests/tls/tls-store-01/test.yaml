@@ -1,3 +1,7 @@
+requires:
+  command:
+    - xargs
+
 pcap: ../tls-cert-issuer/tls.pcap
 
 checks:

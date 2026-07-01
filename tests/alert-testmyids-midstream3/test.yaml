@@ -1,3 +1,7 @@
+requires:
+  command:
+    - xargs
+
 args:
 - --set stream.midstream=true
 

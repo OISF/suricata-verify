@@ -1,0 +1,32 @@
+# This test will run in NFQ, AF-PACKET and IDS modes.
+mode: [nfq, afp, ids]
+
+requires:
+  command:
+    - podman
+
+before: |
+  set -x
+  podman build -q --network=host server > ${OUTDIR}/server.iid
+  podman build -q --network=host client > ${OUTDIR}/client.iid
+
+server: |
+  set -x
+  iid=$(cat ${OUTDIR}/server.iid)
+  podman run --rm \
+    --stop-timeout=0 \
+    --network ns:/var/run/netns/server \
+    ${iid}
+
+client: |
+  set -x
+  iid=$(cat ${OUTDIR}/client.iid)
+  podman run --rm --network ns:/var/run/netns/client ${iid} curl --fail-with-body http://10.200.0.1
+
+checks:
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 2100498
+  - stats:
+      app_layer.tx.http: 1

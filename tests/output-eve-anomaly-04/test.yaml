@@ -1,6 +1,8 @@
 pcap: ../output-eve-anomaly-02/input.pcap
 
 requires:
+  command:
+    - xargs
   min-version: 7
 
 args:

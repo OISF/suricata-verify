@@ -1,3 +1,7 @@
+requires:
+  command:
+    - xargs
+
 command: |
   ${SRCDIR}/src/suricata -c "${SRCDIR}/suricata.yaml" -l "${OUTPUT_DIR}" \
    --set "threshold-file=${TEST_DIR}/../threshold.config" \

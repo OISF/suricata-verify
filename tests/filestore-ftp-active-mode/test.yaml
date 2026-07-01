@@ -1,3 +1,7 @@
+requires:
+  command:
+    - xargs
+
 checks:
   - shell:
       args: find filestore -type f | xargs | wc -l

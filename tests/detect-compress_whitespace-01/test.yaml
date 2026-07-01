@@ -1,6 +1,8 @@
 pcap: ../bug-3616-ips/input.pcap
 
 requires:
+    command:
+        - xargs
     min-version: 6
     pcap: false
 

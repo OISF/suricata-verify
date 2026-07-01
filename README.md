@@ -88,6 +88,12 @@ requires:
   files:
 	- src/detect-ipaddr.c
 
+  # Require that one or more host commands exist in PATH. If a command is
+  # missing, the test will be skipped.
+  command:
+    - jq
+    - xargs
+
   # Don't require a pcap file to be present. By default a test will be skipped
   # if there is no pcap file in the test directory. Not applicable if a
   # command is provided.
@@ -197,11 +203,16 @@ checks:
         # Eg. "ftp":{"reply":["Opening BINARY mode data connection for temp.txt (1164 bytes).","Transfer complete."], }
         ftp.reply.__contains: 'Transfer complete.'
 
+        # Numeric comparisons can be made with __gt, __gte, __lt, and __lte.
+        flow.age.__gt: 0
+
   - stats:
       # Check values in the last stats event in eve.json. Keys are relative to
       # the stats object. Values must match exactly.
       decoder.pkts: 42
       decoder.ethernet: 42
+      # Numeric comparisons can also be used:
+      decoder.bytes.__gte: 128
 
   - shell:
       # A simple shell check. If the command exits with a non-0 exit code the

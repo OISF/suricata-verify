@@ -1,3 +1,7 @@
+requires:
+  command:
+    - xargs
+
 args:
   - -k none --runmode=single
 

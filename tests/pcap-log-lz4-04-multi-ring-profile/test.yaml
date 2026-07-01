@@ -1,4 +1,6 @@
 requires:
+  command:
+    - xargs
   features:
     - liblz4
   min-version: 7

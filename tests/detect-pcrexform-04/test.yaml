@@ -1,3 +1,7 @@
+requires:
+  command:
+    - xargs
+
 pcap: ../detect-pcrexform-01/input.pcap
 
 
