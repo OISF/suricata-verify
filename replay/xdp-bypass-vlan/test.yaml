@@ -1,0 +1,27 @@
+requires:
+  min-version: 9
+  os: linux
+  features:
+    - EBPF
+  files:
+    - ebpf/xdp_filter.bpf
+
+tcpreplay_args:
+  - --pps=100
+
+args:
+  - --set af-packet.0.xdp-filter-file=${SRCDIR}/ebpf/xdp_filter.bpf
+
+timeout: 1
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: flow
+        flow.bypassed.pkts_toserver: 0
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        has-key: flow.bypassed.pkts_toserver
