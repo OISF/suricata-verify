@@ -1,0 +1,19 @@
+%YAML 1.1
+---
+
+default-rule-path: ${TESTDIR}
+rule-files:
+  - test.rules
+
+flow-timeouts:
+  tcp:
+    bypassed: 1
+
+af-packet:
+  - interface: br0
+    cluster-id: 92
+    bypass: yes
+    xdp-mode: soft
+    xdp-filter-file: ${OUTDIR}/xdp_filter.bpf
+  - interface: default
+    cluster-type: cluster_flow
