@@ -42,8 +42,8 @@ from lib.common import (
     check_requires as check_common_requires,
 )
 
-CLIENT_NS = "client"
-SERVER_NS = "server"
+CLIENT_NS = "client0"
+SERVER_NS = "server0"
 DUT_NS = "dut"
 
 MTU = "1500"
@@ -234,8 +234,8 @@ def build_parser() -> argparse.ArgumentParser:
         shell_p.add_argument(
             "target",
             nargs="?",
-            default="client",
-            choices=["client", "server", "dut"],
+            default="client0",
+            choices=["client0", "server0", "dut"],
         )
 
     return parser
@@ -650,8 +650,8 @@ def nfq_status() -> None:
 
 def do_shell(target: str) -> None:
     namespaces = {
-        "client": CLIENT_NS,
-        "server": SERVER_NS,
+        "client0": CLIENT_NS,
+        "server0": SERVER_NS,
         "dut": DUT_NS,
     }
     os.execvp("ip", ["ip", "netns", "exec", namespaces[target], "bash"])

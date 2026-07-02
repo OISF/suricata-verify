@@ -18,7 +18,7 @@ before: |
   podman build --iidfile=${OUTDIR}/client.iid --network=host client
 
 server: |
-  podman run --rm --cap-add=NET_RAW --network ns:/var/run/netns/server \
+  podman run --rm --cap-add=NET_RAW --network ns:/var/run/netns/server0 \
       -v ${OUTDIR}:/out:rw \
       $(cat ${OUTDIR}/server.iid) \
       /server.sh
@@ -29,7 +29,7 @@ client: |
   iid=$(cat ${OUTDIR}/client.iid)
   run() {
     echo "Running: $@"
-    podman run --rm --cap-add=NET_RAW --network ns:/var/run/netns/client ${iid} "$@"
+    podman run --rm --cap-add=NET_RAW --network ns:/var/run/netns/client0 ${iid} "$@"
   }
 
   # Curl request should not succeed.

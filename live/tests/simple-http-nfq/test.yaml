@@ -18,13 +18,13 @@ server: |
   iid=$(cat ${OUTDIR}/server.iid)
   podman run --rm \
     --stop-timeout=0 \
-    --network ns:/var/run/netns/server \
+    --network ns:/var/run/netns/server0 \
     ${iid}
 
 client: |
   set -x
   iid=$(cat ${OUTDIR}/client.iid)
-  podman run --rm --network ns:/var/run/netns/client ${iid} curl --fail-with-body http://10.200.0.1
+  podman run --rm --network ns:/var/run/netns/client0 ${iid} curl --fail-with-body http://10.200.0.1
 
 checks:
   - filter:

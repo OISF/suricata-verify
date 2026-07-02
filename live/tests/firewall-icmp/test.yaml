@@ -13,7 +13,7 @@ before: |
 client: |
   id=$(podman build -q --network=host client)
 
-  podman run --cap-add=NET_RAW --rm --network ns:/var/run/netns/client ${id} bash -lc '
+  podman run --cap-add=NET_RAW --rm --network ns:/var/run/netns/client0 ${id} bash -lc '
     if ping -c 1 -W 1 10.200.0.1; then
         echo "error: ping should have failed" > /dev/stderr
         exit 1
@@ -23,7 +23,7 @@ client: |
   cp firewall2.rules ${OUTDIR}/firewall.rules
   ${SURICATASC} -c reload-rules ${OUTDIR}/suricata.socket
   
-  podman run --cap-add=NET_RAW --rm --network ns:/var/run/netns/client ${id} bash -lc '
+  podman run --cap-add=NET_RAW --rm --network ns:/var/run/netns/client0 ${id} bash -lc '
     ping -c 1 -W 1 10.200.0.1
   '
 
