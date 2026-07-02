@@ -1,0 +1,39 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 1000
+        alert.action: allowed
+
+  - filter:
+      count: 9
+      match:
+        event_type: drop
+
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.firewall.accepted: 4
+        stats.firewall.blocked: 9
+        stats.firewall.drop_reason.default_packet_policy: 9
+        stats.firewall.drop_reason.rules: 0
+
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: ssh
+        flow.alerted: true
+        flow.pkts_toserver: 7
+        flow.pkts_toclient: 6
