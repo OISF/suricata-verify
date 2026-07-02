@@ -1,0 +1,41 @@
+requires:
+  min-version: 9
+
+pcap: smtp-rset-change-sender.pcap
+
+args:
+  - --simulate-ips
+
+checks:
+  # Each transaction validates its own sender (alice for tx0, bob for tx1).
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1998
+
+  # The RSET-aborted first transaction (alice, no recipient) is logged.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        smtp.mail_from: <alice@example.com>
+        not-has-key: smtp.rcpt_to
+
+  # The point of the test: the second transaction, after the RSET, is delivered.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        smtp.mail_from: <bob@example.com>
+        smtp.rcpt_to[0]: <alice@example.com>
+
+  # Nothing is dropped: the RSET did not block the next transaction.
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+
+  - stats:
+      firewall.accepted: 25
+      firewall.blocked: 0
