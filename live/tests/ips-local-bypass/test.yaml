@@ -12,10 +12,10 @@ requires:
 # packets keep arriving in Suricata's userspace; they just skip detection.
 
 server: |
-  exec ip netns exec server python3 ${TESTDIR}/server.py ${OUTDIR}/server.json
+  exec ip netns exec server0 python3 ${TESTDIR}/server.py ${OUTDIR}/server.json
 
 client: |
-  exec ip netns exec client python3 ${TESTDIR}/client.py
+  exec ip netns exec client0 python3 ${TESTDIR}/client.py
 
 checks:
   # We should see sid 1 on the BYPASS flow, with the bypass flowbit set.

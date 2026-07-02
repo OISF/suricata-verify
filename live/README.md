@@ -24,10 +24,14 @@ Linux network namespaces are use to provide an isolated network, the
 name created are:
 
 - dut: The device under test. This is where Suricata runs.
-- server: The server namespace. This is where the server application
+- server0: The server namespace. This is where the server application
   like a HTTP server runs.
-- client: The client namespace. This is where your user controlled
+- client0: The client namespace. This is where your user controlled
   script runs which could run `curl`, etc.
+
+The client and server namespaces are numbered by network in
+anticipation of multi-network topologies (client1/server1, ...);
+currently there is a single network, 0. There is only ever one dut.
 
 ## Test Requirements
 

@@ -13,13 +13,13 @@ before: |
 server: |
   podman run --rm \
     --stop-timeout=0 \
-    --network ns:/var/run/netns/server \
+    --network ns:/var/run/netns/server0 \
     $(cat ${OUTDIR}/server.iid)
 
 client: |
   cd ${OUTDIR}
 
-  if podman run --rm --network ns:/var/run/netns/client \
+  if podman run --rm --network ns:/var/run/netns/client0 \
       -v ${OUTDIR}:/out:rw \
       $(cat ${OUTDIR}/client.iid) \
       timeout --kill-after=1 --preserve-status 2 \
