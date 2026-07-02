@@ -1,0 +1,1 @@
+accept:tx,alert doh2:stream:request_headers any any -> any any (content:"stream"; http.uri; content:"/dns"; sid:11;)

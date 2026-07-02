@@ -1,0 +1,23 @@
+requires:
+  min-version: 9
+
+pcap: ../../dns-over-http2/dns_over_https.pcap
+
+args:
+  - --engine-analysis
+
+checks:
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        class: "firewall"
+        app_proto: "doh2"
+        id: 11
+        type: "app_tx"
+        engines[0].name: "http_uri"
+        engines[0].sub_state: "stream"
+        engines[0].app_proto: "http2"
+        engines[1].name: "stream"
+        engines[1].app_proto: "unknown"
+        not-has-key: "engines[1].sub_state"
