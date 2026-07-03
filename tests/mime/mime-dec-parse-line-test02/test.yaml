@@ -3,6 +3,30 @@ args:
 
 checks:
 - filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      dest_ip: 127.0.0.1
+      dest_port: 25
+      email.from: toto <toto@gmail.com>
+      email.status: PARSE_DONE
+      email.to[0]: 172.16.92.2@linuxbox
+      email.url[0]: www.test.com/malware.exe?hahah
+      event_type: smtp
+      pcap_cnt: 15
+      proto: TCP
+      smtp.helo: linuxbox
+      smtp.mail_from: <toto@gmail.com>
+      smtp.rcpt_to[0]: <172.16.92.2@linuxbox>
+      src_ip: 127.0.0.1
+      src_port: 39202
+      tx_id: 0
+# Pre-9 does not defer tx completion to the server response, so the
+# SMTP event lands one packet earlier. Remove when backported to 8.
+- filter:
+    requires:
+      lt-version: 9
     count: 1
     match:
       dest_ip: 127.0.0.1
