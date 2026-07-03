@@ -21,12 +21,25 @@ checks:
         # 500 5.5.1 Command unrecognized: + junk on new line
         src_port: 49274
   - filter:
-      count: 3
+      requires:
+        min-version: 9
+      count: 1
       match:
         event_type: anomaly
         anomaly.event: INVALID_REPLY
-        #no anomaly for 4.7.0 [IPTS04] Messages from 173.166.146.112 temporarily deferred due to user complaints because tx got closed before
-        #src_port: 49448
+        # no anomaly for 4.7.0 [IPTS04] Messages from 173.166.146.112 temporarily deferred due to user complaints because tx got closed before
+        src_port: 49448
+
+  # Versions less than 9 will get 3 anomaly events
+  # Remove when per direction state tracking backported to 8.
+  - filter:
+      requires:
+        lt-version: 9
+      count: 3
+      match:
+        event_type: anomaly 
+        anomaly.event: INVALID_REPLY
+
   - filter:
       count: 1
       match:
