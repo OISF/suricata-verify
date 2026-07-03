@@ -1,0 +1,145 @@
+%YAML 1.1
+---
+
+vars:
+  address-groups:
+    HOME_NET: "[192.168.0.0/16,10.0.0.0/8,172.16.0.0/12]"
+    EXTERNAL_NET: "!$HOME_NET"
+    HTTP_SERVERS: "$HOME_NET"
+    SMTP_SERVERS: "$HOME_NET"
+    SQL_SERVERS: "$HOME_NET"
+    DNS_SERVERS: "$HOME_NET"
+    TELNET_SERVERS: "$HOME_NET"
+    AIM_SERVERS: "$EXTERNAL_NET"
+    DC_SERVERS: "$HOME_NET"
+    DNP3_SERVER: "$HOME_NET"
+    DNP3_CLIENT: "$HOME_NET"
+    MODBUS_CLIENT: "$HOME_NET"
+    MODBUS_SERVER: "$HOME_NET"
+    ENIP_CLIENT: "$HOME_NET"
+    ENIP_SERVER: "$HOME_NET"
+
+  port-groups:
+    HTTP_PORTS: "80"
+    SHELLCODE_PORTS: "!80"
+    ORACLE_PORTS: 1521
+    SSH_PORTS: 22
+    DNP3_PORTS: 20000
+    MODBUS_PORTS: 502
+    FILE_DATA_PORTS: "[$HTTP_PORTS,110,143]"
+    FTP_PORTS: 21
+    GENEVE_PORTS: 6081
+    VXLAN_PORTS: 4789
+    TEREDO_PORTS: 3544
+    SIP_PORTS: "[5060, 5061]"
+
+stats:
+  enabled: yes
+  interval: 8
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - stats
+        - flow
+        - alert
+        - dns
+        - drop:
+            alerts: yes
+            flows: all
+
+firewall:
+  policies:
+    http2:
+      stream:
+        request-start:
+          - "accept:hook"
+          - "alert"
+        request-headers:
+          - "accept:hook"
+          - "alert"
+        request-data:
+          - "accept:hook"
+          - "alert"
+        request-closed:
+          - "accept:hook"
+          - "alert"
+        request-complete:
+          - "accept:hook"
+          - "alert"
+        response-start:
+          - "accept:hook"
+          - "alert"
+        response-headers:
+          - "accept:hook"
+          - "alert"
+        response-data:
+          - "accept:hook"
+          - "alert"
+        response-closed:
+          - "accept:hook"
+          - "alert"
+        response-complete:
+          - "accept:tx"
+          - "alert"
+      global:
+        request-start:
+          - "accept:hook"
+          - "alert"
+        request-complete:
+          - "accept:tx"
+          - "alert"
+        response-start:
+          - "accept:hook"
+          - "alert"
+        response-complete:
+          - "accept:tx"
+          - "alert"
+    doh2:
+      stream:
+        request-start:
+          - "accept:hook"
+          - "alert"
+        request-headers:
+          - "accept:hook"
+          - "alert"
+        request-data:
+          - "accept:hook"
+          - "alert"
+        request-closed:
+          - "accept:hook"
+          - "alert"
+        request-complete:
+          - "accept:hook"
+          - "alert"
+        response-start:
+          - "accept:hook"
+          - "alert"
+        response-headers:
+          - "accept:hook"
+          - "alert"
+        response-data:
+          - "accept:hook"
+          - "alert"
+        response-closed:
+          - "accept:hook"
+          - "alert"
+        response-complete:
+          - "accept:tx"
+          - "alert"
+      global:
+        request-start:
+          - "accept:hook"
+          - "alert"
+        request-complete:
+          - "accept:tx"
+          - "alert"
+        response-start:
+          - "accept:hook"
+          - "alert"
+        response-complete:
+          - "accept:tx"
+          - "alert"
