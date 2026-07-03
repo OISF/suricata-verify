@@ -14,6 +14,18 @@ checks:
       pcap_cnt: 13
       alert.signature_id: 1
 - filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      event_type: smtp
+      email.message_id: <alpine.DEB.2.00.1311261630120.9535@sd-26634.dedibox.fr>
+      pcap_cnt: 14
+# Pre-9 does not defer tx completion to the server response, so the
+# SMTP event lands one packet earlier. Remove when backported to 8.
+- filter:
+    requires:
+      lt-version: 9
     count: 1
     match:
       event_type: smtp
