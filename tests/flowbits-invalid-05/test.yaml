@@ -11,4 +11,16 @@ checks:
       count: 1
       match:
         log_level: Warning
-        engine.message: "inconsequential flowbit command combination in the same signature: set and unset"
+        engine.message: "inconsequential flowbit command combination in the same signature: set and unset, skipping set/unset from matching logic for flowbit 'fb1' in sid: 111"
+  # both are writes: only the first (set) survives, the later unset is dropped
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 111
+        lists.postmatch.matches[0].name: flowbits
+        lists.postmatch.matches[0].flowbits.cmd: set
+        lists.postmatch.matches[0].flowbits.names[0]: fb1
+        not-has-key:
+          - lists.postmatch.matches[1]
+          - lists.packet
