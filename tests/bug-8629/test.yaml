@@ -9,7 +9,6 @@ requires:
 # reaches the limit.
 args:
 - -k none
-- --set stream.async-oneside=true
 - --set app-layer.protocols.smb.max-tx=3
 
 checks:
