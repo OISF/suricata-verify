@@ -1,7 +1,7 @@
 # smtp-mime-encap-combined — regression test
 
 requires:
-  min-version: 9
+  min-version: 8.0.6
 
 args:
   - -k none
