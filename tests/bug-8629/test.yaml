@@ -1,5 +1,5 @@
 requires:
-  min-version: 8.0.6
+  min-version: 7.0.17
 
 # One-sided (asynchronous) SMB capture: only the client->server direction is
 # present, as with asymmetric routing or a one-sided tap. Requests pile up
