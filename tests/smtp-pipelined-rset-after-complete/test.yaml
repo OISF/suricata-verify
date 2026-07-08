@@ -1,0 +1,44 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # Exactly two message transactions, no split or spurious extras.
+  - filter:
+      count: 2
+      match:
+        event_type: smtp
+
+  # Message 1: alice -> bob, fully completed before the reset.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 0
+        smtp.mail_from: <alice@example.com>
+        smtp.rcpt_to[0]: <bob@example.com>
+        email.from: alice@example.com
+        email.to[0]: bob@example.com
+        not-has-key: ["smtp.rcpt_to[1]", "email.to[1]"]
+        email.status: PARSE_DONE
+
+  # Message 2: bob -> alice, started by the MAIL FROM pipelined with the
+  # RSET. Envelope and body must land in a single transaction; the RSET
+  # reply must not have completed it early.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 1
+        smtp.mail_from: <bob@example.com>
+        smtp.rcpt_to[0]: <alice@example.com>
+        email.from: bob@example.com
+        email.to[0]: alice@example.com
+        not-has-key: ["smtp.rcpt_to[1]", "email.to[1]"]
+        email.status: PARSE_DONE
+
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
