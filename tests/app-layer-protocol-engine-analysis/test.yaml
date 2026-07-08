@@ -1,0 +1,42 @@
+requires:
+    min-version: 9
+    pcap: false
+
+args:
+    - --engine-analysis
+
+# engine-analysis reports the effective match set: the values as expanded by
+# the http1/http2 umbrella and (for legacy detection rules) the AppProtoEquals()
+# equivalences, e.g. dns also covers doh2 and http also covers http1/http2.
+checks:
+# single value: dns expands to its doh2 equivalent
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 1
+      lists.packet.matches[0].app_layer_protocol.protocols[0]: "dns"
+      lists.packet.matches[0].app_layer_protocol.protocols[1]: "doh2"
+      lists.packet.matches[0].app_layer_protocol.mode: "direction"
+      lists.packet.matches[0].app_layer_protocol.negated: false
+# multi value with mode qualifier
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 2
+      lists.packet.matches[0].app_layer_protocol.protocols[0]: "unknown"
+      lists.packet.matches[0].app_layer_protocol.protocols[1]: "tls"
+      lists.packet.matches[0].app_layer_protocol.mode: "either"
+      lists.packet.matches[0].app_layer_protocol.negated: false
+# negated multi value: http expands to the http1/http2 umbrella
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 3
+      lists.packet.matches[0].app_layer_protocol.protocols[0]: "http"
+      lists.packet.matches[0].app_layer_protocol.protocols[1]: "tls"
+      lists.packet.matches[0].app_layer_protocol.protocols[2]: "http2"
+      lists.packet.matches[0].app_layer_protocol.protocols[3]: "http_any"
+      lists.packet.matches[0].app_layer_protocol.negated: true

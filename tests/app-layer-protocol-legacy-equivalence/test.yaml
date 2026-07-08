@@ -1,0 +1,37 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+  # flow is classified as DNS over HTTP/2
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: doh2
+  # legacy dns keyword matches the doh2 flow (AppProtoEquals equivalence)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # legacy http2 keyword matches the doh2 flow (AppProtoEquals equivalence)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  # negated dns does not match a doh2 flow
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  # unrelated protocol does not match
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 4

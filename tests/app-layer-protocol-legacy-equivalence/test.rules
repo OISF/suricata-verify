@@ -1,0 +1,14 @@
+# Legacy (non-firewall) detection rules keep AppProtoEquals() equivalences.
+# The flow is classified as doh2 (DNS over HTTP/2).
+
+# dns is equivalent to doh2 -> matches
+alert tcp any any -> any any (msg:"legacy dns matches doh2"; app-layer-protocol:dns; sid:1;)
+
+# http2 is equivalent to doh2 -> matches
+alert tcp any any -> any any (msg:"legacy http2 matches doh2"; app-layer-protocol:http2; sid:2;)
+
+# negated dns must not match a doh2 flow
+alert tcp any any -> any any (msg:"legacy !dns on doh2"; app-layer-protocol:!dns; sid:3;)
+
+# unrelated protocol must not match
+alert tcp any any -> any any (msg:"legacy tls on doh2"; app-layer-protocol:tls; sid:4;)

@@ -1,0 +1,53 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.engines[0].rules_loaded: 3
+        stats.detect.engines[0].rules_failed: 0
+
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 9001
+
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 9002
+
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        proto: TCP
+        flow.state: closed
+        flow.alerted: false
+
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.firewall.accepted: 12
+        stats.firewall.blocked: 0

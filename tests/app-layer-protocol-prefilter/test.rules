@@ -1,0 +1,4 @@
+# Force the prefilter engine for a single-value app-layer-protocol rule and
+# confirm it still matches the tls flow (exercises the prefilter set/compare/
+# match path).
+alert tcp any any -> any any (msg:"tls via prefilter"; app-layer-protocol:tls; prefilter; sid:1;)
