@@ -13,6 +13,6 @@ checks:
       event_type: smtp
       has-key: email.body_md5
 - filter:
-    count: 2
+    count: 1
     match:
       event_type: smtp

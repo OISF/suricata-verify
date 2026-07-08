@@ -83,8 +83,24 @@ checks:
       smtp.rcpt_to[0]: <172.16.92.2@linuxbox>
       src_ip: 127.0.0.1
       src_port: 39202
+# Pre-9 creates/logs a trailing QUIT transaction with inherited HELO.
 - filter:
+    requires:
+      lt-version: 9.0
     count: 1
+    match:
+      dest_ip: 127.0.0.1
+      dest_port: 25
+      event_type: smtp
+      proto: TCP
+      smtp.helo: linuxbox
+      src_ip: 127.0.0.1
+      src_port: 39202
+      tx_id: 1
+- filter:
+    requires:
+      min-version: 9
+    count: 0
     match:
       dest_ip: 127.0.0.1
       dest_port: 25
