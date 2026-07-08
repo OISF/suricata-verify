@@ -1,0 +1,11 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - -k none
+
+checks:
+  - stats:
+      app_layer.tx.smtp: 2
