@@ -1,0 +1,1 @@
+alert tcp any any -> any any (app-layer-protocol:tls|dns; prefilter; sid:1;)

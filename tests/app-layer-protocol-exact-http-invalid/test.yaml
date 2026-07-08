@@ -1,0 +1,13 @@
+requires:
+  min-version: 9
+  pcap: false
+
+args:
+  - --engine-analysis
+
+exit-code: 1
+
+checks:
+  - shell:
+      args: grep -q "'http' with 'exact' never" suricata.log && echo found
+      expect: found
