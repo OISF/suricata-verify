@@ -83,13 +83,29 @@ checks:
       src_ip: 1.1.205.22
       src_port: 4053
       tx_id: 0
+# Pre-9 creates/logs a trailing QUIT transaction with inherited HELO.
 - filter:
+    requires:
+      lt-version: 9.0
     count: 1
     match:
       dest_ip: 1.2.190.250
       dest_port: 25
       event_type: smtp
       pcap_cnt: 98
+      proto: TCP
+      smtp.helo: client-1016363.example.int
+      src_ip: 1.1.205.22
+      src_port: 4053
+      tx_id: 1
+- filter:
+    requires:
+      min-version: 9
+    count: 0
+    match:
+      dest_ip: 1.2.190.250
+      dest_port: 25
+      event_type: smtp
       proto: TCP
       smtp.helo: client-1016363.example.int
       src_ip: 1.1.205.22

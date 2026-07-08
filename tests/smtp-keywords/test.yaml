@@ -4,9 +4,20 @@ requires:
   min-version: 8.0.0
 
 checks:
+# Pre-9 creates/logs a trailing QUIT transaction with inherited HELO,
+# causing a second HELO alert.
 - filter:
-    # 2 transactions, 2 alerts
+    requires:
+      lt-version: 9.0
     count: 2
+    match:
+      event_type: alert
+      smtp.helo: GP
+      alert.signature_id: 1
+- filter:
+    requires:
+      min-version: 9
+    count: 1
     match:
       event_type: alert
       smtp.helo: GP
