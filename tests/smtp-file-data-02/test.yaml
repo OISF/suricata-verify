@@ -9,7 +9,7 @@ args:
 checks:
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.7
     count: 1
     match:
       dest_ip: 74.53.140.153
@@ -27,11 +27,11 @@ checks:
       src_ip: 10.10.1.4
       src_port: 1470
       tx_id: 0
-# Pre-9 does not defer tx completion to the server response, so the
-# SMTP event lands two packets earlier. Remove when backported to 8.
+# Pre-8.0.7 does not defer tx completion to the server response, so the
+# SMTP event lands two packets earlier. Backported to 8.0.7.
 - filter:
     requires:
-      lt-version: 9
+      lt-version: 8.0.7
     count: 1
     match:
       dest_ip: 74.53.140.153
@@ -85,10 +85,10 @@ checks:
       src_ip: 10.10.1.4
       src_port: 1470
       tx_id: 0
-# Pre-9 creates/logs a trailing QUIT transaction with inherited HELO.
+# Pre-8.0.7 creates/logs a trailing QUIT transaction with inherited HELO.
 - filter:
     requires:
-      lt-version: 9.0
+      lt-version: 8.0.7
     count: 1
     match:
       dest_ip: 74.53.140.153
@@ -102,7 +102,7 @@ checks:
       tx_id: 1
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.7
     count: 0
     match:
       dest_ip: 74.53.140.153

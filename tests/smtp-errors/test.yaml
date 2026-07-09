@@ -22,7 +22,7 @@ checks:
         src_port: 49274
   - filter:
       requires:
-        min-version: 9
+        min-version: 8.0.7
       count: 1
       match:
         event_type: anomaly
@@ -30,11 +30,11 @@ checks:
         # no anomaly for 4.7.0 [IPTS04] Messages from 173.166.146.112 temporarily deferred due to user complaints because tx got closed before
         src_port: 49448
 
-  # Versions less than 9 will get 3 anomaly events
-  # Remove when per direction state tracking backported to 8.
+  # Versions less than 8.0.7 will get 3 anomaly events
+  # Backported to 8.0.7.
   - filter:
       requires:
-        lt-version: 9
+        lt-version: 8.0.7
       count: 3
       match:
         event_type: anomaly 
