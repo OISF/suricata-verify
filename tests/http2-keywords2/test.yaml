@@ -57,14 +57,14 @@ checks:
         alert.signature_id: 34
   - filter:
       requires:
-        lt-version: 9
+        lt-version: 8.0.7
       count: 12
       match:
         event_type: alert
         alert.signature_id: 35
   - filter:
       requires:
-        min-version: 9
+        min-version: 8.0.7
       # In 9, we match only once for global tx instead of for each direction
       # TODO currently matching only on stream type
       count: 4
@@ -83,7 +83,7 @@ checks:
         alert.signature_id: 37
   - filter:
       requires:
-        lt-version: 9
+        lt-version: 8.0.7
       count: 6
       match:
         event_type: alert
@@ -91,14 +91,14 @@ checks:
   - filter:
       # TODO currently matching only on stream type
       requires:
-        min-version: 9
+        min-version: 8.0.7
       count: 2
       match:
         event_type: alert
         alert.signature_id: 38
   - filter:
       requires:
-        lt-version: 9
+        lt-version: 8.0.7
       count: 6
       match:
         event_type: alert
@@ -106,7 +106,7 @@ checks:
   - filter:
       # TODO currently matching only on stream type
       requires:
-        min-version: 9
+        min-version: 8.0.7
       count: 2
       match:
         event_type: alert
