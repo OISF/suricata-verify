@@ -1,7 +1,4 @@
-# Drop ICMP echo requests inline while letting HTTP through.
-#
-# Ports qa/live/netns/afp-ips-netns-bridge.sh (inline environment) and
-# qa/live/netns/nfq-ips-netns-route.sh (nfq environment) from the Suricata repo.
+# Port of qa/live/netns/afp-ips-netns-bridge.sh with the workers runmode.
 environment: inline
 
 requires:
@@ -11,6 +8,7 @@ requires:
 
 args:
   - --af-packet
+  - --runmode workers
 
 before: |
   # Build both images up front. The first build can be slow and would
@@ -61,6 +59,7 @@ client: |
 
 checks:
   - stats:
+      capture.kernel_packets.__gt: 0
       ips.accepted.__gt: 0
       ips.blocked.__gte: 10
 
