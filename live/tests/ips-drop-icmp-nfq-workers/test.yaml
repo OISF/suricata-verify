@@ -1,4 +1,4 @@
-# Drop ICMP echo requests inline in NFQ IPS workers runmode.
+# Port of qa/live/netns/nfq-ips-netns-route.sh with the workers runmode.
 environment: nfq
 
 requires:
