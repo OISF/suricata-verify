@@ -33,9 +33,11 @@ jobs:
             cargo \
             cbindgen \
             clang \
+            curl \
             ethtool \
             fuse-overlayfs \
             git \
+            hping3 \
             inetutils-ping \
             iproute2 \
             iptables \
@@ -70,8 +72,10 @@ jobs:
             rustc \
             slirp4netns \
             software-properties-common \
+            tcpdump \
             tcpreplay \
             uidmap \
+            wget \
             zlib1g \
             zlib1g-dev
 
