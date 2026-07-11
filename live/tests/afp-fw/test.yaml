@@ -1,3 +1,4 @@
+# Port of qa/live/netns/afp-fw-netns-bridge.sh with the workers runmode.
 environment: inline
 
 requires:
@@ -7,6 +8,7 @@ requires:
 
 args:
   - --af-packet
+  - --runmode workers
 
 before: |
   cp ${TESTDIR}/firewall1.rules ${OUTDIR}/firewall.rules
