@@ -1,0 +1,6 @@
+%YAML 1.1
+---
+
+default-rule-path: @RULEDIR@
+rule-files:
+  - suricata.rules
