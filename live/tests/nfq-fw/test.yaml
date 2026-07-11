@@ -1,7 +1,7 @@
 # NFQUEUE firewall test: default-drop with accept rules for HTTP, then a
 # rule reload swaps in a second rule set.
 #
-# Ports qa/live/netns/nfq-fw-netns-route.sh from the Suricata repo. Uses the
+# Ports qa/live/netns/nfq-fw-netns-route.sh with the autofp runmode. Uses the
 # L3 firewall rule variants (no ARP rule) because NFQUEUE operates at layer 3.
 environment: nfq
 
@@ -12,6 +12,7 @@ requires:
 
 args:
   - -q 0
+  - --runmode autofp
 
 before: |
   cp ${TESTDIR}/firewall1.rules ${OUTDIR}/firewall.rules
