@@ -33,9 +33,47 @@ name created are:
 - client0: The client namespace. This is where your user controlled
   script runs which could run `curl`, etc.
 
-The client and server namespaces are numbered by network in
-anticipation of multi-network topologies (client1/server1, ...);
-currently there is a single network, 0. There is only ever one dut.
+The client and server namespaces are numbered by network. The default topology
+has one network (`client0`/`server0`) and there is only ever one `dut`.
+Endpoint interfaces are named `client` and `server`. DUT interfaces are named
+`client0`/`server0`, `client1`/`server1`, and so on.
+
+## Per-test Inline Topologies
+
+Inline tests may replace the default one-network, unbonded, MTU-1500 layout
+with a `topology` mapping. Custom topologies require at least one network
+entry. Every entry has explicit client and server IPv4 CIDRs in the same
+subnet. Set `bond: true` to make both endpoint and DUT logical interfaces
+bonds with two veth members. A bonded network must also set `bond-mode`; there
+is no default bond mode. Supported modes are `balance-rr`, `active-backup`,
+`balance-xor`, `broadcast`, `802.3ad`, `balance-tlb`, and `balance-alb`. The
+optional topology MTU defaults to 1500.
+
+```
+environment: inline
+
+topology:
+  mtu: 9000
+  networks:
+    - client: 10.200.0.2/24
+      server: 10.200.0.1/24
+      bond: true
+      bond-mode: balance-rr
+    - client: 10.200.1.2/24
+      server: 10.200.1.1/24
+      bond: true
+      bond-mode: balance-rr
+```
+
+This creates endpoint namespaces `client0`, `server0`, `client1`, and
+`server1`, plus `dut`. Endpoint scripts continue to use logical interfaces
+named `client` and `server`; Suricata uses `client0`, `server0`, `client1`, and
+`server1` in the DUT. All generated physical-member names stay within Linux's
+15-character interface-name limit. Custom topologies are rejected for the tap
+and NFQ environments.
+
+Omitting `topology` retains the original single-network, unbonded, MTU-1500
+behavior used by existing tests and the manual CLI.
 
 ## Test Requirements
 

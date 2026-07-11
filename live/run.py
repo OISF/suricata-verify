@@ -7,6 +7,7 @@ from __future__ import annotations
 import argparse
 import fcntl
 import glob
+import ipaddress
 import os
 import platform
 import re
@@ -84,6 +85,108 @@ verbose = False
 suricata_config_cache = {}
 
 RUNNER_LOCK_PATH = "/tmp/suricata-verify-live.lock"
+
+
+BOND_MODES = {
+    "balance-rr",
+    "active-backup",
+    "balance-xor",
+    "broadcast",
+    "802.3ad",
+    "balance-tlb",
+    "balance-alb",
+}
+
+
+@dataclass(frozen=True)
+class TopologyNetwork:
+    client: str
+    server: str
+    bond: bool
+    bond_mode: str | None
+
+
+@dataclass(frozen=True)
+class TestTopology:
+    mtu: int
+    networks: tuple[TopologyNetwork, ...]
+
+
+def parse_topology(
+    config: dict, environment: str, path: str = "test.yaml"
+) -> TestTopology | None:
+    """Parse the optional custom inline topology from a test definition."""
+    raw = config.get("topology")
+    if raw is None:
+        return None
+    if environment != "inline":
+        raise ValueError(f'{path}: custom "topology" is only supported in the inline environment')
+    if not isinstance(raw, dict):
+        raise ValueError(f'{path}: "topology" must be a mapping')
+
+    unknown = set(raw) - {"mtu", "networks"}
+    if unknown:
+        raise ValueError(
+            f"{path}: unknown topology key(s): {', '.join(sorted(map(str, unknown)))}"
+        )
+
+    mtu = raw.get("mtu", 1500)
+    if not isinstance(mtu, int) or isinstance(mtu, bool) or not 68 <= mtu <= 65535:
+        raise ValueError(f'{path}: topology "mtu" must be an integer from 68 to 65535')
+
+    raw_networks = raw.get("networks")
+    if not isinstance(raw_networks, list) or not raw_networks:
+        raise ValueError(f'{path}: topology "networks" must contain at least one entry')
+
+    networks = []
+    for index, raw_network in enumerate(raw_networks):
+        prefix = f'{path}: topology network {index}'
+        if not isinstance(raw_network, dict):
+            raise ValueError(f"{prefix} must be a mapping")
+        unknown = set(raw_network) - {"client", "server", "bond", "bond-mode"}
+        if unknown:
+            raise ValueError(
+                f"{prefix} has unknown key(s): {', '.join(sorted(map(str, unknown)))}"
+            )
+        if "client" not in raw_network or "server" not in raw_network:
+            raise ValueError(f'{prefix} requires explicit "client" and "server" CIDRs')
+        bond = raw_network.get("bond", False)
+        if not isinstance(bond, bool):
+            raise ValueError(f'{prefix} "bond" must be true or false')
+        bond_mode = raw_network.get("bond-mode")
+        if bond:
+            if bond_mode not in BOND_MODES:
+                modes = ", ".join(sorted(BOND_MODES))
+                raise ValueError(
+                    f'{prefix} "bond-mode" must be present and one of: {modes}'
+                )
+        elif bond_mode is not None:
+            raise ValueError(f'{prefix} "bond-mode" requires "bond: true"')
+        try:
+            client = ipaddress.ip_interface(raw_network["client"])
+            server = ipaddress.ip_interface(raw_network["server"])
+        except (TypeError, ValueError) as err:
+            raise ValueError(f"{prefix} has an invalid CIDR: {err}") from err
+        if client.version != 4 or server.version != 4:
+            raise ValueError(f"{prefix} only supports IPv4 CIDRs")
+        if client.network != server.network:
+            raise ValueError(f"{prefix} client and server must be in the same subnet")
+        if client.ip == server.ip:
+            raise ValueError(f"{prefix} client and server addresses must differ")
+
+        for iface in (f"client{index}-b", f"server{index}-b"):
+            if len(iface) > 15:
+                raise ValueError(f"{prefix} would create an interface name longer than 15 characters")
+        networks.append(
+            TopologyNetwork(
+                client=str(client),
+                server=str(server),
+                bond=bond,
+                bond_mode=bond_mode,
+            )
+        )
+
+    return TestTopology(mtu=mtu, networks=tuple(networks))
 
 
 class RunnerLock:
@@ -398,6 +501,109 @@ def replace_default_route(ns: str, via: str) -> None:
     ns_exec(ns, ["ip", "route", "replace", "default", "via", via])
 
 
+def topology_namespaces(topology: TestTopology) -> tuple[str, ...]:
+    namespaces = []
+    for index in range(len(topology.networks)):
+        namespaces.extend((f"client{index}", f"server{index}"))
+    namespaces.append(DUT_NS)
+    return tuple(namespaces)
+
+
+def topology_root_links(topology: TestTopology) -> tuple[str, ...]:
+    links = []
+    for index, network in enumerate(topology.networks):
+        members = "ab" if network.bond else "a"
+        for member in members:
+            links.extend(
+                (
+                    f"vc{index}{member}",
+                    f"vdc{index}{member}",
+                    f"vs{index}{member}",
+                    f"vds{index}{member}",
+                )
+            )
+    return tuple(links)
+
+
+def setup_topology_namespaces(topology: TestTopology) -> None:
+    for ns in topology_namespaces(topology):
+        run(["ip", "netns", "add", ns])
+        run(["ip", "-n", ns, "link", "set", "lo", "up"])
+        ns_exec(
+            ns, ["sysctl", "-w", "net.ipv4.ping_group_range=0 2147483647"], quiet=True
+        )
+
+
+def setup_topology_side(
+    index: int, side: str, network: TopologyNetwork, mtu: int
+) -> None:
+    endpoint_ns = f"{side}{index}"
+    endpoint_if = side
+    dut_if = f"{side}{index}"
+    members = "ab" if network.bond else "a"
+
+    for member in members:
+        root_endpoint = f"v{side[0]}{index}{member}"
+        root_dut = f"vd{side[0]}{index}{member}"
+        run(
+            [
+                "ip", "link", "add", root_endpoint, "type", "veth",
+                "peer", "name", root_dut,
+            ]
+        )
+        run(["ip", "link", "set", root_endpoint, "netns", endpoint_ns])
+        run(["ip", "link", "set", root_dut, "netns", DUT_NS])
+
+        endpoint_member = f"{side}-{member}" if network.bond else endpoint_if
+        dut_member = f"{dut_if}-{member}" if network.bond else dut_if
+        run(["ip", "-n", endpoint_ns, "link", "set", root_endpoint, "name", endpoint_member])
+        run(["ip", "-n", DUT_NS, "link", "set", root_dut, "name", dut_member])
+        run(["ip", "-n", endpoint_ns, "link", "set", endpoint_member, "mtu", str(mtu)])
+        run(["ip", "-n", DUT_NS, "link", "set", dut_member, "mtu", str(mtu)])
+
+    if network.bond:
+        for ns, bond_if, member_prefix in (
+            (endpoint_ns, endpoint_if, side),
+            (DUT_NS, dut_if, dut_if),
+        ):
+            assert network.bond_mode is not None
+            ns_exec(
+                ns,
+                [
+                    "ip",
+                    "link",
+                    "add",
+                    bond_if,
+                    "type",
+                    "bond",
+                    "mode",
+                    network.bond_mode,
+                ],
+            )
+            ns_exec(ns, ["ip", "link", "set", bond_if, "mtu", str(mtu)])
+            for member in members:
+                member_if = f"{member_prefix}-{member}"
+                ns_exec(ns, ["ip", "link", "set", member_if, "master", bond_if])
+                ns_exec(ns, ["ip", "link", "set", member_if, "up"])
+
+
+def inline_topology_up(topology: TestTopology) -> None:
+    do_down(topology=topology, quiet=True)
+    setup_topology_namespaces(topology)
+    for index, network in enumerate(topology.networks):
+        setup_topology_side(index, "client", network, topology.mtu)
+        setup_topology_side(index, "server", network, topology.mtu)
+        add_address(f"client{index}", CLIENT_IF, network.client)
+        add_address(f"server{index}", SERVER_IF, network.server)
+        for ns, iface in (
+            (f"client{index}", CLIENT_IF),
+            (f"server{index}", SERVER_IF),
+            (DUT_NS, f"client{index}"),
+            (DUT_NS, f"server{index}"),
+        ):
+            bring_up_interface(ns, iface)
+
+
 def setup_common_topology() -> None:
     do_down(quiet=True)
     setup_namespaces()
@@ -594,14 +800,43 @@ def nfq_up(*, quiet: bool = False) -> None:
         )
 
 
-def do_down(*, quiet: bool = False) -> None:
-    for ns in ALL_NAMESPACES:
+def framework_namespaces(topology: TestTopology | None = None) -> tuple[str, ...]:
+    """Return expected and existing namespaces reserved by the live runner."""
+    namespaces = set(ALL_NAMESPACES)
+    if topology:
+        namespaces.update(topology_namespaces(topology))
+
+    result = run(["ip", "netns", "list"], capture=True)
+    for line in result.stdout.splitlines():
+        parts = line.split()
+        if parts and re.fullmatch(r"(?:client|server)\d+|dut", parts[0]):
+            namespaces.add(parts[0])
+    return tuple(sorted(namespaces))
+
+
+def framework_root_links(topology: TestTopology | None = None) -> tuple[str, ...]:
+    """Return expected and existing root links reserved by the live runner."""
+    links = set(ROOT_LINKS)
+    if topology:
+        links.update(topology_root_links(topology))
+
+    for link in os.listdir("/sys/class/net"):
+        if re.fullmatch(r"v(?:d)?[cs]\d+[ab]", link):
+            links.add(link)
+    return tuple(sorted(links))
+
+
+def do_down(*, topology: TestTopology | None = None, quiet: bool = False) -> None:
+    namespaces = framework_namespaces(topology)
+    root_links = framework_root_links(topology)
+
+    for ns in namespaces:
         kill_ns_processes(ns)
 
-    for link in ROOT_LINKS:
+    for link in root_links:
         run_quiet(["ip", "link", "del", link])
 
-    for ns in ALL_NAMESPACES:
+    for ns in namespaces:
         run_quiet(["ip", "netns", "del", ns])
 
     if not quiet:
@@ -1301,7 +1536,12 @@ def log_test_step(environment: str, test_name: str, message: str) -> None:
 
 
 def run_test(
-    test_name: str, environment: str, config: dict, script_dir: str, test_dir: str
+    test_name: str,
+    environment: str,
+    config: dict,
+    script_dir: str,
+    test_dir: str,
+    topology: TestTopology | None = None,
 ) -> list[str]:
     """Run a single test in the given environment. Returns failure messages."""
     failures = []
@@ -1324,9 +1564,6 @@ def run_test(
         os.environ[key] = test_env[key]
     test_include = render_test_include(test_dir, output_dir)
 
-    log_test_step(environment, test_name, f"Setting up {environment} environment")
-    UP_FUNCS[environment](quiet=True)
-
     stdout_log = None
     stderr_log = None
     suricata = None
@@ -1336,6 +1573,12 @@ def run_test(
     client_rc = -1
     server_rc = 0
     try:
+        log_test_step(environment, test_name, f"Setting up {environment} environment")
+        if topology:
+            inline_topology_up(topology)
+        else:
+            UP_FUNCS[environment](quiet=True)
+
         if before_script:
             log_test_step(environment, test_name, "Running before script")
             before_rc = run_script_logged(
@@ -1433,7 +1676,7 @@ def run_test(
             stdout_log.close()
         if stderr_log:
             stderr_log.close()
-        do_down(quiet=True)
+        do_down(topology=topology, quiet=True)
         for key, value in prev_test_env.items():
             if value is None:
                 os.environ.pop(key, None)
@@ -1530,6 +1773,14 @@ def do_run(
             failing_tests.append(f"{environment}/{test_name}")
             continue
 
+        try:
+            topology = parse_topology(config, environment, test_yaml)
+        except ValueError as err:
+            print(f"ERROR: {err}", file=sys.stderr)
+            failed += 1
+            failing_tests.append(f"{environment}/{test_name}")
+            continue
+
         requires = config.get("requires", {}) or {}
         try:
             check_test_requires(requires, environment, root)
@@ -1543,7 +1794,7 @@ def do_run(
             failing_tests.append(f"{environment}/{test_name}")
             continue
 
-        failures = run_test(test_name, environment, config, script_dir, root)
+        failures = run_test(test_name, environment, config, script_dir, root, topology)
         warnings = []
         if not failures:
             output_dir = os.path.join(root, "output")
