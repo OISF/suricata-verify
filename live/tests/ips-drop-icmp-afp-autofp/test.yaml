@@ -1,4 +1,4 @@
-# Drop ICMP echo requests inline in AF_PACKET IPS autofp runmode.
+# Port of qa/live/netns/afp-ips-netns-bridge.sh with the autofp runmode.
 environment: inline
 
 requires:
@@ -59,6 +59,7 @@ client: |
 
 checks:
   - stats:
+      capture.kernel_packets.__gt: 0
       ips.accepted.__gt: 0
       ips.blocked.__gte: 10
 
