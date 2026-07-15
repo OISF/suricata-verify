@@ -1,0 +1,19 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert
+        - flow
+        - smtp
+
+app-layer:
+  protocols:
+    smtp:
+      enabled: true
+      mime:
+        decode-mime: yes

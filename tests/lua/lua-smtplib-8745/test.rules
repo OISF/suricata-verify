@@ -1,0 +1,1 @@
+alert smtp any any -> any any (email.from; content: "example"; lua: test.lua; sid: 1;)
