@@ -1,0 +1,2 @@
+alert tcp any any -> any 443 (bypass; sid:1000004; rev:1;)
+alert tcp any 443 -> any any (bypass; sid:1000005; rev:1;)
