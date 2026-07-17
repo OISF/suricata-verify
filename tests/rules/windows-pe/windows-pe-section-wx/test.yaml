@@ -1,0 +1,29 @@
+pcap: ../windows-pe-basic/input.pcap
+
+requires:
+  min-version: 9
+
+args:
+- -k none
+
+checks:
+# section_wx should not match (no W+X sections in test PEs)
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 1
+
+# bare windows_pe should still match all PEs
+- filter:
+    count: 5
+    match:
+      event_type: alert
+      alert.signature_id: 2
+
+# Verify has_wx_section is logged as false
+- filter:
+    count: 5
+    match:
+      event_type: fileinfo
+      executable.has_wx_section: false

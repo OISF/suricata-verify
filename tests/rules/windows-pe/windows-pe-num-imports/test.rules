@@ -1,0 +1,8 @@
+# Test windows_pe num_imports keyword
+# Basic test PEs have num_imports=0
+
+# Match: num_imports 0 (all 5 PEs match)
+alert http any any -> any any ( msg:"TEST num_imports 0"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: num_imports 0; sid:1; rev:1;)
+
+# No match: num_imports > 0 (none match)
+alert http any any -> any any ( msg:"TEST num_imports >0"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: num_imports >0; sid:2; rev:1;)

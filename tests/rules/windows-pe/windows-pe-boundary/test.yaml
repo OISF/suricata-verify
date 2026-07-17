@@ -1,0 +1,16 @@
+# Test: Boundary case - exactly 68 bytes (edge case)
+# Validates detection of PE file at exact minimum size boundary
+
+
+checks:
+  # Verify that we get an alert for the boundary PE file
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+
+  # Verify the alert is in fast.log
+  - shell:
+      args: cat fast.log | grep -c "Boundary Windows PE detected"
+      expect: 1

@@ -1,0 +1,13 @@
+# Test combined new windows_pe keywords
+
+# Match: pe_type pe32 + timestamp range + checksum 0 (all 5 match)
+alert http any any -> any any ( msg:"TEST combined new fields"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: pe_type pe32, timestamp >0, checksum 0; sid:1; rev:1;)
+
+# Match: arch x86 + pe_type pe32 + size_of_headers 512 (all 5 match)
+alert http any any -> any any ( msg:"TEST arch+pe_type+headers"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, pe_type pe32, size_of_headers 512; sid:2; rev:1;)
+
+# No match: pe_type pe32+ combined with valid arch (none are PE32+)
+alert http any any -> any any ( msg:"TEST pe32+ negative"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, pe_type pe32+; sid:3; rev:1;)
+
+# Match: num_imports 0 + num_exports 0 + checksum 0 (all 5)
+alert http any any -> any any ( msg:"TEST import+export+checksum"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: num_imports 0, num_exports 0, checksum 0; sid:4; rev:1;)
