@@ -1,0 +1,8 @@
+# A buffer may carry more than one bsize, and the buffer must satisfy them all.
+# When those bounds share no common length the signature can never match, so it
+# is rejected at load. Two differing exact bsizes and a lower bound above an
+# upper bound are both unsatisfiable, in either keyword order.
+alert dns any any -> any any (msg:"two exacts, tight first"; dns.query; content:"abc"; bsize:15; bsize:27; sid:1;)
+alert dns any any -> any any (msg:"two exacts, tight last"; dns.query; content:"abc"; bsize:27; bsize:15; sid:2;)
+alert dns any any -> any any (msg:"lower above upper"; dns.query; content:"abc"; bsize:>20; bsize:<10; sid:3;)
+alert dns any any -> any any (msg:"upper below lower"; dns.query; content:"abc"; bsize:<10; bsize:>20; sid:4;)
