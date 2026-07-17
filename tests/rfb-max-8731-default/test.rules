@@ -1,0 +1,2 @@
+alert rfb any any -> any any (msg:"rfb-name1"; rfb.name; bsize: 32; sid:32;)
+alert rfb any any -> any any (msg:"rfb-name1"; rfb.name; bsize: 16; sid:16;)
