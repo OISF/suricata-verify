@@ -1,0 +1,1 @@
+alert nfs any any -> any any (msg:"NFSv3 READ file.data regression marker"; file.data; content:"SB3_"; sid:9200001; rev:1;)
