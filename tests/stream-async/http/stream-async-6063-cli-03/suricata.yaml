@@ -11,3 +11,4 @@ outputs:
         - http
         - flow
         - anomaly
+        - stats
