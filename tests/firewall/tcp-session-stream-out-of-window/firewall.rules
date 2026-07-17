@@ -1,0 +1,2 @@
+# Accept all TCP — stream engine should still drop out-of-window segments
+accept:flow tcp:all $HOME_NET any -> $EXTERNAL_NET any (tcp.session:setup,established; sid:9101;)

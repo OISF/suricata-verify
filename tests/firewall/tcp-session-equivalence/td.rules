@@ -1,0 +1,4 @@
+# Equivalence: count(sid 9001) == count(sid 9002) + count(sid 9003)
+alert tcp any any <> any any (msg:"tcp.session:setup,established"; tcp.session:setup,established; sid:9001;)
+alert tcp any any <> any any (msg:"flow:not_established"; flow:not_established; sid:9002;)
+alert tcp any any <> any any (msg:"flow:established"; flow:established; sid:9003;)

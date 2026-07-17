@@ -1,0 +1,2 @@
+# Accept all TCP — midstream policy should still reject midstream pickups
+accept:flow tcp:all $HOME_NET any -> $EXTERNAL_NET any (tcp.session:setup,established; sid:9201;)
