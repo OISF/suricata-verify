@@ -1,0 +1,1 @@
+alert tcp any any -> 82.165.177.154 any (msg:"Test GeoIP enrichment to Germany"; flow:established,to_server; sid:1; rev:1;)
