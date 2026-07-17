@@ -1,0 +1,18 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none --set app-layers.rfb.max-string-length=4096
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: rfb
+        rfb.server_security_failure_reason.__len: 4096
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: too_long_string
