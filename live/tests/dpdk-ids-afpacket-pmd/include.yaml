@@ -1,0 +1,47 @@
+%YAML 1.1
+---
+
+default-rule-path: ${OUTDIR}
+rule-files:
+  - suricata.rules
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert
+        - stats:
+            totals: yes
+            threads: no
+            interval: 1
+
+dpdk:
+  eal-params:
+    proc-type: primary
+    vdev: "net_af_packet0,iface=br0"
+    no-huge:
+    no-pci:
+    m: 256
+
+  interfaces:
+    - interface: net_af_packet0
+      threads: 1
+      multicast: false
+      mempool-size: auto
+      mempool-cache-size: auto
+      rx-descriptors: 16
+      tx-descriptors: 16
+      copy-mode: none
+      copy-iface: none
+
+# Required when using DPDK?
+threading:
+  set-cpu-affinity: yes
+  cpu-affinity:
+    - management-cpu-set:
+        cpu: [ 0 ]
+    - worker-cpu-set:
+        cpu: [ "all" ]
+        mode: "exclusive"
