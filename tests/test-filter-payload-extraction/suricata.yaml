@@ -1,0 +1,14 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular #regular|syslog|unix_dgram|unix_stream|redis
+      filename: eve.json
+      types:
+        - alert:
+            payload: yes
+            payload-only-classtypes: ["extract-me"] # dump payload only on specified classtypes if list not empty
+        - flow
+        - http
