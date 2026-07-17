@@ -1,0 +1,41 @@
+requires:
+  min-version: 8
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_ip: 192.168.9.10
+        dest_ip: 10.10.10.10
+        proto: TCP
+        dest_port: 80
+        app_proto: http
+        flow.alerted: true
+        flow.pkts_toserver: 4
+        flow.pkts_toclient: 3
+        flow.state: established
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        src_ip: 192.168.9.10
+        dest_ip: 10.10.10.10
+        http.http_method: HEAD
+        http.hostname: www.google.com
+        http.url: /index.html
+        http.status: 200
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: 192.168.9.10
+        dest_ip: 10.10.10.10
+        alert.signature_id: 1
+  - stats:
+      decoder.ipv4: 14
+      decoder.gre: 7
+      decoder.erspan: 7
