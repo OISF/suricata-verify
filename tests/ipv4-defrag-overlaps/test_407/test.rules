@@ -1,0 +1,1 @@
+alert icmp any any -> 192.168.10.63 any (msg:"Bad keyword 000004ok detected !!!"; content:"000004ok"; classtype:bad-unknown; sid:1; rev:7; )
