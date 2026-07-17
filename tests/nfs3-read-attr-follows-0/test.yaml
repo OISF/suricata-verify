@@ -1,0 +1,35 @@
+requires:
+  min-version: 9
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 9200001
+- filter:
+    count: 1
+    match:
+      event_type: fileinfo
+      app_proto: nfs
+      rpc.xid: 12290
+      nfs.version: 3
+      nfs.procedure: READ
+      nfs.type: response
+      nfs.status: OK
+      fileinfo.size: 12
+- filter:
+    count: 1
+    match:
+      event_type: nfs
+      rpc.xid: 12290
+      nfs.version: 3
+      nfs.procedure: READ
+      nfs.type: response
+      nfs.status: OK
+- filter:
+    count: 0
+    match:
+      event_type: anomaly
+      anomaly.app_proto: nfs
+      anomaly.event: malformed_data
