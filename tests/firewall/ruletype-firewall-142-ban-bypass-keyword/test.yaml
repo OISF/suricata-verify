@@ -10,6 +10,6 @@ exit-code: 1
 
 checks:
   - shell:
-      args: grep "keyword 'bypass' is not allowed in firewall mode" stderr | wc -l
+      args: grep "keyword 'bypass' is not allowed in threat detection rules with firewall mode" stderr | wc -l
       expect: 1
 
