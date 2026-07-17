@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"Test Usage of Unbuffered Content"; file.data; content:"d8:completei1e10:downloadedi1e10:incompletei0e8:intervali7164e12:min intervali3582e5:peers6:V"; sid:1;)
