@@ -1241,6 +1241,25 @@ def build_eve_validator():
             "{} build --release".format(cargo), cwd=os.path.join(TOPDIR, "eve-validator"),
             shell=True, env=env)
 
+def parse_protocols(values):
+    protocols = set()
+    for value in values or []:
+        for protocol in value.split(","):
+            protocol = protocol.strip()
+            if protocol:
+                protocols.add(protocol)
+    return protocols
+
+def get_test_protocols(dirpath):
+    meta_yaml = os.path.join(dirpath, "meta.yaml")
+    if not os.path.exists(meta_yaml):
+        return set()
+    config = yaml.safe_load(open(meta_yaml, "rb")) or {}
+    protocols = config.get("protocols", []) or []
+    if isinstance(protocols, str):
+        protocols = [protocols]
+    return set(str(protocol) for protocol in protocols)
+
 def main():
     global TOPDIR
     global args
@@ -1276,9 +1295,16 @@ def main():
                         help="Clean up output directories of passing tests")
     parser.add_argument("--no-validation", action="store_true", help="Disable EVE validation")
     parser.add_argument("patterns", nargs="*", default=[])
+    parser.add_argument("--meta-protocols", action="append",
+                        help="Run tests whose meta.yaml protocols include any comma-separated protocol")
     parser.add_argument("-j", type=int, default=min(8, os.cpu_count()),
                         help="Number of jobs to run (threads)")
     args = parser.parse_args()
+
+    requested_protocols = parse_protocols(args.meta_protocols)
+    if args.meta_protocols and not requested_protocols:
+        print("error: --meta-protocols requires at least one protocol")
+        return 1
 
     if args.self_test:
         return unittest.main(argv=[sys.argv[0]])
@@ -1367,16 +1393,27 @@ def main():
         else:
             continue
 
+        matched = False
         if not args.patterns:
-            tests.append(dirpath)
+            matched = True
         else:
             for pattern in args.patterns:
                 if args.exact:
                     if pattern == parent or pattern == basename:
-                        tests.append(dirpath)
+                        matched = True
+                        break
                 # also check the parent dir of the test for pattern
                 elif parent.find(pattern) > -1:
-                    tests.append(dirpath)
+                    matched = True
+                    break
+
+        if not matched:
+            continue
+
+        if requested_protocols and not requested_protocols.intersection(get_test_protocols(dirpath)):
+            continue
+
+        tests.append(dirpath)
 
     # Sort alphabetically.
     tests.sort()

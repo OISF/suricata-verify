@@ -1,0 +1,1 @@
+protocols: [gss-api, ip, nbss, ntlmssp, sll, smb, spnego, tcp]
