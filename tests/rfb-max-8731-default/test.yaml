@@ -1,0 +1,45 @@
+requires:
+  min-version: 9
+
+pcap: ../rfb-max-8731/input.pcap 
+
+args:
+  - -k none
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: rfb
+        rfb.server_security_failure_reason.__len: 32
+  - filter:
+      count: 1
+      match:
+        event_type: rfb
+        rfb.server_security_failure_reason.__len: 16
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.event: too_long_string
+  - filter:
+      count: 1
+      match:
+        event_type: rfb
+        rfb.framebuffer.name.__len: 16
+  - filter:
+      count: 1
+      match:
+        event_type: rfb
+        rfb.framebuffer.name.__len: 32
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 16
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 32
