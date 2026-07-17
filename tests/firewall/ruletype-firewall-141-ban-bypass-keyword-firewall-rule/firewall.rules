@@ -1,0 +1,4 @@
+accept:hook tcp:all any any <> any 80 (sid:2000002;)
+accept:hook http1:request_started any any -> any 80 (sid:2000003;)
+accept:hook http1:request_line any any -> any 80 (sid:2000004;)
+accept:flow,alert http1:request_headers any any -> any 80 (msg:"Bypass HTTP host from firewall rule"; http.host; content:"www.testmyids.com"; bypass; sid:2000001;)
