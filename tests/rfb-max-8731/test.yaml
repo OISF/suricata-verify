@@ -1,0 +1,43 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none --set app-layer.protocols.rfb.max-string-length=24
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: rfb
+        rfb.server_security_failure_reason.__len: 24
+  - filter:
+      count: 1
+      match:
+        event_type: rfb
+        rfb.server_security_failure_reason.__len: 16
+  - filter:
+      count: 2
+      match:
+        event_type: anomaly
+        anomaly.event: too_long_string
+  - filter:
+      count: 1
+      match:
+        event_type: rfb
+        rfb.framebuffer.name.__len: 16
+  - filter:
+      count: 1
+      match:
+        event_type: rfb
+        rfb.framebuffer.name.__len: 24
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 16
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 32
