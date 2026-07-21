@@ -1,0 +1,42 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # Exactly two message transactions; the second envelope must not merge
+  # into the BDAT transaction.
+  - filter:
+      count: 2
+      match:
+        event_type: smtp
+
+  # Message 1: alice -> bob, one non-empty final BDAT chunk. BDAT message
+  # content is not MIME parsed, so no email fields are expected.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 0
+        smtp.mail_from: <alice@example.com>
+        smtp.rcpt_to[0]: <bob@example.com>
+        not-has-key: ["smtp.rcpt_to[1]"]
+
+  # Message 2: bob -> alice, a normal DATA transaction started directly
+  # after the final BDAT reply completed the first transaction.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 1
+        smtp.mail_from: <bob@example.com>
+        smtp.rcpt_to[0]: <alice@example.com>
+        email.from: bob@example.com
+        email.to[0]: alice@example.com
+        not-has-key: ["smtp.rcpt_to[1]", "email.to[1]"]
+        email.status: PARSE_DONE
+
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
