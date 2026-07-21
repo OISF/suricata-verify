@@ -1,0 +1,4 @@
+alert http any any -> any any (msg:"WPE file_version lt 7"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: file_version <7.0.0.0; sid:1; rev:1;)
+alert http any any -> any any (msg:"WPE file_version gt 7"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: file_version >7.0.0.0; sid:2; rev:1;)
+alert http any any -> any any (msg:"WPE file_version range"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: file_version 6.0.0.0-11.0.0.0; sid:3; rev:1;)
+alert http any any -> any any (msg:"WPE file_version exact"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: file_version 10.0.19041.1; sid:4; rev:1;)

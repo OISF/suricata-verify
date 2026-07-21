@@ -28,8 +28,19 @@ or more test directories below:
 | `section_wx`        | `windows-pe-section-wx`         | Detect Write+Execute sections        |
 | `export_name`       | `windows-pe-export-name`        | PE export directory DLL name         |
 | *(DLL import)*      | `windows-pe-import`             | Match imported DLL names             |
+| `signature`/`cert_*`| `windows-pe-signature`          | Authenticode signing-certificate identity |
+| `cert_*` (chain)    | `windows-pe-multicert`          | Signer (leaf) resolution in a cert chain |
+| `cert_*` (large)    | `windows-pe-large-signed`       | Buffering config for large signed files |
+| `file_version`      | `windows-pe-file-version`       | FileVersion from the VERSIONINFO resource |
 | *(combined)*        | `windows-pe-combined`           | Multiple options in one keyword      |
 | *(combined)*        | `windows-pe-new-fields-combined`| Combined new-field checks            |
+
+The signing-certificate options are `signature` (presence flag),
+`cert_thumbprint`, `cert_serial`, `cert_subject`, and `cert_issuer`; the
+certificate identity is matched but not cryptographically verified. Because the
+certificate table and `VERSIONINFO` resource sit near the end of a PE, `cert_*`
+and `file_version` require the file to be reassembled from offset 0 — see
+`windows-pe-large-signed` for the buffering settings this needs.
 
 ## Test Structure
 
