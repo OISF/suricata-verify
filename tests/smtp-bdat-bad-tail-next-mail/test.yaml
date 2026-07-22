@@ -1,0 +1,58 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # Invalid BDAT syntax must not disable SMTP parsing for the flow: both
+  # messages sent after the rejected command are still inspected.
+  - filter:
+      count: 2
+      match:
+        event_type: smtp
+
+  # Message 1: alice -> bob, a valid final BDAT chunk sent after the
+  # rejected command. BDAT message content is not MIME parsed, so no
+  # email fields are expected.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 0
+        smtp.mail_from: <alice@example.com>
+        smtp.rcpt_to[0]: <bob@example.com>
+        not-has-key: ["smtp.rcpt_to[1]"]
+
+  # Message 2: bob -> alice, a normal DATA transaction pipelined after
+  # the first message.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 1
+        smtp.mail_from: <bob@example.com>
+        smtp.rcpt_to[0]: <alice@example.com>
+        email.from: bob@example.com
+        email.to[0]: alice@example.com
+        not-has-key: ["smtp.rcpt_to[1]", "email.to[1]"]
+        email.status: PARSE_DONE
+
+  # The rejected command raises a decoder event instead of a parser error.
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: INVALID_BDAT
+
+  # The client pipelines past DATA without waiting for its 354 (the server
+  # already closed the session), which is an invalid pipelined sequence.
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: INVALID_PIPELINED_SEQUENCE
+
+  - filter:
+      count: 2
+      match:
+        event_type: anomaly
