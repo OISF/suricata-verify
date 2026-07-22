@@ -1,0 +1,63 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # Exactly two message transactions. Both BDAT chunks and the second
+  # envelope's MAIL FROM and RCPT TO arrive coalesced in one TCP segment,
+  # so the parser must split each chunk at its exact declared octet
+  # boundary and resume command parsing on the surplus bytes in the same
+  # buffer.
+  - filter:
+      count: 2
+      match:
+        event_type: smtp
+
+  # Message 1: alice -> bob, two BDAT chunks. BDAT message content is not
+  # MIME parsed, so no email fields are expected. If the parser miscounted
+  # the chunk boundary it would consume the trailing "mail from:<bob>" as
+  # chunk data and this transaction's envelope would be wrong.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 0
+        smtp.mail_from: <alice@example.com>
+        smtp.rcpt_to[0]: <bob@example.com>
+        not-has-key: ["smtp.rcpt_to[1]"]
+
+  # Message 2: bob -> alice, whose MAIL FROM and RCPT TO were coalesced
+  # after the final chunk's payload. Recovering this transaction with the
+  # correct envelope proves the surplus command bytes were parsed and not
+  # swallowed by the preceding BDAT chunk.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 1
+        smtp.mail_from: <bob@example.com>
+        smtp.rcpt_to[0]: <alice@example.com>
+        email.from: bob@example.com
+        email.to[0]: alice@example.com
+        not-has-key: ["smtp.rcpt_to[1]", "email.to[1]"]
+        email.status: PARSE_DONE
+
+  # The final chunk sits mid-buffer, not at the input boundary. A parser
+  # that overran the declared length would raise BDAT_CHUNK_LEN_EXCEEDED;
+  # none is expected.
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+
+  # The first transaction is completed by its final chunk's 250 reply and
+  # logged mid-stream (pcap_cnt 15 of 23 packets), not by end-of-flow
+  # logging at the closing FIN. This ties completion to the LAST reply
+  # rather than EOF. Re-baseline this pcap_cnt if the pcap is regenerated.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 0
+        pcap_cnt: 15
