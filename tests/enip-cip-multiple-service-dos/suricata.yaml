@@ -1,0 +1,24 @@
+%YAML 1.1
+---
+# Minimal config for the ENIP CIP Multiple Service DoS reproducer.
+# suricata-verify uses this file (-c) because it exists in the test directory;
+# everything not set here falls back to Suricata's built-in defaults.
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert
+        - anomaly
+        - flow
+        - stats
+
+app-layer:
+  protocols:
+    enip:
+      enabled: yes        # ENIP ships disabled by default (suricata.yaml.in)
+      detection-ports:
+        dp: 44818
+        sp: 44818
