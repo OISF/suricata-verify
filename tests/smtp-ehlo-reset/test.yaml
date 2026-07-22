@@ -1,0 +1,48 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # The mid-session EHLO resets the envelope like a RSET (RFC 5321
+  # 4.1.4), so two transactions are logged.
+  - filter:
+      count: 2
+      match:
+        event_type: smtp
+
+  # Transaction 1: the abandoned envelope, MAIL FROM only.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 0
+        smtp.mail_from: <alice@example.com>
+        not-has-key: ["smtp.rcpt_to[0]", "email.from"]
+
+  # Transaction 2: the delivered message, attributed to its real
+  # sender.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 1
+        smtp.mail_from: <bob@example.com>
+        smtp.rcpt_to[0]: <alice@example.com>
+        email.from: bob@example.com
+        email.to[0]: alice@example.com
+        not-has-key: ["smtp.rcpt_to[1]", "email.to[1]"]
+        email.status: PARSE_DONE
+
+  # The mid-session EHLO still flags a duplicate HELO field, but only
+  # once: the second MAIL FROM belongs to the new transaction.
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: DUPLICATE_FIELDS
