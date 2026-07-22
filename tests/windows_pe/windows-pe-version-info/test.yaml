@@ -1,0 +1,51 @@
+requires:
+  min-version: 9.0.0
+
+args:
+- -k none
+
+checks:
+# substring matches the Microsoft PE (svchost.exe)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+# keyed field match on OriginalFilename
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2
+# regex on a specific field (masquerading .scr)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 3
+# two version_info options AND together (both on the Acme PE)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 4
+# a single alternation regex gives OR -> matches both versioned PEs
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 5
+# non-matching value matches nothing
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 6
+# the StringFileInfo strings are logged in the executable object
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2
+      files[0].executable.version_info.CompanyName: Microsoft Corporation
+      files[0].executable.version_info.OriginalFilename: svchost.exe

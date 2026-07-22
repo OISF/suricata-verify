@@ -32,6 +32,7 @@ or more test directories below:
 | `cert_*` (chain)    | `windows-pe-multicert`          | Signer (leaf) resolution in a cert chain |
 | `cert_*` (large)    | `windows-pe-large-signed`       | Buffering config for large signed files |
 | `file_version`      | `windows-pe-file-version`       | FileVersion from the VERSIONINFO resource |
+| `version_info`      | `windows-pe-version-info`       | VERSIONINFO StringFileInfo strings (substring/regex) |
 | *(combined)*        | `windows-pe-combined`           | Multiple options in one keyword      |
 | *(combined)*        | `windows-pe-new-fields-combined`| Combined new-field checks            |
 
