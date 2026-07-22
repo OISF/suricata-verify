@@ -9,10 +9,13 @@ network environment.
 
 - tap: Creates a bridge in the DUT namespace so Suricata can monitor traffic
   between the client and server namespaces. Internally a Linux bridge is used,
-  but you can think of it like a span port on a switch.
+  but you can think of it like a span port on a switch. This can be used for IDS
+  testing with AF_PACKET, libpcap, etc. An ethernet device `br0` is exposed for
+  Suricata to attach to.
 
 - inline: Creates an inline topology, Suricata bridging all traffic between the
-  client and server.
+  client and server. This is useful for AF_PACKET type IPS testing where
+  Suricata creates the bridge between 2 ethernet interfaces.
 
 - nfq: Creates an NFQUEUE routed topology, intercepting all traffic between the
   client and server.
@@ -37,6 +40,68 @@ The client and server namespaces are numbered by network. The default topology
 has one network (`client0`/`server0`) and there is only ever one `dut`.
 Endpoint interfaces are named `client` and `server`. DUT interfaces are named
 `client0`/`server0`, `client1`/`server1`, and so on.
+
+## Default Topologies
+
+All three environments share the same default single-network layout: a
+`client0` and a `server0` namespace, each wired to the `dut` namespace with a
+veth pair. They differ in how the two DUT interfaces are connected to each
+other.
+
+### tap
+
+The DUT interfaces are enslaved to a Linux bridge, `br0`, which forwards
+traffic on its own. Suricata attaches to `br0` (e.g. `--pcap=br0` or
+`--af-packet=br0`) and passively observes:
+
+```
++------------+     +---------------------+     +------------+
+|  client0   |     |         dut         |     |  server0   |
+|            |     |                     |     |            |
+|   client   |-----| client0     server0 |-----|   server   |
+| 10.200.0.2 |     |    |           |    |     | 10.200.0.1 |
++------------+     |    +----br0----+    |     +------------+
+                   |          |          |
+                   |      Suricata       |
+                   +---------------------+
+```
+
+### inline
+
+No bridge is created. The client and server can only communicate if Suricata
+forwards traffic between the two DUT interfaces, e.g. AF_PACKET copy-mode or
+DPDK:
+
+```
++------------+     +---------------------+     +------------+
+|  client0   |     |         dut         |     |  server0   |
+|            |     |                     |     |            |
+|   client   |-----| client0     server0 |-----|   server   |
+| 10.200.0.2 |     |    |           |    |     | 10.200.0.1 |
++------------+     |    +--Suricata-+    |     +------------+
+                   +---------------------+
+```
+
+### nfq
+
+The DUT is a router: it owns an address on each network, the endpoints use it
+as their default gateway, and iptables queues all forwarded traffic to
+NFQUEUE 0 where Suricata (`-q 0`) provides the verdict:
+
+```
++------------+     +-----------------------------+     +------------+
+|  client0   |     |             dut             |     |  server0   |
+|            |     |                             |     |            |
+|   client   |-----| client0             server0 |-----|   server   |
+| 10.200.1.2 |     | 10.200.1.254   10.200.0.254 |     | 10.200.0.1 |
++------------+     |      |               |      |     +------------+
+                   |      +----NFQUEUE----+      |
+                   |       Suricata (-q 0)       |
+                   +-----------------------------+
+```
+
+The client's default route points at `10.200.1.254`, the server's at
+`10.200.0.254`, and the DUT has `ip_forward` enabled.
 
 ## Per-test Inline Topologies
 
@@ -71,6 +136,33 @@ named `client` and `server`; Suricata uses `client0`, `server0`, `client1`, and
 `server1` in the DUT. All generated physical-member names stay within Linux's
 15-character interface-name limit. Custom topologies are rejected for the tap
 and NFQ environments.
+
+The example above is the dual-network, dual-bond topology used by the
+`afp-ips-bond-two-networks` test. Each `a`/`b` line below is a veth pair
+acting as a bond member: endpoint members are named `client-a`/`client-b`
+(likewise `server-a`/`server-b`), and the DUT members `client0-a`/`client0-b`,
+and so on. Suricata runs inline across each network's bond pair (e.g.
+AF_PACKET copy-mode between `client0`/`server0` and between
+`client1`/`server1`):
+
+```
++------------+     +---------------------+     +------------+
+|  client0   |     |         dut         |     |  server0   |
+|            |     |                     |     |            |
+|   client   |--a--| client0     server0 |--a--|   server   |
+|   (bond)   |--b--| (bond)       (bond) |--b--|   (bond)   |
+| 10.200.0.2 |     |    |           |    |     | 10.200.0.1 |
++------------+     |    +--Suricata-+    |     +------------+
+                   |                     |
++------------+     |                     |     +------------+
+|  client1   |     |                     |     |  server1   |
+|            |     |                     |     |            |
+|   client   |--a--| client1     server1 |--a--|   server   |
+|   (bond)   |--b--| (bond)       (bond) |--b--|   (bond)   |
+| 10.200.1.2 |     |    |           |    |     | 10.200.1.1 |
++------------+     |    +--Suricata-+    |     +------------+
+                   +---------------------+
+```
 
 Omitting `topology` retains the original single-network, unbonded, MTU-1500
 behavior used by existing tests and the manual CLI.
