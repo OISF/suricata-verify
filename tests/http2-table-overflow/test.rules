@@ -1,0 +1,1 @@
+alert http2 any any -> any any (msg:"SURICATA HTTP2 headers table overflow"; flow:established,to_server; app-layer-event:http2.header_table_overflow; classtype:protocol-command-decode; sid:2290021; rev:1;)
