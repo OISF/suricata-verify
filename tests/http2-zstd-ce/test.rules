@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"Test zstd decompressed"; file.data; content:"zstd works on http2"; sid:1;)
