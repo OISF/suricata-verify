@@ -10,3 +10,19 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 1234
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1235
+  - filter:
+      count: 9
+      match:
+        event_type: alert
+        alert.signature_id: 1236
+  - filter:
+      count: 26
+      match:
+        event_type: alert
+        alert.signature_id: 1237
+
