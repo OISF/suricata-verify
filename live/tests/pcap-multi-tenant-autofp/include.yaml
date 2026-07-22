@@ -1,0 +1,29 @@
+%YAML 1.1
+---
+
+default-rule-path: ${TESTDIR}
+rule-files:
+  - suricata.rules
+
+multi-detect:
+  enabled: yes
+  selector: vlan
+  loaders: 3
+  tenants:
+    - id: 1
+      yaml: ${OUTDIR}/tenant-1.yaml
+  mappings:
+    - vlan-id: 1000
+      tenant-id: 1
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert
+        - stats:
+            totals: yes
+            threads: no
+            interval: 1
