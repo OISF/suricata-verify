@@ -69,6 +69,13 @@ count_dict['failed'] = 0
 count_dict['skipped'] = 0
 check_args['fail'] = 0
 
+COMPARISON_OPERATORS = {
+    "__gt": ">",
+    "__gte": ">=",
+    "__lt": "<",
+    "__lte": "<=",
+}
+
 # Global flag for shutdown signal
 shutdown_requested = False
 executor_instance = None
@@ -123,6 +130,25 @@ class SelfTest(unittest.TestCase):
         self.assertTrue(comp.is_lt(SuricataVersion(6, 0, 0), SuricataVersion(6, 1, 1)))
         self.assertFalse(comp.is_lt(SuricataVersion(6, 1, 2), SuricataVersion(6, 1, 1)))
         self.assertTrue(comp.is_lt(SuricataVersion(6, 0, 0), SuricataVersion(7, 0, 0)))
+
+    def test_numeric_comparison_operators(self):
+        self.assertTrue(compare_values(2, 1, "__gt"))
+        self.assertTrue(compare_values(2, 2, "__gte"))
+        self.assertTrue(compare_values(1, 2, "__lt"))
+        self.assertTrue(compare_values(2, 2, "__lte"))
+        self.assertFalse(compare_values(True, 0, "__gt"))
+        self.assertFalse(compare_values("2", 1, "__gt"))
+
+    def test_filter_numeric_comparison(self):
+        check = FilterCheck.__new__(FilterCheck)
+        check.config = {
+            "match": {
+                "flow.age.__gte": 2,
+                "flow.bytes.__lt": 100,
+            }
+        }
+        self.assertTrue(check.match({"flow": {"age": 2, "bytes": 99}}))
+        self.assertFalse(check.match({"flow": {"age": 1, "bytes": 99}}))
 
 class TestError(Exception):
     pass
@@ -426,7 +452,9 @@ def find_value(name, obj):
                 return len(obj)
             except:
                 return -1
-        if part in ["__contains", "__find", "__startswith", "__endswith"]:
+        if part in [
+                "__contains", "__find", "__startswith", "__endswith",
+                *COMPARISON_OPERATORS.keys()]:
             # Return full object, caller will handle the special match logic.
             break
         name = None
@@ -449,6 +477,31 @@ def find_value(name, obj):
                 return None
 
     return obj
+
+
+def get_comparison_operator(key):
+    """Return the comparison operator suffix from a check key, if present."""
+    suffix = key.rsplit(".", 1)[-1]
+    if suffix in COMPARISON_OPERATORS:
+        return suffix
+    return None
+
+
+def compare_values(actual, expected, operator):
+    """Compare two numeric values using a comparison operator suffix."""
+    if isinstance(actual, bool) or isinstance(expected, bool):
+        return False
+    if not isinstance(actual, (int, float)) or not isinstance(expected, (int, float)):
+        return False
+    if operator == "__gt":
+        return actual > expected
+    if operator == "__gte":
+        return actual >= expected
+    if operator == "__lt":
+        return actual < expected
+    if operator == "__lte":
+        return actual <= expected
+    raise ValueError("unknown comparison operator: {}".format(operator))
 
 
 def is_version_compatible(version, suri_version, expr):
@@ -535,10 +588,16 @@ class StatsCheck:
                 if event["event_type"] == "stats":
                     stats = event["stats"]
         for key in self.config:
+            expected = self.config[key]
             val = find_value(key, stats)
-            if val != self.config[key]:
+            operator = get_comparison_operator(key)
+            if operator is not None:
+                if not compare_values(val, expected, operator):
+                    raise TestError("stats.%s: expected %s %s; got %s" % (
+                        key, COMPARISON_OPERATORS[operator], str(expected), str(val)))
+            elif val != expected:
                 raise TestError("stats.%s: expected %s; got %s" % (
-                    key, str(self.config[key]), str(val)))
+                    key, str(expected), str(val)))
         return True
 
 class FilterCheck:
@@ -618,10 +677,15 @@ class FilterCheck:
                 elif key.endswith("__endswith"):
                     if not val.endswith(expected):
                         return False
-                elif val != expected:
-                    if str(val) == str(expected):
-                        print("Different types but same string", type(val), val, type(expected), expected)
-                    return False
+                else:
+                    operator = get_comparison_operator(key)
+                    if operator is not None:
+                        if not compare_values(val, expected, operator):
+                            return False
+                    elif val != expected:
+                        if str(val) == str(expected):
+                            print("Different types but same string", type(val), val, type(expected), expected)
+                        return False
         return True
 
 # wait for suricata to be ready, to send unix-socket commands
