@@ -4,11 +4,11 @@ requires:
   min-version: 8.0.0
 
 checks:
-# Pre-9 creates/logs a trailing QUIT transaction with inherited HELO,
+# Pre-8.0.7 creates/logs a trailing QUIT transaction with inherited HELO,
 # causing a second HELO alert.
 - filter:
     requires:
-      lt-version: 9.0
+      lt-version: 8.0.7
     count: 2
     match:
       event_type: alert
@@ -16,7 +16,7 @@ checks:
       alert.signature_id: 1
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.7
     count: 1
     match:
       event_type: alert

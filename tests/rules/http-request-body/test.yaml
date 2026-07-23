@@ -26,7 +26,7 @@ checks:
 - filter:
     # in 9, http2 comes first with a lower progress
     requires:
-      min-version: 9
+      min-version: 8.0.7
     filename: rules.json
     count: 1
     match:
@@ -43,7 +43,7 @@ checks:
       engines.__len: 2
 - filter:
     requires:
-      lt-version: 9
+      lt-version: 8.0.7
     filename: rules.json
     count: 1
     match:
