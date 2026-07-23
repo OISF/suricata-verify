@@ -1,0 +1,15 @@
+requires:
+  min-version: 9
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: fileinfo
+      # compressed size is 104
+      fileinfo.size: 99
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
