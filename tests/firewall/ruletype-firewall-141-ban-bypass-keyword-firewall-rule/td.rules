@@ -1,0 +1,2 @@
+# Would alert on the HTTP response body if the firewall rule did not bypass the flow.
+alert http any any -> any any (msg:"Response body inspected after firewall bypass"; flow:to_client,established; http.response_body; content:"uid=0|28|root|29|"; sid:100001;)
