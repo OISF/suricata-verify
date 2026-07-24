@@ -6,7 +6,16 @@ args:
 checks:
 - filter:
     requires:
+      min-version: 9
+    # dcerpc.ptype support creates a tx (and thus a dcerpc event) for
+    # otherwise-unhandled header-only PDU types, e.g. the AUTH3 in this pcap.
+    count: 1451
+    match:
+      event_type: dcerpc
+- filter:
+    requires:
       min-version: 8.0.5
+      lt-version: 9
     count: 1450
     match:
       event_type: dcerpc

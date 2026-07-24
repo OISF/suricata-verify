@@ -1,0 +1,17 @@
+pcap: ../dcerpc-bind-no-frag-flag/input.pcap
+
+requires:
+  min-version: 9
+
+args:
+- -k none
+
+checks:
+  # The pcap has two connections, each ending in a FAULT response. FAULT is a
+  # header-only PDU type that is not otherwise processed; dcerpc.ptype must
+  # still be able to match it on the to_client direction.
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1

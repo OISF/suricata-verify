@@ -1,0 +1,2 @@
+alert dcerpc any any -> any any (msg:"DCERPC ptype fault"; flow:to_client; dcerpc.ptype:3; sid:1;)
+alert dcerpc any any -> any any (msg:"DCERPC ptype ping"; flow:to_server; dcerpc.ptype:1; sid:2;)
