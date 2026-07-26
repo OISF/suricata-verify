@@ -1,0 +1,26 @@
+requires:
+    min-version: 9
+    pcap: false
+
+args:
+    - --engine-analysis
+    - --set engine-analysis.rules=yes
+
+# All three load: offset:0 is permitted, a one-byte content is a valid exact,
+# and exact alongside a matching explicit bsize is a feasible (redundant) pair.
+checks:
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 1
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 2
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 3

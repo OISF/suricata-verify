@@ -1,0 +1,7 @@
+# 'exact' in firewall rules. The dns.query buffer is "google.com".
+# sids 100 and 103 let the request reach the request_complete hook; there
+# sid 101 fills the buffer and alerts, and sid 102 does not.
+accept:hook udp:all any any -> any any (sid:100;)
+accept:hook dns:request_started any any -> any any (sid:103;)
+accept:hook dns:request_complete any any -> any any (dns.query; content:"google.com"; exact; alert; sid:101;)
+accept:hook dns:request_complete any any -> any any (dns.query; content:"google"; exact; alert; sid:102;)
