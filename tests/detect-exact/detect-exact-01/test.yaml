@@ -1,0 +1,28 @@
+requires:
+    min-version: 9
+    pcap: false
+
+args:
+    - --engine-analysis
+    - --set engine-analysis.rules=yes
+
+# Both rules load. Being a single content pinned to the whole buffer, the
+# content is marked startswith+endswith -- 'exact' produces the same anchoring
+# as the explicit bsize:10 form.
+checks:
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 1
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 2
+    - shell:
+        args: grep -c '"starts_with":true' rules.json | xargs
+        expect: 2
+    - shell:
+        args: grep -c '"ends_with":true' rules.json | xargs
+        expect: 2

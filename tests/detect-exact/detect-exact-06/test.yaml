@@ -1,0 +1,22 @@
+requires:
+    min-version: 9
+    pcap: false
+
+args:
+    - --engine-analysis
+    - --set engine-analysis.rules=yes
+
+# The rule loads and, despite the length-changing transform, the content is
+# anchored startswith+endswith on the transformed buffer.
+checks:
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 1
+    - shell:
+        args: grep -c '"starts_with":true' rules.json | xargs
+        expect: 1
+    - shell:
+        args: grep -c '"ends_with":true' rules.json | xargs
+        expect: 1
