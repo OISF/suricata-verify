@@ -1,0 +1,6 @@
+# Edge: accepted corner cases. A plain offset:0 is allowed (the content still
+# starts the buffer); a single-byte content pins the buffer to one byte; and
+# 'exact' composes with an explicit, matching bsize (two identical bounds).
+alert dns any any -> any any (msg:"explicit offset zero"; dns.query; content:"google.com"; offset:0; exact; sid:1;)
+alert dns any any -> any any (msg:"single byte"; dns.query; content:"a"; exact; sid:2;)
+alert dns any any -> any any (msg:"exact plus matching bsize"; dns.query; content:"google.com"; exact; bsize:10; sid:3;)

@@ -1,0 +1,11 @@
+# Invalid: every rule here is rejected at load. The first five hit an 'exact'
+# guard; the last is accepted by the guard but rejected by the bsize length
+# check, since exact pins the buffer to the last content's length and the other
+# content no longer fits.
+alert dns any any -> any any (msg:"no preceding content"; dns.query; exact; sid:1;)
+alert dns any any -> any any (msg:"non-zero offset"; dns.query; content:"google.com"; offset:5; exact; sid:2;)
+alert dns any any -> any any (msg:"relative within"; dns.query; content:"a"; content:"b"; within:3; exact; sid:3;)
+alert dns any any -> any any (msg:"relative distance"; dns.query; content:"a"; content:"b"; distance:1; exact; sid:4;)
+alert dns any any -> any any (msg:"negated content"; dns.query; content:!"google.com"; exact; sid:5;)
+alert dns any any -> any any (msg:"multi-content no longer fits"; dns.query; content:"abcdefghij"; content:"xyz"; exact; sid:6;)
+alert tcp any any -> any any (msg:"raw payload has no buffer"; content:"abc"; exact; sid:7;)
