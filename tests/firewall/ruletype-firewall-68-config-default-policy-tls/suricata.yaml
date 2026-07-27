@@ -33,14 +33,15 @@ outputs:
 
 firewall:
   policies:
-    tls:
-      client-in-progress:
-        - "accept:hook"
-      client-hello-done:
-        - "drop:flow"
-      client-cert-done:
-        - "accept:hook"
-      client-handshake-done:
-        - "accept:hook"
-      client-finished:
-        - "accept:hook"
+    app:
+      tls:
+        client-in-progress:
+          - "accept:hook"
+        client-hello-done:
+          - "drop:flow"
+        client-cert-done:
+          - "accept:hook"
+        client-handshake-done:
+          - "accept:hook"
+        client-finished:
+          - "accept:hook"

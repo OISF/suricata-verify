@@ -21,8 +21,9 @@ outputs:
 
 firewall:
   policies:
-    ftp-data:
-      request-started:
-        - "accept:flow"
-      response-started:
-        - "accept:flow"
+    app:
+      ftp-data:
+        request-started:
+          - "accept:flow"
+        response-started:
+          - "accept:flow"

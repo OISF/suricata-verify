@@ -64,10 +64,11 @@ outputs:
 
 firewall:
   policies:
-    http:
-      request-line:
-        - "accept:hook"
-      request-body:
-        - "accept:hook"
-      request-trailers:
-        - "accept:hook"
+    app:
+      http1:
+        request-line:
+          - "accept:hook"
+        request-body:
+          - "accept:hook"
+        request-trailers:
+          - "accept:hook"
