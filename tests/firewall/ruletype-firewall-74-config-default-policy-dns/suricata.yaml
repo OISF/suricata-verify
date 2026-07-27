@@ -64,12 +64,9 @@ outputs:
 
 firewall:
   policies:
-    dns:
-      request-started:
-        - "accept:hook"
-      request-complete:
-        - "drop:flow"
-      response-started:
-        - "accept:hook"
-      response-complete:
-        - "drop:flow"
+    app:
+      dns:
+        request-started: ["accept:hook"]
+        request-complete: ["drop:flow"]
+        response-started: ["accept:hook"]
+        response-complete: ["drop:flow"]
