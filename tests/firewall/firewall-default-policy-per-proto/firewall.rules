@@ -1,0 +1,5 @@
+# Packet rules
+
+# packet.default-policy opens packet hooks for DNS.
+# request-started is carved out in the grouped config; everything else falls
+# back to app.dns.default-policy: drop:flow.

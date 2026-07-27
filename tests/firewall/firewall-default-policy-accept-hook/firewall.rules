@@ -1,0 +1,5 @@
+# Packet rules
+
+# global default-policy: accept:hook
+
+# no app rules, so the grouped default-policy reaches all hooks
