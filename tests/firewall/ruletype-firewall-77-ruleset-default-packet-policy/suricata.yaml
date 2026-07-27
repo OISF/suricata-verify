@@ -65,4 +65,5 @@ outputs:
 
 firewall:
   policies:
-    packet-filter: [ "reject:packet" ]
+    packet:
+      filter: ["reject:packet"]

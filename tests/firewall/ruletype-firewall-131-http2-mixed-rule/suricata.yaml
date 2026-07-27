@@ -60,96 +60,97 @@ app-layer:
 
 firewall:
   policies:
-    http2:
-      stream:
-        request-start:
-          - "accept:hook"
-          - "alert"
-        request-headers:
-          - "accept:hook"
-          - "alert"
-        request-data:
-          - "accept:hook"
-          - "alert"
-        request-closed:
-          - "accept:hook"
-          - "alert"
-        request-complete:
-          - "accept:hook"
-          - "alert"
-        response-start:
-          - "accept:hook"
-          - "alert"
-        response-headers:
-          - "accept:hook"
-          - "alert"
-        response-data:
-          - "accept:hook"
-          - "alert"
-        response-closed:
-          - "accept:hook"
-          - "alert"
-        response-complete:
-          - "accept:tx"
-          - "alert"
-      global:
-        request-start:
-          - "accept:hook"
-          - "alert"
-        request-complete:
-          - "accept:tx"
-          - "alert"
-        response-start:
-          - "accept:hook"
-          - "alert"
-        response-complete:
-          - "accept:tx"
-          - "alert"
-    doh2:
-      stream:
-        request-start:
-          - "accept:hook"
-          - "alert"
-        request-headers:
-          - "accept:hook"
-          - "alert"
-        request-data:
-          - "accept:hook"
-          - "alert"
-        request-closed:
-          - "accept:hook"
-          - "alert"
-        request-complete:
-          - "accept:hook"
-          - "alert"
-        response-start:
-          - "accept:hook"
-          - "alert"
-        response-headers:
-          - "accept:hook"
-          - "alert"
-        response-data:
-          - "accept:hook"
-          - "alert"
-        response-closed:
-          - "accept:hook"
-          - "alert"
-        response-complete:
-          - "accept:tx"
-          - "alert"
-      global:
-        request-start:
-          - "accept:hook"
-          - "alert"
-        request-complete:
-          - "accept:tx"
-          - "alert"
-        response-start:
-          - "accept:hook"
-          - "alert"
-        response-complete:
-          - "accept:tx"
-          - "alert"
+    app:
+      http2:
+        stream:
+          request-started:
+            - "accept:hook"
+            - "alert"
+          request-headers:
+            - "accept:hook"
+            - "alert"
+          request-data:
+            - "accept:hook"
+            - "alert"
+          request-closed:
+            - "accept:hook"
+            - "alert"
+          request-complete:
+            - "accept:hook"
+            - "alert"
+          response-started:
+            - "accept:hook"
+            - "alert"
+          response-headers:
+            - "accept:hook"
+            - "alert"
+          response-data:
+            - "accept:hook"
+            - "alert"
+          response-closed:
+            - "accept:hook"
+            - "alert"
+          response-complete:
+            - "accept:tx"
+            - "alert"
+        global:
+          request-started:
+            - "accept:hook"
+            - "alert"
+          request-complete:
+            - "accept:tx"
+            - "alert"
+          response-started:
+            - "accept:hook"
+            - "alert"
+          response-complete:
+            - "accept:tx"
+            - "alert"
+      doh2:
+        stream:
+          request-started:
+            - "accept:hook"
+            - "alert"
+          request-headers:
+            - "accept:hook"
+            - "alert"
+          request-data:
+            - "accept:hook"
+            - "alert"
+          request-closed:
+            - "accept:hook"
+            - "alert"
+          request-complete:
+            - "accept:hook"
+            - "alert"
+          response-started:
+            - "accept:hook"
+            - "alert"
+          response-headers:
+            - "accept:hook"
+            - "alert"
+          response-data:
+            - "accept:hook"
+            - "alert"
+          response-closed:
+            - "accept:hook"
+            - "alert"
+          response-complete:
+            - "accept:tx"
+            - "alert"
+        global:
+          request-started:
+            - "accept:hook"
+            - "alert"
+          request-complete:
+            - "accept:tx"
+            - "alert"
+          response-started:
+            - "accept:hook"
+            - "alert"
+          response-complete:
+            - "accept:tx"
+            - "alert"
 
 engine-analysis:
   rules-fast-pattern: yes
