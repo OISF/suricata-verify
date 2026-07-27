@@ -19,6 +19,6 @@ outputs:
 
 firewall:
   policies:
-    http:
-      request-started: [ "accept:flow" ]
-      #request-started: [ "accept:flow", "pass:flow" ]
+    app:
+      http1:
+        request-started: ["accept:flow"]
