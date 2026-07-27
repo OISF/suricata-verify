@@ -64,6 +64,6 @@ outputs:
 
 firewall:
   policies:
-    http:
-      request-started:
-        - "accept:tx"
+    app:
+      http1:
+        request-started: ["accept:tx"]
