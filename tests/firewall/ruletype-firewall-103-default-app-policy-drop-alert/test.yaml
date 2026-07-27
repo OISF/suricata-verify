@@ -1,5 +1,5 @@
 requires:
-  min-version: 8.0.6
+  min-version: 9
 
 pcap: input.pcap
 

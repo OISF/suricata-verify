@@ -20,13 +20,14 @@ outputs:
 
 firewall:
   policies:
-    dns:
-      # Allow DNS requests to start.
-      request-started: ["accept:hook"]
+    app:
+      dns:
+        # Allow DNS requests to start.
+        request-started: ["accept:hook"]
 
-      # Drop and alert on all DNS requests that are not allowed in
-      # firewall.rules.
-      request-complete: ["drop:flow", "alert"]
+        # Drop and alert on all DNS requests that are not allowed in
+        # firewall.rules.
+        request-complete: ["drop:flow", "alert"]
 
-      # Accept all responses.
-      response-started: ["accept:flow"]
+        # Accept all responses.
+        response-started: ["accept:flow"]

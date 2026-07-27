@@ -65,6 +65,8 @@ outputs:
 
 firewall:
   policies:
-    packet-filter: [ "accept:hook" ]
-    tls:
-      request-started: [ "accept:flow" ]
+    packet:
+      filter: ["accept:hook"]
+    app:
+      tls:
+        request-started: ["accept:flow"]

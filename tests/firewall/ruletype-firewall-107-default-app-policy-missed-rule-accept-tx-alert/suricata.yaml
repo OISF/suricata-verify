@@ -21,8 +21,9 @@ outputs:
 
 firewall:
   policies:
-    http:
-      request-started: ["accept:hook"]
-      request-line:
-        - "accept:tx"
-        - "alert"
+    app:
+      http1:
+        request-started: ["accept:hook"]
+        request-line:
+          - "accept:tx"
+          - "alert"

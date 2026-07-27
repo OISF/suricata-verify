@@ -65,6 +65,8 @@ outputs:
 
 firewall:
   policies:
-    packet-filter: [ "accept:hook" ]
-    tls:
-      client-in-progress: [ "accept:flow" ]
+    packet:
+      filter: ["accept:hook"]
+    app:
+      tls:
+        client-in-progress: ["accept:flow"]

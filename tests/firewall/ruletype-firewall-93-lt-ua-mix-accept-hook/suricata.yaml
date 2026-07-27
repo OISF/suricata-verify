@@ -65,9 +65,9 @@ outputs:
 
 firewall:
   policies:
-    http:
-      request-started: [ "accept:hook" ]
-
-      request-body: [ "accept:hook" ]
-      request-trailer: [ "accept:hook" ]
-      request-complete: [ "accept:tx" ]
+    app:
+      http1:
+        request-started: ["accept:hook"]
+        request-body: ["accept:hook"]
+        request-trailer: ["accept:hook"]
+        request-complete: ["accept:tx"]
