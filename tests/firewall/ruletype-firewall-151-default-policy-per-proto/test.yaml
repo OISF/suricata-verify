@@ -1,0 +1,51 @@
+requires:
+  min-version: 8.0.7
+
+pcap: ../../dns/dns-eve/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- filter:
+    count: 4
+    match:
+      event_type: dns
+      dns.type: request
+- filter:
+    count: 0
+    match:
+      event_type: dns
+      dns.type: response
+- filter:
+    count: 8
+    match:
+      event_type: drop
+- filter:
+    count: 4
+    match:
+      event_type: drop
+      drop.reason: "firewall default app policy"
+- filter:
+    count: 4
+    match:
+      event_type: drop
+      drop.reason: "firewall flow drop"
+- filter:
+    count: 4
+    match:
+      event_type: flow
+      flow.action: drop
+      flow.alerted: false
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.ips.accepted: 0
+      stats.ips.blocked: 0
+      stats.firewall.accepted: 0
+      stats.firewall.blocked: 8
+      stats.firewall.drop_reason.default_packet_policy: 0
+      stats.firewall.drop_reason.default_app_policy: 4
+      stats.firewall.drop_reason.flow_drop: 4

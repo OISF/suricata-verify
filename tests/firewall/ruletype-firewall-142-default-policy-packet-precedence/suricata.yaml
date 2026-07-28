@@ -1,0 +1,30 @@
+%YAML 1.1
+---
+
+stats:
+  enabled: yes
+  interval: 8
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - stats
+        - flow
+        - alert
+        - drop:
+            alerts: yes
+            flows: all
+
+firewall:
+  policies:
+    # Would apply to every hook, packet and app, if nothing more specific did.
+    default-policy: [ "accept:hook" ]
+    packet:
+      # Beats the global default at the packet hooks. Only filter is left
+      # without a setting of its own, so only filter inherits it.
+      default-policy: [ "reject:packet" ]
+      pre-flow: [ "accept:hook" ]
+      pre-stream: [ "accept:hook" ]

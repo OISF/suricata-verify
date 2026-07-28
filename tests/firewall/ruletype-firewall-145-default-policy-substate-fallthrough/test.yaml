@@ -1,0 +1,48 @@
+requires:
+  min-version: 8.0.7
+
+pcap: ../../http2-userinfo-authority/http2_userinfo_in_authority_1.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+# The "global" sub state has no default-policy of its own, so its first hook
+# falls through to app.http2.default-policy and drops the flow immediately.
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2201001
+      app_proto: http2
+      pcap_cnt: 4
+- filter:
+    count: 1
+    match:
+      event_type: drop
+      drop.reason: "firewall default app policy"
+      pcap_cnt: 4
+- filter:
+    count: 5
+    match:
+      event_type: drop
+      drop.reason: "firewall flow drop"
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      app_proto: http2
+      flow.action: drop
+# The flow is dropped before the http2 parser registers it.
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.app_layer.flow.http2: 0
+      stats.firewall.accepted: 3
+      stats.firewall.blocked: 6
+      stats.firewall.drop_reason.default_app_policy: 1
+      stats.firewall.drop_reason.flow_drop: 5
+      stats.firewall.drop_reason.rules: 0
+      stats.firewall.drop_reason.default_packet_policy: 0

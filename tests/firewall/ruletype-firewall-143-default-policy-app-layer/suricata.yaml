@@ -1,0 +1,29 @@
+%YAML 1.1
+---
+
+stats:
+  enabled: yes
+  interval: 8
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - stats
+        - flow
+        - alert
+        - dns
+        - drop:
+            alerts: yes
+            flows: all
+
+firewall:
+  policies:
+    packet:
+      filter: [ "accept:hook" ]
+    app:
+      # No per-protocol or per-hook setting anywhere, so every app hook of
+      # every protocol resolves through this one.
+      default-policy: [ "accept:hook" ]

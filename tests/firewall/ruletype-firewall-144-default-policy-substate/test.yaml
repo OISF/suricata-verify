@@ -1,0 +1,64 @@
+requires:
+  min-version: 8.0.7
+
+pcap: ../../http2-userinfo-authority/http2_userinfo_in_authority_1.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+# The connection-level "global" sub state hooks run first and inherit the
+# per-protocol accept:hook, so nothing drops while they are in charge.
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      pcap_cnt: 4
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      pcap_cnt: 5
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      pcap_cnt: 6
+# The first "stream" sub state hook uses the sub state's own default, not the
+# per-protocol one, so the flow is dropped here and the policy signature fires.
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2201001
+      app_proto: http2
+      pcap_cnt: 7
+- filter:
+    count: 1
+    match:
+      event_type: drop
+      drop.reason: "firewall default app policy"
+      pcap_cnt: 7
+- filter:
+    count: 2
+    match:
+      event_type: drop
+      drop.reason: "firewall flow drop"
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      app_proto: http2
+      flow.action: drop
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.app_layer.flow.http2: 1
+      stats.firewall.accepted: 6
+      stats.firewall.blocked: 3
+      stats.firewall.drop_reason.default_app_policy: 1
+      stats.firewall.drop_reason.flow_drop: 2
+      stats.firewall.drop_reason.rules: 0
+      stats.firewall.drop_reason.default_packet_policy: 0
