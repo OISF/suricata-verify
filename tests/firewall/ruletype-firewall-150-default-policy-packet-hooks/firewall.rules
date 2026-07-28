@@ -1,0 +1,5 @@
+# The pre-flow and pre-stream hooks are only installed when a rule targets
+# them, so these two rules exist purely to make the hooks run. Port 1 is not
+# in the pcap, so neither ever matches and both hooks fall to their policy.
+accept:packet tcp:pre_flow any any -> any 1 (sid:1;)
+accept:packet tcp:pre_stream any any -> any 1 (sid:2;)

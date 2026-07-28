@@ -1,0 +1,15 @@
+requires:
+  min-version: 9
+  pcap: false
+
+args:
+  - --simulate-ips
+  - -T
+
+exit-code: 1
+
+checks:
+  - shell:
+      args: |-
+        grep -qF 'firewall.policies.default-policy: action scope ("tx") is not valid. Valid scopes: packet/hook/flow' stderr && echo found
+      expect: found

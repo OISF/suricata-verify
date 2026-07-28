@@ -1,0 +1,32 @@
+%YAML 1.1
+---
+
+stats:
+  enabled: yes
+  interval: 8
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - stats
+        - flow
+        - alert
+        - tls:
+            extended: yes
+        - drop:
+            alerts: yes
+            flows: all
+
+firewall:
+  policies:
+    packet:
+      filter: [ "accept:hook" ]
+    app:
+      tls:
+        default-policy: [ "accept:hook" ]
+        # TLS calls its to_server completion state "client_finished". The
+        # generic completion alias has to resolve to that same hook.
+        request-complete: [ "drop:flow", "alert" ]

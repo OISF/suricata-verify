@@ -1,0 +1,26 @@
+%YAML 1.1
+---
+
+stats:
+  enabled: yes
+  interval: 8
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - stats
+        - flow
+        - alert
+        - drop:
+            alerts: yes
+            flows: all
+
+firewall:
+  policies:
+    packet:
+      default-policy: [ "drop:packet" ]
+      pre-flow: [ "accept:hook" ]
+      filter: [ "accept:hook" ]
