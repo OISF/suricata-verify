@@ -1,0 +1,42 @@
+requires:
+  min-version: 9
+  features:
+    - LIBNET1.1
+
+pcap: ../../tls/tls-random/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+# pre-flow and pre-stream specify accept:hook, so the packets reach filter
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.pkts_toserver: 7
+      flow.pkts_toclient: 6
+- filter:
+    count: 0
+    match:
+      event_type: alert
+- filter:
+    count: 13
+    match:
+      event_type: drop
+      drop.reason: "firewall default packet policy"
+# reject is neither the built-in filter policy (drop:packet) nor the global
+# default (accept:hook), so it can only have come from packet.default-policy.
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.flow.total: 1
+      stats.firewall.accepted: 0
+      stats.firewall.blocked: 0
+      stats.firewall.rejected: 13
+      stats.firewall.drop_reason.default_packet_policy: 13
+      stats.firewall.drop_reason.rules: 0
+      stats.firewall.drop_reason.pre_flow_hook: 0
+      stats.firewall.drop_reason.pre_stream_hook: 0

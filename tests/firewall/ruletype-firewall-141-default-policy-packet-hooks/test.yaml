@@ -1,0 +1,41 @@
+requires:
+  min-version: 9
+
+pcap: ../../tls/tls-random/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+# pre-flow accepted, so the flow was set up and the packets reached pre-stream.
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.pkts_toserver: 7
+      flow.pkts_toclient: 6
+# Neither hook rule matches, so nothing alerts.
+- filter:
+    count: 0
+    match:
+      event_type: alert
+# Every packet dies at pre-stream, on the policy it inherited from
+# packet.default-policy.
+- filter:
+    count: 13
+    match:
+      event_type: drop
+      drop.reason: "firewall default packet policy"
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.flow.total: 1
+      stats.firewall.accepted: 0
+      stats.firewall.blocked: 13
+      stats.firewall.rejected: 0
+      stats.firewall.drop_reason.default_packet_policy: 13
+      stats.firewall.drop_reason.rules: 0
+      stats.firewall.drop_reason.pre_flow_hook: 0
+      stats.firewall.drop_reason.pre_stream_hook: 0

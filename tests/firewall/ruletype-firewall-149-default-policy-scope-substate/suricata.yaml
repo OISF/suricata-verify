@@ -1,0 +1,13 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: no
+
+firewall:
+  policies:
+    app:
+      http2:
+        stream:
+          default-policy: [ "drop:packet" ]
