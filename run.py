@@ -375,6 +375,14 @@ def check_requires(requires, suricata_config: SuricataConfig, test_dir=None):
                 if not env in os.environ:
                     raise UnsatisfiedRequirementError(
                         "requires env var %s" % (env))
+        elif key == "skip-env":
+            # Inverse of "env": skip the test when the variable is set. Lets a
+            # test opt out of a specific run configuration without every other
+            # run having to set a variable to opt in.
+            for env in requires["skip-env"]:
+                if env in os.environ:
+                    raise UnsatisfiedRequirementError(
+                        "skipped because env var %s is set" % (env))
         elif key == "files":
             for filename in requires["files"]:
                 if test_dir and not os.path.isabs(filename):
