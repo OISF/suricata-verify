@@ -1,0 +1,4 @@
+alert dcerpc any any -> any any (msg:"dcerpc.flags req_flags 0x83 on to_server"; flow:to_server; dcerpc.flags:0x83; sid:1;)
+alert dcerpc any any -> any any (msg:"dcerpc.flags resp_flags 0x03 on to_client"; flow:to_client; dcerpc.flags:0x03; sid:2;)
+alert dcerpc any any -> any any (msg:"dcerpc.flags req flags 0x83 not visible on to_client"; flow:to_client; dcerpc.flags:0x83; sid:3;)
+alert dcerpc any any -> any any (msg:"dcerpc.flags bitmask low two bits set on to_server"; flow:to_server; dcerpc.flags:&0x03=0x03; sid:4;)
