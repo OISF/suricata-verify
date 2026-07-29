@@ -1,0 +1,4 @@
+alert smb any any -> any any (msg:"dcerpc.is_fragmented true: fragmented response (to_client)"; flow:to_client; dcerpc.is_fragmented:true; sid:1;)
+alert smb any any -> any any (msg:"dcerpc.is_fragmented true: no fragmented request (to_server)"; flow:to_server; dcerpc.is_fragmented:true; sid:2;)
+alert smb any any -> any any (msg:"dcerpc.is_fragmented false: complete response (to_client)"; flow:to_client; dcerpc.is_fragmented:false; sid:3;)
+alert smb any any -> any any (msg:"dcerpc.is_fragmented false: complete request (to_server)"; flow:to_server; dcerpc.is_fragmented:false; sid:4;)
