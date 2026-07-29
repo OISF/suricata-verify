@@ -279,6 +279,7 @@ class SuricataConfig:
         self.version = version
         self.features = set()
         self.config = {}
+        self.extra_set = []
         self.load_build_info()
 
     def load_build_info(self):
@@ -1050,6 +1051,12 @@ class TestRunner:
 
         args += ["-c", self.get_suricata_yaml_path()]
 
+        # Extra command line arguments provided on the run.py command
+        # line. Added late so they take precedence over the values set
+        # above.
+        for keyvalue in self.suricata_config.extra_set:
+            args += ["--set", keyvalue]
+
         # Find pcaps.
         if "pcap" in self.config:
             pcap_path = os.path.join(self.directory, self.config["pcap"])
@@ -1266,6 +1273,9 @@ def main():
                         help="Outputs to custom directory")
     parser.add_argument("--valgrind", dest="valgrind", action="store_true",
                         help="Run tests in with valgrind")
+    parser.add_argument("--set", dest="extra_set", action="append", default=[],
+                        metavar="KEY=VALUE",
+                        help="Pass --set KEY=VALUE to Suricata (may be used multiple times)")
     parser.add_argument("--self-test", action="store_true",
                         help="Run self tests")
     parser.add_argument("--debug-failed", dest="debugfailed", action="store_true",
@@ -1333,6 +1343,7 @@ def main():
             print("error: suricatasc binary is missing")
 
     suricata_config.valgrind = args.valgrind
+    suricata_config.extra_set = args.extra_set
     tdir = os.path.join(TOPDIR, "tests")
     if args.testdir:
         tdir = os.path.abspath(args.testdir)
