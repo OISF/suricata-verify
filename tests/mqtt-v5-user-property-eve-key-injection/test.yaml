@@ -1,0 +1,34 @@
+# Regression test for: MQTT v5 USER_PROPERTY name injected unescaped into
+# EVE JSON object keys (JsonBuilder writes keys with raw push_str; only
+# values are escaped).
+#
+# input.pcap contains one MQTT 5.0 CONNECT whose USER_PROPERTY *name* embeds
+# '"', '{', '}' and raw 0x0A bytes, crafted so that a vulnerable build emits
+# an extra, fully attacker-controlled NDJSON line into eve.json:
+#
+#   {"timestamp":"2026-07-31T00:00:00.000000+0000","flow_id":1,
+#    "event_type":"poc_forged_record","marker":"FORGED_BY_MQTT_POC"}
+#
+# The checks below encode the FIXED behavior:
+#   - the mqtt CONNECT event is logged (sanity: parser + logger ran), and
+#   - no attacker-forged event_type appears in the EVE stream.
+#
+# On a vulnerable build the second check fails (count 1 != 0), which is the
+# bug demonstration; after keys are escaped like values both checks pass
+# (the hostile property name then appears, escaped, inside
+# mqtt.connect.properties as a key/value pair of the legitimate record).
+
+requires:
+  min-version: 8.0.7
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.connect.client_id: pocclient
+        mqtt.connect.protocol_version: 5
+  - filter:
+      count: 0
+      match:
+        event_type: poc_forged_record
