@@ -1,0 +1,22 @@
+# packet:pre_stream — accept and bypass the flow on the SYN
+accept:flow,alert tcp:pre_stream any any -> any any (msg:"FW accept flow with bypass at pre_stream"; flow:to_server; tcp.flags:S; bypass; sid:1000;)
+
+# packet:filter — accept:hook, NOT accept:packet: accept:packet short-circuits
+# packet:td (detect.c "accept:packet: break loop, return accept"), which would
+# defeat the whole point of the test.
+accept:hook tcp:all any any -> any any (sid:100;)
+
+# App-layer rules -- only reached if the bypass did not take effect.
+accept:hook http1:request_started any any -> any any (sid:101;)
+accept:hook http1:request_line any any -> any any (sid:102;)
+accept:hook http1:request_headers any any -> any any (sid:103;)
+accept:hook http1:request_body any any -> any any (sid:104;)
+accept:hook http1:request_trailer any any -> any any (sid:105;)
+accept:hook http1:request_complete any any -> any any (sid:106;)
+
+accept:hook http1:response_started any any -> any any (sid:201;)
+accept:hook http1:response_line any any -> any any (sid:202;)
+accept:hook http1:response_headers any any -> any any (sid:203;)
+accept:hook http1:response_body any any -> any any (sid:204;)
+accept:hook http1:response_trailer any any -> any any (sid:205;)
+accept:hook http1:response_complete any any -> any any (sid:206;)

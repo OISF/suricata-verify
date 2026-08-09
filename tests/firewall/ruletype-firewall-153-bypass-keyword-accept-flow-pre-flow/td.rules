@@ -1,0 +1,3 @@
+# Alerts, because a bypass at pre_flow has no flow to act on: the flow is
+# created right after the hook and inspected normally.
+alert http any any -> any any (msg:"Response body inspected after pre_flow bypass attempt"; flow:to_client,established; http.response_body; content:"uid=0|28|root|29|"; sid:100001;)
