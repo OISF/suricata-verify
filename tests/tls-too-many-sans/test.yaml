@@ -1,0 +1,30 @@
+requires:
+  min-version: 9.0.0
+
+args:
+- -k none
+
+checks:
+# The count saturated at 4k, so the certificate is flagged as anomalous.
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2230032
+
+# SAN entries past index 0 are still reachable from detection. Under a
+# truncating cast the count would be 1 and this would not fire.
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1000001
+
+# The logged list is saturated at exactly 4k entries, not wrapped to 1.
+- filter:
+    count: 1
+    match:
+      event_type: tls
+      tls.subjectaltname.__len: 4096
+      tls.subjectaltname[0]: "a"
+      tls.subjectaltname[1]: "evil.example"
