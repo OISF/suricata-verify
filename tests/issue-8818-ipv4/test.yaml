@@ -1,0 +1,21 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 46
+        alert.signature_id: 1
+
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.decoder.event.ipv4.frag_pkt_too_large: 1
+        stats.defrag.ipv4.fragments: 46
+        stats.defrag.ipv4.reassembled: 0
