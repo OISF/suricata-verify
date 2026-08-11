@@ -1,0 +1,50 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - -k none
+
+checks:
+  # Both messages must be logged. Cumulative BDAT accounting would raise
+  # BDAT_CHUNK_LEN_EXCEEDED on the second chunk and stop SMTP parsing.
+  - filter:
+      count: 2
+      match:
+        event_type: smtp
+
+  # The valid multi-chunk BDAT message is transaction 0.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 0
+        smtp.mail_from: <a@example.com>
+        smtp.rcpt_to[0]: <b@example.com>
+        not-has-key: ["smtp.rcpt_to[1]"]
+
+  # The DATA message following it must be parsed as a separate transaction.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 1
+        smtp.mail_from: <evil@example.com>
+        smtp.rcpt_to[0]: <victim@example.com>
+        not-has-key: ["smtp.rcpt_to[1]"]
+        email.status: PARSE_DONE
+
+  # Detection on the second message proves inspection was not disabled by
+  # processing the second BDAT chunk.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        tx_id: 1
+        alert.signature_id: 1
+
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly

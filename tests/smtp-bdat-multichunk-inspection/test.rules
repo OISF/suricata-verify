@@ -1,0 +1,1 @@
+alert smtp any any -> any any (msg:"SMTP second message after multi-chunk BDAT"; email.subject; content:"SECOND-MAIL-MARKER"; startswith; endswith; sid:1; rev:1;)
