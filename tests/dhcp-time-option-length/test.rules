@@ -1,0 +1,3 @@
+alert dhcp any any -> any any (dhcp.leasetime:<7200; sid:1000001;)
+alert dhcp any any -> any any (dhcp.renewal_time:<7200; sid:1000002;)
+alert dhcp any any -> any any (dhcp.rebinding_time:<7200; sid:1000003;)

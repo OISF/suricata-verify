@@ -1,0 +1,150 @@
+requires:
+  min-version: 9
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 1
+        app_proto: dhcp
+        alert.signature_id: 1000001
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        alert.signature_id: 1000001
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 3
+        app_proto: dhcp
+        alert.signature_id: 1000001
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 4
+        app_proto: dhcp
+        alert.signature_id: 1000001
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 2
+        app_proto: dhcp
+        alert.signature_id: 1000002
+  - filter:
+      count: 10
+      match:
+        event_type: alert
+        alert.signature_id: 1000002
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1000003
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 1
+        app_proto: dhcp
+        alert.signature_id: 1000003
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 3
+        app_proto: dhcp
+        alert.signature_id: 1000003
+  - filter:
+      count: 1
+      match:
+        event_type: dhcp
+        pcap_cnt: 1
+        dhcp.renewal_time: 1800
+  - filter:
+      count: 1
+      match:
+        event_type: dhcp
+        pcap_cnt: 3
+        dhcp.renewal_time: 1800
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 5
+        app_proto: dhcp
+        alert.signature_id: 1000002
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 6
+        app_proto: dhcp
+        alert.signature_id: 1000002
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 7
+        app_proto: dhcp
+        alert.signature_id: 1000002
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 8
+        app_proto: dhcp
+        alert.signature_id: 1000002
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 9
+        app_proto: dhcp
+        alert.signature_id: 1000002
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 10
+        app_proto: dhcp
+        alert.signature_id: 1000002
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 11
+        app_proto: dhcp
+        alert.signature_id: 1000002
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 12
+        app_proto: dhcp
+        alert.signature_id: 1000002
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 13
+        app_proto: dhcp
+        alert.signature_id: 1000002
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 14
+        app_proto: dhcp
+        alert.signature_id: 1000001
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 15
+        app_proto: dhcp
+        alert.signature_id: 1000001
