@@ -56,4 +56,6 @@ transactions with their SMTP envelope fields, that the second message's
 coalesced envelope and parsed email headers land in the second
 transaction, that no BDAT_CHUNK_LEN_EXCEEDED anomaly is raised, and that
 the first transaction is completed by its final chunk's reply
-(logged mid-stream) rather than by end-of-flow logging.
+(logged mid-stream) rather than by end-of-flow logging. It also checks
+that the two BDAT response frames belong to transaction 0 while the
+following MAIL and RCPT response frames belong to transaction 1.

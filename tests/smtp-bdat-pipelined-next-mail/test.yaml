@@ -3,6 +3,9 @@ requires:
 
 pcap: input.pcap
 
+args:
+  - --set outputs.1.eve-log.types.1.frame.enabled=yes
+
 checks:
   # Exactly two message transactions. Both BDAT chunks and the second
   # envelope's MAIL FROM and RCPT TO arrive coalesced in one TCP segment,
@@ -50,6 +53,47 @@ checks:
       count: 0
       match:
         event_type: anomaly
+
+  # All four replies arrive in one server segment after the final BDAT
+  # payload has completed transaction 0's request side and the pipelined
+  # MAIL FROM has created transaction 1. The two BDAT replies still belong to
+  # transaction 0, while the following MAIL and RCPT replies belong to
+  # transaction 1.
+  - filter:
+      count: 1
+      match:
+        event_type: frame
+        pcap_cnt: 16
+        frame.type: response_line
+        frame.tx_id: 0
+        frame.payload_printable: "250 2.0.0 Ok: 64 bytes\r\n"
+
+  - filter:
+      count: 1
+      match:
+        event_type: frame
+        pcap_cnt: 16
+        frame.type: response_line
+        frame.tx_id: 0
+        frame.payload_printable.__startswith: "250 2.0.0 Ok: 216 bytes queued as "
+
+  - filter:
+      count: 1
+      match:
+        event_type: frame
+        pcap_cnt: 16
+        frame.type: response_line
+        frame.tx_id: 1
+        frame.payload_printable: "250 2.1.0 Ok\r\n"
+
+  - filter:
+      count: 1
+      match:
+        event_type: frame
+        pcap_cnt: 16
+        frame.type: response_line
+        frame.tx_id: 1
+        frame.payload_printable: "250 2.1.5 Ok\r\n"
 
   # The first transaction is completed by its final chunk's 250 reply and
   # logged mid-stream (pcap_cnt 15 of 23 packets), not by end-of-flow
