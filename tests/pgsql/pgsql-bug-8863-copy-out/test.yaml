@@ -1,0 +1,58 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 3
+      match:
+        event_type: flow
+        app_proto: pgsql
+        flow.pkts_toserver: 8
+        flow.pkts_toclient: 7
+  - filter:
+      count: 6
+      match:
+        event_type: pgsql
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+  - filter:
+      count: 3
+      match:
+        event_type: anomaly
+        anomaly.app_proto: pgsql
+        anomaly.type: applayer
+        anomaly.event: "malformed_response"
+        anomaly.layer: "proto_parser"
+  - filter:
+      count: 1
+      match:
+        event_type: pgsql
+        pgsql.request.simple_query: "COPY t TO STDOUT"
+        pgsql.response.code: "42501"
+        pgsql.response.severity_localizable: "ERROR"
+        pgsql.response.message: "permission denied for table secrets"
+        pgsql.response.copy_out_response.malformed: true
+  - filter:
+      count: 1
+      match:
+        event_type: pgsql
+        pgsql.request.simple_query: "COPY t TO STDOUT"
+        pgsql.response.copy_out_response.malformed: true
+        pgsql.response.copy_data_out.row_count: 1
+        pgsql.response.copy_data_out.data_size: 13
+        pgsql.response.message: "copy_done"
+        pgsql.response.command_completed: "COPY 1"
+  - filter:
+      count: 1
+      match:
+        event_type: pgsql
+        pgsql.request.simple_query: "COPY t FROM STDIN"
+        pgsql.response.copy_in_response.malformed: true
+        pgsql.response.severity_localizable: "ERROR"
+        pgsql.response.code: "42501"
+        pgsql.response.message: "permission denied for table secrets"
