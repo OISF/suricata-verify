@@ -1,0 +1,27 @@
+requires:
+  min-version: 9
+  os: linux
+  script:
+    - command -v gdb >/dev/null
+    - command -v timeout >/dev/null
+
+env:
+  ASAN_OPTIONS: detect_leaks=0
+
+command: |
+  timeout 20s gdb --batch --return-child-result \
+      -x "${TEST_DIR}/fail-expectation-list.gdb" \
+      --args "${SRCDIR}/src/suricata" --init-errors-fatal \
+      -l "${OUTPUT_DIR}" -c "${SRCDIR}/suricata.yaml" \
+      -r "${TEST_DIR}/input.pcap" --disable-detection -k none \
+      --runmode single
+
+checks:
+  - shell:
+      args: "grep -qx 'SV_FAULT_INJECTION: ExpectationList allocation -> NULL' stdout"
+
+  - shell:
+      args: "grep -qx 'SV_EXPECTED: failed expectation released IPPair' stdout"
+
+  - stats:
+      decoder.pkts: 22
