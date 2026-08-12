@@ -1,0 +1,13 @@
+requires:
+  min-version: 9
+
+args:
+  - --set stream.max-syn-queued=1
+  - -k none
+  - --disable-detection
+  - --runmode single
+
+checks:
+  - stats:
+      decoder.pkts: 4
+      decoder.tcp: 4
