@@ -1,0 +1,1 @@
+alert nfs any any -> any any (msg:"ticket 8860 NFS READ remained visible"; flow:established,to_client; file.data; content:"EVILDATA"; sid:8860001; rev:1;)
