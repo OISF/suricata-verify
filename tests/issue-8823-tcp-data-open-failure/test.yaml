@@ -1,0 +1,20 @@
+requires:
+  min-version: 9
+  os: linux
+
+setup:
+  - script: touch tcp
+
+args:
+  - --set outputs.7.tcp-data.enabled=yes
+  - --set outputs.7.tcp-data.type=dir
+  - --disable-detection
+  - -k none
+  - --runmode single
+
+checks:
+  - shell:
+      args: "test -f tcp && grep -q 'failed to open.*/tcp/' suricata.log"
+
+  - stats:
+      decoder.pkts: 5
