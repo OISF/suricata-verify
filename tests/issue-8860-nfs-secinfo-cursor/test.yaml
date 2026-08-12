@@ -1,0 +1,17 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+  - --runmode single
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 8860001
+
+  - stats:
+      app_layer.flow.nfs_tcp: 1
+      app_layer.tx.nfs_tcp: 1
