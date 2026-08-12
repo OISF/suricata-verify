@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"ticket 8858 Lua flowvar negative length"; lua:flowvar-negative.lua; sid:8858001; rev:1;)

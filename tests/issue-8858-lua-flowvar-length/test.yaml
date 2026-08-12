@@ -1,0 +1,24 @@
+requires:
+  min-version: 9
+  features:
+    - HAVE_LUA
+
+env:
+  ASAN_OPTIONS: detect_leaks=0
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+  - -k none
+  - --runmode single
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 8858001
+
+  - stats:
+      decoder.pkts: 1
+      detect.lua.errors: 1
