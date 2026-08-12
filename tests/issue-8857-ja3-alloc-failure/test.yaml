@@ -1,0 +1,26 @@
+requires:
+  min-version: 9
+  os: linux
+  features:
+    - HAVE_JA3
+  script:
+    - command -v gdb >/dev/null
+
+env:
+  ASAN_OPTIONS: detect_leaks=0
+
+command: |
+  gdb --batch --return-child-result \
+      -x "${TEST_DIR}/fail-ja3-curve-allocation.gdb" \
+      --args "${SRCDIR}/src/suricata" --init-errors-fatal \
+      -l "${OUTPUT_DIR}" -c "${SRCDIR}/suricata.yaml" \
+      -r "${TEST_DIR}/input.pcap" --disable-detection -k none \
+      --set app-layer.protocols.tls.ja3-fingerprints=yes \
+      --runmode single
+
+checks:
+  - shell:
+      args: "grep -qx 'SV_FAULT_INJECTION: JA3 curve data allocation -> NULL' stdout"
+
+  - stats:
+      decoder.pkts: 5
