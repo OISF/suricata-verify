@@ -1,0 +1,25 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # A rejected mid-envelope EHLO must not complete the transaction. The
+  # original envelope is completed after the 501 reply and logged once.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 0
+        smtp.helo: client.example.com
+        smtp.mail_from: <alice@example.com>
+        smtp.rcpt_to[0]: <bob@example.com>
+        email.from: alice@example.com
+        email.to[0]: bob@example.com
+        not-has-key: ["smtp.rcpt_to[1]", "email.to[1]"]
+        email.status: PARSE_DONE
