@@ -1,0 +1,25 @@
+-- Use a md5 hasher after finalize() has consumed it.
+--
+-- finalize() consumes the Rust hash context and the C binding sets the inner
+-- pointer to NULL. The following finalize() must detect that NULL inner pointer and
+-- raise a Lua error. If it only checks the outer userdata pointer (which
+-- luaL_checkudata never returns as NULL), NULL crosses the FFI boundary and
+-- the engine dies with SIGSEGV.
+
+local hashlib = require("suricata.hashlib")
+
+function init(args)
+    return {}
+end
+
+function match(args)
+    local hasher = hashlib.md5()
+    hasher:update("www.suricata-ids.org")
+    hasher:finalize()
+
+    -- Must raise a Lua error rather than crash the process.
+    hasher:finalize()
+
+    -- Not reached: the call above is expected to raise.
+    return 1
+end
