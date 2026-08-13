@@ -1,0 +1,34 @@
+requires:
+  min-version: 8.0.5
+  features:
+    - HAVE_LUA
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+  - --set security.lua.max-bytes=20000
+  - --set logging.outputs.1.file.type=json
+
+# Affected builds lose the configured Lua allocation limit after the handshake's
+# zero-payload packets. SCLuaSbUpdateBytesLimit() then leaves match() with no
+# additional allocation headroom, so even this 1 KB allocation fails. A fixed
+# build retains the 20 KB allowance and sid 8805001 alerts without Lua errors.
+checks:
+  - filter:
+      filename: suricata.log
+      count: 0
+      match:
+        engine.message.__startswith: "Lua script failed to run successfully: memory limit exceeded"
+
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.lua.errors: 0
+        stats.detect.lua.memory_limit_errors: 0
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 8805001
