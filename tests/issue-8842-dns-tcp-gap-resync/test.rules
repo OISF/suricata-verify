@@ -1,0 +1,1 @@
+alert dns any any -> any 53 (msg:"issue 8842 post-gap DNS request"; dns.query; content:"evil.test.com"; endswith; sid:1; rev:1;)
