@@ -1,0 +1,36 @@
+alert dns any any -> any any (msg:"TEST hashlib sha256 update-after-finalize"; \
+      flow:to_server; \
+      dns.queries.rrname; content: "www.suricata-ids.org"; \
+      lua:sha256-update-after-finalize.lua; sid:1; rev:1;)
+alert dns any any -> any any (msg:"TEST hashlib sha256 finalize-after-finalize"; \
+      flow:to_server; \
+      dns.queries.rrname; content: "www.suricata-ids.org"; \
+      lua:sha256-finalize-after-finalize.lua; sid:2; rev:1;)
+alert dns any any -> any any (msg:"TEST hashlib sha256 hex-after-hex"; \
+      flow:to_server; \
+      dns.queries.rrname; content: "www.suricata-ids.org"; \
+      lua:sha256-hex-after-hex.lua; sid:3; rev:1;)
+alert dns any any -> any any (msg:"TEST hashlib sha1 update-after-finalize"; \
+      flow:to_server; \
+      dns.queries.rrname; content: "www.suricata-ids.org"; \
+      lua:sha1-update-after-finalize.lua; sid:4; rev:1;)
+alert dns any any -> any any (msg:"TEST hashlib sha1 finalize-after-finalize"; \
+      flow:to_server; \
+      dns.queries.rrname; content: "www.suricata-ids.org"; \
+      lua:sha1-finalize-after-finalize.lua; sid:5; rev:1;)
+alert dns any any -> any any (msg:"TEST hashlib sha1 hex-after-hex"; \
+      flow:to_server; \
+      dns.queries.rrname; content: "www.suricata-ids.org"; \
+      lua:sha1-hex-after-hex.lua; sid:6; rev:1;)
+alert dns any any -> any any (msg:"TEST hashlib md5 update-after-finalize"; \
+      flow:to_server; \
+      dns.queries.rrname; content: "www.suricata-ids.org"; \
+      lua:md5-update-after-finalize.lua; sid:7; rev:1;)
+alert dns any any -> any any (msg:"TEST hashlib md5 finalize-after-finalize"; \
+      flow:to_server; \
+      dns.queries.rrname; content: "www.suricata-ids.org"; \
+      lua:md5-finalize-after-finalize.lua; sid:8; rev:1;)
+alert dns any any -> any any (msg:"TEST hashlib md5 hex-after-hex"; \
+      flow:to_server; \
+      dns.queries.rrname; content: "www.suricata-ids.org"; \
+      lua:md5-hex-after-hex.lua; sid:9; rev:1;)
