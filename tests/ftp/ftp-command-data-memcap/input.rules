@@ -1,0 +1,1 @@
+alert ftp any any -> any any (msg:"FTP command data after request allocation failure"; flow:to_server; ftp.command_data; content:"AAAA"; sid:1;)
