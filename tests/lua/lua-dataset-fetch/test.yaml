@@ -1,0 +1,25 @@
+pcap: ../../cond-log-dns-dig/input.pcap
+
+requires:
+  min-version: 8
+
+args:
+  - --set security.lua.allow-rules=true
+  - --set default-rule-path=${TEST_DIR}
+  - -k none
+
+checks:
+  # The Lua rule fired exactly once -> preloaded value read back as present and
+  # the fresh value read back as absent.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+
+  # The registration-only rule must never alert.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
