@@ -1,0 +1,20 @@
+# The Lua rule's init() calls bytevar.map() with a wrong-type userdata (a hashlib
+# hasher) as the "signature" argument.
+
+pcap: ../../cond-log-dns-dig/input.pcap
+
+requires:
+  min-version: 9
+
+args:
+  - --set security.lua.allow-rules=true
+  - --set default-rule-path=${TEST_DIR}
+  - -k none
+
+exit-code: 1
+
+checks:
+  # Prove the clean exit is *this* guard firing, not some unrelated init error.
+  - shell:
+      args: 'grep "first argument must be the signature" suricata.log | wc -l'
+      expect: 1
