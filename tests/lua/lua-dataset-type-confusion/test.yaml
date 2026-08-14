@@ -1,0 +1,21 @@
+pcap: ../../cond-log-dns-dig/input.pcap
+
+requires:
+  min-version: 9
+
+args:
+  - --set security.lua.allow-rules=true
+  - --set default-rule-path=${TEST_DIR}
+  - -k none
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+
+  # Prove the abort was the type-check firing (and that match() actually ran),
+  # not a vacuous pass: the wrong-type argument was rejected by name.
+  - shell:
+      args: 'grep -q "dataset::metatable expected, got suricata:flowint:mt" suricata.log && echo ok'
+      expect: ok
