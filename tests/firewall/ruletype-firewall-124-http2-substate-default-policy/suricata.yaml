@@ -64,34 +64,35 @@ outputs:
 
 firewall:
   policies:
-    http2:
-      stream:
-        request-started:
-          - "accept:hook"
-        request-headers:
-          - "accept:hook"
-        request-data:
-          - "accept:hook"
-        request-closed:
-          - "accept:hook"
-        request-complete:
-          - "accept:hook"
-        response-started:
-          - "accept:hook"
-        response-headers:
-          - "accept:hook"
-        response-data:
-          - "accept:hook"
-        response-closed:
-          - "accept:hook"
-        response-complete:
-          - "accept:tx"
-      global:
-        request-started:
-          - "accept:hook"
-        request-complete:
-          - "accept:tx"
-        response-started:
-          - "accept:hook"
-        response-complete:
-          - "accept:tx"
+    app:
+      http2:
+        stream:
+          request-started:
+            - "accept:hook"
+          request-headers:
+            - "accept:hook"
+          request-data:
+            - "accept:hook"
+          request-closed:
+            - "accept:hook"
+          request-complete:
+            - "accept:hook"
+          response-started:
+            - "accept:hook"
+          response-headers:
+            - "accept:hook"
+          response-data:
+            - "accept:hook"
+          response-closed:
+            - "accept:hook"
+          response-complete:
+            - "accept:tx"
+        global:
+          request-started:
+            - "accept:hook"
+          request-complete:
+            - "accept:tx"
+          response-started:
+            - "accept:hook"
+          response-complete:
+            - "accept:tx"

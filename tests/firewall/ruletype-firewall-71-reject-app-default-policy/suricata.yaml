@@ -66,6 +66,7 @@ outputs:
 
 firewall:
   policies:
-    tls:
-      client-hello-done:
-        - "reject:flow"
+    app:
+      tls:
+        client-hello-done:
+          - "reject:flow"

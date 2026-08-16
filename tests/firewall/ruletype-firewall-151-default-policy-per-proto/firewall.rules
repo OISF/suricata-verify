@@ -1,0 +1,3 @@
+# The hooks are decided entirely by the configured default policies.
+# packet.default-policy opens the packet hooks, request-started is carved out
+# for DNS, and everything else falls back to app.dns.default-policy.
