@@ -1,0 +1,56 @@
+# The same crash reached through the other route the report describes: a
+# packet denied a flow while the flow memcap is exhausted. See ../README.md.
+#
+# --simulate-packet-flow-memcap denies a flow to packet 2, the UDP request
+# carrying "EVIL". It returns before FlowGetNew() consults the real memcap,
+# so this reproduces the flowless packet rather than the memcap path itself.
+# bug-8862-01 covers the ICMPv4 route; the checks here are only about the UDP
+# one.
+
+requires:
+  min-version: 9.0
+  features:
+    - QA_SIMULATION
+
+pcap: ../input.pcap
+rules: ../test.rules
+
+args:
+- --simulate-packet-flow-memcap=2
+
+checks:
+  # The UDP request is denied a flow, so every signature alerts on it with no
+  # flow variable stored. This is where the engine used to abort.
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        proto: UDP
+        src_ip: 10.0.0.1
+        not-has-key: metadata.flowvars
+
+  # Captures that do not need a flow are unaffected.
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        proto: UDP
+        src_ip: 10.0.0.1
+        has-key: metadata.pktvars
+        metadata.pktvars.__contains: {p: EVIL}
+
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        proto: UDP
+        src_ip: 10.0.0.1
+        has-key: metadata.pktvars
+        metadata.pktvars.__contains: {r: IL}
+
+  # The flow that could not be created is accounted for.
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.flow.memcap: 1
