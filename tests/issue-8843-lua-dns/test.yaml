@@ -1,0 +1,12 @@
+requires:
+  min-version: 9
+  features:
+    - HAVE_LUA
+
+args:
+  - --runmode=single
+
+checks:
+  - file-compare:
+      filename: lua-dns.log
+      expected: expected/lua-dns.log
