@@ -1,0 +1,23 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+args:
+  - --set app-layer.protocols.nfs.max-write-size=1024
+  - --set app-layer.protocols.nfs.max-read-size=1024
+
+checks:
+  - shell:
+      args: test "$(grep -Ec 'write_request_too_large' eve.json)" -ge 1
+  - shell:
+      args: test "$(grep -Ec 'read_response_too_large' eve.json)" -ge 1
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: WRITE
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: READ
