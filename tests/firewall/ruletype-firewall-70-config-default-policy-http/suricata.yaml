@@ -70,5 +70,5 @@ firewall:
           - "accept:hook"
         request-body:
           - "accept:hook"
-        request-trailers:
+        request-trailer:
           - "accept:hook"
