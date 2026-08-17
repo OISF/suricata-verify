@@ -1,0 +1,42 @@
+%YAML 1.1
+---
+# A partial (incomplete) NFSv4 compound request where an earlier, completed
+# within-limit WRITE precedes the oversized one: PUTFH + a 513-byte WRITE
+# (data fully present; XDR-padded to 516 bytes on the wire) + a WRITE
+# claiming 8192 bytes whose data is absent. The padding matters: the scan
+# must consume it when skipping the first WRITE or the next opcode is read
+# from the padding and the oversized WRITE is missed. Before the fix the
+# scan stopped at the FIRST WRITE (or at the padding), so the oversized
+# later WRITE was never rejected while the record was still incomplete and
+# its payload was buffered before the limit ran. After the fix the first
+# completed within-limit WRITE (data + padding) is skipped and the second
+# WRITE is rejected mid-flow.
+
+requires:
+  min-version: 9
+
+pcap: input.pcap
+args:
+  - --set app-layer.protocols.nfs.max-write-size=1024
+
+checks:
+  - shell:
+      args: test "$(grep -Ec 'write_request_too_large' eve.json)" -ge 1
+  - shell:
+      args: test "$(grep -Ec 'malformed_data' eve.json)" -eq 0
+  - shell:
+      args: test "$(grep -Ec 'too_many_transactions' eve.json)" -eq 0
+  # the rejected (2nd) WRITE is logged mid-flow with the file transaction
+  # completed, not left open
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: "38"
+        nfs.file_tx: true
+        pcap_cnt: 7
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: nfs
