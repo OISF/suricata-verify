@@ -1,0 +1,38 @@
+# Test partial (incomplete) NFSv4 compound request with a non-aligned
+# compound tag: a one-byte tag carries 3 bytes of XDR padding. The scan
+# must consume the tag with its padding; before the fix it consumed
+# tag_len bytes only, so every later read shifted 3 bytes early, the
+# compound looked like it carried no operations, and the oversized WRITE
+# (claim 4096 > max-write-size 1024) was buffered toward the claimed
+# record length instead of being rejected.
+#
+# Run with: --set app-layer.protocols.nfs.max-write-size=1024
+
+requires:
+  min-version: 9
+
+pcap: input.pcap
+args:
+  - --set app-layer.protocols.nfs.max-write-size=1024
+
+checks:
+  - shell:
+      args: test "$(grep -Ec 'write_request_too_large' eve.json)" -ge 1
+  - shell:
+      args: test "$(grep -Ec 'malformed_data' eve.json)" -eq 0
+  - shell:
+      args: test "$(grep -Ec 'too_many_transactions' eve.json)" -eq 0
+  # the rejected WRITE is logged mid-flow with the file transaction
+  # completed, not left open
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: "38"
+        nfs.file_tx: true
+        pcap_cnt: 7
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: nfs

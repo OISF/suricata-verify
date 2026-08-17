@@ -1,0 +1,40 @@
+%YAML 1.1
+---
+# A partial (incomplete) NFSv4 compound reply whose compound status is
+# nonzero (10042): the last operation failed, but the preceding READ
+# response succeeded claiming 4096 bytes (> max-read-size 1024) whose data
+# is absent. Before the fix a nonzero compound status aborted the scan
+# immediately, so the oversized successful READ was never rejected and the
+# reply was buffered toward the claimed length. After the fix preceding
+# successful operations are inspected regardless of the compound status
+# (it reports the last executed operation only) and the reply is rejected
+# mid-flow.
+
+requires:
+  min-version: 9
+
+pcap: input.pcap
+args:
+  - --set app-layer.protocols.nfs.max-read-size=1024
+
+checks:
+  - shell:
+      args: test "$(grep -Ec 'read_response_too_large' eve.json)" -ge 1
+  - shell:
+      args: test "$(grep -Ec 'malformed_data' eve.json)" -eq 0
+  - shell:
+      args: test "$(grep -Ec 'too_many_transactions' eve.json)" -eq 0
+  # the rejected READ response is logged mid-flow with the file
+  # transaction completed, not left open
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: READ
+        nfs.file_tx: true
+        pcap_cnt: 11
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: nfs
