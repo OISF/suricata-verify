@@ -1,0 +1,6 @@
+# The shift count is taken from the payload: byte 0 is 0x40 (64), so shifting
+# the 0xff at byte 1 right by it yields 0, matching the 0x00 at byte 2.
+alert udp any any -> any 5555 (msg:"byte_math right shift by 64 yields 0"; byte_extract:1,0,shift; byte_math:bytes 1, offset 1, oper >>, rvalue shift, result var; byte_test:1,=,var,2; sid:1; rev:1;)
+
+# The same shift must not leave 0xff untouched.
+alert udp any any -> any 5555 (msg:"byte_math right shift by 64 left the value unshifted"; byte_extract:1,0,shift; byte_math:bytes 1, offset 1, oper >>, rvalue shift, result var; byte_test:1,=,var,1; sid:2; rev:1;)

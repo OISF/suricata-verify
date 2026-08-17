@@ -1,0 +1,25 @@
+requires:
+  min-version: 9.0
+
+  # No pcap required.
+  pcap: false
+
+# Loading signatures fails because two of the three rules are rejected.
+exit-code: 1
+
+args:
+  - --engine-analysis
+
+checks:
+  - shell:
+      args: grep -c 'error parsing signature .*oper >>, rvalue 64' suricata.log
+      expect: 1
+
+  - shell:
+      args: grep -c 'error parsing signature .*oper <<, rvalue 64' suricata.log
+      expect: 1
+
+  # sid 3, the rule shifting by 63, is the one that loads.
+  - shell:
+      args: grep -c '1 rules successfully loaded, 2 rules failed' suricata.log
+      expect: 1
