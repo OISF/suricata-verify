@@ -2,6 +2,12 @@ requires:
   features:
     - HAVE_LUA
   min-version: 8
+  # The Lua script builds its output filename at runtime, so Suricata cannot
+  # declare it and the Landlock sandbox denies the write. Running under
+  # Landlock needs the output directory in security.landlock.directories.write,
+  # which the test does not control.
+  skip-env:
+    - SV_LANDLOCK
 
 pcap: ../filestore-v2.1-forced/suricata-update-pdf.pcap
 

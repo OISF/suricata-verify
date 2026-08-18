@@ -4,6 +4,11 @@ pcap: ../../datasets/datasets-parent-path/one-packet.pcap
 requires:
   min-version: 8
   lambda: sys.platform != "win32"
+  # The dataset state/save files are absolute paths under /tmp, which is
+  # outside anything the Landlock sandbox grants, so the rules are rejected
+  # when it is enabled.
+  skip-env:
+    - SV_LANDLOCK
 
 args:
   - -vvv
