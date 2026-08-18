@@ -1,0 +1,29 @@
+requires:
+    min-version: 9
+    pcap: false
+
+args:
+    - --engine-analysis
+
+exit-code: 1
+
+# Each rule is rejected: no content, a non-zero offset, two relative forms, a
+# negated content, and use on the raw payload (all caught by the 'exact'
+# guards), plus a multi-content buffer whose other content no longer fits the
+# pinned length (caught by bsize).
+checks:
+    - shell:
+        args: grep -c "'exact' needs a preceding content option" suricata.log | xargs
+        expect: 1
+    - shell:
+        args: grep -c "'exact' can't be used with a non-zero offset" suricata.log | xargs
+        expect: 1
+    - shell:
+        args: grep -c "'exact' can't be used with a relative or negated content" suricata.log | xargs
+        expect: 3
+    - shell:
+        args: grep -c "'exact' can only be used with an app-layer or sticky buffer" suricata.log | xargs
+        expect: 1
+    - shell:
+        args: grep -c "exceeds bsize value" suricata.log | xargs
+        expect: 1

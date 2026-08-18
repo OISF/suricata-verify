@@ -1,0 +1,5 @@
+# exact composes with a transform: both the content and the length bound that
+# exact injects apply to the transformed buffer. A length-changing transform
+# such as strip_whitespace therefore still yields the depth + startswith/endswith
+# anchoring, computed against the transformed buffer.
+alert dns any any -> any any (msg:"exact after strip_whitespace"; dns.query; strip_whitespace; content:"google.com"; exact; sid:1;)

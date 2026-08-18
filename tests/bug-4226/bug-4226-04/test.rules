@@ -1,0 +1,10 @@
+# engine-analysis suggests bsize when a single content is pinned to the whole
+# buffer with startswith+endswith (isdataat:!1,relative folds into endswith).
+# The note must NOT fire when only one end is anchored, when bsize already
+# exists, or for a plain unbounded content.
+alert dns any any -> any any (msg:"startswith+endswith"; dns.query; content:"example.com"; startswith; endswith; sid:1;)
+alert http any any -> any any (msg:"startswith+isdataat"; http.uri; content:"/a/b/"; startswith; isdataat:!1,relative; sid:2;)
+alert dns any any -> any any (msg:"endswith only"; dns.query; content:"com"; endswith; sid:3;)
+alert dns any any -> any any (msg:"startswith only"; dns.query; content:"example"; startswith; sid:4;)
+alert dns any any -> any any (msg:"already has bsize"; dns.query; content:"example.com"; startswith; endswith; bsize:11; sid:5;)
+alert dns any any -> any any (msg:"plain content"; dns.query; content:"example.com"; sid:6;)

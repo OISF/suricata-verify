@@ -1,0 +1,16 @@
+requires:
+    min-version: 9
+    pcap: false
+
+args:
+    - --engine-analysis
+
+exit-code: 1
+
+# Both orderings of the two bsize keywords must be rejected, because the
+# required content length (10) exceeds the tightest bound (8). Before the
+# tightest-bound check the order-last case slipped through validation.
+checks:
+    - shell:
+        args: grep -c "can't match as required content length 10 exceeds bsize value.*8" suricata.log | xargs
+        expect: 2
