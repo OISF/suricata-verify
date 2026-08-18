@@ -14,7 +14,7 @@ jobs:
     name: PCAP Check
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
       - run: ./pcapng-check.sh
       - run: ./pcap-check.sh
 
@@ -24,7 +24,7 @@ jobs:
     outputs:
       test_names: ${{ steps.fetch_changed_files.outputs.args }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - id: fetch_changed_files
@@ -113,7 +113,7 @@ jobs:
       - run: echo "/usr/lib/rust-1.89/bin" >> "$GITHUB_PATH"
       - run: cargo install --locked --force --debug cbindgen
       - run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
       - run: python3 ./run.py --self-test
       - run: git clone https://github.com/OISF/suricata -b ${{ matrix.branch }}
       - name: Build Suricata
@@ -182,7 +182,7 @@ jobs:
                 zlib-devel
       - run: cargo install --locked --force --debug cbindgen
       - run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
       - run: python3 ./run.py --self-test
       - run: git clone https://github.com/OISF/suricata -b ${{ matrix.branch }}
       - name: Build Suricata
@@ -226,7 +226,7 @@ jobs:
           python \
           rust \
           xz
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
       - name: Create Python virtual environment
         run: python3 -m venv ./testenv
       - name: Install PyYAML
@@ -288,7 +288,7 @@ jobs:
             mingw-w64-ucrt-x86_64-rust
             mingw-w64-ucrt-x86_64-toolchain
             unzip
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
       - run: git clone https://github.com/OISF/suricata -b ${{ matrix.branch }}
       - name: Build Suricata
         working-directory: suricata
