@@ -1,0 +1,2 @@
+# No rules: every hook, packet and app, is decided by the global
+# default-policy.

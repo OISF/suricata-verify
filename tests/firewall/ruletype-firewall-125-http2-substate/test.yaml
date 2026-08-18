@@ -1,5 +1,5 @@
 requires:
-  min-version: 9
+  min-version: 8.0.7
 
 pcap: ../../http2-userinfo-authority/http2_userinfo_in_authority_1.pcap
 

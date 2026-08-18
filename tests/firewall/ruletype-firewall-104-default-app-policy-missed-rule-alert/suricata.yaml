@@ -21,6 +21,7 @@ outputs:
 
 firewall:
   policies:
-    http:
-      request-started: ["accept:hook"]
-      request-line: ["drop:flow", "alert"]
+    app:
+      http1:
+        request-started: ["accept:hook"]
+        request-line: ["drop:flow", "alert"]

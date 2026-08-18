@@ -19,5 +19,6 @@ outputs:
 
 firewall:
   policies:
-    http:
-      request-started: [ "accept:foo" ]
+    app:
+      http1:
+        request-started: [ "accept:foo" ]

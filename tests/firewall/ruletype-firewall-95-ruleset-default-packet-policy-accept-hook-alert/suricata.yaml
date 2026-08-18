@@ -65,52 +65,30 @@ outputs:
 
 firewall:
   policies:
-    packet-filter: [ "accept:hook", "alert" ]
-    http:
-      request-started:
-        - "accept:hook"
-      request-line:
-        - "accept:hook"
-      request-headers:
-        - "accept:hook"
-      request-body:
-        - "accept:hook"
-      request-trailer:
-        - "accept:hook"
-      request-complete:
-        - "accept:hook"
-      request-started:
-        - "accept:hook"
-      response-line:
-        - "accept:hook"
-      response-headers:
-        - "accept:hook"
-      response-body:
-        - "accept:hook"
-      response-trailer:
-        - "accept:hook"
-      response-complete:
-        - "accept:hook"
-    tls:
-      client-in-progress:
-        - "accept:hook"
-      client-hello-done:
-        - "accept:hook"
-      client-cert-done:
-        - "accept:hook"
-      client-handshake-done:
-        - "accept:hook"
-      client-finished:
-        - "accept:hook"
-      server-in-progress:
-        - "accept:hook"
-      server-hello:
-        - "accept:hook"
-      server-hello-done:
-        - "accept:hook"
-      server-cert-done:
-        - "accept:hook"
-      server-handshake-done:
-        - "accept:hook"
-      server-finished:
-        - "accept:hook"
+    packet:
+      filter: ["accept:hook", "alert"]
+    app:
+      http1:
+        request-started: ["accept:hook"]
+        request-line: ["accept:hook"]
+        request-headers: ["accept:hook"]
+        request-body: ["accept:hook"]
+        request-trailer: ["accept:hook"]
+        request-complete: ["accept:hook"]
+        response-line: ["accept:hook"]
+        response-headers: ["accept:hook"]
+        response-body: ["accept:hook"]
+        response-trailer: ["accept:hook"]
+        response-complete: ["accept:hook"]
+      tls:
+        client-in-progress: ["accept:hook"]
+        client-hello-done: ["accept:hook"]
+        client-cert-done: ["accept:hook"]
+        client-handshake-done: ["accept:hook"]
+        client-finished: ["accept:hook"]
+        server-in-progress: ["accept:hook"]
+        server-hello: ["accept:hook"]
+        server-hello-done: ["accept:hook"]
+        server-cert-done: ["accept:hook"]
+        server-handshake-done: ["accept:hook"]
+        server-finished: ["accept:hook"]

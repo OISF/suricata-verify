@@ -1,0 +1,28 @@
+%YAML 1.1
+---
+
+stats:
+  enabled: yes
+  interval: 8
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - stats
+        - flow
+        - alert
+        - drop:
+            alerts: yes
+            flows: all
+
+firewall:
+  policies:
+    packet:
+      # pre-flow and filter have their own setting, so this default is only
+      # visible at pre-stream, whose built-in policy is accept:hook.
+      default-policy: [ "drop:packet" ]
+      pre-flow: [ "accept:hook" ]
+      filter: [ "accept:hook" ]
