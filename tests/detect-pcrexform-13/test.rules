@@ -1,0 +1,21 @@
+# When pcrexform fails to match, the original buffer is preserved and
+# content keywords match against it (pass-through semantics).
+#
+# Packets:
+#   1. "example.com"     -- not a subdomain, pcrexform fails, buffer preserved
+#   2. "www.example.com" -- subdomain, pcrexform succeeds, buffer = "example.com"
+#   3. "example.org"     -- not a subdomain, pcrexform fails, buffer preserved
+
+# SID 1: fires on packet 1 (fail, "example.com" preserved) and
+#         packet 2 (success, "example.com" extracted) -- count 2
+alert dns any any -> any any (msg:"pcrexform passthrough and success"; \
+    dns.query; pcrexform:"\.([^\.]+\.[^\.]+)$"; content:"example.com"; sid:1; rev:1;)
+
+# SID 2: "www.example.com" is in the original for packet 2 but NOT in the
+#         extracted buffer -- verifies success uses only extracted data -- count 0
+alert dns any any -> any any (msg:"pcrexform success does not expose original"; \
+    dns.query; pcrexform:"\.([^\.]+\.[^\.]+)$"; content:"www.example.com"; sid:2; rev:1;)
+
+# SID 3: fires only on packet 3 (fail, "example.org" preserved) -- count 1
+alert dns any any -> any any (msg:"pcrexform passthrough second domain"; \
+    dns.query; pcrexform:"\.([^\.]+\.[^\.]+)$"; content:"example.org"; sid:3; rev:1;)

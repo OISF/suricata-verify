@@ -1,0 +1,14 @@
+requires:
+  min-version: 9
+
+pcap: ../content-incomplete-hex-t-version-7-init-errors-fatal/empty.pcap
+
+args:
+  - --init-errors-fatal
+
+exit-code: 1
+
+checks:
+  - shell:
+      args: grep "must_error cannot be combined with other keywords" suricata.log | wc -l | xargs
+      expect: 1

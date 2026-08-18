@@ -1,0 +1,27 @@
+requires:
+  min-version: 9
+
+pcap: ../../from_base64-02/input.pcap
+
+args:
+  - -k none
+
+checks:
+  # rfc2045 decode succeeds, content matches -> alert
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # must_succeed: strict decode fails -> no match
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  # rfc2045 decode succeeds but content does not match -> no alert
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 3
