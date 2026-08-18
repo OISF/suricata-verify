@@ -1,0 +1,20 @@
+requires:
+  features:
+    - HAVE_LUA
+  min-version: 9
+
+args:
+  - --set security.lua.allow-rules=true
+  - --set default-rule-path=${TEST_DIR}
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 2
+ 
