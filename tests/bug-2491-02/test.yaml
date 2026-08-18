@@ -63,3 +63,11 @@ checks:
         tcp.state: close_wait
         tcp.ts_max_regions: 1
         tcp.tc_max_regions: 1
+  - filter:
+      requires:
+        min-version: 9
+      count: 1
+      match:
+        event_type: stats
+        stats.flow.total: 1
+        stats.tcp.async_stream: 1
