@@ -1,0 +1,42 @@
+requires:
+  min-version: 8.0.7
+
+pcap: ../../dns/dns-eve/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+# Both directions get through: the app tier covers response hooks too.
+- filter:
+    count: 4
+    match:
+      event_type: dns
+      dns.type: request
+- filter:
+    count: 4
+    match:
+      event_type: dns
+      dns.type: response
+- filter:
+    count: 0
+    match:
+      event_type: drop
+- filter:
+    count: 4
+    match:
+      event_type: flow
+      flow.alerted: false
+      not-has-key: flow.action
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.flow.total: 4
+      stats.firewall.accepted: 8
+      stats.firewall.blocked: 0
+      stats.firewall.rejected: 0
+      stats.firewall.drop_reason.default_app_policy: 0
+      stats.firewall.drop_reason.default_packet_policy: 0
+      stats.firewall.drop_reason.flow_drop: 0

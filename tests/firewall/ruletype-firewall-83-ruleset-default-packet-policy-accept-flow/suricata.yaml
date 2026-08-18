@@ -65,4 +65,5 @@ outputs:
 
 firewall:
   policies:
-    packet-filter: [ "accept:flow" ]
+    packet:
+      filter: ["accept:flow"]

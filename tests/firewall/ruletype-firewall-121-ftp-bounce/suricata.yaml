@@ -22,21 +22,23 @@ outputs:
 
 firewall:
   policies:
-    packet-filter:
-      - "accept:hook"
-
-    ftp:
-      request-started:
-        - "accept:hook"
-      request-complete:
-        - "accept:hook"
-      response-started:
-        - "accept:hook"
-      response-complete:
+    packet:
+      filter:
         - "accept:hook"
 
-    ftp-data:
-      request-started:
-        - "accept:flow"
-      response-started:
-        - "accept:flow"
+    app:
+      ftp:
+        request-started:
+          - "accept:hook"
+        request-complete:
+          - "accept:hook"
+        response-started:
+          - "accept:hook"
+        response-complete:
+          - "accept:hook"
+
+      ftp-data:
+        request-started:
+          - "accept:flow"
+        response-started:
+          - "accept:flow"

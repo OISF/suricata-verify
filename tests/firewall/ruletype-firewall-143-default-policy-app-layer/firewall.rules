@@ -1,0 +1,2 @@
+# No app rules at all: the app hooks are decided entirely by
+# app.default-policy.

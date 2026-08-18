@@ -1,0 +1,15 @@
+requires:
+  min-version: 8.0.7
+  pcap: false
+
+args:
+  - --simulate-ips
+  - -T
+
+exit-code: 1
+
+checks:
+  - shell:
+      args: |-
+        grep -qF 'firewall.policies.app.http2.stream.default-policy: action scope ("packet") is not valid.  Valid scopes: flow/tx/hook' stderr && echo found
+      expect: found
