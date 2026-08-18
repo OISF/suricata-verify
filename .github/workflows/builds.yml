@@ -58,10 +58,10 @@ jobs:
           esac
           echo "args=$final_tests" >> "$GITHUB_OUTPUT"
 
-  ubuntu-22-04:
-    name: Ubuntu 22.04
-    runs-on: ubuntu-22.04
-    container: ubuntu:22.04
+  ubuntu-24-04:
+    name: Ubuntu 24.04
+    runs-on: ubuntu-24.04
+    container: ubuntu:24.04
     needs: isolate-tests
     strategy:
       fail-fast: false
@@ -77,7 +77,7 @@ jobs:
                 autoconf \
                 automake \
                 build-essential \
-                cargo \
+                cargo-1.89 \
                 git \
                 jq \
                 libpcre3 \
@@ -101,18 +101,16 @@ jobs:
                 libevent-dev \
                 libevent-pthreads-2.1-7 \
                 libjansson-dev \
-                libpython2.7 \
                 libnss3-dev \
                 libssl-dev \
                 make \
                 parallel \
-                python3-distutils \
                 python3-jsonschema \
                 python3-yaml \
-                rustc \
                 software-properties-common \
                 zlib1g \
                 zlib1g-dev
+      - run: echo "/usr/lib/rust-1.89/bin" >> "$GITHUB_PATH"
       - run: cargo install --locked --force --debug cbindgen
       - run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
       - uses: actions/checkout@v3
