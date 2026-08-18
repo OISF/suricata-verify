@@ -1,0 +1,22 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+  - --set app-layer.protocols.imap.enabled=yes
+  - --set stream.reassembly.depth=0
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: "A001 APPEND INBOX {10485813+}"
+        imap.responses[0]: "A001 OK APPEND completed"
+
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: imap
+        anomaly.event: body_too_large
