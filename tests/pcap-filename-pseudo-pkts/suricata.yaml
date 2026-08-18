@@ -1,0 +1,41 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      pcap-file: true
+      types:
+        - http:
+            enabled: yes
+        - files:
+            force-magic: no
+            force-hash: [md5]
+
+  - file-store:
+       version: 2
+       enabled: yes
+       dir: filestore
+       write-fileinfo: yes
+       force-filestore: yes
+
+logging:
+  default-log-level: notice
+  outputs:
+  - console:
+      enabled: yes
+  - file:
+      enabled: yes
+      level: info
+      filename: suricata.json
+
+app-layer:
+  protocols:
+    http:
+      enabled: yes
+      libhtp:
+         default-config:
+           personality: IDS
+           request-body-limit: 100kb
+           response-body-limit: 100kb
