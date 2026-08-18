@@ -1,0 +1,29 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --set app-layer.protocols.nfs.max-read-size=49152
+
+checks:
+  # NFSv3 over UDP. Same shape as the write variant but on the reply side:
+  # a 64000B READ response datagram against a 48KiB max-read-size must
+  # raise read_response_too_large, log the rejected file transaction, and
+  # stay clear of malformed_data.
+  - shell:
+      args: test "$(grep -Ec 'read_response_too_large' eve.json)" -ge 1
+  - shell:
+      args: test "$(grep -Ec 'too_large' eve.json)" -eq "$(grep -Ec 'read_response_too_large' eve.json)"
+  - shell:
+      args: test "$(grep -Ec 'malformed_data' eve.json)" -eq 0
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: READ
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: nfs
