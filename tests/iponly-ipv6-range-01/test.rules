@@ -1,0 +1,1 @@
+drop ip [10.0.0.1,2001:db8::1-2001:db8::ff] any -> any any (msg:"block listed sources"; sid:1000001; rev:1;)
