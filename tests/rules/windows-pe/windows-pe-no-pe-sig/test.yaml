@@ -1,0 +1,16 @@
+# Test: Invalid PE signature (negative case)
+# Validates that files with MZ but without valid PE signature are NOT detected
+
+
+checks:
+  # Verify that NO alert is generated for invalid PE signature
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+
+  # Verify fast.log is empty (no alerts)
+  - shell:
+      args: test ! -s fast.log && echo "0" || cat fast.log | wc -l
+      expect: 0
