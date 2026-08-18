@@ -1,0 +1,22 @@
+requires:
+  features:
+    - HAVE_LIBJANSSON
+
+args:
+  - --set decoder.vxlan.enabled=true
+  - --set decoder.vxlan.mode=strip
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_port: 53
+        dest_port: 12345
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_port: 32021
+        dest_port: 12345
+
