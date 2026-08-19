@@ -1,0 +1,19 @@
+requires:
+  min-version: 9.0.0
+
+args:
+  - -k none
+  - --set app-layer.protocols.sip.enabled=yes
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: sip
+        src_port: 5060
+        dest_port: 5060
+  - filter:
+      count: 2
+      match:
+        event_type: sip

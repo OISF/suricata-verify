@@ -1,0 +1,1 @@
+alert sctp any any -> any any (msg:"SURICATA SCTP packet too small"; decode-event:sctp.pkt_too_small; classtype:protocol-command-decode; sid:2239001; rev:1;)

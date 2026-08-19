@@ -1,0 +1,44 @@
+requires:
+  min-version: 9
+
+pcap: two-rcpt.pcap
+
+args:
+  - --simulate-ips
+
+checks:
+  # Check that MAIL FROM was accepted.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1998
+        smtp.mail_from: <alice@example.com>
+
+  # The allowed-recipient rule is present, but the explicit drop rule matches
+  # first in this all-recipients-must-be-allowed policy.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1999
+
+  # Check that the disallowed RCPT TO was seen.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1997
+        smtp.rcpt_to[0]: <bob@example.com>
+        smtp.rcpt_to[1]: <alice@example.com>
+
+  # Dropping before the SMTP transaction completes does not result in an SMTP
+  # event type, so use that as our test.
+  - filter:
+      count: 0
+      match:
+        event_type: smtp
+
+  # Check we have firewall blocks
+  - stats:
+      firewall.blocked: 9

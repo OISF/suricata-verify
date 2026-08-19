@@ -1,0 +1,25 @@
+%YAML 1.1
+---
+
+vars:
+  address-groups:
+    HOME_NET: "[192.168.0.0/16]"
+    EXTERNAL_NET: "!$HOME_NET"
+  port-groups:
+    FTP_PORTS: "21"
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      types:
+        - alert
+        - anomaly
+        - ftp
+        - stats:
+            totals: yes
+
+app-layer:
+  protocols:
+    ftp:
+      enabled: yes

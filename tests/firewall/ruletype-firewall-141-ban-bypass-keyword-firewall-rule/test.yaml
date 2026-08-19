@@ -1,0 +1,40 @@
+requires:
+  min-version: 9
+
+pcap: ../../flowbit-oring/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+exit-code: 1
+
+checks:
+  - filter:
+      # Would be 1 if bypass were enabled in firewall rules.
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2000001
+        http.hostname: www.testmyids.com
+  - filter:
+      # Would remain 0 if bypass were enabled and suppressed TD inspection.
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 100001
+  - filter:
+      # Would be 1 if bypass were enabled in firewall rules.
+      count: 0
+      match:
+        event_type: flow
+        flow.state: bypassed
+        flow.bypass: local
+  - filter:
+      # Would be 1 if bypass were enabled in firewall rules.
+      count: 0
+      match:
+        event_type: stats
+        stats.flow_bypassed.local_pkts: 6
+  - shell:
+      args: grep "keyword 'bypass' is not allowed in firewall mode" stderr | wc -l
+      expect: 1

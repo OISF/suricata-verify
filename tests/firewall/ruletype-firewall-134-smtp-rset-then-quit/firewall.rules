@@ -1,0 +1,31 @@
+# Allow all TCP handshakes and established packets.
+accept:hook tcp:all any any -> any any (flow:not_established; sid:1000;)
+accept:hook tcp:all any any <> any any (flow:established; sid:1001;)
+
+# Sender validation:
+# - Only allow from alice@example.com
+accept:hook,alert smtp:request_started any any -> any any (sid:1998; \
+	smtp.mail_from; content:"alice@example.com>"; endswith; \
+	xbits:set,fw.smtp.mail_from_ok,track tx;)
+
+# Recipient validation:
+# - Only allow recipients @example.com
+accept:hook,alert smtp:request_started any any -> any any (sid:1999; \
+	smtp.rcpt_to; content:"@example.com>"; endswith; \
+	xbits:set,fw.smtp.rcpt_to_ok,track tx;)
+
+# Allow all other request_started through, but do not set an xbit.
+accept:hook smtp:request_started any any -> any any (sid:2000;)
+
+# Allow all response_started. This hooks into all responses pre-data.
+accept:hook,alert smtp:response_started any any -> any any (sid:3000;)
+
+accept:hook smtp:request_complete any any -> any any (sid:2010;)
+
+# Only allow data if the sender and recipient were OK for this transaction.
+accept:hook smtp:request_data any any -> any any (sid:2005; \
+	xbits:isset,fw.smtp.mail_from_ok,track tx; \
+	xbits:isset,fw.smtp.rcpt_to_ok,track tx;)
+
+accept:hook smtp:response_data any any -> any any (sid:3005;)
+accept:hook smtp:response_complete any any -> any any (sid:3010;)

@@ -1,0 +1,48 @@
+requires:
+  min-version: 9
+
+pcap: ../../ftp/ftp-bounce/test.pcap
+
+args:
+  - --simulate-ips
+  - --runmode=single
+  - -k none
+
+checks:
+
+  # The valid PORT command should not match ftpbounce.
+  - filter:
+      count: 0
+      match:
+        src_port: 33112
+        event_type: alert
+        alert.signature_id: 2000
+        app_proto: ftp
+
+  # The bounce PORT command should match ftpbounce.
+  - filter:
+      count: 1
+      match:
+        src_port: 58316
+        event_type: alert
+        alert.signature_id: 2000
+        alert.action: blocked
+        app_proto: ftp
+
+  # The attack flow should be dropped by the firewall rule.
+  - filter:
+      count: 1
+      match:
+        src_port: 58316
+        event_type: drop
+        alert.signature_id: 2000
+        drop.reason: firewall rules
+
+  # The valid FTP transaction should still complete.
+  - filter:
+      count: 1
+      match:
+        src_port: 33112
+        event_type: ftp
+        ftp.command: QUIT
+        ftp.reply_received: 'yes'

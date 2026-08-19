@@ -1,0 +1,37 @@
+requires:
+  min-version: 8
+
+pcap: ../dns-over-http2/dns_over_https.pcap
+# disables checksum verification
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 5
+        event_type: "http"
+        http.http2.stream_id: 0
+        http.http2.request.settings[0].settings_id: "SETTINGSHEADERTABLESIZE"
+        http.http2.request.settings[0].settings_value: 65536
+        http.http2.request.settings[1].settings_id: "SETTINGSENABLEPUSH"
+        http.http2.request.settings[1].settings_value: 0
+        http.http2.request.settings[2].settings_id: "SETTINGSMAXCONCURRENTSTREAMS"
+        http.http2.request.settings[2].settings_value: 1000
+        http.http2.request.settings[3].settings_id: "SETTINGSINITIALWINDOWSIZE"
+        http.http2.request.settings[3].settings_value: 6291456
+        http.http2.request.settings[4].settings_id: "SETTINGSMAXHEADERLISTSIZE"
+        http.http2.request.settings[4].settings_value: 262144
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 6
+        event_type: "http"
+        http.http2.stream_id: 0
+        http.http2.response.settings[0].settings_id: "SETTINGSMAXCONCURRENTSTREAMS"
+        http.http2.response.settings[0].settings_value: 100
+        http.http2.response.settings[1].settings_id: "SETTINGSINITIALWINDOWSIZE"
+        http.http2.response.settings[1].settings_value: 1048576
+        http.http2.response.settings[2].settings_id: "SETTINGSMAXHEADERLISTSIZE"
+        http.http2.response.settings[2].settings_value: 65536

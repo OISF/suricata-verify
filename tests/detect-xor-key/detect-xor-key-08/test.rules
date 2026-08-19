@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"XOR offset without key"; http.request_body; xor:offset 1; content:"test"; sid:1;)

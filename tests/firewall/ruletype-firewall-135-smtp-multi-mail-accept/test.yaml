@@ -1,0 +1,50 @@
+requires:
+  min-version: 9
+
+pcap: smtp-multi-mail.pcap
+
+args:
+  - --simulate-ips
+
+checks:
+  # Each of the three transactions has its sender validated.
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 1998
+
+  # Message 1: alice -> bob
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        smtp.mail_from: <alice@example.com>
+        smtp.rcpt_to[0]: <bob@example.com>
+        not-has-key: smtp.rcpt_to[1]
+
+  # Message 2: bob -> alice
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        smtp.mail_from: <bob@example.com>
+        smtp.rcpt_to[0]: <alice@example.com>
+
+  # Message 3: alice -> bob, alice
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        smtp.mail_from: <alice@example.com>
+        smtp.rcpt_to[0]: <bob@example.com>
+        smtp.rcpt_to[1]: <alice@example.com>
+
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+
+  - stats:
+      firewall.accepted: 39
+      firewall.blocked: 0

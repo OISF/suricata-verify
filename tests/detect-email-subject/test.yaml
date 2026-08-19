@@ -14,6 +14,18 @@ checks:
       pcap_cnt: 13
       alert.signature_id: 1
 - filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      event_type: smtp
+      pcap_cnt: 14
+      email.subject: This is a test email
+# Pre-9 does not defer tx completion to the server response, so the
+# SMTP event lands one packet earlier. Remove when backported to 8.
+- filter:
+    requires:
+      lt-version: 9
     count: 1
     match:
       event_type: smtp

@@ -1,0 +1,1 @@
+alert tcp any any -> any any (http.method; content:"GET"; flowbits:isset, A; flowbits:set, B; flowbits: set,C; sid:1;)

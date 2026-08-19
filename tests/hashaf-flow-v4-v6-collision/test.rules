@@ -1,0 +1,2 @@
+alert ipv4 any any -> any any (msg:"hashaf flow set flowbit on IPv4"; content:"SETFLOW"; flowbits:set,hashaf.flow; sid:9100001; rev:1;)
+alert ipv6 any any -> any any (msg:"BUG: IPv6 reused IPv4 flow"; content:"HITFLOW"; flowbits:isset,hashaf.flow; sid:9100002; rev:1;)

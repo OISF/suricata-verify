@@ -1,0 +1,10 @@
+# The flow is classified as doh2 (DNS over HTTP/2).
+
+# default (fuzzy): dns is equivalent to doh2 -> matches
+alert tcp any any -> any any (msg:"fuzzy dns matches doh2"; app-layer-protocol:dns; sid:1;)
+
+# exact: dns is strict identity, does not cover doh2 -> no match
+alert tcp any any -> any any (msg:"exact dns on doh2"; app-layer-protocol:dns,exact; sid:2;)
+
+# exact: doh2 matches the doh2 flow itself
+alert tcp any any -> any any (msg:"exact doh2 matches doh2"; app-layer-protocol:doh2,exact; sid:3;)

@@ -1,0 +1,1 @@
+alert tcp any any -> any any (app-layer-protocol:!http; app-layer-protocol:!http; sid:1;)

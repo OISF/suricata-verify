@@ -27,12 +27,10 @@ those scenarios -01 and -03 would still pass but -02 would fail. If
 you ever find yourself wanting to delete it, delete it deliberately,
 not because it "doesn't seem to test anything."
 
-### bug-8489-03 — flow keeps parsing after overflow
+### bug-8489-03 — flow stops parsing after overflow
 
 Bursts three `PWD`s past `max-tx=1`, then sends a `CWD` after a
-server response. Checks that the event doesn't halt the flow — the
-`CWD` after the burst must still be logged, and each excess `PWD`
-creation reaps one stale tx with the event attached to it.
+server response. Checks that the event halts the flow processing.
 
 ## Why the response rule?
 

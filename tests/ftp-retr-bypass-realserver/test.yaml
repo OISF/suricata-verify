@@ -1,0 +1,31 @@
+requires:
+  min-version: 8.0.6
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 7001
+
+  # FAILS on 8.0.5: CWD not detected via app-layer after APP_LAYER_ERROR
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 7002
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 7003
+
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: file_before_port

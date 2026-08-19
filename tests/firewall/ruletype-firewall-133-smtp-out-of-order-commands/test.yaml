@@ -1,0 +1,20 @@
+requires:
+  min-version: 9
+
+pcap: smtp-out-of-order.pcap
+
+args:
+  - --simulate-ips
+
+checks:
+  # The premature DATA is dropped before the sender is validated, so no SMTP
+  # transaction is logged.
+  - filter:
+      count: 0
+      match:
+        event_type: smtp
+
+  # The flow is blocked (15 packets). See README for the mechanism.
+  - stats:
+      firewall.accepted: 10
+      firewall.blocked: 15

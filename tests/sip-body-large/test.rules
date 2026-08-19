@@ -1,0 +1,1 @@
+alert sip any any -> any any (flow:to_server; frame:request.body; content:"XXXXXXXXXX"; sid:1;)

@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"XOR 4-byte variable key"; http.request_body; xor:offset 4,extract 4 0; content:"password"; sid:1;)

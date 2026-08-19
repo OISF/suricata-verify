@@ -1,0 +1,22 @@
+accept:hook,alert tcp:all any any -> any any (sid:100;)
+
+accept:tx,alert doh2:stream:<request_closed any any -> any any (sid:1;)
+accept:tx,alert doh2:stream:<request_complete any any -> any any (sid:2;)
+
+accept:tx,alert doh2:stream:<response_closed any any -> any any (sid:10;)
+accept:tx,alert doh2:stream:<response_complete any any -> any any (sid:11;)
+
+accept:tx,alert doh2:global:request_started any any -> any any (sid:30;)
+accept:tx,alert doh2:global:request_complete any any -> any any (sid:31;)
+accept:tx,alert doh2:global:response_started any any -> any any (sid:40;)
+accept:tx,alert doh2:global:response_started any any -> any any (sid:41;)
+
+accept:tx,alert http2:global:request_started any any -> any any (sid:50;)
+accept:tx,alert http2:global:request_complete any any -> any any (sid:51;)
+accept:tx,alert http2:global:response_started any any -> any any (sid:60;)
+accept:tx,alert http2:global:response_started any any -> any any (sid:61;)
+
+accept:tx,alert http2:stream:<request_closed any any -> any any (sid:70;)
+accept:tx,alert http2:stream:<request_complete any any -> any any (sid:71;)
+accept:tx,alert http2:stream:<response_closed any any -> any any (sid:80;)
+accept:tx,alert http2:stream:<response_complete any any -> any any (sid:81;)

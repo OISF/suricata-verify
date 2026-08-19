@@ -1,0 +1,1 @@
+alert ip any any -> any any (frame:http1.response;pcre://; domain;pcre://;sid:1;)

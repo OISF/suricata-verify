@@ -1,0 +1,8 @@
+requires:
+    min-version: 9
+    pcap: false
+
+args:
+    - -T
+
+exit-code: 1

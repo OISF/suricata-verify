@@ -1,0 +1,8 @@
+# Negated keywords must not match while the protocol is unknown, and must not
+# match tls once classified. Both rules expect zero alerts.
+
+# Single-value negated form
+alert tcp any any <> any any (msg:"negated single-value !tls"; flow:established; app-layer-protocol:!tls; sid:9001;)
+
+# Multi-value negated form
+alert tcp any any <> any any (msg:"negated multi-value !tls|http"; flow:established; app-layer-protocol:!tls|http; sid:9002;)

@@ -1,0 +1,24 @@
+pcap: ../http2-keywords/input.pcap
+# disables checksum verification
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 7
+        event_type: "http"
+        http.http2.stream_id: 0
+        http.http2.request.settings[0].settings_id: "SETTINGSMAXCONCURRENTSTREAMS"
+        http.http2.request.settings[0].settings_value: 100
+        http.http2.request.settings[1].settings_id: "SETTINGSINITIALWINDOWSIZE"
+        http.http2.request.settings[1].settings_value: 65535
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 7
+        event_type: "http"
+        http.http2.stream_id: 0
+        http.http2.response.settings[0].settings_id: "SETTINGSMAXCONCURRENTSTREAMS"
+        http.http2.response.settings[0].settings_value: 100

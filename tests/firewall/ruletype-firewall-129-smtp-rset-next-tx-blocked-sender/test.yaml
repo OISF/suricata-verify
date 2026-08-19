@@ -1,0 +1,50 @@
+requires:
+  min-version: 9
+
+pcap: ../ruletype-firewall-128-smtp-rset-next-tx-delivered/smtp-rset-change-sender.pcap
+
+args:
+  - --simulate-ips
+
+checks:
+  # Only alice's sender is validated; bob's is not (alice-only policy).
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1998
+        smtp.mail_from: <alice@example.com>
+
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1998
+        smtp.mail_from: <bob@example.com>
+
+  # Alice's RSET-aborted transaction is handled and logged (not dropped by the
+  # RSET).
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        smtp.mail_from: <alice@example.com>
+        not-has-key: smtp.rcpt_to
+
+  # The second transaction (bob) occurred but is blocked on its own sender: no
+  # completed transaction is logged for bob.
+  - filter:
+      count: 0
+      match:
+        event_type: smtp
+        smtp.mail_from: <bob@example.com>
+
+  # The flow is blocked at bob's DATA (see README).
+  - stats:
+      firewall.accepted: 16
+      firewall.blocked: 9
+
+  - filter:
+      count: 1
+      match:
+        event_type: smtp

@@ -1,0 +1,13 @@
+# ftpdata_command:retr is always in the to_client direction whether passive or
+# active.
+alert ftp-data any any -> any any (msg:"ftpdata retr"; flow:established,to_client; \
+	ftpdata_command:retr; sid:10;)
+
+# This rule matches in passive download mode, but not in active mode.
+alert ftp-data any any -> any any (msg:"ftpdata filedata"; flow:to_client; file_data; content:"root"; sid:20;)
+
+# This rule matches in active download mode, but not in passive model
+alert ftp-data any any -> any any (msg:"ftpdata filedata"; flow:to_server; file_data; content:"root"; sid:30;)
+
+# This rule matches in active or passive modes as its not directional.
+alert ftp-data any any -> any any (msg:"ftpdata filedata"; file_data; content:"root"; sid:40;)

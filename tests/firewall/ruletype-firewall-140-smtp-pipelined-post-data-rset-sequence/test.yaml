@@ -1,0 +1,46 @@
+requires:
+  min-version: 9
+
+pcap: smtp-pipelined-post-data-rset-sequence.pcap
+
+args:
+  - --simulate-ips
+
+checks:
+  # Each message transaction has its envelope validated.
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1998
+
+  # Message 1: alice -> bob.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 0
+        smtp.mail_from: <alice@example.com>
+        smtp.rcpt_to[0]: <bob@example.com>
+        not-has-key: smtp.rcpt_to[1]
+
+  # Message 2: bob -> alice.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 1
+        smtp.mail_from: <bob@example.com>
+        smtp.rcpt_to[0]: <alice@example.com>
+        not-has-key: smtp.rcpt_to[1]
+
+  # The delayed DATA reply must not produce duplicate-field parser anomalies.
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+
+  - filter:
+      count: 0
+      match:
+        event_type: drop

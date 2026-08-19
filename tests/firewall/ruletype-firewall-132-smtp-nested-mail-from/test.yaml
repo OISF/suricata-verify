@@ -1,0 +1,33 @@
+requires:
+  min-version: 9
+
+pcap: smtp-nested-mail.pcap
+
+args:
+  - --simulate-ips
+
+checks:
+  # The original (allowed) sender remains validated despite the nested,
+  # server-rejected MAIL FROM.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1998
+        smtp.mail_from: <alice@example.com>
+
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        smtp.mail_from: <alice@example.com>
+        smtp.rcpt_to[0]: <bob@example.com>
+
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+
+  - stats:
+      firewall.accepted: 23
+      firewall.blocked: 0

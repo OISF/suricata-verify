@@ -1,0 +1,6 @@
+# SCTP decoder event rules.
+# SID's fall in the 2239000+ range. See rules/README.md
+
+alert sctp any any -> any any (msg:"SURICATA SCTP too many chunks"; decode-event:sctp.too_many_chunks; classtype:protocol-command-decode; sid:2239007; rev:1;)
+
+#next sid is 2239009

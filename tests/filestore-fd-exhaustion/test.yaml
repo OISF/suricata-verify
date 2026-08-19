@@ -1,0 +1,33 @@
+requires:
+  min-version: 8
+
+  # I'm not sure how portable ulimit is.
+  os: linux
+
+# Run with a low file-descriptor ulimit. The pcap drives 48 concurrent HTTP
+# downloads that file-store extracts at the same time. With the documented
+# default (max-open-files: 0) Suricata should close each file after every
+# write, so only a couple of descriptors are ever open. The regression keeps
+# one descriptor open per in-progress file, so all ~48 are held at once, the
+# 32-fd limit is exceeded, and file-store logs EMFILE ("Too many open files").
+command: |
+  ulimit -Sn 32 && \
+  ${SRCDIR}/src/suricata \
+      --set classification-file="${SRCDIR}/etc/classification.config" \
+      --set reference-config-file="${SRCDIR}/etc/reference.config" \
+      -c "${TEST_DIR}/suricata.yaml" \
+      -l "${OUTPUT_DIR}" \
+      --runmode single -k none \
+      -r "${TEST_DIR}/input.pcap"
+
+checks:
+  # Sanity: a correct build extracts all 48 forced files.
+  - filter:
+      count: 48
+      match:
+        event_type: fileinfo
+        fileinfo.stored: true
+  # Regression: a correct build never exhausts the fd table here.
+  # (test -s guards against a silent pass if suricata.log is ever missing.)
+  - shell:
+      args: "test -s suricata.log && ! grep -q 'Too many open files' suricata.log"

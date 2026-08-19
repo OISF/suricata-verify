@@ -1,0 +1,21 @@
+requires:
+    min-version: 9
+    pcap: false
+
+args:
+    - --engine-analysis
+
+checks:
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        class: "threat detection"
+        app_proto: "http2"
+        id: 1
+        type: "app_tx"
+        engines[0].name: "http_uri"
+        engines[0].app_proto: "http2"
+        engines[0].sub_state: "stream"
+        engines[0].progress: 1
+        engines[0].direction: "toserver"

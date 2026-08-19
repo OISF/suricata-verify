@@ -1,0 +1,7 @@
+accept:hook tcp:all any any -> any any (sid:1;)
+
+accept:hook doh2:stream:request_started any any -> any any (sid:10;)
+accept:tx,alert doh2:stream:request_headers any any -> any any (http.uri; content:"/dns"; sid:11;)
+
+accept:tx doh2:global:request_started any any -> any any (sid:20;)
+accept:tx doh2:global:response_started any any -> any any (sid:21;)

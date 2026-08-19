@@ -1,0 +1,34 @@
+requires:
+  min-version: 8.0.6
+
+# One-sided (asynchronous) SMB capture: only the client->server direction is
+# present, as with asymmetric routing or a one-sided tap. Requests pile up
+# waiting for responses that are never seen. When the transaction list passes
+# smb.max-tx the parser puts the flow into an error state instead of trying to
+# handle it gracefully (issue 8629). max-tx is lowered so a small capture
+# reaches the limit.
+args:
+- -k none
+- --set stream.async-oneside=true
+- --set app-layer.protocols.smb.max-tx=3
+
+checks:
+  # SMB is parsed completely
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.command: SMB2_COMMAND_SESSION_LOGOFF
+
+  # No max-tx anomaly
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+
+  # The flow is not in error state
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.app_layer.error.smb.parser: 0

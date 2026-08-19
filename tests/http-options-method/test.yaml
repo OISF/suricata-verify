@@ -1,0 +1,18 @@
+requires:
+  min-version: 9.0.0
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: http
+        src_port: 54321
+        dest_port: 80
+        proto: TCP
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.http_method: OPTIONS
+        http.hostname: example.com

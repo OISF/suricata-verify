@@ -1,0 +1,5 @@
+
+accept:hook tcp:all any any <> any 80 (app-layer-protocol:unknown; sid:1000;)
+
+accept:hook tcp:all any any <> any 80 (app-layer-protocol:tls; sid:1001;)
+

@@ -1,0 +1,23 @@
+%YAML 1.1
+---
+
+logging:
+  default-log-level: notice
+  outputs:
+    - console:
+        enabled: yes
+    - file:
+        enabled: yes
+        level: info
+        filename: suricata.log
+
+outputs:
+  - eve-log:
+      enabled: yes
+      types:
+        - files
+  - file-store:
+      version: 2
+      enabled: yes
+      force-filestore: yes
+      max-open-files: 0

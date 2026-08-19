@@ -1,0 +1,2 @@
+alert http2:stream:request_started any any -> any any \
+    (app-layer-event:http2.invalid_frame_header; sid:1;)

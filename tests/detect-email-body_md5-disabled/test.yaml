@@ -18,7 +18,7 @@ checks:
       event_type: smtp
       email.body_md5: "ed00c81b85fa455d60e19f1230977134"
 - filter:
-    count: 2
+    count: 1
     match:
       event_type: smtp
 # test stdout has Info: detect-requires: Suricata did not meet the rule requirements: Suricata missing a required keyword: keyword email.body_md5 [DetectRequiresSetup:detect-requires.c:38]

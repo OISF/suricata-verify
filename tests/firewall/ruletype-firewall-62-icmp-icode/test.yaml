@@ -1,5 +1,5 @@
 requires:
-  min-version: 9
+  min-version: 8
 
 pcap: ../../detect-itype-prefilter/icmpv4-ping.pcap
 

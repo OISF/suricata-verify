@@ -1,0 +1,54 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # A single message transaction: the rejected BDAT command does not
+  # create or complete a message of its own.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+
+  # The message pipelined behind the rejected BDAT command. The email
+  # fields prove the DATA body was inspected: the rejected command must
+  # occupy a reply queue slot so its 501 consumes that slot and the 354
+  # is matched to DATA, entering data mode. If the slot is missing the
+  # replies shift, RCPT TO's 250 lands on DATA and the body is never
+  # parsed.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 0
+        smtp.mail_from: <alice@example.com>
+        smtp.rcpt_to[0]: <bob@example.com>
+        email.from: alice@example.com
+        email.to[0]: bob@example.com
+        not-has-key: ["smtp.rcpt_to[1]", "email.to[1]"]
+        email.status: PARSE_DONE
+
+  # The rejected command raises a decoder event instead of a parser error.
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: INVALID_BDAT
+
+  # And no other anomaly: a shifted reply queue would match RCPT TO's 250
+  # against DATA and raise DATA_COMMAND_REJECTED.
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+
+  # The transaction is completed by the 250 reply to the message body and
+  # logged mid-stream, not by end-of-flow logging at the closing FIN.
+  # Re-baseline this pcap_cnt if the pcap is regenerated.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 0
+        pcap_cnt: 16

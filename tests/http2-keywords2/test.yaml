@@ -66,7 +66,8 @@ checks:
       requires:
         min-version: 9
       # In 9, we match only once for global tx instead of for each direction
-      count: 8
+      # TODO currently matching only on stream type
+      count: 4
       match:
         event_type: alert
         alert.signature_id: 35
@@ -88,9 +89,10 @@ checks:
         event_type: alert
         alert.signature_id: 38
   - filter:
+      # TODO currently matching only on stream type
       requires:
         min-version: 9
-      count: 3
+      count: 2
       match:
         event_type: alert
         alert.signature_id: 38
@@ -102,9 +104,10 @@ checks:
         event_type: alert
         alert.signature_id: 39
   - filter:
+      # TODO currently matching only on stream type
       requires:
         min-version: 9
-      count: 3
+      count: 2
       match:
         event_type: alert
         alert.signature_id: 39

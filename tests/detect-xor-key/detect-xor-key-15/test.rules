@@ -1,0 +1,2 @@
+alert http any any -> any any (msg:"XOR static key"; http.request_body; xor:"42"; content:"password"; sid:1;)
+alert http any any -> any any (msg:"XOR variable key"; http.request_body; xor:offset 1,extract 1 0; content:"password"; sid:2;)

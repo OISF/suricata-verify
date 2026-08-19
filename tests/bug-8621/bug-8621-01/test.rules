@@ -1,0 +1,1 @@
+alert dhcp any any -> any any (msg:"DHCP transaction"; sid:1; rev:1;)

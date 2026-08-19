@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"SURICATA-VERIFY SWF file_data reached"; flow:established,to_client; file_data; bsize:>0; sid:9000001; rev:1;)

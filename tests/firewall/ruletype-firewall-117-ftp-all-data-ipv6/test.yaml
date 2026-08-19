@@ -1,0 +1,104 @@
+requires:
+  min-version: 8.0.6
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - --runmode=single
+  - -k none
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: ftp_data
+        ftp_data.command: APPE
+        ftp_data.filename: "all-data-ipv6-passive-stor-appe.txt"
+
+  - filter:
+      count: 1
+      match:
+        event_type: ftp_data
+        ftp_data.command: APPE
+        ftp_data.filename: "all-data-ipv6-active-stor-appe.txt"
+
+  - filter:
+      count: 1
+      match:
+        event_type: ftp_data
+        ftp_data.command: STOU
+        ftp_data.filename: "all-data-ipv6-passive-stou.txt"
+
+  - filter:
+      count: 1
+      match:
+        event_type: ftp_data
+        ftp_data.command: STOU
+        ftp_data.filename: "all-data-ipv6-active-stou.txt"
+
+  - filter:
+      count: 2
+      match:
+        event_type: ftp_data
+        ftp_data.command: LIST
+        not-has-key: ftp_data.filename
+
+  - filter:
+      count: 2
+      match:
+        event_type: ftp_data
+        ftp_data.command: MLSD
+        not-has-key: ftp_data.filename
+
+  # One passive data-channel request for APPE.
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 4200
+
+  # One active data-channel response for APPE.
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 5200
+
+  # One passive data-channel request for STOU.
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 4201
+
+  # One active data-channel response for STOU.
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 5201
+
+  # One active data-channel request for each listing command.
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 4100
+
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 4101
+
+  # One passive data-channel response for each listing command.
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 5100
+
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 5101
+
+  - filter:
+      count: 0
+      match:
+        event_type: drop

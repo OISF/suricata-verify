@@ -1,0 +1,13 @@
+requires:
+  min-version: 9
+  pcap: false
+
+args:
+  - --engine-analysis
+
+exit-code: 1
+
+checks:
+  - shell:
+      args: grep "prefilter is not supported for multi-value app-layer-protocol" suricata.log | wc -l | xargs
+      expect: 1

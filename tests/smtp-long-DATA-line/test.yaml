@@ -44,8 +44,19 @@ checks:
       smtp.helo: Percival
       smtp.mail_from: <xxxxxx@xxxxx.co.uk>
       smtp.rcpt_to[0]: <xxxxxx@xxxxx.co.uk>
+# Pre-9 creates/logs a trailing QUIT transaction with inherited HELO.
 - filter:
+    requires:
+      lt-version: 9.0
     count: 1
+    match:
+      event_type: smtp
+      smtp.helo: Percival
+      tx_id: 1
+- filter:
+    requires:
+      min-version: 9
+    count: 0
     match:
       event_type: smtp
       smtp.helo: Percival

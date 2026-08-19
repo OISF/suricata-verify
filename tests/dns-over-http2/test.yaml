@@ -26,6 +26,18 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 21
+  # matches request and response
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 22
+  # matches request and response
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 23
   - filter:
       count: 4
       match:
@@ -43,6 +55,34 @@ checks:
         alert.signature_id: 40
         http.version: "2"
         dns.queries[0].rrname : "nav-edge.smartscreen.microsoft.com"
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 50
+        http.version: "2"
+        dns.queries[0].rrname : "nav-edge.smartscreen.microsoft.com"
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 51
+        http.version: "2"
+        dns.queries[0].rrname : "nav-edge.smartscreen.microsoft.com"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 60
+        http.version: "2"
+        dns.authorities[0].rrname : "westeurope.cloudapp.azure.com"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 61
+        http.version: "2"
+        dns.authorities[0].rrname : "westeurope.cloudapp.azure.com"
   - filter:
       count: 2
       match:

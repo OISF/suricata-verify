@@ -1,0 +1,1 @@
+alert http2:global:request_started any any -> any any (msg:"http2 global hook with stream-scoped http.uri"; http.uri; content:"x"; sid:1; rev:1;)

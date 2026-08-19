@@ -1,0 +1,13 @@
+requires:
+  min-version: 9
+  pcap: false
+
+args:
+  - --engine-analysis
+
+exit-code: 1
+
+checks:
+  - shell:
+      args: grep "duplicate or overlapping negated entries under the same mode" suricata.log | wc -l | xargs
+      expect: 1

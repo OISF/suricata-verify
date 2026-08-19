@@ -1,0 +1,1 @@
+alert http2:stream:request_headers any any -> any any (http.uri; content:"x"; sid:1; rev:1;)

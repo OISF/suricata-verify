@@ -1,0 +1,49 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.engines[0].rules_loaded: 2
+        stats.detect.engines[0].rules_failed: 0
+
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+
+  - filter:
+      count: 6
+      match:
+        event_type: drop
+
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        pcap_cnt: 4
+        drop.reason: "firewall default packet policy"
+
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.firewall.blocked: 6
+        stats.firewall.accepted: 4
+        stats.firewall.drop_reason.default_packet_policy: 6
+
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: http
+        flow.state: "closed"
+        not-has-key: flow.action

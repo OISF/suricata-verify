@@ -1,0 +1,30 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: doh2
+  # default fuzzy: dns matches the doh2 flow
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # exact: dns does not match doh2
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  # exact: doh2 matches the doh2 flow
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3

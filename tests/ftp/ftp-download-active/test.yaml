@@ -1,0 +1,58 @@
+pcap: input.pcap
+
+args:
+  - --runmode=single
+
+checks:
+
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 10
+      ftp_data.command: "RETR"
+      ftp_data.filename: "index.html"
+      app_proto: ftp-data
+
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 20
+
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 30
+      ftp_data.command: "RETR"
+      ftp_data.filename: "index.html"
+      app_proto: ftp-data
+
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 40
+      ftp_data.command: "RETR"
+      ftp_data.filename: "index.html"
+      app_proto: ftp-data
+
+- filter:
+    count: 1
+    match:
+      event_type: ftp
+      src_ip: "172.23.0.3"
+      dest_ip: "172.23.0.2"
+      ftp.command: "USER"
+
+# In active FTP, the src_ip and dest_ip are reversed from the control
+# channel. This matches the TCP connection for the data channel.
+- filter:
+    count: 1
+    match:
+      event_type: ftp_data
+      src_ip: "172.23.0.2"
+      dest_ip: "172.23.0.3"
+      ftp_data.command: "RETR"
+      ftp_data.filename: "index.html"

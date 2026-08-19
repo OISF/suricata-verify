@@ -1,0 +1,5 @@
+accept:hook tcp:all any any -> any any (sid:1;)
+
+accept:tx http2:stream:request_started any any -> any any (sid:10;)
+
+accept:tx http2:global:request_started any any -> any any (sid:20;)

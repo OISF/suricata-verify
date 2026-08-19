@@ -1,0 +1,46 @@
+requires:
+  min-version: 8.0.6
+
+pcap: ../../ftp/ftp-download-active/input.pcap
+
+args:
+  - --simulate-ips
+  - --runmode=single
+  - -k none
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+
+  - filter:
+      count: 3
+      match:
+        event_type: ftp_data
+
+  # We expect no drops.
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+
+  # There are 2 NLST data channels.
+  - filter:
+      count: 2
+      match:
+        alert.signature_id: 4002
+
+  # We don't expect any drops.
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+
+  # Make sure we go our ftp.reply_received alert.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2016

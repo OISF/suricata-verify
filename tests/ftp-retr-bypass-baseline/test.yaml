@@ -1,0 +1,40 @@
+# ftp-retr-bypass-baseline — regression test (baseline, must always pass)
+#
+# Normal FTP session: USER → PASS → PORT → RETR → CWD → QUIT
+# App-layer detection active throughout; all ftp.command rules fire.
+# This test verifies that the fix does not break normal FTP detection.
+
+requires:
+  min-version: 8
+
+args:
+  - -k none
+
+checks:
+  # RETR command logged as FTP transaction
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 7001
+
+  # CWD command detected via app-layer keyword (app-layer active)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 7002
+
+  # CWD raw bytes visible
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 7003
+
+  # FTP transactions recorded: USER, PASS, PORT, RETR, CWD, QUIT
+  # (plus one connection-open event = 7 total)
+  - filter:
+      count: 7
+      match:
+        event_type: ftp

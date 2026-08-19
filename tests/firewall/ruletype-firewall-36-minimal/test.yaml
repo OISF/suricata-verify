@@ -31,13 +31,3 @@ checks:
       flow.state: "established"
       flow.alerted: true
       flow.action: "accept"
-- filter:
-    requires:
-      lt-version: 9
-    count: 1
-    match:
-      event_type: stats
-      stats.ips.accepted: 322
-      stats.ips.blocked: 0
-      stats.ips.drop_reason.default_app_policy: 0
-      stats.ips.drop_reason.rules: 0

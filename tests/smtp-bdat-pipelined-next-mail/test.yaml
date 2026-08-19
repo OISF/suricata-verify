@@ -1,0 +1,107 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --set outputs.1.eve-log.types.1.frame.enabled=yes
+
+checks:
+  # Exactly two message transactions. Both BDAT chunks and the second
+  # envelope's MAIL FROM and RCPT TO arrive coalesced in one TCP segment,
+  # so the parser must split each chunk at its exact declared octet
+  # boundary and resume command parsing on the surplus bytes in the same
+  # buffer.
+  - filter:
+      count: 2
+      match:
+        event_type: smtp
+
+  # Message 1: alice -> bob, two BDAT chunks. BDAT message content is not
+  # MIME parsed, so no email fields are expected. If the parser miscounted
+  # the chunk boundary it would consume the trailing "mail from:<bob>" as
+  # chunk data and this transaction's envelope would be wrong.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 0
+        smtp.mail_from: <alice@example.com>
+        smtp.rcpt_to[0]: <bob@example.com>
+        not-has-key: ["smtp.rcpt_to[1]"]
+
+  # Message 2: bob -> alice, whose MAIL FROM and RCPT TO were coalesced
+  # after the final chunk's payload. Recovering this transaction with the
+  # correct envelope proves the surplus command bytes were parsed and not
+  # swallowed by the preceding BDAT chunk.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 1
+        smtp.mail_from: <bob@example.com>
+        smtp.rcpt_to[0]: <alice@example.com>
+        email.from: bob@example.com
+        email.to[0]: alice@example.com
+        not-has-key: ["smtp.rcpt_to[1]", "email.to[1]"]
+        email.status: PARSE_DONE
+
+  # The final chunk sits mid-buffer, not at the input boundary. A parser
+  # that overran the declared length would raise BDAT_CHUNK_LEN_EXCEEDED;
+  # none is expected.
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+
+  # All four replies arrive in one server segment after the final BDAT
+  # payload has completed transaction 0's request side and the pipelined
+  # MAIL FROM has created transaction 1. The two BDAT replies still belong to
+  # transaction 0, while the following MAIL and RCPT replies belong to
+  # transaction 1.
+  - filter:
+      count: 1
+      match:
+        event_type: frame
+        pcap_cnt: 16
+        frame.type: response_line
+        frame.tx_id: 0
+        frame.payload_printable: "250 2.0.0 Ok: 64 bytes\r\n"
+
+  - filter:
+      count: 1
+      match:
+        event_type: frame
+        pcap_cnt: 16
+        frame.type: response_line
+        frame.tx_id: 0
+        frame.payload_printable.__startswith: "250 2.0.0 Ok: 216 bytes queued as "
+
+  - filter:
+      count: 1
+      match:
+        event_type: frame
+        pcap_cnt: 16
+        frame.type: response_line
+        frame.tx_id: 1
+        frame.payload_printable: "250 2.1.0 Ok\r\n"
+
+  - filter:
+      count: 1
+      match:
+        event_type: frame
+        pcap_cnt: 16
+        frame.type: response_line
+        frame.tx_id: 1
+        frame.payload_printable: "250 2.1.5 Ok\r\n"
+
+  # The first transaction is completed by its final chunk's 250 reply and
+  # logged mid-stream (pcap_cnt 15 of 23 packets), not by end-of-flow
+  # logging at the closing FIN. This ties completion to the LAST reply
+  # rather than EOF. Re-baseline this pcap_cnt if the pcap is regenerated.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 0
+        pcap_cnt: 15

@@ -1,0 +1,4 @@
+
+
+accept:hook tcp:all any any <> any 443 (app-layer-protocol:unknown|tls; alert; sid:1000;)
+

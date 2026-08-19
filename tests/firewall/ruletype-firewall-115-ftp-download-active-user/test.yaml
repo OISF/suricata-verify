@@ -1,0 +1,40 @@
+requires:
+  min-version: 9
+
+pcap: ../../ftp/ftp-download-active/input.pcap
+
+args:
+  - --simulate-ips
+  - --runmode=single
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 2010
+
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: USER
+        ftp.command_data: bob
+
+  # Check that we matched on the ftp.completion_code.
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 2021
+
+  # Test that ftp.mode works.
+  - filter:
+      count: 3
+      match:
+        alert.signature_id: 2042
+
+  # We don't expect any drops.
+  - filter:
+      count: 0
+      match:
+        event_type: drop

@@ -1,0 +1,33 @@
+requires:
+  min-version: 9
+
+pcap: smtp-rset-after-rcpt.pcap
+
+args:
+  - --simulate-ips
+
+checks:
+  # The sender is validated for both the aborted and the resent envelope.
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1998
+        smtp.mail_from: <alice@example.com>
+
+  # Both transactions (RSET-aborted and delivered) are logged.
+  - filter:
+      count: 2
+      match:
+        event_type: smtp
+        smtp.mail_from: <alice@example.com>
+        smtp.rcpt_to[0]: <bob@example.com>
+
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+
+  - stats:
+      firewall.accepted: 27
+      firewall.blocked: 0

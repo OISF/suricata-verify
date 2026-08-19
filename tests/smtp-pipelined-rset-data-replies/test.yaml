@@ -1,0 +1,25 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+# Disable checksum validation for the generated capture.
+args:
+  - -k none
+
+checks:
+  # The pipelined sequence produces one completed SMTP transaction object.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 0
+        smtp.helo: client.example
+        email.status: PARSE_DONE
+
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: smtp
+        anomaly.event: INVALID_PIPELINED_SEQUENCE

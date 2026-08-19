@@ -6,7 +6,9 @@ args:
 
 checks:
   - filter:
-      count: 1
+      requires:
+        min-version: 8.0.6
+      count: 2
       match:
         event_type: ftp_data
 

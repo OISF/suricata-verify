@@ -1,0 +1,9 @@
+requires:
+  min-version: 9
+
+pcap: ../detect-xor-key-01/input.pcap
+
+args:
+  - -k none
+
+exit-code: 1

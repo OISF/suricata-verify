@@ -1,0 +1,35 @@
+requires:
+  min-version: 9
+
+pcap: smtp-quit-after-mail.pcap
+
+args:
+  - --simulate-ips
+
+checks:
+  # The point of the test: the transaction never transitions to request_data
+  # (DATA), so the tripwire rule must never fire.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2006
+
+  # The session was parsed and the abandoned transaction (sender only, no
+  # recipient) was logged -- so the tripwire's zero count is meaningful, not
+  # just an empty run.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        smtp.mail_from: <alice@example.com>
+        not-has-key: smtp.rcpt_to
+
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+
+  - stats:
+      firewall.accepted: 15
+      firewall.blocked: 0

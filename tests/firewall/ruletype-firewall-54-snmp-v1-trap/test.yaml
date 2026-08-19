@@ -48,11 +48,3 @@ checks:
       flow.pkts_toclient: 0
       flow.state: "new"
       flow.alerted: true
-- filter:
-    requires:
-      lt-version: 9
-    count: 1
-    match:
-      event_type: stats
-      stats.app_layer.error.snmp.parser: 1
-      stats.ips.drop_reason.rules: 1

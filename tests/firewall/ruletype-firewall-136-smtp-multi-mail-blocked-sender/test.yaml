@@ -1,0 +1,41 @@
+requires:
+  min-version: 9
+
+pcap: ../ruletype-firewall-135-smtp-multi-mail-accept/smtp-multi-mail.pcap
+
+args:
+  - --simulate-ips
+
+checks:
+  # Only message 1's sender (alice) is validated before the flow is dropped.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1998
+        smtp.mail_from: <alice@example.com>
+
+  # Only message 1 is delivered/logged.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        smtp.mail_from: <alice@example.com>
+        smtp.rcpt_to[0]: <bob@example.com>
+
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+
+  # The disallowed sender's message is never logged as a completed transaction.
+  - filter:
+      count: 0
+      match:
+        event_type: smtp
+        smtp.mail_from: <bob@example.com>
+
+  # The flow is blocked from message 2's DATA onward (19 packets). See README.
+  - stats:
+      firewall.accepted: 20
+      firewall.blocked: 19

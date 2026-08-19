@@ -1,0 +1,20 @@
+requires:
+    min-version: 9
+    pcap: false
+
+args:
+    - --engine-analysis
+
+checks:
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        class: "threat detection"
+        app_proto: "http2"
+        id: 1
+        type: "app_tx"
+        engines[0].name: "app-layer-events"
+        engines[0].app_proto: "unknown"
+        engines[0].progress: 0
+        engines[0].direction: "toserver"
