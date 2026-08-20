@@ -1,0 +1,44 @@
+# Test for the MQTT v5 too_many_properties app-layer event AND the property cap.
+#
+# A single to-server CONNECT carries 300 USER_PROPERTY entries (unique keys).
+# parse_properties() keeps at most MQTT_MAX_PROPERTIES (256) and drops the rest;
+# too_many_properties fires because recognized properties were actually dropped
+# (truncation), not merely because a count was reached.
+#
+# The event alone does not prove the cap: without the cap all 300 would be
+# stored. The regression guard is the logged property count -- with the cap
+# exactly 256 are stored and logged; remove the cap and 300 would be logged,
+# failing the __len check.
+
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+
+  # v5 CONNECT parsed; the cap kept exactly 256 of the 300 sent properties
+  # (this is the regression guard for the memory cap itself).
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.connect.protocol_version: 5
+        mqtt.connect.properties.user_properties.__len: 256
+
+  # Properties were dropped, so the too_many_properties anomaly fires.
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: mqtt
+        anomaly.type: applayer
+        anomaly.event: too_many_properties
+
+  # ... and the matching app-layer-event rule alerts.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2226009
