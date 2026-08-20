@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"bug-8861 threaded eve flow"; sid:1; rev:1;)
