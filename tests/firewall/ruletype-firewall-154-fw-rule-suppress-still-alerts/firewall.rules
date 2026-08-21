@@ -1,0 +1,28 @@
+# Packet rules
+
+accept:hook tcp:all any any -> any any (sid:100;)
+
+# default drop
+
+# App-layer rules
+
+accept:hook http1:request_started any any -> any any (sid:101;)
+accept:hook http1:request_line any any -> any any (sid:102;)
+
+# Rule under test. A `suppress` entry in threshold.config covers this sid, so
+# the alert must be withheld. A scoped suppress returns "suppressed, but still
+# apply the rule's actions", so the accept itself must still take effect --
+# which is what separates this from the thresholded-accept cases.
+accept:flow,alert http1:request_headers any any -> any any (msg:"FW accept flow, alert suppressed"; http.host; content:"www.testmyids.com"; sid:103;)
+
+accept:hook http1:request_body any any -> any any (sid:104;)
+accept:hook http1:request_trailer any any -> any any (sid:105;)
+accept:hook http1:request_complete any any -> any any (sid:106;)
+
+# Response side accepted so the test does not depend on the default app policy.
+accept:hook http1:response_started any any -> any any (sid:201;)
+accept:hook http1:response_line any any -> any any (sid:202;)
+accept:hook http1:response_headers any any -> any any (sid:203;)
+accept:hook http1:response_body any any -> any any (sid:204;)
+accept:hook http1:response_trailer any any -> any any (sid:205;)
+accept:hook http1:response_complete any any -> any any (sid:206;)

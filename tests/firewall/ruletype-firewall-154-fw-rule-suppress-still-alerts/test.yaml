@@ -1,0 +1,50 @@
+requires:
+  min-version: 9
+
+pcap: ../../flowbit-oring/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+  - --set threshold-file=threshold.config
+
+checks:
+# Control: the rules do match this traffic.
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 100002
+
+# Control: the suppress config loaded, and suppress works on the threat
+# detection path.
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 100001
+
+# The point: the same suppress must withhold the firewall rule's alert too.
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 103
+
+# A scoped suppress still applies the rule's actions, so the accept stands.
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.action: accept
+
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.firewall.blocked: 0
+      stats.firewall.drop_reason.default_packet_policy: 0
+      stats.firewall.drop_reason.default_app_policy: 0
+      stats.firewall.drop_reason.flow_drop: 0
+      stats.ips.blocked: 0
+      stats.detect.alerts_suppressed: 2
