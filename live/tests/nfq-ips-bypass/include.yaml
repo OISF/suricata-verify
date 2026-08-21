@@ -1,0 +1,12 @@
+%YAML 1.1
+---
+
+default-rule-path: ${TESTDIR}
+rule-files:
+  - test.rules
+
+# NFQ IPS with capture (offload) bypass. Unlike af-packet, the kernel forwarding
+# path is driven by an iptables conntrack/CONNMARK ruleset (installed by the
+# test's `before` script) rather than an XDP program; Suricata only ORs the
+# bypass mark into the verdict via nfq.bypass-mark. This is the NFQ equivalent of
+# the af-packet XDP capture bypass in ../afp-ips-xdp-bypass.
