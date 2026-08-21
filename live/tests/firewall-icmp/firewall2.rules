@@ -1,0 +1,2 @@
+# Allow ICMP.
+accept:packet icmp:all any any -> any any (alert; sid:100;)
