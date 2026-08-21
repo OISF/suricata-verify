@@ -1,0 +1,6 @@
+# Flow to be passed. "BYPASS" will be sent before "TRIPWIRE".
+alert tcp any any -> any 7000 (flow:to_server; content:"BYPASS"; bypass; flowbits:set,bypassed; sid:1; rev:1;)
+
+# Alert when we see "TRIPWIRE". The idea is that we'll see this on flows
+# that were not bypassed.
+alert tcp any any -> any 7000 (flow:to_server; content:"TRIPWIRE"; sid:2; rev:1;)
