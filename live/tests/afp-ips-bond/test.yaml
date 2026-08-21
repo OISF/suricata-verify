@@ -1,0 +1,85 @@
+# Port of qa/live/netns/afp-ips-netns-bond-bridge.sh.
+environment: inline
+
+topology:
+  mtu: 9000
+  networks:
+    - client: 10.200.0.2/24
+      server: 10.200.0.1/24
+      bond: true
+      bond-mode: balance-rr
+
+requires:
+  command:
+    - curl
+    - grep
+    - hping3
+    - jq
+    - python3
+    - tcpdump
+    - wc
+    - wget
+
+args:
+  - --af-packet
+  - --runmode workers
+
+server: |
+  cleanup() {
+    kill "${http:-}" "${capture:-}" 2>/dev/null || true
+    wait 2>/dev/null || true
+  }
+  trap cleanup EXIT INT TERM
+
+  ip netns exec server0 tcpdump -U -n -i server \
+      -w ${OUTDIR}/server0.pcap icmp &
+  capture=$!
+  ip netns exec server0 python3 -m http.server 8000 --bind 10.200.0.1 &
+  http=$!
+  wait
+
+client: |
+  errors=no
+
+  echo "Checking HTTP with curl"
+  if ! ip netns exec client0 \
+      curl --retry 10 --retry-connrefused --retry-delay 1 -fsS \
+      http://10.200.0.1:8000/ -o /dev/null; then
+    echo "error: curl should have succeeded"
+    errors=yes
+  fi
+
+  echo "Checking HTTP with wget"
+  if ! ip netns exec client0 wget -qO /dev/null http://10.200.0.1:8000/; then
+    echo "error: wget should have succeeded"
+    errors=yes
+  fi
+
+  echo "Sending fragmented ICMP"
+  hping_output=$(ip netns exec client0 hping3 -c 10 -1 -f -d 15000 \
+      10.200.0.1 2>&1) || true
+  echo "${hping_output}"
+  if ! grep -Eq '0 packets received|100% packet loss' <<<"${hping_output}"; then
+    echo "error: fragmented ICMP should have been dropped"
+    errors=yes
+  fi
+
+  test "${errors}" = no
+
+checks:
+  - stats:
+      capture.kernel_packets.__gt: 0
+      ips.accepted.__gt: 0
+      ips.blocked.__gte: 10
+
+  - shell:
+      args: |
+        http=$(jq -c 'select(.event_type == "http" and .src_ip == "10.200.0.2")' eve.json | wc -l)
+        drops=$(jq -c 'select(.event_type == "drop" and .src_ip == "10.200.0.2")' eve.json | wc -l)
+        test "${http}" -ge 2
+        test "${drops}" -ge 20
+
+  - shell:
+      args: |
+        echoes=$(tcpdump -nn -r server0.pcap 'icmp[0] = 8' 2>/dev/null | wc -l)
+        test "${echoes}" -eq 0
