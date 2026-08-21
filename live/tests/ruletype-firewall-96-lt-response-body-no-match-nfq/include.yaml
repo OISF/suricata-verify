@@ -1,0 +1,12 @@
+%YAML 1.1
+---
+
+default-rule-path: ${TESTDIR}
+rule-files:
+  - empty.rules
+
+firewall:
+  enabled: true
+  rule-path: ${OUTDIR}
+  rule-files:
+    - firewall.rules
