@@ -1,0 +1,6 @@
+# Twin rules, identical apart from the sid: 100001 is covered by a suppress
+# entry, 100002 is not. If 100002 alerts and 100001 does not, the suppress
+# config loaded and works on the threat detection path -- without that, a
+# firewall alert appearing could equally mean the config was never read.
+alert http any any -> any any (msg:"TD suppressed"; flow:to_server,established; http.host; content:"www.testmyids.com"; sid:100001;)
+alert http any any -> any any (msg:"TD control, not suppressed"; flow:to_server,established; http.host; content:"www.testmyids.com"; sid:100002;)
