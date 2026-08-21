@@ -1,0 +1,55 @@
+environment: inline
+
+requires:
+  command:
+    - ping
+
+args:
+  - --af-packet
+  - --runmode workers
+
+client: |
+  errors="no"
+
+  # Pings to the server match both the generic alert rule and the
+  # specific drop rule, so they must fail.
+  echo "Pinging server from client (should be dropped)..."
+  if ip netns exec client0 ping -c 10 -i 0.2 -W 1 10.200.0.1; then
+    echo "error: ping to server should have failed"
+    errors="yes"
+  fi
+
+  # Pings from the server to the client only match the generic alert
+  # rule, so they must succeed.
+  echo "Pinging client from server (should pass)..."
+  if ! ip netns exec server0 ping -c 5 -i 0.2 -W 1 10.200.0.2; then
+    echo "error: ping to client should have succeeded"
+    errors="yes"
+  fi
+
+  if [ "${errors}" = "yes" ]; then
+    exit 1
+  fi
+
+checks:
+  # The generic alert rule matches every echo request in both
+  # directions: 10 client->server plus 5 server->client. It alerts on
+  # the dropped packets too, but its own action stays "allowed".
+  - filter:
+      count: 15
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        alert.action: allowed
+
+  # The drop rule only matches the 10 echo requests to the server.
+  - filter:
+      count: 10
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        alert.action: blocked
+
+  - stats:
+      ips.accepted.__gt: 0
+      ips.blocked.__gte: 10
