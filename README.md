@@ -16,6 +16,13 @@ Or to run a single test:
 ../path/to/suricata-tests/run.py TEST-NAME
 ```
 
+For Unix socket tests, the path to `suricatasc` can be overridden with the
+`SURICATASC` environment variable:
+
+```
+SURICATASC=/path/to/suricatasc ../path/to/suricata-tests/run.py
+```
+
 ## Adding a New Test
 
 - Create a directory that is the name of the new test.

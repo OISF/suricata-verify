@@ -1383,13 +1383,15 @@ def main():
     HAS_SURICATA_SC = None
     global suricatasc_bin
     if not args.skipunixsocket:
-        sc_path = [".", "rust", "target", "release", "suricatasc"]
-        if "DEBUG" in suricata_config.features:
-            sc_path[3] = "debug"
-        cargo_build_target = os.environ.get("CARGO_BUILD_TARGET")
-        if cargo_build_target != None :
-            sc_path.insert(3, cargo_build_target)
-        suricatasc_bin = os.path.join(*sc_path)
+        suricatasc_bin = os.environ.get("SURICATASC")
+        if suricatasc_bin is None:
+            sc_path = [".", "rust", "target", "release", "suricatasc"]
+            if "DEBUG" in suricata_config.features:
+                sc_path[3] = "debug"
+            cargo_build_target = os.environ.get("CARGO_BUILD_TARGET")
+            if cargo_build_target != None :
+                sc_path.insert(3, cargo_build_target)
+            suricatasc_bin = os.path.join(*sc_path)
         if os.path.exists(suricatasc_bin):
             HAS_SURICATA_SC = True
         else:
