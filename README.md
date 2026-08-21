@@ -88,6 +88,12 @@ requires:
   files:
 	- src/detect-ipaddr.c
 
+  # Require that one or more host commands exist in PATH. If a command is
+  # missing, the test will be skipped.
+  command:
+    - jq
+    - xargs
+
   # Don't require a pcap file to be present. By default a test will be skipped
   # if there is no pcap file in the test directory. Not applicable if a
   # command is provided.

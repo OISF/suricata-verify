@@ -1,0 +1,70 @@
+# Port of qa/live/netns/afp-ips-netns-bridge.sh with the workers runmode.
+environment: inline
+
+requires:
+  command:
+    - jq
+    - podman
+
+args:
+  - --af-packet
+  - --runmode workers
+
+before: |
+  # Build both images up front. The first build can be slow and would
+  # otherwise race the server/client scripts.
+  podman build --iidfile=${OUTDIR}/server.iid --network=host server
+  podman build --iidfile=${OUTDIR}/client.iid --network=host client
+
+server: |
+  podman run --rm --cap-add=NET_RAW --network ns:/var/run/netns/server0 \
+      -v ${OUTDIR}:/out:rw \
+      $(cat ${OUTDIR}/server.iid) \
+      /server.sh
+
+client: |
+  errors="no"
+
+  iid=$(cat ${OUTDIR}/client.iid)
+  run() {
+    echo "Running: $@"
+    podman run --rm --cap-add=NET_RAW --network ns:/var/run/netns/client0 ${iid} "$@"
+  }
+
+  # Only ICMP is dropped, so HTTP requests should still succeed.
+  echo "Running curl..."
+  if ! run timeout --kill-after=1 --preserve-status 5 \
+      curl -fsS -O http://10.200.0.1/index.html; then
+    echo "error: curl should have completed successfully"
+    errors="yes"
+  fi
+
+  echo "Running wget..."
+  if ! run timeout --kill-after=1 --preserve-status 5 \
+      wget http://10.200.0.1/index.html; then
+    echo "error: wget should have completed successfully"
+    errors="yes"
+  fi
+
+  # ICMP echo requests should be dropped, so ping should fail.
+  echo "Running ping..."
+  if run ping -c 10 -i 0.2 -W 1 10.200.0.1; then
+    echo "error: ping should have failed"
+    errors="yes"
+  fi
+
+  if [ "${errors}" = "yes" ]; then
+    exit 1
+  fi
+
+checks:
+  - stats:
+      capture.kernel_packets.__gt: 0
+      ips.accepted.__gt: 0
+      ips.blocked.__gte: 10
+
+  # We should not have seen any ICMP echo requests on the server.
+  - shell:
+      args: |
+        pings=$(jq -c '.[]' ./tshark-server.json|jq 'select(._source.layers.icmp."icmp.type"=="8")'|wc -l)
+        test "${pings}" -eq 0

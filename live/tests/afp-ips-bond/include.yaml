@@ -1,0 +1,35 @@
+%YAML 1.1
+---
+
+default-rule-path: ${TESTDIR}
+rule-files:
+  - drop-icmp.rules
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert
+        - drop:
+            flows: all
+            alerts: true
+        - http
+        - stats:
+            totals: yes
+            threads: no
+
+af-packet:
+  - interface: client0
+    cluster-id: 80
+    copy-mode: ips
+    copy-iface: server0
+  - interface: server0
+    cluster-id: 81
+    copy-mode: ips
+    copy-iface: client0
+  - interface: default
+    defrag: false
+    threads: 2
+    cluster-type: cluster_flow
