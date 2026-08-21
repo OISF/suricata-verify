@@ -1,0 +1,83 @@
+environment: nfq
+
+requires:
+  command:
+    - python3
+
+# Enable NFQ capture bypass: Suricata ORs this mark into the verdict of a
+# bypassed flow's packets so the kernel can offload the rest of the flow.
+args:
+  - -q 0
+  - --set nfq.bypass-mark=1
+  - --set nfq.bypass-mask=1
+
+# Replace the runner's plain NFQUEUE ruleset with a conntrack/CONNMARK ruleset
+# so the bypass mark persists across packets and marked flows skip the queue.
+# This is the NFQ analogue of staging the XDP object in afp-ips-xdp-bypass: it is
+# what actually forwards a bypassed flow's packets in the kernel, past Suricata.
+before: |
+  set -e
+  dut() { ip netns exec dut "$@"; }
+
+  dut iptables -F
+  dut iptables -t mangle -F
+  dut iptables -P FORWARD DROP
+
+  # Restore the connection's saved mark onto each packet as it enters FORWARD.
+  dut iptables -A FORWARD -j CONNMARK --restore-mark
+  # A packet whose flow has already been bypassed carries the mark: accept it
+  # immediately so it never reaches Suricata.
+  dut iptables -A FORWARD -m mark --mark 0x1/0x1 -j ACCEPT
+  # Everything else is queued to Suricata for inspection.
+  dut iptables -A FORWARD -i client0 -o server0 -j NFQUEUE --queue-num 0
+  dut iptables -A FORWARD -i server0 -o client0 -j NFQUEUE --queue-num 0
+
+  # After Suricata accepts a bypassed packet (with the mark set on the verdict),
+  # save that packet mark onto the conntrack entry so future packets inherit it.
+  dut iptables -t mangle -A POSTROUTING -j CONNMARK --save-mark
+
+server: |
+  exec ip netns exec server0 python3 ${TESTDIR}/server.py ${OUTDIR}/server.json
+
+client: |
+  exec ip netns exec client0 python3 ${TESTDIR}/client.py
+
+checks:
+  # We should see sid 1 on the BYPASS flow, with the bypass flowbit set.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        metadata.flowbits[0]: "bypassed"
+
+  # SID 2 should match once, on the non-bypassed (control) flow only. On the
+  # bypassed flow the TRIPWIRE payload is offloaded to the kernel and never
+  # reaches Suricata, so it must not match there.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+
+  # We should have one flow on port 7000 reported capture-bypassed (offloaded
+  # to the kernel), not local-bypassed.
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        dest_port: 7000
+        flow.state: bypassed
+        flow.bypass: capture
+
+  # The control flow on port 7000 should be reported closed.
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        dest_port: 7000
+        flow.state: closed
+
+  # One flow should be marked as capture-bypassed in the stats.
+  - stats:
+      flow.end.state.capture_bypassed: 1
