@@ -1,0 +1,23 @@
+# Port of qa/live/multi-tenant.sh autofp.
+environment: tap
+
+requires:
+  command:
+    - jq
+    - ping
+    - timeout
+
+args:
+  - --pcap=br0
+  - --runmode autofp
+  - --set pcap.bpf-filter=icmp
+
+before: |
+  sed "s|@RULEDIR@|${TESTDIR}|" ${TESTDIR}/tenant-1.yaml.in > ${OUTDIR}/tenant-1.yaml
+
+client: |
+  exec bash ${TESTDIR}/client.sh
+
+checks:
+  - stats:
+      capture.kernel_packets.__gt: 0
