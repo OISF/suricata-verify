@@ -1,0 +1,67 @@
+environment: inline
+
+requires:
+  command:
+    - curl
+    - python3
+
+args:
+  - --af-packet
+  - --runmode workers
+
+server: |
+  exec ip netns exec server0 python3 -m http.server --directory ${TESTDIR}/www 80
+
+client: |
+  errors="no"
+
+  # The benign page does not match any rule and must pass.
+  echo "Fetching benign page..."
+  if ! ip netns exec client0 timeout --kill-after=1 --preserve-status 5 \
+      curl -fsS --retry 3 --retry-connrefused --retry-delay 1 \
+      -o /dev/null http://10.200.0.1/index.html; then
+    echo "error: fetching the benign page should have succeeded"
+    errors="yes"
+  fi
+
+  # The testmyids page matches both rules and the response is dropped,
+  # so curl must fail.
+  echo "Fetching testmyids page..."
+  if ip netns exec client0 timeout --kill-after=1 --preserve-status 5 \
+      curl -fsS -o /dev/null http://10.200.0.1/ids.html; then
+    echo "error: fetching the testmyids page should have failed"
+    errors="yes"
+  fi
+
+  if [ "${errors}" = "yes" ]; then
+    exit 1
+  fi
+
+checks:
+  # Both rules match the testmyids response, but the alert rule's own
+  # action stays "allowed" even though the packet was dropped.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        alert.action: allowed
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        alert.action: blocked
+
+  # The benign request completes as a normal HTTP transaction.
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.url: "/index.html"
+        http.status: 200
+
+  - stats:
+      ips.accepted.__gt: 0
+      ips.blocked.__gte: 1
