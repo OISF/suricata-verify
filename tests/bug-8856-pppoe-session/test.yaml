@@ -1,0 +1,6 @@
+requires:
+  min-version: 8
+
+checks:
+  - stats:
+      decoder.event.pppoe.pkt_too_small: 1
