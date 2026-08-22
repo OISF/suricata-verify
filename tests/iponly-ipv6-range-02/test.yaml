@@ -1,10 +1,12 @@
 requires:
-  min-version: 9
+  min-version: 8.0.7
 
 args:
 - --engine-analysis
 
 exit-code: 0
+
+pcap: false
 
 checks:
   - filter:
