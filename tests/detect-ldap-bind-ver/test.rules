@@ -1,0 +1,8 @@
+alert ldap any any -> any any (msg:"LDAP BindRequest version 1"; ldap.bind_request.version:1; sid:1;)
+alert ldap any any -> any any (msg:"LDAP BindRequest version 3"; ldap.bind_request.version:3; sid:2;)
+alert ldap any any -> any any (msg:"LDAP BindRequest version 127"; ldap.bind_request.version:127; sid:3;)
+alert ldap any any -> any any (msg:"LDAP BindRequest version less than 3"; ldap.bind_request.version:<3; sid:4;)
+alert ldap any any -> any any (msg:"LDAP BindRequest version 3 or greater"; ldap.bind_request.version:>=3; sid:5;)
+
+# Negative test: no BindRequest in the PCAP has version 2.
+alert ldap any any -> any any (msg:"LDAP BindRequest version 2"; ldap.bind_request.version:2; sid:6;)
