@@ -1,0 +1,11 @@
+alert ldap any any -> any any (msg:"LDAP BindRequest simple authentication"; ldap.bind_request.authentication:simple; sid:1;)
+alert ldap any any -> any any (msg:"LDAP BindRequest SASL authentication"; ldap.bind_request.authentication:sasl; sid:2;)
+
+alert ldap any any -> any any (msg:"LDAP BindRequest SASL mechanism GSS-SPNEGO"; ldap.bind_request.sasl.mechanism; content:"GSS-SPNEGO"; sid:3;)
+alert ldap any any -> any any (msg:"LDAP BindRequest SASL mechanism PLAIN"; ldap.bind_request.sasl.mechanism; content:"PLAIN"; sid:4;)
+
+alert ldap any any -> any any (msg:"LDAP BindRequest SASL credentials"; ldap.bind_request.sasl.credentials; content:"SASL-CREDS-MARKER"; sid:5;)
+
+# These strings occur only in the simple BindRequest. They must not be exposed through the SASL sticky buffers.
+alert ldap any any -> any any (msg:"LDAP BindRequest SASL mechanism negative buffer-scope test"; ldap.bind_request.sasl.mechanism; content:"SIMPLE-ONLY-MECH"; sid:6;)
+alert ldap any any -> any any (msg:"LDAP BindRequest SASL credentials negative buffer-scope test"; ldap.bind_request.sasl.credentials; content:"SIMPLE-ONLY-CRED"; sid:7;)
