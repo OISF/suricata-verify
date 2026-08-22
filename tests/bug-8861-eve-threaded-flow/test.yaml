@@ -1,0 +1,39 @@
+requires:
+  min-version: 9
+
+pcap: ../bug-5758/input.pcap
+
+# Strip the configured prefix so the remaining payload can be validated as
+# real JSON by the filter checks below.
+pre-check: |
+  cat eve.*.json | sed 's/^@cee: //' > merged.json
+
+checks:
+  - shell:
+      args: test ! -e eve.json
+  # Flow logging gives the receive thread and the flow recycler their
+  # own contexts on top of the workers, so at least three files exist even on
+  # a single-core host. The exact count tracks the CPU count.
+  - shell:
+      args: test $(ls eve.*.json | wc -l) -ge 3
+
+  - shell:
+      args: "cat eve.*.json | grep -v '^@cee: {' | wc -l | xargs"
+      expect: 0
+  - shell:
+      args: "cat eve.*.json | grep -v '\"host\":\"bug8861sensor\"' | wc -l | xargs"
+      expect: 0
+
+  - filter:
+      filename: merged.json
+      count: 2
+      match:
+        event_type: alert
+        host: bug8861sensor
+
+  - filter:
+      filename: merged.json
+      count: 1
+      match:
+        event_type: flow
+        host: bug8861sensor

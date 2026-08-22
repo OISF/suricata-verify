@@ -1,0 +1,14 @@
+%YAML 1.1
+---
+sensor-name: bug8861sensor
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      threaded: true
+      prefix: "@cee: "
+      types:
+        - alert
+        - flow
