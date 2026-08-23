@@ -1,0 +1,2 @@
+alert http any any -> any any (msg:"src in 10.20.48.0/24"; flow:established; ip.src; dataset:isset,net-src,type cidr,load net-src.lst; sid:1;)
+alert http any any -> any any (msg:"dst in 10.50.0.0/16"; flow:established; ip.dst; dataset:isset,net-dst,type cidr,load net-dst.lst; sid:2;)

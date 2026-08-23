@@ -18,6 +18,9 @@ Tests are grouped by what they exercise:
 - 15, 17-19 -- the `mask` option and its notations
 - 16 -- Lua access to a CIDR dataset
 - 20-21 -- set/unset behavior on IPv6
+- 27 -- CIDR-dataset equivalent of the luaxform IP->CIDR-string pattern
+  used by `tests/lua/lua-transform-09`, reusing that test's pcap and
+  assertions
 
 ### datasets-cidr-01-ipv4-isset
 
@@ -223,6 +226,20 @@ Rule uses `mask 0` (which would match every address). Rule load must
 fail with `prefix length 0 is not allowed`. `--engine-analysis`, no
 pcap, `exit-code: 1`.
 
+### datasets-cidr-27-luaxform-equivalent
+
+Demonstrates that a CIDR-dataset `isset` match replaces the
+luaxform-based IP->CIDR-string pattern used by
+`tests/lua/lua-transform-09`, without per-packet Lua invocation. Two
+rules mirror lua-transform-09's semantics:
+
+- sid:1 uses `ip.src` with `net-src.lst` containing `10.20.48.0/24`
+- sid:2 uses `ip.dst` with `net-dst.lst` containing `10.50.0.0/16`
+
+Reuses `../../lua/lua-transform-01/test.pcap` (the same pcap that
+lua-transform-09 loads via `../lua-transform-01/test.pcap`) and
+asserts the same 4+4 alert counts.
+
 ## Shared pcap relationships
 
 ```
@@ -259,3 +276,7 @@ input-ipv6.pcap (in datasets-cidr-21-ipv6-unset/)
 
 Tests 13, 14, 22, 23, 24, 25, and 26 do not use a pcap; they are
 rejection tests that exercise `--engine-analysis` and grep the log.
+
+Test 27 reuses `../../lua/lua-transform-01/test.pcap` from a
+different test group to mirror the assertions of
+`tests/lua/lua-transform-09`.
