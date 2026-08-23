@@ -1,0 +1,22 @@
+requires:
+  min-version: 8.0.7
+  lt-version: 9
+
+pcap: ../../decode-arp-1/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+        drop.reason: "firewall default packet policy"
+
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.firewall.accepted: 1

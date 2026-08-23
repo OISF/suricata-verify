@@ -1,0 +1,1 @@
+# No explicit firewall rules, rely on default drop policy and accept-arp config

@@ -1,0 +1,28 @@
+%YAML 1.1
+---
+
+firewall:
+  enabled: true
+  policies:
+    accept-arp: false
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - stats
+        - drop:
+            alerts: yes
+            flows: all
+        - flow
+
+stream:
+  inline: yes
+
+logging:
+  default-log-level: notice
+  outputs:
+    - console:
+        enabled: yes
