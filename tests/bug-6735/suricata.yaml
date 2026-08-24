@@ -1,0 +1,13 @@
+%YAML 1.1
+---
+
+threading:
+  set-cpu-affinity: yes
+  cpu-affinity:
+  - management-cpu-set:
+      cpu: [ 0 ]
+  - worker-cpu-set:
+      cpu: ["all"]
+      mode: exclusive
+      prio:
+        default: medium

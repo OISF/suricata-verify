@@ -1,0 +1,9 @@
+requires:
+  min-version: 9
+
+pcap: false
+
+args:
+  - --set threading.cpu-affinity.worker-cpu-set.threads=28
+  - -T
+  - --disable-detection
