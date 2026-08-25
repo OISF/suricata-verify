@@ -1,0 +1,6 @@
+# Boundary: the pcap has a dns.query of exactly "google.com" (10 bytes).
+# 'exact' forces the buffer length to equal the content length, so a content
+# that fills the buffer alerts, while a shorter content (buffer longer than the
+# implied bsize) does not.
+alert dns any any -> any any (msg:"exact full buffer"; dns.query; content:"google.com"; exact; sid:1;)
+alert dns any any -> any any (msg:"exact shorter than buffer"; dns.query; content:"google"; exact; sid:2;)

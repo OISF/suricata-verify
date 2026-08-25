@@ -1,0 +1,22 @@
+requires:
+    min-version: 9
+
+pcap:
+  ../../test-bsize-values-2/input.pcap
+
+args:
+    - -k none
+
+# sid 1 fills the buffer exactly (10 == 10) and alerts; sid 2's content is
+# shorter than the 10-byte buffer, so exact (bsize:6) can never match.
+checks:
+    - filter:
+        count: 1
+        match:
+            event_type: alert
+            alert.signature_id: 1
+    - filter:
+        count: 0
+        match:
+            event_type: alert
+            alert.signature_id: 2

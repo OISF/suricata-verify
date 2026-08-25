@@ -1,0 +1,4 @@
+# A single content anchored startswith/endswith still spans the buffer when the
+# buffer carries a transform, so engine-analysis suggests 'exact'. The
+# suggestion is no longer suppressed for transformed buffers.
+alert dns any any -> any any (msg:"transformed anchored suggests exact"; dns.query; strip_whitespace; content:"google.com"; startswith; endswith; sid:1;)
