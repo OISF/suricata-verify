@@ -1,0 +1,2 @@
+alert udp any any -> any any (content:"byps"; sid:1; bypass;)
+alert udp any any -> any any (content:"stuf"; sid:2;)
