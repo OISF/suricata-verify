@@ -1,0 +1,28 @@
+# *** Add configuration here ***
+
+requires:
+   min-version: 8.0.3
+
+command: |
+  ${SRCDIR}/src/suricata -v --set classification-file="${TEST_DIR}/classification.config" -l ${OUTPUT_DIR} -c ${TEST_DIR}/suricata.yaml -S ${TEST_DIR}/test.rules -r ./input.pcap
+
+
+checks:
+- filter:
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: Classtype that should NOT have payload extracted
+      alert.signature: JPG request - don't extract my payload classtype
+      not-has-key: payload
+- filter:
+    count: 1
+    match:
+      alert.category: Classtype that SHOULD have payload extracted
+      alert.signature: JPG request - filter-me classtype
+      has-key: payload
+- filter:
+    count: 1
+    match:
+      alert.signature: JPG request - don't extract payload I do not have a classtype
+      not-has-key: payload
