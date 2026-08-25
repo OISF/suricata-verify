@@ -1,0 +1,29 @@
+# Asserts expected behaviour; currently FAILS (see README).
+pcap: ../../tls/tls-client-hello-frag-01/dump_mtu300.pcap
+requires:
+  min-version: 9
+args:
+  - --simulate-ips
+  - -k none
+checks:
+# sid:200 drops www.google.com by SNI, with alert
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 200
+      alert.action: blocked
+      firewall.hook: "tls:client_hello_done"
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.action: "drop"
+      flow.alerted: true
+# dropped by the rule, not the default app policy
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.firewall.drop_reason.rules: 1
+      stats.firewall.drop_reason.default_app_policy: 0
