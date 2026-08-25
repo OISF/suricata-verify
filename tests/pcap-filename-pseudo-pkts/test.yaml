@@ -1,0 +1,16 @@
+requires:
+  min-version: 7
+  
+pcap: ../bug-5392/TPWhite-carved-out-7787-s1.pcap
+
+args:
+- -k none
+- --no-random
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        pcap_filename.__endswith: "TPWhite-carved-out-7787-s1.pcap"
+        fileinfo.state: "TRUNCATED"
