@@ -1,0 +1,1 @@
+alert http any any => any any (msg:"Pipelined multi-TX byte cache test"; flow:established; http.uri; content:"/val/"; byte_extract:2,0,val,relative,string,dec; http.stat_code; content:"2"; byte_test:1,>,val,0,relative; sid:1;)
