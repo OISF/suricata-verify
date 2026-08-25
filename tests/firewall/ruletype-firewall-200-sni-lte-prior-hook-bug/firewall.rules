@@ -1,0 +1,7 @@
+# allow session setup
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+# drop a specific SNI; accept all other SNI via auto-accept-prior-states (<)
+# note: no explicit accept:hook tls:client_in_progress (see README)
+drop:flow tls:client_hello_done $HOME_NET any -> $EXTERNAL_NET any (tls.sni; content:"www.google.com"; endswith; nocase; msg:"Drop www.google.com by SNI"; alert; sid:200;)
+accept:flow tls:<client_hello_done $HOME_NET any -> $EXTERNAL_NET any (alert; sid:201;)
