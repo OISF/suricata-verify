@@ -1,0 +1,12 @@
+requires:
+  min-version: 9
+  pcap: false
+
+args:
+  - --engine-analysis
+
+checks:
+  # all four rules load, none is rejected by the inherited-scope validation
+  - shell:
+      args: grep -c "4 rules successfully loaded, 0 rules failed" suricata.log | xargs
+      expect: 1

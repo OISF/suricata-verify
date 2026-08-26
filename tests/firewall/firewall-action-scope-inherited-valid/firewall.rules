@@ -1,0 +1,7 @@
+# An inherited scope that is valid for the secondary action must keep working.
+# pass supports flow and packet scope:
+accept:flow,pass tcp:all any any -> any any (sid:1;)
+accept:packet,pass tcp:all any any -> any any (sid:2;)
+# alert takes no scope of its own, so it may inherit any scope:
+accept:hook,alert tcp:all any any -> any any (sid:3;)
+accept:tx,alert http1:request_line any any -> any any (sid:4;)

@@ -1,0 +1,13 @@
+%YAML 1.1
+---
+
+engine-analysis:
+  rules-fast-pattern: no
+  rules: yes
+
+logging:
+  outputs:
+    - file:
+        enabled: yes
+        filename: suricata.log
+        
