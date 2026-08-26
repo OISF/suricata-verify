@@ -1,0 +1,34 @@
+requires:
+  min-version: 9
+
+pcap: ../../tls/tls-random/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+  # The ruleset accepts the 6 toclient packets by default.
+  # The 7 toserver ones fall through to the packet.filter default policy.
+  # With drop:flow, the first drops the whole flow, so not even the packets
+  # matching the rule pass through the FW.
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.firewall.accepted: 0
+        stats.firewall.blocked: 13
+
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.firewall.drop_reason.default_packet_policy: 1
+        stats.firewall.drop_reason.flow_drop: 12
+
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.action: drop
+        flow.state: new

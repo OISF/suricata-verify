@@ -1,0 +1,34 @@
+requires:
+  min-version: 9
+
+pcap: ../../tls/tls-random/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+  # Same ruleset as firewall-packet-filter-policy-drop-flow, but the default
+  # policy uses packet scope, which means the flow is not dropped
+  # and policy is applied on per-packet basis.
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.firewall.accepted: 6
+        stats.firewall.blocked: 7
+
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.firewall.drop_reason.default_packet_policy: 7
+        stats.firewall.drop_reason.flow_drop: 0
+
+  # packet scope never marks the flow
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.state: closed
+        not-has-key: flow.action
