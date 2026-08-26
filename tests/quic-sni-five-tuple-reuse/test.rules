@@ -1,0 +1,1 @@
+alert quic any any -> any any (msg:"SURICATA VERIFY QUIC SNI five-tuple reuse"; flow:to_server; quic.sni; content:"www.dongbeirain.fun"; endswith; sid:1000001; rev:1;)
