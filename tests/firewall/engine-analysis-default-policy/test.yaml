@@ -1,0 +1,37 @@
+requires:
+  min-version: 9
+  pcap: false
+
+args:
+  - --engine-analysis
+
+checks:
+  # The global default-policy should be reported instead of the built-in hook.
+  - filter:
+      filename: firewall.json
+      count: 1
+      match:
+        "tables.packet:filter.policy": "accept:flow"
+
+  - filter:
+      filename: firewall.json
+      count: 1
+      match:
+        "tables.http.app:http:request_line.policy": "accept:flow"
+        "tables.tls.app:tls:client_hello_done.policy": "accept:flow"
+        "tables.dns.app:dns:request-complete.policy": "accept:flow"
+
+  - filter:
+      filename: firewall.json
+      count: 1
+      match:
+        "tables.http2.app:http2:stream:request_headers.policy": "accept:flow"
+        "tables.http2.app:http2:global:request_complete.policy": "accept:flow"
+
+  # The td tables have no configurable policy, they must stay accept:hook.
+  - filter:
+      filename: firewall.json
+      count: 1
+      match:
+        "tables.packet:td.policy": "accept:hook"
+        "tables.app:td.policy": "accept:hook"
