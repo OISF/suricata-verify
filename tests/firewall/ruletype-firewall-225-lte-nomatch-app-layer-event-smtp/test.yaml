@@ -1,0 +1,24 @@
+requires:
+  min-version: 9
+
+args:
+  - --simulate-ips
+  - -k none
+
+pcap: ../../smtp-attachment-md5/input.pcap
+
+checks:
+# the bare < rule covers request_started, so no default app policy drop may happen
+# in the to_server direction
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      drop.reason: "firewall default app policy"
+      direction: to_server
+# the no-match drop candidate never matched, so nothing is dropped by the rules
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      drop.reason: "firewall rules"

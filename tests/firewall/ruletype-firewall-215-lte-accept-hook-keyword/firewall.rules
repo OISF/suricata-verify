@@ -1,0 +1,33 @@
+# BUG REPRO (auto-accept-prior-states over-approximation -> per-state false accept, accept:hook path).
+#
+# An accept:hook rule matches at client_in_progress (hook 0). The intermediate state
+# client_hello_done (hook 1) has NO explicit rule. The ONLY rule that "covers" that
+# intermediate state is a <hook (auto-accept-prior-states) rule whose SNI keyword does NOT
+# match the pcap. Because that < rule does not actually accept the intermediate state, the
+# per-state default app policy (drop) MUST be applied for it (to_server).
+#
+# NOTE: the < rule is at client_hello_done (hook 1) so that its SNI keyword (available at
+# progress 1) is valid -- the parser enforces buffer progress == rule hook for app-hook rules.
+#
+# Buggy behaviour: the engine assumes the < rule covers the intermediate state and skips the
+# default policy, so the to_server intermediate state is left unhandled (0 to_server
+# default-app-policy drops) -> per-state false accept.
+#
+# Correct behaviour: the intermediate to_server state is dropped by the default app policy
+# (1 to_server "firewall default app policy" drop).
+#
+# Pcap SNI is www.google.com.
+
+# allow session setup
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+
+# accept:hook at client_in_progress (hook 0); a bare hook rule, so it always matches. After it
+# matches, the intermediate state (client_hello_done) has no explicit rule, so the default app
+# policy is applied for it -- unless a later auto-accept-prior-states (<) rule genuinely covers it.
+accept:hook tls:client_in_progress $HOME_NET any -> $EXTERNAL_NET any (sid:212;)
+
+# auto-accept-prior-states rule at client_hello_done (hook 1), so its SNI keyword (available at
+# progress 1) is valid. Its SNI keyword does NOT match the pcap (zzznotthere != www.google.com),
+# so it is NOT a candidate and does NOT actually accept the intermediate client_hello_done state.
+accept:flow tls:<client_hello_done $HOME_NET any -> $EXTERNAL_NET any (tls.sni; content:"zzznotthere"; sid:213;)

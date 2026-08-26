@@ -1,10 +1,12 @@
-# Asserts expected behaviour; currently FAILS (see README).
-pcap: ../../tls/tls-client-hello-frag-01/dump_mtu300.pcap
 requires:
   min-version: 9
+
+pcap: ../../tls/tls-client-hello-frag-01/dump_mtu300.pcap
+
 args:
   - --simulate-ips
   - -k none
+
 checks:
 # sid:200 drops www.google.com by SNI, with alert
 - filter:
