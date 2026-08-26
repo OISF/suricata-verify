@@ -1,0 +1,97 @@
+requires:
+  min-version: 9
+
+args:
+  - --simulate-ips
+  - -k none
+
+pcap: ../../http2-bugfixes/input.pcap
+
+checks:
+# the bare < rule covers the prior state and the head rule matches: no default app
+# policy drop may happen
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      drop.reason: "firewall default app policy"
+# no drop rule exists in this ruleset
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      drop.reason: "firewall rules"
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 710
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 711
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 712
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 713
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 714
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 720
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 721
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 722
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 723
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 724
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 716
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 964
+      alert.action: allowed
+      firewall.policy: accept:flow,alert
+      pcap_cnt: 4
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 965
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.action: accept
+      flow.alerted: true

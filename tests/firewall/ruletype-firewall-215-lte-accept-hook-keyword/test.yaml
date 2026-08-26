@@ -1,0 +1,47 @@
+requires:
+  min-version: 9
+
+args:
+  - --simulate-ips
+  - -k none
+
+pcap: ../../tls/tls-client-hello-frag-01/dump_mtu300.pcap
+
+checks:
+# the < rule does not actually match, so the intermediate state must be dropped by the default app policy
+- filter:
+    count: 1
+    match:
+      event_type: drop
+      drop.reason: "firewall default app policy"
+      direction: to_server
+# no explicit drop rule matches, so nothing is dropped by the rules
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      drop.reason: "firewall rules"
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 212
+      alert.action: allowed
+      firewall.hook: tls:client_started
+      firewall.policy: accept:hook,alert
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 213
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 214
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.action: drop
+      flow.alerted: true
