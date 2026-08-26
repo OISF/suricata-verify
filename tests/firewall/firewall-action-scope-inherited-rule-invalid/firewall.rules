@@ -1,0 +1,4 @@
+# "pass" without an explicit scope inherits the scope of the primary action.
+# pass only supports packet and flow scope, so an inherited hook scope has to be
+# rejected the same way an explicit "pass:hook" is.
+accept:hook,pass tcp:all any any -> any any (sid:1;)
