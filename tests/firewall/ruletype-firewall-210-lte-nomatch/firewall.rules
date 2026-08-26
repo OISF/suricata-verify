@@ -1,0 +1,11 @@
+# allow session setup
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+# Drop rule at client_hello that is a *candidate* (the primary SNI content
+# "www.google.com" matches the pcap SNI, so the SNI prefilter selects it) but does NOT
+# fully match (the second content "zzznotthere" is absent). It is the last firewall rule
+# for the client_hello state, so its no-match must trigger the per-state default
+# policy -- unless a later auto-accept-prior-states (<) rule covers that state.
+drop:flow,alert tls:client_hello $HOME_NET any -> $EXTERNAL_NET any (tls.sni; content:"www.google.com"; nocase; content:"zzznotthere"; sid:210;)
+# Auto-accept-prior-states at a higher hook: covers client_hello (and the head gap).
+accept:flow,alert tls:<client_data $HOME_NET any -> $EXTERNAL_NET any (sid:211;)
