@@ -1,0 +1,65 @@
+requires:
+  min-version: 9
+
+args:
+  - --simulate-ips
+  - -k none
+
+pcap: ../../smtp-attachment-md5/input.pcap
+
+checks:
+# the bare < rule covers the prior states and matches at completion: the request
+# must be accepted, so no default app policy drop may happen
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      drop.reason: "firewall default app policy"
+# no drop rule exists in this ruleset
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      drop.reason: "firewall rules"
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 852
+      alert.action: allowed
+      firewall.hook: smtp:request_complete
+      firewall.policy: accept:flow,alert
+      pcap_cnt: 17
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 853
+- filter:
+    count: 4
+    match:
+      event_type: alert
+      alert.signature_id: 1004
+      alert.action: allowed
+      firewall.hook: smtp:response_started
+      firewall.policy: accept:hook,alert
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1005
+      alert.action: allowed
+      firewall.hook: smtp:response_data
+      firewall.policy: accept:hook,alert
+      pcap_cnt: 14
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 1006
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.action: accept
+      flow.alerted: true
