@@ -13,6 +13,7 @@ import platform
 import re
 import shlex
 import signal
+import stat
 import string
 import shutil
 import subprocess
@@ -78,7 +79,8 @@ ENVIRONMENTS = ("inline", "tap", "nfq")
 verbose = False
 suricata_config_cache = {}
 
-RUNNER_LOCK_PATH = "/tmp/suricata-verify-live.lock"
+RUNNER_RUNTIME_DIR = "/run/suricata-verify-live"
+RUNNER_LOCK_PATH = os.path.join(RUNNER_RUNTIME_DIR, "runner.lock")
 
 
 BOND_MODES = {
@@ -190,8 +192,70 @@ class RunnerLock:
         self.path = path
         self.file = None
 
+    def _open(self):
+        runtime_dir, filename = os.path.split(self.path)
+        if not runtime_dir or not filename:
+            raise RuntimeError(f"invalid runner lock path: {self.path}")
+
+        try:
+            os.mkdir(runtime_dir, mode=0o700)
+        except FileExistsError:
+            pass
+
+        dir_flags = os.O_RDONLY | os.O_CLOEXEC | os.O_DIRECTORY | os.O_NOFOLLOW
+        try:
+            dir_fd = os.open(runtime_dir, dir_flags)
+        except OSError as err:
+            raise RuntimeError(
+                f"unable to safely open runner runtime directory {runtime_dir}: {err}"
+            ) from err
+
+        lock_fd = None
+        try:
+            dir_stat = os.fstat(dir_fd)
+            if dir_stat.st_uid != os.geteuid():
+                raise RuntimeError(
+                    f"runner runtime directory is not owned by uid {os.geteuid()}: "
+                    f"{runtime_dir}"
+                )
+            if stat.S_IMODE(dir_stat.st_mode) != 0o700:
+                raise RuntimeError(
+                    f"runner runtime directory permissions are not 0700: {runtime_dir}"
+                )
+
+            lock_flags = os.O_RDWR | os.O_CREAT | os.O_CLOEXEC | os.O_NOFOLLOW
+            try:
+                lock_fd = os.open(filename, lock_flags, 0o600, dir_fd=dir_fd)
+            except OSError as err:
+                raise RuntimeError(
+                    f"unable to safely open runner lock {self.path}: {err}"
+                ) from err
+        finally:
+            os.close(dir_fd)
+
+        try:
+            lock_stat = os.fstat(lock_fd)
+            if not stat.S_ISREG(lock_stat.st_mode):
+                raise RuntimeError(f"runner lock is not a regular file: {self.path}")
+            if lock_stat.st_uid != os.geteuid():
+                raise RuntimeError(
+                    f"runner lock is not owned by uid {os.geteuid()}: {self.path}"
+                )
+            if stat.S_IMODE(lock_stat.st_mode) != 0o600:
+                raise RuntimeError(
+                    f"runner lock permissions are not 0600: {self.path}"
+                )
+            if lock_stat.st_nlink != 1:
+                raise RuntimeError(
+                    f"runner lock has an unexpected link count: {self.path}"
+                )
+            return os.fdopen(lock_fd, "r+", encoding="utf-8")
+        except Exception:
+            os.close(lock_fd)
+            raise
+
     def __enter__(self):
-        self.file = open(self.path, "a+", encoding="utf-8")
+        self.file = self._open()
         try:
             fcntl.flock(self.file, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except BlockingIOError:
@@ -206,6 +270,10 @@ class RunnerLock:
                 print(holder, file=sys.stderr)
             self.file.close()
             sys.exit(1)
+        except Exception:
+            self.file.close()
+            self.file = None
+            raise
 
         self.file.seek(0)
         self.file.truncate()
