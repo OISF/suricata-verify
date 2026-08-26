@@ -1,0 +1,2 @@
+# one packet-hook rule so the packet:filter table is populated
+accept:packet tcp:all any any <> any 443 (flow:not_established; sid:1;)
