@@ -1,0 +1,15 @@
+requires:
+  min-version: 9
+  pcap: false
+
+args:
+  - -T
+
+exit-code: 1
+
+checks:
+  # the error must name the pre-flow policy specifically
+  - shell:
+      args: |-
+        grep -qF 'firewall.policies.packet.pre-flow: action scope ("flow") is not valid. Valid scopes: packet/hook' suricata.log && echo found
+      expect: found

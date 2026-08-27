@@ -1,0 +1,18 @@
+%YAML 1.1
+---
+
+logging:
+  default-log-level: notice
+  outputs:
+    - file:
+        enabled: yes
+        level: info
+        filename: suricata.log
+
+firewall:
+  policies:
+    packet:
+      # TESTED LINE, invalid on purpose: pre-flow runs before the flow
+      # lookup, so there is no flow for the "flow" scope to apply to.
+      # Suricata must refuse to start with this.
+      pre-flow: [ "accept:flow" ]

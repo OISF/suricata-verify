@@ -1,0 +1,6 @@
+# TESTED LINES, invalid on purpose: pre_flow rules run before the flow
+# lookup, so there is no flow or transaction for these scopes to apply to.
+# Suricata must refuse to load them.
+accept:flow tcp:pre_flow any any -> any any (sid:1;)
+drop:flow tcp:pre_flow any any -> any any (sid:2;)
+accept:tx tcp:pre_flow any any -> any any (sid:3;)
