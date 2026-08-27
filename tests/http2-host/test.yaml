@@ -14,3 +14,10 @@ checks:
         event_type: alert
         alert.signature_id: 740000
         pcap_cnt: 9
+  - filter:
+      requires:
+        min-version: 9
+      count: 1
+      match:
+        event_type: alert
+        http.hostname: play.google.com
