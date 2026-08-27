@@ -1,0 +1,1 @@
+alert http2 any any -> any any (msg:"block normalized HTTP/2 host"; http.host; content:"toto.host.com"; sid:1; rev:1;)
