@@ -1,0 +1,1 @@
+drop:packet,pass:packet,alert tcp:all any any <> any any (sid:1001;)

@@ -1,0 +1,6 @@
+# pass after an accept primary is the documented combination
+accept:packet,pass:packet,alert tcp:all any any <> any any (sid:1;)
+accept:flow,alert,pass:flow tcp:all any any <> any 443 (sid:2;)
+# alert has no such restriction, it is valid after any primary
+drop:packet,alert tcp:all any any <> any 8080 (sid:3;)
+accept:packet,alert tcp:all any any <> any 8081 (sid:4;)
