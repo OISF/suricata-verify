@@ -1,0 +1,13 @@
+requires:
+  min-version: 9
+  pcap: false
+
+args:
+  - -T
+
+exit-code: 1
+
+checks:
+  - shell:
+      args: 'grep -c "action scope (\"flow\") is not valid" suricata.log | xargs'
+      expect: 1

@@ -1,0 +1,17 @@
+%YAML 1.1
+---
+
+logging:
+  default-log-level: notice
+  outputs:
+    - file:
+        enabled: yes
+        level: info
+        filename: suricata.log
+
+firewall:
+  policies:
+    packet:
+      # pre-flow cannot operate on flow scope
+      pre-flow: [ "accept:flow" ]
+      filter: [ "accept:packet" ]
