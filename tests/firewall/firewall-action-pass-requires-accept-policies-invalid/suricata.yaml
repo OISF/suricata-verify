@@ -1,0 +1,20 @@
+%YAML 1.1
+---
+
+engine-analysis:
+  rules-fast-pattern: no
+  rules: yes
+
+logging:
+  default-log-level: notice
+  outputs:
+    - file:
+        enabled: yes
+        level: info
+        filename: suricata.log
+
+firewall:
+  policies:
+    packet:
+      # a "pass" secondary is only evaluated after an "accept" primary
+      filter: [ "drop:packet", "pass:packet", "alert" ]
