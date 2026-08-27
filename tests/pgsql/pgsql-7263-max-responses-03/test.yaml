@@ -1,0 +1,112 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+  # 2 transactions per flow: the startup sequence, then one query
+  - filter:
+      count: 4
+      match:
+        event_type: pgsql
+  - filter:
+      count: 2
+      match:
+        event_type: flow
+        app_proto: pgsql
+
+  # one alert per query transaction; the startups raise nothing
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # the traffic is well-formed: capping must not desync the parser
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+
+  # Both startups fit, so BackendKeyData is kept
+  - filter:
+      count: 1
+      match:
+        event_type: pgsql
+        pgsql.response.process_id: 20301
+        pgsql.response.secret_key: 1234
+  - filter:
+      count: 1
+      match:
+        event_type: pgsql
+        pgsql.response.process_id: 20302
+        pgsql.response.secret_key: 1234
+
+  # 47830: the row description is kept, the rows and the completion are not
+  - filter:
+      count: 1
+      match:
+        event_type: pgsql
+        pgsql.request.simple_query: "SELECT age FROM census;"
+        pgsql.response.field_count: 1
+  - filter:
+      count: 0
+      match:
+        event_type: pgsql
+        pgsql.request.simple_query: "SELECT age FROM census;"
+        pgsql.response.data_rows: 3
+  - filter:
+      count: 0
+      match:
+        event_type: pgsql
+        pgsql.request.simple_query: "SELECT age FROM census;"
+        pgsql.response.command_completed: "SELECT 3"
+
+  # 47831: the copy-out header is kept, the copy data and what follows are not
+  - filter:
+      count: 1
+      match:
+        event_type: pgsql
+        pgsql.request.simple_query: "COPY census TO STDOUT;"
+        pgsql.response.copy_out_response.columns: 1
+  - filter:
+      count: 0
+      match:
+        event_type: pgsql
+        pgsql.request.simple_query: "COPY census TO STDOUT;"
+        pgsql.response.copy_data_out.row_count: 3
+  - filter:
+      count: 0
+      match:
+        event_type: pgsql
+        pgsql.request.simple_query: "COPY census TO STDOUT;"
+        pgsql.response.message: "copy_done"
+  - filter:
+      count: 0
+      match:
+        event_type: pgsql
+        pgsql.request.simple_query: "COPY census TO STDOUT;"
+        pgsql.response.command_completed: "COPY 3"
+
+  # One event per refused response, per tx: one in 47830's query, one in 47831's
+  - filter:
+      count: 2
+      match:
+        event_type: anomaly
+        anomaly.app_proto: pgsql
+        anomaly.type: applayer
+        anomaly.event: "too_many_responses"
+        anomaly.layer: "proto_parser"
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        src_port: 47830
+        anomaly.event: "too_many_responses"
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        src_port: 47831
+        anomaly.event: "too_many_responses"

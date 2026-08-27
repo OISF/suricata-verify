@@ -1,0 +1,112 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+  # 2 transactions per flow: the startup sequence, then one query
+  - filter:
+      count: 8
+      match:
+        event_type: pgsql
+  - filter:
+      count: 4
+      match:
+        event_type: flow
+        app_proto: pgsql
+
+  # 47820, 47822 and 47823 overrun the cap; 47821 does not
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # the traffic is well-formed: capping must not desync the parser
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+
+  # Whether a flow's BackendKeyData got a slot is the discriminator: distinct
+  # backend pids let one filter target one flow.
+  #
+  # 47821: the whole startup fits
+  - filter:
+      count: 1
+      match:
+        event_type: pgsql
+        pgsql.response.process_id: 20002
+        pgsql.response.secret_key: 1234
+  # 47823: the cap fires, but only on ReadyForQuery, so BackendKeyData still
+  # lands.
+  - filter:
+      count: 1
+      match:
+        event_type: pgsql
+        pgsql.response.process_id: 20004
+        pgsql.response.secret_key: 1234
+  # 47820: the ParameterStatus run is cut short, so BackendKeyData never gets
+  # a slot...
+  - filter:
+      count: 0
+      match:
+        event_type: pgsql
+        pgsql.response.process_id: 20001
+  # ...and 47822 fills the vector exactly with the run, making BackendKeyData
+  # the first refusal. This pins the cap at exactly max-responses.
+  - filter:
+      count: 0
+      match:
+        event_type: pgsql
+        pgsql.response.process_id: 20003
+
+  # Every flow parses its query normally afterwards, including the three whose
+  # startup transaction was truncated
+  - filter:
+      count: 4
+      match:
+        event_type: pgsql
+        pgsql.request.simple_query: "SELECT * from dummy_table;"
+        pgsql.response.field_count: 1
+        pgsql.response.data_rows: 1
+        pgsql.response.data_size: 1
+        pgsql.response.command_completed: "SELECT 1"
+
+  # We set the event once per response, per transaction
+  - filter:
+      count: 3
+      match:
+        event_type: anomaly
+        anomaly.app_proto: pgsql
+        anomaly.type: applayer
+        anomaly.event: "too_many_responses"
+        anomaly.layer: "proto_parser"
+  # 47820: four ParameterStatus, BackendKeyData, ReadyForQuery
+  # But only one anomaly: we don't set the same event twice for the same tx
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        src_port: 47820
+        anomaly.event: "too_many_responses"
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        src_port: 47821
+  # 47822: BackendKeyData, ReadyForQuery
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        src_port: 47822
+        anomaly.event: "too_many_responses"
+  # 47823: ReadyForQuery alone
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        src_port: 47823
+        anomaly.event: "too_many_responses"
