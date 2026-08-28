@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"162 h2 pushed header seen"; http.response_header; content:"x-pushed-secret|3a 20|pp-padding-marker"; sid:9042; rev:1;)
