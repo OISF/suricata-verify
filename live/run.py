@@ -479,6 +479,21 @@ def disable_offloads(ns: str, iface: str) -> None:
         ns_run_quiet(ns, ["ethtool", "-K", iface, feature, "off"])
 
 
+def disable_ipv6_autoconfiguration(ns: str) -> None:
+    """Keep IPv6 available while suppressing automatic discovery traffic."""
+    for setting in (
+        "addr_gen_mode=1",
+        "autoconf=0",
+        "accept_ra=0",
+        "router_solicitations=0",
+    ):
+        ns_exec(
+            ns,
+            ["sysctl", "-w", f"net.ipv6.conf.default.{setting}"],
+            quiet=True,
+        )
+
+
 def setup_namespaces() -> None:
     for ns in ALL_NAMESPACES:
         run(["ip", "netns", "add", ns])
@@ -486,6 +501,7 @@ def setup_namespaces() -> None:
         ns_exec(
             ns, ["sysctl", "-w", "net.ipv4.ping_group_range=0 2147483647"], quiet=True
         )
+        disable_ipv6_autoconfiguration(ns)
 
 
 def setup_links() -> None:
@@ -579,6 +595,7 @@ def setup_topology_namespaces(topology: TestTopology) -> None:
         ns_exec(
             ns, ["sysctl", "-w", "net.ipv4.ping_group_range=0 2147483647"], quiet=True
         )
+        disable_ipv6_autoconfiguration(ns)
 
 
 def setup_topology_side(

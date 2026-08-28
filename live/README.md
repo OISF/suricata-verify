@@ -56,6 +56,11 @@ one network (`client0`/`server0`), and there is only ever one `dut` namespace.
 Endpoint interfaces are named `client` and `server`. DUT interfaces are named
 `client0`/`server0`, `client1`/`server1`, and so on.
 
+IPv6 remains enabled, but automatic link-local address generation, SLAAC, and
+router discovery are disabled by default on interfaces created in the test
+namespaces. Tests can configure static IPv6 addresses without automatic IPv6
+traffic adding background noise to packet captures and Suricata output.
+
 ## Default Topologies
 
 All three environments share the same default single-network layout: a
