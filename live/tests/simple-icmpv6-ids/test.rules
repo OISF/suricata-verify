@@ -1,0 +1,1 @@
+alert icmpv6 any any -> any any (msg:"ICMPv6 echo request"; itype:128; sid:1;)

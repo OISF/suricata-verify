@@ -1,0 +1,33 @@
+environment: tap
+
+requires:
+  command:
+    - ping
+
+args:
+  - --pcap=br0
+
+before: |
+  ip -n client0 -6 address add fd00::2/64 dev client nodad
+  ip -n server0 -6 address add fd00::1/64 dev server nodad
+
+client: |
+  ip netns exec client0 ping -6 -c 1 -W 2 fd00::1
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: fd00:0000:0000:0000:0000:0000:0000:0002
+        dest_ip: fd00:0000:0000:0000:0000:0000:0000:0001
+        ip_v: 6
+        proto: IPv6-ICMP
+        icmp_type: 128
+        alert.signature_id: 1
+        alert.action: allowed
+
+  - stats:
+      capture.kernel_packets.__gt: 0
+      decoder.ipv6.__gte: 2
+      decoder.icmpv6.__gte: 2
