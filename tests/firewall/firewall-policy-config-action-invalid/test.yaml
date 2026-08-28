@@ -1,0 +1,13 @@
+requires:
+  min-version: 9
+  pcap: false
+
+args:
+  - --engine-analysis
+
+exit-code: 1
+
+checks:
+  - shell:
+      args: "grep -c \"'config' is not a valid default policy action\" suricata.log | xargs"
+      expect: 1

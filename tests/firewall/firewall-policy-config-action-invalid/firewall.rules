@@ -1,0 +1,1 @@
+accept:packet tcp:all any any <> any any (sid:1000;)
