@@ -13,3 +13,14 @@ checks:
       match:
         event_type: nfs
         nfs.procedure: WRITE
+  # the rejected (too large) write is refused without file data and the
+  # peer never replies for it: the file tx must still complete (and be
+  # logged) right after the request instead of waiting for flow teardown
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.file_tx: true
+        nfs.procedure: WRITE
+        pcap_cnt: 9
+        rpc.xid: 305419777
