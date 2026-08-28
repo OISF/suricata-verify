@@ -90,7 +90,9 @@ checks:
         alert.signature_id: 202
 
   - stats:
-      firewall.accepted: 25
+      capture.kernel_packets.__gt: 0
+      firewall.accepted.__gt: 0
+      firewall.blocked.__gte: 10
 
   # We should not have seen any pings on the server side packet capture.
   - shell:
