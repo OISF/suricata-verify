@@ -10,3 +10,10 @@ checks:
     count: 1
     match:
       return: OK
+
+# The test harness sends "shutdown" over the unix socket after the
+# commands above. By the time this check runs, Suricata has fully
+# exited, so the command socket file must be gone.
+# Ticket: https://redmine.openinfosecfoundation.org/issues/8799
+- shell:
+    args: test ! -e socket
