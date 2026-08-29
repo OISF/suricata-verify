@@ -1,7 +1,15 @@
+# The runtime guard is on 8.0.x as well, so this runs on both branches.
 requires:
-  min-version: 9.0
+  min-version: 8.0.7
 
 checks:
+  # On 8.0.x this rule draws no byte_math warning: a variable shift count is
+  # only known once the rule runs. The pattern is the 8.0.x warning text, so
+  # on main the check cannot match either way.
+  - shell:
+      args: "grep -c 'byte_math rvalue' suricata.log || true"
+      expect: 0
+
   - filter:
       count: 1
       match:

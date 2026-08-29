@@ -1,3 +1,4 @@
+# main rejects these rules; 8.0.x warns instead, and bug-8845-03 covers that.
 requires:
   min-version: 9.0
 
