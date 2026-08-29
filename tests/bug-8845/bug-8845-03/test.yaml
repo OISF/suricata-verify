@@ -1,0 +1,32 @@
+# The 8.0.x side of bug-8845-02. On 8.0.x all three rules load and the two
+# shifting by 64 draw a warning, so the run ends with exit code 0 where main
+# ends with 1. That is why the two cases need separate directories: exit-code
+# is one value for the whole test.
+requires:
+  min-version: 8.0.7
+  lt-version: 9.0
+
+  # No pcap required.
+  pcap: false
+
+args:
+  - --engine-analysis
+
+checks:
+  - shell:
+      args: "grep -c 'signature sid:1: byte_math rvalue 64 is 64 or more' suricata.log"
+      expect: 1
+
+  - shell:
+      args: "grep -c 'signature sid:2: byte_math rvalue 64 is 64 or more' suricata.log"
+      expect: 1
+
+  # sid 3 shifts by 63 and draws no warning.
+  - shell:
+      args: "grep -c 'signature sid:3' suricata.log || true"
+      expect: 0
+
+  # All three load, unlike on main where two are rejected.
+  - shell:
+      args: "grep -c '3 rules successfully loaded, 0 rules failed' suricata.log"
+      expect: 1

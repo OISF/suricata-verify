@@ -1,0 +1,7 @@
+# A shift of 64 or more always yields 0. On 8.0.x a literal rvalue that large
+# is warned about when the rule is loaded, and the rule still loads.
+alert udp any any -> any 5555 (msg:"byte_math right shift by a literal 64"; byte_math:bytes 4, offset 0, oper >>, rvalue 64, result var; sid:1; rev:1;)
+alert udp any any -> any 5555 (msg:"byte_math left shift by a literal 64"; byte_math:bytes 4, offset 0, oper <<, rvalue 64, result var; sid:2; rev:1;)
+
+# 63 is still accepted.
+alert udp any any -> any 5555 (msg:"byte_math right shift by a literal 63"; byte_math:bytes 4, offset 0, oper >>, rvalue 63, result var; sid:3; rev:1;)
