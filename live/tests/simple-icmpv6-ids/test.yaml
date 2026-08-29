@@ -12,7 +12,11 @@ before: |
   ip -n server0 -6 address add fd00::1/64 dev server nodad
 
 client: |
-  ip netns exec client0 ping -6 -c 1 -W 2 fd00::1
+  if command -v ping6 >/dev/null 2>&1; then
+    ip netns exec client0 ping6 -c 1 -w 2 fd00::1
+  else
+    ip netns exec client0 ping -6 -c 1 -W 2 fd00::1
+  fi
 
 checks:
   - filter:
