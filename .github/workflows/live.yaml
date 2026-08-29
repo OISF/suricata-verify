@@ -101,7 +101,7 @@ jobs:
 
       - name: Run live tests
         run: |
-          ../live/run.py
+          ../live/run.py -v
         working-directory: suricata
 
       - name: Upload live test outputs artifact on failure
