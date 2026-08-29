@@ -109,5 +109,8 @@ jobs:
         uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
         with:
           name: live-test-output
-          path: live/tests/**/output/**
+          path: |
+            live/tests/**/output/**
+            !live/tests/**/output/*.socket
+            !live/tests/**/output/sur
           if-no-files-found: ignore
