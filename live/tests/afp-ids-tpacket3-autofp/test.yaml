@@ -1,0 +1,38 @@
+# Port of qa/live/afp-ids.sh 3 autofp.
+environment: tap
+
+requires:
+  command:
+    - jq
+    - ping
+
+args:
+  - --af-packet=br0
+  - --runmode autofp
+  - --set af-packet.1.bpf-filter=icmp
+  - --set af-packet.1.tpacket-v3=false
+
+before: |
+  cp ${TESTDIR}/icmp.rules ${OUTDIR}/suricata.rules
+
+client: |
+  EXPECTED_RUNMODE=autofp exec bash ${TESTDIR}/client.sh
+
+checks:
+  - stats:
+      capture.kernel_packets.__gt: 0
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 222
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
