@@ -1460,8 +1460,8 @@ def add_script_log_paths(failures: list[str], output_dir: str, name: str) -> Non
     failures.append(f"{name} stderr: {os.path.join(output_dir, f'{name}.stderr')}")
 
 
-def log_test_step(environment: str, test_name: str, message: str) -> None:
-    print(f"===> [{environment}/{test_name}] {message}", flush=True)
+def log_test_step(test_name: str, message: str) -> None:
+    print(f"===> [{test_name}] {message}", flush=True)
 
 
 def run_test(
@@ -1502,14 +1502,14 @@ def run_test(
     client_rc = -1
     server_rc = 0
     try:
-        log_test_step(environment, test_name, f"Setting up {environment} environment")
+        log_test_step(test_name, f"Setting up {environment} environment")
         if topology:
             inline_topology_up(topology)
         else:
             UP_FUNCS[environment]()
 
         if before_script:
-            log_test_step(environment, test_name, "Running before script")
+            log_test_step(test_name, "Running before script")
             before_rc = run_script_logged(
                 before_script,
                 test_dir,
@@ -1522,7 +1522,7 @@ def run_test(
                 add_script_log_paths(failures, output_dir, "before")
                 return failures
 
-        log_test_step(environment, test_name, "Starting Suricata")
+        log_test_step(test_name, "Starting Suricata")
 
         stdout_log = open(os.path.join(output_dir, "stdout"), "w")
         stderr_log = open(os.path.join(output_dir, "stderr"), "w")
@@ -1555,7 +1555,7 @@ def run_test(
         stdout_thread.start()
 
         if server_script:
-            log_test_step(environment, test_name, "Starting Server")
+            log_test_step(test_name, "Starting Server")
             server = start_background_script(
                 server_script,
                 test_dir,
@@ -1573,7 +1573,7 @@ def run_test(
                 add_script_log_paths(failures, output_dir, "server")
                 return failures
 
-        log_test_step(environment, test_name, "Running Client")
+        log_test_step(test_name, "Running Client")
         client_rc = run_script_logged(
             client_script,
             test_dir,
@@ -1592,10 +1592,10 @@ def run_test(
                 add_script_log_paths(failures, output_dir, "server")
     finally:
         if server:
-            log_test_step(environment, test_name, "Stopping Server")
+            log_test_step(test_name, "Stopping Server")
             server.stop()
         if suricata:
-            log_test_step(environment, test_name, "Stopping Suricata")
+            log_test_step(test_name, "Stopping Suricata")
             stop_suricata(suricata)
         if stdout_thread:
             stdout_thread.join(timeout=5)
@@ -1732,7 +1732,7 @@ def do_run(
             check_test_requires(requires, environment, root)
         except UnsatisfiedRequirementError as err:
             skipped += 1
-            log_test_step(environment, test_name, f"SKIP ⏭️: {err}")
+            log_test_step(test_name, f"SKIP ⏭️: {err}")
             continue
         except ValueError as err:
             print(f"ERROR: {test_yaml}: {err}", file=sys.stderr)
@@ -1746,7 +1746,7 @@ def do_run(
             output_dir = os.path.join(root, "output")
             failures, warnings = run_checks(config, output_dir, environment, script_dir, root)
         ok = not failures
-        log_test_step(environment, test_name, "OK ✅" if ok else "FAIL ❌")
+        log_test_step(test_name, "OK ✅" if ok else "FAIL ❌")
         if ok:
             passed += 1
         else:
