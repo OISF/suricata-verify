@@ -1,0 +1,21 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.url: /
+        http.status: 101
+  - filter:
+      count: 1
+      match:
+        event_type: dns
+        http.http2.stream_id: 3
+        dns.queries[0].rrname: example.com
+
+
