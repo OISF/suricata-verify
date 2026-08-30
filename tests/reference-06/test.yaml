@@ -1,0 +1,16 @@
+requires:
+  min-version: 9.0
+
+  # Rule load is the subject; no traffic needed.
+  pcap: false
+
+exit-code: 1
+
+args:
+  - --engine-analysis
+  - --strict-rule-keywords=reference
+
+checks:
+  - shell:
+      args: grep 'unknown reference key "unknownkey"' suricata.log | wc -l | xargs
+      expect: 1

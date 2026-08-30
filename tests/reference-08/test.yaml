@@ -1,0 +1,24 @@
+requires:
+  min-version: 9.0
+
+  # Rule load is the subject; no traffic needed.
+  pcap: false
+
+exit-code: 1
+
+args:
+  - --engine-analysis
+
+checks:
+  # A 64 character key leaves no room for the terminator in a buffer of
+  # REFERENCE_SYSTEM_NAME_MAX, so the substring copy fails.
+  - shell:
+      args: grep -c "pcre2_substring_copy_bynumber key failed" suricata.log | xargs
+      expect: 1
+  # A reference needs both a key and a value.
+  - shell:
+      args: grep -c 'Unable to parse .reference. keyword argument' suricata.log | xargs
+      expect: 2
+  - shell:
+      args: grep -c "error parsing signature" suricata.log | xargs
+      expect: 3

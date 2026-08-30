@@ -1,0 +1,21 @@
+requires:
+  min-version: 9.0
+
+args:
+ - -k none
+
+pcap: ../dcerpc/zerologon/input.pcap
+
+checks:
+  - filter:
+      count: 21
+      match:
+        event_type: alert
+        alert.signature_id: 20166330
+        alert.references: ["undefined001-2010"]
+  - filter:
+      count: 21
+      match:
+        event_type: alert
+        alert.signature_id: 20166332
+        alert.references: ["https://cve.mitre.org/cgi-bin/cvename.cgi?name=2014-0160","undefined002-2011"]

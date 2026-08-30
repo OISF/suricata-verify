@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"unknown reference key"; reference:unknownkey,001-2010; sid:1000001; rev:1;)

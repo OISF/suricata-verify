@@ -1,0 +1,17 @@
+requires:
+  min-version: 9.0
+
+args:
+ - -k none
+
+pcap: ../dcerpc/zerologon/input.pcap
+
+checks:
+  # A 63 character key is the longest that fits REFERENCE_SYSTEM_NAME_MAX
+  # alongside its terminator, and resolves through the unknown-key fallback.
+  - filter:
+      count: 21
+      match:
+        event_type: alert
+        alert.signature_id: 20166363
+        alert.references: ["undefined001"]
