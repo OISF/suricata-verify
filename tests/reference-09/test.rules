@@ -1,0 +1,1 @@
+alert dcerpc any any -> any ![139,445] (msg:"Possible Zerologon Attempt"; flow:established,to_server; dcerpc.opnum:26; content:"|00 00 00 00 00 00 00 00 ff ff 2f 21|"; endswith; reference:kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk,001; classtype:attempted-admin; sid:20166363; rev:2;)

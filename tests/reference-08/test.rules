@@ -1,0 +1,3 @@
+alert ip any any -> any any (msg:"key too long"; reference:kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk,001; sid:1000064; rev:1;)
+alert ip any any -> any any (msg:"no reference value"; reference:cve,; sid:1000003; rev:1;)
+alert ip any any -> any any (msg:"no comma"; reference:cve; sid:1000004; rev:1;)
