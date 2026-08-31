@@ -1,0 +1,15 @@
+requires:
+  min-version: 9
+
+args:
+  - --set app-layer.protocols.nfs.max-read-queue-size=65536
+  - --set app-layer.protocols.nfs.max-read-queue-cnt=16
+
+checks:
+  - shell:
+      args: test "$(grep -Ec 'queue_(size|cnt)_exceeded' eve.json)" -ge 1
+  - filter:
+      count: 2
+      match:
+        event_type: flow
+        app_proto: nfs
