@@ -1,0 +1,3 @@
+alert dnp3 any any -> any any (msg:"SURICATA DNP3 Bad link CRC"; \
+    app-layer-event:dnp3.bad_link_crc; classtype:protocol-command-decode; \
+    sid:2270002; rev:2;)
