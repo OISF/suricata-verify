@@ -1,0 +1,11 @@
+requires:
+  min-version: 9
+  pcap: false
+
+args:
+  - --engine-analysis
+
+checks:
+  - shell:
+      args: grep -c "4 rules successfully loaded, 0 rules failed" suricata.log | xargs
+      expect: 1
