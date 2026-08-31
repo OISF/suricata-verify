@@ -1,1 +1,0 @@
-alert tls any any -> any any (requires: version < 8; lua: tls.lua; sid:2;)

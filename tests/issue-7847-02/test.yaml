@@ -1,7 +1,7 @@
 requires:
   min-version: 8
 
-pcap: ../issue-7847-01/xor_packet_test.pcap
+pcap: xor_packet_test.pcap
 
 args:
   - -v
