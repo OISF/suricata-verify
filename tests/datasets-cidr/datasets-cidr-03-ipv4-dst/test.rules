@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"Google DNS dst"; ip.dst; dataset:isset,google-dns,type cidr,load google-dns.lst; sid:1;)

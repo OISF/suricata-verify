@@ -1,0 +1,47 @@
+requires:
+  min-version: 9
+
+pcap: input-boundary.pcap
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_ip: "192.168.0.0"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_ip: "192.168.255.255"
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        src_ip: "192.169.0.1"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        src_ip: "192.167.255.255"

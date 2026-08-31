@@ -1,0 +1,21 @@
+requires:
+  min-version: 9
+
+# Reuses the same pcap as tests/lua/lua-transform-09 so the CIDR-dataset
+# rules produce the same alert counts (4 for sid:1, 4 for sid:2) that the
+# luaxform equivalents produce there. Demonstrates that a CIDR-dataset
+# isset match replaces the luaxform IP->CIDR-string pattern without any
+# per-packet Lua invocation.
+pcap: ../../lua/lua-transform-01/test.pcap
+
+checks:
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 2

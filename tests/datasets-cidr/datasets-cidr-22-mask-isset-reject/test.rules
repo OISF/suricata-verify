@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"CIDR isset with mask"; ip.src; dataset:isset,my-cidr,type cidr,mask 24; sid:1;)
