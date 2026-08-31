@@ -1,0 +1,36 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+
+  # RFB 3.8 "None" (security type 1) handshake. Per the RFB 3.8 spec the
+  # server sends a security result after the client's selection (here a
+  # 4-byte big-endian 0 = OK, the width modeled by both the parser's
+  # be_u32 and tshark's VNC dissector tvb_get_ntohl), followed by the
+  # client's shared flag and the ServerInit.
+  #
+  # The parser must consume the security result. If it is skipped, the
+  # result bytes arrive on ToClient while the state machine is in
+  # TSClientInit (a ToServer-only state), the "Invalid state for
+  # response" catch-all fires, a confused_state anomaly is logged and
+  # the rest of the handshake (shared flag + ServerInit) is discarded.
+  # The full set of fields below is only present when the handshake was
+  # parsed end to end.
+  - filter:
+      count: 1
+      match:
+        event_type: rfb
+        rfb.authentication.security_type: 1
+        rfb.authentication.security_result: OK
+        rfb.screen_shared: true
+        rfb.framebuffer.width: 1920
+        rfb.framebuffer.height: 1080
+        rfb.framebuffer.name: test
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.event: confused_state
