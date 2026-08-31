@@ -13,13 +13,3 @@ checks:
         min-version: 8
       args: grep "invalid datarep value" suricata.log | wc -l | xargs
       expect: 1
-  - shell:
-      requires:
-        lt-version: 8
-      args: grep "is not a valid reputation value" suricata.log | wc -l | xargs
-      expect: 1
-  - shell:
-      requires:
-        lt-version: 8
-      args: grep "bad rep for dataset" suricata.log | wc -l | xargs
-      expect: 1
