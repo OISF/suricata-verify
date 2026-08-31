@@ -1,0 +1,24 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none --set app-layer.protocols.rfb.max-string-length=1024
+
+checks:
+
+  # The 5000-byte failure reason is truncated to 1024 (too_long_string),
+  # but the well-formed 10-byte failure reason that follows it in a second
+  # segment must NOT be skipped by the pending to_skip bookkeeping: the
+  # state machine is still in TCFailureReason and re-parses it, so the
+  # logged reason must be the second one.
+  - filter:
+      count: 1
+      match:
+        event_type: rfb
+        rfb.server_security_failure_reason: 0123456789
+        rfb.server_security_failure_reason.__len: 10
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: too_long_string
