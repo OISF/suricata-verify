@@ -1,0 +1,7 @@
+- filter:
+    - eve.json:
+        - app-layer:
+            - smb:
+                - event: read_queue_size_exceeded: 1
+
+  name: SMB1 queue limits enforce on a gapped stream
