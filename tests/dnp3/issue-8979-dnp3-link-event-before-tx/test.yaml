@@ -1,0 +1,36 @@
+requires:
+  min-version: 9
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        app_proto: dnp3
+        alert.signature_id: 2270002
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        app_proto: dnp3
+        direction: to_client
+        alert.signature_id: 2270002
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        app_proto: dnp3
+        direction: to_server
+        alert.signature_id: 2270002
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        dnp3.type: request
+        dnp3.application.function_code: 1
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        dnp3.type: response
+        dnp3.application.function_code: 129
