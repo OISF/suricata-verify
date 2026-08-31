@@ -1,0 +1,17 @@
+%YAML 1.1
+---
+# Minimal configuration for this test only.
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - smb:
+            enabled: yes
+        - anomaly:
+            enabled: yes
+            types:
+              applayer: yes
+        - flow
