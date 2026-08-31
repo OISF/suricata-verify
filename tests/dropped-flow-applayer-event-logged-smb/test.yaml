@@ -31,25 +31,6 @@ checks:
       match:
         event_type: drop
   - filter:
-      requires:
-        lt-version: 8.0
-      count: 1
-      match:
-        event_type: alert
-        pcap_cnt: 2
-  - filter:
-      requires:
-        lt-version: 8.0
-      count: 1
-      match:
-        event_type: smb
-  - filter:
-      requires:
-        lt-version: 8.0
-      count: 53
-      match:
-        event_type: drop
-  - filter:
       count: 1
       match:
         event_type: flow

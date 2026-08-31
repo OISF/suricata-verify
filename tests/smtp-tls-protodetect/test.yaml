@@ -14,19 +14,3 @@ checks:
         event_type: flow
         app_proto: tls
         app_proto_tc: smtp
-  - filter:
-      requires:
-        version: 7
-      count: 1
-      match:
-        event_type: flow
-        app_proto: tls
-        # no smtp probin parser in 7
-  - filter:
-      requires:
-        version: 7
-      count: 1
-      match:
-        event_type: anomaly
-        anomaly.event: APPLAYER_DETECT_PROTOCOL_ONLY_ONE_DIRECTION
-        # no smtp probin parser in 7

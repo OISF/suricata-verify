@@ -34,37 +34,6 @@ checks:
       match:
         alert.signature_id: 8
 
-  # Check that for Suricata >= 7.0.0 and < 8 we have two alerts and that one is
-  # sid 7 and the other is sid 9.
-  - filter:
-      requires:
-        lt-version: 8
-      count: 2
-      match:
-        event_type: alert
-  - filter:
-      requires:
-        lt-version: 8
-      count: 1
-      match:
-        alert.signature_id: 7
-  - filter:
-      requires:
-        lt-version: 8
-      count: 1
-      match:
-        alert.signature_id: 9
-
-  - filter:
-      requires:
-        lt-version: 8
-      count: 1
-      match:
-        event_type: stats
-        stats.detect.engines[0].rules_skipped: 7
-        stats.detect.engines[0].rules_loaded: 2
-        stats.detect.engines[0].rules_failed: 0
-
   - filter:
       requires:
         min-version: 8
