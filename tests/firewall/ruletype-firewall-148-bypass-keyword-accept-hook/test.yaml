@@ -1,0 +1,15 @@
+requires:
+  min-version: 9
+
+pcap: ../../tls/tls-random/input.pcap
+
+# the invalid combination rules should make the engine error out
+exit-code: 1
+
+args:
+  - --simulate-ips
+
+checks:
+- shell:
+    args: grep "keyword 'bypass' cannot be used in combination with 'hook' scope" stderr | wc -l
+    expect: 1
