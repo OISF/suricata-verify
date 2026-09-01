@@ -1,0 +1,23 @@
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+  # queue limits disabled: only the OOO gap backstop applies
+  - --set app-layer.protocols.nfs.max-read-queue-size=0
+  - --set app-layer.protocols.nfs.max-read-queue-cnt=0
+  # the OOO file data of a gapped stream is buffered by the TCP reassembler
+  # until the app consumes it; give the reassembly queue room for it.
+  - --set stream.reassembly.depth=33554432
+
+requires:
+  min-version: 9
+
+checks:
+  - shell:
+      args: test "$(grep -Ec 'truncated_file_data' eve.json)" -ge 1
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: truncated_file_data
