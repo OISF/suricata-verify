@@ -1,0 +1,44 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # RSET abandons the rejected commands before the delivered message.
+  - filter:
+      count: 2
+      match:
+        event_type: smtp
+
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 0
+        smtp.helo: client.example.com
+        not-has-key: ["smtp.mail_from", "smtp.rcpt_to[0]", "email.from"]
+
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 1
+        smtp.mail_from: <alice@example.com>
+        smtp.rcpt_to[0]: <bob@example.com>
+        email.from: alice@example.com
+        email.to[0]: bob@example.com
+        email.status: PARSE_DONE
+        smtp.rcpt_to.__len: 1
+        email.to.__len: 1
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        tx_id: 1
+        alert.signature_id: 1
+
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
