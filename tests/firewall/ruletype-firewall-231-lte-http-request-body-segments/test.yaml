@@ -1,0 +1,39 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2310001
+      firewall.hook: "http:request_body"
+      pcap_cnt: 6
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      drop.reason: "firewall default app policy"
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      drop.reason: "firewall rules"
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.action: "accept"
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.ips.blocked: 0
+      stats.firewall.drop_reason.default_app_policy: 0
+      stats.firewall.drop_reason.rules: 0
