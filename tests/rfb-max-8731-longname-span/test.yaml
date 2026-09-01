@@ -1,0 +1,36 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none --set app-layer.protocols.rfb.max-string-length=4096
+
+checks:
+
+  # RFB 3.8 VNC-auth handshake whose ServerInit name (10000 bytes) is
+  # longer than max-string-length (4096) and spans multiple 1400-byte
+  # TCP segments.
+  #
+  # PR 16159 (v3.4) crashes the engine here: in the TCServerInit branch
+  # the parser does `current = &rem[request.to_skip..]` with to_skip
+  # (name_len - cap) larger than rem (the in-buffer name tail) ->
+  # out-of-bounds slice -> panic -> abort. The name tail already present
+  # in the input buffer must be accounted for (pending skip = the part
+  # of the tail NOT in the buffer).
+  #
+  # A correct parser truncates the name to the cap and logs the full
+  # transaction; the engine must survive the flow.
+  - filter:
+      count: 1
+      match:
+        event_type: rfb
+        rfb.authentication.security_type: 2
+        rfb.authentication.security_result: OK
+        rfb.screen_shared: true
+        rfb.framebuffer.width: 1024
+        rfb.framebuffer.height: 768
+        rfb.framebuffer.name.__len: 4096
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: too_long_string
