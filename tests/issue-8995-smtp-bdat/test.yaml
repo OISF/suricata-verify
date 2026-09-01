@@ -1,0 +1,43 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # RSET completes the abandoned envelope-less BDAT attempt, then the
+  # delivered DATA message is parsed in a fresh transaction.
+  - filter:
+      count: 2
+      match:
+        event_type: smtp
+
+  # Transaction 0 contains only the rejected BDAT attempt.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 0
+        smtp.helo: client.example.com
+        not-has-key: ["smtp.mail_from", "smtp.rcpt_to[0]", "email.from"]
+
+  # Transaction 1 is the message delivered after the rejection and RSET.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 1
+        smtp.mail_from: <alice@example.com>
+        smtp.rcpt_to[0]: <bob@example.com>
+        email.from: alice@example.com
+        email.to[0]: bob@example.com
+        email.status: PARSE_DONE
+        not-has-key: ["smtp.rcpt_to[1]", "email.to[1]"]
+
+  # Detection proves the commands and DATA body following the rejected BDAT
+  # were not consumed as part of the missing advertised chunk.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        tx_id: 1
+        alert.signature_id: 1
