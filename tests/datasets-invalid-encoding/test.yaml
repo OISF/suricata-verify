@@ -16,13 +16,3 @@ checks:
         event_type: "engine"
         engine.message.__find: "bad base64 encoding ua-seen"
         engine.module: "debug"
-  - filter:
-      requires:
-        lt-version: 8
-      filename: suricata.json
-      count: 1
-      match:
-        log_level: "Error"
-        event_type: "engine"
-        engine.message.__find: "bad base64 encoding ua-seen"
-        engine.module: "datasets"

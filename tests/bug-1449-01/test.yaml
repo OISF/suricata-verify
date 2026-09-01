@@ -6,14 +6,6 @@ checks:
         alert.signature_id: 2220017
   - filter:
       requires:
-        lt-version: 8
-      count: 1
-      match:
-        event_type: smtp
-        smtp.helo: bug.client
-        email.status: PARSE_ERROR
-  - filter:
-      requires:
         min-version: 8
       count: 1
       match:

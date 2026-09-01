@@ -8,16 +8,6 @@ checks:
 
   - filter:
       requires:
-        lt-version: 8
-      count: 1
-      match:
-        event_type: stats
-        stats.detect.engines[0].rules_skipped: 0
-        stats.detect.engines[0].rules_loaded: 1
-        stats.detect.engines[0].rules_failed: 0
-
-  - filter:
-      requires:
         min-version: 8
       count: 1
       match:

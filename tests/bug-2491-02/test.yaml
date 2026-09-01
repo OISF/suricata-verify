@@ -25,22 +25,6 @@ checks:
         alert.signature_id: 2
         pcap_cnt: 2
   - filter:
-      requires:
-        lt-version: 8.0
-      count: 1
-      match:
-        event_type: alert
-        alert.signature_id: 1
-        pcap_cnt: 11
-  - filter:
-      requires:
-        lt-version: 8.0
-      count: 1
-      match:
-        event_type: alert
-        alert.signature_id: 2
-        pcap_cnt: 11
-  - filter:
       count: 1
       match:
         event_type: flow
