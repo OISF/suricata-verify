@@ -1,0 +1,28 @@
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+  - --set app-layer.protocols.smb.max-read-queue-size=0
+  - --set app-layer.protocols.smb.max-read-queue-cnt=0
+
+requires:
+  min-version: 9
+
+checks:
+  - shell:
+      args: test "$(grep -Ec 'truncated_file_data' eve.json)" -ge 1
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: smb
+        anomaly.event: truncated_file_data
+  # the truncation is attributed to the truncated file's own transaction,
+  # not to the most recently enqueued one
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: smb
+        anomaly.event: truncated_file_data
+        tx_id: 4

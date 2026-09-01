@@ -1,7 +1,17 @@
-- filter:
-    - eve.json:
-        - app-layer:
-            - smb:
-                - event: read_queue_size_exceeded: 1
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
 
-  name: SMB1 queue limits enforce on a gapped stream
+requires:
+  min-version: 9
+
+checks:
+  - shell:
+      args: test "$(grep -Ec 'read_queue_(size|cnt)_exceeded' eve.json)" -ge 1
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.command: SMB1_COMMAND_NEGOTIATE_PROTOCOL
+
