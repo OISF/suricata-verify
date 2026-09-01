@@ -1,0 +1,34 @@
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+  # small write queue limit so the second write is rejected
+  - --set app-layer.protocols.nfs.max-write-queue-size=4096
+  - --set app-layer.protocols.nfs.max-write-queue-cnt=0
+
+requires:
+  min-version: 9
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: write_queue_size_exceeded
+  # the reject must skip exactly to the RPC record boundary: the next
+  # record parses cleanly, so no malformed data
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+  # the in-order write after the skipped record drains the queued chunk
+  # and completes the file
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: f45a95b0b782cd75f47947e6583b8e2de78fa19e1694b0d3708b1cea610a044c
+        fileinfo.stored: true
