@@ -1,0 +1,8 @@
+requires:
+  min-version: 9
+
+checks:
+- filter:
+    count: 5
+    match:
+      event_type: flow
