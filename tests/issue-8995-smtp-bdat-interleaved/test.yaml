@@ -1,0 +1,44 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # The rejected BDAT transaction and the message after RSET remain separate.
+  - filter:
+      count: 2
+      match:
+        event_type: smtp
+
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 0
+        smtp.mail_from: <first@example.com>
+        smtp.rcpt_to[0]: <discard@example.com>
+        not-has-key: ["smtp.rcpt_to[1]", "email.from"]
+
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 1
+        smtp.mail_from: <alice@example.com>
+        smtp.rcpt_to[0]: <bob@example.com>
+        email.from: alice@example.com
+        email.to[0]: bob@example.com
+        email.status: PARSE_DONE
+        not-has-key: ["smtp.rcpt_to[1]", "email.to[1]"]
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        tx_id: 1
+        alert.signature_id: 1
+
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly

@@ -1,0 +1,1 @@
+alert smtp any any -> any any (msg:"SMTP EICAR after shifted BDAT replies"; file.data; content:"EICAR-STANDARD-ANTIVIRUS-TEST-FILE"; sid:1; rev:1;)
