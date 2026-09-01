@@ -1,0 +1,23 @@
+%YAML 1.1
+---
+# Minimal configuration for this test only.
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - nfs:
+            enabled: yes
+        - anomaly:
+            enabled: yes
+            types:
+              applayer: yes
+        - flow
+  - file-store:
+      version: 2
+      enabled: yes
+      force-filestore: yes
+requires:
+  min-version: 9
