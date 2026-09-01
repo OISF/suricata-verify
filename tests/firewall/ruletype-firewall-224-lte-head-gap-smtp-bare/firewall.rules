@@ -1,0 +1,39 @@
+# BUG REPRO: #8944 over-drop on smtp — head-gap check with a later BARE < rule.
+#
+# The smtp request tx is presented to detection incrementally across multiple
+# packets: detect_progress_orig 0 (request_started), then request_data (1), then
+# request_complete (2) after the DATA message ends. When the tx reaches progress 2,
+# the head candidate (accept:flow request_complete, hook 2) has a head-of-list gap
+# (2 > current detect progress 1) that main decides with the unconditional default
+# app policy.
+#
+# The later accept:flow smtp:<request_complete rule legitimately covers the gap
+# (bare rule, no keyword — it auto-accepts the prior states and matches at
+# completion). Correct behaviour: the request is accepted (no default app policy
+# drop).
+#
+# Unlike 221/222/223 (http1/http2/dns, where the tx completes in a single packet
+# and the < rule has no stored state at the gap decision), the smtp presentation
+# is multi-packet: the < rule is inspected (PARTIAL) at the earlier progresses, so
+# BOTH fix branches suppress the gap correctly. Only main over-drops.
+#
+# main: "missing fw rules at list start: sid 852, progress 2 (2:1)" -> default app
+#   policy drop (over-drop, #8944 family).
+# the #8944 fix (firewall-bug-8944-new/v5): max_in_progress_lte_hook is 2 at the gap
+# decision (the < rule has stored in-progress state and is a candidate) -> suppresses
+# the gap -> accept (correct).
+# bug-8944-new/v3: max_in_progress_lte_hook sees the < rule's stored (PARTIAL) state
+#   -> suppresses the gap -> accept (correct).
+#
+# The to_client (response) side shows the same split: with a bare request_* shield
+# plus the same head/< shape on response_complete, main over-drops the response
+# while both fix branches accept.
+accept:hook tcp:all 192.168.92.1 any <> 172.16.92.2 any (flow:not_established; sid:1021;)
+accept:hook tcp:all 192.168.92.1 any <> 172.16.92.2 any (flow:established; sid:1022;)
+# bare head accept:flow at request_complete, followed by a later bare < rule
+accept:flow smtp:request_complete 192.168.92.1 any -> 172.16.92.2 any (sid:852;)
+accept:flow smtp:<request_complete 192.168.92.1 any -> 172.16.92.2 any (sid:853;)
+# to_client shield (response states covered bare)
+accept:hook smtp:response_started 172.16.92.2 any -> 192.168.92.1 any (sid:1004;)
+accept:hook smtp:response_data 172.16.92.2 any -> 192.168.92.1 any (sid:1005;)
+accept:hook smtp:response_complete 172.16.92.2 any -> 192.168.92.1 any (sid:1006;)

@@ -1,0 +1,32 @@
+# BUG REPRO: #8944 over-drop on the ftp response tx — head-gap with a later BARE < rule.
+#
+# The ftp response tx is first presented to detection at detect progress 0
+# (response_started / FTP_STATE_IN_PROGRESS) and completes within the first reply
+# packet (tx_progress 1, detect_progress_orig 0). The head candidate (accept:flow
+# response_complete, hook 1) has a head-of-list gap (1 > 0) on the first detection
+# pass, before the < rule has ever been inspected.
+#
+# The later accept:flow ftp:<response_complete rule legitimately covers the gap
+# (bare rule, no keyword — it auto-accepts response_started and matches at
+# completion). Correct behaviour: the response is accepted (no default app policy
+# drop).
+#
+# main: "missing fw rules at list start: sid 852, progress 1 (1:0)" -> to_client
+#   default app policy drop (over-drop, #8944 family — the ftp mirror of 221/222/223).
+# bug-8944-new/v3: max_in_progress_lte_hook sees no stored state for the < rule on
+#   the first pass (the response tx completes in a single packet) -> same over-drop.
+# the #8944 fix (firewall-bug-8944-new/v5): max_in_progress_lte_hook includes this-pass
+# prefilter candidates (no stored state on the single-packet first pass) -> suppresses
+# the gap -> accept (correct).
+#
+# The to_server direction cannot exhibit this shape: the ftp request tx is reported
+# as finished at presentation (FTPGetAlstateProgress: "having a tx implies request
+# side is done"), so there is no head gap on request rules.
+accept:hook tcp:all 127.0.0.1 any <> 127.0.0.1 any (flow:not_established; sid:1021;)
+accept:hook tcp:all 127.0.0.1 any <> 127.0.0.1 any (flow:established; sid:1022;)
+# to_server shield (request states covered bare)
+accept:hook ftp:request_started 127.0.0.1 any -> 127.0.0.1 21 (sid:1001;)
+accept:hook ftp:request_complete 127.0.0.1 any -> 127.0.0.1 21 (sid:1002;)
+# bare head accept:flow at response_complete, followed by a later bare < rule
+accept:flow ftp:response_complete 127.0.0.1 21 -> 127.0.0.1 any (sid:852;)
+accept:flow ftp:<response_complete 127.0.0.1 21 -> 127.0.0.1 any (sid:853;)

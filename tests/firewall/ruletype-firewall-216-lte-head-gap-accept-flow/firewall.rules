@@ -1,0 +1,39 @@
+# SEMANTICS TEST (auto-accept-prior-states head gap, failing keyword, matching
+# accept:flow at the < rule's own hook).
+#
+# A <hook (auto-accept-prior-states) rule whose SNI keyword does NOT match the pcap is
+# pending on the first detection passes (partially matched on the earlier fragments of
+# the client hello). The head of the candidate list for client_hello_done is a NON-LTE
+# accept:flow rule whose SNI DOES match.
+#
+# Auto-accept-prior-states semantics: the prior state (client_in_progress) is
+# auto-accepted while the < rule is pending -- its partial match acts as an accept:hook
+# for the prior states -- and the definitive no-match of the < rule's keyword at the
+# rule's own hook state does NOT retroactively revoke that auto-accept. The keyword only
+# decides the final action at the rule's own hook state (client_hello_done), where the
+# matching NON-LTE accept:flow rule accepts the flow anyway.
+#
+# Expected: 0 "firewall default app policy" drops -- client_in_progress is accepted by
+# the pending phase and the flow is accepted at client_hello_done. (A reading that
+# retroactively revokes the prior-state auto-accept when the < rule's keyword fails at
+# its own hook would drop client_in_progress and FAIL here.)
+#
+# NOTE: the < rule is at client_hello_done (hook 1) so that its SNI keyword (available at
+# progress 1) is valid -- the parser enforces buffer progress == rule hook for app-hook
+# rules.
+#
+# Pcap SNI is www.google.com.
+
+# allow session setup
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+
+# Matching accept:flow at client_hello_done (hook 1). First in the rule file, so it leads
+# the (rule-file-ordered) candidate list. Its SNI matches the pcap.
+accept:flow tls:client_hello_done $HOME_NET any -> $EXTERNAL_NET any (tls.sni; content:"www.google.com"; sid:210;)
+
+# auto-accept-prior-states rule at the SAME hook (client_hello_done, hook 1), so its SNI
+# keyword (available at progress 1) is valid. Its SNI keyword does NOT match the pcap
+# (zzznotthere != www.google.com), so it does NOT actually accept any state and must NOT
+# be treated as covering client_in_progress.
+accept:flow tls:<client_hello_done $HOME_NET any -> $EXTERNAL_NET any (tls.sni; content:"zzznotthere"; sid:211;)

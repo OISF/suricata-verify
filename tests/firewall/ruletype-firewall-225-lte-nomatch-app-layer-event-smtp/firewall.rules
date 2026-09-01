@@ -1,0 +1,35 @@
+# BUG REPRO: #8944 over-drop on smtp — no-match path with a later BARE < rule.
+#
+# The drop:flow candidate at request_started is selected for inspection (progress
+# bucket 0) but does NOT fully match: its app-layer-event keyword
+# (smtp.UNABLE_TO_MATCH_REPLY_WITH_REQUEST) never fires on a clean pcap. It is the
+# only request_started rule for this flow, so its no-match would trigger the
+# per-state default app policy -- unless a later auto-accept-prior-states (<) rule
+# covers request_started.
+#
+# The later accept:flow smtp:<request_complete rule is bare and matches at
+# completion, auto-accepting the prior states (request_started/request_data).
+# Correct behaviour: request_started is covered, so NO default app policy drop.
+#
+# main: the no-match path applies the default app policy unconditionally ("detect:
+#   toserver default policy for progress 0") -> over-drop (#8944 no-match family,
+#   same shape as ruletype-firewall-210-lte-nomatch).
+# the #8944 fix (firewall-bug-8944-new/v5) and bug-8944-new/v3: the < rule covers the
+# state -> accept
+#   (correct). Unlike 214 (where the later < rule carried a FAILING keyword), the
+#   < rule here is bare, so covering the state is legitimate.
+#
+# app-layer-event is the only keyword attachable to a progress-0 smtp app-hook
+# (smtp.helo/smtp.mail_from/smtp.rcpt_to also register at progress 0); the
+# decoder-error event never fires on a clean session, which is what makes the
+# candidate a definitive no-match.
+accept:hook tcp:all 192.168.92.1 any <> 172.16.92.2 any (flow:not_established; sid:1021;)
+accept:hook tcp:all 192.168.92.1 any <> 172.16.92.2 any (flow:established; sid:1022;)
+# candidate drop rule at request_started: never matches on a clean pcap
+drop:flow smtp:request_started 192.168.92.1 any -> 172.16.92.2 any (app-layer-event:smtp.UNABLE_TO_MATCH_REPLY_WITH_REQUEST; sid:210;)
+# auto-accept-prior-states at a higher hook: covers request_started (and request_data)
+accept:flow smtp:<request_complete 192.168.92.1 any -> 172.16.92.2 any (sid:211;)
+# to_client shield (response states covered bare)
+accept:hook smtp:response_started 172.16.92.2 any -> 192.168.92.1 any (sid:1004;)
+accept:hook smtp:response_data 172.16.92.2 any -> 192.168.92.1 any (sid:1005;)
+accept:hook smtp:response_complete 172.16.92.2 any -> 192.168.92.1 any (sid:1006;)

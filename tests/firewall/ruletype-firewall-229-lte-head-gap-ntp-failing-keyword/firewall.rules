@@ -1,0 +1,34 @@
+# SEMANTICS TEST (auto-accept-prior-states head gap on the ntp request tx, failing
+# keyword, matching accept:flow at the < rule's own hook).
+#
+# The head accept:flow ntp:request_complete rule matches (ntp.version:4), but the
+# head-of-list gap decision fires first: the request tx is presented at detect
+# progress 0 and completes within the same packet, so the head candidate (hook 1)
+# has a head-of-list gap (1 > 0) before any rule is inspected.
+#
+# Auto-accept-prior-states semantics: request_started (progress 0) is
+# auto-accepted while the < rule is pending -- on the first (and only) detection
+# pass the < rule is a pending candidate (its ntp.mode:server keyword is only
+# final at its own hook state), so its auto-accept-prior-states covers
+# request_started at the moment the head-gap decision is made. The keyword only
+# decides the final action at the rule's own hook state (request_complete), where
+# the head rule's matching accept:flow accepts the flow anyway.
+#
+# Expected: 0 to_server "firewall default app policy" drops -- request_started is
+# accepted by the pending phase and the flow is accepted at request_complete.
+# (A reading that retroactively revokes the prior-state auto-accept when the <
+# rule's keyword fails at its own hook would drop request_started and FAIL here.)
+#
+# All ntp keywords register at progress 1 with SIGMATCH_SUPPORT_FIREWALL
+# (rust/src/ntp/detect.rs), so a keyword-bearing <ntp:request_complete rule is
+# valid -- the first head-gap semantics shape on an always-complete app layer.
+accept:hook udp:all 192.0.2.1 any <> 192.0.2.123 any (flow:not_established; sid:1021;)
+accept:hook udp:all 192.0.2.1 any <> 192.0.2.123 any (flow:established; sid:1022;)
+# matching head accept:flow at request_complete (the head candidate for the gap decision)
+accept:flow ntp:request_complete 192.0.2.1 any -> 192.0.2.123 any (ntp.version:4; sid:210;)
+# later < rule with a FAILING keyword: request is mode 3 (client), so ntp.mode:server
+# never matches -> auto-accept-prior never fires
+accept:flow ntp:<request_complete 192.0.2.1 any -> 192.0.2.123 any (ntp.mode:server; sid:211;)
+# to_client shield (response states covered bare)
+accept:hook ntp:response_started 192.0.2.123 any -> 192.0.2.1 any (sid:1003;)
+accept:hook ntp:response_complete 192.0.2.123 any -> 192.0.2.1 any (sid:1004;)
