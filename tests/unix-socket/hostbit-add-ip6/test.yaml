@@ -5,8 +5,17 @@ unix-commands:
   - "add-hostbit fe80:0000:0000:0000:6600:6aff:fe5b:8f4a test 60"
 
 checks:
-- filter:
-    filename: sc.json
-    count: 1
-    match:
-      return: OK
+  - filter:
+      filename: sc.json
+      count: 1
+      match:
+        return: OK
+
+  # The test harness sends "shutdown" over the unix socket after the
+  # commands above. By the time this check runs, Suricata has fully
+  # exited, so the command socket file must be gone.
+  # Ticket: https://redmine.openinfosecfoundation.org/issues/8799
+  - shell:
+      requires:
+        min-version: 9
+      args: test ! -e socket
