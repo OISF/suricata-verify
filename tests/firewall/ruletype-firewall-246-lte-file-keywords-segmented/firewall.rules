@@ -1,0 +1,35 @@
+# Two HTTP file downloads toclient. The file data arrives in two segments
+# (4 + 30 bytes): on the first body pass the file has just started (4 bytes)
+# so the magic is not determined yet and the name/magic no-matches there are
+# PROVISIONAL (the filehandler buffers are streaming: a file may still start
+# and grow at the engine's progress).
+#
+# * flow A (49240): downloads "match.png" (PNG content) - the file.name and
+#   filename keywords match the name and the file.magic keyword matches the
+#   magic when the file completes; the flow is accepted.
+# * flow B (49241): downloads "other.txt" (text content) - no keyword
+#   matches; the engines' own eof CANT_MATCH drops the flow once.
+#
+# The toserver accept:hook shield (sids 701-706) keeps the toserver
+# direction from adjudicating the flow before the toclient direction does.
+#
+# Expected: exactly 1 `firewall default app policy` drop (flow B).
+#
+# accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+# accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+
+# allow session setup
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+
+# toserver shield
+accept:hook,alert http1:request_started $HOME_NET any -> $EXTERNAL_NET any (sid:701;)
+accept:hook,alert http1:request_line $HOME_NET any -> $EXTERNAL_NET any (sid:702;)
+accept:hook,alert http1:request_headers $HOME_NET any -> $EXTERNAL_NET any (sid:703;)
+accept:hook,alert http1:request_body $HOME_NET any -> $EXTERNAL_NET any (sid:704;)
+accept:hook,alert http1:request_trailer $HOME_NET any -> $EXTERNAL_NET any (sid:705;)
+accept:hook,alert http1:request_complete $HOME_NET any -> $EXTERNAL_NET any (sid:706;)
+
+accept:flow,alert http1:<response_body $EXTERNAL_NET any -> $HOME_NET any (file.magic; filemagic:"PNG"; sid:211;)
+accept:flow,alert http1:<response_body $EXTERNAL_NET any -> $HOME_NET any (filename:png; sid:212;)
+accept:flow,alert http1:<response_body $EXTERNAL_NET any -> $HOME_NET any (file.name; content:"match.png"; sid:213;)

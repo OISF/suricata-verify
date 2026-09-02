@@ -1,0 +1,36 @@
+# Per-buffer validation of the remaining response-line (LINE) app_stream
+# registrations toclient (http.response_line, http.stat_msg,
+# http.protocol). The status line is split over two TCP segments: while it is
+# incomplete the HTP response progress is at response_line and the line
+# buffers are empty (no partial line inspection). The no-match of the first
+# segment is PROVISIONAL and must not be converted to CANT_MATCH (all three
+# buffers are streaming).
+#
+# A flows (49210-49212) complete the line into "HTTP/1.1 200 OK" and are
+# accepted; each B flow (49213-49215) completes it into "HTTP/1.0 503 Gone",
+# matches no keyword and is dropped once by the engines' own eof CANT_MATCH.
+#
+# The toserver accept:hook shield (sids 701-706) keeps the toserver direction
+# from adjudicating the flow before the toclient direction does.
+#
+# Expected: exactly 3 `firewall default app policy` drops (B1-B3).
+#
+# accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+# accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+
+# allow session setup
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+
+# toserver shield: accept the request states so the flow is not adjudicated
+# toserver before the toclient LTE rules run
+accept:hook,alert http1:request_started $HOME_NET any -> $EXTERNAL_NET any (sid:701;)
+accept:hook,alert http1:request_line $HOME_NET any -> $EXTERNAL_NET any (sid:702;)
+accept:hook,alert http1:request_headers $HOME_NET any -> $EXTERNAL_NET any (sid:703;)
+accept:hook,alert http1:request_body $HOME_NET any -> $EXTERNAL_NET any (sid:704;)
+accept:hook,alert http1:request_trailer $HOME_NET any -> $EXTERNAL_NET any (sid:705;)
+accept:hook,alert http1:request_complete $HOME_NET any -> $EXTERNAL_NET any (sid:706;)
+
+accept:flow,alert http1:<response_line $EXTERNAL_NET any -> $HOME_NET any (http.response_line; content:"200 OK"; sid:211;)
+accept:flow,alert http1:<response_line $EXTERNAL_NET any -> $HOME_NET any (http.stat_msg; content:"OK"; sid:212;)
+accept:flow,alert http1:<response_line $EXTERNAL_NET any -> $HOME_NET any (http.protocol; content:"HTTP/1.1"; sid:213;)
