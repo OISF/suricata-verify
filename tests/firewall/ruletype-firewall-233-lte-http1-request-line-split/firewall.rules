@@ -1,0 +1,32 @@
+# # The request line is split over two TCP segments (see input.pcap). Two flows:
+#
+# * flow A (port 49153): segments "GET /ind" + "ex HTTP/1.1 ..." complete the
+#   line into uri "/index" (keyword present);
+# * flow B (port 49154): segments "GET /adm" + "in HTTP/1.1 ..." complete the
+#   line into uri "/admin" (keyword absent).
+#
+# While the line is incomplete (first segment) the HTP progress is at
+# request_line (LINE) and the http_uri buffer is empty - there is no partial
+# request-line inspection, the line fields are only set once the line
+# completes. The empty-buffer no match of the first segment is therefore
+# PROVISIONAL at the rule's own hook state and must not be converted to
+# CANT_MATCH (http_uri is a streaming buffer: its data still arrives at its
+# registered progress).
+#
+# * flow A: when the second segment completes the line the keyword matches and
+#   the accept:flow accepts the flow.
+# * flow B: the completed line never matches; the engine's own eof CANT_MATCH
+#   (progress passes LINE) kills the rule and the flow is dropped by the
+#   default app policy at the next state - streaming defers the decision, it
+#   never waives the drop.
+#
+# Expected: exactly 1 `firewall default app policy` drop (flow B).
+#
+# accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+# accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+
+# allow session setup
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+
+accept:flow,alert http1:<request_line $HOME_NET any -> $EXTERNAL_NET any (http.uri; content:"/index"; sid:211;)

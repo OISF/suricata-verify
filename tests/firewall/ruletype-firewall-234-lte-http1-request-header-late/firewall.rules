@@ -1,0 +1,29 @@
+# # Two flows; in each the request line and an Accept header arrive first,
+# # the Host header second (before the blank line, so both passes happen at
+# # request_headers progress):
+#
+# * flow A (port 49155): late Host header "latehost.example.com" (keyword
+#   present);
+# * flow B (port 49156): late Host header "other.example.com" (keyword absent).
+#
+# The HTP progress moves to request_headers (HEADERS) when the request LINE
+# completes - i.e. BEFORE any header line has been parsed; the header values
+# are parsed line by line while the progress sits at HEADERS. On the first
+# HEADERS pass the http_host buffer is still empty, so the no match there is
+# PROVISIONAL (http_host is a streaming buffer) and must not be converted to
+# CANT_MATCH.
+#
+# * flow A: the late Host header arrives and the accept:flow accepts the flow.
+# * flow B: no match ever; the eof CANT_MATCH at the progress after HEADERS
+#   kills the rule and the flow drops by the default app policy.
+#
+# Expected: exactly 1 `firewall default app policy` drop (flow B).
+#
+# accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+# accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+
+# allow session setup
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+
+accept:flow,alert http1:<request_headers $HOME_NET any -> $EXTERNAL_NET any (http.host; content:"latehost.example.com"; sid:211;)
