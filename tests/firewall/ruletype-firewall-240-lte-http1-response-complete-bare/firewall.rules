@@ -1,0 +1,40 @@
+# # Head-gap coverage on the to_client direction (response side
+# # complement of ruletype-firewall-221): a single flow with a plain GET and a
+# # one-packet 200 OK response.
+#
+# The first to_client state presented is response_line (the status line is a
+# single record), while the only to_client accept rule hooks
+# response_complete (hook 5) - a head-of-list gap. The bare
+# accept:flow http1:<response_complete rule (auto-accept-prior-states) is the
+# only rule that could authorize the gap state; it is a pending candidate on
+# the first to_client pass and its prior-states coverage accepts the gap
+# state. At response_complete the bare rule fires and accepts the flow.
+#
+# The to_server side is fully authorized by bare accept:hook shield rules.
+#
+# Expected: 0 `firewall default app policy` drops.
+#
+# accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+# accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+# rules (state-scoped, not flow-scoped) so the to_server side never drops and
+# does not mask the to_client adjudication
+# accept:hook http1:request_started $HOME_NET any -> $EXTERNAL_NET any (sid:701;)
+# accept:hook http1:request_line $HOME_NET any -> $EXTERNAL_NET any (sid:702;)
+# accept:hook http1:request_headers $HOME_NET any -> $EXTERNAL_NET any (sid:703;)
+# accept:hook http1:request_body $HOME_NET any -> $EXTERNAL_NET any (sid:704;)
+# accept:hook http1:request_trailer $HOME_NET any -> $EXTERNAL_NET any (sid:705;)
+# accept:hook http1:request_complete $HOME_NET any -> $EXTERNAL_NET any (sid:706;)
+
+# allow session setup
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+
+# to_server shield: authorize every to_server HTTP state with bare accept:hook rules (state-scoped, not flow-scoped) so the to_server side never drops and does not mask the to_client adjudication
+accept:hook,alert http1:request_started $HOME_NET any -> $EXTERNAL_NET any (sid:701;)
+accept:hook,alert http1:request_line $HOME_NET any -> $EXTERNAL_NET any (sid:702;)
+accept:hook,alert http1:request_headers $HOME_NET any -> $EXTERNAL_NET any (sid:703;)
+accept:hook,alert http1:request_body $HOME_NET any -> $EXTERNAL_NET any (sid:704;)
+accept:hook,alert http1:request_trailer $HOME_NET any -> $EXTERNAL_NET any (sid:705;)
+accept:hook,alert http1:request_complete $HOME_NET any -> $EXTERNAL_NET any (sid:706;)
+
+accept:flow,alert http1:<response_complete $EXTERNAL_NET any -> $HOME_NET any (sid:211;)
