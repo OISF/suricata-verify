@@ -1,0 +1,38 @@
+# SMTP sessions with streaming MIME (progress request_data). The first MIME
+# packet carries only the From line; the remaining headers and the body
+# arrive in the second packet. On the first DATA pass the other email
+# buffers are empty - their no-matches there are PROVISIONAL (all eight
+# buffers are streaming) and must not be converted to CANT_MATCH.
+#
+# A flows (49270-49277): all marker values present; the keywords match and
+# the flows are accepted. B flows (49278-49285): different values; no
+# keyword matches; each flow is dropped once when the mail completes (eof
+# CANT_MATCH).
+#
+# Expected: exactly 8 `firewall default app policy` drops (B1-B8).
+#
+# accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+# accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+
+# allow session setup
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+
+# keep the flow alive while the SMTP session is set up (before DATA): the
+# first tx pass happens at request_started, where none of the email buffers
+# (and thus no LTE rule) can match yet; without a covering rule the default
+# app policy would drop the flow before the MIME is ever parsed. The shield
+# is state-scoped (hook) and does not mask the request_data/request_complete
+# adjudication.
+accept:hook,alert smtp:request_started $HOME_NET any -> $EXTERNAL_NET any (sid:701;)
+accept:hook,alert smtp:response_started $EXTERNAL_NET any -> $HOME_NET any (sid:702;)
+accept:hook,alert smtp:response_data $EXTERNAL_NET any -> $HOME_NET any (sid:703;)
+
+accept:flow,alert smtp:<request_data $HOME_NET any -> $EXTERNAL_NET any (email.from; content:"alice"; sid:211;)
+accept:flow,alert smtp:<request_data $HOME_NET any -> $EXTERNAL_NET any (email.subject; content:"marker subject A"; sid:212;)
+accept:flow,alert smtp:<request_data $HOME_NET any -> $EXTERNAL_NET any (email.to; content:"bob@example.com"; sid:213;)
+accept:flow,alert smtp:<request_data $HOME_NET any -> $EXTERNAL_NET any (email.cc; content:"cc@example.com"; sid:214;)
+accept:flow,alert smtp:<request_data $HOME_NET any -> $EXTERNAL_NET any (email.date; content:"01 Jan 2024"; sid:215;)
+accept:flow,alert smtp:<request_data $HOME_NET any -> $EXTERNAL_NET any (email.message_id; content:"midA@ex.com"; sid:216;)
+accept:flow,alert smtp:<request_data $HOME_NET any -> $EXTERNAL_NET any (email.x_mailer; content:"MailerA/1.0"; sid:217;)
+accept:flow,alert smtp:<request_data $HOME_NET any -> $EXTERNAL_NET any (email.body_md5; content:"834ce629a80f4271126e63f548dc0029"; sid:218;)

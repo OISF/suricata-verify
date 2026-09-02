@@ -1,0 +1,37 @@
+# Per-buffer validation of the remaining response-header (HEADERS)
+# app_stream registrations toclient (http.cookie via Set-Cookie,
+# http.header_names, http.start). The response line plus one header complete
+# in the first segment, so the HTP response progress moves to
+# response_headers before the remaining header lines are parsed; the
+# discriminating headers arrive in the second segment. On the first segment
+# the header buffers do not yet contain them - the header buffers populate
+# line by line during the HEADERS progress - so the no-match there is
+# provisional and must not be converted to CANT_MATCH.
+#
+# A flows (49220-49222) carry the marker response headers and are accepted;
+# each B flow (49223-49225) matches no keyword and is dropped once by the
+# engines' own eof CANT_MATCH.
+#
+# The toserver accept:hook shield (sids 701-706) keeps the toserver direction
+# from adjudicating the flow before the toclient direction does.
+#
+# Expected: exactly 3 `firewall default app policy` drops (B1-B3).
+#
+# accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+# accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+
+# allow session setup
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+
+# toserver shield
+accept:hook,alert http1:request_started $HOME_NET any -> $EXTERNAL_NET any (sid:701;)
+accept:hook,alert http1:request_line $HOME_NET any -> $EXTERNAL_NET any (sid:702;)
+accept:hook,alert http1:request_headers $HOME_NET any -> $EXTERNAL_NET any (sid:703;)
+accept:hook,alert http1:request_body $HOME_NET any -> $EXTERNAL_NET any (sid:704;)
+accept:hook,alert http1:request_trailer $HOME_NET any -> $EXTERNAL_NET any (sid:705;)
+accept:hook,alert http1:request_complete $HOME_NET any -> $EXTERNAL_NET any (sid:706;)
+
+accept:flow,alert http1:<response_headers $EXTERNAL_NET any -> $HOME_NET any (http.cookie; content:"sct=cookieA"; sid:211;)
+accept:flow,alert http1:<response_headers $EXTERNAL_NET any -> $HOME_NET any (http.header_names; content:"X-RespA"; sid:212;)
+accept:flow,alert http1:<response_headers $EXTERNAL_NET any -> $HOME_NET any (http.start; content:"X-StartR: s1"; sid:213;)
