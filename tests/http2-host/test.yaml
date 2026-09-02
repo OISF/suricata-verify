@@ -16,7 +16,7 @@ checks:
         pcap_cnt: 9
   - filter:
       requires:
-        min-version: 9
+        min-version: 8.0.7
       count: 1
       match:
         event_type: alert
