@@ -1,0 +1,25 @@
+# The http2 request body (http_client_body registration for http2) arrives in
+# two 4096-byte DATA frames. Flow A (port 49230) carries the marker
+# "HTTP2MARKERABCD1" in the second frame: the first DATA pass (progress at
+# request_data) sees a 4096-byte body without the marker - its no-match is
+# PROVISIONAL (the buffer is streaming) and must not be converted to
+# CANT_MATCH; the rule matches when the second frame completes the body and
+# the flow is accepted. Flow B (port 49231) never matches; the engine's own
+# eof CANT_MATCH at END_STREAM rejects the rule and the flow is dropped once.
+#
+# The pcap deliberately omits the SETTINGS frames: the connection-level
+# (global) tx is presented to detection before the stream tx exists, and the
+# global states have no covering rules here - the default app policy would
+# drop the flow before the request body is even parsed. The global tx is out
+# of scope for this test (see generate-pcap.py).
+#
+# Expected: exactly 1 `firewall default app policy` drop (flow B).
+#
+# accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+# accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+
+# allow session setup
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+
+accept:flow,alert http2:stream:<request_data $HOME_NET any -> $EXTERNAL_NET any (http.request_body; content:"HTTP2MARKERABCD1"; sid:211;)

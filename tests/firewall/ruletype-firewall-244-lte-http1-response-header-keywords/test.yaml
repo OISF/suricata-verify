@@ -1,0 +1,93 @@
+requires:
+  min-version: 9
+
+args:
+  - --simulate-ips
+  - -k none
+
+pcap: input.pcap
+
+checks:
+- filter:
+    count: 3
+    match:
+      event_type: drop
+      drop.reason: "firewall default app policy"
+- filter:
+    count: 6
+    match:
+      event_type: alert
+      alert.signature_id: 701
+      alert.action: allowed
+      firewall.hook: http:request_started
+      firewall.policy: accept:hook,alert
+- filter:
+    count: 6
+    match:
+      event_type: alert
+      alert.signature_id: 702
+      alert.action: allowed
+      firewall.hook: http:request_line
+      firewall.policy: accept:hook,alert
+- filter:
+    count: 6
+    match:
+      event_type: alert
+      alert.signature_id: 703
+      alert.action: allowed
+      firewall.hook: http:request_headers
+      firewall.policy: accept:hook,alert
+- filter:
+    count: 6
+    match:
+      event_type: alert
+      alert.signature_id: 704
+      alert.action: allowed
+      firewall.hook: http:request_body
+      firewall.policy: accept:hook,alert
+- filter:
+    count: 6
+    match:
+      event_type: alert
+      alert.signature_id: 705
+      alert.action: allowed
+      firewall.hook: http:request_trailer
+      firewall.policy: accept:hook,alert
+- filter:
+    count: 6
+    match:
+      event_type: alert
+      alert.signature_id: 706
+      alert.action: allowed
+      firewall.hook: http:request_complete
+      firewall.policy: accept:hook,alert
+- filter:
+    count: 3
+    match:
+      event_type: alert
+      alert.signature_id: 211
+      alert.action: allowed
+      firewall.hook: http:response_headers
+      firewall.policy: accept:flow,alert
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 212
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 213
+- filter:
+    count: 3
+    match:
+      event_type: flow
+      flow.action: drop
+      flow.alerted: true
+- filter:
+    count: 3
+    match:
+      event_type: flow
+      flow.action: accept
+      flow.alerted: true
