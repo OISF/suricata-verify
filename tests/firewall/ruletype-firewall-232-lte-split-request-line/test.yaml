@@ -1,0 +1,33 @@
+requires:
+  min-version: 9
+
+args:
+  - --simulate-ips
+  - -k none
+
+pcap: input.pcap
+
+checks:
+# the request line completes (and the uri keyword can match) in the second
+# segment, while the tx progress is still at request_line; the empty-buffer
+# no-match of the first segment must not have dropped the flow
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      drop.reason: "firewall default app policy"
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 211
+      alert.action: allowed
+      firewall.hook: http:request_line
+      firewall.policy: accept:flow,alert
+      pcap_cnt: 6
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.action: accept
+      flow.alerted: true
