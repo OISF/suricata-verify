@@ -1,0 +1,34 @@
+%YAML 1.1
+---
+
+stats:
+  enabled: yes
+  interval: 8
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - stats
+        - flow
+        - alert
+        - http:
+            extended: yes
+        - drop:
+            alerts: yes
+            flows: all
+
+app-layer:
+  protocols:
+    http:
+      enabled: yes
+      libhtp:
+        default-config:
+          personality: IDS
+          request-body-limit: 100 KiB
+          request-body-minimal-inspect-size: 1
+          request-body-inspect-window: 4 KiB
+          http-body-inline: yes
+          randomize-inspection-sizes: no
