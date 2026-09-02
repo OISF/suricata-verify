@@ -1,0 +1,47 @@
+# # The response status line is split over two TCP segments. Two flows:
+#
+# * flow A (port 49159): "HTTP/1.1 20" + "0 OK ..." complete the line into
+#   status code "200" (keyword present);
+# * flow B (port 49160): "HTTP/1.1 50" + "3 Gone ..." complete the line into
+#   status code "503" (keyword absent).
+#
+# The response-side progress reaches response_line (LINE) on the first
+# response byte and the status line fields are only set when the line
+# completes (second segment), so the empty-buffer no match of the first
+# segment is PROVISIONAL at the rule's own hook state (http.stat_code is a
+# streaming buffer) and must not be converted to CANT_MATCH.
+#
+# * flow A: the completed status line matches and the accept:flow accepts the
+#   flow.
+# * flow B: no match ever; the eof CANT_MATCH kills the rule and the flow
+#   drops by the default app policy.
+#
+# The to_server side is fully authorized by bare accept:hook shield rules so
+# the to_client adjudication is not masked.
+#
+# Expected: exactly 1 `firewall default app policy` drop (flow B).
+#
+# accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+# accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+# rules (state-scoped, not flow-scoped) so the to_server side never drops and
+# does not mask the to_client adjudication
+# accept:hook http1:request_started $HOME_NET any -> $EXTERNAL_NET any (sid:701;)
+# accept:hook http1:request_line $HOME_NET any -> $EXTERNAL_NET any (sid:702;)
+# accept:hook http1:request_headers $HOME_NET any -> $EXTERNAL_NET any (sid:703;)
+# accept:hook http1:request_body $HOME_NET any -> $EXTERNAL_NET any (sid:704;)
+# accept:hook http1:request_trailer $HOME_NET any -> $EXTERNAL_NET any (sid:705;)
+# accept:hook http1:request_complete $HOME_NET any -> $EXTERNAL_NET any (sid:706;)
+
+# allow session setup
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+
+# to_server shield: authorize every to_server HTTP state with bare accept:hook rules (state-scoped, not flow-scoped) so the to_server side never drops and does not mask the to_client adjudication
+accept:hook,alert http1:request_started $HOME_NET any -> $EXTERNAL_NET any (sid:701;)
+accept:hook,alert http1:request_line $HOME_NET any -> $EXTERNAL_NET any (sid:702;)
+accept:hook,alert http1:request_headers $HOME_NET any -> $EXTERNAL_NET any (sid:703;)
+accept:hook,alert http1:request_body $HOME_NET any -> $EXTERNAL_NET any (sid:704;)
+accept:hook,alert http1:request_trailer $HOME_NET any -> $EXTERNAL_NET any (sid:705;)
+accept:hook,alert http1:request_complete $HOME_NET any -> $EXTERNAL_NET any (sid:706;)
+
+accept:flow,alert http1:<response_line $EXTERNAL_NET any -> $HOME_NET any (http.stat_code; content:"200"; sid:211;)
