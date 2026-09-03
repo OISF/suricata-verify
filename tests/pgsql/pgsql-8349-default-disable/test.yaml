@@ -1,0 +1,32 @@
+requires:
+   min-version: 9
+args:
+- -k none
+- --set stream.midstream=true
+
+pcap: ../pgsql-query-keyword-01/input.pcap
+
+checks:
+- filter:
+    count: 0
+    match:
+      event_type: pgsql
+- filter:
+    count: 0
+    match:
+      event_type: alert
+- filter:
+    count: 0
+    match:
+      event_type: flow
+      flow.app_proto: pgsql
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      not-has-key: stats.app_layer.flow.pgsql
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.decoder.pkts: 30
