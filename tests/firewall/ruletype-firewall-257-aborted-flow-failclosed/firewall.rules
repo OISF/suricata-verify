@@ -1,0 +1,19 @@
+# Fail-closed verdict when a flow dies while the rule at request_started is
+# still provisional (no-match not yet definitive: no CANT_MATCH, tx below its
+# end state).
+#
+# The rule (sid 211) waits for a marker in the re-assembled DNP3 application
+# buffer (hook request_started, progress 0 while the message is still being
+# reassembled). Flow B dies after the first (FIR, no FIN) DNP3 frame: the
+# message never completes, the request tx stays at progress 0 (below its end
+# state) and the keyword can never match any more. The flow-end passes (RST +
+# PKT_PSEUDO_STREAM_END) get no app-layer update, so the app layer is not
+# inspected there; the default packet filter policy must drop the final
+# stream-end pass - the flow may not die with a pending rule and no drop
+# verdict. The app-layer side of the same situation is kept fail-closed as
+# well: on a PKT_PSEUDO_STREAM_END pass a still-provisional no match is
+# treated as definitive (per-hook default app policy).
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+
+accept:flow,alert dnp3:request_started $HOME_NET any -> $EXTERNAL_NET any (dnp3.data; content:"DNP3ABORTMARK"; sid:211;)
