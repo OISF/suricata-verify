@@ -1,0 +1,37 @@
+# IKEv1 nested-Proposal unbounded-recursion stack exhaustion (CWE-674).
+#
+# input.pcap is a single IKE/ISAKMP datagram (UDP/500), emitted as IP
+# fragments, carrying a Proposal chain nested 5000 levels deep. Suricata
+# defragments it, the IKE app-layer parser detects ISAKMP v1, and
+# rust/src/ike/parser.rs parse_payload() <-> parse_proposal_payload()
+# recurse once per level with no depth cap.
+#
+# We pin the worker thread stack to the 512 KiB Suricata floor
+# (threading.stack-size) so the recursion is guaranteed to overrun the stack.
+# On the CURRENT (unpatched) build the worker thread crashes with SIGSEGV and
+# the run exits non-zero: THAT is the reproduction and the test FAILS.
+# Once a recursion depth cap is added the datagram is parsed within bounds,
+# the engine survives, and the flow is still tagged app_proto=ike, so the
+# check below PASSES. See README.md.
+#
+# Needs a Rust build (IKE app-layer is Rust and enabled by default).
+
+requires:
+  min-version: 9 
+
+args:
+  # Force the documented 512 KiB per-thread stack floor so the unbounded
+  # recursion deterministically overruns the worker stack.
+  - --set threading.stack-size=512kb
+
+pcap: input.pcap
+
+checks:
+  # Post-fix expected behaviour: a bounded parse processes the datagram, the
+  # engine stays up, and the flow is recorded as IKE. Modelled on the eve
+  # output observed from shallow (non-overflowing) Proposal chains.
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: ike
