@@ -1,0 +1,16 @@
+# Fail-closed drop at flow end for an LTE rule when the parser completes
+# the in-progress tx on stream close.
+#
+# The LTE rule (sid 100) waits for a marker header line at
+# request_headers. Flow B dies with the request line plus two headers
+# complete (progress at request_headers) and a truncated header line
+# (no CRLF), followed by an RST. On stream close the htp parser completes
+# the request transaction (progress reaches request_complete), so on the
+# pass of the RST packet the engine's eof applies (progress 5 > 2): the
+# no match is definitive and the per-hook default app policy must drop
+# the flow - the flow may not end with the LTE rule still pending and no
+# verdict.
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+
+accept:flow,alert http1:<request_headers $HOME_NET any -> $EXTERNAL_NET any (http.request_header; content:"MARKERHDR"; sid:100;)
