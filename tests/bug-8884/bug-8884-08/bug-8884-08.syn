@@ -1,0 +1,8 @@
+# The remainder of an oversized command arrives with a real command behind it
+# in the same slice: the remainder is dropped, the QUIT must be parsed. See
+# README.md.
+flow c tcp 1.1.1.1:40000 > 2.2.2.2:21 (tcp.initialize;);
+c < (content:"220 ready\x0d\x0a";);
+c > (content:"USER a\x0d\x0aPORT AAAAAAAAAAAAAAAAAAAAAAAAAAA";);
+c > (content:"PASS s3cret\x0d\x0aQUIT\x0d\x0a";);
+c < (content:"221 bye\x0d\x0a";);

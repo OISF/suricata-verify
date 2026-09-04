@@ -1,0 +1,40 @@
+# Over-long reply whose LF lands in the same slice; see README.md.
+
+requires:
+  min-version: 9
+
+args:
+- -k none --set app-layer.protocols.ftp.max-line-length=32
+
+checks:
+  - filter:
+      count: 3
+      match:
+        event_type: ftp
+
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: USER
+        ftp.completion_code: ["550"]
+        ftp.reply: ["BBBBBBBBBBBBBBBBBBBBBBBBBBBB"]
+        ftp.reply_truncated: true
+
+  # The reply behind the oversized one is still parsed and attached to the
+  # pending transaction.
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: PWD
+        ftp.completion_code: ["226"]
+        ftp.reply: ["done"]
+        ftp.reply_received: "yes"
+        ftp.reply_truncated: false
+
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: response_command_too_long

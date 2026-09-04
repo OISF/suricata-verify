@@ -1,0 +1,12 @@
+# Over-long reply to a command whose response handling jumps to tx_complete
+# (invalid PORT). The oversized 500 leaves no logged reply, but its truncation
+# state must still be settled or the 331 reply to the following USER -- in a
+# later slice -- is discarded and the 221 is misattributed to USER. See README.
+flow c tcp 1.1.1.1:40000 > 2.2.2.2:21 (tcp.initialize;);
+c < (content:"220 ready\x0d\x0a";);
+c > (content:"PORT bad\x0d\x0a";);
+c < (content:"500 ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ\x0d\x0a";);
+c > (content:"USER x\x0d\x0a";);
+c < (content:"331 need password\x0d\x0a";);
+c > (content:"QUIT\x0d\x0a";);
+c < (content:"221 bye\x0d\x0a";);

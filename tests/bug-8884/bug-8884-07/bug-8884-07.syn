@@ -1,0 +1,10 @@
+# Response split-slice phantom: a rejected spaces reply sets the completion
+# flag, then an unterminated oversized 550 whose tail (226 done) is in the next
+# slice. See README.md.
+flow c tcp 1.1.1.1:40000 > 2.2.2.2:21 (tcp.initialize;);
+c < (content:"220 ready\x0d\x0a";);
+c > (content:"USER x\x0d\x0a";);
+c < (content:"      \x0d\x0a550 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";);
+c < (content:"226 done\x0d\x0a";);
+c > (content:"QUIT\x0d\x0a";);
+c < (content:"221 bye\x0d\x0a";);
