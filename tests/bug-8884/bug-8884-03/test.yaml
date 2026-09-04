@@ -1,0 +1,29 @@
+requires:
+  min-version: 9
+
+args:
+- -k none --set app-layer.protocols.ftp.max-line-length=32
+
+checks:
+  - filter:
+      count: 3
+      match:
+        event_type: ftp
+
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: PWD
+        ftp.completion_code: ["226"]
+        ftp.reply: ["done"]
+        ftp.reply_received: "yes"
+
+  # The oversized line yields no response line at all, so it carries no
+  # completion code and raises no too-long event -- only its tail-swallowing
+  # side effect is under test here.
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.event: response_command_too_long
