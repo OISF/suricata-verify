@@ -1,0 +1,46 @@
+requires:
+  min-version: 9
+
+# A complete T.123 TPKT whose inner X.223 payload is malformed used to
+# escape parse_t123_tpkt as Incomplete, making the app-layer parser request
+# more bytes forever and wedging RDP decoding for the direction. Two
+# poisoned TPKTs (empty X.223 payload, CS_CORE length overrun) are sent as
+# the first data; the real handshake that follows must still be logged.
+
+checks:
+
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: rdp
+
+  # to-server: X.224 connection request, sent after the poisoned TPKTs
+  - filter:
+      count: 1
+      match:
+        event_type: rdp
+        rdp.event_type: "initial_request"
+        rdp.cookie: "A70067"
+
+  # to-server: MCS connect request, sent after the poisoned TPKTs
+  - filter:
+      count: 1
+      match:
+        event_type: rdp
+        rdp.event_type: "connect_request"
+        rdp.client.client_name: "ISD2-KM84178"
+
+  # to-client: X.224 connection confirm
+  - filter:
+      count: 1
+      match:
+        event_type: rdp
+        rdp.event_type: "initial_response"
+
+  # to-client: MCS connect response
+  - filter:
+      count: 1
+      match:
+        event_type: rdp
+        rdp.event_type: "connect_response"
