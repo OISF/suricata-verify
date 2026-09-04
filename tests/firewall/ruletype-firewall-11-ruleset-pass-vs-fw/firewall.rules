@@ -15,8 +15,8 @@ accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET 443 (flow:established; alert;
 # App-layer rules
 
 # should match, pcap is to google
-accept:flow tls:client_hello_done $HOME_NET any -> $EXTERNAL_NET any (tls.sni; content:"www.google.com"; sid:104; alert;)
+accept:flow tls:client_hello $HOME_NET any -> $EXTERNAL_NET any (tls.sni; content:"www.google.com"; sid:104; alert;)
 # allow tls before client hello is done.
-accept:hook tls:client_in_progress $HOME_NET any -> $EXTERNAL_NET any (alert; sid:105;)
+accept:hook tls:client_started $HOME_NET any -> $EXTERNAL_NET any (alert; sid:105;)
 
 # default drop
