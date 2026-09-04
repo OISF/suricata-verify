@@ -104,15 +104,13 @@ firewall:
           - "accept:hook"
         client-finished:
           - "accept:hook"
-        server-in-progress:
+        server-started:
           - "accept:hook"
         server-hello:
           - "accept:hook"
-        server-hello-done:
+        server-data:
           - "accept:hook"
-        server-cert-done:
-          - "accept:hook"
-        server-handshake-done:
+        server-cert:
           - "accept:hook"
         server-finished:
           - "accept:hook"
