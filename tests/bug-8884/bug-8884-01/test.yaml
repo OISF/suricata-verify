@@ -1,0 +1,34 @@
+# Over-long command whose LF lands in the same slice; see README.md.
+
+requires:
+  min-version: 9
+
+args:
+- -k none --set app-layer.protocols.ftp.max-line-length=32
+
+checks:
+  - filter:
+      count: 3
+      match:
+        event_type: ftp
+
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: PORT
+        ftp.command_data: "AAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        ftp.command_truncated: true
+
+  # The command behind the oversized one is still parsed.
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: QUIT
+
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: request_command_too_long

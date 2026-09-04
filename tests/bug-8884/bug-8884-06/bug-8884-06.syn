@@ -1,0 +1,7 @@
+# Request split-slice phantom: ZORP sets lf_found, then an unterminated
+# oversized USER line whose tail (QUIT) is in the next slice. See README.md.
+flow c tcp 1.1.1.1:40000 > 2.2.2.2:21 (tcp.initialize;);
+c < (content:"220 ready\x0d\x0a";);
+c > (content:"ZORP\x0d\x0aUSER AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";);
+c > (content:"QUIT\x0d\x0a";);
+c < (content:"221 bye\x0d\x0a";);

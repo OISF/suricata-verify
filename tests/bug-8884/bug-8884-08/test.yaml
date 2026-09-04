@@ -1,0 +1,35 @@
+# The remainder of an oversized command, followed by a real command in the same
+# slice. See README.md.
+
+requires:
+  min-version: 9
+
+args:
+- -k none --set app-layer.protocols.ftp.max-line-length=32
+
+checks:
+  - filter:
+      count: 4
+      match:
+        event_type: ftp
+
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: request_command_too_long
+
+  # The command behind the remainder is parsed.
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: QUIT
+
+  # The remainder itself is not a command: no PASS transaction, and no
+  # credential from it in the log.
+  - filter:
+      count: 0
+      match:
+        event_type: ftp
+        ftp.command: PASS
