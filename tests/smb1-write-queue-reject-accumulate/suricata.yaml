@@ -1,0 +1,32 @@
+%YAML 1.1
+---
+# Minimal configuration for this only.
+
+app-layer:
+  protocols:
+    smb:
+      enabled: yes
+      detect: yes
+
+      max-write-queue-size: 4096
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - smb:
+            enabled: yes
+        - files
+        - anomaly:
+            enabled: yes
+            types:
+              applayer: yes
+        - flow
+  - file-store:
+      version: 2
+      enabled: yes
+      force-filestore: yes
+      stream-depth: 0
+      write-fileinfo: true
