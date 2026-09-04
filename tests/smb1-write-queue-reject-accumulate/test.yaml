@@ -1,0 +1,35 @@
+%YAML 1.1
+---
+# 1100 fresh file handles each send a single out-of-order WRITE (200
+# KiB offset, 8192 bytes) larger than the (lowered)
+# max-write-queue-size, so the first chunk is rejected before any file
+# is opened. The rejected transaction must be completed and its file
+# accounting balanced so it can be cleaned up; otherwise the file
+# logger keeps every dangling transaction (files_opened with no file)
+# live until flow teardown, the list grows past SMB_MAX_TX (1024) and
+# new_tx stops creating transactions, terminating inspection of the
+# flow. With file logging enabled, every one of the 1100 rejections
+# must still raise the queue event and none may turn into a
+# too_many_transactions event.
+
+requires:
+  min-version: 9
+
+pcap: input.pcap
+args:
+  - -k
+  - none
+
+checks:
+  # every rejected first chunk raises the queue-limit event
+  - shell:
+      args: test "$(grep -Ec 'write_queue_size_exceeded' eve.json)" -eq 1100
+  # the rejected transactions are cleaned up: no evictions
+  - shell:
+      args: test "$(grep -Ec 'too_many_transactions' eve.json)" -eq 0
+  # no files were opened (all chunks rejected)
+  - shell:
+      args: test "$(grep -c '"event_type":"fileinfo"' eve.json)" -eq 0
+  # no desync
+  - shell:
+      args: test "$(grep -Ec 'malformed' eve.json)" -eq 0

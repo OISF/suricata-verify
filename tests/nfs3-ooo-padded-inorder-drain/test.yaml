@@ -1,0 +1,31 @@
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # an in-order WRITE completing on its XDR padding must drain the OOO
+  # queue like an unpadded completion: the queued chunk (4000 x 0x45 at
+  # 8097) is flushed once tracked reaches 8097 (the file tx is logged)
+  - shell:
+      args: test "$(grep -Ec 'malformed' eve.json)" -eq 0
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: WRITE
+        nfs.file_tx: true
+        rpc.xid: 1
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: "3d03fcbd79b87b7799ca4636f6652951b5c55e5b5874177ec83c97d1f9a4ac30"
+        fileinfo.stored: true
+  - shell:
+      args: test "$(grep -Ec 'truncated_file_data' eve.json)" -eq 0
