@@ -1,0 +1,41 @@
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # a SPLIT backward READ reply (offset below the tracked region) must
+  # be discarded AND its continuation (payload + XDR padding) consumed,
+  # so the following records parse: no desync
+  - shell:
+      args: test "$(grep -Ec 'malformed' eve.json)" -eq 0
+  # the follow-up READ transaction is logged (stream stayed in sync)
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: READ
+        nfs.file_tx: true
+        rpc.xid: 3
+  # the retransmitted region is discarded: file A is stored with its
+  # original 4000 bytes only
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: "3cd415359b70f2455b7601ea31f625e6a781a59d95b541e630c7b860ee048bd8"
+        fileinfo.stored: true
+  # the follow-up read file is stored intact
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: "79f5111c048c744fd8eac59ef7a57de53c82f2cb559a092cc7cb95e95b2d49e2"
+        fileinfo.stored: true
+  - shell:
+      args: test "$(grep -Ec 'truncated_file_data' eve.json)" -eq 0
