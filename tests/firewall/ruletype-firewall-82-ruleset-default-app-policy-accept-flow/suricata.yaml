@@ -69,4 +69,4 @@ firewall:
       filter: [ "accept:hook" ]
     app:
       tls:
-        client-in-progress: [ "accept:flow" ]
+        client-started: [ "accept:flow" ]
