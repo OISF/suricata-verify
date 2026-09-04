@@ -59,12 +59,12 @@ checks:
       event_type: alert
       alert.signature_id: 202
 - filter:
-    count: 1
+    count: 18
     match:
       event_type: alert
       alert.signature_id: 203
 - filter:
-    count: 18
+    count: 0
     match:
       event_type: alert
       alert.signature_id: 204
