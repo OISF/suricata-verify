@@ -1,0 +1,38 @@
+requires:
+  min-version: 9
+
+pcap: ../lua-bad-script/test.pcap
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+  - --include ${TEST_DIR}/logging.yaml
+
+  # Run single threaded so all Lua errors occur on the same thread, the
+  # error is only logged once per thread.
+  - --runmode single
+
+checks:
+  - filter:
+      count: 8
+      match:
+        alert.signature_id: 1
+
+  - filter:
+      count: 0
+      match:
+        alert.signature_id: 2
+
+  # PCAP has 8 packets, so 8 failures of finalized.lua.
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.lua.errors: 8
+
+  - filter:
+      filename: suricata.json
+      count: 1
+      match:
+        event_type: engine
+        engine.message.__find: "invalid sha256 hash context"
