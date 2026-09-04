@@ -68,5 +68,5 @@ firewall:
   policies:
     app:
       tls:
-        client-hello-done:
+        client-hello:
           - "reject:flow"
