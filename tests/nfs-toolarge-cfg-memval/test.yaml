@@ -1,0 +1,28 @@
+args:
+  # memory-unit suffixes must be accepted for the byte-valued limits
+  # (1k == 1024, the value nfs-toolarge-cfg uses numerically)
+  - -k
+  - none
+  - --set app-layer.protocols.nfs.max-write-size=1kb
+  - --set app-layer.protocols.nfs.max-read-size=1kb
+
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  - shell:
+      args: test "$(grep -Ec 'write_request_too_large' eve.json)" -ge 1
+  - shell:
+      args: test "$(grep -Ec 'read_response_too_large' eve.json)" -ge 1
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: WRITE
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: READ
