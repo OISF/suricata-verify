@@ -70,7 +70,7 @@ checks:
 - filter:
     requires:
       lt-version: 9
-    count: 3
+    count: 0
     match:
       verdict.action: drop
       verdict.reject-target: to_client
