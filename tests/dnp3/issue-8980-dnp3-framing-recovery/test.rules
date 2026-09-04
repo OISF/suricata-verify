@@ -1,0 +1,2 @@
+alert dnp3 any any -> any any (msg:"DNP3 response after framing error"; \
+    dnp3_func:129; sid:8980001; rev:1;)
