@@ -1,0 +1,40 @@
+# Upgrade contract for the TLS state rename (config): firewall.policies
+# keys that are known to be renamed states are an error at load, so with
+# --init-errors-fatal the run aborts before any traffic is processed -
+# which is what the exit code pins. The error counts pin the two
+# renamed keys; a non-renamed bogus key still only warns without a
+# hint, and the exempt keys (default-policy, a generic hook alias, a
+# valid current state) stay silent. The stale TLS name under the http
+# section is a cross-protocol typo: the rename hints are scoped per
+# protocol, so it warns like any unknown key instead of erroring. A
+# scalar (leaf) key with a sub-state name (app.http2.stream) is never
+# consulted by the loader and must be warned as an unknown key, not
+# skipped as a sub-state section. The mapping-shaped
+# default-policy (app.http2.default-policy) is consulted by the loader
+# and must not be reported as a bogus sub-state section.
+requires:
+  min-version: 9
+
+exit-code: 1
+
+pcap: ../../tls/tls-client-hello-frag-01/dump_mtu300.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- shell:
+    args: "grep -c 'matches no tls state: a state previously named' stderr"
+    expect: 2
+- shell:
+    args: "grep -c 'matches no tls state and is ignored' stdout"
+    expect: 1
+- shell:
+    args: "grep -c 'matches no http2 state and is ignored' stdout"
+    expect: 1
+- shell:
+    args: "! grep -q 'matches no http2 sub-state' stdout"
+- shell:
+    args: "grep -c 'matches no http state and is ignored' stdout"
+    expect: 1
