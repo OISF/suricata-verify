@@ -1,0 +1,48 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none --set app-layer.protocols.rfb.max-string-length=1024
+
+checks:
+
+  # A truncated (2048 > cap 1024) VNC-auth failure reason and a second,
+  # well-formed 10-byte failure reason are coalesced in the SAME TCP
+  # segment (rem > 0 when the first reason is parsed).
+  #
+  # The parser stays in TCFailureReason and re-parses following reason
+  # PDUs (last reason wins, pinned by rfb-max-8731-toskip-vncauth).
+  #
+  # v3.4-v3.6 lose the second PDU: the TCFailureReason branch credits
+  # to_skip_tc with the rem bytes (which are not part of the skipped
+  # string tail) and returns ok without processing rem - the framework
+  # consumes the whole input, dropping the second PDU. The logged
+  # reason must be the second one.
+  #
+  # NOTE: the rfb.authentication.security_result field is absent on the
+  # failure path - the parser only records tc_security_result for status
+  # 0 (pre-existing behaviour, unchanged by the PR series), so it is
+  # not asserted here.
+  - filter:
+      count: 1
+      match:
+        event_type: rfb
+        rfb.authentication.security_type: 2
+        rfb.server_security_failure_reason: 0123456789
+        rfb.server_security_failure_reason.__len: 10
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: too_long_string
+  # the second PDU must not be mis-parsed or desync the stream
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.event: confused_state
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.event: malformed_message
