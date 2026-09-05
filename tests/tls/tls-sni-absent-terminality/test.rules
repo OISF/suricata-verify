@@ -1,0 +1,2 @@
+alert tls any any -> any any (msg:"SNI window terminal no-match"; flow:established,to_server; tls.sni; content:"example.com"; sid:1;)
+alert tls any any -> any any (msg:"random fires in the same window"; flow:established,to_server; tls.random; content:"|94 2d 1f ef 57 5d 77 02|"; sid:2;)
