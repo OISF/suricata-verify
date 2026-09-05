@@ -1,0 +1,28 @@
+# A client hello without a SNI extension: the client_hello window opens at
+# the first hello byte and must close terminal (no match) for a rule that
+# requires SNI, while a rule in the same window that can match does fire.
+# The connection is fully parsed with no SNI recorded.
+requires:
+  min-version: 9
+
+pcap: ../tls-random/input.pcap
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+        not-has-key: tls.sni
