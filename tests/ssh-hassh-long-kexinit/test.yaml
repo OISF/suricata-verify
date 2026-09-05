@@ -1,0 +1,36 @@
+requires:
+  min-version: 9
+
+args:
+ - -k none --set app-layer.protocols.ssh.hassh=yes
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: ssh
+        ssh.client.software_version: "Evil_1.0"
+        ssh.client.hassh.hash: "2dd6531c7e89d3c925db9214711be76a"
+        ssh.server.hassh.hash: "6832f1ce43d4397c2c0a3e2f8c94334e"
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: ssh
+        anomaly.event: long_kex_record
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.app_proto: ssh
+        anomaly.event: invalid_record
