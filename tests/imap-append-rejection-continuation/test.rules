@@ -1,0 +1,2 @@
+alert imap any any -> any any (msg:"IMAP IDLE after NO APPEND rejection"; flow:to_server,established; imap.request; content:"A2 IDLE"; startswith; endswith; sid:1; rev:1;)
+alert imap any any -> any any (msg:"IMAP IDLE after BAD APPEND rejection"; flow:to_server,established; imap.request; content:"A4 IDLE"; startswith; endswith; sid:2; rev:1;)

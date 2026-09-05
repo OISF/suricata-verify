@@ -1,0 +1,8 @@
+# Accept TCP packets
+accept:hook tcp:all any any -> any any (sid:100;)
+
+# Accept all IMAP hooks except request_complete
+accept:hook imap:request_in_progress any any -> any any (sid:1;)
+# No accept for imap:request_complete -> default drop
+accept:hook imap:response_in_progress any any -> any any (sid:3;)
+accept:hook imap:response_complete any any -> any any (alert; sid:4;)

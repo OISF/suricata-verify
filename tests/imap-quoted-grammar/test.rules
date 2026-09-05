@@ -1,0 +1,3 @@
+alert imap any any -> any any (msg:"IMAP escaped quoted request"; flow:to_server,established; imap.request; content:"|5c 22|quoted|5c 22 20 5c 5c|folder"; sid:1; rev:1;)
+alert imap any any -> any any (msg:"IMAP quoted parenthesis response"; flow:to_client,established; imap.response; content:"a)b"; sid:2; rev:1;)
+alert imap any any -> any any (msg:"IMAP parser continued after quoted grammar"; flow:to_server,established; imap.request; content:"A3 NOOP"; startswith; endswith; sid:3; rev:1;)

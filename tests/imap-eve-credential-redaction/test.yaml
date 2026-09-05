@@ -1,0 +1,60 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+  - --set app-layer.protocols.imap.enabled=yes
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: "A1 LOGIN <redacted>"
+        imap.responses[0]: "A1 NO LOGIN failed"
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: "A2 AUTHENTICATE PLAIN <redacted>"
+        imap.responses[0]: "A2 NO AUTHENTICATE failed"
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: "A3 AUTHENTICATE XOAUTH2 <redacted>"
+        imap.responses[0]: "A3 NO AUTHENTICATE failed"
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: "A4 AUTHENTICATE PLAIN"
+        imap.responses[0]: "+ "
+        imap.responses[1]: "A4 NO AUTHENTICATE failed"
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: "A5 LOGIN <redacted>"
+        imap.responses.__len: 3
+        imap.responses[0]: "+ continue"
+        imap.responses[1]: "+ continue"
+        imap.responses[2]: "A5 NO LOGIN failed"
+  - shell:
+      args: >-
+        ! grep -Fq
+        -e 'login-user-secret'
+        -e 'login-password-secret'
+        -e 'literal-login-user-secret'
+        -e 'literal-login-password-secret'
+        -e 'AHBsYWluLXVzZXItc2VjcmV0AHBsYWluLXBhc3N3b3JkLXNlY3JldA=='
+        -e 'dXNlcj1vYXV0aC11c2VyLXNlY3JldAFhdXRoPUJlYXJlciBvYXV0aC10b2tlbi1zZWNyZXQBAQ=='
+        -e 'Y29udGludWF0aW9uLXVzZXItc2VjcmV0AGNvbnRpbnVhdGlvbi1wYXNzd29yZC1zZWNyZXQ='
+        eve.json

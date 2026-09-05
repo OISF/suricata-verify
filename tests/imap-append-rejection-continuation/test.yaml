@@ -1,0 +1,73 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+  - --set app-layer.protocols.imap.enabled=yes
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: "A1 APPEND INBOX {4}"
+        imap.responses[0]: "A1 NO APPEND rejected"
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 2
+        imap.requests[0]: "A2 IDLE"
+        imap.requests[1]: "DONE"
+        imap.responses.__len: 2
+        imap.responses[0]: "+ idling"
+        imap.responses[1]: "A2 OK IDLE completed"
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: "A3 APPEND INBOX {4}"
+        imap.responses[0]: "A3 BAD APPEND rejected"
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 2
+        imap.requests[0]: "A4 IDLE"
+        imap.requests[1]: "DONE"
+        imap.responses.__len: 2
+        imap.responses[0]: "+ idling"
+        imap.responses[1]: "A4 OK IDLE completed"
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: "A5 APPEND INBOX {77}"
+        imap.responses.__len: 2
+        imap.responses[0]: "+ Ready for literal"
+        imap.responses[1]: "A5 OK APPEND completed"
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: "A6 NOOP"
+        imap.responses[0]: "A6 OK NOOP completed"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.app_layer.error.imap.parser: 0
