@@ -1,0 +1,20 @@
+# Upgrade contract for the TLS state rename (rules): a firewall rule that
+# still uses a pre-phase state name is rejected at load ("does not
+# support hook") and the failure is fatal under --init-errors-fatal,
+# which is how the test framework runs suricata. The config carries only
+# valid keys so that the run reaches rule load.
+requires:
+  min-version: 9
+
+exit-code: 1
+
+pcap: ../../tls/tls-client-hello-frag-01/dump_mtu300.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- shell:
+    args: grep -c 'does not support hook "client_hello_done"' stderr
+    expect: 1
