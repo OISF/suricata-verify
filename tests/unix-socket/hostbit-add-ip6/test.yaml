@@ -17,5 +17,5 @@ checks:
   # Ticket: https://redmine.openinfosecfoundation.org/issues/8799
   - shell:
       requires:
-        min-version: 9
+        min-version: 8.0.7
       args: test ! -e socket
