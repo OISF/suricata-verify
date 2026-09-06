@@ -1,0 +1,2 @@
+alert tls any any -> any any (msg:"original SNI, window open"; tls.sni; content:"www.google.com"; sid:1;)
+alert tls any any -> any any (msg:"renegotiation SNI, window closed"; tls.sni; content:"reneg.example.com"; sid:2;)
