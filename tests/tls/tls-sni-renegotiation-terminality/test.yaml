@@ -1,0 +1,38 @@
+# A renegotiation exchange (server ServerHello with
+# renegotiation_info + ChangeCipherSpec, then a client ClientHello
+# with a new SNI) arrives after the handshake completed: the client
+# track is at client_data and the monotonic state machine does not
+# move backwards, so the client_hello window stays closed.
+# Pinned: the control rule matching the original SNI fires exactly
+# once at client_hello (no re-alert when the flow replays a
+# hello-shaped packet), a rule registered at client_hello and
+# matching only the renegotiation SNI never fires (the window's
+# decision is terminal from the moment the track advanced past it),
+# and the parser keeps the first SNI across the renegotiation, which
+# the tls log pins.
+# The pcap is crafted by craft-pcap.py (see that file).
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+      ts_progress: client_hello
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 2
+- filter:
+    count: 1
+    match:
+      event_type: tls
+      tls.sni: www.google.com
