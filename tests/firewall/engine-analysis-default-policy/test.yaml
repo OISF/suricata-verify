@@ -1,5 +1,5 @@
 requires:
-  min-version: 9
+  min-version: 8.0.7
   pcap: false
 
 args:
@@ -22,11 +22,22 @@ checks:
         "tables.dns.app:dns:request-complete.policy": "accept:flow"
 
   - filter:
+      requires:
+        min-version: 9
       filename: firewall.json
       count: 1
       match:
         "tables.http2.app:http2:stream:request_headers.policy": "accept:flow"
         "tables.http2.app:http2:global:request_complete.policy": "accept:flow"
+
+  - filter:
+      requires:
+        lt-version: 9
+      filename: firewall.json
+      count: 1
+      match:
+        "tables.http2.app:http2:request-started.policy": "accept:flow"
+        "tables.http2.app:http2:request-complete.policy": "accept:flow"
 
   # The td tables have no configurable policy, they must stay accept:hook.
   - filter:
