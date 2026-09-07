@@ -3,7 +3,7 @@ pcap: ../../cond-log-dns-dig/input.pcap
 requires:
   features:
     - HAVE_LUA
-  min-version: 8
+  min-version: 9
 
 args:
   - --set security.lua.allow-rules=true
