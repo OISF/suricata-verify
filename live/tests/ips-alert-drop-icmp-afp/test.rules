@@ -1,0 +1,2 @@
+alert icmp any any -> any any (msg:"ICMP echo request"; itype:8; sid:1;)
+drop icmp 10.200.0.2 any -> 10.200.0.1 any (msg:"ICMP echo request to server"; itype:8; sid:2;)

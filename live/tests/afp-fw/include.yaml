@@ -1,0 +1,26 @@
+%YAML 1.1
+---
+
+default-rule-path: ${TESTDIR}
+rule-files:
+  - empty.rules
+
+firewall:
+  enabled: true
+  rule-path: ${OUTDIR}
+  rule-files:
+    - firewall.rules
+
+af-packet:
+  - interface: client0
+    cluster-id: 80
+    copy-mode: ips
+    copy-iface: server0
+  - interface: server0
+    cluster-id: 81
+    copy-mode: ips
+    copy-iface: client0
+  - interface: default
+    defrag: false
+    threads: auto
+    cluster-type: cluster_flow

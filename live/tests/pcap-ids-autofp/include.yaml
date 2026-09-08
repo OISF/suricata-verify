@@ -1,0 +1,18 @@
+%YAML 1.1
+---
+
+default-rule-path: ${OUTDIR}
+rule-files:
+  - suricata.rules
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert
+        - stats:
+            totals: yes
+            threads: no
+            interval: 1

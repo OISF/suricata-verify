@@ -1,0 +1,6 @@
+:80 {
+    root * /srv
+    rewrite * /index.txt
+    header Content-Type text/plain
+    file_server
+}

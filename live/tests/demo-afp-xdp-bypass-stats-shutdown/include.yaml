@@ -1,0 +1,21 @@
+%YAML 1.1
+---
+
+default-rule-path: ${TESTDIR}
+rule-files:
+  - test.rules
+
+# AF_PACKET inline copy-mode (IPS) with XDP bypass on both capture interfaces.
+# When a flow is bypassed, Suricata installs it in the XDP flow map; the XDP
+# program then forwards that flow's packets between client0 and server0 in the
+# kernel, so they stop reaching Suricata's userspace while the endpoints keep
+# talking. This is the af-packet equivalent of the NFQ capture bypass in
+# ../bypass-nfq.
+af-packet:
+  - interface: br0
+    cluster-id: 91
+    bypass: yes
+    xdp-mode: soft
+    xdp-filter-file: ${OUTDIR}/xdp_filter.bpf
+  - interface: default
+    cluster-type: cluster_flow
