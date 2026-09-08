@@ -11,4 +11,5 @@ dangling buffer. The fixed double-pointer path clears caller ownership and
 exits safely.
 
 Regenerate the pcap with `./make-pcap.py`. The test is skipped if GDB is not
-available.
+available or the Suricata binary lacks GDB-readable line information for the
+fault-injection breakpoint.

@@ -5,6 +5,7 @@ requires:
     - HAVE_JA3
   script:
     - command -v gdb >/dev/null
+    - gdb --batch -nx -ex 'file ./src/suricata' -ex 'info line util-ja3.c:181' 2>/dev/null | grep -q 'starts at address'
 
 env:
   ASAN_OPTIONS: detect_leaks=0
