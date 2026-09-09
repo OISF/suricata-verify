@@ -1,0 +1,16 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # the v4 COMPOUND request leads with CREATE_SESSION and carries an
+  # oversized WRITE (17 MiB claim, above the 16 MiB default
+  # max-write-size) as its second op, in a record claiming 8 KiB. The
+  # scanner must advance the CREATE_SESSION op per its exact wire
+  # layout instead of consuming the remaining buffer: the WRITE claim
+  # must be visible from the first buffered packet, so the record is
+  # rejected + skipped instead of being buffered toward the claimed
+  # (attacker-controlled) record length.
+  - shell:
+      args: test "$(grep -Ec 'write_request_too_large' eve.json)" -ge 1

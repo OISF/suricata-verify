@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""Generate pcaps for the nfs4-malformed-compound-{request,response} and
-nfs-size-limit-zero suricata-verify tests.
+"""Generate pcaps for the nfs4-malformed-compound-{request,response},
+nfs-size-limit-zero, nfs4-gss-integrity-{write,read} and
+nfs4-createsession-partial-write suricata-verify tests.
 
 NFS RPC framing as consumed by the analyzer:
   request record: marker(frag_len,xid) msgtype rpcver program progver
@@ -64,6 +65,64 @@ def fh3():
 def fh3b():
     # a second, distinct file handle (separate file for the read transfer)
     return be32(32) + bytes(range(33, 65))
+
+
+# ---------------------------------------------------------------- GSS helpers
+
+def gss_creds():
+    # RPCSEC_GSS credential: version procedure seqnum service ctx.
+    # procedure=0, service=2 = integrity: the analyzer unwraps the
+    # (length, seqnum, data) envelope around the compound for this
+    # combination (full record path and partial scan).
+    return be32(1) + be32(0) + be32(1) + be32(2) + be32(0)
+
+
+def req_record_gss(xid, progver, proc, prog_data, frag_len=None):
+    body = (be32(xid) + be32(0) + be32(2) + be32(NFS_PROG) +
+            be32(progver) + be32(proc) + be32(6) + be32(len(gss_creds())) +
+            gss_creds() + be32(0) + be32(0) + prog_data)
+    return marker(frag_len if frag_len is not None else len(body)) + body
+
+
+def gss_envelope(compound, seq=1):
+    # the integrity wrapper the analyzer expects inside prog_data
+    return be32(len(compound)) + be32(seq) + compound
+
+
+WRITE_CLAIM = 17 * 1024 * 1024 + 4  # above the 16 MiB default
+
+
+def v4_write_compound(write_len=WRITE_CLAIM):
+    # PUTFH + WRITE: the WRITE claims write_len but the compound carries
+    # no data (claim vs data desync, cf. Redmine #8791)
+    putfh = be32(22) + fh3()
+    write = (be32(38) + be32(1) + b"\x00" * 12 +   # stateid
+             be64(0) + be32(2) + be32(write_len))  # offset stable write_len
+    return be32(0) + be32(0) + be32(2) + putfh + write
+
+
+def v4_read_req_compound(count=4096):
+    # PUTFH + READ request op (stateid, offset, count)
+    putfh = be32(22) + fh3()
+    read = be32(25) + be32(1) + b"\x00" * 12 + be64(0) + be32(count)
+    return be32(0) + be32(0) + be32(2) + putfh + read
+
+
+def v4_read_reply_compound(read_len=WRITE_CLAIM):
+    # compound status, tag, ops_cnt, READ op (status 0, eof 1, read_len)
+    return (be32(0) + be32(0) + be32(1) +
+            be32(25) + be32(0) + be32(1) + be32(read_len))
+
+
+def v4_createsession_write_compound(write_len=WRITE_CLAIM):
+    # CREATE_SESSION (clientid + 80 fixed bytes + machine name) followed
+    # by an oversized WRITE. The scanner must advance the CREATE_SESSION
+    # op per its exact layout and still see the WRITE claim.
+    createsession = (be32(43) + b"\x22" * 8 + b"\x33" * 80 +
+                     be32(4) + b"suri")
+    write = (be32(38) + be32(1) + b"\x00" * 12 +
+             be64(0) + be32(2) + be32(write_len))
+    return be32(0) + be32(0) + be32(2) + createsession + write
 
 
 def v4_getattr_req(xid):
@@ -233,3 +292,76 @@ flow.data_acked("s", v3_read_reply(0x77777777, SIZE, b"\x42" * SIZE))
 flow.close()
 wrpcap("tests/nfs-size-limit-zero/input.pcap", flow.pkts)
 print("test C:", len(flow.pkts), "pkts, size", SIZE)
+
+# ---------------------------------------------------------------- test D
+# RPCSEC_GSS integrity-wrapped oversized WRITE (request side). The partial
+# scan must unwrap the envelope before scanning: scanning the raw envelope
+# would read its length as the compound tag length and buffer toward the
+# 8 KiB claim (Redmine #8791) instead of rejecting the 17 MiB claim.
+flow = Flow(883)
+flow.handshake()
+flow.data("c", v4_getattr_req(0x11111111))
+flow.data("s", v4_getattr_reply(0x11111111))
+comp = v4_write_compound()
+env = gss_envelope(comp)
+hdr = (be32(0x22222222) + be32(0) + be32(2) + be32(NFS_PROG) +
+       be32(4) + be32(1) + be32(6) + be32(len(gss_creds())) +
+       gss_creds() + be32(0) + be32(0))
+p1 = marker(8188) + hdr + env + b"\xaa" * (4096 - 4 - len(hdr) - len(env))
+p2 = b"\xaa" * 4096
+flow.data("c", p1, seg=4096)
+flow.tcp("s", "A")
+flow.data("c", p2, seg=4096)
+flow.close()
+wrpcap("tests/nfs4-gss-integrity-write/input.pcap", flow.pkts)
+print("test D:", len(flow.pkts), "pkts, envelope", len(env))
+
+# ---------------------------------------------------------------- test E
+# RPCSEC_GSS integrity-wrapped oversized READ (response side). The request
+# (complete, small) records the (0, 2) GSS combination in the xidmap; the
+# partial reply scan must unwrap via that and reject the 17 MiB claim
+# instead of buffering toward the 8 KiB record claim.
+flow = Flow(884)
+flow.handshake()
+flow.data("c", v4_getattr_req(0x11111111))
+flow.data("s", v4_getattr_reply(0x11111111))
+rcomp = v4_read_req_compound()
+renv = gss_envelope(rcomp)
+rhdr = (be32(0x88888888) + be32(0) + be32(2) + be32(NFS_PROG) +
+       be32(4) + be32(1) + be32(6) + be32(len(gss_creds())) +
+       gss_creds() + be32(0) + be32(0))
+flow.data("c", marker(len(rhdr) + len(renv)) + rhdr + renv)
+flow.tcp("s", "A")
+wcomp = v4_read_reply_compound()
+wenv = gss_envelope(wcomp, seq=2)
+whdr = (be32(0x88888888) + be32(1) + be32(0) + be32(0) +
+        be32(0) + be32(0))               # ..verf_len accept_state
+p1 = marker(8188) + whdr + wenv + b"\xbb" * (4096 - 4 - len(whdr) - len(wenv))
+p2 = b"\xbb" * 4096
+flow.data("s", p1, seg=4096)
+flow.tcp("c", "A")
+flow.data("s", p2, seg=4096)
+flow.close()
+wrpcap("tests/nfs4-gss-integrity-read/input.pcap", flow.pkts)
+print("test E:", len(flow.pkts), "pkts")
+
+# ---------------------------------------------------------------- test F
+# CREATE_SESSION leading an oversized WRITE. The scanner must advance the
+# CREATE_SESSION op per its exact layout instead of consuming the remaining
+# buffer: the WRITE claim has to be visible from the first 4 KiB, so the
+# record is rejected + skipped instead of buffered toward the claim.
+flow = Flow(885)
+flow.handshake()
+flow.data("c", v4_getattr_req(0x11111111))
+flow.data("s", v4_getattr_reply(0x11111111))
+comp = v4_createsession_write_compound()
+hdr = (be32(0x99999999) + be32(0) + be32(2) + be32(NFS_PROG) +
+       be32(4) + be32(1) + be32(0) + be32(0) + be32(0) + be32(0))
+p1 = marker(8188) + hdr + comp + b"\xcc" * (4096 - 4 - len(hdr) - len(comp))
+p2 = b"\xcc" * 4096
+flow.data("c", p1, seg=4096)
+flow.tcp("s", "A")
+flow.data("c", p2, seg=4096)
+flow.close()
+wrpcap("tests/nfs4-createsession-partial-write/input.pcap", flow.pkts)
+print("test F:", len(flow.pkts), "pkts")
