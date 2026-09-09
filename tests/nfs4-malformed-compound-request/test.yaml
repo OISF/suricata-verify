@@ -1,0 +1,13 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # a v4 COMPOUND request record claims 8 KiB but carries an op count
+  # (100) above the 64-op bound within the first 4 KiB buffered. The
+  # structural error is definitive from the buffered bytes: the record
+  # must be rejected (and skipped) instead of being buffered toward the
+  # claimed record length.
+  - shell:
+      args: test "$(grep -Ec '"event":"malformed_data"' eve.json)" -ge 1
