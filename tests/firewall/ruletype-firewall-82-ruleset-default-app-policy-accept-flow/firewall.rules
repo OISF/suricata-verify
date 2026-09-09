@@ -2,4 +2,4 @@
 
 # default packet policy: accept:hook
 
-# no app rules, so drop
+# no app rules; traffic is accepted via the policies in suricata.yaml
