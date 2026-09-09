@@ -1,0 +1,9 @@
+# Packet-scope threat detection drop on the very packet that firewall sid:103
+# accepts and bypasses. `tcp-pkt` forces this into the packet detect table, so
+# unlike the app-layer TD rule in test 150 it is evaluated before the firewall
+# rule is reached in the alert queue.
+drop:packet tcp-pkt any any -> any any (msg:"TD packet drop on raw HTTP host"; flow:to_server,established; content:"www.testmyids.com"; sid:100003;)
+
+# Would alert on the response body if the flow were still being inspected.
+# Must not alert: the flow was bypassed at the request headers.
+alert http any any -> any any (msg:"Response body inspected after bypass"; flow:to_client,established; http.response_body; content:"uid=0|28|root|29|"; sid:100001;)

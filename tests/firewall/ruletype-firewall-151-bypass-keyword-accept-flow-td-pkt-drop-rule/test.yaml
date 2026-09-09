@@ -1,0 +1,61 @@
+requires:
+  min-version: 9
+
+pcap: ../../flowbit-oring/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+# The firewall rule must and its bypass be applied, so the rule and its accept must be visible.
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 103
+      pcap_cnt: 4
+      alert.action: allowed
+      verdict.action: accept
+
+# Threat detection must not be consulted for the bypassed packet.
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 100003
+
+# The rest of the flow is not inspected after the bypass.
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 100001
+
+# No alert may carry a blocking verdict.
+- filter:
+    count: 0
+    match:
+      event_type: drop
+
+# If these fail, the test is not reproducing the intended corner case
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.state: bypassed
+      flow.bypass: local
+      flow.action: accept
+      flow.pkts_toserver: 6
+      flow.pkts_toclient: 4
+
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.ips.blocked: 0
+      stats.ips.accepted: 3
+      stats.ips.drop_reason.rules: 0
+      stats.firewall.accepted: 4
+      stats.flow.end.state.local_bypassed: 1
+      stats.flow_bypassed.local_pkts: 6

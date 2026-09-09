@@ -1,0 +1,26 @@
+# Packet rules
+
+accept:hook tcp:all any any -> any any (sid:100;)
+
+# default drop
+
+# App-layer rules
+
+accept:hook http1:request_started any any -> any any (sid:101;)
+accept:hook http1:request_line any any -> any any (sid:102;)
+
+# Rule under test: the `threshold` keyword is banned in firewall rules, so
+# loading this ruleset must fail.
+accept:flow,alert http1:request_headers any any -> any any (msg:"FW accept flow, thresholded"; http.host; content:"www.testmyids.com"; threshold:type limit, track by_src, count 1, seconds 60; sid:103;)
+
+accept:hook http1:request_body any any -> any any (sid:104;)
+accept:hook http1:request_trailer any any -> any any (sid:105;)
+accept:hook http1:request_complete any any -> any any (sid:106;)
+
+# Response side accepted so the test does not depend on the default app policy.
+accept:hook http1:response_started any any -> any any (sid:201;)
+accept:hook http1:response_line any any -> any any (sid:202;)
+accept:hook http1:response_headers any any -> any any (sid:203;)
+accept:hook http1:response_body any any -> any any (sid:204;)
+accept:hook http1:response_trailer any any -> any any (sid:205;)
+accept:hook http1:response_complete any any -> any any (sid:206;)
