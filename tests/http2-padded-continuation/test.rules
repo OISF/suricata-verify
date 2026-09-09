@@ -1,0 +1,2 @@
+alert http any any -> any any (msg:"SV1264 h2 padded split continuation marker c1"; http.response_header; content:"x-splitpad|3a 20|splitpad-c1"; sid:9043; rev:1;)
+alert http any any -> any any (msg:"SV1264 h2 padded split continuation marker c2"; http.response_header; content:"x-splitpad|3a 20|splitpad-c2"; sid:9044; rev:1;)
