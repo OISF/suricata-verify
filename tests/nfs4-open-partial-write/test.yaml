@@ -1,0 +1,15 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # A v4 COMPOUND request leads with an OPEN op carrying a
+  # CLAIM4_DELEGATE_CUR claim (a non-void claim payload the scanner's
+  # skip tables do not mirror) and then an oversized WRITE, inside a
+  # record claiming far more than ever arrives. The claim payload makes
+  # the compound's structure un-skippable: the scanner must apply its
+  # bounded rejection (malformed tx + skip to the marker boundary)
+  # instead of buffering toward the 17 MiB claim (Redmine #8791).
+  - shell:
+      args: test "$(grep -Ec '"event":"malformed_data"' eve.json)" -ge 1

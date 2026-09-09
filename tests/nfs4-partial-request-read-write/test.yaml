@@ -1,0 +1,17 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # a fragmented PUTFH; READ; WRITE request: the request scanner skips the
+  # READ op's args (stateid + offset + count) to reach the within-limit
+  # WRITE, so the record completes and the 8192-byte write is inspected
+  # (fileinfo), NOT rejected as malformed.
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.size: 8192
+  - shell:
+      args: test "$(grep -Ec 'malformed_data' eve.json)" -eq 0
