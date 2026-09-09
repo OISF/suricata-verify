@@ -2,4 +2,4 @@
 
 # default packet policy: accept:hook,alert
 
-# no app rules, so drop ?
+# no app rules; the alert is the default packet policy alert (sid 2201000)
