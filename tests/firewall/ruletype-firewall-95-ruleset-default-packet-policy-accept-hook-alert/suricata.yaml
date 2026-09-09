@@ -81,7 +81,7 @@ firewall:
           - "accept:hook"
         request-complete:
           - "accept:hook"
-        request-started:
+        response-started:
           - "accept:hook"
         response-line:
           - "accept:hook"
