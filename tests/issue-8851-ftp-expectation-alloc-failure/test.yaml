@@ -4,6 +4,7 @@ requires:
   script:
     - command -v gdb >/dev/null
     - command -v timeout >/dev/null
+    - gdb --batch -nx -ex 'file ./src/suricata' -ex 'info line AppLayerExpectationCreate' 2>/dev/null | grep -q 'starts at address'
 
 env:
   ASAN_OPTIONS: detect_leaks=0
