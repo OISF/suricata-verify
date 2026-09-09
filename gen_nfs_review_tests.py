@@ -114,15 +114,129 @@ def v4_read_reply_compound(read_len=WRITE_CLAIM):
             be32(25) + be32(0) + be32(1) + be32(read_len))
 
 
-def v4_createsession_write_compound(write_len=WRITE_CLAIM):
-    # CREATE_SESSION (clientid + 80 fixed bytes + machine name) followed
-    # by an oversized WRITE. The scanner must advance the CREATE_SESSION
-    # op per its exact layout and still see the WRITE claim.
-    createsession = (be32(43) + b"\x22" * 8 + b"\x33" * 80 +
-                     be32(4) + b"suri")
+def v4_sequence_read_req_compound(count=8192):
+    # NFSv4.1 request: SEQUENCE (32-byte args), PUTFH, READ. Establishes the
+    # file (PUTFH) and requests a `count`-byte read.
+    sequence = (be32(53) + b"\x22" * 16 + be32(1) + be32(1) +
+                be32(1) + be32(0))  # ssn_id(16) + seqid/slot/high/cache
+    putfh = be32(22) + fh3()
+    read = be32(25) + be32(1) + b"\x00" * 12 + be64(0) + be32(count)
+    return be32(0) + be32(0) + be32(3) + sequence + putfh + read
+
+
+def v4_sequence_read_reply_compound(read_len=8192):
+    # NFSv4.1 reply: SEQUENCE (status 0 + 36-byte sequence_ok result),
+    # PUTFH (status 0, no result), READ (status 0, eof 0, read_len, data).
+    # The response scanner must skip the 36-byte SEQUENCE result to reach
+    # the READ; without that the compound is rejected as malformed.
+    sequence = be32(53) + be32(0) + b"\x11" * 36
+    putfh = be32(22) + be32(0)
+    read = be32(25) + be32(0) + be32(0) + be32(read_len) + b"\x77" * read_len
+    return be32(0) + be32(0) + be32(3) + sequence + putfh + read
+
+
+def v4_createsession_op(machine_name=b"nfsclient", variant="auth_none"):
+    # A valid-looking CREATE_SESSION op: clientid4, seqid, flags,
+    # fore/back channel_attributes4, cb program/version, g flavor/stamp,
+    # machine name. The channel attributes carry realistic values (the
+    # 0x33333333 RDMA counts in the original fixture were invalid); the
+    # "rdma" variant carries a non-empty channel netid, so the op is
+    # variable-length. The scanner rejects the op tag (not reliably
+    # skippable) regardless of these args.
+    clientid = bytes(range(0xa0, 0xa8))
+    seqid = be32(1)
+    flags = be32(0)
+    # channel_attributes4: high_tls, session_cached_lb, slot_table_size,
+    # xdr_minsize, xdr_maxsize, hauth_maxreqs, sc_first, sc_backchannel
+    chan = (be32(0) + be32(0) + be32(128) + be32(64) +
+            be32(1 << 20) + be32(256) + be32(0) + be32(0))
+    cb_program = be32(0)
+    cb_version = be32(0)
+    g_flavor = be32(0)
+    if variant == "auth_sys":
+        cb_program = be32(NFS_PROG)
+        cb_version = be32(3)
+        g_flavor = be32(1)
+    elif variant == "rdma":
+        # a non-empty channel netid makes the attributes variable-length
+        chan += be32(4) + b"rdma"
+        cb_program = be32(NFS_PROG)
+        cb_version = be32(4)
+        g_flavor = be32(1)
+    g_stamp = be32(0x5f3c0000)
+    name = be32(len(machine_name)) + machine_name
+    pad = (4 - (len(machine_name) % 4)) % 4
+    return (be32(43) + clientid + seqid + flags + chan + chan +
+            cb_program + cb_version + g_flavor + g_stamp +
+            name + b"\x00" * pad)
+
+
+def v4_createsession_write_compound(write_len=WRITE_CLAIM, variant="auth_none"):
+    # CREATE_SESSION (a valid variable-length op) followed by an oversized
+    # WRITE. The scanner must not advance past the CREATE_SESSION op: it
+    # rejects the compound (bounded, Malformed) instead of Incomplete.
     write = (be32(38) + be32(1) + b"\x00" * 12 +
              be64(0) + be32(2) + be32(write_len))
-    return be32(0) + be32(0) + be32(2) + createsession + write
+    return (be32(0) + be32(0) + be32(2) +
+            v4_createsession_op(variant=variant) + write)
+
+
+def v4_open_write_compound(write_len=WRITE_CLAIM):
+    # OPEN (with a CLAIM4_DELEGATE_CUR claim) followed by an oversized
+    # WRITE. The scanner must not advance past the OPEN's open_claim4
+    # union (a CLAIM4_DELEGATE_CUR stateid seqid would be misread as a
+    # filename length by a non-union-aware parser): bounded rejection
+    # (Malformed), never Incomplete.
+    seqid = be32(1)
+    share_access = be32(0)
+    share_deny = be32(0)
+    clientid = bytes(range(0xb0, 0xb8))
+    owner = be32(0)    # OPEN4_NONGROUP (no clientid in the union arm)
+    how = be32(0)      # OPEN4_CURRENT
+    claim_type = be32(3)  # CLAIM4_DELEGATE_CUR
+    # the claim carries a stateid4; its seqid would be misread as a
+    # filename length by a non-union-aware parser
+    claim = be32(0x01000000) + b"\x00" * 12  # stateid4
+    filename = be32(5) + b"nfsfile"
+    open_op = (be32(18) + seqid + share_access + share_deny + clientid +
+               owner + how + claim_type + claim + filename)
+    write = (be32(38) + be32(1) + b"\x00" * 12 +
+             be64(0) + be32(2) + be32(write_len))
+    return be32(0) + be32(0) + be32(2) + open_op + write
+
+
+def v4_read_write_req_compound(write_len=8192):
+    # PUTFH + READ (stateid, offset, count) + WRITE (stateid, offset,
+    # stable, write_len, data). The READ (request) is a valid op the
+    # scanner must skip to reach the following within-limit WRITE.
+    putfh = be32(22) + fh3()
+    read = be32(25) + be32(1) + b"\x00" * 12 + be64(0) + be32(write_len)
+    write = (be32(38) + be32(1) + b"\x00" * 12 +
+             be64(0) + be32(2) + be32(write_len) + b"\x99" * write_len)
+    return be32(0) + be32(0) + be32(3) + putfh + read + write
+
+
+def v4_open_getfh_read_reply_compound(read_len=8192):
+    # status, tag, ops_cnt, OPEN (status 0 + open_ok4: stateid, change_info,
+    # result_flags, fattr4 attr_cnt(0) + mask1 -- the parser always reads
+    # mask1 -- delegate NONE), GETFH (status 0 + 32-byte fh, 4-aligned:
+    # no XDR pad), READ (status 0, eof 0, read_len, data). The OPEN
+    # (response) is a valid op the scanner must skip to reach the
+    # within-limit READ; the GETFH result mirrors the request's PUTFH
+    # handle, so the tx file state stays intact.
+    open_op = (be32(18) + be32(0) + b"\x00" * 16 + b"\x00" * 20 +
+               be32(0) + be32(0) + be32(0) + be32(0))
+    getfh = be32(10) + be32(0) + fh3()
+    read = be32(25) + be32(0) + be32(0) + be32(read_len) + b"\x77" * read_len
+    return be32(0) + be32(0) + be32(3) + open_op + getfh + read
+
+
+def v4_write_reply(xid, count):
+    # compound status, tag, ops_cnt=1, WRITE res (status 0 + count +
+    # committed + verifier)
+    prog_data = (be32(0) + be32(0) + be32(1) +
+                 be32(38) + be32(0) + be32(count) + be32(0) + be64(0))
+    return reply_record(xid, prog_data)
 
 
 def v4_getattr_req(xid):
@@ -346,16 +460,41 @@ wrpcap("tests/nfs4-gss-integrity-read/input.pcap", flow.pkts)
 print("test E:", len(flow.pkts), "pkts")
 
 # ---------------------------------------------------------------- test F
-# CREATE_SESSION leading an oversized WRITE. The scanner must advance the
-# CREATE_SESSION op per its exact layout instead of consuming the remaining
-# buffer: the WRITE claim has to be visible from the first 4 KiB, so the
-# record is rejected + skipped instead of buffered toward the claim.
+# CREATE_SESSION (a valid variable-length op) leading an oversized WRITE.
+# The scanner must not advance past the CREATE_SESSION op: it rejects the
+# compound (bounded, Malformed) instead of returning Incomplete and
+# buffering toward the claim (Redmine #8791). Three channel variants
+# (AUTH_NONE, AUTH_SYS, non-empty RDMA) are covered.
 flow = Flow(885)
 flow.handshake()
 flow.data("c", v4_getattr_req(0x11111111))
 flow.data("s", v4_getattr_reply(0x11111111))
-comp = v4_createsession_write_compound()
-hdr = (be32(0x99999999) + be32(0) + be32(2) + be32(NFS_PROG) +
+for i, variant in enumerate(("auth_none", "auth_sys", "rdma")):
+    comp = v4_createsession_write_compound(variant=variant)
+    xid = 0x99990001 + i
+    hdr = (be32(xid) + be32(0) + be32(2) + be32(NFS_PROG) +
+           be32(4) + be32(1) + be32(0) + be32(0) + be32(0) + be32(0))
+    p1 = marker(8188) + hdr + comp + b"\xcc" * (4096 - 4 - len(hdr) - len(comp))
+    p2 = b"\xcc" * 4096
+    flow.data("c", p1, seg=4096)
+    flow.tcp("s", "A")
+    flow.data("c", p2, seg=4096)
+flow.close()
+wrpcap("tests/nfs4-createsession-partial-write/input.pcap", flow.pkts)
+print("test F:", len(flow.pkts), "pkts")
+
+# ---------------------------------------------------------------- test G
+# OPEN (CLAIM4_DELEGATE_CUR) leading an oversized WRITE. The scanner must
+# not advance past the OPEN's open_claim4 union (a CLAIM4_DELEGATE_CUR
+# stateid seqid would be misread as a filename length by a non-union-aware
+# parser): bounded rejection (Malformed), never Incomplete and never
+# buffering toward the claim (Redmine #8791).
+flow = Flow(886)
+flow.handshake()
+flow.data("c", v4_getattr_req(0x11111111))
+flow.data("s", v4_getattr_reply(0x11111111))
+comp = v4_open_write_compound()
+hdr = (be32(0x88880001) + be32(0) + be32(2) + be32(NFS_PROG) +
        be32(4) + be32(1) + be32(0) + be32(0) + be32(0) + be32(0))
 p1 = marker(8188) + hdr + comp + b"\xcc" * (4096 - 4 - len(hdr) - len(comp))
 p2 = b"\xcc" * 4096
@@ -363,5 +502,91 @@ flow.data("c", p1, seg=4096)
 flow.tcp("s", "A")
 flow.data("c", p2, seg=4096)
 flow.close()
-wrpcap("tests/nfs4-createsession-partial-write/input.pcap", flow.pkts)
-print("test F:", len(flow.pkts), "pkts")
+wrpcap("tests/nfs4-open-partial-write/input.pcap", flow.pkts)
+print("test G:", len(flow.pkts), "pkts")
+
+# ---------------------------------------------------------------- test H
+# A fragmented NFSv4.1 SEQUENCE; PUTFH; READ reply. The response scanner
+# must skip the 36-byte successful SEQUENCE result (and the PUTFH status)
+# to reach the READ; without that the compound is rejected as malformed and
+# the read data is never inspected. The read is within the limit, so the
+# record completes and the file is logged (size 8192); the check asserts
+# the fileinfo event and no malformed_data.
+flow = Flow(887)
+flow.handshake()
+flow.data("c", v4_getattr_req(0x11111111))
+flow.data("s", v4_getattr_reply(0x11111111))
+# the read request (SEQUENCE; PUTFH; READ): establishes the file
+rcomp = v4_sequence_read_req_compound(8192)
+rhdr = (be32(0x77777777) + be32(0) + be32(2) + be32(NFS_PROG) +
+        be32(4) + be32(1) + be32(0) + be32(0) + be32(0) + be32(0))
+flow.data("c", marker(len(rhdr) + len(rcomp)) + rhdr + rcomp)
+flow.tcp("s", "A")
+# the fragmented SEQUENCE; PUTFH; READ reply (within-limit 8192-byte read)
+wcomp = v4_sequence_read_reply_compound(8192)
+whdr = (be32(0x77777777) + be32(1) + be32(0) + be32(0) +
+        be32(0) + be32(0))
+body = whdr + wcomp
+p1 = marker(len(body)) + body[:4092]
+p2 = body[4092:]
+flow.data("s", p1, seg=4096)
+flow.tcp("c", "A")
+flow.data("s", p2, seg=4096)
+flow.close()
+wrpcap("tests/nfs4-sequence-read-partial/input.pcap", flow.pkts)
+print("test H:", len(flow.pkts), "pkts")
+
+# ---------------------------------------------------------------- test I
+# A fragmented PUTFH; READ; WRITE request (within-limit 8192-byte write).
+# The request scanner must skip the READ (a valid op the full parser
+# supports) to reach the WRITE; without that the compound is rejected as
+# malformed and the write data is never inspected. The write is within the
+# limit, so the record completes and the file is logged (size 8192).
+flow = Flow(888)
+flow.handshake()
+flow.data("c", v4_getattr_req(0x11111111))
+flow.data("s", v4_getattr_reply(0x11111111))
+comp = v4_read_write_req_compound(8192)
+hdr = (be32(0x77777777) + be32(0) + be32(2) + be32(NFS_PROG) +
+       be32(4) + be32(1) + be32(0) + be32(0) + be32(0) + be32(0))
+body = hdr + comp
+full = marker(len(body)) + body
+# first packet: marker + hdr + compound header + PUTFH + READ cmd tag
+p1 = full[:100]
+p2 = full[100:]
+flow.data("c", p1, seg=4096)
+flow.tcp("s", "A")
+flow.data("c", p2, seg=4096)
+flow.tcp("s", "A")
+flow.data("s", v4_write_reply(0x77777777, 8192))
+flow.close()
+wrpcap("tests/nfs4-partial-request-read-write/input.pcap", flow.pkts)
+print("test I:", len(flow.pkts), "pkts")
+
+# ---------------------------------------------------------------- test J
+# A fragmented OPEN; GETFH; READ reply (within-limit 8192-byte read). The
+# response scanner must skip the OPEN (a valid op the full parser supports)
+# to reach the READ; without that the compound is rejected as malformed and
+# the read data is never inspected. The read is within the limit, so the
+# record completes and the file is logged (size 8192).
+flow = Flow(889)
+flow.handshake()
+flow.data("c", v4_getattr_req(0x11111111))
+flow.data("s", v4_getattr_reply(0x11111111))
+rcomp = v4_read_req_compound(8192)
+rhdr = (be32(0x88888888) + be32(0) + be32(2) + be32(NFS_PROG) +
+        be32(4) + be32(1) + be32(0) + be32(0) + be32(0) + be32(0))
+flow.data("c", marker(len(rhdr) + len(rcomp)) + rhdr + rcomp)
+flow.tcp("s", "A")
+comp = v4_open_getfh_read_reply_compound(8192)
+whdr = (be32(0x88888888) + be32(1) + be32(0) + be32(0) +
+        be32(0) + be32(0))
+body = whdr + comp
+p1 = marker(len(body)) + body[:4092]
+p2 = body[4092:]
+flow.data("s", p1, seg=4096)
+flow.tcp("c", "A")
+flow.data("s", p2, seg=4096)
+flow.close()
+wrpcap("tests/nfs4-partial-response-open-read/input.pcap", flow.pkts)
+print("test J:", len(flow.pkts), "pkts")
