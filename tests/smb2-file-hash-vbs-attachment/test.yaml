@@ -1,0 +1,51 @@
+args:
+- -k none
+
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # three full-read transactions: the complete 4733-byte file, hash of
+  # the actual wire data
+  - filter:
+      count: 3
+      match:
+        event_type: fileinfo
+        app_proto: smb
+        fileinfo.filename: "SH-20180404-B92D36.vbs"
+        fileinfo.size: 4733
+        fileinfo.gaps: false
+        fileinfo.stored: true
+        fileinfo.sha256: "2535c52dad357d25e5ad05f89977c8fff622d99ca145328debf9c5559ec9f4d1"
+  # two partial-read transactions: the 512-byte prefix, hash of the
+  # 512 bytes actually delivered by the read responses
+  - filter:
+      count: 2
+      match:
+        event_type: fileinfo
+        app_proto: smb
+        fileinfo.filename: "SH-20180404-B92D36.vbs"
+        fileinfo.size: 512
+        fileinfo.gaps: false
+        fileinfo.stored: true
+        fileinfo.sha256: "cd4a4b9e0cd008a61d11b6f64126c09b868a18e2b056043c9fec9f39465d639a"
+  # no other file transactions (7 file ops -> 5 logged files)
+  - filter:
+      count: 5
+      match:
+        event_type: fileinfo
+        fileinfo.filename: "SH-20180404-B92D36.vbs"
+  # two file transactions carry repeated reads of the same offset range
+  # (one file read fully twice, one read 4096 bytes then 4733): the file
+  # tracker reports the overlaps; the file content is consistent
+  - filter:
+      count: 2
+      match:
+        event_type: anomaly
+        anomaly.app_proto: smb
+        anomaly.event: file_overlap
+  # no other app-layer anomalies
+  - shell:
+      args: test "$(grep -E '"event_type":"anomaly"' eve.json | grep -vc 'file_overlap')" -eq 0
