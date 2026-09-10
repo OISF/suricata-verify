@@ -8,7 +8,7 @@
 # inside run.py instead of failing the check.
 
 requires:
-  min-version: 9.0
+  min-version: 8.0.7
 
 pcap: ../input.pcap
 rules: ../test.rules

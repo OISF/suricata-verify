@@ -2,7 +2,7 @@
 ---
 
 requires:
-  min-version: 9
+  min-version: 8.0.7
 
 # ENIP is disabled by default; enable it. -k none disables checksum checks.
 args:

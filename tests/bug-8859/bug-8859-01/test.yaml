@@ -9,7 +9,7 @@
 # carrying "a\r\nPORT AAAAAAAAAAAAAAAAAAA".
 
 requires:
-  min-version: 9
+  min-version: 8.0.7
 
 args:
 - -k none --set app-layer.protocols.ftp.max-line-length=32

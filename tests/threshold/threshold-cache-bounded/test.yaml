@@ -6,7 +6,7 @@
 # does not exist, or its value exceeds the bound). It must be added
 # together with the fix that bounds the cache.
 requires:
-  min-version: 9
+  min-version: 8.0.7
 
 args:
   # single detection thread so the per-thread cache is a single cache
