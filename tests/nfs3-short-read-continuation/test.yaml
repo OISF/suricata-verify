@@ -1,0 +1,27 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # T1 reads 512 bytes (offset 0), T2 is a SHORT read (count 1000, 100
+  # bytes of data, all inside the tracked region), T3 reads 512 new
+  # bytes at offset 512. T2 must not leave a count-based chunk promise
+  # that eats T3's reply as chunk data: the file is the 1024 bytes of
+  # wire data (T1 + T3) and closes complete.
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.size: 1024
+        fileinfo.state: CLOSED
+        fileinfo.sha256: c99a61cabe8f29f3c92683483dee97864e77517632d0f1ab489036f6d7e24563
+  # T3's reply is inspected as a record (the tx logs 3 read chunks)
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: READ
+        nfs.file_tx: true
+  - shell:
+      args: test "$(grep -Ec 'malformed_data' eve.json)" -eq 0

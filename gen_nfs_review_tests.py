@@ -258,11 +258,13 @@ def v4_getattr_reply(xid):
     return reply_record(xid, prog_data)
 
 
-def v3_write_req(xid, offset, count, data, stable=0):
+def v3_write_req(xid, offset, count, data, stable=0, fh=None):
     # fh offset count stable file_len data. stable=0 (UNSTABLE): the file
     # tx stays open, so the in-progress chunk is fed by later stream data;
     # stable=2 closes the tx and the remaining chunk bytes are dropped.
-    prog_data = (fh3() + be64(offset) + be32(count) + be32(stable) +
+    if fh is None:
+        fh = fh3()
+    prog_data = (fh + be64(offset) + be32(count) + be32(stable) +
                  be32(len(data)) + data)
     return req_record(xid, 3, 7, prog_data)
 
@@ -295,14 +297,17 @@ class Flow:
         self.pkts = []
 
     def tcp(self, d, flags, payload=b""):
-        # SYN/SYN-ACK consume one sequence number; data packets consume
-        # exactly their payload length (no gaps in the stream)
+        # SYN/SYN-ACK consume one sequence number, data packets consume
+        # their payload length, pure ACKs consume nothing
         if d == "c":
             p = (IP(src=CLIENT, dst=SERVER) /
                  TCP(sport=self.cport, dport=NFS_PORT, seq=self.cseq,
                      ack=self.ack_c, flags=flags, window=self.window) /
                  Raw(load=payload))
-            self.cseq += len(payload) if payload else 1
+            if payload:
+                self.cseq += len(payload)
+            elif flags in ("S", "SA"):
+                self.cseq += 1
             # the server will ack up to the client's new position
             self.ack_s = self.cseq
         else:
@@ -310,7 +315,10 @@ class Flow:
                  TCP(sport=NFS_PORT, dport=self.cport, seq=self.sseq,
                      ack=self.ack_s, flags=flags, window=self.window) /
                  Raw(load=payload))
-            self.sseq += len(payload) if payload else 1
+            if payload:
+                self.sseq += len(payload)
+            elif flags in ("S", "SA"):
+                self.sseq += 1
             self.ack_c = self.sseq
         self.pkts.append(p)
 
@@ -590,3 +598,175 @@ flow.data("s", p2, seg=4096)
 flow.close()
 wrpcap("tests/nfs4-partial-response-open-read/input.pcap", flow.pkts)
 print("test J:", len(flow.pkts), "pkts")
+
+# ---------------------------------------------------------------- test K
+# A fragmented PUTFH; OPEN; GETFH request compound (record >= 512 bytes):
+# the OPEN (request) is a valid op the full parser supports but had no
+# scanner skip entry, so the record was rejected malformed and the OPEN's
+# filename association was lost. The OPEN (open_type 0, CLAIM_NULL) is
+# padded via the owner name to push the record past 512 bytes; the split
+# lands mid-OPEN, right after the OPEN tag. The following PUTFH; READ
+# reuses the GETFH handle: the fileinfo must carry the OPEN's filename
+# (association via the namemap), proving the record was inspected.
+def v4_open_getfh_req_compound(name=b"opengetfhfile", owner_len=512):
+    putfh = be32(22) + fh3()
+    # owner (len + bytes, no XDR pad: 4-aligned) pads the record past 512
+    owner = be32(owner_len) + b"\x0f" * owner_len
+    # seq_id share_access share_deny client_id owner open_type claim_type name
+    open_op = (be32(18) + be32(8192) + be32(2) + be32(0) + be32(123) +
+               be32(12345) + owner + be32(0) + be32(0) +
+               be32(len(name)) + name + b"\x00" * (-len(name) % 4))
+    getfh = be32(10)
+    return be32(0) + be32(0) + be32(3) + putfh + open_op + getfh
+
+
+def v4_open_getfh_reply_compound():
+    # OPEN res (status 0 + open_ok4: stateid, change_info, result_flags,
+    # delegate NONE) + GETFH res (status 0 + 32-byte fh, 4-aligned).
+    open_op = (be32(18) + be32(0) + b"\x00" * 16 + b"\x00" * 20 +
+               be32(0) + be32(0) + be32(0) + be32(0))
+    getfh = be32(10) + be32(0) + fh3()
+    return be32(0) + be32(0) + be32(2) + open_op + getfh
+
+
+def v4_read_data_reply_compound(read_len=8192):
+    read = be32(25) + be32(0) + be32(0) + be32(read_len) + b"\x77" * read_len
+    return be32(0) + be32(0) + be32(1) + read
+
+
+flow = Flow(890)
+flow.handshake()
+flow.data("c", v4_getattr_req(0x11111111))
+flow.data("s", v4_getattr_reply(0x11111111))
+comp = v4_open_getfh_req_compound()
+hdr = (be32(0x77777777) + be32(0) + be32(2) + be32(NFS_PROG) +
+       be32(4) + be32(1) + be32(0) + be32(0) + be32(0) + be32(0))
+body = hdr + comp
+full = marker(len(body)) + body
+assert len(full) >= 512
+# first packet ends right after the OPEN tag
+p1 = full[:100]
+p2 = full[100:]
+flow.data("c", p1, seg=4096)
+flow.tcp("s", "A")
+flow.data("c", p2, seg=4096)
+flow.tcp("s", "A")
+flow.data("s", reply_record(0x77777777, v4_open_getfh_reply_compound()))
+flow.tcp("c", "A")
+# the read reuses the GETFH handle (putfh fh3): the filename association
+flow.data("c", req_record(0x99999999, 4, 1, v4_read_req_compound(8192)))
+flow.tcp("s", "A")
+flow.data("s", reply_record(0x99999999, v4_read_data_reply_compound(8192)))
+flow.close()
+wrpcap("tests/nfs4-partial-request-open-getfh/input.pcap", flow.pkts)
+print("test K:", len(flow.pkts), "pkts")
+
+# ---------------------------------------------------------------- test L
+# A v3 WRITE with count (4096) > file_len (2048): the chunk promise is
+# count-based but the record tail is file_len-based. The continuation
+# crosses max-write-queue-size (2048) and the chunk path rejects it; the
+# stream must land exactly at the following RPC (a 1000-byte WRITE on a
+# second handle), whose file must still be logged. The count-based
+# accounting consumed/skipped past the record tail into the following RPC
+# and lost the file.
+flow = Flow(891)
+flow.handshake()
+# in-order 100-byte WRITE on fh3: establishes the file tx, stays open
+flow.data("c", v3_write_req(0x11111111, 0, 100, b"\x33" * 100))
+flow.tcp("s", "A")
+flow.data("s", v3_write_reply(0x11111111, 0, 100))
+flow.tcp("c", "A")
+# the partial WRITE: offset 8192 (OOO), count 4096, file_len 2048.
+# Only the header + 512 data bytes ride in the first packet; the record
+# claims the full args (1536 bytes of data remain unbuffered).
+wcount = 4096
+wlen = 2048
+prog_data = (fh3() + be64(8192) + be32(wcount) + be32(0) +
+             be32(wlen) + b"\x55" * wlen)
+body = (be32(0x22222222) + be32(0) + be32(2) + be32(NFS_PROG) +
+        be32(3) + be32(7) + be32(0) + be32(0) + be32(0) + be32(0) +
+        prog_data)
+full = marker(len(body)) + body
+first = 4 + 40 + 36 + 8 + 4 + 4 + 4 + 512  # marker hdr fh off cnt stb flen 512
+assert first < len(full)
+flow.data("c", full[:first], seg=4096)
+flow.tcp("s", "A")
+# the rest of the record (1536 bytes of file data) followed by a complete
+# 1000-byte in-order WRITE on the second handle: the rejection must leave
+# this record in the stream, not consume/skip it.
+follow = v3_write_req(0x44444444, 0, 1000, b"\x44" * 1000, fh=fh3b())
+flow.data("c", full[first:] + follow, seg=64240)
+flow.tcp("s", "A")
+flow.data("s", v3_write_reply(0x44444444, 0, 1000))
+flow.tcp("c", "A")
+flow.close()
+wrpcap("tests/nfs3-write-count-data-continuation-overflow/input.pcap", flow.pkts)
+print("test L:", len(flow.pkts), "pkts")
+
+# ---------------------------------------------------------------- test M
+# A short v3 READ reply (data_len < count, complete record) must not arm a
+# count-based chunk promise: the promise would outlive the record and eat
+# the following reply's bytes as (consume-only) chunk data, losing the
+# next read's file. The tracker and the chunk state must follow the data
+# actually present in the reply (data_len-based), so the following read's
+# new data is stored and the file closes complete.
+flow = Flow(892)
+flow.handshake()
+# T1: full read, 512 bytes at offset 0 (the file is established)
+flow.data("c", v3_read_req(0x10000001, 0, 512))
+flow.tcp("s", "A")
+flow.data("s", v3_read_reply(0x10000001, 512, b"A" * 512, eof=0))
+flow.tcp("c", "A")
+# T2: SHORT read: count 1000, only 100 bytes of data (all inside the
+# tracked region: a covered retransmission, discarded)
+flow.data("c", v3_read_req(0x10000002, 0, 1000))
+flow.tcp("s", "A")
+flow.data("s", v3_read_reply(0x10000002, 1000, b"B" * 100, eof=0))
+flow.tcp("c", "A")
+# T3: a new in-order read at offset 512: its reply must be parsed as a
+# record, not consumed as T2's chunk continuation
+flow.data("c", v3_read_req(0x10000003, 512, 512))
+flow.tcp("s", "A")
+flow.data("s", v3_read_reply(0x10000003, 512, b"C" * 512, eof=1))
+flow.close()
+wrpcap("tests/nfs3-short-read-continuation/input.pcap", flow.pkts)
+print("test M:", len(flow.pkts), "pkts")
+
+# ---------------------------------------------------------------- test N
+# Partial v4 COMPOUND request [OPEN, WRITE]: the record claims 4196 bytes,
+# only the ~90-byte compound is present. The scanner must skip the OPEN
+# with the layout the full parser actually reads (seq_id + share_access +
+# share_deny + client_id = 20 bytes before the owner string). The 12-byte
+# owner below is crafted so the old 4-byte-off skip misreads it: the
+# misaligned compound desyncs and the record is rejected as malformed
+# instead of the oversized WRITE (17 MiB claim) being rejected.
+def v4_open_oversized_write_compound():
+    seqid = be32(1)
+    share_access = be32(0)
+    share_deny = be32(0)
+    clientid = bytes(range(0xb0, 0xb8))
+    # owner: first 8 bytes zero, last 4 bytes decode to 65536 -- what the
+    # old (4-byte-off) OPEN skip walks over as the misaligned layout
+    owner = be32(12) + bytes(8) + be32(65536)
+    open_type = be32(0)    # OPEN4_NONE (no open_data)
+    claim_type = be32(0)   # CLAIM4_NONE (no claim payload)
+    filename = be32(4) + b"file"
+    open_op = (be32(18) + seqid + share_access + share_deny + clientid +
+               owner + open_type + claim_type + filename)
+    write = (be32(38) + be32(1) + b"\x00" * 12 +
+             be64(0) + be32(2) + be32(WRITE_CLAIM))
+    return be32(0) + be32(0) + be32(2) + open_op + write
+
+flow = Flow(893)
+flow.handshake()
+# small, complete v4 exchange first: the app layer attaches on the first
+# fully parsed record in each direction
+flow.data("c", v4_getattr_req(0x11111111))
+flow.tcp("s", "A")
+flow.data("s", v4_getattr_reply(0x11111111))
+flow.tcp("c", "A")
+comp = v4_open_oversized_write_compound()
+flow.data("c", req_record(0x55555555, 4, 1, comp, frag_len=4196))
+flow.close()
+wrpcap("tests/nfs4-open-oversized-write-skip/input.pcap", flow.pkts)
+print("test N:", len(flow.pkts), "pkts")

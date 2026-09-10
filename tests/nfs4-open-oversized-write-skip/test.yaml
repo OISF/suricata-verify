@@ -1,0 +1,39 @@
+%YAML 1.1
+---
+# A partial (incomplete) NFSv4 compound request [OPEN, WRITE]: the RPC
+# fragment claims a 4196-byte record but only the ~90-byte compound is
+# present. The compound scanner must skip the OPEN with the layout the
+# full parser actually reads (seq_id + share_access + share_deny +
+# client_id = 20 bytes before the owner string). The 12-byte owner is
+# crafted so a 4-byte-off skip desyncs the misaligned compound: the record
+# would be rejected as malformed_data (no write_request_too_large) instead
+# of the oversized WRITE (17 MiB claim, above the 16 MiB default) being
+# rejected and skipped mid-flow.
+
+requires:
+  min-version: 9
+
+pcap: input.pcap
+args: []
+
+checks:
+  - shell:
+      args: test "$(grep -Ec 'write_request_too_large' eve.json)" -ge 1
+  - shell:
+      args: test "$(grep -Ec 'malformed_data' eve.json)" -eq 0
+  - shell:
+      args: test "$(grep -Ec 'too_many_transactions' eve.json)" -eq 0
+  # the rejected WRITE is logged mid-flow with the file transaction
+  # completed, not left open
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: "WRITE"
+        nfs.file_tx: true
+        pcap_cnt: 9
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: nfs
