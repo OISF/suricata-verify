@@ -11,7 +11,7 @@
 # failing the __len check.
 
 requires:
-  min-version: 9
+  min-version: 8.0.7
 
 args:
   - -k none

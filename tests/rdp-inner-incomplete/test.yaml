@@ -1,5 +1,5 @@
 requires:
-  min-version: 9
+  min-version: 8.0.7
 
 # A complete T.123 TPKT whose inner X.223 payload is malformed used to
 # escape parse_t123_tpkt as Incomplete, making the app-layer parser request
