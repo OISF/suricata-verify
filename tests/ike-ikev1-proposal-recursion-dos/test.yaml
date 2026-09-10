@@ -17,7 +17,7 @@
 # Needs a Rust build (IKE app-layer is Rust and enabled by default).
 
 requires:
-  min-version: 9 
+  min-version: 8.0.7
 
 args:
   # Force the documented 512 KiB per-thread stack floor so the unbounded

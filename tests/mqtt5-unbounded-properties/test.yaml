@@ -13,6 +13,9 @@
 #     properties object alone cannot distinguish fixed from vulnerable; the
 #     too_many_properties guard below is what makes this a real regression test.
 
+requires:
+  min-version: 8.0.7
+
 args:
   - -k none
 

@@ -14,7 +14,7 @@
 # the cap as low as 640 bytes; with it broken, the flow leaks 30000 bytes.
 
 requires:
-  min-version: 9
+  min-version: 8.0.7
 
 args:
 - -k none --set app-layer.protocols.ftp.memcap=16384

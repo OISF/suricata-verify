@@ -8,7 +8,7 @@
 # one.
 
 requires:
-  min-version: 9.0
+  min-version: 8.0.7
   features:
     - QA_SIMULATION
 

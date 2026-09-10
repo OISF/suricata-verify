@@ -1,5 +1,5 @@
 requires:
-  min-version: 9
+  min-version: 8.0.7
 
 checks:
   - filter:
@@ -10,11 +10,15 @@ checks:
         app_proto: dhcp
         alert.signature_id: 1000001
   - filter:
+      requires:
+        min-version: 9
       count: 5
       match:
         event_type: alert
         alert.signature_id: 1000001
   - filter:
+      requires:
+        min-version: 9
       count: 1
       match:
         event_type: alert
@@ -22,6 +26,8 @@ checks:
         app_proto: dhcp
         alert.signature_id: 1000001
   - filter:
+      requires:
+        min-version: 9
       count: 1
       match:
         event_type: alert
@@ -41,6 +47,8 @@ checks:
         event_type: alert
         alert.signature_id: 1000002
   - filter:
+      requires:
+        min-version: 9
       count: 2
       match:
         event_type: alert
@@ -53,6 +61,8 @@ checks:
         app_proto: dhcp
         alert.signature_id: 1000003
   - filter:
+      requires:
+        min-version: 9
       count: 1
       match:
         event_type: alert
@@ -66,6 +76,8 @@ checks:
         pcap_cnt: 1
         dhcp.renewal_time: 1800
   - filter:
+      requires:
+        min-version: 9
       count: 1
       match:
         event_type: dhcp
@@ -135,6 +147,8 @@ checks:
         app_proto: dhcp
         alert.signature_id: 1000002
   - filter:
+      requires:
+        min-version: 9
       count: 1
       match:
         event_type: alert
@@ -142,6 +156,8 @@ checks:
         app_proto: dhcp
         alert.signature_id: 1000001
   - filter:
+      requires:
+        min-version: 9
       count: 1
       match:
         event_type: alert

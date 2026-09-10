@@ -8,7 +8,7 @@
 # time and the real 550 reply was dropped.
 
 requires:
-  min-version: 9
+  min-version: 8.0.7
 
 args:
 - -k none --set app-layer.protocols.ftp.max-line-length=32
