@@ -4,6 +4,8 @@ requires:
   script:
     - command -v gdb >/dev/null
     - nm ./src/suricata | grep -q ' FileOpenFileWithId$'
+  features:
+    - USE_GDB
 
 env:
   ASAN_OPTIONS: detect_leaks=0
