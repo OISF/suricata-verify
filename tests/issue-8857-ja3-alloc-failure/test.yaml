@@ -3,6 +3,7 @@ requires:
   os: linux
   features:
     - HAVE_JA3
+    - USE_GDB
   script:
     - command -v gdb >/dev/null
     - gdb --batch -nx -ex 'file ./src/suricata' -ex 'info line util-ja3.c:181' 2>/dev/null | grep -q 'starts at address'
