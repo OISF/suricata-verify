@@ -1,0 +1,25 @@
+requires:
+  min-version: 9
+
+args:
+- -k none
+- --set stream.midstream=true
+- --set app-layer.protocols.nfs.enabled=yes
+
+pcap: input.pcap
+
+checks:
+  # the v4 COMPOUND WRITE request carries RPCSEC_GSS credentials with
+  # service rpc_gss_svc_none (procedure 0, service 1): the data is not
+  # wrapped, the raw compound is the prog_data. The record claims 20 MiB
+  # (above the 16 MiB default max-write-size) and arrives segmented. The
+  # partial scan must scan the raw compound and reject the claim with the
+  # size event; before the service-none fix the (0, 1) combination hit
+  # the scanner's catch-all and the record was discarded as malformed
+  # instead (Redmine #8791 class)
+  - shell:
+      args: test "$(grep -Ec 'write_request_too_large' eve.json)" -ge 1
+  # no malformed-data anomaly: the rejection is the size reject, not a
+  # scanner catch-all
+  - shell:
+      args: test "$(grep -Ec '"event":"malformed_data"' eve.json)" -eq 0
