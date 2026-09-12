@@ -6,8 +6,7 @@ the `max-read-size` limit.
 A typical NFSv4.1 compound reply leads with a `SEQUENCE` op. The partial
 response scanner (which walks the compound to find an oversized `READ`
 before the RPC record is buffered) must skip the `SEQUENCE` op's successful
-result — a 44-byte `nfs41_sequence_ok` (ssn4 + seqid + slots + flags +
-callback_ident4) — to
+result — the 36-byte `SEQUENCE4resok` (RFC 5661) — to
 reach the following `READ`. Without that skip the `SEQUENCE` op is "not
 reliably skippable" and the compound is rejected as malformed, so the read
 data is never inspected.

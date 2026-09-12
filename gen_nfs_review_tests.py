@@ -125,12 +125,11 @@ def v4_sequence_read_req_compound(count=8192):
 
 
 def v4_sequence_read_reply_compound(read_len=8192):
-    # NFSv4.1 reply: SEQUENCE (status 0 + 44-byte nfs41_sequence_ok result:
-    # ssn4 + seqid/high/slots/flags + callback_ident4), PUTFH (status 0,
-    # no result), READ (status 0, eof 0, read_len, data). The response
-    # scanner must skip the 44-byte SEQUENCE result to reach the READ;
-    # without that the compound is rejected as malformed.
-    sequence = be32(53) + be32(0) + b"\x11" * 32 + be32(8) + b"\x11" * 8
+    # NFSv4.1 reply: SEQUENCE (status 0 + 36-byte SEQUENCE4resok result),
+    # PUTFH (status 0, no result), READ (status 0, eof 0, read_len, data).
+    # The response scanner must skip the 36-byte SEQUENCE result to reach
+    # the READ; without that the compound is rejected as malformed.
+    sequence = be32(53) + be32(0) + b"\x11" * 16 + be32(1) + be32(1) + be32(1) + be32(1) + be32(1)
     putfh = be32(22) + be32(0)
     read = be32(25) + be32(0) + be32(0) + be32(read_len) + b"\x77" * read_len
     return be32(0) + be32(0) + be32(3) + sequence + putfh + read
@@ -516,7 +515,7 @@ print("test G:", len(flow.pkts), "pkts")
 
 # ---------------------------------------------------------------- test H
 # A fragmented NFSv4.1 SEQUENCE; PUTFH; READ reply. The response scanner
-# must skip the 44-byte successful SEQUENCE result (and the PUTFH status)
+# must skip the 36-byte successful SEQUENCE result (and the PUTFH status)
 # to reach the READ; without that the compound is rejected as malformed and
 # the read data is never inspected. The read is within the limit, so the
 # record completes and the file is logged (size 8192); the check asserts
@@ -774,12 +773,13 @@ print("test N:", len(flow.pkts), "pkts")
 
 # ---------------------------------------------------------------- test P
 # Well-formed v3 WRITE continuation shapes (RFC 2203: XDR fragments are
-# 4-byte aligned, so a well-formed record's claim INCLUDES the 3-byte XDR
-# fill of the file data). P: OOO write with an unresolved gap (data not
+# 4-byte aligned, so a well-formed record's claim INCLUDES the XDR fill
+# of the file data). P: OOO write with an unresolved gap (data not
 # stored); Q: in-order completion (exact content); R: the split lands
-# inside the fill (buffered fill byte). All three must keep the stream
-# framing clean: the following 1000-byte WRITE (second handle) parses and
-# logs its file, no malformed data.
+# exactly at the end of the data (k=0 fill bytes buffered); S: the split
+# lands inside the fill (k=1). All four must keep the stream framing
+# clean: the following 1000-byte WRITE (second handle) parses and logs
+# its file, no malformed data.
 def well_formed_partial_write_flow(port, offset, first_len):
     wlen = 2149
     prog_data = (fh3() + be64(offset) + be32(wlen) + be32(0) +
@@ -794,7 +794,9 @@ def well_formed_partial_write_flow(port, offset, first_len):
     flow.tcp("s", "A")
     flow.data("s", v3_write_reply(0x11111111, 0, 100))
     flow.tcp("c", "A")
-    first = 4 + 44 + first_len
+    # first_len = bytes of data+fill buffered: the file data starts 100
+    # bytes in (marker 4 + rpc header 40 + fh/args 56)
+    first = 100 + first_len
     assert first < len(full)
     flow.data("c", full[:first], seg=4096)
     flow.tcp("s", "A")
@@ -812,6 +814,9 @@ print("test P:", len(p.pkts), "pkts")
 q = well_formed_partial_write_flow(895, 100, 1000)
 wrpcap("tests/nfs3-inorder-partial-completion/input.pcap", q.pkts)
 print("test Q:", len(q.pkts), "pkts")
-r = well_formed_partial_write_flow(896, 100, 2150)
+r = well_formed_partial_write_flow(896, 100, 2149)
 wrpcap("tests/nfs3-straddle-fill-completion/input.pcap", r.pkts)
 print("test R:", len(r.pkts), "pkts")
+s = well_formed_partial_write_flow(897, 100, 2150)
+wrpcap("tests/nfs3-split-inside-fill-completion/input.pcap", s.pkts)
+print("test S:", len(s.pkts), "pkts")
