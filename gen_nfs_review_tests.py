@@ -125,11 +125,12 @@ def v4_sequence_read_req_compound(count=8192):
 
 
 def v4_sequence_read_reply_compound(read_len=8192):
-    # NFSv4.1 reply: SEQUENCE (status 0 + 36-byte sequence_ok result),
-    # PUTFH (status 0, no result), READ (status 0, eof 0, read_len, data).
-    # The response scanner must skip the 36-byte SEQUENCE result to reach
-    # the READ; without that the compound is rejected as malformed.
-    sequence = be32(53) + be32(0) + b"\x11" * 36
+    # NFSv4.1 reply: SEQUENCE (status 0 + 44-byte nfs41_sequence_ok result:
+    # ssn4 + seqid/high/slots/flags + callback_ident4), PUTFH (status 0,
+    # no result), READ (status 0, eof 0, read_len, data). The response
+    # scanner must skip the 44-byte SEQUENCE result to reach the READ;
+    # without that the compound is rejected as malformed.
+    sequence = be32(53) + be32(0) + b"\x11" * 32 + be32(8) + b"\x11" * 8
     putfh = be32(22) + be32(0)
     read = be32(25) + be32(0) + be32(0) + be32(read_len) + b"\x77" * read_len
     return be32(0) + be32(0) + be32(3) + sequence + putfh + read
@@ -515,7 +516,7 @@ print("test G:", len(flow.pkts), "pkts")
 
 # ---------------------------------------------------------------- test H
 # A fragmented NFSv4.1 SEQUENCE; PUTFH; READ reply. The response scanner
-# must skip the 36-byte successful SEQUENCE result (and the PUTFH status)
+# must skip the 44-byte successful SEQUENCE result (and the PUTFH status)
 # to reach the READ; without that the compound is rejected as malformed and
 # the read data is never inspected. The read is within the limit, so the
 # record completes and the file is logged (size 8192); the check asserts
