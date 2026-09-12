@@ -5,7 +5,7 @@ pcap: input.pcap
 
 checks:
   # a fragmented NFSv4.1 SEQUENCE; PUTFH; READ reply: the response scanner
-  # skips the 36-byte successful SEQUENCE result (and the PUTFH status) to
+  # skips the 44-byte successful SEQUENCE result (and the PUTFH status) to
   # reach the within-limit READ, so the record completes and the 8192-byte
   # read is inspected (fileinfo), NOT rejected as malformed.
   - filter:
