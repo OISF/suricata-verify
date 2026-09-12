@@ -10,7 +10,7 @@
 # buffering toward the claimed (up to 31-bit RPC length) record size.
 
 requires:
-  min-version: 9
+  min-version: 8.0.7
 
 pcap: input.pcap
 args:

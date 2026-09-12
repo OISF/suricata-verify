@@ -13,7 +13,7 @@
 # only (attr_cnt words + fields blob) and rejects the READ mid-flow.
 
 requires:
-  min-version: 9
+  min-version: 8.0.7
 
 pcap: input.pcap
 args:

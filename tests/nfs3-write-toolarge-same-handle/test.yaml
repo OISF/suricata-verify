@@ -5,7 +5,7 @@ args:
   - --set app-layer.protocols.nfs.max-write-size=4096
 
 requires:
-  min-version: 9
+  min-version: 8.0.7
 
 pcap: input.pcap
 

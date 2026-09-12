@@ -9,7 +9,7 @@
 # teardown while the caller marks the transaction closed.
 
 requires:
-  min-version: 9
+  min-version: 8.0.7
 
 pcap: input.pcap
 args:

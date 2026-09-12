@@ -7,7 +7,7 @@ args:
   - --set app-layer.protocols.nfs.max-read-queue-cnt=0
 
 requires:
-  min-version: 9
+  min-version: 8.0.7
 
 checks:
   # an in-order append can only drain the queue: it must not be

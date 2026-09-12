@@ -6,7 +6,7 @@ args:
   - --set app-layer.protocols.smb.max-read-queue-cnt=0
 
 requires:
-  min-version: 9
+  min-version: 8.0.7
 
 checks:
   - shell:

@@ -4,7 +4,7 @@ args:
   - none
 
 requires:
-  min-version: 9
+  min-version: 8.0.7
 
 checks:
   - shell:

@@ -10,7 +10,7 @@
 # past NFS_MAX_TX and evictions fire.
 
 requires:
-  min-version: 9
+  min-version: 8.0.7
 
 pcap: input.pcap
 args:

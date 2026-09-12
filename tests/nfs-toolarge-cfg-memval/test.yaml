@@ -7,7 +7,7 @@ args:
   - --set app-layer.protocols.nfs.max-read-size=1kb
 
 requires:
-  min-version: 9
+  min-version: 8.0.7
 
 pcap: input.pcap
 
