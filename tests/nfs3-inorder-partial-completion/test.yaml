@@ -1,0 +1,29 @@
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # the well-formed partial WRITE (fill inside the aligned claim)
+  # completes in order: the file is stored with the exact content
+  # (100 in-order + 2149 from the split record)
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: "7d5013fbaf9409217b5094ce5785bd4669def0023909c59d880ea8866e0d3c85"
+        fileinfo.stored: true
+  # the following WRITE's file is still logged (framing stayed clean)
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: "04ffd92aef8aafe6f4f8388bc9f7c5b0d39eae37128b1ca693647b8569f8e629"
+        fileinfo.stored: true
+  - shell:
+      args: test "$(grep -Ec 'malformed' eve.json)" -eq 0
