@@ -193,7 +193,7 @@ def v4_open_write_compound(write_len=WRITE_CLAIM):
     clientid = bytes(range(0xb0, 0xb8))
     owner = be32(0)    # OPEN4_NONGROUP (no clientid in the union arm)
     how = be32(0)      # OPEN4_CURRENT
-    claim_type = be32(3)  # CLAIM4_DELEGATE_CUR
+    claim_type = be32(2)  # CLAIM4_DELEGATE_CUR (stateid payload)
     # the claim carries a stateid4; its seqid would be misread as a
     # filename length by a non-union-aware parser
     claim = be32(0x01000000) + b"\x00" * 12  # stateid4
@@ -770,3 +770,47 @@ flow.data("c", req_record(0x55555555, 4, 1, comp, frag_len=4196))
 flow.close()
 wrpcap("tests/nfs4-open-oversized-write-skip/input.pcap", flow.pkts)
 print("test N:", len(flow.pkts), "pkts")
+
+# ---------------------------------------------------------------- test P
+# Well-formed v3 WRITE continuation shapes (RFC 2203: XDR fragments are
+# 4-byte aligned, so a well-formed record's claim INCLUDES the 3-byte XDR
+# fill of the file data). P: OOO write with an unresolved gap (data not
+# stored); Q: in-order completion (exact content); R: the split lands
+# inside the fill (buffered fill byte). All three must keep the stream
+# framing clean: the following 1000-byte WRITE (second handle) parses and
+# logs its file, no malformed data.
+def well_formed_partial_write_flow(port, offset, first_len):
+    wlen = 2149
+    prog_data = (fh3() + be64(offset) + be32(wlen) + be32(0) +
+                 be32(wlen) + b"\x55" * wlen + b"\xee" * 3)
+    body = (be32(0x22222222) + be32(0) + be32(2) + be32(NFS_PROG) +
+            be32(3) + be32(7) + be32(0) + be32(0) + be32(0) + be32(0) +
+            prog_data)
+    full = marker(len(body)) + body
+    flow = Flow(port)
+    flow.handshake()
+    flow.data("c", v3_write_req(0x11111111, 0, 100, b"\x33" * 100))
+    flow.tcp("s", "A")
+    flow.data("s", v3_write_reply(0x11111111, 0, 100))
+    flow.tcp("c", "A")
+    first = 4 + 44 + first_len
+    assert first < len(full)
+    flow.data("c", full[:first], seg=4096)
+    flow.tcp("s", "A")
+    follow = v3_write_req(0x44444444, 0, 1000, b"\x77" * 1000, fh=fh3b())
+    flow.data("c", full[first:] + follow, seg=64240)
+    flow.tcp("s", "A")
+    flow.data("s", v3_write_reply(0x44444444, 0, 1000))
+    flow.tcp("c", "A")
+    flow.close()
+    return flow
+
+p = well_formed_partial_write_flow(894, 8192, 1000)
+wrpcap("tests/nfs3-ooo-fill-completion/input.pcap", p.pkts)
+print("test P:", len(p.pkts), "pkts")
+q = well_formed_partial_write_flow(895, 100, 1000)
+wrpcap("tests/nfs3-inorder-partial-completion/input.pcap", q.pkts)
+print("test Q:", len(q.pkts), "pkts")
+r = well_formed_partial_write_flow(896, 100, 2150)
+wrpcap("tests/nfs3-straddle-fill-completion/input.pcap", r.pkts)
+print("test R:", len(r.pkts), "pkts")

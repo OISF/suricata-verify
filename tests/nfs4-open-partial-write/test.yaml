@@ -5,11 +5,15 @@ pcap: input.pcap
 
 checks:
   # A v4 COMPOUND request leads with an OPEN op carrying a
-  # CLAIM4_DELEGATE_CUR claim (a non-void claim payload the scanner's
-  # skip tables do not mirror) and then an oversized WRITE, inside a
-  # record claiming far more than ever arrives. The claim payload makes
-  # the compound's structure un-skippable: the scanner must apply its
-  # bounded rejection (malformed tx + skip to the marker boundary)
-  # instead of buffering toward the 17 MiB claim (Redmine #8791).
+  # CLAIM4_DELEGATE_CUR claim and then a WRITE whose count runs past the
+  # end of the record. The record (claim 8188) arrives in full, so the
+  # full compound parser is what fails - OPEN4args is parsed per the wire
+  # now, so the parse reaches the WRITE instead of rejecting an
+  # un-mirrored claim. The failure must produce exactly one tx rather
+  # than being consumed in silence (set_event alone labels an unrelated
+  # tx, or nothing at all): the bounded scan of the same bytes finds no
+  # oversized WRITE claim here (the claim's name field shifts the op walk
+  # for parser and scanner alike), so the reject is the malformed one
+  # (Redmine #8791).
   - shell:
       args: test "$(grep -Ec '"event":"malformed_data"' eve.json)" -ge 1

@@ -1,0 +1,29 @@
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # the partial OOO WRITE (fill inside the aligned claim) completes; the
+  # OOO extent has an unresolved gap and is not stored, but the framing
+  # must stay clean: the in-order file and the following WRITE's file are
+  # both logged intact
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: "de577cc8152fad5ddc31d41026a136384d24a6e0c44f2033dc30819652b94a73"
+        fileinfo.stored: true
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: "04ffd92aef8aafe6f4f8388bc9f7c5b0d39eae37128b1ca693647b8569f8e629"
+        fileinfo.stored: true
+  - shell:
+      args: test "$(grep -Ec 'malformed' eve.json)" -eq 0
