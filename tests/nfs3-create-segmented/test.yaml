@@ -1,0 +1,28 @@
+requires:
+  min-version: 9
+
+args:
+- -k none
+- --set stream.midstream=true
+- --set app-layer.protocols.nfs.enabled=yes
+
+pcap: input.pcap
+
+checks:
+  # the v3 CREATE reply arrives split across two TCP segments. Before the
+  # metadata-partial fix the segmented reply was skipped, so the created
+  # file's handle->name mapping never reached the namemap and the
+  # follow-up request's fileinfo carried no filename; now the reply is
+  # parsed and the follow-up response fileinfo shows the created name.
+  # The follow-up is ACCESS (not GETATTR) because v3 GETATTR transactions
+  # are filtered out of the eve log by design (SCNfsTxLoggingIsFiltered)
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        proto: TCP
+        nfs.version: 3
+        nfs.procedure: ACCESS
+        nfs.type: response
+        nfs.filename: cfile
+        rpc.xid: 822083586
