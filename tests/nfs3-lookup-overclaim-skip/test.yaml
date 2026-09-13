@@ -1,0 +1,42 @@
+requires:
+  min-version: 9
+
+args:
+- -k none
+- --set stream.midstream=true
+- --set app-layer.protocols.nfs.enabled=yes
+- --set app-layer.protocols.nfs.max-read-size=1048576
+
+pcap: input.pcap
+
+checks:
+  # the LOOKUP reply claims 1 MiB + 64 KiB (above the 1 MiB max-read-size
+  # + 64). The segmented-metadata gate must not buffer toward the crafted
+  # claim: the record is skipped to its claimed boundary and the reply
+  # never reaches the namemap, so the follow-up ACCESS on the reply's
+  # filehandle carries no filename. If the gate admitted the record, the
+  # filler (sized to the claim) would complete it, the lenient v3 parser
+  # would feed the namemap, and the ACCESS would carry the filename
+  - filter:
+      count: 0
+      match:
+        event_type: nfs
+        proto: TCP
+        nfs.version: 3
+        nfs.procedure: ACCESS
+        nfs.type: response
+        nfs.filename: segfile
+        rpc.xid: 1090519042
+  # the skip must land exactly on the record boundary: the follow-up
+  # ACCESS record is parsed (an off-by-N skip would eat or desync it)
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        proto: TCP
+        nfs.version: 3
+        nfs.procedure: ACCESS
+        rpc.xid: 1090519042
+  # the over-claiming record is skipped, not discarded as malformed
+  - shell:
+      args: test "$(grep -Ec '"event":"malformed_data"' eve.json)" -eq 0
