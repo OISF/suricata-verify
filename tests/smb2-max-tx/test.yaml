@@ -1,0 +1,47 @@
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # max-tx is 3: each WRITE carries a fresh file GUID and opens a new file
+  # transaction; the 4th WRITE cannot create one: new_tx refuses with
+  # too_many_transactions, attached to the newest (3rd) transaction
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: smb
+        anomaly.event: too_many_transactions
+        tx_id: 2
+  # the 3 accepted writes are stored correctly: stream stayed in sync
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.stored: true
+        fileinfo.sha256: "d82c6aa133a0fc25b087f46ad7ed2a3042772e612e015571e61753ff55ba6da8"
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.stored: true
+        fileinfo.sha256: "cfbe7d2db2f3dcdec7c2799f0b7c611e5bdfc145a7639516e8ec1e51a65c70ac"
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.stored: true
+        fileinfo.sha256: "d7f16b579c04dfbf05a9688190279d2f3ba008417884c9f4568a626a56c2a2e7"
+  - filter:
+      count: 3
+      match:
+        event_type: smb
+        smb.command: SMB2_COMMAND_WRITE
+  - shell:
+      args: test "$(grep -Ec 'malformed' eve.json)" -eq 0
