@@ -1,0 +1,36 @@
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # the 2nd WRITE declares 300 bytes but only 100 remain in the NBSS
+  # record: the request is refused with write_request_too_large (event on
+  # the one open file transaction) and the record tail is skipped
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: smb
+        anomaly.event: write_request_too_large
+        tx_id: 0
+  # only the first write ever reached the file: 100 x 0x41
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.stored: true
+        fileinfo.size: 100
+        fileinfo.sha256: "d82c6aa133a0fc25b087f46ad7ed2a3042772e612e015571e61753ff55ba6da8"
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.command: SMB2_COMMAND_WRITE
+  - shell:
+      args: test "$(grep -Ec 'malformed' eve.json)" -eq 0
