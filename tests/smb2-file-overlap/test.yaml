@@ -1,0 +1,35 @@
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # WRITE at offset 50 overlaps the tracked region (0..100): file_overlap
+  # on the file transaction; the uncovered tail is re-anchored at the
+  # tracked offset, so the file holds A*100 + B*50
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: smb
+        anomaly.event: file_overlap
+        tx_id: 0
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.stored: true
+        fileinfo.size: 150
+        fileinfo.sha256: "71e27b6ce0a7c3d776b4f7fb85df55082bd74a1d0b195a85cc35f957f630b64c"
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.command: SMB2_COMMAND_WRITE
+  - shell:
+      args: test "$(grep -Ec 'malformed' eve.json)" -eq 0
