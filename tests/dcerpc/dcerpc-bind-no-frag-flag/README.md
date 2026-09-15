@@ -9,7 +9,9 @@ The PCAP contains two connections to port 135:
 
 Both bindings are for the EPM interface (`e1af8308-5d1f-11c9-91a4-08002b14a0fa`).
 SID 1 uses a dummy interface (`22222222-2222-2222-2222-222222222222`) and should not alert on either.
-SID 2 uses the EPM interface and should alert on both.
+SID 2 uses the EPM interface and should alert on both. Before Suricata 9 it
+only alerts on the second connection as the BIND without `PFC_FIRST_FRAG` was
+not considered a first fragment for `dcerpc.iface` (see Redmine #8577).
 
 ## PCAP Origin
 The PCAP (`input.pcap`) was captured against a real Windows Server 2022 endpoint.

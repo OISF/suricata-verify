@@ -1,0 +1,112 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - -k none
+
+checks:
+  # Without any_frag the request PDU must have PFC_FIRST_FRAG set, the
+  # flags of the BIND are not relevant. 40001 (BIND with pfc_flags 0),
+  # 40002 (fragmented request) and 40005 match, 40003 (request with
+  # pfc_flags 0) and 40004 (request with only PFC_LAST_FRAG) do not.
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_port: 40001
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_port: 40002
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_port: 40003
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_port: 40004
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_port: 40005
+
+  # With any_frag all requests match.
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        alert.signature_id: 2
+
+  # The fragment flags of the response are not considered, the request
+  # side decides: same as SID 1 (40005 has a response without
+  # PFC_FIRST_FRAG but matches as its request has it).
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+        dest_port: 40005
+
+  # With any_frag all responses match.
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        alert.signature_id: 4
+
+  # Interface version checks.
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 5
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 6
+
+  # A different interface UUID never matches, with or without any_frag.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 7
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 8
+
+  # All 5 request/response transactions were parsed with an accepted
+  # interface.
+  - filter:
+      count: 5
+      match:
+        event_type: dcerpc
+        dcerpc.request: REQUEST
+        dcerpc.response: RESPONSE
+        dcerpc.interfaces[0].uuid: 12345678-1234-abcd-ef00-01234567cffb
+        dcerpc.interfaces[0].ack_result: 0
