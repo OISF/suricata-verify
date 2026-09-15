@@ -1,0 +1,1 @@
+protocols: [arp, dcerpc, dns, eth, gss-api, igmp, ip, llmnr, nbns, nbss, ntlmssp, smb, spnego, ssdp, tcp, udp]
