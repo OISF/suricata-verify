@@ -1,0 +1,10 @@
+# must_error cross-buffer with a transform on the following buffer
+
+# pcrexform no match -> error -> must_error matches; dotprefix + content on http.host matches -> alert
+alert http any any -> any any (msg:"must_error then transform match"; http.request_line; pcrexform:"(XXXNOMATCHXXX)"; absent: must_error; http.host; dotprefix; content:".imgur.com"; endswith; sid:1;)
+
+# pcrexform matches -> no error -> must_error fails -> no alert
+alert http any any -> any any (msg:"must_error then transform no error"; http.request_line; pcrexform:"[a-zA-Z]+\s+(.*)\s+HTTP"; absent: must_error; http.host; dotprefix; content:".imgur.com"; endswith; sid:2;)
+
+# pcrexform no match -> error -> must_error matches; dotprefix + content on http.host does not match -> no alert
+alert http any any -> any any (msg:"must_error then transform host miss"; http.request_line; pcrexform:"(XXXNOMATCHXXX)"; absent: must_error; http.host; dotprefix; content:".evil.com"; endswith; sid:3;)

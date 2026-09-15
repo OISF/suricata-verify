@@ -1,0 +1,2 @@
+# must_error with a transform and content on the same buffer should fail
+alert http any any -> any any (msg:"must_error pcrexform with transform and content"; http.request_line; pcrexform:"[a-zA-Z]+\s+(.*)\s+HTTP"; dotprefix; absent: must_error; content:"test"; sid:1;)

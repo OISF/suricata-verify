@@ -1,0 +1,12 @@
+requires:
+  min-version: 9
+
+pcap: ../absent-02/input.pcap
+
+exit-code: 1
+
+checks:
+
+  - shell:
+      args: grep "no buffer for absent keyword" suricata.log | wc -l | xargs
+      expect: 1

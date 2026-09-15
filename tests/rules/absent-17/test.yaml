@@ -1,0 +1,27 @@
+requires:
+  min-version: 9
+
+pcap: ../../bug-2558-02/2008.mp4.pcap
+
+args:
+  - -k none
+
+checks:
+  # must_error matches when filename fails strict base64 decode
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # error_or matches immediately on transform error (content not checked)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  # must_succeed: transform error -> no match
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 3
