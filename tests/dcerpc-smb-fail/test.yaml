@@ -11,12 +11,6 @@ checks:
     match:
       event_type: dcerpc
 - filter:
-    requires:
-      lt-version: 8.0.5
-    count: 1445
-    match:
-      event_type: dcerpc
-- filter:
     count: 22
     match:
       event_type: smb

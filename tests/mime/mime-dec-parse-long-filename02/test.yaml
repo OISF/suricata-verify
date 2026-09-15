@@ -22,28 +22,6 @@ checks:
       src_ip: 127.0.0.1
       src_port: 39202
       tx_id: 0
-# Pre-8.0.7 does not defer tx completion to the server response, so the
-# SMTP event lands one packet earlier. Backported to 8.0.7.
-- filter:
-    requires:
-      lt-version: 8.0.7
-    count: 1
-    match:
-      dest_ip: 127.0.0.1
-      dest_port: 25
-      email.attachment[0]: 12characters12characters12characters.exe
-      email.from: toto <toto@gmail.com>
-      email.status: PARSE_DONE
-      email.to[0]: 172.16.92.2@linuxbox
-      event_type: smtp
-      pcap_cnt: 14
-      proto: TCP
-      smtp.helo: linuxbox
-      smtp.mail_from: <toto@gmail.com>
-      smtp.rcpt_to[0]: <172.16.92.2@linuxbox>
-      src_ip: 127.0.0.1
-      src_port: 39202
-      tx_id: 0
 - filter:
     count: 1
     match:
@@ -68,20 +46,6 @@ checks:
       smtp.rcpt_to[0]: <172.16.92.2@linuxbox>
       src_ip: 127.0.0.1
       src_port: 39202
-# Pre-8.0.7 creates/logs a trailing QUIT transaction with inherited HELO.
-- filter:
-    requires:
-      lt-version: 8.0.7
-    count: 1
-    match:
-      dest_ip: 127.0.0.1
-      dest_port: 25
-      event_type: smtp
-      proto: TCP
-      smtp.helo: linuxbox
-      src_ip: 127.0.0.1
-      src_port: 39202
-      tx_id: 1
 - filter:
     requires:
       min-version: 8.0.7
