@@ -1,6 +1,5 @@
 requires:
-  min-version: 8
-  lt-version: 9
+  min-version: 9
 
 pcap: ../../issue-5466-alert-then-pass-02/icmp_and_ssh-s0.pcap
 
@@ -10,27 +9,17 @@ args:
 
 checks:
 - filter:
-    count: 324
+    count: 2
     match:
       event_type: alert
       alert.signature_id: 1000
 - filter:
-    count: 1
+    count: 0
     match:
       event_type: alert
       alert.signature_id: 2000
 - filter:
-    count: 1
-    match:
-      event_type: alert
-      alert.signature_id: 2001
-- filter:
-    count: 1
-    match:
-      event_type: alert
-      alert.signature_id: 2002
-- filter:
-    count: 0
+    count: 320
     match:
       event_type: drop
 - filter:
@@ -46,9 +35,10 @@ checks:
     count: 1
     match:
       event_type: stats
-      stats.ips.accepted: 322
+      stats.ips.accepted: 2
       stats.ips.blocked: 0
-      stats.firewall.accepted: 322
-      stats.firewall.blocked: 0
+      stats.firewall.accepted: 2
+      stats.firewall.blocked: 320
       stats.firewall.drop_reason.default_app_policy: 0
+      stats.firewall.drop_reason.default_packet_policy: 320
       stats.firewall.drop_reason.rules: 0
