@@ -1,0 +1,14 @@
+requires:
+  min-version: 9
+  pcap: false
+
+exit-code: 1
+
+args:
+  - --engine-analysis
+
+checks:
+  # datarep does not support type cidr; the sig fails to parse.
+  - shell:
+      args: grep 'error parsing signature' suricata.log | wc -l | xargs
+      expect: 1

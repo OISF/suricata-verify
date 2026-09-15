@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"CIDR unset with mask 24"; ip.src; dataset:unset,prefix-unset,type cidr,load cidr.lst,mask 24; sid:1;)

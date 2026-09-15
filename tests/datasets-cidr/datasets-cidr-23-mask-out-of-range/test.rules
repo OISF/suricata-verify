@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"CIDR set with non-contiguous bitmask"; ip.src; dataset:set,my-cidr,type cidr,mask 0x00ff00ff; sid:1;)
