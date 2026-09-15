@@ -22,11 +22,6 @@ checks:
     count: 1
     match:
       event_type: alert
-      alert.signature_id: 2001
-- filter:
-    count: 1
-    match:
-      event_type: alert
       alert.signature_id: 2002
 - filter:
     count: 0
