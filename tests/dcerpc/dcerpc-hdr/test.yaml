@@ -1,0 +1,43 @@
+requires:
+  min-version: 9
+
+pcap: ../dcerpc-dce-iface-02/input.pcap
+
+args:
+- -k none
+
+checks:
+  # to_server exposes the request-side header: bind then request
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  # to_client exposes the response-side header: bind_ack then response
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
+  # direction isolation: the request header is not visible on to_client
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 5
+  # the full header is exposed: match the hdrtype byte at offset 2 (bind = 0x0b)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 6
