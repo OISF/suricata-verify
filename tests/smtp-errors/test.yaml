@@ -30,16 +30,6 @@ checks:
         # no anomaly for 4.7.0 [IPTS04] Messages from 173.166.146.112 temporarily deferred due to user complaints because tx got closed before
         src_port: 49448
 
-  # Versions less than 8.0.7 will get 3 anomaly events
-  # Backported to 8.0.7.
-  - filter:
-      requires:
-        lt-version: 8.0.7
-      count: 3
-      match:
-        event_type: anomaly 
-        anomaly.event: INVALID_REPLY
-
   - filter:
       count: 1
       match:
