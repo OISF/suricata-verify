@@ -1,0 +1,20 @@
+requires:
+  min-version: 8
+
+args:
+- -k none
+
+checks:
+- filter:
+    # we should get twice the extracted flowvar
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 1
+      metadata.flowvars[0].paramval: value
+- filter:
+  # we have twice the same data in 2 flows, rule matches twice and it is ok
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 1
