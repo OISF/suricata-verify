@@ -1,0 +1,13 @@
+# Test windows_pe keyword arch option (all PEs are 0x014C/x86)
+
+# Test 1: Detect x86 PE files (all match = 5)
+alert http any any -> any any ( msg:"TEST windows_pe arch x86 (0x014C)"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86; sid:30; rev:1;)
+
+# Test 2: Detect x64 PE files (none match = 0)
+alert http any any -> any any ( msg:"TEST windows_pe arch x64 (0x8664)"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86_64; sid:31; rev:1;)
+
+# Test 3: Detect ARM PE files (none match = 0)
+alert http any any -> any any ( msg:"TEST windows_pe arch ARM (0x01C0) negative"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch arm; sid:32; rev:1;)
+
+# Test 4: Match x86 PE (duplicate test)
+alert http any any -> any any ( msg:"TEST windows_pe arch x86 duplicate"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86; sid:33; rev:1;)

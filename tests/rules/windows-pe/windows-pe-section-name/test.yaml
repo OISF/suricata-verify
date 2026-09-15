@@ -1,0 +1,69 @@
+requires:
+  min-version: 9
+
+args:
+- -k none
+
+checks:
+# SID 1: .UPX0 section — only packed PE has it (1 match)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+
+# SID 2: .text section — both PEs have it (2 matches)
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 2
+
+# SID 3: .rdata section — only normal PE has it (1 match)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 3
+
+# SID 4: .rsrc section — both PEs have it (2 matches)
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 4
+
+# SID 5: .reloc section — neither PE has it (0 matches)
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 5
+
+# SID 6: arch x86 + .UPX0 — packed PE only (1 match)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 6
+
+# SID 7: .upx0 lowercase — case insensitive match (1 match)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 7
+
+# SID 8: .data section — only normal PE has it (1 match)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 8
+
+# Verify fileinfo events are produced
+- filter:
+    count: 2
+    match:
+      event_type: fileinfo
+      executable.type: windows_pe

@@ -1,0 +1,45 @@
+pcap: ../windows-pe-basic/multi_pe.pcap
+
+requires:
+  min-version: 9
+  features:
+    - RUST
+
+args:
+- -k none
+
+checks:
+# Test: entry_point > 4000 (all match, 4096 > 4000)
+- filter:
+    count: 5
+    match:
+      event_type: alert
+      alert.signature_id: 40
+
+# Test: entry_point < 5000 (all match, 4096 < 5000)
+- filter:
+    count: 5
+    match:
+      event_type: alert
+      alert.signature_id: 41
+
+# Test: entry_point > 100000 (none match)
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 42
+
+# Test: entry_point range 4000-5000 (all match)
+- filter:
+    count: 5
+    match:
+      event_type: alert
+      alert.signature_id: 43
+
+# Verify entry_point is correctly logged in fileinfo events
+- filter:
+    count: 5
+    match:
+      event_type: fileinfo
+      executable.entry_point: 4096
