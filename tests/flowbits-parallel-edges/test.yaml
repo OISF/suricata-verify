@@ -1,0 +1,25 @@
+requires:
+    min-version: 9
+
+pcap: false
+
+args:
+  - --engine-analysis
+
+exit-code: 1
+
+checks:
+  # only.
+  - shell:
+      args: 'grep -c "Cyclic dependency found between flowbits from signatures" suricata.log'
+      expect: 1
+  - filter:
+      count: 1
+      match:
+        log_level: Error
+        engine.message: "Unable to resolve cycles after 1 tries"
+  - filter:
+      count: 1
+      match:
+        log_level: Error
+        engine.message: "Flowbits have circular dependencies that cannot be met at runtime"

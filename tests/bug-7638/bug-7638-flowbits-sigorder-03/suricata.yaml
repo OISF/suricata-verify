@@ -1,0 +1,12 @@
+%YAML 1.1
+---
+
+engine-analysis:
+  rules: yes
+
+logging:
+  outputs:
+    - file:
+        enabled: yes
+        filename: eve.json
+        type: json
