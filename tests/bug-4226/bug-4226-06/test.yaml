@@ -1,0 +1,19 @@
+requires:
+    min-version: 9
+    pcap: false
+
+args:
+    - --engine-analysis
+    - --set engine-analysis.rules=yes
+
+# Only the exact-equals rule (sid 1) is marked startswith+endswith. Its lone
+# content is dumped three times in rules.json (rule, mpm, prefilter); the other
+# three rules contribute none, so both counts are exactly 3.
+checks:
+    - shell:
+        args: grep -o '"starts_with":true' rules.json | wc -l | xargs
+        expect: 3
+
+    - shell:
+        args: grep -o '"ends_with":true' rules.json | wc -l | xargs
+        expect: 3

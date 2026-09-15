@@ -1,0 +1,14 @@
+requires:
+    min-version: 9
+    pcap: false
+
+args:
+    - --engine-analysis
+    - --set engine-analysis.rules=yes
+
+# The anchored content is on a transformed buffer, and the 'exact' suggestion
+# still fires (the transform no longer suppresses it).
+checks:
+    - shell:
+        args: grep -c "the 'exact' keyword expresses this" rules.json | xargs
+        expect: 1

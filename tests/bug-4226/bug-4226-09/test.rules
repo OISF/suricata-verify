@@ -1,0 +1,6 @@
+# The "fold into a bsize range" hint only applies when the multiple bsize
+# keywords form a two-sided bound (a lower and an upper). Same-direction bounds
+# -- two upper bounds or two lower bounds -- are not a range, so the analyzer
+# must not suggest one. Both signatures are satisfiable and load.
+alert dns any any -> any any (msg:"two upper bounds"; dns.query; content:"ab"; bsize:<8; bsize:<20; sid:1;)
+alert dns any any -> any any (msg:"two lower bounds"; dns.query; content:"ab"; bsize:>2; bsize:>1; sid:2;)
