@@ -1,5 +1,6 @@
 requires:
   min-version: 7.0.17
+  lt-version: 8.0.7
   features:
     - ASAN
 
