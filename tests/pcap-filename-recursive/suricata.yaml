@@ -1,0 +1,14 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      pcap-file: true
+      types:
+        - http:
+            enabled: yes
+        - files:
+            force-magic: no
+        - flow
