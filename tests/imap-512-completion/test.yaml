@@ -1,0 +1,32 @@
+requires:
+  min-version: 9
+
+args:
+  - --simulate-ips
+  - -k none
+  - --set app-layer.protocols.imap.enabled=yes
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        direction: to_client
+        tx_id: 1
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.firewall.blocked: 0

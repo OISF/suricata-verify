@@ -1,0 +1,6 @@
+alert imap any any -> any any (msg:"IMAP pipelined FETCH command association"; flow:to_client,established; email.command; content:"FETCH"; startswith; endswith; sid:1; rev:1;)
+alert imap any any -> any any (msg:"IMAP pipelined NOOP must not own fetched email"; flow:to_client,established; email.command; content:"NOOP"; startswith; endswith; sid:2; rev:1;)
+alert imap any any -> any any (msg:"IMAP pipelined FETCH body"; flow:to_client,established; email.body; content:"PIPELINED-FETCH-BODY"; sid:3; rev:1;)
+alert imap any any -> any any (msg:"IMAP reverse pipelined FETCH association"; flow:to_client,established; email.command; content:"FETCH"; startswith; endswith; email.body; content:"REVERSE-PIPELINE-BODY"; sid:4; rev:1;)
+alert imap any any -> any any (msg:"IMAP ambiguous FETCH body retained"; flow:to_client,established; email.body; content:"AMBIGUOUS-FETCH-BODY"; sid:5; rev:1;)
+alert imap any any -> any any (msg:"IMAP sequence-matched FETCH command owner"; flow:to_client,established; email.command; content:"FETCH"; startswith; endswith; email.body; content:"AMBIGUOUS-FETCH-BODY"; sid:6; rev:1;)

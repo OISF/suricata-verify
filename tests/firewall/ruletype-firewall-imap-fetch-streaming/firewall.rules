@@ -1,0 +1,11 @@
+accept:hook tcp:all any any -> any any (sid:1000;)
+
+accept:hook imap:response_in_progress any any -> any any (frame:imap.pdu; content:"* 1 FETCH"; alert; sid:1;)
+accept:hook imap:response_complete 192.0.2.2 any -> 192.0.2.1 any (alert; sid:2;)
+accept:hook imap:response_in_progress any any -> any any (frame:imap.pdu; content:"* 7 FETCH"; alert; sid:3;)
+accept:hook imap:response_complete any any -> any any (email.subject; content:"RESPONSE-FIRST-SUBJECT-2F63"; alert; sid:4;)
+
+accept:hook imap:request_in_progress any any -> any any (sid:1010;)
+accept:hook imap:request_complete any any -> any any (sid:1011;)
+accept:hook imap:response_in_progress any any -> any any (sid:1012;)
+accept:hook imap:response_complete any any -> any any (sid:1013;)

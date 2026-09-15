@@ -1,0 +1,27 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+  - --set app-layer.protocols.imap.enabled=yes
+  - --set app-layer.protocols.imap.max-tx=2
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: anomaly
+        anomaly.app_proto: imap
+        anomaly.event: too_many_transactions
+
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 2244000
+
+  - filter:
+      count: 0
+      match:
+        event_type: imap
+        imap.requests[0]: "A3 NOOP"

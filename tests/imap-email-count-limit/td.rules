@@ -1,0 +1,1 @@
+alert imap any any -> any any (msg:"SURICATA IMAP data limit reached"; app-layer-event:imap.data_limit_reached; classtype:protocol-command-decode; sid:2244006; rev:1;)

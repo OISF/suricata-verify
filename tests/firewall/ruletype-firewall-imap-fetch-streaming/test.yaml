@@ -1,0 +1,114 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+  - --set app-layer.protocols.imap.enabled=yes
+  - --set stream.reassembly.depth=0
+  - --set stream.reassembly.memcap=4mb
+  - --set stream.reassembly.memcap-policy=drop-flow
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 6
+        direction: to_client
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        pcap_cnt: 214
+        direction: to_client
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        pcap_cnt: 213
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 100
+        pcap_cnt: 213
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 101
+        pcap_cnt: 216
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        pcap_cnt: 214
+        imap.requests[0]: "A1 FETCH 1 BODY[]"
+        imap.responses[0]: "* 1 FETCH (BODY[] {6291456})"
+        imap.responses[1]: "A1 OK FETCH completed"
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_ip: 192.0.2.1
+        app_proto: imap
+        not-has-key: flow.exception_policy
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        pcap_cnt: 216
+        imap.requests[0]: "A2 NOOP"
+        imap.responses[0]: "A2 OK NOOP completed"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 102
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 103
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+        pcap_cnt: 239
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 104
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 105
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_ip: 192.0.2.21
+        app_proto: imap
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.responses[0]: "* 7 FETCH (BODY[] {153})"

@@ -1,0 +1,108 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+  - --set stream.inline=true
+  - --set app-layer.protocols.imap.enabled=yes
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 5
+        direction: to_server
+        tx_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        pcap_cnt: 7
+        direction: to_server
+        tx_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+        pcap_cnt: 7
+        direction: to_server
+        tx_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
+        pcap_cnt: 11
+        direction: to_server
+        tx_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 5
+        pcap_cnt: 15
+        direction: to_server
+        tx_id: 3
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 6
+        pcap_cnt: 17
+        direction: to_server
+        tx_id: 3
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 7
+        pcap_cnt: 19
+        direction: to_server
+        tx_id: 4
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: "A1 APPEND INBOX {116}"
+        imap.responses.__len: 2
+        imap.responses[0]: "+ Ready for literal"
+        imap.responses[1]: "A1 OK APPEND completed"
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 2
+        imap.requests[0]: "A2 IDLE"
+        imap.requests[1]: "DONE"
+        imap.responses.__len: 2
+        imap.responses[0]: "+ idling"
+        imap.responses[1]: "A2 OK IDLE completed"
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: "A3 AUTHENTICATE X-TEST"
+        imap.responses.__len: 3
+        imap.responses[0]: "+ first challenge"
+        imap.responses[1]: "+ second challenge"
+        imap.responses[2]: "A3 NO AUTHENTICATE failed"
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: "A4 NOOP"
+        imap.responses[0]: "A4 OK NOOP completed"
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.app_layer.error.imap.parser: 0
