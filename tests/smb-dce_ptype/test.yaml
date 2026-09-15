@@ -1,0 +1,33 @@
+pcap: ../smb-dce_iface/input.pcap
+
+requires:
+  min-version: 9
+
+args:
+- -k none
+
+checks:
+  # bind (11), to_server
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # bind_ack (12), to_client
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  # request (0), to_server: 3 requests in the pcap
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  # response (2), to_client: 3 responses in the pcap
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 4

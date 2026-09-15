@@ -1,0 +1,34 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+- -k none
+
+checks:
+  # fault (server->client) is a previously-unhandled connectionless PDU type;
+  # dcerpc.ptype must now match it on the to_client direction.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # ping (client->server), another previously-unhandled type, on to_server.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  # the fault is stored as a transaction and logged as a response
+  - filter:
+      count: 1
+      match:
+        event_type: dcerpc
+        dcerpc.response: FAULT
+  # the ping is stored as a transaction and logged as a request
+  - filter:
+      count: 1
+      match:
+        event_type: dcerpc
+        dcerpc.request: PING
