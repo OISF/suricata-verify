@@ -1,0 +1,39 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+- -k none
+
+checks:
+  # request side (to_server): req_flags = (flags2 << 8) | flags1 = 0x0201
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # response side (to_client): resp_flags = 0x0403
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  # per-direction isolation: the request flags are not seen on to_client
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  # low byte holds flags1 of the request (to_server)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
+  # high byte holds flags2 of the response (to_client)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 5
