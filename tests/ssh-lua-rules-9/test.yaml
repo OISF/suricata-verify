@@ -1,8 +1,7 @@
 pcap: ../ssh-banner-only/input.pcap
 
 requires:
-  min-version: 8
-  lt-version: 9
+  min-version: 9
 
 args:
   - -k none --set default-rule-path=. --simulate-ips

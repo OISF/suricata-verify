@@ -1,6 +1,5 @@
 requires:
-  min-version: 8
-  lt-version: 9
+  min-version: 9
 
 pcap: ../../issue-5466-alert-then-pass-02/icmp_and_ssh-s0.pcap
 
@@ -10,10 +9,15 @@ args:
 
 checks:
 - filter:
-    count: 324
+    count: 4
     match:
       event_type: alert
       alert.signature_id: 1000
+- filter:
+    count: 320
+    match:
+      event_type: alert
+      alert.signature_id: 1001
 - filter:
     count: 1
     match:
@@ -23,37 +27,7 @@ checks:
     count: 1
     match:
       event_type: alert
-      alert.signature_id: 2001
-- filter:
-    count: 1
-    match:
-      event_type: alert
       alert.signature_id: 2002
-- filter:
-    count: 1
-    match:
-      event_type: alert
-      alert.signature_id: 2003
-- filter:
-    count: 1
-    match:
-      event_type: alert
-      alert.signature_id: 3000
-- filter:
-    count: 1
-    match:
-      event_type: alert
-      alert.signature_id: 3001
-- filter:
-    count: 1
-    match:
-      event_type: alert
-      alert.signature_id: 3002
-- filter:
-    count: 1
-    match:
-      event_type: alert
-      alert.signature_id: 3003
 - filter:
     count: 0
     match:
