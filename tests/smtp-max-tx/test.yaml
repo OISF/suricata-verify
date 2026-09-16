@@ -1,0 +1,48 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none --set app-layer.protocols.smtp.max-tx=16
+
+checks:
+  # 18 mail envelopes on one connection; live tx count never exceeds 2.
+  # The max-tx limit must not stop the flow at the 18th envelope.
+  - filter:
+      count: 18
+      match:
+        event_type: alert
+        alert.signature_id: 1
+
+  # The 18th envelope is tx 17 (0-based). It must be parsed and the
+  # signature must match its MAIL FROM.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+
+  # One smtp log event per transaction.
+  - filter:
+      count: 18
+      match:
+        event_type: smtp
+
+  # The 18th transaction's log event carries its own envelope.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        smtp.mail_from: "<user18@example.com>"
+
+  # Well-formed session: no app-layer events, scaffold never fires.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 999
+
+  # The parser must not hit an error; with the tx_cnt high-water-mark
+  # bug the 18th envelope's transaction cannot be created and the
+  # parser dies with APP_LAYER_ERROR.
+  - stats:
+      app_layer.error.smtp.parser: 0
