@@ -1,0 +1,15 @@
+# All 18 envelopes carry a mail_from address of @example.com.
+# max-tx limits *live* transactions, never the lifetime count, so all
+# 18 transactions must be parsed and alerted on.
+alert smtp any any -> any any (msg:"SMTP mail_from"; smtp.mail_from; content:"@example.com"; sid:1; rev:1;)
+
+# The 18th envelope becomes tx id 17. Its transaction can only be
+# created if tx ids of freed transactions are reclaimed; with the
+# tx_cnt high-water-mark bug its creation fails, the parser errors and
+# this signature never gets a transaction to match.
+alert smtp any any -> any any (msg:"SMTP mail_from user18 (tx 17)"; smtp.mail_from; content:"user18@example.com"; sid:2; rev:1;)
+
+# Scaffold: keep a toclient SMTP signature loaded so toclient parsing
+# (server replies) is not skipped. Must not fire on this well-formed
+# session.
+alert smtp any any -> any any (msg:"scaffold smtp events"; app-layer-event:smtp.invalid_reply; sid:999; rev:1;)
