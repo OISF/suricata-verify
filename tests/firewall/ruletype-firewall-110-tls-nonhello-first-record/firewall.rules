@@ -1,0 +1,14 @@
+# The first TLS record on both tracks is an alert, so the parser never
+# leaves the started states: state rules are only evaluated when the
+# parser's progress moves through a state (the hello record moves it
+# out of client_started), so neither rule below can fire here.
+#
+# client_started (sid 1002) is the rename of the old client_in_progress:
+# it is the state the flow IS in, but its decision point only arrives
+# when a hello record is seen - which never happens in this session.
+# client_hello (sid 1001) is the phase state that is never entered.
+#
+# The flow is therefore dropped by the implicit default app policy at
+# teardown, with every packet accepted in transit.
+accept:hook tls:client_started $HOME_NET any -> $HOME_NET any (alert; sid:1002; msg:"client_started state evaluated";)
+drop:flow tls:client_hello $HOME_NET any -> $HOME_NET any (alert; sid:1001; msg:"client_hello phase entered on a non-hello first record";)
