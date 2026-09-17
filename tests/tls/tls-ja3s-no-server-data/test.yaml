@@ -1,0 +1,33 @@
+# TLS1.2 session ending right after the client's flight: the server
+# sends no application data at all. With the phase rename the TLS
+# event carrying the ja3s field is emitted once the data phase is
+# reached, not at the old flight-completion milestone
+# (server_handshake_done). In a session with a server certificate the
+# data phase is established when the certificate is parsed, so ja3s
+# stays available for a session without server app data; this pins
+# that, and where: the data-phase event (pcap_cnt 11). A session with
+# no server certificate at all only publishes the event at the end of
+# the connection.
+# input.pcap is derived from tls-certs-alert/input.pcap (first 13
+# frames); see craft-pcap.py.
+requires:
+  features:
+    - HAVE_JA3
+  min-version: 8
+
+pcap: input.pcap
+
+args:
+ - -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: tls
+      tls.ja3s.hash: "5d79edf64e03689ff559a54e9d9487bc"
+- filter:
+    count: 1
+    match:
+      event_type: tls
+      pcap_cnt: 11
