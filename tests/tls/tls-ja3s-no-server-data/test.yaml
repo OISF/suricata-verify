@@ -1,0 +1,26 @@
+# TLS1.2 session ending right after the client's flight: the server
+# sends no application data at all. The tls event carrying ja3s is a
+# tx-level log keyed on content: it flushes once the server
+# certificate data is final - the fragmented certificate completes
+# during frame 11's parse pass - and nothing on the client track is
+# awaited when no client certificate was requested. A session whose
+# server certificate never completes publishes the event only at the
+# end of the connection.
+# input.pcap is derived from tls-certs-alert/input.pcap (first 13
+# frames); see craft-pcap.py.
+requires:
+  features:
+    - HAVE_JA3
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+ - -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: tls
+      tls.ja3s.hash: "5d79edf64e03689ff559a54e9d9487bc"
