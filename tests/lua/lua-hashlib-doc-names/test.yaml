@@ -1,0 +1,18 @@
+requires:
+  min-version: 8
+
+pcap: ../../cond-log-dns-dig/input.pcap
+
+checks:
+  # The userguide documents *_hex_digest names, the code registers
+  # *_hexdigest. Keep the two in sync: no docs name may be missing from
+  # the registration table, and the wrong spelling must not appear.
+  - shell:
+      args: grep -o '_hex_digest' ${SRCDIR}/doc/userguide/lua/libs/hashlib.rst | wc -l
+      expect: 0
+  - shell:
+      args: grep -o '_hexdigest' ${SRCDIR}/doc/userguide/lua/libs/hashlib.rst | wc -l
+      expect: 3
+  - shell:
+      args: for n in sha256_hexdigest sha1_hexdigest md5_hexdigest; do grep -q "\"$n\"" ${SRCDIR}/src/util-lua-hashlib.c || exit 1; done && echo OK
+      expect: OK
