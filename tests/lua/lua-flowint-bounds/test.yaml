@@ -1,0 +1,16 @@
+requires:
+  min-version: 8
+
+pcap: ../../cond-log-dns-dig/input.pcap
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+
+checks:
+  # set() casts luaL_checkinteger's 64 bit value to int and stores it in
+  # a uint32_t. set(2^32) silently stores 0. Either reject the value or
+  # keep it; it must not silently truncate.
+  - shell:
+      args: grep -q '^TRUNCATED' results.log && echo BAD || echo OK
+      expect: OK
