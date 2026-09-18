@@ -1,0 +1,15 @@
+requires:
+  min-version: 8
+
+pcap: ../../cond-log-dns-dig/input.pcap
+
+args:
+  - --disable-hashing
+
+checks:
+  # --disable-hashing is enforced by transforms and file hashing but the
+  # Lua hashlib module never checks g_disable_hashing, so scripts can
+  # still hash while the operator believes hashing is off.
+  - shell:
+      args: grep -q '^WORKED$' results.log && echo BAD || echo OK
+      expect: OK
