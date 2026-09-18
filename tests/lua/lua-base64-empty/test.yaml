@@ -1,0 +1,18 @@
+requires:
+  min-version: 8
+
+pcap: ../lua-flowintlib/rootx5.pcap
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+
+checks:
+  # SCBase64Decode returns 0 both for "empty input" and for real decode
+  # errors; the Lua wrapper maps n == 0 to luaL_error, so decode("")
+  # raises instead of returning "".
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        alert.signature_id: 1
