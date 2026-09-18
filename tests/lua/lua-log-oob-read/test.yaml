@@ -1,0 +1,17 @@
+requires:
+  min-version: 8
+
+pcap: ../lua-flowintlib/rootx5.pcap
+
+checks:
+  # SCLogMessageJSON leaves the 12800 byte stack buffer unterminated when
+  # the JSON render is clamped to buffer_size, so the stream/syslog sinks
+  # walk past the buffer. Fixed: a full-length render is terminated at
+  # buffer_size - 1, so no log line can exceed 12799 bytes.
+  - shell:
+      args: awk 'length > 12799 { bad++ } END { if (bad) print "BAD"; else print "OK" }' suricata.log
+      expect: OK
+  # The script must survive the log call.
+  - shell:
+      args: grep -c '^logged$' results.log
+      expect: 1
