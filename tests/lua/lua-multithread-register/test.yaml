@@ -1,0 +1,20 @@
+requires:
+  min-version: 8.0.8
+
+pcap: ../lua-flowintlib/rootx5.pcap
+
+args:
+  - --runmode autofp
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+
+checks:
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # The 16th registration hits the limit. It must fail cleanly (Lua
+  # error, engine keeps running) and not leak a name store entry.
+  - stats:
+      detect.lua.errors.__gte: 1
