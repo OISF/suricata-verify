@@ -1,0 +1,13 @@
+requires:
+  min-version: 8
+
+pcap: ../lua-flowintlib/rootx5.pcap
+
+checks:
+  # setmetatable() is available in the unsandboxed output state, so a
+  # script can give an md5 hasher the sha256 metatable. The type check
+  # (luaL_checkudata) then passes and the md5 payload is used as an
+  # SCSha256 (ASAN: heap corruption / wrong drop size).
+  - shell:
+      args: grep -q '^OK$' results.log && echo OK || cat results.log
+      expect: OK
