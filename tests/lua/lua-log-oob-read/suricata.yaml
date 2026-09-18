@@ -1,0 +1,25 @@
+%YAML 1.1
+---
+
+logging:
+  outputs:
+    - console:
+        enabled: yes
+    - file:
+        enabled: yes
+        filename: suricata.log
+        type: json
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert
+
+  - lua:
+      enabled: yes
+      scripts-dir: .
+      scripts:
+        - output.lua
