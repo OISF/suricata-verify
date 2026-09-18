@@ -1,0 +1,13 @@
+requires:
+  min-version: 8
+
+pcap: dns-flood.pcap
+
+checks:
+  # log() raises on every call. Each failure must pop the error object
+  # from the Lua stack; otherwise the shared output state grows by one
+  # value per event. The script measures live Lua memory after a full
+  # GC between the last failing call (2000) and the end of the pcap.
+  - shell:
+      args: grep -q '^OK' results.log && echo OK || cat results.log
+      expect: OK
