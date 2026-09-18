@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"init bad key"; http.uri; content:"/"; lua:bad-key.lua; sid:1; rev:1;)
