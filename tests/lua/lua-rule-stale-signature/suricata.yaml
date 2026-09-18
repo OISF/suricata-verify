@@ -1,0 +1,23 @@
+%YAML 1.1
+---
+
+rule-files:
+  - test.rules
+
+security:
+  lua:
+    allow-rules: true
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert
+
+  - lua:
+      enabled: yes
+      scripts-dir: .
+      scripts:
+        - output.lua
