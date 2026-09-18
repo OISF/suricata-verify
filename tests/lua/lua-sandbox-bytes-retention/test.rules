@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"retain bytes"; lua:retain.lua; sid:1; rev:1;)
