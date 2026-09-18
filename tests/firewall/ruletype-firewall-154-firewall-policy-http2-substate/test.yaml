@@ -1,0 +1,23 @@
+# Load-time validation of the firewall policy config for a sub-state
+# protocol. The protocol-level default-policy is a list, and the yaml
+# loader hangs its items under the key node - the sub-state section
+# check must not report it as an unknown section. bogus-section pins
+# the positive control: unknown sections are still reported.
+requires:
+  min-version: 9
+
+pcap: false
+
+args:
+  - -T
+
+checks:
+- shell:
+    args: "grep -c 'matches no http2 sub-state and is ignored' stdout"
+    expect: 1
+- shell:
+    args: grep -c "section 'default-policy'" stdout || true
+    expect: 0
+- shell:
+    args: grep -c "key 'bogus-section'" stdout || true
+    expect: 0
