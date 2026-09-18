@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"enable return"; http.uri; content:"/"; lua:enable.lua; sid:1; rev:1;)
