@@ -1,0 +1,13 @@
+requires:
+  min-version: 8
+
+pcap: ../lua-flowintlib/rootx5.pcap
+
+checks:
+  # bytevar.map() only checks that the first argument is lightuserdata
+  # and treats it as a const Signature*. The output state can obtain
+  # other lightuserdata values (registry keys), so a forged pointer is
+  # dereferenced (ASAN: SEGV in DetectByteRetrieveSMVar).
+  - shell:
+      args: grep -q '^OK$' results.log && echo OK || cat results.log
+      expect: OK
