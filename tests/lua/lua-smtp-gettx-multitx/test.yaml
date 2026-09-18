@@ -1,0 +1,14 @@
+requires:
+  min-version: 8
+
+pcap: ../../smtp-bdat-pipelined-next-mail/input.pcap
+
+checks:
+  # smtp.get_tx() returns state->curr_tx, which has already advanced to
+  # the next pipelined mail, so tx#0 reports tx#1's MAIL FROM.
+  - shell:
+      args: grep -c 'from=<alice@example.com>' results.log
+      expect: 1
+  - shell:
+      args: grep -c 'from=<bob@example.com>' results.log
+      expect: 1
