@@ -1,0 +1,13 @@
+requires:
+  min-version: 8
+
+pcap: ../lua-output-log-error-stack/dns-flood.pcap
+
+checks:
+  # The registry holds the engine context as bare lightuserdata under
+  # well-known keys. An output script can move one context pointer into
+  # the tx key; the tx libraries then cast it to a transaction and
+  # dereference a wrong struct (SIGSEGV).
+  - shell:
+      args: grep -c '^done$' results.log
+      expect: 1
