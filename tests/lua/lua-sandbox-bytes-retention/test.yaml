@@ -1,0 +1,23 @@
+requires:
+  min-version: 8
+
+pcap: ../lua-flowintlib/rootx5.pcap
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+  - --set security.lua.max-bytes=20000
+
+checks:
+  # Each match call permanently retains 10KB. SCLuaSbUpdateBytesLimit()
+  # sets the cap to alloc_bytes + cfg_limit after every call, so the
+  # configured 20000 byte budget is re-granted on top of everything the
+  # script already keeps alive and retention is unbounded. With an
+  # absolute cap the script trips the memory limit early.
+  - stats:
+      detect.lua.memory_limit_errors.__gte: 1
+  - filter:
+      filename: suricata.log
+      count: 1
+      match:
+        engine.message.__startswith: "Lua script failed to run successfully: memory limit exceeded"
