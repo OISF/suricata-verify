@@ -1,0 +1,16 @@
+# 4GiB+ Lua string: opt-in only, needs a few GB of RAM
+requires:
+  min-version: 8.0.8
+  env:
+    - SV_LUA_HUGE
+
+pcap: ../../cond-log-dns-dig/input.pcap
+
+checks:
+  # Every hashlib entry point truncates luaL_checklstring's size_t length
+  # to uint32_t before the FFI, so a >4GiB string is hashed only for
+  # len mod 2^32 bytes and silently produces a wrong digest. Must be
+  # rejected instead.
+  - shell:
+      args: grep -q '^REJECTED$' results.log && echo OK || cat results.log
+      expect: OK
