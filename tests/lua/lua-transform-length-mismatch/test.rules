@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"luaxform length mismatch"; http.uri; luaxform:bad-length.lua; content:"base64-hello-world"; sid:1; rev:1;)
