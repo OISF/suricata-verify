@@ -36,5 +36,5 @@ checks:
     count: 1
     match:
       event_type: stats
-      stats.firewall.accepted: 6
+      stats.firewall.accepted: 5
       stats.firewall.blocked: 0

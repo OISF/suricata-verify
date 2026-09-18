@@ -5,13 +5,13 @@ Craft the TLS fragmented-hello firewall test pcap.
 TCP 3-way handshake between 10.0.2.5 (client) and 172.16.0.10:443
 (server), then a ClientHello that is split across two TLS records:
 
-  P4 client->server  TLS handshake record 1: the 4-byte handshake
+  P3 client->server  TLS handshake record 1: the 4-byte handshake
                      header and the first 60 bytes of the ClientHello
                      message
-  P5 client->server  TLS handshake record 2: the remaining 69 bytes
+  P4 client->server  TLS handshake record 2: the remaining 67 bytes
                      (completes the message, includes the SNI
                      extension "example.com")
-  P6 client->server  TCP FIN
+  P5 client->server  TCP FIN
 
 tshark dissects the two records as Client Hello (fragment) and
 Client Hello (last fragment) and reassembles them.
@@ -71,11 +71,13 @@ def client_hello():
     random = bytes(range(32))
     ciphers = bytes.fromhex("13021303c02fc02cc02bc030")
     sni = b"example.com"
-    sni_ext = b"\x00\x00" + struct.pack(">H", 19) + struct.pack(">H", 17) + \
+    # ext_data = list_len(2) + list(1 + name_len(2) + 11)
+    sni_ext = b"\x00\x00" + struct.pack(">H", 16) + struct.pack(">H", 14) + \
         b"\x00" + struct.pack(">H", len(sni)) + sni
     sv_ext = b"\x00\x2b" + struct.pack(">H", 5) + b"\x00\x03\x03\x04\x03\x03"
     ks = bytes(range(32))
-    ks_ext = b"\x00\x33" + struct.pack(">H", 38) + struct.pack(">H", 36) + \
+    # ext_data = list_len(2) + entry(group(2) + key_len(2) + 32)
+    ks_ext = b"\x00\x33" + struct.pack(">H", 37) + struct.pack(">H", 35) + \
         b"\x00\x1d" + struct.pack(">H", 32) + ks
     exts = sni_ext + sv_ext + ks_ext
     body = b"\x03\x03" + random + b"\x00" + struct.pack(">H", len(ciphers)) + ciphers + \
@@ -99,7 +101,6 @@ def main():
     # 3-way handshake
     send(CLIENT_IP, SERVER_IP, CLIENT_PORT, SERVER_PORT, C_SEQ, 0, 0x02, b"")
     send(SERVER_IP, CLIENT_IP, SERVER_PORT, CLIENT_PORT, S_SEQ, C_SEQ + 1, 0x12, b"")
-    send(CLIENT_IP, SERVER_IP, CLIENT_PORT, SERVER_PORT, C_SEQ + 1, S_SEQ + 1, 0x01, b"")
 
     hs = client_hello()
     rec1 = b"\x16\x03\x03" + struct.pack(">H", len(hs[:FRAG1])) + hs[:FRAG1]
