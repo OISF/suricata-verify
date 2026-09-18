@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"base64 binary"; http.uri; content:"/"; lua:b64.lua; sid:1; rev:1;)
