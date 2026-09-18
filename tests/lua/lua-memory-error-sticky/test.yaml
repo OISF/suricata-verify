@@ -1,0 +1,22 @@
+requires:
+  min-version: 8
+
+pcap: ../lua-flowintlib/rootx5.pcap
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+  - --set security.lua.max-bytes=20000
+
+checks:
+  # The first match call trips the memory limit; every later call raises
+  # an unrelated script error. Once memory_limit_error is set it is never
+  # cleared, so all later errors are counted and reported as memory
+  # limit errors and the real error text is discarded.
+  - stats:
+      detect.lua.memory_limit_errors.__lte: 2
+  - filter:
+      filename: suricata.log
+      count: 1
+      match:
+        engine.message.__find: "generic failure"

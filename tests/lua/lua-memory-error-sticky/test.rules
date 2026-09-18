@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"sticky memory limit error"; lua:sticky.lua; sid:1; rev:1;)
