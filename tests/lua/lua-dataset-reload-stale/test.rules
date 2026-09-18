@@ -1,0 +1,1 @@
+alert dns any any -> any any (msg:"static dataset"; dns.query; dataset:isset,ds-reload,type string,load ds.csv; sid:1; rev:1;)
