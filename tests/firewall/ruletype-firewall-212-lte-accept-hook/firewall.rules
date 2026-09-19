@@ -1,0 +1,10 @@
+# allow session setup
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+# accept:hook at client_in_progress (hook 0); a bare hook rule, so it always matches.
+# After it matches, the intermediate state (client_hello_done) has no explicit rule, so the
+# default app policy is applied for it -- unless a later auto-accept-prior-states (<) rule
+# covers that state.
+accept:hook tls:client_in_progress $HOME_NET any -> $EXTERNAL_NET any (sid:212;)
+# Auto-accept-prior-states at a higher hook: covers client_hello_done (the intermediate state).
+accept:flow tls:<client_handshake_done $HOME_NET any -> $EXTERNAL_NET any (alert; sid:213;)

@@ -1,0 +1,36 @@
+# SEMANTICS TEST (auto-accept-prior-states head gap on the ftp request tx, failing
+# keyword, matching accept:flow at the < rule's own hook).
+#
+# The head accept:flow ftp:request_complete rule matches (ftp.command contains
+# "USER"), but the head-of-list gap decision fires first: the request tx is
+# presented at detect progress 0 and completes within the same packet, so the
+# head candidate (hook 1) has a head-of-list gap (1 > 0) before any rule is
+# inspected.
+#
+# Auto-accept-prior-states semantics: request_started (progress 0) is
+# auto-accepted while the < rule is pending. On the first detection pass the <
+# rule's MPM is still indeterminate on the in-progress command buffer, so the
+# rule is a pending candidate and its auto-accept-prior-states covers
+# request_started at the moment the head-gap decision is made. Its ftp.command
+# keyword ("zzznotthere") is only final (no-match) once the buffer is complete,
+# which decides the rule's own hook state -- there the head rule's matching
+# accept:flow accepts the flow anyway.
+#
+# Expected: 0 to_server "firewall default app policy" drops -- request_started
+# is accepted by the pending phase and the flow is accepted at request_complete.
+# (A reading that retroactively revokes the prior-state auto-accept when the <
+# rule's keyword fails at its own hook would drop request_started and FAIL here.)
+#
+# All ftp keywords register at progress 1 (FTP_STATE_FINISHED) and carry the
+# explicit SIGMATCH_SUPPORT_FIREWALL flag, so a keyword-bearing
+# <ftp:request_complete rule is valid -- the first head-gap shape on an app
+# layer whose keywords sit at the complete-hook progress.
+accept:hook tcp:all 127.0.0.1 any <> 127.0.0.1 any (flow:not_established; sid:1021;)
+accept:hook tcp:all 127.0.0.1 any <> 127.0.0.1 any (flow:established; sid:1022;)
+# matching head accept:flow at request_complete (the head candidate for the gap decision)
+accept:flow ftp:request_complete 127.0.0.1 any -> 127.0.0.1 21 (ftp.command; content:"USER"; sid:210;)
+# later < rule with a FAILING keyword: auto-accept-prior never fires
+accept:flow ftp:<request_complete 127.0.0.1 any -> 127.0.0.1 21 (ftp.command; content:"zzznotthere"; sid:211;)
+# to_client shield (response states covered bare)
+accept:hook ftp:response_started 127.0.0.1 21 -> 127.0.0.1 any (sid:1003;)
+accept:hook ftp:response_complete 127.0.0.1 21 -> 127.0.0.1 any (sid:1004;)

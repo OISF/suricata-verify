@@ -1,0 +1,23 @@
+requires:
+  min-version: 9
+
+args:
+  - --simulate-ips
+  - -k none
+
+pcap: ../../ftp-port-memcap/input.pcap
+
+checks:
+# the bare < rule covers the prior state and matches at completion: the response
+# must be accepted, so no default app policy drop may happen
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      drop.reason: "firewall default app policy"
+# no drop rule exists in this ruleset
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      drop.reason: "firewall rules"
