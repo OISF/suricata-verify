@@ -1191,13 +1191,6 @@ def check_args_fail():
 
 def check_deps():
     try:
-        cmd = "jq --version > nil" if WIN32 else "jq --version > /dev/null 2>&1"
-        subprocess.check_call(cmd, shell=True)
-    except:
-        print("error: jq is required")
-        return False
-
-    try:
         cmd = "echo suricata | xargs > nil" if WIN32 else "echo | xargs > /dev/null 2>&1"
         subprocess.check_call(cmd, shell=True)
     except:
