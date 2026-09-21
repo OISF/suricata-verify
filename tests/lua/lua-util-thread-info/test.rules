@@ -1,0 +1,1 @@
+alert ntp:request_complete any any -> any any (msg:"TEST NTP LUA thread info"; lua:test-thread-info.lua; sid:1; rev:1;)
