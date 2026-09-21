@@ -2,7 +2,10 @@
 # protocol. The protocol-level default-policy is a list, and the yaml
 # loader hangs its items under the key node - the sub-state section
 # check must not report it as an unknown section. bogus-section pins
-# the positive control: unknown sections are still reported.
+# the section positive control (unknown sections are still reported),
+# and response-complete pins the key positive control: the loader only
+# reads state keys under the sub-state sections for a sub-state
+# protocol, so a plain-node alias must be reported as unmatched.
 requires:
   min-version: 9
 
@@ -21,3 +24,6 @@ checks:
 - shell:
     args: grep -c "key 'bogus-section'" stdout || true
     expect: 0
+- shell:
+    args: grep -c "key 'response-complete' under firewall.policies.app.http2" stdout
+    expect: 1

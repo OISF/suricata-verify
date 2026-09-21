@@ -19,3 +19,8 @@ firewall:
         bogus-section:
           default-policy:
             - "accept:hook"
+        # a generic hook alias at the protocol level: the loader only
+        # reads state keys under the sub-state sections for a sub-state
+        # protocol, so this must be reported as an unmatched key
+        response-complete:
+          - "accept:hook"
