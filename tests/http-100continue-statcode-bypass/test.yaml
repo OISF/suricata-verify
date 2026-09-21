@@ -1,0 +1,121 @@
+rules: test.rules
+
+pcap: input.pcap
+
+# Reproducer for the 100-continue stat_code deviations on the standard
+# 100-continue flow (B, client 10.0.0.3): the parser rewinds the
+# response tx in place (status number left at 100, progress moved
+# backwards), so the detection engine's per-tx state is stale - the
+# final 200's stat_code is never inspected (false negative) and the
+# 100 line double-alerts (false positive) against the stale "100"
+# buffer.
+#
+# The exchange is a standard spec-compliant one (RFC 7231
+# Expect: 100-continue client, plain "100 Continue" server answer,
+# normal client ACKs) - see README.md, "Real-world client and server
+# behaviour (severity)".
+#
+# This test expects the FIXED behaviour: on the 100-continue flow the
+# final-200 stat_code rules (sids 1001/1003) fire once and the 100
+# line (sid 1002) alerts once. Against a pre-fix build the test
+# FAILS on exactly those three checks (1001/1003 -> 0, 1002 -> 2)
+# while the flow-A baseline, the scope controls (1004-1006) and the
+# http log checks pass - the failure isolates the deviation to the
+# stat_code buffer.
+#
+# Note: alert events carry src/dst in the alert direction (server ->
+# client) for these toclient alerts.
+checks:
+  # flow A (normal GET -> 200): the rules work
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1001
+        src_ip: "10.0.0.2"
+        dest_ip: "10.0.0.1"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1003
+        src_ip: "10.0.0.2"
+        dest_ip: "10.0.0.1"
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1002
+        src_ip: "10.0.0.2"
+        dest_ip: "10.0.0.1"
+  # flow B (100-continue -> 200): expected FIXED behaviour - the
+  # final 200's stat_code rules fire once (a pre-fix build bypasses
+  # the final 200's stat_code entirely: the 100 line's final run
+  # stores the per-tx detect_progress bookkeeping, the 100-continue
+  # rewind (HEADERS -> LINE) resets neither that bookkeeping nor the
+  # stale stat_code buffer, and the tx-level prefilter bookkeeping
+  # skips the tx when the final 200 reaches COMPLETE)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1001
+        src_ip: "10.0.0.2"
+        dest_ip: "10.0.0.3"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1003
+        src_ip: "10.0.0.2"
+        dest_ip: "10.0.0.3"
+  # flow B: the 100 line alerts exactly once (a pre-fix build
+  # double-alerts it: HEADERS final run + LINE non-terminal re-run
+  # after the rewind, against the stale "100" buffer)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1002
+        src_ip: "10.0.0.2"
+        dest_ip: "10.0.0.3"
+  # http log: both flows log the final 200
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        src_ip: "10.0.0.1"
+        http.status: 200
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        src_ip: "10.0.0.3"
+        http.status: 200
+  # scope controls (flow B): response headers, response body and
+  # request-side detection are unaffected by the deviation - the final
+  # 200's response header, response body and the request-side host are
+  # still detected normally (these pass even on a pre-fix build; the
+  # affected set is the response-line buffer family - see the
+  # stat_msg / response_line sibling tests)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1004
+        src_ip: "10.0.0.2"
+        dest_ip: "10.0.0.3"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1005
+        src_ip: "10.0.0.2"
+        dest_ip: "10.0.0.3"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1006
+        src_ip: "10.0.0.3"
+        dest_ip: "10.0.0.2"
