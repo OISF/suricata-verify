@@ -1,0 +1,72 @@
+requires:
+  min-version: 9
+
+args:
+  - --simulate-ips
+
+# IPS reproducer for the 100-continue response_line bypass:
+# the 100-continue rewind leaves the detection engine's per-tx state
+# stale, so the final 200's response line is never inspected
+# (false negative) and the 100 line's response line double-alerts
+# (false positive) against the stale buffer - the same deviation the
+# stat_code sibling tests pin, on the http.response_line buffer, which shares
+# the LINE response progress and the tx-level detect_progress
+# bookkeeping.
+#
+# Run with --simulate-ips: in inline mode the stream engine
+# parses each packet's own direction immediately (no ACK-triggered
+# deferral), so the plain small 100-continue exchange reproduces the
+# deviation without any ACK dependency; see the sibling test
+# http-100continue-statcode-bypass-ips for the full mechanism.
+#
+# This test expects the FIXED behaviour: the final-200 rule (sid 1202)
+# fires once and the 100 line rule (sid 1203) alerts once on the
+# 100-continue flow. Against a pre-fix build the test FAILS on
+# exactly those two checks (1202 -> 0, 1203 -> 2) while the flow-A
+# baseline and the http log checks pass.
+#
+# Note: alert events carry src/dst in the alert direction (server ->
+# client) for these toclient alerts.
+checks:
+  # flow A (normal GET -> 200): the rule works
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1201
+        src_ip: "10.0.0.2"
+        dest_ip: "10.0.0.1"
+  # flow B (100-continue -> 200): expected FIXED behaviour - the
+  # final 200's response line rule fires once (a pre-fix build never
+  # inspects it: the tx-level prefilter bookkeeping skips the tx when
+  # the final 200 reaches COMPLETE)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1202
+        src_ip: "10.0.0.2"
+        dest_ip: "10.0.0.3"
+  # flow B: the 100 line's response line alerts exactly once (a
+  # pre-fix build double-alerts it: HEADERS final run + LINE
+  # non-terminal re-run after the rewind, against the stale buffer)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1203
+        src_ip: "10.0.0.2"
+        dest_ip: "10.0.0.3"
+  # http log: both flows log the final 200
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        src_ip: "10.0.0.1"
+        http.status: 200
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        src_ip: "10.0.0.3"
+        http.status: 200
