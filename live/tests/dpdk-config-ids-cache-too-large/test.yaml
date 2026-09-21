@@ -1,0 +1,24 @@
+# Port of qa/live/dpdk/dpdk-testsuite.sh: IDS: auto mempool, oversized cache=1024 (fail)
+environment: tap
+requires:
+  features:
+    - DPDK
+  command:
+    - python3
+    - grep
+  script:
+    - python3 -c 'import os; assert len(os.sched_getaffinity(0)) >= 2'
+args:
+  - --dpdk
+  - --runmode workers
+  - -v
+  - --include "${OUTDIR}/dpdk.yaml"
+  - -S "${TESTDIR}/../dpdk-config/icmp.rules"
+  - --set dpdk.interfaces.0.threads=1
+  - --set dpdk.interfaces.0.mempool-size=auto
+  - --set dpdk.interfaces.0.mempool-cache-size=1024
+before: python3 "${TESTDIR}/../dpdk-config/prepare.py" ids 1
+exit-code: 1
+checks:
+  - shell:
+      args: grep -F -- 'mempool cache size requires a positive number' suricata.log

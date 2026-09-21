@@ -1,0 +1,23 @@
+# Port of qa/live/dpdk/dpdk-testsuite.sh: IDS: mempool too small for queues (fail)
+environment: tap
+requires:
+  features:
+    - DPDK
+  command:
+    - python3
+    - grep
+  script:
+    - python3 -c 'import os; assert len(os.sched_getaffinity(0)) >= 3'
+args:
+  - --dpdk
+  - --runmode workers
+  - -v
+  - --include "${OUTDIR}/dpdk.yaml"
+  - -S "${TESTDIR}/../dpdk-config/icmp.rules"
+  - --set dpdk.interfaces.0.threads=2
+  - --set dpdk.interfaces.0.mempool-size=1
+before: python3 "${TESTDIR}/../dpdk-config/prepare.py" ids 2
+exit-code: 1
+checks:
+  - shell:
+      args: grep -F -- 'mempool size is likely too small' suricata.log

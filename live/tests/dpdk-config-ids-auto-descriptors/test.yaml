@@ -1,0 +1,28 @@
+# Port of qa/live/dpdk/dpdk-testsuite.sh: IDS: auto descriptors, auto mempool (OOM expected with nohuge)
+environment: tap
+requires:
+  features:
+    - DPDK
+  command:
+    - python3
+    - grep
+  script:
+    - python3 -c 'import os; assert len(os.sched_getaffinity(0)) >= 2'
+args:
+  - --dpdk
+  - --runmode workers
+  - -v
+  - --include "${OUTDIR}/dpdk.yaml"
+  - -S "${TESTDIR}/../dpdk-config/icmp.rules"
+  - --set dpdk.interfaces.0.threads=1
+  - --set dpdk.interfaces.0.mempool-size=auto
+  - --set dpdk.interfaces.0.mempool-cache-size=auto
+  - --set dpdk.interfaces.0.rx-descriptors=auto
+  - --set dpdk.interfaces.0.tx-descriptors=auto
+before: python3 "${TESTDIR}/../dpdk-config/prepare.py" ids 1
+exit-code: 1
+checks:
+  - shell:
+      args: grep -F -- '1 packet mempools of size 65535, cache size 257' suricata.log
+  - shell:
+      args: grep -F -- 'rte_pktmbuf_pool_create failed' suricata.log

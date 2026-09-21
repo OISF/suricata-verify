@@ -1,0 +1,30 @@
+# Port of qa/live/dpdk/dpdk-testsuite.sh: IDS: static mempool=64, power-of-two boundary (1 thread)
+environment: tap
+requires:
+  features:
+    - DPDK
+  command:
+    - python3
+    - ping
+    - jq
+    - grep
+  script:
+    - python3 -c 'import os; assert len(os.sched_getaffinity(0)) >= 2'
+args:
+  - --dpdk
+  - --runmode workers
+  - -v
+  - --include "${OUTDIR}/dpdk.yaml"
+  - -S "${TESTDIR}/../dpdk-config/icmp.rules"
+  - --set dpdk.interfaces.0.threads=1
+  - --set dpdk.interfaces.0.mempool-size=64
+  - --set dpdk.interfaces.0.mempool-cache-size=auto
+before: python3 "${TESTDIR}/../dpdk-config/prepare.py" ids 1
+client: ip netns exec client0 ping -c 3 -i 0.2 -W 2 10.200.0.1
+checks:
+  - shell:
+      args: grep -F -- '1 packet mempools of size 63, cache size 21' suricata.log
+  - stats:
+      capture.packets.__gt: 0
+  - shell:
+      args: jq -e -s 'any(.[]; .event_type == "alert" and .alert.signature_id == 1)' eve.json

@@ -1,0 +1,1 @@
+alert icmp any any -> any any (msg:"DPDK configuration test echo request"; itype:8; sid:1; rev:1;)

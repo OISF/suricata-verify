@@ -1,0 +1,25 @@
+# Port of qa/live/dpdk/dpdk-testsuite.sh: Bond: mempool too small (fail)
+environment: tap
+requires:
+  features:
+    - DPDK
+  command:
+    - python3
+    - pkg-config
+    - grep
+  script:
+    - python3 -c 'import os; assert len(os.sched_getaffinity(0)) >= 2'
+    - 'src/suricata --build-info | grep -Eq "DPDK Bond PMD: +yes"'
+args:
+  - --dpdk
+  - --runmode workers
+  - -v
+  - --include "${OUTDIR}/dpdk.yaml"
+  - -S "${TESTDIR}/../dpdk-config/icmp.rules"
+  - --set dpdk.interfaces.0.threads=1
+  - --set dpdk.interfaces.0.mempool-size=15
+before: python3 "${TESTDIR}/../dpdk-config/prepare.py" bond 1
+exit-code: 1
+checks:
+  - shell:
+      args: grep -F -- 'mempool size is likely too small' suricata.log

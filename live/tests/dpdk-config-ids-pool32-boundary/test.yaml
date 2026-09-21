@@ -1,0 +1,23 @@
+# Port of qa/live/dpdk/dpdk-testsuite.sh: IDS: static mempool=32, power-of-two boundary (fail)
+environment: tap
+requires:
+  features:
+    - DPDK
+  command:
+    - python3
+    - grep
+  script:
+    - python3 -c 'import os; assert len(os.sched_getaffinity(0)) >= 2'
+args:
+  - --dpdk
+  - --runmode workers
+  - -v
+  - --include "${OUTDIR}/dpdk.yaml"
+  - -S "${TESTDIR}/../dpdk-config/icmp.rules"
+  - --set dpdk.interfaces.0.threads=1
+  - --set dpdk.interfaces.0.mempool-size=32
+before: python3 "${TESTDIR}/../dpdk-config/prepare.py" ids 1
+exit-code: 1
+checks:
+  - shell:
+      args: grep -F -- 'mempool size is likely too small' suricata.log
