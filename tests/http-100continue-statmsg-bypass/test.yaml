@@ -1,0 +1,69 @@
+rules: test.rules
+
+pcap: input.pcap
+# NIDS reproducer for the 100-continue stat_msg bypass:
+# the 100-continue rewind leaves the detection engine's per-tx state
+# stale, so the final 200's reason phrase is never inspected
+# (false negative) and the 100 line's reason phrase double-alerts
+# (false positive) against the stale buffer - the same deviation the
+# stat_code sibling tests pin, on the http.stat_msg buffer, which shares
+# the LINE response progress and the tx-level detect_progress
+# bookkeeping.
+#
+# The exchange is a standard spec-compliant one (RFC 7231
+# Expect: 100-continue client, plain "100 Continue" server answer,
+# normal client ACKs - the ACKs give the 100 line its own
+# parse/detect cycle); see the sibling test
+# http-100continue-statcode-bypass for the full mechanism.
+#
+# This test expects the FIXED behaviour: the final-200 rule (sid 1102)
+# fires once and the 100 line rule (sid 1103) alerts once on the
+# 100-continue flow. Against a pre-fix build the test FAILS on
+# exactly those two checks (1102 -> 0, 1103 -> 2) while the flow-A
+# baseline and the http log checks pass.
+#
+# Note: alert events carry src/dst in the alert direction (server ->
+# client) for these toclient alerts.
+checks:
+  # flow A (normal GET -> 200): the rule works
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1101
+        src_ip: "10.0.0.2"
+        dest_ip: "10.0.0.1"
+  # flow B (100-continue -> 200): expected FIXED behaviour - the
+  # final 200's reason phrase rule fires once (a pre-fix build never
+  # inspects it: the tx-level prefilter bookkeeping skips the tx when
+  # the final 200 reaches COMPLETE)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1102
+        src_ip: "10.0.0.2"
+        dest_ip: "10.0.0.3"
+  # flow B: the 100 line's reason phrase alerts exactly once (a
+  # pre-fix build double-alerts it: HEADERS final run + LINE
+  # non-terminal re-run after the rewind, against the stale buffer)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1103
+        src_ip: "10.0.0.2"
+        dest_ip: "10.0.0.3"
+  # http log: both flows log the final 200
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        src_ip: "10.0.0.1"
+        http.status: 200
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        src_ip: "10.0.0.3"
+        http.status: 200
