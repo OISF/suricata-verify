@@ -1,0 +1,21 @@
+# Let the TCP handshake and TLS data packets through to the app layer
+# so the TLS state rules are evaluated (established fw-test idiom):
+accept:hook tcp:all $HOME_NET any <> $HOME_NET any (flow:not_established; sid:1566; msg:"session setup";)
+accept:hook tcp:all $HOME_NET any <> $HOME_NET any (flow:established; sid:1567; msg:"established";)
+
+# The session explicitly allows every phase state it enters. The
+# malformed leaf in the client certificate suppresses the
+# client_cert phase (the certificate phase data is incomplete), so
+# the client track stays in client_hello and sid 1562 must never
+# fire. The incomplete-data condition survives the following
+# ClientKeyExchange, so the certificate data alone must not establish
+# the data phase either: sid 1563 must never fire. Without a rule for
+# an entered state the implicit default app policy (drop:flow) would
+# apply - which this test must not see: the decode failure is not an
+# app-layer error, so there is no drop at all.
+accept:hook tls:client_started $HOME_NET any -> $HOME_NET any (alert; sid:1560; msg:"client_started";)
+accept:hook tls:client_hello $HOME_NET any -> $HOME_NET any (alert; sid:1561; msg:"client_hello phase entered";)
+accept:hook tls:client_cert $HOME_NET any -> $HOME_NET any (alert; sid:1562; msg:"client_cert phase entered despite incomplete certificate data";)
+accept:hook tls:client_data $HOME_NET any -> $HOME_NET any (alert; sid:1563; msg:"client_data phase established from incomplete certificate data";)
+accept:hook tls:server_started $HOME_NET any -> $HOME_NET any (alert; sid:1564; msg:"server_started";)
+accept:hook tls:server_hello $HOME_NET any -> $HOME_NET any (alert; sid:1565; msg:"server_hello phase entered";)
