@@ -1,0 +1,56 @@
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # the write queue count limit (max-write-queue-cnt 1) is hit by the
+  # WRITE_AND_CLOSE (2nd queued OOO chunk): the event is attached to the
+  # affected file transaction
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: smb
+        anomaly.event: write_queue_cnt_exceeded
+        tx_id: 4
+  # the rejected WRITE_AND_CLOSE still closes the file transaction at the
+  # close command: a single CLOSED file record with the in-order write only
+  # (100 x 0x41); the queued chunk was never drained
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.state: CLOSED
+        fileinfo.stored: true
+        fileinfo.size: 100
+        fileinfo.sha256: "d82c6aa133a0fc25b087f46ad7ed2a3042772e612e015571e61753ff55ba6da8"
+  # the record after the rejected one (same FID) is still parsed: a second
+  # file transaction for its 100 x 0x44 write, truncated at teardown
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.state: TRUNCATED
+        fileinfo.stored: true
+        fileinfo.size: 100
+        fileinfo.sha256: "407c28e1d51f887a034d378a1f30870486fdd987b7d2724a643bdd8d3e550304"
+  - filter:
+      count: 2
+      match:
+        event_type: smb
+        smb.command: SMB1_COMMAND_WRITE_ANDX
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.command: SMB1_COMMAND_WRITE_AND_CLOSE
+  - shell:
+      args: test "$(grep -Ec 'malformed' eve.json)" -eq 0
+  - shell:
+      args: test "$(grep -Ec 'truncated_file_data' eve.json)" -eq 0
