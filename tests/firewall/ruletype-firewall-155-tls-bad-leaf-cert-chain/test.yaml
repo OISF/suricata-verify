@@ -1,0 +1,108 @@
+# A TLS session whose server Certificate message carries a garbage
+# leaf (not an ASN.1 SEQUENCE) followed by a valid certificate, and
+# whose next handshake message is a ServerHelloDone (pcap_cnt 7).
+# The undecodable leaf is skipped - it must not abort the message:
+# - exactly one INVALID_CERTIFICATE decoder event is raised for the
+#   bad leaf (pcap_cnt 6);
+# - the rest of the chain is still decoded and logged: the
+#   certificate phase data is filled from the first decodable
+#   certificate (the tls log carries its subject/issuer);
+# - the certificate phase data is incomplete (the leaf is missing),
+#   so the server_cert phase is never entered: sid 1552 never fires;
+# - the incomplete-data condition survives the following
+#   ServerHelloDone: the certificate data alone must not establish
+#   the data phase, so sid 1555 (server_data) never fires either and
+#   the server track stays in server_hello;
+# - the failure is not an app-layer error: the message bytes are
+#   consumed, the rest of the flow is parsed, and nothing is dropped -
+#   every phase state the session enters carries an explicit accept
+#   rule (see firewall.rules), so no implicit default app policy drop
+#   either.
+#
+# The pcap is crafted by craft-pcap.py (see that file); the valid
+# certificate body is the committed client_cert.der (a self-signed
+# X.509 certificate, subject CN=clienttest).
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+# the client and server hello phases are entered by the valid hellos
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1553
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1550
+      ts_progress: client_hello
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1554
+# the server_hello state rule is evaluated on the ServerHello record,
+# the certificate record and the ServerHelloDone record (the bad leaf
+# suppressed the phase advance, so the server track is still in
+# server_hello on all of them)
+- filter:
+    count: 3
+    match:
+      event_type: alert
+      alert.signature_id: 1551
+# the certificate phase data is incomplete: the server_cert phase is
+# never entered
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 1552
+# the incomplete-data condition survives the ServerHelloDone: the
+# data phase is not established from the incomplete certificate data
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 1555
+# the bad leaf is flagged once on the certificate record
+- filter:
+    count: 1
+    match:
+      event_type: anomaly
+      anomaly.event: INVALID_CERTIFICATE
+      anomaly.app_proto: tls
+      pcap_cnt: 6
+# the rest of the chain survived: the certificate data in the tls log
+# comes from the first decodable certificate (the valid one - the
+# garbage leaf was skipped and never added to the chain; the chain
+# content itself is pinned by the TLSPhaseCertChainSkipTest unit test)
+- filter:
+    count: 1
+    match:
+      event_type: tls
+      tls.subject: CN=clienttest
+      tls.issuerdn: CN=clienttest
+# no drop at all: the decode failure is not an app-layer error
+- filter:
+    count: 0
+    match:
+      event_type: flow
+      flow.action: drop
+# no packet or app state was dropped by rules or by the implicit
+# default app policy
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.firewall.accepted: 8
+      stats.firewall.blocked: 0
+      stats.firewall.drop_reason.rules: 0
+      stats.firewall.drop_reason.default_app_policy: 0
