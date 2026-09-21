@@ -1,0 +1,13 @@
+# Rules for the 100-continue response_line bypass test.
+#
+# 1201: the "final 200" rule on flow A (baseline). Fires normally.
+# 1202: the "final 200" rule on flow B. Expected to fire once; on a
+#       pre-fix build it does NOT fire (the bypass - the final
+#       response's response line is never inspected).
+# 1203: the "100 line" rule on flow B. Expected to fire once; on a
+#       pre-fix build it double-alerts (HEADERS final run + LINE
+#       non-terminal re-run after the rewind, against the stale
+#       buffer).
+alert tcp 10.0.0.2 any -> 10.0.0.1 10000 (msg:"100continue-response_line 200 response_line (baseline)"; sid:1201; rev:1; http.response_line; content:"200 OK";)
+alert tcp 10.0.0.2 any -> 10.0.0.3 10001 (msg:"100continue-response_line 200 response_line"; sid:1202; rev:1; http.response_line; content:"200 OK";)
+alert tcp 10.0.0.2 any -> 10.0.0.3 10001 (msg:"100continue-response_line 100 response_line"; sid:1203; rev:1; http.response_line; content:"100 Continue";)
