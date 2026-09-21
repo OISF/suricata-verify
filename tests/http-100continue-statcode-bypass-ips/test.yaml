@@ -1,0 +1,135 @@
+requires:
+  min-version: 9
+
+args:
+  - --simulate-ips
+
+# IPS-mode reproducer for the 100-continue stat_code deviations (false
+# negative + false positive double alert). In inline mode the stream
+# engine parses each packet's own direction immediately (no
+# ACK-triggered deferral), so the 100 line, the empty line and the
+# final 200 each get their own parse/detect cycle - the plain small
+# 100-continue exchange reproduces the full deviation end-to-end on a
+# pre-fix build, no header-size trigger, no ACK dependency:
+#
+#   flow A (normal GET -> 200): 1001/1003 fire, 1002 does not.
+#   flow B (100-continue -> 200), on a pre-fix build:
+#     1001/1003 = 0  the final 200's stat_code is never inspected (FN).
+#                    The 100 line's prefilter final run (HEADERS, C > P)
+#                    stores per-tx detect_progress; the 100-continue
+#                    rewind (HEADERS -> LINE) resets nothing; the
+#                    tx-level prefilter bookkeeping skips the tx when
+#                    the final 200 reaches COMPLETE.
+#     1002 = 2       the 100 line double-alerts (FP): once at HEADERS
+#                    (final run, stale "100" buffer), once at LINE
+#                    (non-terminal re-run after the rewind).
+#
+# This test expects the FIXED behaviour: on the 100-continue flow the
+# final-200 stat_code rules (1001/1003) fire once and the 100 line
+# (1002) alerts once. Against a pre-fix build it FAILS on exactly
+# those three checks; the flow-A baseline, the scope controls
+# (1004-1006) and the http log checks pass, isolating the deviation to
+# the stat_code buffer.
+#
+# NIDS-mode sibling: ../http-100continue-statcode-bypass - there the
+# client's normal auto-ACKs of the 100 line and the empty line give
+# each of them its own parse/detect cycle (ACK-triggered stream
+# processing), so the same plain exchange reproduces the deviation
+# (including the double alert) identically.
+#
+# Note: alert events carry src/dst in the alert direction (server ->
+# client) for these toclient alerts.
+checks:
+  # flow A (normal GET -> 200): the rules work
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1001
+        src_ip: "10.0.0.2"
+        dest_ip: "10.0.0.1"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1003
+        src_ip: "10.0.0.2"
+        dest_ip: "10.0.0.1"
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1002
+        src_ip: "10.0.0.2"
+        dest_ip: "10.0.0.1"
+  # flow B (100-continue -> 200): expected FIXED behaviour - the
+  # final 200's stat_code rules fire once (a pre-fix build bypasses
+  # the final 200's stat_code entirely: the 100 line's final run
+  # stores the per-tx detect_progress bookkeeping, the 100-continue
+  # rewind (HEADERS -> LINE) resets neither that bookkeeping nor the
+  # stale stat_code buffer, and the tx-level prefilter bookkeeping
+  # skips the tx when the final 200 reaches COMPLETE)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1001
+        src_ip: "10.0.0.2"
+        dest_ip: "10.0.0.3"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1003
+        src_ip: "10.0.0.2"
+        dest_ip: "10.0.0.3"
+  # flow B: the 100 line alerts exactly once (a pre-fix build
+  # double-alerts it: HEADERS final run + LINE non-terminal re-run
+  # after the rewind, against the stale "100" buffer)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1002
+        src_ip: "10.0.0.2"
+        dest_ip: "10.0.0.3"
+  # http log: both flows log the final 200 in IPS mode
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        src_ip: "10.0.0.1"
+        http.status: 200
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        src_ip: "10.0.0.3"
+        http.status: 200
+  # scope controls (flow B): response headers, response body and
+  # request-side detection are unaffected by the deviation - the final
+  # 200's response header, response body and the request-side host are
+  # still detected normally (these pass even on a pre-fix build; the
+  # affected set is the response-line buffer family - see the
+  # stat_msg / response_line sibling tests)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1004
+        src_ip: "10.0.0.2"
+        dest_ip: "10.0.0.3"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1005
+        src_ip: "10.0.0.2"
+        dest_ip: "10.0.0.3"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1006
+        src_ip: "10.0.0.3"
+        dest_ip: "10.0.0.2"
