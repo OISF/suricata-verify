@@ -1,0 +1,22 @@
+# Rules for the 100-continue stat_code bypass test.
+#
+# 1001/1003: the "final 200" rule (with MPM / without MPM). Fires on
+#            flow A. Expected to fire once on flow B's final 200 as
+#            well; on a pre-fix build it does NOT fire (the bypass -
+#            the final response's stat_code is never inspected).
+# 1002: the "100 line" rule. Expected to fire once on flow B's 100
+#       status line; on a pre-fix build it double-alerts (HEADERS
+#       final run + LINE non-terminal re-run after the rewind,
+#       against the stale "100" buffer).
+# 1004-1006: scope controls - pin that response headers, response
+#            body and request-side detection are unaffected: the
+#            final 200's response header (1004), response body (1005)
+#            and the request-side host (1006) are detected normally
+#            on flow B even on a pre-fix build (the affected set is
+#            the response-line buffer family).
+alert tcp any any -> any any (msg:"100continue-bypass 200 stat_code (mpm)"; sid:1001; rev:1; http.stat_code; content:"200";)
+alert tcp any any -> any any (msg:"100continue-bypass 100 stat_code"; sid:1002; rev:1; http.stat_code; content:"100";)
+alert tcp any any -> any any (msg:"100continue-bypass 200 stat_code (pcre, no mpm)"; sid:1003; rev:1; http.stat_code; pcre:"/200/";)
+alert tcp any any -> any any (msg:"100continue-bypass scope: final 200 response header"; sid:1004; rev:1; http.header; content:"finalmarker";)
+alert tcp any any -> any any (msg:"100continue-bypass scope: final 200 response body"; sid:1005; rev:1; http.response_body; content:"hello200";)
+alert tcp any any -> any 80 (msg:"100continue-bypass scope: request host (control)"; sid:1006; rev:1; http.host; content:"b.example.com";)
