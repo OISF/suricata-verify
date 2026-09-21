@@ -1,0 +1,42 @@
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # the write queue count limit (max-write-queue-cnt 3) is hit by the 5th
+  # WRITE (3 queued + 1 > 3): the rejected record is a split NBSS record
+  # (partial path), and the event is attached to the file transaction
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: smb
+        anomaly.event: write_queue_cnt_exceeded
+        tx_id: 0
+  # the record after the rejected one is still parsed and applied in order:
+  # the stored file holds the 2 in-order writes only (100 x 'A' + 100 x 'E'),
+  # which proves the skipped remainder of the rejected record did not
+  # consume the next record's bytes
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.state: TRUNCATED
+        fileinfo.stored: true
+        fileinfo.size: 200
+        fileinfo.sha256: "da7dec94ecc026b268ed595002048b4e67b54636a7a4ec6e2b343f496bc7be31"
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.command: SMB2_COMMAND_WRITE
+  - shell:
+      args: test "$(grep -Ec 'malformed' eve.json)" -eq 0
+  - shell:
+      args: test "$(grep -Ec 'truncated_file_data' eve.json)" -eq 0
