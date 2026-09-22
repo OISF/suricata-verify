@@ -8,7 +8,9 @@ rule-files:
 multi-detect:
   enabled: yes
   selector: vlan
-  loaders: 3
+  # Use 8 for now, possible race condition in tenant loading.
+  loaders: 8
+  #loaders: 3
   tenants:
     - id: 1
       yaml: ${OUTDIR}/tenant-1.yaml
