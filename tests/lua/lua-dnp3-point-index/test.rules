@@ -1,0 +1,1 @@
+alert dnp3:request_started any any -> any any (msg:"dnp3 point index"; dnp3_func:2; lua:points-index.lua; sid:1; rev:1;)
