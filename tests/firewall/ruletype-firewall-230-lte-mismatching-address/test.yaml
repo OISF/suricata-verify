@@ -1,0 +1,43 @@
+requires:
+  min-version: 9
+
+pcap: ../../tls/tls-fingerprint-alert/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+# The prior-hook default drop happens before either same-hook rule is inspected.
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 2300001
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 2300002
+- filter:
+    count: 1
+    match:
+      event_type: drop
+      drop.reason: "firewall default app policy"
+      direction: to_server
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      drop.reason: "firewall rules"
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.action: "drop"
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.firewall.drop_reason.default_app_policy: 1
+      stats.firewall.drop_reason.rules: 0
