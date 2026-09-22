@@ -1,0 +1,32 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - stats
+
+flow-timeouts:
+  tcp:
+    new: 100
+    established: 100
+    closed: 100
+    bypassed: 5
+    emergency-new: 5
+    emergency-established: 20
+    emergency-closed: 10
+    emergency-bypassed: 1
+
+flow:
+  memcap: 32 MiB
+  hash-size: 10
+  prealloc: 10
+
+af-packet:
+  - interface: default
+    xdp-mode: soft
+    bypass: yes
+

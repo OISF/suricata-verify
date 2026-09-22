@@ -1,0 +1,16 @@
+requires:
+  min-version: 9
+  os: linux
+  features:
+    - EBPF
+  files:
+    - ebpf/xdp_filter.bpf
+
+args:
+  - --set af-packet.0.xdp-filter-file=${SRCDIR}/ebpf/xdp_filter.bpf
+
+live-shutdown-after: 20
+
+checks:
+  - stats:
+      flow.mgr.flows_timeout: 100
