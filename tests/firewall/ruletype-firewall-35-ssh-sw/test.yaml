@@ -22,14 +22,13 @@ checks:
     count: 1
     match:
       event_type: alert
-      alert.signature_id: 2001
-- filter:
-    count: 1
-    match:
-      event_type: alert
       alert.signature_id: 2002
+# session is per direction: the request side reaches it on its own
+# NewKeys, so the finished accept fires on the detect/log flush issued
+# by the dual-NewKeys NO_INSPECTION and again on the next wire packet
+# while the direction still sits in session
 - filter:
-    count: 1
+    count: 2
     match:
       event_type: alert
       alert.signature_id: 2003
@@ -38,11 +37,6 @@ checks:
     match:
       event_type: alert
       alert.signature_id: 3000
-- filter:
-    count: 1
-    match:
-      event_type: alert
-      alert.signature_id: 3001
 - filter:
     count: 1
     match:
