@@ -1,0 +1,15 @@
+requires:
+  min-version: 8
+
+pcap: ../lua-output-log-error-stack/dns-flood.pcap
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+
+checks:
+  - filter:
+      count: 2200
+      match:
+        event_type: alert
+        alert.signature_id: 1
