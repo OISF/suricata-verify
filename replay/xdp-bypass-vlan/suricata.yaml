@@ -1,0 +1,20 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - stats
+
+flow-timeouts:
+  tcp:
+    bypassed: 1 
+
+af-packet:
+  - interface: default
+    xdp-mode: soft
+    bypass: yes
+
