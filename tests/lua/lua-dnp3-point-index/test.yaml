@@ -1,0 +1,17 @@
+requires:
+  min-version: 8
+
+pcap: ../../dnp3/dnp3-max-points/test.pcap
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+
+checks:
+  # the points table must be 1-based: points[1] the first point,
+  # points[#points] the last; a shifted walk must not pass
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
