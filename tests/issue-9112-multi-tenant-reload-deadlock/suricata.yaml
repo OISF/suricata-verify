@@ -1,0 +1,43 @@
+%YAML 1.1
+---
+
+multi-detect:
+  enabled: yes
+  selector: vlan
+  # Tenants are assigned to loaders round-robin, so with 14 tenants and 7
+  # loaders every loader has two tenants: 1 and 8, 2 and 9, and so on. Each
+  # loader can start its first task before its second is queued, which is when
+  # the deadlock happens.
+  loaders: 7
+  tenants:
+    - id: 1
+      yaml: tenant.yaml
+    - id: 2
+      yaml: tenant.yaml
+    - id: 3
+      yaml: tenant.yaml
+    - id: 4
+      yaml: tenant.yaml
+    - id: 5
+      yaml: tenant.yaml
+    - id: 6
+      yaml: tenant.yaml
+    - id: 7
+      yaml: tenant.yaml
+    - id: 8
+      yaml: tenant.yaml
+    - id: 9
+      yaml: tenant.yaml
+    - id: 10
+      yaml: tenant.yaml
+    - id: 11
+      yaml: tenant.yaml
+    - id: 12
+      yaml: tenant.yaml
+    - id: 13
+      yaml: tenant.yaml
+    - id: 14
+      yaml: tenant.yaml
+  mappings:
+    - vlan-id: 1000
+      tenant-id: 1
