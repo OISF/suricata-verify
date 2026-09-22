@@ -1,7 +1,7 @@
 pcap: ../../tls/tls-client-hello-frag-01/dump_mtu300.pcap
 
 requires:
-  min-version: 8
+  min-version: 9
 
 args:
   - --simulate-ips
