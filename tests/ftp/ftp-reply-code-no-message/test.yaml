@@ -1,0 +1,27 @@
+requires:
+  min-version: 9
+
+args:
+  - --runmode=single
+
+checks:
+  - filter:
+      count: 4
+      match:
+        event_type: ftp
+
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: QUIT
+        ftp.completion_code: ['221']
+        not-has-key: ftp.reply
+
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: PASS
+        ftp.completion_code: ['230']
+        ftp.reply: ['User anonymous logged in']
