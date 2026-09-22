@@ -1,0 +1,12 @@
+requires:
+    min-version: 9
+    pcap: false
+
+args:
+    - -T
+
+checks:
+    - shell:
+        args: |-
+          grep "Warning: detect-parse: Rule missing closing parenthesis" suricata.log | wc -l
+        expect: 1
