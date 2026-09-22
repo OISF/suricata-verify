@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"missing parenthesis"; content:"warn"; sid:1; 
