@@ -1,0 +1,59 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+  # Two files are uploaded. The first does not match the rule; the rule
+  # must remain matchable (per file state reset) so the second file, which
+  # contains %PDF, still triggers it and the request is accepted.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 200
+        alert.action: allowed
+        pcap_cnt: 7
+
+  # the rule matched, so the fail-closed default policy is not applied
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2201001
+
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+
+  # both multipart parts are tracked as files, first unnamed (no
+  # filename attr, named after the URL) second a.txt with the %PDF
+  - filter:
+      count: 2
+      match:
+        event_type: fileinfo
+
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /upload
+        fileinfo.size: 2
+        fileinfo.md5: e0aa021e21dddbd6d8cecec71e9cf564
+        fileinfo.state: CLOSED
+        fileinfo.tx_id: 0
+
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: a.txt
+        fileinfo.size: 201
+        fileinfo.md5: 6573e4dd899ae1c6b76f699eb0dac2cb
+        fileinfo.state: CLOSED
+        fileinfo.tx_id: 0

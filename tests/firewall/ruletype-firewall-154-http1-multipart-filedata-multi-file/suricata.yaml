@@ -1,0 +1,31 @@
+%YAML 1.1
+---
+
+stats:
+  enabled: yes
+  interval: 8
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - stats
+        - files:
+            force-magic: yes
+            force-hash: [md5]
+        - alert
+        - flow
+        - http
+        - drop:
+            alerts: yes
+            flows: all
+
+firewall:
+  policies:
+    app:
+      http1:
+        # fail-closed default: drop (and alert) on requests that did not
+        # get an explicit accept from firewall.rules
+        request-body: ["drop:flow", "alert"]

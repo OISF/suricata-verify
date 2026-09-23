@@ -1,0 +1,15 @@
+# Accept the TCP handshake and keep established flows alive at the
+# packet level.
+accept:hook tcp:all any any -> any any (flow:not_established; sid:1000;)
+accept:hook tcp:all any any <> any any (flow:established; sid:1001;)
+
+# Accept all server responses.
+accept:hook smtp:response_started any any -> any any (sid:1002;)
+accept:hook smtp:response_data any any -> any any (sid:1003;)
+accept:hook smtp:response_complete any any -> any any (sid:1004;)
+
+# Allow DATA txs whose attachments contain the PDF magic.
+# Two attachments are sent; the first does not match. The rule must remain
+# matchable after the first attachment is inspected (per file state reset)
+# so the second attachment still triggers it.
+accept:tx,alert smtp:<request_data any any -> any any (file_data; content:"%PDF"; sid:300;)

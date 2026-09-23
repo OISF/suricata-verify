@@ -1,0 +1,10 @@
+# Accept the TCP handshake and keep established flows alive at the
+# packet level.
+accept:hook tcp:all any any -> any any (flow:not_established; sid:1000;)
+accept:hook tcp:all any any <> any any (flow:established; sid:1001;)
+
+# Allow requests whose uploaded files contain the PDF magic.
+# Two files are uploaded; the first does not match. The rule must remain
+# matchable after the first file is inspected (per file state reset) so the
+# second file still triggers it.
+accept:tx,alert http1:<request_body any any -> any any (file_data; content:"%PDF"; sid:200;)
