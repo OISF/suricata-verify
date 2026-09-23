@@ -1,0 +1,10 @@
+# LTE (<hook) state matrix: http1 ts request_headers / single-content-nomatch
+# < rule with a non-matching http.host keyword: the no match becomes final at S + 1 and the per-state default policy drops the flow at S.
+#
+# The packet:filter default policy accepts the session (see suricata.yaml).
+# The last rule is scaffolding: it covers the opposite direction so its
+# default policy does not drop the flow before this direction reaches S + 1.
+
+accept:hook http1:<response_complete $EXTERNAL_NET any -> $HOME_NET any (sid:9001;)
+
+accept:flow,alert http1:<request_headers $HOME_NET any -> $EXTERNAL_NET any (http.host; content:"nope.example"; sid:100;)
