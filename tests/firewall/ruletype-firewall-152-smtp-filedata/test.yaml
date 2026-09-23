@@ -1,0 +1,44 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+  # the DATA section ends at packet 14; the request completes without the
+  # file_data rule matching, so the fail-closed default policy drops it
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        drop.reason: "firewall default app policy"
+        pcap_cnt: 14
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2201001
+        alert.signature: "SURICATA FW default app policy"
+        pcap_cnt: 14
+
+  # the rule itself never matches
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 300
+
+  # the MIME attachment is tracked as a file and complete
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: note.txt
+        fileinfo.size: 44
+        fileinfo.md5: ed0349682797617115d88098afe9ff9c
+        fileinfo.state: CLOSED
+        fileinfo.tx_id: 0

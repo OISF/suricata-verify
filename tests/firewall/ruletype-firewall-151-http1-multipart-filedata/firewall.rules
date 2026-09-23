@@ -1,0 +1,10 @@
+# Accept the TCP handshake and keep established flows alive at the
+# packet level.
+accept:hook tcp:all any any -> any any (flow:not_established; sid:1000;)
+accept:hook tcp:all any any <> any any (flow:established; sid:1001;)
+
+# Only allow requests whose uploaded file contains the PDF magic.
+# The filedata engine is at request_body progress; once the request has
+# moved past it, the engine must report a final no match so the
+# fail-closed default policy is applied.
+accept:tx,alert http1:<request_body any any -> any any (file_data; content:"%PDF"; sid:200;)

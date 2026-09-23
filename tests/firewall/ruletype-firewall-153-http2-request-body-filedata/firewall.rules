@@ -1,0 +1,16 @@
+# Accept the TCP handshake and keep established flows alive at the
+# packet level.
+accept:hook tcp:all any any -> any any (flow:not_established; sid:1000;)
+accept:hook tcp:all any any <> any any (flow:established; sid:1001;)
+
+# Accept the http2 connection (global) hooks so the flow reaches the
+# stream level.
+accept:tx,alert http2:global:request_started any any -> any any (sid:1002;)
+accept:tx,alert http2:global:response_started any any -> any any (sid:1003;)
+
+# Only allow request streams whose body contains the PDF magic.
+# The file_data engine is at request_data progress for the http2 stream
+# substate; once the request has moved past it (the request is closed) the
+# engine must report a final no match, so the fail-closed default policy is
+# applied even though the stream/tx has not completed yet.
+accept:tx,alert http2:stream:<request_data any any -> any any (file_data; content:"%PDF"; sid:400;)
