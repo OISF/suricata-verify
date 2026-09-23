@@ -1,0 +1,45 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+  # The request stream closes at packet 8 (DATA with END_STREAM), which is
+  # past the filedata engine's request_data progress. The engine must report
+  # a final no match so the fail-closed default policy drops the flow, even
+  # though the stream/tx has not completed yet (the response is left open).
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        drop.reason: "firewall default app policy"
+        pcap_cnt: 8
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2201001
+        alert.signature: "SURICATA FW default app policy"
+        pcap_cnt: 8
+
+  # the rule itself never matches
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 400
+
+  # the request body is tracked as a file (unnamed) and complete
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.size: 58
+        fileinfo.md5: c8572082823536b361b5d9f7d0672909
+        fileinfo.state: CLOSED
+        fileinfo.tx_id: 1

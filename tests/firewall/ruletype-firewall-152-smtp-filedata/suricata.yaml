@@ -1,0 +1,31 @@
+%YAML 1.1
+---
+
+stats:
+  enabled: yes
+  interval: 8
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - stats
+        - files:
+            force-magic: yes
+            force-hash: [md5]
+        - alert
+        - flow
+        - smtp
+        - drop:
+            alerts: yes
+            flows: all
+
+firewall:
+  policies:
+    app:
+      smtp:
+        # fail-closed default: drop (and alert) on DATA txs that did not
+        # get an explicit accept from firewall.rules
+        request-data: ["drop:flow", "alert"]

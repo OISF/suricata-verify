@@ -1,0 +1,44 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+  # request completes at packet 6 without the filedata rule matching,
+  # so the fail-closed default policy drops it
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        drop.reason: "firewall default app policy"
+        pcap_cnt: 6
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2201001
+        alert.signature: "SURICATA FW default app policy"
+        pcap_cnt: 6
+
+  # the rule itself never matches
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 200
+
+  # the multipart file part is tracked as a file and complete
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: notes.txt
+        fileinfo.size: 39
+        fileinfo.md5: c5e4bc0298c9c69391a2470b7d7a8ad9
+        fileinfo.state: CLOSED
+        fileinfo.tx_id: 0
