@@ -8,9 +8,11 @@ client's flight - the server sends no application data at all.
 
 The point of the session: the TLS event carrying the ja3s field is
 emitted once the data phase is reached, not at a flight-completion
-milestone. In this session the data phase is only reached through the
-certificates (subject/issuer), so the event is emitted after the
-handshake completes - ja3s stays published for a session without
+milestone. The tracks reach their data phase independently: the
+server track through its certificate (a 3999-byte record fragmented
+over frames 6-10), the client track through its own
+ChangeCipherSpec (frame 12). The event flushes on the packet after
+both are in phase - ja3s stays published for a session without
 server app data.
 
 Run this script from its own test directory: the pcap is written to

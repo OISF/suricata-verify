@@ -1,13 +1,16 @@
-# A TLS session whose server Certificate message carries a garbage
-# DER body (not an ASN.1 SEQUENCE). The ClientHello, the ServerHello
-# and a valid client Certificate are all complete and decode cleanly,
-# so the client track reaches the client_cert phase and the server
-# track reaches the server_hello phase. The malformed server
-# certificate must fail to decode without entering the server_cert
-# phase - the certificate phase data does not exist for a message
-# that failed to parse:
-# - sid 1532 (server_cert) never fires: the server track stays in
-#   server_hello;
+# A TLS session whose server Certificate message carries a garbage DER
+# body (not an ASN.1 SEQUENCE). The ClientHello, the ServerHello and a
+# valid client Certificate are all complete and decode cleanly, so the
+# client track reaches the client_cert phase (entered at the hello
+# hand-over, before any certificate byte) and the server track reaches
+# server_cert (entered by the ServerHello completing, again with no
+# certificate data yet). The malformed server certificate must fail to
+# decode without establishing the data phase - a message whose parse
+# failed has no phase data:
+# - sid 1536 (server_data) never fires: the failed certificate leaves
+#   the server track in server_cert;
+# - sid 1532 (server_cert) fires on the ServerHello record (the
+#   hand-over) and on the certificate record itself;
 # - the failure is not an app-layer error: the message bytes are
 #   consumed, the rest of the flow is parsed, and nothing is dropped
 #   - every phase state the session enters carries an explicit
@@ -15,8 +18,7 @@
 #   policy drop either.
 #
 # The certificate failure is visible in the anomaly events
-# (INVALID_CERTIFICATE, INVALID_HANDSHAKE_MESSAGE) at the malformed
-# record (pcap_cnt 7).
+# (INVALID_CERTIFICATE) at the malformed record (pcap_cnt 7).
 #
 # The pcap is crafted by craft-pcap.py (see that file); the client
 # certificate body is the committed client_cert.der (a self-signed
@@ -42,22 +44,24 @@ checks:
     match:
       event_type: alert
       alert.signature_id: 1530
-      ts_progress: client_hello
 - filter:
     count: 1
     match:
       event_type: alert
       alert.signature_id: 1535
-# the valid client certificate enters the client_cert phase
+# the client_cert phase is entered at the hello hand-over (walked
+# through on the ClientHello record) and re-evaluated on the client
+# certificate record
 - filter:
-    count: 1
+    count: 2
     match:
       event_type: alert
       alert.signature_id: 1533
       ts_progress: client_cert
-# the malformed server certificate never enters the server_cert phase
+# the server_cert phase is entered by the ServerHello hand-over and
+# re-entered by the certificate message itself
 - filter:
-    count: 0
+    count: 2
     match:
       event_type: alert
       alert.signature_id: 1532
@@ -71,13 +75,19 @@ checks:
       pcap_cnt: 7
 # (one event: the decode fails at the first certificate and the
 # decode error is reported once)
-# the server_hello state rule is evaluated on the ServerHello record
-# and on the malformed certificate record (still in server_hello)
+# the server_hello rule is evaluated in the walk-over of the
+# ServerHello record
 - filter:
-    count: 2
+    count: 1
     match:
       event_type: alert
       alert.signature_id: 1531
+# the malformed server certificate must not establish the data phase
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 1536
 # no drop at all: the decode failure suppresses the phase advance of
 # its own message only, it is not an app-layer error
 - filter:

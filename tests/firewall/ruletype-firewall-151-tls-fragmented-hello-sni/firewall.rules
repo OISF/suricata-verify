@@ -1,7 +1,8 @@
-# The ClientHello is split across two TLS records: the first record
-# carries the handshake header and part of the message. The phase
-# transition must wait until the message is fully buffered (the final
-# fragment), so the client_hello decision is made only when the SNI
-# is available and the sni rule can match.
-accept:hook tls:client_started $HOME_NET any -> $HOME_NET any (alert; sid:1511; msg:"client_started state evaluated";)
-accept:flow tls:client_hello $HOME_NET any -> $HOME_NET any (tls.sni; content:"example.com"; alert; sid:1512; msg:"sni available at client_hello";)
+# The ClientHello is split across two TLS records. The track enters
+# client_hello at the first fragment; the hello data (sni) is only
+# available when the message completes, and that record is then decided
+# at client_cert (the hand-over state). The in-flight fragments are
+# accepted in the hello state itself.
+accept:hook tls:client_started $HOME_NET any -> $EXTERNAL_NET any (alert; sid:1511; msg:"client_started state evaluated";)
+accept:flow tls:client_hello $HOME_NET any -> $EXTERNAL_NET any (tls.sni; content:"example.com"; alert; sid:1512; msg:"sni check, matches on the record that completes the hello";)
+accept:hook tls:client_hello $HOME_NET any -> $EXTERNAL_NET any (alert; sid:1513; msg:"hello in flight, no sni yet";)

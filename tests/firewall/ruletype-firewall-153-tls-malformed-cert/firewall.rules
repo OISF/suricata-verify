@@ -11,14 +11,16 @@ accept:hook tcp:all $HOME_NET any <> $HOME_NET any (flow:established; sid:1541; 
 # drops it, and the decode failure of the malformed server
 # certificate is not an app-layer error, so there is no drop at all.
 #
-# server_cert (sid 1532) must never fire: the certificate message
-# fails to decode (garbage DER), so the phase state must not advance -
-# the server track stays in server_hello and the certificate phase
-# data does not exist. The message bytes are consumed, the rest of
-# the flow is parsed, and nothing is dropped.
+# server_cert (sid 1532) fires twice: on the ServerHello record (the
+# hello hands the track over before any certificate byte) and on the
+# certificate record itself. The failed decode must not establish the
+# data phase: server_data (sid 1536) must never fire. The message bytes
+# are consumed, the rest of the flow is parsed, and nothing is
+# dropped.
 accept:hook tls:client_started $HOME_NET any -> $HOME_NET any (alert; sid:1534; msg:"client_started";)
 accept:hook tls:client_hello $HOME_NET any -> $HOME_NET any (alert; sid:1530; msg:"client_hello phase entered";)
 accept:hook tls:client_cert $HOME_NET any -> $HOME_NET any (alert; sid:1533; msg:"client_cert phase entered";)
 accept:hook tls:server_started $HOME_NET any -> $HOME_NET any (alert; sid:1535; msg:"server_started";)
 accept:hook tls:server_hello $HOME_NET any -> $HOME_NET any (alert; sid:1531; msg:"server_hello phase entered";)
-accept:hook tls:server_cert $HOME_NET any -> $HOME_NET any (alert; sid:1532; msg:"server_cert phase entered on a malformed certificate";)
+accept:hook tls:server_cert $HOME_NET any -> $HOME_NET any (alert; sid:1532; msg:"server_cert phase entered";)
+accept:hook tls:server_data $HOME_NET any <> $HOME_NET any (alert; sid:1536; msg:"server_data phase established from a failed certificate";)
