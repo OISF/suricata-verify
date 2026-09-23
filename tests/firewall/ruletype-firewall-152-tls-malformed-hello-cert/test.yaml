@@ -1,21 +1,22 @@
 # A TLS session whose ClientHello is truncated (too short for the
 # random field) and whose server certificate carries a garbage DER
-# body: both messages fail to decode. A decode failure must not enter
-# the phase state - the phase data (SNI, certificates) does not exist
-# for a message that failed to parse - but the message bytes are
-# consumed and parsing continues: the flow is neither dropped nor
-# blinded, and the next message that decodes cleanly still advances:
-# - the client_hello rule (sid 1520) never fires: the truncated hello
-#   leaves the client track in client_started;
-# - the server_hello rule (sid 1521) fires twice: the valid ServerHello
-#   decodes after the failed ClientHello (the suppression applies to
-#   the failed message only) and the state rule is evaluated on the
-#   ServerHello record and on the following certificate record;
-# - the server_cert rule (sid 1522) never fires: the malformed
-#   certificate leaves the server track in server_hello.
-# The decode failures are visible in the anomaly events
-# (HANDSHAKE_INVALID_LENGTH on the truncated hello, INVALID_CERTIFICATE
-# on the garbage certificate).
+# body: both messages fail to decode. The hello phase is entered when
+# the message starts, so the failed ClientHello leaves the client
+# track in client_hello (no hand-over to client_cert: the hello data
+# never existed). The valid ServerHello completes and hands the server
+# track to server_cert before any certificate byte; the malformed
+# certificate message then re-evaluates server_cert without the
+# advance to data being possible (the certificate phase data does not
+# exist for a message that failed to parse). Pins:
+# - the client_hello rule (sid 1520) fires: the failed hello is in
+#   the hello phase, where its accept decides (no drop);
+# - the server_hello rule (sid 1521) fires once, in the walk-over of
+#   the completing ServerHello record (ts server_cert);
+# - the server_cert rule (sid 1522) fires on the ServerHello record
+#   and on the malformed certificate record;
+# - the decode failures are visible in the anomaly events
+#   (HANDSHAKE_INVALID_LENGTH on the truncated hello,
+#   INVALID_CERTIFICATE on the garbage certificate).
 # The pcap is crafted by craft-pcap.py (see that file).
 requires:
   min-version: 9
@@ -28,17 +29,17 @@ args:
 
 checks:
 - filter:
-    count: 0
+    count: 1
     match:
       event_type: alert
       alert.signature_id: 1520
 - filter:
-    count: 2
+    count: 1
     match:
       event_type: alert
       alert.signature_id: 1521
 - filter:
-    count: 0
+    count: 2
     match:
       event_type: alert
       alert.signature_id: 1522

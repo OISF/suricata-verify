@@ -8,16 +8,17 @@ accept:hook tcp:all $HOME_NET any <> $HOME_NET any (flow:established; sid:1524; 
 accept:hook tls:client_started $HOME_NET any -> $HOME_NET any (alert; sid:1525; msg:"client_started";)
 accept:hook tls:server_started $HOME_NET any -> $HOME_NET any (alert; sid:1526; msg:"server_started";)
 
-# sid 1520: must never fire - the truncated ClientHello fails to
-# decode, so its phase advance is suppressed and the client track
-# never leaves client_started.
+# sid 1520: fires on the ClientHello record - the phase is entered at
+# the message start, and the failed decode only blocks the hand-over,
+# so the client track stays in client_hello where this accept decides.
 accept:hook tls:client_hello $HOME_NET any -> $HOME_NET any (alert; sid:1520; msg:"client_hello phase entered on a truncated hello";)
-# sid 1521: must fire - the valid ServerHello decodes cleanly after
-# the failed ClientHello (the suppression applies to the failed
-# message only): the server track enters server_hello and the state
-# rule is evaluated on the ServerHello record and on the following
-# certificate record (still in server_hello).
+# sid 1521: evaluated in the walk-over of the ServerHello record (the
+# valid ServerHello decodes after the failed ClientHello; the state
+# advances through server_hello to the server_cert hand-over in that
+# same record).
 accept:hook tls:server_hello $HOME_NET any -> $HOME_NET any (alert; sid:1521; msg:"server_hello phase entered after a failed hello";)
-# sid 1522: must never fire - the malformed certificate fails to
-# decode, so the server track stays in server_hello.
+# sid 1522: fires on the ServerHello record (hand-over, no certificate
+# byte seen yet) and on the malformed certificate record (its own
+# phase entry; the failed decode blocks the data phase, not the cert
+# phase).
 accept:hook tls:server_cert $HOME_NET any -> $HOME_NET any (alert; sid:1522; msg:"server_cert phase entered on a malformed certificate";)
