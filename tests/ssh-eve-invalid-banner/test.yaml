@@ -5,15 +5,18 @@ args:
  - -k none
 
 checks:
-  # The failed client direction is logged with the failure reason; the
-  # server direction parsed a valid banner and carries no error.
+  # The failed client direction is logged with the failure reason and
+  # the state it failed in (banner); the server direction parsed a
+  # valid banner and carries no error or state.
   - filter:
       count: 1
       match:
         event_type: ssh
         ssh.client.error: "invalid_banner"
+        ssh.client.state: "banner"
         ssh.server.proto_version: "2.0"
         ssh.server.software_version: "TestServer_1.0"
         not-has-key:
           - ssh.client.proto_version
           - ssh.server.error
+          - ssh.server.state
