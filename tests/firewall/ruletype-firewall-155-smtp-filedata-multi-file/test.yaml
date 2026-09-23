@@ -1,0 +1,59 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+  # Two attachments are sent. The first does not match the rule; the rule
+  # must remain matchable (per file state reset) so the second attachment,
+  # which contains %PDF, still triggers it and the DATA tx is accepted.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 300
+        alert.action: allowed
+        pcap_cnt: 16
+
+  # the rule matched, so the fail-closed default policy is not applied
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2201001
+
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+
+  # both attachments are tracked as files, the second one holding the
+  # %PDF magic
+  - filter:
+      count: 2
+      match:
+        event_type: fileinfo
+
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: note.txt
+        fileinfo.size: 49
+        fileinfo.md5: c0c04a023bc8e6282b200709c644f62b
+        fileinfo.state: CLOSED
+        fileinfo.tx_id: 0
+
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: doc.pdf
+        fileinfo.size: 51
+        fileinfo.md5: 639e18a944d36827c03edef195c8ed90
+        fileinfo.state: CLOSED
+        fileinfo.tx_id: 0
