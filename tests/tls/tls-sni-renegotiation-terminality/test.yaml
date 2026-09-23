@@ -25,7 +25,7 @@ checks:
     match:
       event_type: alert
       alert.signature_id: 1
-      ts_progress: client_hello
+      ts_progress: client_cert
 - filter:
     count: 0
     match:
