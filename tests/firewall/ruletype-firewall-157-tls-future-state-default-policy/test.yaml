@@ -1,0 +1,34 @@
+# TLS1.2 session: 3-way handshake, one complete ClientHello, one
+# ServerHello; the client sends nothing after the hello. The
+# ClientHello packet advances the client track to client_cert. The
+# single TLS rule does not match there, so the firewall applies the
+# default policies of the states the packet walked over: the sweep
+# must stop at the current progress. client_data carries drop:flow in
+# the config - a future state the packet never crossed, so its
+# policy must not be consulted for this packet. See
+# craft-pcap.py; input.pcap written by it.
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- filter:
+    count: 0
+    match:
+      event_type: drop
+- filter:
+    count: 0
+    match:
+      event_type: flow
+      flow.action: drop
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.firewall.accepted: 5
+      stats.firewall.blocked: 0
