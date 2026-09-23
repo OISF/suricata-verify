@@ -1,0 +1,11 @@
+# LTE (<hook) state matrix: tls ts client_finished / multi-match-content-nomatch
+# A matching rule for S and a failing keyword rule for another state: the match decides.
+#
+# The packet:filter default policy accepts the session (see suricata.yaml).
+# The last rule is scaffolding: it covers the opposite direction so its
+# default policy does not drop the flow before this direction reaches S + 1.
+
+accept:hook tls:<server_finished $EXTERNAL_NET any -> $HOME_NET any (sid:9001;)
+
+accept:flow,alert tls:<client_finished $HOME_NET any -> $EXTERNAL_NET any (tls.version:1.2; sid:100;)
+accept:flow,alert tls:<client_data $HOME_NET any -> $EXTERNAL_NET any (tls.version:1.3; sid:101;)
