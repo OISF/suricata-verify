@@ -1,0 +1,11 @@
+# LTE (<hook) state matrix: http1 ts request_line / multi-match-ip-nomatch
+# An out of scope rule and a matching bare rule at S: the out of scope rule must not disturb the match.
+#
+# The packet:filter default policy accepts the session (see suricata.yaml).
+# The last rule is scaffolding: it covers the opposite direction so its
+# default policy does not drop the flow before this direction reaches S + 1.
+
+accept:hook http1:<response_complete $EXTERNAL_NET any -> $HOME_NET any (sid:9001;)
+
+accept:flow,alert http1:<request_line 198.51.100.0/24 any -> 198.51.100.0/24 any (sid:100;)
+accept:flow,alert http1:<request_line $HOME_NET any -> $EXTERNAL_NET any (sid:101;)

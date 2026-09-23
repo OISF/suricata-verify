@@ -1,0 +1,13 @@
+# LTE (<hook) state matrix: http2:global tc response_complete / single-bare
+# Bare < rule: the prior states are auto-accepted and the rule accepts the flow at S.
+#
+# The packet:filter default policy accepts the session (see suricata.yaml).
+# The last rules are scaffolding: they cover the directions and the
+# untested http2 tx type so their default policies do not drop the flow
+# before the tested state is reached.
+
+accept:hook http2:global:<request_complete any any <> any any (sid:9001;)
+accept:hook http2:stream:<request_complete any any -> any any (sid:9002;)
+accept:hook http2:stream:<response_complete any any -> any any (sid:9003;)
+
+accept:flow,alert http2:global:<response_complete any any -> any any (sid:100;)

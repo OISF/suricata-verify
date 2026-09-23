@@ -1,0 +1,11 @@
+# LTE (<hook) state matrix: tls tc server_hello / multi-states
+# Two bare < rules at different states: the rule for the earlier state accepts.
+#
+# The packet:filter default policy accepts the session (see suricata.yaml).
+# The last rule is scaffolding: it covers the opposite direction so its
+# default policy does not drop the flow before this direction reaches S + 1.
+
+accept:hook tls:<client_finished $HOME_NET any -> $EXTERNAL_NET any (sid:9001;)
+
+accept:flow,alert tls:<server_hello $EXTERNAL_NET any -> $HOME_NET any (sid:100;)
+accept:flow,alert tls:<server_cert $EXTERNAL_NET any -> $HOME_NET any (sid:101;)

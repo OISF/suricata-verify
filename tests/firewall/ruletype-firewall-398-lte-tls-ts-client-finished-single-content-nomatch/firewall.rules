@@ -1,0 +1,10 @@
+# LTE (<hook) state matrix: tls ts client_finished / single-content-nomatch
+# < rule with a non-matching tls.version keyword: the no match becomes final at S + 1 and the per-state default policy drops the flow at S.
+#
+# The packet:filter default policy accepts the session (see suricata.yaml).
+# The last rule is scaffolding: it covers the opposite direction so its
+# default policy does not drop the flow before this direction reaches S + 1.
+
+accept:hook tls:<server_finished $EXTERNAL_NET any -> $HOME_NET any (sid:9001;)
+
+accept:flow,alert tls:<client_finished $HOME_NET any -> $EXTERNAL_NET any (tls.version:1.3; sid:100;)
