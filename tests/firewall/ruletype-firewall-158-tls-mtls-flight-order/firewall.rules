@@ -1,0 +1,19 @@
+# session setup
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+
+# client track: one rule set per state; 13 is the observability pin, it
+# needs the mTLS flag and a client certificate buffer
+accept:hook tls:client_started any any -> any any (sid:11;)
+accept:hook tls:client_hello any any -> any any (alert; flowbits:set,mtls; sid:12; msg:"client hello state";)
+accept:hook tls:client_cert any any -> any any (alert; flowbits:isset,mtls; tls.cert_subject; content:"clienttest"; sid:13; msg:"client certificate observed in client_cert";)
+accept:hook tls:client_cert any any -> any any (alert; sid:14; msg:"client cert state no match";)
+accept:hook tls:client_data any any -> any any (sid:15;)
+accept:hook tls:client_finished any any -> any any (sid:16;)
+
+# server track
+accept:hook tls:server_started any any -> any any (sid:21;)
+accept:hook tls:server_hello any any -> any any (sid:22;)
+accept:hook tls:server_cert any any -> any any (sid:23;)
+accept:hook tls:server_data any any -> any any (sid:24;)
+accept:hook tls:server_finished any any -> any any (sid:25;)
