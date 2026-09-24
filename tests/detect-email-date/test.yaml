@@ -21,13 +21,3 @@ checks:
       event_type: smtp
       email.date: Fri, 21 Apr 2023 05:10:36 +0000
       pcap_cnt: 14
-# Pre-8.0.7 does not defer tx completion to the server response, so the
-# SMTP event lands one packet earlier. Backported to 8.0.7.
-- filter:
-    requires:
-      lt-version: 8.0.7
-    count: 1
-    match:
-      event_type: smtp
-      email.date: Fri, 21 Apr 2023 05:10:36 +0000
-      pcap_cnt: 13

@@ -55,12 +55,3 @@ checks:
       match:
         event_type: stats
         stats.exception_policy.tcp.midstream.drop_flow: 1
-  # in Suricata 7, the exception policy stats counters can be disabled
-  - filter:
-      requires:
-        min-version: 7.0.12
-        lt-version: 8
-      count: 1
-      match:
-        event_type: stats
-        not-has-key: stats.exception_policy

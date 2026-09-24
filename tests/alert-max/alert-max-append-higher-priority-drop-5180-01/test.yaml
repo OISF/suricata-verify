@@ -39,29 +39,6 @@ checks:
       pkt_src: "wire/pcap"
       alert.signature_id: 3
       verdict.action: drop
-# Sub-test 4
-- filter:
-    requires:
-      # suricata 8 doesn't show this alert
-      lt-version: 8.0
-    count: 1
-    match:
-      event_type: alert
-      alert.signature_id: 4
-# Sub-test 5
-- filter:
-    requires:
-      # suricata 7 doesn't show this alert.
-      # if we don't drop the flow, it matches against the stream
-      # (pkt_srt: stream (flow timeout))
-      lt-version: 8.0
-    count: 0
-    match:
-      event_type: alert
-      pcap_cnt: 1
-      pkt_src: "wire/pcap"
-      alert.signature_id: 3
-      verdict.action: drop
 # Sub-test 6
 - filter:
     requires:
@@ -100,19 +77,6 @@ checks:
     match:
       event_type: stats
       stats.detect.alert_queue_overflow: 2
-      stats.detect.alert: 3
-      stats.decoder.pkts: 1
-      stats.ips.blocked: 1
-      stats.ips.accepted: 0
-      stats.ips.drop_reason.rules: 1
-# Sub-test 11
-- filter:
-    requires:
-      lt-version: 8.0
-    count: 1
-    match:
-      event_type: stats
-      stats.detect.alert_queue_overflow: 1
       stats.detect.alert: 3
       stats.decoder.pkts: 1
       stats.ips.blocked: 1
