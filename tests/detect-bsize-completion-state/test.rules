@@ -1,0 +1,5 @@
+# A bsize negative only finalizes at engine eof. For an engine registered at a
+# protocol completion state there is no P+1, so the tx end state is that eof:
+# ntp.reference_id is registered at progress 1, the NTP completion state, and
+# the negated size must be decided there.
+alert ntp any any -> any any (msg:"NTP reference ID size not 3"; ntp.reference_id; bsize:!3; sid:1; rev:1;)
