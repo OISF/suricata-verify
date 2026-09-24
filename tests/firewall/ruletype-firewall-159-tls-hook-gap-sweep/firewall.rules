@@ -1,0 +1,14 @@
+# session setup
+accept:hook tcp:all any any <> any any (flow:not_established; sid:1001;)
+accept:hook tcp:all any any <> any any (flow:established; sid:1002;)
+
+# sid 10 completes the hello; sid 11 is the last rule of client_cert
+# and the next fw rule sits two hooks later (client_finished), so the
+# missing-progress flag applies at the cert hook. On the ClientHello
+# packet the track enters client_cert with an empty certificate
+# buffer: sid 11 does not match there (rule-no-match default policy
+# path). On the packet completing the client certificate sid 11 does
+# match (rule-match path). Both passes carry the same sweep.
+accept:hook tls:client_hello any any -> any any (tls.sni; content:"lab"; sid:10;)
+accept:hook tls:client_cert any any -> any any (tls.cert_subject; content:"clienttest"; alert; sid:11; msg:"cert state matched with gap ahead";)
+accept:hook tls:client_finished any any -> any any (alert; sid:13; msg:"finished state";)

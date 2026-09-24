@@ -1,0 +1,42 @@
+# mTLS-style flight (like the flight-order test) with a sparse rule
+# set: fw rules sit on client_hello (sid 10), client_cert (sid 11)
+# and client_finished (sid 13); client_data has no rule, so the
+# "next progress missing" flag applies around the cert hook. This
+# pins what the default-policy sweep must do across such a gap:
+# sid 11 alerts once, on the packet completing the client
+# certificate; sid 13 alerts once, on the finish pass; no default
+# accept alert (signature id 0) and no drops anywhere. The sweep
+# guard in detect.c (only sweep states the tx walked over) is
+# defensive hardening: the inverted hook range it prevents was not
+# reproduced in debug-validation runs, and guard/no-guard behaviour
+# is identical on this flow.
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 11
+      pcap_cnt: 9
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 13
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 0
+- filter:
+    count: 0
+    match:
+      event_type: drop
