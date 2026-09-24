@@ -1,0 +1,28 @@
+requires:
+  min-version: 9
+
+args:
+ - -k none --set default-rule-path=. --simulate-ips
+
+checks:
+  # The server banner is invalid: the server direction fails
+  # unrecoverably in the banner state, so its kex and session hooks
+  # never open. The client direction parses a valid banner: its
+  # banner and kex hooks open, each checked with a lua assertion on
+  # the client proto version.
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 2
+  - filter:
+      count: 0
+      match:
+        alert.signature_id: 3
+  - filter:
+      count: 0
+      match:
+        alert.signature_id: 4
