@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"XOR var string-mode key with explicit width"; http.uri; byte_extract:2,1,xkey,string,hex; http.request_body; xor:var xkey 1; content:"SECRET"; sid:1;)

@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"XOR var 2-byte big-endian key"; http.uri; byte_extract:2,1,xkey; http.request_body; xor:var xkey; content:"SECRET"; sid:1;)
