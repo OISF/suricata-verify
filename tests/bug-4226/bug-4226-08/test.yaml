@@ -1,0 +1,15 @@
+requires:
+    min-version: 9
+    pcap: false
+
+args:
+    - --engine-analysis
+
+exit-code: 1
+
+# All four signatures carry mutually exclusive bsize keywords, so each is
+# rejected at load, regardless of the order the keywords appear in.
+checks:
+    - shell:
+        args: grep -c "'bsize' keywords are mutually exclusive" suricata.log | xargs
+        expect: 4

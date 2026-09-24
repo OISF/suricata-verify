@@ -1,0 +1,3 @@
+# Multiple bsize on a buffer (here a lower + upper bound forming a range) are
+# accepted; engine-analysis suggests collapsing them into a single bsize range.
+alert dns any any -> any any (msg:"range via two bsize"; dns.query; content:"abc"; bsize:>2; bsize:<20; sid:1;)

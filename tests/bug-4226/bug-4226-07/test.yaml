@@ -1,0 +1,19 @@
+requires:
+    min-version: 9
+    pcap: false
+
+args:
+    - --engine-analysis
+    - --set engine-analysis.rules=yes
+
+# The rule loads (multiple bsize is accepted) and engine-analysis suggests a
+# single bsize range.
+checks:
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 1
+    - shell:
+        args: grep -c "uses multiple 'bsize' keywords" rules.json | xargs
+        expect: 1

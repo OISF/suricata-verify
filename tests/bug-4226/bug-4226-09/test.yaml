@@ -1,0 +1,24 @@
+requires:
+    min-version: 9
+    pcap: false
+
+args:
+    - --engine-analysis
+    - --set engine-analysis.rules=yes
+
+# Both rules load; neither forms a two-sided bound, so engine-analysis does not
+# suggest a bsize range for them (contrast bug-4226-07, a lower+upper pair).
+checks:
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 1
+    - filter:
+        filename: rules.json
+        count: 1
+        match:
+            id: 2
+    - shell:
+        args: grep -c "uses multiple 'bsize' keywords" rules.json | xargs
+        expect: 0
