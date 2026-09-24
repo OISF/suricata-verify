@@ -1,0 +1,33 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+  - --set app-layer.protocols.imap.enabled=yes
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: "A1 FETCH 1:* BODY[]"
+        imap.responses[0]: "* 1 FETCH (BODY[] {217})"
+        imap.responses[1]: "* 2 FETCH (BODY[] {222})"
+        imap.responses[2]: "A1 OK FETCH completed"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3

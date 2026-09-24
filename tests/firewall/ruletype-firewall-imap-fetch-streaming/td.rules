@@ -1,0 +1,6 @@
+alert imap any any -> any any (flow:to_client,established; email.body; content:"LARGE-FETCH-BODY-END-7D31"; sid:100; rev:1;)
+alert imap any any -> any any (flow:to_client,established; imap.response; content:"A2 OK NOOP completed"; sid:101; rev:1;)
+alert imap any any -> any any (flow:to_client,established; email.subject; content:"MULTI-LITERAL-SUBJECT-4A92"; sid:102; rev:1;)
+alert imap any any -> any any (flow:to_client,established; email.body; content:"MULTI-LITERAL-BODY-8C15"; sid:103; rev:1;)
+alert imap any any -> any any (flow:to_client,established; email.subject; content:"RESPONSE-FIRST-SUBJECT-2F63"; sid:104; rev:1;)
+alert imap any any -> any any (flow:to_client,established; email.body; content:"RESPONSE-FIRST-BODY-6B04"; sid:105; rev:1;)

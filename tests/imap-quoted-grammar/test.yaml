@@ -1,0 +1,55 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+  - --set app-layer.protocols.imap.enabled=yes
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: 'A1 ID ("name" "value ) ( \"quoted\" \\folder")'
+        imap.responses.__len: 1
+        imap.responses[0]: "A1 OK ID completed"
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: "A2 FETCH 1 BODYSTRUCTURE"
+        imap.responses.__len: 2
+        imap.responses[0]: '* 1 FETCH (BODYSTRUCTURE ("TEXT" "PLAIN" ("NAME" "a)b") NIL NIL "7BIT" 12 1))'
+        imap.responses[1]: "A2 OK FETCH completed"
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: "A3 NOOP"
+        imap.responses.__len: 1
+        imap.responses[0]: "A3 OK NOOP completed"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.app_layer.error.imap.parser: 0

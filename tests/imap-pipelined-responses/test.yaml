@@ -1,0 +1,111 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+  - --set app-layer.protocols.imap.enabled=yes
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: "A1 SELECT INBOX"
+        imap.responses.__len: 4
+        imap.responses[0]: "* FLAGS (\\Seen)"
+        imap.responses[1]: "* 3 EXISTS"
+        imap.responses[2]: "* OK [UIDVALIDITY 42] selected"
+        imap.responses[3]: "A1 OK [READ-WRITE] SELECT completed"
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: "A2 NOOP"
+        imap.responses.__len: 1
+        imap.responses[0]: "A2 OK NOOP completed"
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: "A3 FETCH 1 BODY[]"
+        imap.responses.__len: 2
+        imap.responses[0]: "* 1 FETCH (BODY[] {105})"
+        imap.responses[1]: "A3 OK FETCH completed"
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: "A4 NOOP"
+        imap.responses.__len: 1
+        imap.responses[0]: "A4 OK NOOP completed"
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: "A5 NOOP"
+        imap.responses.__len: 1
+        imap.responses[0]: "A5 OK NOOP completed"
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: "A6 FETCH 2 BODY[]"
+        imap.responses.__len: 2
+        imap.responses[0]: "* 2 FETCH (BODY[] {106})"
+        imap.responses[1]: "A6 OK FETCH completed"
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        pcap_cnt: 13
+        pkt_src: wire/pcap
+        imap.requests[0]: "A7 FETCH 3 BODY[]"
+        imap.responses.__len: 1
+        imap.responses[0]: "A7 OK FETCH completed"
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        pcap_cnt: 13
+        pkt_src: wire/pcap
+        imap.requests[0]: "A8 FETCH 4 BODY[]"
+        imap.responses.__len: 2
+        imap.responses[0]: "* 4 FETCH (BODY[] {109})"
+        imap.responses[1]: "A8 OK FETCH completed"
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 5
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 6
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.app_layer.error.imap.parser: 0

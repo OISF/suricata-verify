@@ -1,0 +1,7 @@
+alert imap any any -> any any (msg:"IMAP synchronizing APPEND command"; flow:to_server,established; imap.request; content:"A1 APPEND INBOX {116}"; startswith; endswith; sid:1; rev:1;)
+alert imap any any -> any any (msg:"IMAP synchronizing APPEND body"; flow:to_server,established; email.command; content:"APPEND"; startswith; endswith; email.body; content:"SYNC-APPEND-DETECTION-BODY"; sid:2; rev:1;)
+alert imap any any -> any any (msg:"IMAP synchronizing APPEND subject"; flow:to_server,established; email.subject; content:"Continuation detection"; startswith; endswith; sid:3; rev:1;)
+alert imap any any -> any any (msg:"IMAP IDLE continuation"; flow:to_server,established; imap.request; content:"DONE"; startswith; endswith; sid:4; rev:1;)
+alert imap any any -> any any (msg:"IMAP first AUTHENTICATE continuation"; flow:to_server,established; imap.request; content:"FIRST-CONTINUATION-MARKER"; startswith; endswith; sid:5; rev:1;)
+alert imap any any -> any any (msg:"IMAP second AUTHENTICATE continuation"; flow:to_server,established; imap.request; content:"SECOND-CONTINUATION-MARKER"; startswith; endswith; sid:6; rev:1;)
+alert imap any any -> any any (msg:"IMAP command after continuations"; flow:to_server,established; imap.request; content:"A4 NOOP"; startswith; endswith; sid:7; rev:1;)
