@@ -1,0 +1,14 @@
+# More than two active LTE (<hook) rules in one direction (http1 toserver).
+#
+# Three LTE rules are pending at the same hook: two with a non-matching
+# http.host value and one that matches. The two failures must not apply the
+# default policy for the hook while the rules count each other as pending
+# coverage; the third matches and accepts the flow.
+#
+# The opposite direction gets one scaffolding accept:hook <last-state rule so
+# its default policy does not drop the flow first.
+accept:hook http1:<response_complete $EXTERNAL_NET any -> $HOME_NET any (sid:9001;)
+
+accept:flow,alert http1:<request_headers $HOME_NET any -> $EXTERNAL_NET any (http.host; content:"nope.example"; sid:100;)
+accept:flow,alert http1:<request_headers $HOME_NET any -> $EXTERNAL_NET any (http.host; content:"other.example"; sid:101;)
+accept:flow,alert http1:<request_headers $HOME_NET any -> $EXTERNAL_NET any (http.host; content:"www.example.com"; sid:102;)
