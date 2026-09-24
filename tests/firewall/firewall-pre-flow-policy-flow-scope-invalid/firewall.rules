@@ -1,0 +1,3 @@
+# the pre-flow default policy is only applied when the ruleset has a pre_flow
+# rule, so this non-matching rule is what installs the hook
+accept:hook tcp:pre_flow any any -> any 9999 (sid:99;)

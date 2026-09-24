@@ -1,0 +1,25 @@
+%YAML 1.1
+---
+
+stats:
+  enabled: yes
+  interval: 8
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert
+        - flow
+        - stats
+        - drop
+
+firewall:
+  policies:
+    packet:
+      filter: [ "drop:packet" ]
+    app:
+      # neutralise the app layer so it cannot influence the verdict
+      default-policy: [ "accept:hook" ]
