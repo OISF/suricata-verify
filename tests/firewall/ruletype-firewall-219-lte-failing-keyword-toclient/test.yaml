@@ -1,0 +1,24 @@
+requires:
+  min-version: 9
+
+args:
+  - --simulate-ips
+  - -k none
+
+pcap: ../../tls/tls-client-hello-frag-01/dump_mtu300.pcap
+
+checks:
+# the < rule does not actually match, so the uncovered to_client states must be dropped
+# by the default app policy
+- filter:
+    count: 1
+    match:
+      event_type: drop
+      drop.reason: "firewall default app policy"
+      direction: to_client
+# no explicit drop rule exists in this ruleset
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      drop.reason: "firewall rules"

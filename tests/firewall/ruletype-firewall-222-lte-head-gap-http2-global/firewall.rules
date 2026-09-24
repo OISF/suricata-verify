@@ -1,0 +1,29 @@
+# BUG REPRO: #8944 over-drop on the http2 global tx (head-of-list gap with a later
+# bare < rule). The global (connection-level) tx is presented to detection on the
+# first h2 packet already in its end state (progress 1 = request_complete) with
+# detect_progress_orig 0, so the head candidate (accept:flow global:request_complete,
+# hook 1) has a head-of-list gap on the first detection pass. The later bare
+# accept:flow http2:global:<request_complete rule legitimately covers the prior state
+# (0), and the head rule matches (bare) at completion -> the flow must be accepted.
+#
+# main: unconditional head-gap default policy -> over-drop.
+# bug-8944-new/v3: max_in_progress_lte_hook is computed from stored rule state; the <
+# rule has no stored state yet on the first pass -> no suppression -> same over-drop.
+# the #8944 fix (firewall-bug-8944-new/v5): max_in_progress_lte_hook is computed from
+# the final candidate list (this-pass prefilter candidates count) -> suppresses the gap
+# -> accept (correct).
+accept:hook tcp:all any any <> any any (flow:not_established; sid:1021;)
+accept:hook tcp:all any any <> any any (flow:established; sid:1022;)
+accept:hook http2:stream:request_started any any -> any any (sid:710;)
+accept:hook http2:stream:request_headers any any -> any any (sid:711;)
+accept:hook http2:stream:request_data any any -> any any (sid:712;)
+accept:hook http2:stream:request_closed any any -> any any (sid:713;)
+accept:hook http2:stream:request_complete any any -> any any (sid:714;)
+accept:hook http2:stream:response_started any any -> any any (sid:720;)
+accept:hook http2:stream:response_headers any any -> any any (sid:721;)
+accept:hook http2:stream:response_data any any -> any any (sid:722;)
+accept:hook http2:stream:response_closed any any -> any any (sid:723;)
+accept:hook http2:stream:response_complete any any -> any any (sid:724;)
+accept:hook http2:global:response_complete any any -> any any (sid:716;)
+accept:flow http2:global:request_complete any any -> any any (sid:964;)
+accept:flow http2:global:<request_complete any any -> any any (sid:965;)

@@ -1,0 +1,22 @@
+requires:
+  min-version: 9
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+# the request prior state is auto-accepted while the < rule is pending (its partial match acts as an accept:hook for the prior states), so
+# no default app policy drop may happen for it
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      drop.reason: "firewall default app policy"
+      direction: to_server
+# no explicit drop rule exists in this ruleset
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      drop.reason: "firewall rules"

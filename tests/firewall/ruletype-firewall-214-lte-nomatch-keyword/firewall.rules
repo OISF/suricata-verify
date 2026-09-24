@@ -1,0 +1,33 @@
+# BUG REPRO (auto-accept-prior-states over-approximation -> per-state false accept, no-match path).
+#
+# The to_server state client_hello_done has a candidate rule that does NOT fully match. The
+# ONLY rule that "covers" it is a <hook (auto-accept-prior-states) rule whose SNI keyword does
+# NOT match the pcap. Because that < rule does not actually accept the state, the per-state
+# default app policy (drop) MUST be applied for the to_server direction.
+#
+# NOTE: the < rule is at client_hello_done (hook 1) so that its SNI keyword (available at
+# progress 1) is valid -- the parser enforces buffer progress == rule hook for app-hook rules.
+#
+# Buggy behaviour: the engine assumes the < rule covers the state and skips the default
+# policy, so the to_server state is left unhandled (0 to_server default-app-policy drops) ->
+# per-state false accept. The flow still drops, but via to_client (which has no rules).
+#
+# Correct behaviour: the to_server state is dropped by the default app policy (1 to_server
+# "firewall default app policy" drop).
+#
+# Pcap SNI is www.google.com.
+
+# allow session setup
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+
+# Candidate (primary SNI "www.google.com" matches the pcap SNI) but does NOT fully match
+# (the second content "zzznotthere" is absent). It is the last firewall rule for
+# client_hello_done, so its no-match must trigger the per-state default app policy.
+drop:flow tls:client_hello_done $HOME_NET any -> $EXTERNAL_NET any (tls.sni; content:"www.google.com"; nocase; content:"zzznotthere"; sid:210;)
+
+# auto-accept-prior-states rule at the SAME hook (client_hello_done, hook 1), so its SNI
+# keyword (available at progress 1) is valid. Its SNI keyword does NOT match the pcap
+# (zzznotthere != www.google.com), so it is NOT a candidate and does NOT actually accept
+# client_hello_done. It must NOT be treated as covering that state.
+accept:flow tls:<client_hello_done $HOME_NET any -> $EXTERNAL_NET any (tls.sni; content:"zzznotthere"; sid:211;)

@@ -1,0 +1,41 @@
+# BUG REPRO (to_client direction of the stale "partial match" of a failing-keyword <
+# rule -> optimistic default accept -> false accept): same mechanism as
+# ruletype-firewall-218, but on the to_client direction.
+#
+# to_server is fully authorized by bare accept:hook rules at every TLS client state
+# (sids 701-705), so the to_server side never drops and does not mask the to_client
+# adjudication. The ONLY to_client rule is a <server_hello (auto-accept-prior-states)
+# rule (hook 1) whose version keyword (tls.version:1.3) does NOT match the pcap (server
+# speaks TLSv1.2). The version buffer is final at the server hello (progress 1 == the
+# rule's hook), so the no-match is definitive: the rule's own hook state
+# (server_hello) is not authorized and falls to the per-state default app policy; the
+# prior to_client states are auto-accepted by the pending phase.
+#
+# Correct behaviour: exactly 1 to_client "firewall default app policy" drop at the
+# server_hello state (the rule's own hook state) -- the #8944 fix does this (NO_MATCH
+# -> CANT_MATCH conversion makes the no-match final).
+#
+# Buggy behaviour (main and firewall-lte-followup/v1): the definitive no-match is
+# reported as a partial match, the rule never becomes CANT_MATCH, and
+# DetectRunTxFirewallRulePartialMatch appends a default accept instead -> to_client
+# false accept (0 to_client default-app-policy drops, flow closed).
+#
+# Pcap: ../../tls/tls-client-hello-frag-01 (server hello is TLSv1.2).
+
+# allow session setup
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+
+# to_server shield: authorize every to_server TLS state with bare accept:hook rules so
+# the to_server side never drops and the to_client adjudication is not masked by an
+# early flow drop
+accept:hook tls:client_in_progress $HOME_NET any -> $EXTERNAL_NET any (sid:701;)
+accept:hook tls:client_hello_done $HOME_NET any -> $EXTERNAL_NET any (sid:702;)
+accept:hook tls:client_cert_done $HOME_NET any -> $EXTERNAL_NET any (sid:703;)
+accept:hook tls:client_handshake_done $HOME_NET any -> $EXTERNAL_NET any (sid:704;)
+accept:hook tls:client_finished $HOME_NET any -> $EXTERNAL_NET any (sid:705;)
+
+# The ONLY to_client rule: auto-accept-prior-states at server_hello (hook 1), so its
+# version keyword (available at progress 1) is valid. tls.version:1.3 does NOT match
+# the pcap (TLSv1.2), so the rule never matches and covers no state.
+accept:flow tls:<server_hello $EXTERNAL_NET any -> $HOME_NET any (tls.version:1.3; sid:611;)

@@ -1,0 +1,44 @@
+# BUG REPRO (stale "partial match" of a failing-keyword < rule -> optimistic default
+# accept -> to_server state left unhandled / false accept).
+#
+# The ONLY app-layer rule is a <hook (auto-accept-prior-states) rule at
+# client_hello_done whose SNI keyword does NOT match the pcap. The rule is inspected
+# while the client hello is still fragmenting (tx progress 0, partial match) and is
+# re-inspected when progress reaches 1 (client_hello_done) -- at which point the SNI
+# buffer is complete and the keyword definitively fails.
+#
+# Correct behaviour: the prior state (client_in_progress) is auto-accepted by the
+# pending phase (the rule's partial match acts as an accept:hook for the prior
+# states). The rule's own hook state (client_hello_done) is not covered by the <
+# rule and, with the definitive no-match, falls to the per-state default app
+# policy: exactly 1 to_server "firewall default app policy" drop at
+# client_hello_done. The #8944 fix does this: its NO_MATCH -> CANT_MATCH
+# conversion (the rule's hook <= tx progress, so its buffer data is complete and
+# the no-match is final) leads the no-match path to apply the default policy for
+# the rule's own hook state.
+#
+# Buggy behaviour (main, and firewall-lte-followup/v1): the rule's no-match is reported
+# as a PARTIAL match (DetectRunTxInspectRule returns 0 whenever the rule is not
+# CANT_MATCH and tx progress < tx end state), so the rule is never CANT_MATCHed and the
+# no-match path never runs. Instead DetectRunTxFirewallRulePartialMatch applies the
+# optimistic partial-match handling for accept rules: it downgrades accept:flow to
+# accept:hook and appends a DEFAULT ACCEPT to the packet. The to_server states are thus
+# accepted and never re-adjudicated -> per-state FALSE ACCEPT (0 to_server default-app-
+# policy drops). The flow still drops, but via to_client (which has no rules); a
+# deployment with to_client accept rules would see a flow-level false accept.
+#
+# NOTE: the < rule is at client_hello_done (hook 1) so that its SNI keyword (available at
+# progress 1) is valid -- the parser enforces buffer progress == rule hook for app-hook
+# rules.
+#
+# Pcap SNI is www.google.com.
+
+# allow session setup
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+
+# The ONLY app-layer rule: auto-accept-prior-states at client_hello_done (hook 1), so its
+# SNI keyword (available at progress 1) is valid. Its SNI keyword does NOT match the pcap
+# (zzznotthere != www.google.com), so it does NOT actually accept any state. Its no-match
+# must lead to the per-state default app policy (drop) for the to_server states.
+accept:flow tls:<client_hello_done $HOME_NET any -> $EXTERNAL_NET any (tls.sni; content:"zzznotthere"; sid:353;)
