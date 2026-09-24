@@ -1,0 +1,24 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+- -k none
+
+checks:
+  # call_id 1 is one request fragmented across two PDUs (FIRST then LAST), which
+  # reassemble into a single transaction; no PDU sets both PFC_FIRST_FRAG and
+  # PFC_LAST_FRAG -> fragmented
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # call_id 2 is a single complete request (both PFC_FIRST_FRAG and
+  # PFC_LAST_FRAG set) -> not fragmented
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
