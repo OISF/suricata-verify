@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"json_decoded"; http.uri; content:"/api"; flow:to_server; fast_pattern; file.data; json_decode; content:"|22|key|22|:|22|value|22|"; content:"|5c 22 5c|t|5c|t|5c|u0000/|c2 b5 c2 b5|"; content:"|f0 9f 9a 80 f0 9f 9a 80|"; sid:1;)
