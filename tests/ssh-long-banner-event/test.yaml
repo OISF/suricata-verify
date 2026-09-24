@@ -1,0 +1,14 @@
+args:
+ - -k none
+
+checks:
+  # A banner line of 256 bytes or more without EOL fires the one-shot
+  # ssh.long_banner event on the first parse of the line (the direction
+  # stays in the banner state until the EOL arrives); the event is the
+  # actionable signal for a parked banner since the banner_wait_eol
+  # state was removed in 9.0.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
