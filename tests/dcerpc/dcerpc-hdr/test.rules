@@ -1,0 +1,6 @@
+alert dcerpc any any -> any any (msg:"dcerpc.hdr bind (to_server)"; flow:established,to_server; dcerpc.hdr; content:"|05 00 0b|"; startswith; sid:1;)
+alert dcerpc any any -> any any (msg:"dcerpc.hdr request (to_server)"; flow:established,to_server; dcerpc.hdr; content:"|05 00 00|"; startswith; sid:2;)
+alert dcerpc any any -> any any (msg:"dcerpc.hdr bind_ack (to_client)"; flow:established,to_client; dcerpc.hdr; content:"|05 00 0c|"; startswith; sid:3;)
+alert dcerpc any any -> any any (msg:"dcerpc.hdr response (to_client)"; flow:established,to_client; dcerpc.hdr; content:"|05 00 02|"; startswith; sid:4;)
+alert dcerpc any any -> any any (msg:"dcerpc.hdr request bytes must not match to_client"; flow:established,to_client; dcerpc.hdr; content:"|05 00 00|"; startswith; sid:5;)
+alert dcerpc any any -> any any (msg:"dcerpc.hdr hdrtype byte at offset 2 (bind)"; flow:established,to_server; dcerpc.hdr; content:"|0b|"; offset:2; depth:1; sid:6;)
