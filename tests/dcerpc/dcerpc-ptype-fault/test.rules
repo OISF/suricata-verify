@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"DCERPC ptype FAULT"; flow:established,to_client; dcerpc.ptype:3; sid:1;)
