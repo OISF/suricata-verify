@@ -11,8 +11,19 @@ checks:
         event_type: alert
         alert.signature_id: 1
 
-  # SID 2 matches the real UUID. There are two connections with opnum 42 in the PCAP.
+  # SID 2 matches the real UUID. There are two connections with opnum 42 in
+  # the PCAP. Since Suricata 9 the BIND flags are not relevant for
+  # dcerpc.iface, only the REQUEST flags are (Redmine #8577).
   - filter:
+      requires:
+        min-version: 9
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      requires:
+        lt-version: 9
       count: 1
       match:
         event_type: alert
