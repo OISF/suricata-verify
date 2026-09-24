@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"Not RFC1918 src"; ip.src; dataset:isnotset,rfc1918,type cidr,load rfc1918.lst; sid:1;)

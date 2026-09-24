@@ -1,0 +1,33 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - -k none
+
+checks:
+  # unset fires once per pre-loaded host address (removes it on first match)
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_ip: "1.2.3.4"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_ip: "5.6.7.8"
+  # 9.9.9.9 was never in the set, unset does not fire
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        src_ip: "9.9.9.9"
