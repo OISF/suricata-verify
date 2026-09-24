@@ -1,0 +1,11 @@
+# Matches the same packet as firewall sid:103. `tcp-pkt` puts it in the packet
+# detect table, so it is evaluated.
+alert tcp-pkt any any -> any any (msg:"TD packet rule setting xbits"; flow:to_server,established; content:"/alpha"; xbits:set,td_post_match_ran,track ip_src,expire 3600; sid:100003;)
+
+# The probe, on the second flow. It can only match if sid:100003's post-match
+# ran, i.e. if threat detection mutated host state for a packet
+alert http any any -> any any (msg:"TD post-match state"; flow:to_server,established; http.uri; content:"/beta"; xbits:isset,td_post_match_ran,track ip_src; sid:100004;)
+
+# Control: the probe without the xbit condition. Proves the second flow is
+# inspected, so sid:100004 staying silent cannot mean nothing was inspected.
+alert http any any -> any any (msg:"Control: second flow is inspected"; flow:to_server,established; http.uri; content:"/beta"; sid:100005;)

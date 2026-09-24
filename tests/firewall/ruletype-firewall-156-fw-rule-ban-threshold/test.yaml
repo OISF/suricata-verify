@@ -1,0 +1,17 @@
+requires:
+  min-version: 9
+
+pcap: ../../flowbit-oring/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+exit-code: 1
+
+checks:
+# Threshold keyword cannot be used with Firewall rules
+  - shell:
+      args: grep "keyword 'threshold' is not allowed with firewall rules" stderr | wc -l
+      expect: 1
+
