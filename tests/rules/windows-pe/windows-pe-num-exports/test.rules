@@ -1,0 +1,23 @@
+# Detect PE with any exports (>0) — both DLLs match (2 alerts)
+alert http any any -> any any (msg:"PE with exports"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: num_exports >0; sid:1; rev:1;)
+
+# Detect PE with many exports (>3) — only many_exports.dll (1 alert)
+alert http any any -> any any (msg:"PE with many exports"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: num_exports >3; sid:2; rev:1;)
+
+# Detect PE with exactly 5 exports — only many_exports.dll (1 alert)
+alert http any any -> any any (msg:"PE with 5 exports"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: num_exports 5; sid:3; rev:1;)
+
+# Detect PE with exactly 1 export — only few_exports.dll (1 alert)
+alert http any any -> any any (msg:"PE with 1 export"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: num_exports 1; sid:4; rev:1;)
+
+# Detect PE with 0 exports — only no_exports.exe (1 alert)
+alert http any any -> any any (msg:"PE with 0 exports"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: num_exports 0; sid:5; rev:1;)
+
+# Detect PE with <2 exports — few_exports.dll (1) + no_exports.exe (0) = 2 alerts
+alert http any any -> any any (msg:"PE with few exports"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: num_exports <2; sid:6; rev:1;)
+
+# Negative: no PE has exactly 99 exports (0 alerts)
+alert http any any -> any any (msg:"PE with 99 exports"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: num_exports 99; sid:7; rev:1;)
+
+# Combined: arch x86 + num_exports >3 — many_exports.dll only (1 alert)
+alert http any any -> any any (msg:"x86 PE with many exports"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, num_exports >3; sid:8; rev:1;)
