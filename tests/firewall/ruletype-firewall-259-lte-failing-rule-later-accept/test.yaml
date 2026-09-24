@@ -1,0 +1,53 @@
+requires:
+  min-version: 9
+
+args:
+  - --simulate-ips
+  - -k none
+
+pcap: input.pcap
+
+checks:
+# the later rule accepts the flow at request_headers
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 6
+      pcap_cnt: 6
+# the failing rule stays silent
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 5
+# the failing rule's state is covered by the later < rule: no default policy
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      drop.reason: "firewall default app policy"
+# no rule drops the flow
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      drop.reason: "firewall rules"
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.action: "accept"
+- filter:
+    count: 6
+    match:
+      event_type: alert
+      alert.signature_id: 1
+      alert.action: allowed
+      firewall.hook: packet:filter
+      firewall.policy: accept:hook,alert
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 2

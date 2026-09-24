@@ -1,0 +1,16 @@
+# A rule at an earlier state fails its content while a later
+# auto-accept-prior-states rule covers that state and matches later. The
+# failing rule's own state must not fall to the default policy: the later
+# rule's pending coverage accepts it, and the later rule accepts the flow.
+#
+# The request line completes in packet 4 (decided at request_headers), the
+# Host header arrives in packet 6, where sid:6 accepts.
+accept:hook,alert tcp:all any any <> any any (sid:1;)
+
+accept:flow,alert tls:<client_hello any any -> any any (tls.sni; content:"example.com"; sid:2;)
+
+# request_line content does not match: dropped only if nothing covers it
+accept:flow,alert http1:<request_line any any -> any any (http.uri; content:"/nope"; sid:5;)
+
+# later < rule: auto-accepts request_line while pending, matches on the Host
+accept:flow,alert http1:<request_headers any any -> any any (http.host; content:"example.com"; sid:6;)
