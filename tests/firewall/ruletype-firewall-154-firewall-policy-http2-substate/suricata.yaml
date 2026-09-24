@@ -1,0 +1,26 @@
+%YAML 1.1
+---
+firewall:
+  policies:
+    packet:
+      filter: [ "accept:hook" ]
+    app:
+      http2:
+        # a list at the protocol node: the yaml loader hangs the items
+        # under this node, so it must not be reported as an unknown
+        # sub-state section (http2 sub-states are stream and global)
+        default-policy:
+          - "accept:hook"
+        stream:
+          default-policy:
+            - "accept:hook"
+        # positive control: a section that is no sub-state must still
+        # be reported
+        bogus-section:
+          default-policy:
+            - "accept:hook"
+        # a generic hook alias at the protocol level: the loader only
+        # reads state keys under the sub-state sections for a sub-state
+        # protocol, so this must be reported as an unmatched key
+        response-complete:
+          - "accept:hook"

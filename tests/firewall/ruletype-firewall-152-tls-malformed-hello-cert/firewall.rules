@@ -1,0 +1,24 @@
+# Let the TCP handshake and TLS data packets through to the app layer
+# so the TLS state rules are evaluated (established fw-test idiom):
+accept:hook tcp:all $HOME_NET any <> $HOME_NET any (flow:not_established; sid:1523; msg:"session setup";)
+accept:hook tcp:all $HOME_NET any <> $HOME_NET any (flow:established; sid:1524; msg:"established";)
+
+# sid 1525/1526: the started states are entered as soon as the first
+# TLS record of each direction is seen:
+accept:hook tls:client_started $HOME_NET any -> $HOME_NET any (alert; sid:1525; msg:"client_started";)
+accept:hook tls:server_started $HOME_NET any -> $HOME_NET any (alert; sid:1526; msg:"server_started";)
+
+# sid 1520: fires on the ClientHello record - the phase is entered at
+# the message start, and the failed decode only blocks the hand-over,
+# so the client track stays in client_hello where this accept decides.
+accept:hook tls:client_hello $HOME_NET any -> $HOME_NET any (alert; sid:1520; msg:"client_hello phase entered on a truncated hello";)
+# sid 1521: evaluated in the walk-over of the ServerHello record (the
+# valid ServerHello decodes after the failed ClientHello; the state
+# advances through server_hello to the server_cert hand-over in that
+# same record).
+accept:hook tls:server_hello $HOME_NET any -> $HOME_NET any (alert; sid:1521; msg:"server_hello phase entered after a failed hello";)
+# sid 1522: fires on the ServerHello record (hand-over, no certificate
+# byte seen yet) and on the malformed certificate record (its own
+# phase entry; the failed decode blocks the data phase, not the cert
+# phase).
+accept:hook tls:server_cert $HOME_NET any -> $HOME_NET any (alert; sid:1522; msg:"server_cert phase entered on a malformed certificate";)

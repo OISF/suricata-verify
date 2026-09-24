@@ -1,5 +1,5 @@
 requires:
-  min-version: 8
+  min-version: 9
 
 pcap: ../tls/tls-client-hello-frag-01/dump_mtu300.pcap
 
@@ -14,7 +14,7 @@ checks:
       event_type: alert
       alert.signature_id: 1
 - filter:
-    count: 2
+    count: 1
     match:
       event_type: alert
       alert.signature_id: 2

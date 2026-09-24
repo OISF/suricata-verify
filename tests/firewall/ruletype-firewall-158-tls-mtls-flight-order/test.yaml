@@ -1,0 +1,82 @@
+# Mutual TLS 1.2 in the standard RFC 5246 flight order: the server
+# certificate (pkt 6) arrives before the CertificateRequest (pkt 7),
+# so the need-client-cert flag is not set when the server certificate
+# completes. The client certificate is additionally split over two
+# records (pkts 8/9).
+#
+# The data shortcut that establishes a track from parsed certificate
+# data must decide its own track only. With the cross-track write the
+# server certificate pushed the client track to client_data before the
+# client sent anything; monotonicity then makes the client certificate
+# a phase no-op and the client_cert state no longer decides the
+# fragment packets: the plain state accept (sid 14) would show
+# client_data progress on the client certificate fragment (pkt 8)
+# instead of client_cert. Pinned here:
+# - sid 12/14 decide the ClientHello packet with the track walked into
+#   client_cert (pkt 4);
+# - sid 14 decides the first client certificate fragment in
+#   client_cert: the phase belongs to the message in flight (pkt 8);
+#   this is the regression pin for the cross-track shortcut;
+# - sid 13 (mTLS flag + certificate buffer condition) observes the
+#   client certificate when its message completes (pkt 9).
+# The server track is established by its own certificate; the flow is
+# fully accepted, no drops, no anomalies. See craft-pcap.py;
+# input.pcap written by it.
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 12
+      pcap_cnt: 4
+      ts_progress: client_cert
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 14
+      pcap_cnt: 4
+      ts_progress: client_cert
+# the client certificate fragment is decided in the cert phase: the
+# client track must not have been pushed to data by the server
+# certificate
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 14
+      pcap_cnt: 8
+      ts_progress: client_cert
+# the buffer-carrying rule sees the client certificate complete
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 13
+      pcap_cnt: 9
+      ts_progress: client_data
+- filter:
+    count: 0
+    match:
+      event_type: anomaly
+      anomaly.app_proto: tls
+- filter:
+    count: 0
+    match:
+      event_type: flow
+      flow.action: drop
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.firewall.accepted: 10
+      stats.firewall.blocked: 0
