@@ -1,0 +1,16 @@
+requires:
+  min-version: 8
+
+pcap: ../absent-04/empty.pcap
+
+args:
+  - --init-errors-fatal
+
+checks:
+  # or_else with a genuinely non-failing transform (strip_whitespace) should
+  # load without errors and produce no alerts on the empty pcap
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1

@@ -1,0 +1,24 @@
+requires:
+  min-version: 9
+
+pcap: ../detect-pcrexform-01/input.pcap
+
+checks:
+  # pcrexform no match -> must_error matches + host matches -> alert
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # pcrexform matches -> must_error fails -> no alert
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  # pcrexform no match -> must_error matches + host misses -> no alert
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 3

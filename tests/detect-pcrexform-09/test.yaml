@@ -1,0 +1,14 @@
+requires:
+  min-version: 9
+
+pcap: ../content-incomplete-hex-t-version-7-init-errors-fatal/empty.pcap
+
+args:
+  - --init-errors-fatal
+
+exit-code: 1
+
+checks:
+  - shell:
+      args: grep "or_else on a buffer with a transform that can fail" suricata.log | wc -l | xargs
+      expect: 1
