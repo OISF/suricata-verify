@@ -1,0 +1,3 @@
+alert http any any -> any any (http.user_agent; content:"Mozilla"; flowbits:isset, headtest; flowbits:isset,other; flowbits:set,moz; sid:10;)
+alert http any any -> any any (http.method; content:"GET"; flowbits:set,headtest; flowbits:isset,moz; sid:12;)
+alert http any any -> any any (http.host; content:"example"; flowbits:set,other; sid:20;)
