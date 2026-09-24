@@ -1,1 +1,11 @@
-alert tcp any any -> any any (flow:established,to_server; stream_size:server,<,1111; content: "EICAR"; sid:1234;)
+# no_payload + stream
+alert tcp any any -> any any (stream_size:server,<,1111; content: "EICAR"; sid:1234;)
+
+# no_payload + pkt + stream
+alert tcp any any -> any any (flow:established,to_server; stream_size:server,<,1111; content: "EICAR"; content: "ANTIVIRUS"; within: 19; sid:1235;)
+
+# no_payload + pkt
+alert tcp any any -> any any (flow:established,to_server; stream_size:server,<,1111; dsize:>20; sid:1236;)
+
+# no_payload
+alert tcp any any -> any any (stream_size:server,<,1111; sid:1237;)
