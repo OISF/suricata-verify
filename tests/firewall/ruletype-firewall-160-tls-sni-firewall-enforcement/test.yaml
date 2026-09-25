@@ -1,0 +1,101 @@
+# The SNI firewall enforcement point. The ruleset mirrors the SNI
+# example in the firewall user guide (firewall-example.rst): the
+# record that completes the ClientHello is decided in the client
+# certificate phase, not in the hello phase. The enforcement is the
+# negated-SNI drop rule (sid 102), which fires on the completing
+# record itself:
+#
+# - the non-matching SNI (flow on port 4443) is dropped by sid 102 on
+#   the completing record (pkt 12), with the rule's alert;
+# - the SNI-less hello (flow on port 4453) matches no SNI rule (the
+#   SNI buffer only exists once the message is fully parsed) and, with
+#   no accept at the certificate state, falls on the implicit default
+#   policy (drop:flow): the same drop the base release gave it at the
+#   hello-completion milestone - the committed verdict for a SNI-less
+#   hello;
+# - the two allowed flows (ports 443 and 4463) are carried by the
+#   flow-scoped SNI accept; the port-4463 hello is split over two
+#   records, so the first fragment is accepted by the plain hello
+#   state accept (sid 103) while the completing record matches the
+#   flow-scoped accept. There is no accept at the certificate state:
+#   an accepted flow is carried by the flow action, which is checked
+#   before any further firewall rule of a packet is evaluated.
+#
+# The pcap is crafted by craft-pcap.py (see that file); input.pcap
+# written by it.
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+# the non-matching SNI flow: the completing record (pkt 12) is
+# dropped by the negated-SNI rule, with the rule's alert
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 102
+      dest_port: 4443
+      pcap_cnt: 12
+# sid 102 is the only alert of the run
+- filter:
+    count: 1
+    match:
+      event_type: alert
+# the two SNI-less and non-matching flows are dropped; the allowed
+# flows are not
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      dest_port: 4443
+      flow.action: drop
+- filter:
+    count: 2
+    match:
+      event_type: flow
+      flow.action: drop
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      dest_port: 443
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      dest_port: 4453
+      flow.action: drop
+# the SNI-less completing record is dropped by the implicit default
+# policy (no certificate-state accept)
+- filter:
+    count: 1
+    match:
+      event_type: drop
+      drop.reason: "firewall default app policy"
+      dest_port: 4453
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      dest_port: 4463
+# the allowed flows publish the SNI
+- filter:
+    count: 2
+    match:
+      event_type: tls
+      tls.sni: suricata.io
+# the non-matching ClientHello record is a rule drop, the SNI-less
+# one a default-app-policy drop
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.firewall.blocked: 2
+      stats.firewall.drop_reason.rules: 1
+      stats.firewall.drop_reason.default_app_policy: 1
