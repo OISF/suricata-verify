@@ -1,0 +1,1 @@
+alert tls any any -> any any (msg:"ssl_state client_keyx"; content:"|16 03|"; ssl_state:client_keyx; sid:1; rev:1;)

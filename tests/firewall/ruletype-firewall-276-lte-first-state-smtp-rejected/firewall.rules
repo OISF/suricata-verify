@@ -1,0 +1,3 @@
+# Same rejection on a protocol whose to-server and to-client state tables
+# differ: smtp's first to-server state is request_started.
+accept:flow,alert smtp:<request_started $HOME_NET any -> $EXTERNAL_NET any (sid:100;)

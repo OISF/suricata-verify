@@ -1,0 +1,3 @@
+# An LTE (<hook) rule at the to-server first state (progress 0) provides no
+# prior-state coverage and is rejected at load.
+accept:flow,alert tls:<client_started $HOME_NET any -> $EXTERNAL_NET any (sid:100;)
