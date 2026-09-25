@@ -1,0 +1,66 @@
+%YAML 1.1
+---
+
+vars:
+  address-groups:
+    HOME_NET: "[10.0.0.0/8]"
+    EXTERNAL_NET: "!$HOME_NET"
+    HTTP_SERVERS: "$HOME_NET"
+  port-groups:
+    HTTP_PORTS: "80"
+
+stats:
+  enabled: yes
+  interval: 8
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - stats
+        - flow
+        - alert
+        - http
+        - drop:
+            alerts: yes
+            flows: all
+
+firewall:
+  policies:
+    packet:
+      filter: [ "accept:hook" ]
+    app:
+      http1:
+        # toserver: every request state accepted, so the two complete
+        # requests pass identically on both sides (the rules they hit
+        # are not toserver).
+        request-started:
+          - "accept:hook"
+        request-line:
+          - "accept:hook"
+        request-headers:
+          - "accept:hook"
+        request-body:
+          - "accept:hook"
+        request-trailer:
+          - "accept:hook"
+        request-complete:
+          - "accept:hook"
+        # toclient: the response-body drop sits strictly above the
+        # response-line packet's progress. The branch sweeps only the
+        # states walked over (up to tx_progress) and accepts P5; the
+        # base release sweeps up to tx_end_state, reaches the drop and
+        # drops P5. The accepts below are only traversed (non-decisive)
+        # because tx1 is not the last tx of the flow once tx2 exists.
+        response-line:
+          - "accept:hook"
+        response-headers:
+          - "accept:hook"
+        response-body:
+          - "drop:flow"
+        response-trailer:
+          - "accept:hook"
+        response-complete:
+          - "accept:hook"
