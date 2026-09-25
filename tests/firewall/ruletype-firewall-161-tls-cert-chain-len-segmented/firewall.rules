@@ -1,0 +1,24 @@
+# Every phase the flows enter is accepted; the certificate phase
+# carries the condition under test. A conditional rule must not be
+# the only rule of its hook: an unmatched conditional rule falls back
+# on the hook's default policy (drop:flow), so the unconditional
+# accept (sid 202) sits after the alerting one (sid 201) and carries
+# the phase when the chain length does not match.
+accept:hook tcp:all any any <> any any (flow:not_established; sid:1; msg:"session setup";)
+accept:hook tcp:all any any <> any any (flow:established; sid:2; msg:"established";)
+accept:hook tls:client_started any any -> any any (sid:100;)
+accept:hook tls:client_hello any any -> any any (sid:101;)
+accept:hook tls:client_cert any any -> any any (sid:102;)
+accept:hook tls:client_data any any -> any any (sid:103;)
+accept:hook tls:client_finished any any -> any any (sid:104;)
+accept:hook tls:server_started any any -> any any (sid:200;)
+accept:hook tls:server_hello any any -> any any (sid:201;)
+# the chain length may only be evaluated once the certificate
+# message has decoded fully: the track enters this phase at the
+# ServerHello completion, before any certificate is parsed, and a
+# message spread over several packets shows a partial chain until its
+# last record
+accept:hook tls:server_cert any any -> any any (alert; tls.cert_chain_len:<2; sid:202; msg:"chain shorter than 2";)
+accept:hook tls:server_cert any any -> any any (sid:203;)
+accept:hook tls:server_data any any -> any any (sid:204;)
+accept:hook tls:server_finished any any -> any any (sid:205;)
