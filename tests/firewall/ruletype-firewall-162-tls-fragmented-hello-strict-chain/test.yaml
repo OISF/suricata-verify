@@ -1,0 +1,86 @@
+# The strict migrated chain (a started accept, a content SNI rule at
+# the hello state in the migrated accept:hook form, accepts at the
+# remaining states - no plain accept at client_hello) drops the first
+# fragment of a ClientHello split over two records: the fragment is
+# decided at client_hello, it carries no data to match, and the
+# unmatched packet falls on the implicit default policy (drop:flow).
+# In the previous release the same fragment was decided at the
+# pre-hello state (client_in_progress) and was accepted by the
+# started-state accept.
+#
+# Pins:
+# - the started state is still evaluated in the walk-over of the
+#   first record (sid 1620, rendered at the packet's final progress
+#   client_hello);
+# - the SNI rule never matches (sid 1621 count 0): the buffer is
+#   empty until the message completes, and the flow dies before it
+#   does;
+# - the first fragment (pcap_cnt 3) is dropped by the implicit
+#   default app policy at client_hello; the rest of the flow (the
+#   completing record and the FIN) is dropped as a flow drop;
+# - no TLS event is published (no phase data was ever parsed).
+#
+# The companion test ruletype-firewall-151 pins the same session with
+# a plain hello accept added for the fragments: the flow is then
+# accepted through the hand-over.
+#
+# The pcap is crafted by craft-pcap.py (see that file).
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+# the started state is evaluated in the walk-over of the first
+# fragment, rendered at the packet's final progress
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1620
+      ts_progress: client_hello
+# the SNI rule never matches: no buffer before completion, and the
+# flow is dropped before the message completes
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 1621
+# the first fragment is dropped by the implicit default app policy
+# at client_hello
+- filter:
+    count: 1
+    match:
+      event_type: drop
+      drop.reason: "firewall default app policy"
+      pcap_cnt: 3
+# the completing record and the FIN arrive on a dropped flow
+- filter:
+    count: 2
+    match:
+      event_type: drop
+      drop.reason: "firewall flow drop"
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      app_proto: tls
+      flow.action: drop
+# no phase data was ever parsed: no TLS event
+- filter:
+    count: 0
+    match:
+      event_type: tls
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.firewall.accepted: 2
+      stats.firewall.blocked: 3
+      stats.firewall.drop_reason.default_app_policy: 1
+      stats.firewall.drop_reason.flow_drop: 2
+      stats.firewall.drop_reason.rules: 0
