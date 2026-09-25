@@ -1,0 +1,4 @@
+# The only fw rule: a mid-walk accept at the response-started state.
+# It never carries a verdict itself (the packet's progress is always
+# above it); it triggers the walked-over-states sweep.
+accept:hook http1:response_started any any -> any any (sid:1641;)
