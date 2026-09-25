@@ -1,0 +1,11 @@
+# The peek at the next candidate must not let an LTE rule that contributes no
+# coverage (out of scope for this packet) suppress the current rule's hook
+# default policy.
+#
+# sid:100 fails at request_headers (content nomatch); sid:101 is an LTE rule at
+# the higher request_body hook, but its header predicates fail, so it covers
+# nothing. sid:100's no match must apply the request_headers default policy.
+accept:hook http1:<response_complete $EXTERNAL_NET any -> $HOME_NET any (sid:9001;)
+
+accept:flow,alert http1:<request_headers $HOME_NET any -> $EXTERNAL_NET any (http.host; content:"nope.example"; sid:100;)
+accept:flow,alert http1:<request_body 198.51.100.0/24 any -> 198.51.100.0/24 any (sid:101;)

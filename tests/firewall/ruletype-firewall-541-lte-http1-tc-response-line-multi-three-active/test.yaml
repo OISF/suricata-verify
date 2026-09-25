@@ -1,0 +1,36 @@
+requires:
+  min-version: 9
+args:
+- --simulate-ips
+- -k none
+pcap: ../lte-matrix-data/http1.pcap
+checks:
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      drop.reason: firewall default app policy
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 102
+      pcap_cnt: 16
+      alert.action: allowed
+      firewall.hook: http:response_line
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.action: accept
+      flow.alerted: true
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 100
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 101

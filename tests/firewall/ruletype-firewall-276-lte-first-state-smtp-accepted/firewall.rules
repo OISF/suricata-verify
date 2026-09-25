@@ -1,0 +1,14 @@
+# LTE (<) rule at the protocol's first state (progress 0): accepted.
+#
+# smtp:<request_started is the auto-accept (<hook) form at the protocol's
+# first to-server state, whose to-server and to-client state tables differ.
+# There are no prior states to cover, so it is exactly equivalent to the plain
+# hook form.
+#
+# The packet:filter default policy accepts the session (see suricata.yaml).
+# The last rule is scaffolding: it covers the opposite direction so its
+# default policy does not drop the flow.
+
+accept:hook smtp:<response_complete $EXTERNAL_NET any -> $HOME_NET any (sid:9001;)
+
+accept:flow,alert smtp:<request_started $HOME_NET any -> $EXTERNAL_NET any (sid:100;)

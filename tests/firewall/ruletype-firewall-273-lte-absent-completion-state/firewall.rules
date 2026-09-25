@@ -1,0 +1,10 @@
+# `absent` at a completion state: the NTP reference_id buffer is present in both
+# requests, so the absent rule must not match, and the request_complete state
+# default must be decided at the completion packet (the buffer engine takes its
+# eof decision there) - not deferred to the packet default policy.
+accept:hook udp:all $HOME_NET any <> $HOME_NET 123 (alert; sid:1;)
+accept:hook ntp:request_started $HOME_NET any -> $HOME_NET 123 (sid:11;)
+accept:hook ntp:response_started $HOME_NET 123 -> $HOME_NET any (sid:20;)
+accept:hook ntp:response_complete $HOME_NET 123 -> $HOME_NET any (sid:21;)
+
+accept:flow,alert ntp:<request_complete $HOME_NET any -> $HOME_NET 123 (ntp.reference_id; absent; sid:100;)

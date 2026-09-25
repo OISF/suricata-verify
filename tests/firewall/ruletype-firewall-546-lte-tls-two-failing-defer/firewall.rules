@@ -1,0 +1,12 @@
+# LTE (<hook) deferral: a failing < rule defers the per-state defaults of the
+# states it promised to cover; the last pending covering rule decides them.
+#
+# sid:100 (<client_hello) and sid:101 (<client_cert) both fail on the
+# fragmented tls.version below. sid:101 is the last pending covering rule, so
+# its own hook default (accept, see suricata.yaml) applies and its forward
+# sweep covers the states above its hook. The per-state default for the lower
+# state tls:client_hello (drop:flow, alert) is never applied.
+accept:hook tls:<server_finished $EXTERNAL_NET any -> $HOME_NET any (sid:9001;)
+
+accept:flow,alert tls:<client_hello $HOME_NET any -> $EXTERNAL_NET any (tls.version:1.3; sid:100;)
+accept:flow,alert tls:<client_cert $HOME_NET any -> $EXTERNAL_NET any (tls.version:1.3; sid:101;)

@@ -1,0 +1,36 @@
+requires:
+  min-version: 9
+args:
+- --simulate-ips
+- -k none
+pcap: ../ruletype-firewall-17-http-txbits-multi-tx/http-sticky-server-s8.pcap
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 100
+      pcap_cnt: 4
+      alert.action: allowed
+      firewall.hook: http:request_headers
+- filter:
+    count: 0
+    match:
+      event_type: drop
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.action: accept
+      flow.alerted: true
+      flow.pkts_toserver: 18
+      flow.pkts_toclient: 9
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.firewall.accepted: 27
+      stats.firewall.blocked: 0
+      stats.firewall.drop_reason.default_app_policy: 0
+      stats.firewall.drop_reason.default_packet_policy: 0
+      stats.firewall.drop_reason.flow_drop: 0

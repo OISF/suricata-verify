@@ -1,0 +1,12 @@
+# LTE (<hook) state matrix: http1 tc response_line / multi-three-active
+# Three active keyword rules at S: the coverage accounting keeps the two failing siblings from applying the state default before the matching rule accepts.
+#
+# The packet:filter default policy accepts the session (see suricata.yaml).
+# The last rule is scaffolding: it covers the opposite direction so its
+# default policy does not drop the flow before this direction reaches S + 1.
+
+accept:hook http1:<request_complete $HOME_NET any -> $EXTERNAL_NET any (sid:9001;)
+
+accept:flow,alert http1:<response_line $EXTERNAL_NET any -> $HOME_NET any (http.stat_code; content:"404"; sid:100;)
+accept:flow,alert http1:<response_line $EXTERNAL_NET any -> $HOME_NET any (http.stat_code; content:"404"; sid:101;)
+accept:flow,alert http1:<response_line $EXTERNAL_NET any -> $HOME_NET any (http.stat_code; content:"200"; sid:102;)
