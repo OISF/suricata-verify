@@ -1,0 +1,63 @@
+# An incomplete certificate chain must never be counted as final,
+# in any phase. The flow is 155's bad-leaf chain (one committed
+# certificate, cert_data_incomplete sticky) plus a server
+# application-data record (P8) that advances the server track beyond
+# the certificate phase.
+#
+# A cert_chain_len rule at tls:server_cert is still evaluated on P8
+# (rules at a hook below the packet's progress match mid-walk), and
+# a phase-scoped chain guard goes dead once the track has advanced -
+# the pre-fix state on this branch. The keyword must suppress while
+# the certificate data is incomplete, independent of the current
+# phase; the zero-certificate case (no Certificate message seen)
+# keeps matching, and ruletype-firewall-161 keeps the empty-chain
+# suppression inside the cert phase.
+#
+# With the suppression in place, no rule decides P8: the walked-over
+# states carry no configured policy and the implicit default
+# (drop:flow) decides it. The trap rule sid 202 (accept:flow with
+# alert, on the false count of 1) must stay silent for the whole run.
+#
+# The pcap is crafted by craft-pcap.py (see that file); input.pcap
+# written by it.
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+# the trap never fires: no alert of any kind in the run
+- filter:
+    count: 0
+    match:
+      event_type: alert
+# P8 is decided by the implicit default policy, not by the trap rule
+- filter:
+    count: 1
+    match:
+      event_type: drop
+      pcap_cnt: 8
+      drop.reason: "firewall default app policy"
+# and no rule drop happened at all
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      drop.reason: "firewall rules"
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.action: drop
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.firewall.blocked: 2
+      stats.firewall.drop_reason.rules: 0
+      stats.firewall.drop_reason.default_app_policy: 1
+      stats.firewall.drop_reason.flow_drop: 1
