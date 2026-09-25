@@ -1,0 +1,14 @@
+# LTE (<) rule at the protocol's first state (progress 0): accepted.
+#
+# The first state has no prior states to auto-accept, so the < form is
+# exactly equivalent to the plain hook form. Bare rule: no http1 keyword is
+# registered at request_started (a keyword registered at a later state, e.g.
+# http.uri at request_line, still fails the engine-progress validation).
+#
+# The packet:filter default policy accepts the session (see suricata.yaml).
+# The last rule is scaffolding: it covers the opposite direction so its
+# default policy does not drop the flow.
+
+accept:hook http1:<response_complete $EXTERNAL_NET any -> $HOME_NET any (sid:9001;)
+
+accept:flow,alert http1:<request_started $HOME_NET any -> $EXTERNAL_NET any (sid:100;)

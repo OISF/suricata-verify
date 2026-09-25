@@ -1,0 +1,6 @@
+# The to-client direction through a bidirectional arrow: an LTE rule with <>.
+# (<- is rejected by SigParseBasics: only -> and <> are valid direction
+# modifiers.)
+accept:hook http1:<request_complete $HOME_NET any -> $EXTERNAL_NET any (sid:9001;)
+
+accept:flow,alert http1:<response_headers $EXTERNAL_NET any <> $HOME_NET any (http.header; content:"X-Marker: yes"; sid:100;)

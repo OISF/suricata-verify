@@ -1,0 +1,16 @@
+# A matched rule that sets a flowbit can make the post-rule flowbits prefilter
+# append a `flowbits:isset` LTE rule mid-walk. The appended rule must count as
+# pending coverage for the remaining checks of that walk, otherwise the failing
+# sibling applies the hook default prematurely and drops the flow before the
+# appended rule is evaluated.
+#
+# sid:100 matches at request_line and sets the flowbit; sid:103 is the
+# `flowbits:isset` LTE rule for request_headers, appended after that match;
+# sid:101 is the failing sibling at request_headers. sid:101 must not apply the
+# request_headers default while sid:103 is pending, and sid:103 then matches
+# and accepts the flow.
+accept:hook http1:<response_complete $EXTERNAL_NET any -> $HOME_NET any (sid:9001;)
+
+accept:hook,alert http1:request_line $HOME_NET any -> $EXTERNAL_NET any (flowbits:set,S; sid:100;)
+accept:flow,alert http1:<request_headers $HOME_NET any -> $EXTERNAL_NET any (http.host; content:"nope.example"; sid:101;)
+accept:flow,alert http1:<request_headers $HOME_NET any -> $EXTERNAL_NET any (flowbits:isset,S; http.host; content:"www.example.com"; sid:103;)

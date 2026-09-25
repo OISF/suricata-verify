@@ -1,0 +1,17 @@
+# app-layer-state with mode '<' at the protocol's starting state (progress 0)
+# can never match and is rejected at load, which is fatal under
+# --init-errors-fatal (how the framework runs suricata).
+requires:
+  min-version: 9
+
+pcap: false
+
+args:
+  - -T
+
+exit-code: 1
+
+checks:
+- shell:
+    args: grep -c 'is the starting state' stderr
+    expect: 1
