@@ -1,0 +1,17 @@
+accept:hook tcp:all any any <> any any (flow:not_established; sid:1; msg:"session setup";)
+accept:hook tcp:all any any <> any any (flow:established; sid:2; msg:"established";)
+accept:hook tls:client_started any any -> any any (sid:100;)
+accept:hook tls:client_hello any any -> any any (sid:101;)
+accept:hook tls:client_cert any any -> any any (sid:102;)
+accept:hook tls:server_started any any -> any any (sid:200;)
+accept:hook tls:server_hello any any -> any any (sid:201;)
+# the trap: a chain count is only final once a Certificate message has
+# decoded fully. The partial chain of a failed decode (1 certificate
+# committed, the leaf undecodable, cert_data_incomplete sticky) must
+# not match cert_chain_len:1 - not in the cert phase, and especially
+# not after the track advanced to the data phase via P8.
+accept:flow tls:server_cert any any -> any any (alert; tls.cert_chain_len: 1; sid:202; msg:"false final count";)
+# the cert-phase accept that lets P6/P7 through without verdicts of
+# their own; there is deliberately NO accept at the data phase: after
+# the fix P8 must fall on the implicit default policy.
+accept:hook tls:server_cert any any -> any any (sid:203;)
