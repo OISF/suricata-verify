@@ -1,0 +1,7 @@
+alert modbus any any -> any any (msg:"write quantity req and echo"; modbus.write.quantity:2; sid:1;)
+alert modbus any any -> any any (msg:"quantity echo is not a value"; modbus.write.value:2; sid:2;)
+alert modbus any any -> any any (msg:"single write value"; modbus.write.value:1234; sid:3;)
+alert modbus any any -> any any (msg:"mask write address"; modbus.write.address:200; sid:4;)
+alert modbus any any -> any any (msg:"multiple write address"; modbus.write.address:100; sid:5;)
+alert modbus any any -> any any (msg:"write value negation"; modbus.write.value:!1234; sid:6;)
+alert modbus any any -> any any (msg:"mask write function"; modbus.function:22; sid:7;)
