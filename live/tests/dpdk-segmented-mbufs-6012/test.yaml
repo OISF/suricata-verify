@@ -1,0 +1,51 @@
+environment: tap
+
+requires:
+  min-version: 9
+  command:
+    - jq
+    - ping
+  features:
+    - DPDK
+
+args:
+  - --dpdk
+  - --runmode workers
+
+# Jumbo frames need a 9000 byte MTU along the whole bridged path.
+before: |
+  set -e
+  ip netns exec client0 ip link set client mtu 9000
+  ip netns exec server0 ip link set server mtu 9000
+  for iface in client0 server0 br0; do
+    ip netns exec dut ip link set "${iface}" mtu 9000
+  done
+
+client: exec bash ${TESTDIR}/client.sh
+
+checks:
+  - shell:
+      args: grep -F 'Segmented mbufs detected' suricata.log
+  - stats:
+      capture.packets.__gt: 0
+      capture.dpdk.no_mbufs: 0
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 4

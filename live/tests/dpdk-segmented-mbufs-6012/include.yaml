@@ -1,0 +1,52 @@
+%YAML 1.1
+---
+
+default-rule-path: ${TESTDIR}
+rule-files:
+  - test.rules
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert
+        - stats:
+            totals: yes
+            threads: no
+            interval: 1
+
+dpdk:
+  eal-params:
+    proc-type: primary
+    vdev: "net_pcap0,iface=br0"
+    no-huge:
+    no-pci:
+    m: 256
+
+  interfaces:
+    - interface: net_pcap0
+      threads: 1
+      promisc: true
+      multicast: false
+      # A 256 byte MTU gives 1024 byte mbufs, so larger frames arrive as
+      # chained mbufs.
+      mtu: 256
+      # A 9014 byte frame takes 8 mbufs.
+      mempool-size: 1023
+      mempool-cache-size: auto
+      rx-descriptors: 16
+      tx-descriptors: 16
+      copy-mode: none
+      copy-iface: none
+
+# DPDK requires CPU affinity.
+threading:
+  set-cpu-affinity: yes
+  cpu-affinity:
+    - management-cpu-set:
+        cpu: [ 0 ]
+    - worker-cpu-set:
+        cpu: [ "all" ]
+        mode: "exclusive"

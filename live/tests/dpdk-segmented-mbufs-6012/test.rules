@@ -1,0 +1,4 @@
+alert icmp any any -> any any (msg:"Intact 2 segment echo request"; itype:8; dsize:1400; icmpv4-csum:valid; content:"|de ad be ef de ad be ef|"; offset:1392; depth:8; sid:1;)
+alert icmp any any -> any any (msg:"Intact 2 segment echo reply"; itype:0; dsize:1400; icmpv4-csum:valid; content:"|de ad be ef de ad be ef|"; offset:1392; depth:8; sid:2;)
+alert icmp any any -> any any (msg:"Intact 8 segment echo request"; itype:8; dsize:8972; icmpv4-csum:valid; content:"|de ad be ef de ad be ef|"; offset:8964; depth:8; sid:3;)
+alert icmp any any -> any any (msg:"Intact 8 segment echo reply"; itype:0; dsize:8972; icmpv4-csum:valid; content:"|de ad be ef de ad be ef|"; offset:8964; depth:8; sid:4;)
