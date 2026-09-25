@@ -1,0 +1,77 @@
+requires:
+  min-version: 9
+args:
+- --simulate-ips
+- -k none
+pcap: ../lte-matrix-data/http1.pcap
+checks:
+# HTTP1: the URI accept at request_line (pkt 6)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 100
+      pcap_cnt: 6
+      alert.action: allowed
+      firewall.hook: http:request_line
+      firewall.policy: accept:hook,alert
+# HTTP1: the failing request_body rule falls to the per-state default at pkt 12
+- filter:
+    count: 1
+    match:
+      event_type: drop
+      drop.reason: firewall default app policy
+      pcap_cnt: 12
+      direction: to_server
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2201001
+      pcap_cnt: 12
+      alert.action: blocked
+      firewall.hook: http:request_body
+      firewall.policy: drop:flow,alert
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.action: drop
+      flow.alerted: true
+# the HTTP1 failing rule itself stays silent
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 101
+# no foreign-protocol rule fires or drops
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 200
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 201
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 202
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 203
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      drop.reason: firewall rules
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 9001

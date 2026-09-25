@@ -260,6 +260,27 @@ def nearest_content_state(pkey, direction, states, i):
     return None
 
 
+# multi-three-active only: with same-hook failing siblings the matching rule is
+# decided at the state eof packet instead of the data packet on some protocols.
+THREE_ACTIVE_MATCH_PKT = {
+    ("smtp", "ts", "request_data"): 24,
+}
+
+
+def primary_state(pkey, direction, states):
+    """First non-initial state with a content keyword and a match packet.
+
+    The ordering shapes below are generated only for this state per (protocol,
+    direction): candidate list position is a state independent property, so one
+    representative cell per axis is enough and the matrix stays small.
+    """
+    for st in states[1:]:
+        c = content(pkey, direction, st)
+        if c and "match" in WHEN[(pkey, direction, st)]:
+            return st
+    return None
+
+
 def cases_for(pkey, direction, state, states):
     """Return (slug, [rules], [checks], notes) tuples."""
     i = states.index(state)
@@ -357,6 +378,44 @@ def cases_for(pkey, direction, state, states):
                           "the first S rule resolves and retires from the coverage, the second "
                           "applies the default policy for S, and the later match cannot rescue "
                           "the flow."))
+
+    # Candidate list ordering shapes: only for the primary cell per (protocol,
+    # direction), see primary_state(). Generated as their own passes at the end
+    # of main() so no pre-existing cell is renumbered.
+    if state == primary_state(pkey, direction, states):
+        # sid 9100: the scaffolding rules use 9001-9003
+        oos = rule(pkey, direction, state, "", 9100, out_of_scope=True)
+        if c and "match" in when:
+            cases.append(("multi-out-of-scope-sibling",
+                          [rule(pkey, direction, state, kw_part(c, "match"), 100), oos],
+                          zero_drops(100, when["match"], hook_filter(pkey, state), no_alert=9100),
+                          "A matching rule at S and an out of scope sibling last by sid: the "
+                          "trailing candidate must not disturb the accept and must not add "
+                          "pending coverage."))
+        if c and "content_drop" in when:
+            oos_checks = one_drop(direction, state, 100, when["content_drop"],
+                                  hook_filter(pkey, state))
+            oos_checks.append({"filter": {"count": 0, "match": {
+                "event_type": "alert", "alert.signature_id": 9100}}})
+            cases.append(("multi-out-of-scope-sibling-nomatch",
+                          [rule(pkey, direction, state, kw_part(c, "nomatch"), 100), oos],
+                          oos_checks,
+                          "A failing keyword rule at S and an out of scope sibling last by sid: "
+                          "the sibling neither covers S nor hides the state default."))
+        if c and "match" in when:
+            three_checks = zero_drops(102, THREE_ACTIVE_MATCH_PKT.get(
+                                          (pkey, direction, state), when["match"]),
+                                      hook_filter(pkey, state), no_alert=100)
+            three_checks.append({"filter": {"count": 0, "match": {
+                "event_type": "alert", "alert.signature_id": 101}}})
+            cases.append(("multi-three-active",
+                          [rule(pkey, direction, state, kw_part(c, "nomatch"), 100),
+                           rule(pkey, direction, state, kw_part(c, "nomatch"), 101),
+                           rule(pkey, direction, state, kw_part(c, "match"), 102)],
+                          three_checks,
+                          "Three active keyword rules at S: the coverage accounting keeps the "
+                          "two failing siblings from applying the state default before the "
+                          "matching rule accepts."))
     return cases
 
 
@@ -483,6 +542,14 @@ EXCLUDED = {
     # At the first TLS state the failing rule stays provisional at S + 1 (its
     # tls.version data is not final there), so the later matching rule
     # legitimately accepts before the state default can apply.
+    # http2 to-server headers: a failing keyword sibling at the same hook with a
+    # lower sid suppresses the matching rule, and the state default policy then
+    # drops the flow at the eof packet instead of the match accepting it. The
+    # to-client state needs two failing siblings to show it. Pre-existing:
+    # reproduces on the branch base and on a pre-fix build, so the cell can only
+    # pass once that is fixed.
+    ("http2:stream", "ts", "request_headers", "multi-three-active"),
+    ("http2:stream", "tc", "response_headers", "multi-three-active"),
 }
 
 
@@ -505,7 +572,10 @@ def main():
     # The cells added later are numbered after the pre-existing ones so their
     # test directories keep their numbers.
     added_later = {"multi-content-nomatch-next-match",
-                   "multi-content-nomatch-same-hook-next-match"}
+                   "multi-content-nomatch-same-hook-next-match",
+                   "multi-out-of-scope-sibling",
+                   "multi-out-of-scope-sibling-nomatch",
+                   "multi-three-active"}
     # The pre-existing protocols keep their numbers: run every pass for them
     # before the http2 cells are appended.
     groups = ([p for p in PROTOCOLS if not p[0].startswith("http2") and p[0] != "smtp"],
@@ -525,6 +595,22 @@ def main():
                             if slug in added_later:
                                 continue
                         elif slug != pass_slug:
+                            continue
+                        names.append(write_test(number, pkey, direction, state, slug,
+                                                rules, checks, note, pcap))
+                        number += 1
+    # The ordering shapes are generated as a second round, after every
+    # pre-existing cell, so the new directories are appended at the end of the
+    # numbering and no existing test is renamed.
+    for pass_slug in ("multi-out-of-scope-sibling",
+            "multi-out-of-scope-sibling-nomatch", "multi-three-active"):
+        for group in groups:
+            for pkey, direction, states, pcap in group:
+                for state in states:
+                    if state == states[0]:
+                        continue
+                    for slug, rules, checks, note in cases_for(pkey, direction, state, states):
+                        if slug != pass_slug or excluded(pkey, direction, state, slug):
                             continue
                         names.append(write_test(number, pkey, direction, state, slug,
                                                 rules, checks, note, pcap))

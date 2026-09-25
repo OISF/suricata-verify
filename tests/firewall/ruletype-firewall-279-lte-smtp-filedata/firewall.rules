@@ -1,0 +1,12 @@
+# LTE (<hook) file-data coverage: smtp ts request_data / file.data predicate
+# The file data engine streams the tracked attachment at request_data; the
+# matching < rule accepts the flow at the packet where the file content is
+# available.
+#
+# The packet:filter default policy accepts the session (see suricata.yaml).
+# The last rule is scaffolding: it covers the opposite direction so its
+# default policy does not drop the flow before this direction reaches S + 1.
+
+accept:hook smtp:<response_complete $EXTERNAL_NET any -> $HOME_NET any (sid:9001;)
+
+accept:flow,alert smtp:<request_data $HOME_NET any -> $EXTERNAL_NET any (file.data; content:"raw attachment three"; sid:100;)

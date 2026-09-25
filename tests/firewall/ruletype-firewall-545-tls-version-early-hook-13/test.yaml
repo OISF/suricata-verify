@@ -1,0 +1,40 @@
+# A record-fragmented TLS 1.3 ClientHello: the first record only shows the
+# legacy/record layer version 0x0303 (TLS 1.2), the second completes the
+# supported_versions extension (0x0304). The client_started hook sits before
+# the hello decoded, so tls.version must stay revisitable while the version is
+# not final and only finalize once the hello decoded (the reviewer's
+# decoded-mismatch contract). The rule matches the negotiated 1.3 version on
+# the packet completing supported_versions.
+#
+# The pcap is crafted by craft-pcap.py (see that file).
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+  # the negotiated version decoded on the completing record
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 100
+        pcap_cnt: 6
+        ts_progress: client_cert
+        alert.action: allowed
+        firewall.hook: tls:client_started
+  # the hello never negotiates 1.2: the legacy value must not match
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 101
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+        drop.reason: firewall default app policy

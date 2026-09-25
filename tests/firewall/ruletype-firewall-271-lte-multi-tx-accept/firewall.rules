@@ -1,0 +1,6 @@
+# An LTE rule that stays active across the 8 transactions of one flow: each tx
+# resolves its own request_headers phase and must accept, with no state default
+# drop between them.
+accept:hook http1:<response_complete any any <> any any (sid:9001;)
+
+accept:flow,alert http1:<request_headers any any -> any any (http.host; content:"c.msn.com"; sid:100;)
