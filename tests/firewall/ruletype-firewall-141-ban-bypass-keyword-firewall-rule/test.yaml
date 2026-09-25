@@ -36,5 +36,5 @@ checks:
         event_type: stats
         stats.flow_bypassed.local_pkts: 6
   - shell:
-      args: grep "keyword 'bypass' is not allowed in firewall mode" stderr | wc -l
+      args: grep "keyword 'bypass' is not supported in firewall mode" stderr | wc -l
       expect: 1
