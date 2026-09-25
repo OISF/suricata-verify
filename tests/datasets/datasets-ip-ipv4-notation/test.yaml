@@ -1,0 +1,9 @@
+requires:
+  min-version: 9.0.0
+
+args:
+  - -T --data-dir=${TEST_DIR}
+
+exit-code: 0
+
+pcap: false
