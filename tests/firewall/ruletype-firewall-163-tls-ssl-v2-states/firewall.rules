@@ -1,0 +1,24 @@
+# Record the states an SSLv2 session actually walks: the v2 client
+# hello moves the client track to client_hello, the v2 server hello
+# moves the server track to server_hello, and the v2 client
+# certificate moves the client track to client_cert - with the
+# certificate payload itself left unextracted. The v2 client
+# certificate must not touch the server track (it used to update the
+# server track to the now-removed server_cert_done milestone): a pure
+# v2 session's server track stops at server_hello, pinned by the
+# server-track progress (tc_progress) on the client_cert alert.
+accept:hook tls:client_started $HOME_NET any -> $EXTERNAL_NET any (alert; sid:1630; msg:"client_started walk-over of the v2 client hello";)
+accept:hook tls:client_hello $HOME_NET any -> $EXTERNAL_NET any (alert; sid:1634; msg:"the v2 client hello moves the client track to client_hello";)
+accept:hook tls:client_cert $HOME_NET any -> $EXTERNAL_NET any (alert; sid:1631; msg:"the v2 client certificate moves the client track to client_cert (payload not extracted)";)
+# the started accept is required for the first toclient packet:
+# without a rule at the starting state the default policy walk over the
+# gap would drop it before server_hello is reached
+accept:hook tls:server_started $EXTERNAL_NET any -> $HOME_NET any (alert; sid:1635; msg:"server_started walk-over of the v2 server hello";)
+accept:hook tls:server_hello $EXTERNAL_NET any -> $HOME_NET any (alert; sid:1632; msg:"the v2 server hello moves the server track to server_hello";)
+# terminal states: accepted so the session closes cleanly (the v2
+# session never reaches data in this test, but the teardown walk must
+# find an accept rather than the implicit default drop)
+accept:hook tls:client_data $HOME_NET any -> $EXTERNAL_NET any (sid:1636;)
+accept:hook tls:client_finished $HOME_NET any -> $EXTERNAL_NET any (sid:1637;)
+accept:hook tls:server_data $EXTERNAL_NET any -> $HOME_NET any (sid:1638;)
+accept:hook tls:server_finished $EXTERNAL_NET any -> $HOME_NET any (sid:1639;)
