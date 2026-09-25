@@ -1,0 +1,1 @@
+protocols: [afp, data, dcerpc, gss-api, ip, nbss, 'null', smb, spnego, spnego-krb5, tcp]
