@@ -1,0 +1,19 @@
+%YAML 1.1
+---
+security:
+  lua:
+    allow-rules: yes
+logging:
+  default-log-level: notice
+  outputs:
+    - file:
+        enabled: yes
+        level: info
+        filename: suricata.log
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert
