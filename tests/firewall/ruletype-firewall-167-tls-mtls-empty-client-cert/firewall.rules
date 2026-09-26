@@ -1,0 +1,18 @@
+# mTLS where the client answers the CertificateRequest with a valid
+# EMPTY certificate message: the no-certificate decision. The empty
+# chain decodes fully (no anomaly, no sticky incomplete data) but
+# carries no content, so the client track never reaches its data
+# phase and the tls event can only publish at close (the logger gate's
+# mTLS branch waits for client content that will never come). No
+# drops, zero anomalies.
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1678; msg:"session setup";)
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1679; msg:"established";)
+
+accept:hook tls:client_started $HOME_NET any -> $EXTERNAL_NET any (alert; sid:1670; msg:"client_started";)
+accept:hook tls:client_hello $HOME_NET any -> $EXTERNAL_NET any (alert; sid:1671; msg:"client_hello";)
+accept:hook tls:client_cert $HOME_NET any -> $EXTERNAL_NET any (alert; sid:1672; msg:"client_cert entered";)
+accept:hook tls:client_data $HOME_NET any -> $EXTERNAL_NET any (alert; sid:1673; msg:"MUST NOT FIRE: no client certificate content";)
+accept:hook tls:server_started $EXTERNAL_NET any -> $HOME_NET any (alert; sid:1674; msg:"server_started";)
+accept:hook tls:server_hello $EXTERNAL_NET any -> $HOME_NET any (alert; sid:1675; msg:"server_hello";)
+accept:hook tls:server_cert $HOME_NET any <> $EXTERNAL_NET any (alert; sid:1676; msg:"server_cert entered";)
+accept:hook tls:server_data $EXTERNAL_NET any -> $HOME_NET any (alert; sid:1677; msg:"server_data established";)

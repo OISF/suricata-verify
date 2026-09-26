@@ -1,0 +1,53 @@
+# The no-certificate decision branch: a valid EMPTY client Certificate
+# answers the CertificateRequest. The message decodes fully (zero
+# entries: no anomaly, no sticky incomplete data), so the client track
+# never reaches its data phase from content - the logger gate's mTLS
+# branch waits for client readiness that this shape can only satisfy
+# at close, where the event publishes once with server fields and no
+# client object (no packet pin possible: close-published events log on
+# the LAST_PSEUDO packet whose pcap counter is 0, so the field is
+# absent). Sid 1673 (client_data) must stay silent; no drops.
+# See craft-pcap.py; input.pcap written by it.
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 1673
+- filter:
+    count: 1
+    match:
+      event_type: tls
+      tls.subject: CN=servertest
+- filter:
+    count: 0
+    match:
+      event_type: tls
+      tls.client.subject: CN=clienttest
+- filter:
+    count: 0
+    match:
+      event_type: anomaly
+      anomaly.app_proto: tls
+- filter:
+    count: 0
+    match:
+      event_type: flow
+      flow.action: drop
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.firewall.accepted: 10
+      stats.firewall.blocked: 0
+      stats.firewall.drop_reason.rules: 0
+      stats.firewall.drop_reason.default_app_policy: 0
