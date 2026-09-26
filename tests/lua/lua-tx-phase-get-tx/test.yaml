@@ -1,0 +1,12 @@
+requires:
+  min-version: 8.0.8
+
+pcap: input.pcap
+
+checks:
+  # The rule is dns:request_complete, so it is inspected in the tx phase,
+  # where the tx registry entry is populated: dns.get_tx() must return the
+  # live tx (with the query rrname and tx id), not nil.
+  - shell:
+      args: grep -c 'txphase ok rrname=example.com' suricata.log
+      expect: '1'

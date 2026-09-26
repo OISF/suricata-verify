@@ -1,0 +1,1 @@
+alert dns:request_complete any any -> any any (msg:"lua tx phase get_tx"; lua:tx-phase-get-tx.lua; sid:1; rev:1;)
