@@ -1,0 +1,11 @@
+requires:
+  min-version: 8.0.8
+
+pcap: input.pcap
+
+checks:
+  # IPv4 flow 10.0.0.1:1234 -> 10.0.0.2:80: flow:tuple() must return the
+  # 6 documented values (ipver, src ip, dst ip, proto, sport, dport).
+  - shell:
+      args: grep -c 'ftup 4 10.0.0.1 10.0.0.2 6 1234 80' suricata.log
+      expect: '1'

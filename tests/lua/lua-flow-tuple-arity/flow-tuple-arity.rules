@@ -1,0 +1,1 @@
+alert tcp 10.0.0.1 1234 -> 10.0.0.2 80 (msg:"lua flow tuple arity"; content:"GET"; lua:flow-tuple-arity.lua; sid:1; rev:1;)
