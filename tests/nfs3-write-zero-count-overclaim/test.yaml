@@ -1,0 +1,44 @@
+%YAML 1.1
+---
+# A v3 WRITE request with count == 0 and file_len == 0 whose RPC record
+# claim overreaches the parsed extent (56 bytes) by 512. The args parse;
+# before the fix the count-0 early return in process_write_record ran
+# before the extent/claim check, so the record boundary was dropped and
+# the claimed remainder (junk) was parsed as a new RPC record on the next
+# segment, desyncing the stream. A claim above the extent is the record
+# tail, not malformed data: the zero-count arm consumes the record and
+# skips to its boundary silently, and the following well-formed WRITE
+# (xid 0x44444444) parses and logs its 1000-byte file.
+
+requires:
+  min-version: 9
+
+pcap: input.pcap
+args:
+  - -k
+  - none
+  - --set app-layer.protocols.nfs.enabled=yes
+
+checks:
+  # the skip keeps the stream in sync: the following WRITE parses
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.version: 3
+        nfs.procedure: WRITE
+        rpc.xid: 1145324612
+  # and its file is extracted intact
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: c76cd26ee5fe20a8f0bbf376a1cf15fb1f87f203d7e64ca5b650b253af3edafc
+        fileinfo.size: 1000
+        fileinfo.stored: true
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: truncated_file_data
