@@ -1,0 +1,49 @@
+%YAML 1.1
+---
+# A complete v4 READ reply whose RPC record claim covers its record tail:
+# the claim (572) is 8 bytes past the parsed body (564) and ends 4 byte
+# aligned, so the stream advance walks over the tail and none of it is ever
+# parsed. A complete record also leaves nothing unbuffered, so the file
+# tracker must not be armed with a fill: the next chunk for the same handle
+# (offset 512, eof) has to continue the same file rather than take the
+# fill_bytes != 0 arm and truncate it.
+
+requires:
+  min-version: 9
+
+pcap: input.pcap
+args:
+  - -k
+  - none
+  - --set app-layer.protocols.nfs.enabled=yes
+
+checks:
+  # no spurious anomaly: the tail is record content, not malformed data
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+  # one READ transaction, both replies parsed into it: the second chunk
+  # continued the same file instead of the tail breaking the stream
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: READ
+        nfs.file_tx: true
+        nfs.hhash: "87e6ec25"
+        rpc.xid: 858993459
+        nfs.read.first: true
+        nfs.read.last: true
+        nfs.read.last_xid: 1145324612
+  # the two chunks assemble one file, without the tail bytes:
+  # 512 x 0x77 + 512 x 0x88
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.state: CLOSED
+        fileinfo.sha256: 48c123cecff4699e6e11f2b06baf064040337c71feb6bd5dfe5ed44ff32078db
+        fileinfo.size: 1024
+        fileinfo.stored: true
