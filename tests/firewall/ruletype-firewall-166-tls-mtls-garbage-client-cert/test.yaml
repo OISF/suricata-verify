@@ -1,0 +1,62 @@
+# A garbage client certificate chain must block the client track in
+# client_cert (its cert_data_incomplete sticks, no cert0 is committed)
+# while the server track completes on its own valid certificate: this
+# is 156's full-chain variant with the missing server Certificate
+# added, the mirror of 153. Pinned: the tls event is logged once with
+# the server content and no client content (the mTLS logger branch),
+# the client data phase is never established (sid 1663 count 0), the
+# server data phase is (sid 1669 fires), one INVALID_CERTIFICATE
+# anomaly, no drops. See craft-pcap.py; input.pcap written by it.
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 1663
+- filter:
+    count: 1
+    match:
+      event_type: anomaly
+      anomaly.event: INVALID_CERTIFICATE
+      anomaly.app_proto: tls
+      pcap_cnt: 8
+# the event carries server content only and publishes at connection
+# close: the client track never became ready (incomplete data, no
+# cert0) so the gate held the tx to the end - and the client flight's
+# anomaly was still flushed with it, above. No packet pin is possible
+# on this event: EOF-flushed txs are logged on the LAST_PSEUDO packet,
+# whose pcap packet counter is 0, so the field is absent from the
+# json (mid-flow logs like 158's pcap_cnt 9 and 168's pcap_cnt 8 carry
+# it and are the timing proofs of the gate)
+- filter:
+    count: 1
+    match:
+      event_type: tls
+      tls.subject: CN=servertest
+- filter:
+    count: 0
+    match:
+      event_type: tls
+      tls.client.subject: CN=clienttest
+- filter:
+    count: 0
+    match:
+      event_type: flow
+      flow.action: drop
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.firewall.accepted: 10
+      stats.firewall.blocked: 0
+      stats.firewall.drop_reason.rules: 0
+      stats.firewall.drop_reason.default_app_policy: 0

@@ -1,0 +1,20 @@
+# mTLS with a fully-garbage client certificate chain and a fully valid
+# server flight (including the server Certificate). The client track
+# must stay blocked in client_cert (cert_data_incomplete sticks with
+# no cert0 committed, so sid 1663 must never fire and the tls event
+# must not carry client content); the server track must complete on
+# its own certificate (sid 1669 fires; the client failure must not
+# block it) and the tls event carries the server certificate exactly
+# once. The garbage chain yields one INVALID_CERTIFICATE anomaly.
+# Nothing is dropped.
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1670; msg:"session setup";)
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1671; msg:"established";)
+
+accept:hook tls:client_started $HOME_NET any -> $EXTERNAL_NET any (alert; sid:1660; msg:"client_started";)
+accept:hook tls:client_hello $HOME_NET any -> $EXTERNAL_NET any (alert; sid:1661; msg:"client_hello";)
+accept:hook tls:client_cert $HOME_NET any -> $EXTERNAL_NET any (alert; sid:1662; msg:"client_cert entered";)
+accept:hook tls:client_data $HOME_NET any -> $EXTERNAL_NET any (alert; sid:1663; msg:"MUST NOT FIRE: client_data from garbage chain";)
+accept:hook tls:server_started $EXTERNAL_NET any -> $HOME_NET any (alert; sid:1664; msg:"server_started";)
+accept:hook tls:server_hello $EXTERNAL_NET any -> $HOME_NET any (alert; sid:1665; msg:"server_hello";)
+accept:hook tls:server_cert $HOME_NET any <> $EXTERNAL_NET any (alert; sid:1668; msg:"server_cert entered";)
+accept:hook tls:server_data $EXTERNAL_NET any -> $HOME_NET any (alert; sid:1669; msg:"server_data established from valid content";)
