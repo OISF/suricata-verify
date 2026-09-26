@@ -1,0 +1,79 @@
+# Pins the states a pure SSLv2 session actually walks through:
+# - the v2 client hello moves the client track to client_hello
+#   (sid 1634, and the started-state walk-over sid 1630 rendered at
+#   the packet's final progress);
+# - the v2 server hello moves the server track to server_hello
+#   (sid 1632; the started-state walk-over is sid 1635 - the started
+#   accept is required so the default policy walk over the starting
+#   state does not drop the first toclient packet);
+# - the v2 client certificate moves the client track to client_cert
+#   (sid 1631) - the v2 certificate payload is not extracted, and the
+#   server track is not advanced by it: the alert's server-track
+#   progress (tc_progress) is still server_hello, so a pure v2
+#   session's server track stops there;
+# - every state the session enters carries an explicit accept, so
+#   nothing is dropped.
+#
+# The pcap is crafted by craft-pcap.py (see that file): SYN, SYN/ACK,
+# v2 client hello, v2 server hello, v2 client certificate, FIN.
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1630
+      ts_progress: client_hello
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1634
+      ts_progress: client_hello
+      tc_progress: server_started
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1635
+      tc_progress: server_hello
+      pcap_cnt: 4
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1632
+      tc_progress: server_hello
+      pcap_cnt: 4
+# the v2 client certificate reaches the client_cert state; the
+# payload is not extracted, so no certificate data follows
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1631
+      ts_progress: client_cert
+      tc_progress: server_hello
+      pcap_cnt: 5
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      app_proto: tls
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.app_layer.flow.tls: 1
+      stats.firewall.accepted: 6
+      stats.firewall.blocked: 0
+      stats.firewall.drop_reason.rules: 0
+      stats.firewall.drop_reason.default_app_policy: 0

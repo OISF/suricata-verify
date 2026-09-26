@@ -1,0 +1,24 @@
+# A client hello spanning multiple TLS records (fragmented at the MTU) must
+# still yield the SNI once, at the client_hello phase: the phase starts at
+# the first hello byte, the SNI data becomes available when the record
+# completes, and the window is evaluated exactly once.
+requires:
+  min-version: 9
+
+pcap: ../tls-client-hello-frag-01/dump_mtu300.pcap
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        ts_progress: client_cert
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+        tls.sni: www.google.com

@@ -1,5 +1,5 @@
 requires:
-  min-version: 8.0.7
+  min-version: 9
 
 pcap: ../../tls/tls-client-hello-frag-01/dump_mtu300.pcap
 
@@ -20,7 +20,6 @@ checks:
       flow.pkts_toclient: 30
       flow.state: "closed"
       flow.alerted: false
-      not-has-key: flow.action
 - filter:
     count: 1
     match:

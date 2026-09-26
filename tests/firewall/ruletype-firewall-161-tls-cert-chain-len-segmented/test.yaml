@@ -1,0 +1,39 @@
+# The certificate chain length is final only once the certificate
+# message has decoded fully: the server track enters the certificate
+# phase at the ServerHello completion, before any certificate is
+# parsed, and a certificate message spread over several packets shows
+# a partial chain until its last record. Evaluating the length before
+# that point matches rules against a chain that does not exist yet.
+#
+# Two sessions (see craft-pcap.py): port 8443 carries a
+# two-certificate chain in three records - the chain is never shorter
+# than two once the message is complete, so the alerting rule (sid
+# 202) never fires; port 8444 carries a single-certificate chain and
+# alerts once, on the packet that completes the certificate message
+# (pkt 15).
+#
+# input.pcap is written by craft-pcap.py.
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+# the single-certificate chain: one alert, on the packet that
+# completes the certificate message
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 202
+      pcap_cnt: 15
+# the segmented two-certificate chain never matches: sid 202 is the
+# only alerting rule
+- filter:
+    count: 1
+    match:
+      event_type: alert
