@@ -1,0 +1,1 @@
+alert dns:request_complete any any -> any any (lua:no-packet.lua; sid:1;)
