@@ -1,0 +1,12 @@
+requires:
+  min-version: 8.0.8
+
+pcap: input.pcap
+
+checks:
+  # File output context: the file's tx registry entry is always set by the
+  # file log callback, so file:tx_id() must return the tx id of the file's
+  # transaction (0 for the first transaction), not an error.
+  - shell:
+      args: grep -q '^txid=0 name=download.bin$' results.log && echo OK || cat results.log
+      expect: OK

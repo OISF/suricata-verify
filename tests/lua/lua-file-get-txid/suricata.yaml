@@ -1,0 +1,29 @@
+%YAML 1.1
+---
+security:
+  lua:
+    allow-rules: yes
+logging:
+  default-log-level: notice
+  outputs:
+    - file:
+        enabled: yes
+        level: info
+        filename: suricata.log
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      # the http type registers the http tx logger; the tx-log pipeline
+      # (output-tx.c) bails when no tx logger is registered for the flow's
+      # alproto, and that pipeline is what drives the file loggers
+      types:
+        - alert
+        - http
+
+  - lua:
+      enabled: yes
+      scripts-dir: .
+      scripts:
+        - file-txid.lua
