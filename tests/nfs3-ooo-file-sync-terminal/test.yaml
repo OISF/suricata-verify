@@ -1,0 +1,45 @@
+%YAML 1.1
+---
+# A terminal (FILE_SYNC) v3 WRITE whose chunk is out of order: the tracker
+# truncates the file at the terminal chunk's newchunk, so the record tail is
+# consumed, not stored, and the tracker's is_done transition never happens
+# inside the stream promise. The tx terminal bookkeeping (is_last / last_xid
+# / done flags) must run at parse time, as the base did: the promise is_done
+# arm only closes a tx whose tail is actually stored (an in-order live
+# chunk).
+
+requires:
+  min-version: 9
+
+pcap: input.pcap
+args:
+  - -k none
+
+checks:
+  # the OOO terminal write truncates the file mid-flow; only W1's 100 bytes
+  # are stored
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.state: TRUNCATED
+        fileinfo.size: 100
+        fileinfo.sha256: "2b8d064f292defd7e5ea933ef9a264e2cff5f31f7beb62211df9f16fdfecc39e"
+  # the terminal bookkeeping ran at parse time: last=true and last_xid is
+  # W2's xid (12289). Pre-fix the tx stayed open with last=false /
+  # last_xid=0 until flow teardown. chunks: 2 - the W1 chunk that opened the
+  # tx (new-tx arm) and the W2 terminal chunk; W2's tail is consumed rather
+  # than stored, but it is still a chunk of the tx, so it counts.
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: WRITE
+        nfs.hhash: "87e6ec25"
+        nfs.write.first: true
+        nfs.write.last: true
+        nfs.write.last_xid: 12289
+        nfs.write.chunks: 2
+  # no desync
+  - shell:
+      args: test "$(grep -Ec 'malformed' eve.json)" -eq 0
