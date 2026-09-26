@@ -1,0 +1,11 @@
+requires:
+  min-version: 8.0.8
+
+pcap: input.pcap
+
+checks:
+  # dns flow: app_layer_proto() must return 5 documented name strings,
+  # the first being the flow's app-layer protocol name "dns".
+  - shell:
+      args: grep -c 'alproto n=5 first=dns' suricata.log
+      expect: '1'
