@@ -35,13 +35,13 @@ firewall:
   policies:
     app:
       tls:
-        client-started:
+        client-in-progress:
           - "accept:hook"
-        client-hello:
+        client-hello-done:
           - "drop:flow"
-        client-cert:
+        client-cert-done:
           - "accept:hook"
-        client-data:
+        client-handshake-done:
           - "accept:hook"
         client-finished:
           - "accept:hook"
