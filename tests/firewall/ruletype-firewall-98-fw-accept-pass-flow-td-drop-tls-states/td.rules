@@ -1,0 +1,1 @@
+drop:flow tls any any -> any any (flow:to_server; tls.sni; content:"com"; sid:666;)
