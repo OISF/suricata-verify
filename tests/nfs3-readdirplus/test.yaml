@@ -1,5 +1,5 @@
 requires:
-  min-version: 6.0
+  min-version: 9
 
 args:
 - -k none
@@ -11,8 +11,8 @@ checks:
       count: 1
       match:
         event_type: nfs
-        dest_ip: 192.168.1.6
-        dest_port: 939
+        dest_ip: 192.168.1.2
+        dest_port: 2049
         nfs.version: 3
         nfs.status: OK
         nfs.procedure: READDIRPLUS
@@ -22,8 +22,8 @@ checks:
         nfs.id: 1
         nfs.file_tx: false
         proto: TCP
-        src_ip: 192.168.1.2
-        src_port: 2049
+        src_ip: 192.168.1.6
+        src_port: 939
         rpc.xid: 3391488638
         rpc.status: ACCEPTED
         rpc.auth_type: UNIX
