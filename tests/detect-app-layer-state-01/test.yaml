@@ -1,5 +1,8 @@
 requires:
-  min-version: 9
+  min-version: 8
+  # the renamed TLS state hooks do not load before 9; this
+  # variant keeps the pre-rename rules running on the 8.0.x line
+  lt-version: 9
 
 pcap: ../tls/tls-client-hello-frag-01/dump_mtu300.pcap
 
@@ -14,7 +17,7 @@ checks:
       event_type: alert
       alert.signature_id: 1
 - filter:
-    count: 1
+    count: 2
     match:
       event_type: alert
       alert.signature_id: 2

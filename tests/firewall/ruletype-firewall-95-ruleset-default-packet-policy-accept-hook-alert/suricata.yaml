@@ -81,7 +81,7 @@ firewall:
           - "accept:hook"
         request-complete:
           - "accept:hook"
-        response-started:
+        request-started:
           - "accept:hook"
         response-line:
           - "accept:hook"
@@ -94,23 +94,25 @@ firewall:
         response-complete:
           - "accept:hook"
       tls:
-        client-started:
+        client-in-progress:
           - "accept:hook"
-        client-hello:
+        client-hello-done:
           - "accept:hook"
-        client-cert:
+        client-cert-done:
           - "accept:hook"
-        client-data:
+        client-handshake-done:
           - "accept:hook"
         client-finished:
           - "accept:hook"
-        server-started:
+        server-in-progress:
           - "accept:hook"
         server-hello:
           - "accept:hook"
-        server-data:
+        server-hello-done:
           - "accept:hook"
-        server-cert:
+        server-cert-done:
+          - "accept:hook"
+        server-handshake-done:
           - "accept:hook"
         server-finished:
           - "accept:hook"

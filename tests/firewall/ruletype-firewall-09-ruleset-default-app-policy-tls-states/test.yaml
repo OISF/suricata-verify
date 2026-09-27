@@ -1,0 +1,77 @@
+requires:
+  min-version: 9
+  features:
+    - HAVE_JA3
+
+pcap: ../../tls/tls-client-hello-frag-01/dump_mtu300.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 1011
+- filter:
+    count: 3
+    match:
+      event_type: alert
+      alert.signature_id: 1021
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 1022
+- filter:
+    count: 3
+    match:
+      event_type: alert
+      alert.signature_id: 1023
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 102
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 103
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 104
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 105
+- filter:
+    count: 57
+    match:
+      event_type: drop
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.pkts_toserver: 32
+      flow.pkts_toclient: 30
+      flow.state: "established"
+      flow.alerted: true
+      flow.action: drop
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.decoder.pkts: 62
+      stats.ips.accepted: 5
+      stats.ips.blocked: 0
+      stats.firewall.accepted: 5
+      stats.firewall.blocked: 57
+      stats.firewall.drop_reason.default_app_policy: 1
+      stats.firewall.drop_reason.flow_drop: 56
+      stats.firewall.drop_reason.rules: 0
