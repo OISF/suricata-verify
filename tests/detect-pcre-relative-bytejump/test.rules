@@ -1,0 +1,11 @@
+alert tcp any any -> any any (msg:"relative pcre after byte_jump"; flow:established,to_server; \
+    byte_jump:4,0; pcre:"/^TARGET/R"; sid:1; rev:1;)
+alert tcp any any -> any any (msg:"relative pcre after a relative byte_jump"; \
+    flow:established,to_server; byte_jump:4,0,relative; pcre:"/^TARGET/R"; sid:2; rev:1;)
+alert tcp any any -> any any (msg:"relative pcre after byte_extract"; \
+    flow:established,to_server; byte_extract:4,0,jumped; pcre:"/^TARGET/R"; sid:3; rev:1;)
+alert tcp any any -> any any (msg:"relative pcre after byte_math"; \
+    flow:established,to_server; byte_math: bytes 4, offset 0, oper +, rvalue 0, result len; \
+    pcre:"/^TARGET/R"; sid:4; rev:1;)
+alert tcp any any -> any any (msg:"pcre without /R after byte_jump"; flow:established,to_server; \
+    byte_jump:4,0; pcre:"/^TARGET/"; sid:5; rev:1;)
