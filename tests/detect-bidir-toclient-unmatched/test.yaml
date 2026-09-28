@@ -1,0 +1,33 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # Rule 1 has the toserver buffer (http.host, progress 2) after the
+  # toclient one (http.stat_msg, progress 1) in the engine list. It must
+  # not alert on the request half alone: http.stat_msg is "OK", never
+  # "ZZZZZZ", so the rule can not match at all.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+
+  # Rule 2 is the control: same shape, but the toclient engine happens to
+  # be last in the list, so it already behaved correctly.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+
+  # pin the exchange so the checks above cannot pass vacuously
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.hostname: example.com
+        http.url: /index.html
+        http.http_method: GET
+        http.status: 200

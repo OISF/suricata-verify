@@ -1,0 +1,35 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # Rule 1 puts http.host (toserver, progress 2) after http.stat_msg
+  # (toclient, progress 1) in the engine list. Both halves match, so the
+  # rule must alert exactly once, and only where the last half completes:
+  # the response reaches response_complete on the server FIN/ACK (packet 8),
+  # which is the packet the alert has to be logged on.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 8
+        alert.signature_id: 1
+
+  # Rule 2 is the same rule shape with a toclient engine last in the list.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 8
+        alert.signature_id: 2
+
+  # pin the exchange so the checks above cannot pass vacuously
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.hostname: example.com
+        http.url: /index.html
+        http.http_method: GET
+        http.status: 200
