@@ -1,7 +1,7 @@
 pcap: input.pcap
 
 requires:
-  min-version: 8
+  min-version: 9
 
 args:
   - -k none
