@@ -1,0 +1,65 @@
+environment: inline
+
+requires:
+  min-version: 9
+  command:
+    - grep
+    - python3
+  features:
+    - DPDK
+  script:
+    - python3 -c 'import os; assert len(os.sched_getaffinity(0)) >= 3'
+
+args:
+  - --dpdk
+  - --runmode workers
+
+# Jumbo frames need a 9000 byte MTU along the whole path. No namespace owns
+# the addresses of traffic.py, so they are resolved statically.
+before: |
+  set -e
+  ip netns exec client0 ip link set client mtu 9000
+  ip netns exec server0 ip link set server mtu 9000
+  for iface in client0 server0; do
+    ip netns exec dut ip link set "${iface}" mtu 9000
+  done
+  client_mac=$(ip netns exec client0 cat /sys/class/net/client/address)
+  server_mac=$(ip netns exec server0 cat /sys/class/net/server/address)
+  ip -n client0 neigh replace 10.200.0.9 lladdr "${server_mac}" dev client nud permanent
+  ip -n server0 neigh replace 10.200.0.3 lladdr "${client_mac}" dev server nud permanent
+
+# 500 byte datagrams and 400 byte segments fit one mbuf, 1400 byte segments
+# span 2 mbufs and 8972 byte datagrams 9 mbufs.
+client: |
+  set -e
+  ip netns exec server0 python3 ${TESTDIR}/traffic.py server ${OUTDIR}/server.ready &
+  server=$!
+  for _ in $(seq 1 40); do
+    [ -f ${OUTDIR}/server.ready ] && break
+    sleep 0.25
+  done
+  ip netns exec client0 python3 ${TESTDIR}/traffic.py client
+  wait ${server}
+
+checks:
+  - shell:
+      args: grep -F 'Segmented mbufs detected' suricata.log
+  - stats:
+      ips.replaced: 4
+      capture.dpdk.segmented_drops: 0
+      capture.dpdk.segmented_too_large: 0
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 3
