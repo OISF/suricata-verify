@@ -1,0 +1,11 @@
+pcap: ../detect-pcre-relative-bytejump/input.pcap
+
+checks:
+  # byte_test and isdataat only read the detection pointer, they do not move
+  # it, so they are no anchor for a relative pcre and neither is having no
+  # preceding keyword at all.
+  - shell:
+      args: grep "needs preceding match" suricata.log | wc -l | xargs
+      expect: 3
+
+exit-code: 1
