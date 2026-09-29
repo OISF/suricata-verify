@@ -1,0 +1,39 @@
+%YAML 1.1
+---
+requires:
+  min-version: 8
+
+checks:
+  # sid 1 alerts once: the first packet of the flow.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # and the alert that is logged keeps its pcre capture,
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        alert.context.captured: abc00
+  # while the 19 suppressed ones are not logged at all.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        alert.context.captured: abc19
+  # sid 2 alerts on all 20 packets,
+  - filter:
+      count: 20
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  # each one with its own capture.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        not-has-key: alert.context.always
