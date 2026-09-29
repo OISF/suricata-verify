@@ -1,3 +1,6 @@
+# https://redmine.openinfosecfoundation.org/issues/9112
+skip: true
+
 # Port of qa/live/multi-tenant.sh autofp.
 environment: tap
 # This test uses suricatasc to shut down Suricata.
