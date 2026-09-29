@@ -1,0 +1,26 @@
+requires:
+  min-version: 9
+
+args:
+ - -k none
+
+checks:
+  # Normal (ACK-ed) flow: both banners parse mid-flow, the client ACKs
+  # the server banner, and the server direction then sends a record
+  # header with pkt_len 0 and fails unrecoverably (invalid_record,
+  # frozen in kex). The failure must be visible in the emitted ssh
+  # object even though both banners were already delivered: the eve
+  # ssh log condition is failure-only, so the one-shot tx log is not
+  # consumed by the successful handshake and the object is emitted at
+  # the failure, carrying the error and the frozen state.
+  - filter:
+      count: 1
+      match:
+        event_type: ssh
+        ssh.client.proto_version: "2.0"
+        ssh.server.proto_version: "2.0"
+        ssh.server.error: "invalid_record"
+        ssh.server.state: "kex"
+        not-has-key:
+          - ssh.client.error
+          - ssh.client.state
