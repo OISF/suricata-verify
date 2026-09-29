@@ -1,0 +1,16 @@
+requires:
+  features:
+    - HAVE_LUA
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # battery: multiple dns accessors on the live tx must all succeed
+  # (no false positive from the liveness guard).
+  - shell:
+      args: test $(grep -c 'accessors ok' stdout) -ge 1 && echo 1 || echo 0
+      expect: "1"
+  - shell:
+      args: test $(grep -c 'live accessors failed' stdout) -eq 0 && echo 1 || echo 0
+      expect: "1"

@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"lua"; flow:to_server; lua: probe.lua; sid:1; rev:1;)

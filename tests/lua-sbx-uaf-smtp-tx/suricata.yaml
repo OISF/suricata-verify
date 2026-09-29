@@ -1,0 +1,31 @@
+%YAML 1.1
+---
+
+default-rule-path: .
+
+logging:
+  default-log-level: info
+  outputs:
+    - file:
+        enabled: yes
+        level: info
+        filename: suricata.log
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert
+        - smtp
+  - lua:
+      enabled: yes
+      scripts-dir: .
+      scripts:
+        - smtp_cache.lua
+
+app-layer:
+  protocols:
+    smtp:
+      enabled: yes

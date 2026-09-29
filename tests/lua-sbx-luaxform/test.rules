@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"luaxform"; http.uri; luaxform:bad.lua,run; content:"base64"; sid:1; rev:1;)

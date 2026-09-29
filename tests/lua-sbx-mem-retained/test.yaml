@@ -1,0 +1,18 @@
+requires:
+  features:
+    - HAVE_LUA
+  min-version: 9
+
+pcap: ../lua-output-http/input.pcap
+
+args:
+  - --set security.lua.allow-rules=true
+  - --set security.lua.max-bytes=32768
+
+checks:
+  # the retained set must hit the cap: the script errors (memory limit), so
+  # fewer than the unbounded count of alerts fire.
+  - filter:
+      count: 0
+      match:
+        alert.signature_id: 1

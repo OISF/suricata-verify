@@ -1,0 +1,19 @@
+requires:
+  features:
+    - HAVE_LUA
+  min-version: 9
+
+pcap: ../lua-output-http/input.pcap
+
+args:
+  - --set security.lua.allow-rules=true
+
+checks:
+  # The transform script errors out; the failure must be counted in the
+  # transform.lua.errors stat (rate-limited warning, not debug-only).
+  - stats:
+      transform.lua.errors: 1
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 1

@@ -1,0 +1,14 @@
+requires:
+  features:
+    - HAVE_LUA
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # the cached tx handle must not read freed memory repeatedly: after the
+  # first (live) read, the liveness guard raises. At most 1 stale read
+  # succeeds; repeated stale reads would be the UAF.
+  - shell:
+      args: test $(grep -c 'stale read succeeded' stdout) -le 1 && echo 1 || echo 0
+      expect: "1"
