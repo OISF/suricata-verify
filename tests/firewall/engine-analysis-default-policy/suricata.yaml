@@ -8,3 +8,7 @@ engine-analysis:
 firewall:
   policies:
     default-policy: ["accept:flow"]
+    packet:
+      # pre-flow runs before the flow lookup and does not support the flow
+      # scope, so it must not inherit the global default-policy
+      pre-flow: ["accept:hook"]
