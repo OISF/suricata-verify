@@ -1,0 +1,7 @@
+# The capture allocates alert context for every queued alert. Only the first
+# one is logged, the other 19 are suppressed by the threshold: their context
+# belongs to the alert queue, not to the packet.
+alert udp any any -> any 9999 (flow:to_server; content:"id="; pcre:"/id=([a-z0-9]+)/,alert:captured"; threshold:type limit, track by_src, count 1, seconds 3600; sid:1; rev:1;)
+
+# Same context allocation, but the alert always goes to the packet.
+alert udp any any -> any 9999 (flow:to_server; content:"id="; pcre:"/id=([a-z0-9]+)/,alert:always"; sid:2; rev:1;)
