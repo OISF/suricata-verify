@@ -1,0 +1,31 @@
+requires:
+  min-version: 9
+
+args:
+- --simulate-ips
+- --set stream.inline=yes
+- --set stream.reassembly.depth=8kb
+- --set stream.reassembly.randomize-chunk-size=no
+- --set stats.stream-events=true
+
+checks:
+  # the request line at the very start of the stream reaches the app-layer,
+  # so reassembly does work up to the depth.
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.url: /ABCDEFGHIJ
+  # reassembly of the upload stopped at the configured depth, and it stopped
+  # cleanly: the ACK's of the peer keep being tracked, so there is no gap and
+  # no rejected packet.
+  - stats:
+      tcp.stream_depth_reached: 1
+      tcp.reassembly_gap: 0
+      stream.reassembly_seq_gap: 0
+      stream.est_packet_out_of_window: 0
+      stream.est_invalid_ack: 0
+  - filter:
+      count: 0
+      match:
+        event_type: drop
