@@ -1,9 +1,9 @@
-# the ssh eve object is logged mid-flow (8.x) vs at the flow-end
-# flush (9.0, failure-only log condition): 9.0 expectations live in
-# the -9 sibling.
+# 9.0 re-pin: the eve ssh log condition is failure-only, so this
+# no-failure flow's ssh object is logged at the flow-end flush; the
+# timing-sensitive pcap_cnt / pkts / flow-bytes fields are not
+# pinned (they are flow-end snapshots).
 requires:
-  min-version: 6
-  lt-version: 9
+  min-version: 9
 
 args:
 - -k none
@@ -67,7 +67,6 @@ checks:
       dest_ip: 192.168.200.1
       dest_port: 22
       event_type: ssh
-      pcap_cnt: 6
       proto: TCP
       src_ip: 192.168.100.1
       src_port: 10003
