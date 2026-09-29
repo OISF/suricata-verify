@@ -1,0 +1,36 @@
+requires:
+  features:
+    - HAVE_LUA
+  min-version: 9.0.0
+
+pcap: input.pcap
+
+checks:
+  # The capture carries exactly one transaction per sender in one
+  # session: the stale read in smtp_cache.lua can only fire once the
+  # second is logged. These filters make that premise visible instead
+  # of implied (a single-transaction capture would leave the grep
+  # green on nothing).
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 0
+        smtp.mail_from: <alice@example.com>
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 1
+        smtp.mail_from: <carol@example.com>
+  # The pcap carries two complete SMTP transactions in one session: the
+  # first is freed when the second MAIL FROM opens the next transaction.
+  # The script caches the handle of the first logged transaction and
+  # reads it from the log call of the second: the accessor must fail
+  # closed and raise, which the engine logs. Positive assertion - the
+  # stale transition is asserted to have happened, not merely bounded.
+  # Red on base: the read dereferences the freed transaction and
+  # completes silently, so nothing is logged.
+  - shell:
+      args: grep -q "tx no longer valid" suricata.log && echo 1 || tail -5 suricata.log
+      expect: "1"
