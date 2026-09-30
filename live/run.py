@@ -25,6 +25,7 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import fcntl
 import glob
 import ipaddress
@@ -62,6 +63,7 @@ from lib.common import (
     UnsatisfiedRequirementError,
     check_required_commands as check_common_required_commands,
     check_requires as check_common_requires,
+    check_skip as check_common_skip,
 )
 
 CLIENT_NS = "client0"
@@ -97,6 +99,7 @@ ROOT_LINKS = (TMP_CLIENT_IF, TMP_SERVER_IF, TMP_DUT_CLIENT_IF, TMP_DUT_SERVER_IF
 ENVIRONMENTS = ("inline", "tap", "nfq")
 
 verbose = False
+base_suricata_config = None
 suricata_config_cache = {}
 
 RUNNER_RUNTIME_DIR = "/run/suricata-verify-live"
@@ -1305,6 +1308,25 @@ class SuricataConfig:
         return feature in self.features
 
 
+def get_base_suricata_config() -> SuricataConfig:
+    """Return the Suricata version and build info, loaded once per run.
+
+    The returned object has no configuration loaded and must not be modified.
+    Use get_suricata_config() for a test specific copy with the configuration
+    loaded.
+    """
+    global base_suricata_config
+    if base_suricata_config is None:
+        suricata_bin = os.path.join(os.getcwd(), "src", "suricata")
+        version = parse_suricata_version(
+            subprocess.check_output([suricata_bin, "-V"])
+        )
+        if version is None:
+            raise ValueError("failed to determine Suricata version")
+        base_suricata_config = SuricataConfig(suricata_bin, version)
+    return base_suricata_config
+
+
 def get_suricata_config(
     environment: str,
     script_dir: str,
@@ -1325,15 +1347,10 @@ def get_suricata_config(
     if cache_key in suricata_config_cache:
         return suricata_config_cache[cache_key]
 
-    cwd = os.getcwd()
-    suricata_bin = os.path.join(cwd, "src", "suricata")
-    suricata_yaml = os.path.join(cwd, "suricata.yaml")
-    version = parse_suricata_version(subprocess.check_output([suricata_bin, "-V"]))
-    if version is None:
-        raise ValueError("failed to determine Suricata version")
-
-    suricata_config = SuricataConfig(suricata_bin, version)
-    suricata_config.load_config(suricata_yaml, extra_args)
+    # Copy the base config to reuse the version and build info, load_config()
+    # replaces the config dict so the base config is not modified.
+    suricata_config = copy.copy(get_base_suricata_config())
+    suricata_config.load_config(os.path.join(os.getcwd(), "suricata.yaml"), extra_args)
     suricata_config_cache[cache_key] = suricata_config
     return suricata_config
 
@@ -1645,13 +1662,29 @@ def check_test_requires(requires: dict, environment: str, test_dir: str) -> None
     if not (set(requires) - {"command"}):
         return
 
-    cwd = os.getcwd()
-    suricata_bin = os.path.join(cwd, "src", "suricata")
-    version = parse_suricata_version(subprocess.check_output([suricata_bin, "-V"]))
-    if version is None:
-        raise ValueError("failed to determine Suricata version")
-    suricata_config = SuricataConfig(suricata_bin, version)
-    check_requires(requires, suricata_config, cwd)
+    check_requires(requires, get_base_suricata_config(), os.getcwd())
+
+
+def check_test_skip(
+    config: dict, environment: str, script_dir: str, test_dir: str
+) -> None:
+    """Check test-level skips before setting up namespaces or running scripts."""
+    skip = config.get("skip", False)
+    suricata_config = None
+    if isinstance(skip, list):
+        if any(isinstance(item, dict) and "config" in item for item in skip):
+            # Config based skips need the configuration as the test will run
+            # it. This is cached and reused by the post-run checks.
+            output_dir = os.path.join(test_dir, "output")
+            os.makedirs(output_dir, exist_ok=True)
+            test_include = render_test_include(test_dir, output_dir)
+            suricata_config = get_suricata_config(
+                environment, script_dir, config, test_dir, output_dir, test_include
+            )
+        elif any(isinstance(item, dict) and "feature" in item for item in skip):
+            suricata_config = get_base_suricata_config()
+
+    check_common_skip(skip, suricata_config)
 
 
 def do_run(
@@ -1719,6 +1752,7 @@ def do_run(
 
         requires = config.get("requires", {}) or {}
         try:
+            check_test_skip(config, environment, script_dir, root)
             check_test_requires(requires, environment, root)
         except UnsatisfiedRequirementError as err:
             skipped += 1
