@@ -1,0 +1,3 @@
+# Accept only the toclient direction. The toserver packets match no rule and
+# therefore fall through to the packet.filter default policy.
+accept:packet tcp:all any 443 -> any any (sid:1;)

@@ -1,0 +1,23 @@
+requires:
+  min-version: 9
+  pcap: false
+
+args:
+  - -T
+
+exit-code: 1
+
+checks:
+  # every rule must be rejected, naming the pre_flow hook specifically
+  - shell:
+      args: |-
+        grep -qF 'rule 1: action scope ("flow") is not valid for the "pre_flow" hook. Valid scopes: packet/hook' suricata.log && echo found
+      expect: found
+  - shell:
+      args: |-
+        grep -qF 'rule 2: action scope ("flow") is not valid for the "pre_flow" hook. Valid scopes: packet/hook' suricata.log && echo found
+      expect: found
+  - shell:
+      args: |-
+        grep -qF 'rule 3: action scope ("tx") is not valid for the "pre_flow" hook. Valid scopes: packet/hook' suricata.log && echo found
+      expect: found
