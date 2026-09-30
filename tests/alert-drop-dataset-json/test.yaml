@@ -1,0 +1,47 @@
+requires:
+  min-version: 9
+
+args:
+ - -k none --simulate-ips
+
+checks:
+  # The drop rule alerts on all 12 packets of the flow,
+  - filter:
+      count: 12
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # each one with the JSON alert info the dataset lookup built,
+  - filter:
+      count: 12
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        alert.context.src_ip.test: success
+  # and every one of them ends in a drop verdict, logged from the alert the
+  # packet keeps for the drop log. That info has to still be valid here.
+  - filter:
+      count: 12
+      match:
+        event_type: drop
+        alert.signature_id: 1
+        alert.context.src_ip.test: success
+  # Detection keeps running on the flow after the first drop: the packets
+  # following it are still decoded, alerted on and recycled.
+  - filter:
+      count: 12
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        pcap_cnt: 12
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.pkts_toserver: 12
+        flow.alerted: true

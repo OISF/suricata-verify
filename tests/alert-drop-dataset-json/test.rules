@@ -1,0 +1,9 @@
+# Every packet of the flow matches a drop rule whose alert info comes from a
+# JSON dataset lookup. The drop copy of the packet alert keeps its own
+# allocation of that info, so it has to stay valid until the packet is done and
+# be released when the packet is recycled.
+drop udp any any -> any 9999 (flow:to_server; ip.src; dataset:isset,src_ip,type ip,load src.lst,format json,context_key src_ip,value_key ip; msg:"drop with dataset json"; sid:1; rev:1;)
+
+# Plain alert on the same packets, the reference that detection keeps running on
+# the flow after the first drop verdict.
+alert udp any any -> any 9999 (flow:to_server; content:"q=req"; sid:2; rev:1;)
