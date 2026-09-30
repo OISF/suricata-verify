@@ -1,9 +1,0 @@
-requires:
-  lt-version: 8
-  features:
-    - HAVE_LUA
-
-checks:
-  - shell:
-      args: grep 'packets 10' lua-stats.log | wc -l
-      expect: 1

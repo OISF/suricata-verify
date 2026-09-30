@@ -22,15 +22,6 @@ checks:
         flow.pkts_toclient: 0
         flow.bytes_toclient: 0
   - filter:
-      requires:
-        lt-version: 8
-      count: 13
-      match:
-        event_type: flow
-        dest_port: 4789
-        flow.pkts_toclient: 0
-        flow.bytes_toclient: 0
-  - filter:
       count: 4
       match:
         event_type: ssh
@@ -48,10 +39,3 @@ checks:
       match:
         event_type: dns
         dns.queries[0].rrname: "ec2-18-196-145-224.eu-central-1.compute.amazonaws.com"
-  - filter:
-      requires:
-        lt-version: 8
-      count: 8
-      match:
-        event_type: dns
-        dns.rrname: "ec2-18-196-145-224.eu-central-1.compute.amazonaws.com"

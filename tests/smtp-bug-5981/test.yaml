@@ -45,21 +45,6 @@ checks:
       email.from: '"Xxxxxx xxxx" <xxxxxx@xxxxx.co.uk>'
       email.to[0]: <xxxxxx@xxxxx.co.uk>
 
-# Pre-8.0.7 creates/logs a trailing QUIT transaction with inherited HELO.
-- filter:
-    requires:
-      lt-version: 8.0.7
-    count: 1
-    match:
-      event_type: smtp
-      src_ip: 192.168.1.4
-      src_port: 3326
-      dest_ip: 217.12.11.66
-      dest_port: 587
-      proto: TCP
-      pkt_src: stream (flow timeout)
-      tx_id: 1
-      smtp.helo: Percival
 - filter:
     requires:
       min-version: 8.0.7

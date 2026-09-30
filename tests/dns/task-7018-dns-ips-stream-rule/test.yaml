@@ -32,29 +32,6 @@ checks:
       src_ip: 10.16.1.11
       src_port: 36926
 - filter:
-    requires:
-      lt-version: 8
-    count: 1
-    match:
-      event_type: alert
-      pcap_cnt: 4
-      proto: TCP
-      app_proto: dns
-      src_ip: 10.16.1.11
-      src_port: 36926
-      alert.signature: DNS suricata query - payload rule
-      alert.signature_id: 1
-      dest_ip: 9.9.9.9
-      dest_port: 53
-      direction: to_server
-      tx_id: 0
-      dns.query[0].id: 0
-      dns.query[0].opcode: 0
-      dns.query[0].rrname: suricata.io
-      dns.query[0].rrtype: A
-      dns.query[0].tx_id: 0
-      dns.query[0].type: query
-- filter:
     # DNS has only v3 logging for alerts in 8
     requires:
       min-version: 8
@@ -105,34 +82,6 @@ checks:
       dns.version: 2
 - filter:
     requires:
-      lt-version: 8
-    count: 1
-    match:
-      event_type: alert
-      pcap_cnt: 6
-      proto: TCP
-      src_ip: 9.9.9.9
-      src_port: 53
-      alert.signature: DNS suricata query - payload rule
-      alert.signature_id: 1
-      app_proto: dns
-      dest_ip: 10.16.1.11
-      dest_port: 36926
-      direction: to_client
-      tx_id: 1
-      dns.answer.flags: '8180'
-      dns.answer.id: 0
-      dns.answer.opcode: 0
-      dns.answer.qr: true
-      dns.answer.ra: true
-      dns.answer.rcode: NOERROR
-      dns.answer.rd: true
-      dns.answer.rrname: suricata.io
-      dns.answer.rrtype: A
-      dns.answer.type: answer
-      dns.answer.version: 2
-- filter:
-    requires:
       min-version: 8
     count: 1
     match:
@@ -173,30 +122,6 @@ checks:
 - filter:
     # This check is about an undesirable behavior cf redmine ticket #7004
     requires:
-      lt-version: 8
-    count: 1
-    match:
-      event_type: alert
-      pcap_cnt: 8
-      proto: TCP
-      src_ip: 10.16.1.11
-      src_port: 36926
-      alert.signature: DNS suricata query - payload rule
-      alert.signature_id: 1
-      app_proto: dns
-      dest_ip: 9.9.9.9
-      dest_port: 53
-      direction: to_server
-      tx_id: 2
-      dns.query[0].type: query
-      dns.query[0].id: 0
-      dns.query[0].rrname: oisf.net
-      dns.query[0].opcode: 0
-      dns.query[0].rrtype: A
-      dns.query[0].tx_id: 2
-- filter:
-    # This check is about an undesirable behavior cf redmine ticket #7004
-    requires:
       min-version: 8
     count: 1
     match:
@@ -217,33 +142,6 @@ checks:
       dns.opcode: 0
       dns.queries[0].rrname: oisf.net
       dns.queries[0].rrtype: A
-- filter:
-    requires:
-      lt-version: 8
-    count: 1
-    match:
-      event_type: alert
-      pcap_cnt: 9
-      alert.signature: DNS suricata query - payload rule
-      alert.signature_id: 1
-      proto: TCP
-      src_ip: 9.9.9.9
-      src_port: 53
-      dest_ip: 10.16.1.11
-      dest_port: 36926
-      app_proto: dns
-      direction: to_client
-      dns.answer.rrname: oisf.net
-      dns.answer.rrtype: A
-      dns.answer.flags: '8180'
-      dns.answer.id: 0
-      dns.answer.opcode: 0
-      dns.answer.qr: true
-      dns.answer.rd: true
-      dns.answer.ra: true
-      dns.answer.rcode: NOERROR
-      dns.answer.type: answer
-      dns.answer.version: 2
 - filter:
     requires:
       min-version: 8
@@ -297,28 +195,6 @@ checks:
       dns.rrtype: A
       dns.type: answer
       dns.version: 2
-- filter:
-    requires:
-      lt-version: 8
-    count: 1
-    match:
-      event_type: alert
-      alert.signature: DNS suricata query - payload rule
-      alert.signature_id: 1
-      dest_ip: 9.9.9.9
-      dest_port: 53
-      proto: TCP
-      src_ip: 10.16.1.11
-      src_port: 36926
-      direction: to_server
-      pcap_cnt: 10
-      tx_id: 4
-      dns.query[0].id: 0
-      dns.query[0].opcode: 0
-      dns.query[0].rrname: suricata.org
-      dns.query[0].rrtype: A
-      dns.query[0].tx_id: 4
-      dns.query[0].type: query
 - filter:
     requires:
       min-version: 8

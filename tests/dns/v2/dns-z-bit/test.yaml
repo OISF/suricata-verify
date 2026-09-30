@@ -13,14 +13,6 @@ checks:
       dns.z: true
 - filter:
     requires:
-      lt-version: 8
-    count: 1
-    match:
-      event_type: alert
-      alert.signature_id: 2240006
-      dns.query[0].z: true
-- filter:
-    requires:
       min-version: 8
     count: 1
     match:
