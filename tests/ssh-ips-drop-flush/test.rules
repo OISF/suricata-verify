@@ -1,0 +1,10 @@
+# Mark the server banner so the drop below can be triggered on a later
+# packet that carries no app-layer data: the flow then gets its app layer
+# disabled before the tx logger ever runs for that packet, which is the
+# case the app-layer disable flush has to cover.
+alert ssh any any -> any any (msg:"ssh server banner seen"; ssh.software; content:"OpenSSH_7.4"; flowbits:set,ssh_srv_banner; flowbits:noalert; sid:1; rev:1;)
+
+# Drop the flow (flow scope) on the first server-to-client ACK after the
+# server banner. This is before either side sends NewKeys, and the drop
+# lands on a packet without an app-layer update.
+drop:flow tcp:all any 22 -> any any (msg:"drop ssh flow before NewKeys"; flowbits:isset,ssh_srv_banner; dsize:0; sid:2; rev:1;)

@@ -1,0 +1,32 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+  # The flow is dropped in IPS mode before either side sends NewKeys. The
+  # ssh record must still be emitted: the app-layer disable path runs the
+  # tx loggers once before the flow is torn down, and the flow-end flush
+  # that would normally log it is skipped for dropped flows.
+  - filter:
+      count: 1
+      match:
+        event_type: ssh
+        pcap_cnt: 15
+        ssh.client.proto_version: "2.0"
+        ssh.client.software_version: "OpenSSH_for_Windows_7.7"
+        ssh.server.proto_version: "2.0"
+        ssh.server.software_version: "OpenSSH_7.4"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        alert.action: blocked
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: ssh
+        flow.action: drop
