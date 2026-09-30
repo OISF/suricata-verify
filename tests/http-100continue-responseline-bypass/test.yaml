@@ -1,5 +1,5 @@
 requires:
-  min-version: 9
+  min-version: 8.0.8
 
 # NIDS reproducer for the 100-continue response_line bypass:
 # the 100-continue rewind leaves the detection engine's per-tx state

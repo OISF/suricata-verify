@@ -1,5 +1,5 @@
 requires:
-  min-version: 9
+  min-version: 8.0.8
 
 # Reproducer for the 100-continue stat_code deviations on the standard
 # 100-continue flow (B, client 10.0.0.3): the parser rewinds the
