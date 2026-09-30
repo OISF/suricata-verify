@@ -1,0 +1,17 @@
+# Proof that firewall-mode app-layer rules are inert for IMAP.
+#
+# IMAP in Suricata is detection-only. src/app-layer-imap.c registers protocol
+# detection patterns but no parser, no transactions and no progress states.
+# An administrator can still write a firewall rule that hooks an IMAP
+# app-layer state and it loads without error, but it never matches: the
+# app-layer firewall never engages for an IMAP flow.
+
+# Packet level: accept the TCP session so packets flow and the flow reaches
+# app-layer classification. This isolates the app-layer behaviour under test.
+accept:hook tcp:all any any <> any any (flow:not_established; alert; sid:1000;)
+accept:hook tcp:all any any <> any any (flow:established; alert; sid:1001;)
+
+# Intended policy: drop every IMAP flow at the request hook. This rule loads
+# cleanly but is completely inert because IMAP has no app-layer transactions
+# for the hook to bind to, so the IMAP flow is never blocked.
+drop:flow imap:request_started any any -> any any (alert; sid:2000;)
