@@ -1,0 +1,80 @@
+environment: tap
+
+requires:
+  min-version: 9
+  command:
+    - grep
+    - jq
+    - ping
+    - python3
+  features:
+    - DPDK
+  script:
+    - python3 -c 'import os; assert len(os.sched_getaffinity(0)) >= 3'
+
+args:
+  - --dpdk
+  - --runmode workers
+
+# Jumbo frames need a 9000 byte MTU along the whole bridged path.
+before: |
+  set -e
+  ip netns exec client0 ip link set client mtu 9000
+  ip netns exec server0 ip link set server mtu 9000
+  for iface in client0 server0 br0; do
+    ip netns exec dut ip link set "${iface}" mtu 9000
+  done
+
+# 542 byte frames fit one mbuf, 1442 byte frames span 2 mbufs and 9014 byte
+# frames 9 mbufs.
+client: |
+  set -e
+  for size in 500 1400 8972; do
+    ip netns exec client0 ping -c 1 -W 2 -s ${size} -p deadbeef 10.200.0.1
+  done
+  # The last frames may still be in flight after ping exits.
+  for _ in $(seq 1 40); do
+    count=$(jq -cR 'fromjson? | select(.event_type == "alert")' ${OUTDIR}/eve.json | wc -l || true)
+    [ "${count}" -ge 4 ] && exit 0
+    sleep 0.25
+  done
+
+checks:
+  - shell:
+      args: grep -F 'Segmented mbufs detected' suricata.log
+  - shell:
+      args: grep -F 'segmented-mbufs is disabled' suricata.log
+  # The chained echo requests and replies of the disabled port.
+  - stats:
+      capture.dpdk.segmented_drops: 4
+      capture.dpdk.segmented_too_large: 0
+      capture.dpdk.no_mbufs: 0
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        in_iface: net_pcap0
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        in_iface: net_pcap0
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        in_iface: net_pcap0
+        alert.signature_id: 3
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        in_iface: net_pcap1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        in_iface: net_pcap1
+        alert.signature_id: 1

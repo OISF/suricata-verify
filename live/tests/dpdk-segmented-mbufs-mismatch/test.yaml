@@ -1,0 +1,25 @@
+# IPS: both copy interfaces must share the segmented-mbufs setting (fail)
+environment: inline
+
+requires:
+  min-version: 9
+  command:
+    - grep
+    - python3
+  features:
+    - DPDK
+  script:
+    - python3 -c 'import os; assert len(os.sched_getaffinity(0)) >= 3'
+
+args:
+  - --dpdk
+  - --runmode workers
+  - --include "${TESTDIR}/../dpdk-segmented-mbufs-ips/include.yaml"
+  - -S "${TESTDIR}/../dpdk-config/icmp.rules"
+  - --set dpdk.interfaces.1.segmented-mbufs=false
+
+exit-code: 1
+
+checks:
+  - shell:
+      args: grep -F 'segmented-mbufs settings of interfaces net_pcap0 and net_pcap1 are not equal' suricata.log
