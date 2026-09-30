@@ -1,0 +1,42 @@
+requires:
+  # the rule loading check accepts a detection pointer moving keyword as the
+  # preceding match of a relative pcre since 9.0.
+  min-version: 9
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
+
+  # without /R the pcre is anchored at the start of the payload, where there
+  # is no match, so this rule must stay quiet.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 5
+
+  # all rules of this test must load
+  - shell:
+      args: grep "needs preceding match" suricata.log | wc -l | xargs
+      expect: 0
