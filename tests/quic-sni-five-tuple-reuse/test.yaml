@@ -1,0 +1,30 @@
+requires:
+  min-version: 8.0.0
+
+pcap: input.pcap
+rules: test.rules
+
+args:
+  - --set app-layer.protocols.quic.detection-ports.dp=4434
+
+checks:
+  # Preserve the existing transaction for the first ClientHello.
+  - filter:
+      count: 1
+      match:
+        event_type: quic
+        quic.sni: Google.com
+
+  # Inspect the second Client Initial on the reused five-tuple.
+  - filter:
+      count: 1
+      match:
+        event_type: quic
+        quic.sni: www.dongbeirain.fun
+
+  # The SNI rule must alert on the second connection.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000001
