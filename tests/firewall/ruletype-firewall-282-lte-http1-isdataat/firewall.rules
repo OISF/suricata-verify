@@ -1,0 +1,6 @@
+# LTE rule using isdataat instead of content: the uri buffer must have data at
+# offset 5 ("/index" is 6 bytes), so the rule resolves and accepts at the
+# request_line packet.
+accept:hook http1:<response_complete $EXTERNAL_NET any -> $HOME_NET any (sid:9001;)
+
+accept:flow,alert http1:<request_line $HOME_NET any -> $EXTERNAL_NET any (http.uri; isdataat:5; sid:100;)

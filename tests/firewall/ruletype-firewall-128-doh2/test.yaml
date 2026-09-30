@@ -7,3 +7,11 @@ checks:
   - stats:
       ips.blocked: 0
       firewall.blocked: 0
+  # the LTE (<) stream rule logs the doh2 hook name it was registered at
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        alert.action: allowed
+        firewall.hook: doh2:stream:request_closed

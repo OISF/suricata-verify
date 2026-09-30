@@ -1,0 +1,11 @@
+# LTE (<hook) state matrix: smtp tc response_complete / multi-states
+# Two bare < rules at different states: the rule for the earlier state accepts.
+#
+# The packet:filter default policy accepts the session (see suricata.yaml).
+# The last rule is scaffolding: it covers the opposite direction so its
+# default policy does not drop the flow before this direction reaches S + 1.
+
+accept:hook smtp:<request_complete $HOME_NET any -> $EXTERNAL_NET any (sid:9001;)
+
+accept:flow,alert smtp:<response_data $EXTERNAL_NET any -> $HOME_NET any (sid:100;)
+accept:flow,alert smtp:<response_complete $EXTERNAL_NET any -> $HOME_NET any (sid:101;)

@@ -1,0 +1,65 @@
+requires:
+  min-version: 9
+
+args:
+  - --simulate-ips
+  - -k none
+
+pcap: input.pcap
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: drop
+      drop.reason: "firewall default app policy"
+- filter:
+    count: 8
+    match:
+      event_type: alert
+      alert.signature_id: 701
+      alert.action: allowed
+      firewall.hook: smtp:request_started
+      firewall.policy: accept:hook,alert
+- filter:
+    count: 8
+    match:
+      event_type: alert
+      alert.signature_id: 702
+      alert.action: allowed
+      firewall.hook: smtp:response_started
+      firewall.policy: accept:hook,alert
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 703
+      alert.action: allowed
+      firewall.hook: smtp:response_data
+      firewall.policy: accept:hook,alert
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 211
+      alert.action: allowed
+      firewall.hook: smtp:request_data
+      firewall.policy: accept:flow,alert
+      pcap_cnt: 24
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 212
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.action: drop
+      flow.alerted: true
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.action: accept
+      flow.alerted: true

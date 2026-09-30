@@ -1,0 +1,62 @@
+requires:
+  min-version: 9
+
+pcap: ../../issue-5466-alert-then-pass-02/icmp_and_ssh-s0.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- filter:
+    count: 324
+    match:
+      event_type: alert
+      alert.signature_id: 1000
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2000
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2002
+# session is per direction: the request side reaches it on its own
+# NewKeys, so the finished accept fires on the detect/log flush issued
+# by the dual-NewKeys NO_INSPECTION and again on the next wire packet
+# while the direction still sits in session
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 2003
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 3000
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 3002
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 3003
+- filter:
+    count: 0
+    match:
+      event_type: drop
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.pkts_toserver: 140
+      flow.pkts_toclient: 182
+      flow.state: "established"
+      flow.alerted: true
+      not-has-key: flow.action

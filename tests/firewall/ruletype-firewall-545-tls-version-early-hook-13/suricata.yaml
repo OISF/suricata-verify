@@ -1,0 +1,36 @@
+%YAML 1.1
+---
+
+vars:
+  address-groups:
+    HOME_NET: "[10.0.0.0/8]"
+    EXTERNAL_NET: "!$HOME_NET"
+
+stats:
+  enabled: yes
+  interval: 8
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - stats
+        - flow
+        - alert:
+            verdict: true
+        - drop:
+            alerts: yes
+            flows: all
+        - tls
+
+firewall:
+  policies:
+    packet:
+      filter: [ "accept:hook" ]
+    # accept the per-state defaults so the early hook rule gets to see the
+    # completed hello; the rule is what decides the flow
+    app:
+      tls:
+        default-policy: [ "accept:hook" ]

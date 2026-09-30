@@ -1,0 +1,38 @@
+# Mixed-protocol LTE (<hook) ruleset on an HTTP/1 flow. All rules share one
+# firewall ruleset: the HTTP/1 rules must be the only ones that can decide the
+# HTTP1 transaction, and the foreign-protocol LTE rules (tls, smtp, http2)
+# must be invisible to it.
+#
+# The foreign rules carry the same numeric hook as an HTTP1 state and raw
+# content bytes that are present in the HTTP request ("/index"), so a
+# protocol-blind MPM would select them. They must add no alert, no drop and no
+# pending hook coverage.
+#
+# HTTP1 rule sequence:
+# - sid:100 matches the URI at request_line (hook 1) and accepts the hook
+#   (accept:hook, not accept:flow, so the later state default can still fire);
+# - sid:101 at request_body (hook 3) fails its http.request_body keyword, so
+#   the HTTP1 request_body per-state default policy (drop:flow,alert) drops
+#   the flow.
+#
+# The opposite direction carries one scaffolding accept:hook <last-state rule
+# so its default policy does not drop the flow before toserver reaches the
+# request_body default.
+accept:hook http1:<response_complete $EXTERNAL_NET any -> $HOME_NET any (sid:9001;)
+
+# HTTP1: matching accept at request_line
+accept:hook,alert http1:<request_line $HOME_NET any -> $EXTERNAL_NET any (http.uri; content:"/index"; sid:100;)
+
+# HTTP1: failing rule at a later state; its per-state default must still fire
+accept:flow,alert http1:<request_body $HOME_NET any -> $EXTERNAL_NET any (http.request_body; content:"NEVER-MARKER"; sid:101;)
+
+# Foreign tls LTE rules: hook 1 (request_line) with raw request bytes, and
+# hook 2 out of scope.
+accept:flow,alert tls:<client_hello $HOME_NET any -> $EXTERNAL_NET any (content:"/index"; sid:200;)
+accept:flow,alert tls:<client_cert 198.51.100.0/24 any -> 198.51.100.0/24 any (content:"/index"; sid:201;)
+
+# Foreign smtp LTE rule: hook 1 (request_line)
+accept:flow,alert smtp:<request_data $HOME_NET any -> $EXTERNAL_NET any (content:"/index"; sid:202;)
+
+# Foreign http2 stream LTE rule: hook 1 (request_line)
+accept:flow,alert http2:stream:<request_headers any any -> any any (content:"/index"; sid:203;)

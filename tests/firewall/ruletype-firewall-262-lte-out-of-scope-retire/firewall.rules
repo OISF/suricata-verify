@@ -1,0 +1,13 @@
+# An out of scope LTE rule that fails its header check must not remove the
+# coverage contributed by the in-scope pending rules when it retires.
+#
+# sid:6 is a pending LTE rule for request_body (streaming no match at that
+# hook); sid:98 is the same hook but out of scope; sid:99 is a failing LTE
+# rule for the earlier request_headers, covered by sid:6 while it resolves;
+# sid:100 matches at request_body and accepts the flow.
+accept:hook http1:<response_complete $EXTERNAL_NET any -> $HOME_NET any (sid:9001;)
+
+accept:flow,alert http1:<request_body $HOME_NET any -> $EXTERNAL_NET any (http.request_body; content:"NEVER-MARKER"; sid:6;)
+accept:flow,alert http1:<request_body 198.51.100.0/24 any -> 198.51.100.0/24 any (sid:98;)
+accept:flow,alert http1:<request_headers $HOME_NET any -> $EXTERNAL_NET any (http.host; content:"nope.example"; sid:99;)
+accept:flow,alert http1:request_body $HOME_NET any -> $EXTERNAL_NET any (http.request_body; content:"BODY-MARKER"; sid:100;)

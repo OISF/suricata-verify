@@ -1,0 +1,3 @@
+# pre-phase state name: must fail to load; the error is fatal under
+# --init-errors-fatal, which is how the test framework runs suricata
+accept:hook tls:client_hello_done $HOME_NET any -> $EXTERNAL_NET any (alert; sid:401;)

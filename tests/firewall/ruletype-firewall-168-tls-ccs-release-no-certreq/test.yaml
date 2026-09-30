@@ -1,0 +1,47 @@
+# A flight without CertificateRequest: the tls event must wait for the
+# client-cert question to be settled and the change cipher spec record
+# is what settles it - the event publishes at that packet (pcap_cnt 8),
+# mid-flow, not at close, with the server content only. A
+# ServerKeyExchange (a flight position BEFORE the CertificateRequest
+# slot) must not release the log: content is final from packet 6 and
+# still waited two packets. Zero anomalies, no drops. See
+# craft-pcap.py; input.pcap written by it.
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: tls
+      tls.subject: CN=servertest
+      pcap_cnt: 8
+- filter:
+    count: 0
+    match:
+      event_type: tls
+      tls.client.subject: CN=clienttest
+- filter:
+    count: 0
+    match:
+      event_type: anomaly
+      anomaly.app_proto: tls
+- filter:
+    count: 0
+    match:
+      event_type: flow
+      flow.action: drop
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.firewall.accepted: 9
+      stats.firewall.blocked: 0
+      stats.firewall.drop_reason.rules: 0
+      stats.firewall.drop_reason.default_app_policy: 0

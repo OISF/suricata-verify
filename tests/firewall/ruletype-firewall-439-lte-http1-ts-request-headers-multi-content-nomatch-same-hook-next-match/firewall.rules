@@ -1,0 +1,12 @@
+# LTE (<hook) state matrix: http1 ts request_headers / multi-content-nomatch-same-hook-next-match
+# Two failing keyword rules for S and a matching non-LTE rule for S + 1: the first S rule resolves and retires from the coverage, the second applies the default policy for S, and the later match cannot rescue the flow.
+#
+# The packet:filter default policy accepts the session (see suricata.yaml).
+# The last rule is scaffolding: it covers the opposite direction so its
+# default policy does not drop the flow before this direction reaches S + 1.
+
+accept:hook http1:<response_complete $EXTERNAL_NET any -> $HOME_NET any (sid:9001;)
+
+accept:flow,alert http1:<request_headers $HOME_NET any -> $EXTERNAL_NET any (http.host; content:"nope.example"; sid:100;)
+accept:flow,alert http1:<request_headers $HOME_NET any -> $EXTERNAL_NET any (http.host; content:"nope.example"; sid:101;)
+accept:flow,alert http1:request_body $HOME_NET any -> $EXTERNAL_NET any (http.request_body; content:"BODY-MARKER"; sid:102;)

@@ -1,0 +1,3 @@
+# <hook at the protocol's first state: rejected at load. There are no prior
+# states to auto-accept, so the form is meaningless.
+accept:flow,alert http1:<request_started $HOME_NET any -> $EXTERNAL_NET any (http.uri; content:"/index"; sid:100;)

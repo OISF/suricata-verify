@@ -1,0 +1,17 @@
+# The strict migrated chain: a started accept, a content SNI rule at
+# the hello state in the migrated (accept:hook) form, and accepts at
+# the remaining states - no plain accept at client_hello. The
+# in-flight fragments of a split ClientHello are decided at
+# client_hello with no data to match and fall on the implicit default
+# policy (drop:flow): the first fragment is dropped, the flow dies
+# and the SNI is never seen. See tls-state-migration.rst.
+accept:hook tls:client_started $HOME_NET any -> $EXTERNAL_NET any (alert; sid:1620; msg:"client_started state evaluated";)
+accept:hook tls:client_hello $HOME_NET any -> $EXTERNAL_NET any (tls.sni; content:"example.com"; alert; sid:1621; msg:"sni check, migrated accept:hook form";)
+accept:hook tls:client_cert $HOME_NET any -> $EXTERNAL_NET any (sid:1622;)
+accept:hook tls:client_data $HOME_NET any -> $EXTERNAL_NET any (sid:1623;)
+accept:hook tls:client_finished $HOME_NET any -> $EXTERNAL_NET any (sid:1624;)
+accept:hook tls:server_started $EXTERNAL_NET any -> $HOME_NET any (sid:1625;)
+accept:hook tls:server_hello $EXTERNAL_NET any -> $HOME_NET any (sid:1626;)
+accept:hook tls:server_cert $EXTERNAL_NET any -> $HOME_NET any (sid:1627;)
+accept:hook tls:server_data $EXTERNAL_NET any -> $HOME_NET any (sid:1628;)
+accept:hook tls:server_finished $EXTERNAL_NET any -> $HOME_NET any (sid:1629;)

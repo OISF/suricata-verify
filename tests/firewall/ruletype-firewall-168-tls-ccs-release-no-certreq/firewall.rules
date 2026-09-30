@@ -1,0 +1,15 @@
+# A flight that never requests a client certificate: the change cipher
+# spec record is what settles the logger gate's client-cert question
+# (the CCS alternative of the release clauses), so the tls event
+# publishes mid-flow at the CCS packet, not at close. No client
+# messages past the hello, no anomalies, no drops.
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1688; msg:"session setup";)
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1689; msg:"established";)
+
+accept:hook tls:client_started $HOME_NET any -> $EXTERNAL_NET any (alert; sid:1680; msg:"client_started";)
+accept:hook tls:client_hello $HOME_NET any -> $EXTERNAL_NET any (alert; sid:1681; msg:"client_hello";)
+accept:hook tls:client_cert $HOME_NET any -> $EXTERNAL_NET any (alert; sid:1686; msg:"client_cert entered by the hello hand-over";)
+accept:hook tls:server_started $EXTERNAL_NET any -> $HOME_NET any (alert; sid:1682; msg:"server_started";)
+accept:hook tls:server_hello $EXTERNAL_NET any -> $HOME_NET any (alert; sid:1683; msg:"server_hello";)
+accept:hook tls:server_cert $HOME_NET any <> $EXTERNAL_NET any (alert; sid:1684; msg:"server_cert entered";)
+accept:hook tls:server_data $EXTERNAL_NET any -> $HOME_NET any (alert; sid:1685; msg:"server_data established";)

@@ -1,0 +1,16 @@
+# Rule-load rejection: fatal under --init-errors-fatal (how the framework
+# runs suricata), checked with -T and no pcap.
+requires:
+  min-version: 9
+
+pcap: false
+
+args:
+  - -T
+
+exit-code: 1
+
+checks:
+- shell:
+    args: grep -c 'cannot be used at the first state' stderr
+    expect: 1

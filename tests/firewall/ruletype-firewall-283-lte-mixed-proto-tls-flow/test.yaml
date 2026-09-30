@@ -1,0 +1,77 @@
+requires:
+  min-version: 9
+args:
+- --simulate-ips
+- -k none
+pcap: ../../tls/tls-client-hello-frag-01/dump_mtu300.pcap
+checks:
+# TLS: the SNI accept at client_hello (pkt 6)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 100
+      pcap_cnt: 6
+      alert.action: allowed
+      firewall.hook: tls:client_hello
+      firewall.policy: accept:hook,alert
+# TLS: the failing client_cert rule falls to the per-state default at pkt 22
+- filter:
+    count: 1
+    match:
+      event_type: drop
+      drop.reason: firewall default app policy
+      pcap_cnt: 22
+      direction: to_server
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2201001
+      pcap_cnt: 22
+      alert.action: blocked
+      firewall.hook: tls:client_cert
+      firewall.policy: drop:flow,alert
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.action: drop
+      flow.alerted: true
+# the TLS failing rule itself stays silent
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 101
+# no foreign-protocol rule fires or drops
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 200
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 201
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 202
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 203
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      drop.reason: firewall rules
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 9001

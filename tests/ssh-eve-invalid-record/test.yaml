@@ -1,0 +1,21 @@
+requires:
+  min-version: 9
+
+args:
+ - -k none
+
+checks:
+  # Both banners parse; the server direction then sends a record header
+  # with pkt_len 0 and fails unrecoverably (invalid_record, frozen in
+  # kex).
+  - filter:
+      count: 1
+      match:
+        event_type: ssh
+        ssh.client.proto_version: "2.0"
+        ssh.server.proto_version: "2.0"
+        ssh.server.error: "invalid_record"
+        ssh.server.state: "kex"
+        not-has-key:
+          - ssh.client.error
+          - ssh.client.state

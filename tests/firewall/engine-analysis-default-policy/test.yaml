@@ -13,12 +13,25 @@ checks:
       match:
         "tables.packet:filter.policy": "accept:flow"
 
+  # The tls key follows the branch's phase-state rename on 9.x.
   - filter:
+      requires:
+        lt-version: 9
       filename: firewall.json
       count: 1
       match:
         "tables.http.app:http:request_line.policy": "accept:flow"
         "tables.tls.app:tls:client_hello_done.policy": "accept:flow"
+        "tables.dns.app:dns:request-complete.policy": "accept:flow"
+
+  - filter:
+      requires:
+        min-version: 9
+      filename: firewall.json
+      count: 1
+      match:
+        "tables.http.app:http:request_line.policy": "accept:flow"
+        "tables.tls.app:tls:client_hello.policy": "accept:flow"
         "tables.dns.app:dns:request-complete.policy": "accept:flow"
 
   - filter:

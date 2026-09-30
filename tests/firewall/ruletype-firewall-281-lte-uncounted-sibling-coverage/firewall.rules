@@ -1,0 +1,8 @@
+# An LTE candidate excluded from the coverage (header mismatch) must not be
+# treated as carrying its own count: while the in-scope LTE rule is pending,
+# the uncounted sibling must not decide the hook.
+accept:hook http1:<response_complete $EXTERNAL_NET any -> $HOME_NET any (sid:9001;)
+
+accept:hook,alert http1:request_line $HOME_NET any -> $EXTERNAL_NET any (flowbits:set,S; sid:100;)
+accept:flow,alert http1:<request_headers $HOME_NET any -> $EXTERNAL_NET any (http.host; content:"www.example.com"; sid:101;)
+accept:flow,alert http1:<request_headers 198.51.100.0/24 any -> 198.51.100.0/24 any (flowbits:isset,S; http.host; content:"www.example.com"; sid:109;)

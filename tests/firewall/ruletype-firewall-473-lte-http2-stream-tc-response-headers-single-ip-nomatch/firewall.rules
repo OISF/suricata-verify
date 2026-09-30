@@ -1,0 +1,13 @@
+# LTE (<hook) state matrix: http2:stream tc response_headers / single-ip-nomatch
+# Out of scope < rule: it provides no pending coverage, so the default policy for S is applied.
+#
+# The packet:filter default policy accepts the session (see suricata.yaml).
+# The last rules are scaffolding: they cover the directions and the
+# untested http2 tx type so their default policies do not drop the flow
+# before the tested state is reached.
+
+accept:hook http2:stream:<request_complete any any <> any any (sid:9001;)
+accept:hook http2:global:<request_complete any any -> any any (sid:9002;)
+accept:hook http2:global:<response_complete any any -> any any (sid:9003;)
+
+accept:flow,alert http2:stream:<response_headers 198.51.100.0/24 any -> 198.51.100.0/24 any (sid:100;)

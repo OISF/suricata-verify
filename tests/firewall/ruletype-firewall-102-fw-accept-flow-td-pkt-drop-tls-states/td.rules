@@ -1,0 +1,2 @@
+# drop the first TLS data that comes in
+drop:flow tcp-pkt any any -> any any (flow:to_server; content:"|16 03 01|"; depth:3; sid:666;)

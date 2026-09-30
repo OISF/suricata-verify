@@ -1,0 +1,29 @@
+# Per-buffer validation of the remaining request-header (HEADERS)
+# app_stream registrations (http.header, http.cookie, http.host.raw,
+# http.user_agent, http.header_names, http.start, toserver). The request line
+# plus one header complete in the first segment, so the HTP progress moves to
+# request_headers before the remaining header lines are parsed; the
+# discriminating headers arrive in the second segment. On the first segment
+# the header buffers do not yet contain them - the header buffers populate
+# line by line during the HEADERS progress - so the no-match there is
+# provisional and must not be converted to CANT_MATCH.
+#
+# A flows (49190-49195) carry all six marker headers and are accepted; each B
+# flow (49196-49201) matches no keyword and is dropped once by the engines'
+# own eof CANT_MATCH.
+#
+# Expected: exactly 6 `firewall default app policy` drops (B1-B6).
+#
+# accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+# accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+
+# allow session setup
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+
+accept:flow,alert http1:<request_headers $HOME_NET any -> $EXTERNAL_NET any (http.header; content:"X-HdrA: a1"; sid:211;)
+accept:flow,alert http1:<request_headers $HOME_NET any -> $EXTERNAL_NET any (http.cookie; content:"sca=cookieA"; sid:212;)
+accept:flow,alert http1:<request_headers $HOME_NET any -> $EXTERNAL_NET any (http.host.raw; content:"hostA.example.com"; sid:213;)
+accept:flow,alert http1:<request_headers $HOME_NET any -> $EXTERNAL_NET any (http.user_agent; content:"AgentA/1.0"; sid:214;)
+accept:flow,alert http1:<request_headers $HOME_NET any -> $EXTERNAL_NET any (http.header_names; content:"X-HdrB"; sid:215;)
+accept:flow,alert http1:<request_headers $HOME_NET any -> $EXTERNAL_NET any (http.start; content:"X-StartA: s1"; sid:216;)

@@ -1,0 +1,50 @@
+# A TLS session whose first records are alerts (no client hello is ever
+# sent) never leaves the started states, so no tls state rule can fire:
+# state rules are only evaluated when the parser's progress moves
+# through a state, and the hello record is what moves the progress out
+# of the started states. This test pins that:
+# - the client_started rule (sid 1002, the rename of the old
+#   client_in_progress) never fires: it is the state the flow is in,
+#   but its decision point only arrives when a hello record is seen;
+# - the client_hello rule (sid 1001) never fires: the phase state is
+#   never entered;
+# - the flow ends up dropped by the implicit default app policy at
+#   teardown, with all 7 packets accepted in transit (no in-transit
+#   drops: the started states carry no decision).
+# On a session that does send a client hello the client_started rule
+# fires at the hello transition (see ruletype-firewall-04).
+# The pcap is crafted by craft-pcap.py (see that file).
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 1002
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 1001
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.action: drop
+      app_proto: tls
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.firewall.accepted: 7
+      stats.firewall.blocked: 0
+      stats.firewall.drop_reason.rules: 0
+      stats.firewall.drop_reason.default_app_policy: 0
