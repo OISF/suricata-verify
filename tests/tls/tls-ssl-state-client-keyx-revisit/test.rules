@@ -1,0 +1,5 @@
+# ssl_state reads live handshake state: the engine must be revisited as the
+# transaction advances, so the client_keyx state set by the ClientKeyExchange
+# is seen even though the keyword was already evaluated (and missed) at the
+# client_hello state.
+alert tls any any -> any any (msg:"ssl_state ckx"; ssl_state:client_keyx; sid:1;)
