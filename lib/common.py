@@ -33,6 +33,39 @@ def check_required_commands(requires, unsatisfied_error=UnsatisfiedRequirementEr
             raise unsatisfied_error("requires command {}".format(command))
 
 
+def check_skip(skip, suricata_config=None, win32=False):
+    """Check boolean or conditional test-level skips for either runner."""
+    if isinstance(skip, bool):
+        if skip:
+            raise UnsatisfiedRequirementError("skipped by default")
+        return
+    if not isinstance(skip, list) or any(not isinstance(item, dict) for item in skip):
+        raise ValueError("skip must be a boolean or an array of mappings")
+
+    for item in skip:
+        if "uid" in item:
+            if win32:
+                raise UnsatisfiedRequirementError("uid based skip not supported on Windows")
+            if os.getuid() == item["uid"]:
+                raise UnsatisfiedRequirementError(
+                    item.get("msg", "not for uid %d" % item["uid"])
+                )
+
+        if "feature" in item:
+            if suricata_config.has_feature(item["feature"]):
+                raise UnsatisfiedRequirementError(
+                    item.get("msg", "not for feature %s" % item["feature"])
+                )
+
+        if "config" in item:
+            for pattern, need_val in item["config"].items():
+                for key, val in suricata_config.config.items():
+                    if re.match(pattern, key) and str(need_val) == str(val):
+                        raise UnsatisfiedRequirementError(
+                            "not for %s = %s" % (key, need_val)
+                        )
+
+
 def check_requires(
     requires,
     suricata_config,

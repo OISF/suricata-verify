@@ -53,6 +53,7 @@ from lib.common import (
     StatsCheck,
     UnsatisfiedRequirementError,
     check_requires as check_common_requires,
+    check_skip as check_common_skip,
     compare_values,
 )
 
@@ -466,40 +467,7 @@ class TestRunner:
                 raise UnsatisfiedRequirementError("requires shorter path for unix socket")
 
     def check_skip(self):
-        if not "skip" in self.config:
-            return
-        if isinstance(self.config["skip"], bool):
-            if self.config["skip"]:
-                raise UnsatisfiedRequirementError("skipped by default")
-            return
-        for skip in self.config["skip"]:
-
-            if "uid" in skip:
-                if WIN32:
-                    raise UnsatisfiedRequirementError("uid based skip not supported on Windows")
-                if os.getuid() == skip["uid"]:
-                    if "msg" in skip:
-                        msg = skip["msg"]
-                    else:
-                        msg = "not for uid %d" % (skip["uid"])
-                    raise UnsatisfiedRequirementError(msg)
-
-            if "feature" in skip:
-                if self.suricata_config.has_feature(skip["feature"]):
-                    if "msg" in skip:
-                        msg = skip["msg"]
-                    else:
-                        msg = "not for feature %s" % (skip["feature"])
-                    raise UnsatisfiedRequirementError(msg)
-
-            if "config" in skip:
-                for pattern, need_val in skip["config"].items():
-                    for key, val in self.suricata_config.config.items():
-                        if re.match(pattern, key):
-                            if str(need_val) == str(val):
-                                raise UnsatisfiedRequirementError(
-                                    "not for %s = %s" % (
-                                        key, need_val))
+        check_common_skip(self.config.get("skip", False), self.suricata_config, WIN32)
 
     def check_requires(self):
         requires = self.config.get("requires", {})
