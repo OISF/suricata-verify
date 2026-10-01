@@ -1,0 +1,18 @@
+# Rule-load rejection: the '<' lower bound hook form is firewall only, so a
+# threat detection rule using it fails to load. Fatal under
+# --init-errors-fatal (how the framework runs suricata), checked with -T and
+# no pcap.
+requires:
+  min-version: 9
+
+pcap: false
+
+args:
+  - -T
+
+exit-code: 1
+
+checks:
+- shell:
+    args: grep -c "only allowed for firewall rules" stderr
+    expect: 1
