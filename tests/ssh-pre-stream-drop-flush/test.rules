@@ -1,0 +1,11 @@
+# Mark the server banner so the pre-stream drop below can be triggered on a
+# later packet that carries no app-layer data: the flow is then dropped before
+# the stream engine runs, which is the case the drop-transition flush has to
+# cover.
+alert ssh any any -> any any (msg:"ssh server banner seen"; ssh.software; content:"OpenSSH_7.4"; flowbits:set,ssh_srv_banner; flowbits:noalert; sid:1; rev:1;)
+
+# Drop the flow (flow scope) at the pre-stream hook on the first server-to-client
+# ACK after the server banner. This is before either side sends NewKeys, and the
+# drop lands on a packet without an app-layer update; the stream engine is not
+# reached, so the app-layer disable path does not run.
+drop:flow tcp:pre_stream any 22 -> any any (msg:"drop ssh flow before stream processing"; flowbits:isset,ssh_srv_banner; dsize:0; sid:2; rev:1;)

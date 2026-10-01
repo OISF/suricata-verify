@@ -1,26 +1,28 @@
 requires:
   min-version: 9
 
+pcap: ../ssh-ips-drop-flush/input.pcap
+
 args:
+  - --simulate-ips
   - -k none
 
 checks:
-  # The flow is dropped in IPS mode before either side sends NewKeys. The
-  # ssh record must still be emitted: the drop schedules the pending tx
-  # loggers once, so the dropping packet's output stage runs them (the
-  # app-layer disable that follows raises the same flush, and the flow-end
-  # flush that would normally log it is skipped for dropped flows).
+  # The flow is dropped at the pre-stream hook after the banners were parsed
+  # but before either side sends NewKeys. The ssh record must still be emitted:
+  # the drop schedules the pending tx loggers once, and the output stage of the
+  # dropping packet runs them.
   - filter:
       count: 1
       match:
         event_type: ssh
-        pcap_cnt: 14
         ssh.client.proto_version: "2.0"
         ssh.client.software_version: "OpenSSH_for_Windows_7.7"
         ssh.server.proto_version: "2.0"
         ssh.server.software_version: "OpenSSH_7.4"
+  # the pre-stream rule matches on the first two bare ACKs after the banner
   - filter:
-      count: 1
+      count: 2
       match:
         event_type: alert
         alert.signature_id: 2
