@@ -1,0 +1,7 @@
+# tls.sni matches once the hello (and its SNI extension) is decoded. The
+# ssl_state engine is run-always (a stateful keyword): revisiting it at the
+# starting progress must not lower the tx's detection progress and re-enable
+# the already completed SNI prefilter, or the SNI alert repeats on every later
+# app-layer update.
+alert tls any any -> any any (msg:"tls.sni google"; tls.sni; content:"google"; sid:1;)
+alert tls any any -> any any (msg:"ssl_state client_hello"; ssl_state:client_hello; sid:2;)
