@@ -1,0 +1,26 @@
+# The run-always ssl_state engine must not lower the tx detection progress
+# when it is revisited at the starting progress: doing so re-enables the SNI
+# prefilter after the hello, and the SNI match (deliberately not stored after
+# the hello) repeats the alert on every later app-layer update.
+#
+# The pcap is a real-world TLS handshake with an SNI and records after the
+# hello.
+requires:
+  min-version: 9
+
+pcap: ../tls-client-hello-frag-01/dump_mtu300.pcap
+
+args:
+  - -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2
