@@ -1,0 +1,2 @@
+alert ssh any any -> any any (msg:"banner"; ssh.software; content:"OpenSSH_7.4"; flowbits:set,ssh_srv_banner; sid:1; rev:1;)
+alert tcp any any -> any any (msg:"bypass"; flowbits:isset,ssh_srv_banner; dsize:0; bypass; sid:2; rev:1;)
