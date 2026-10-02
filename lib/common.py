@@ -226,6 +226,9 @@ def find_value(name, obj, comparison_operators=None):
         if part in operator_suffixes:
             break
 
+        if "__dot__" in part:
+            part = part.replace("__dot__", ".")
+
         index = None
         m = re.match(r"^(.*)\[(\d+)\]$", part)
         if m:
