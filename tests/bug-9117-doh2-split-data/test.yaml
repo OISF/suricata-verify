@@ -1,0 +1,44 @@
+# Description
+
+# DNS over HTTP/2 where, in both directions, the DNS message is sent in a
+# DATA frame without END_STREAM, followed by an empty DATA frame with
+# END_STREAM. The dns keywords must match the query and the answer.
+
+# The http2 rules put HTTP/2 prefilter engines next to the dns ones in the
+# rule group.
+
+# https://redmine.openinfosecfoundation.org/issues/9117
+
+
+requires:
+  min-version: 8.0.8
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: doh2
+  # On 8.0.x, to-client HTTP/2 header keywords do not match on this traffic.
+  - filter:
+      requires:
+        min-version: 9
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
