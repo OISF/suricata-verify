@@ -1,0 +1,16 @@
+requires:
+  min-version: 9
+
+pcap: ../decoder-tunnels-01/tunnels.pcap
+
+args:
+  - --set decoder.vxlan.enabled=true
+  - --set multi-detect.config-path=${TEST_DIR}
+  - --set multi-detect.1.default-rule-path=${TEST_DIR}
+
+exit-code: 1
+
+checks:
+  - shell:
+      args: cat stdout stderr | grep -c SignalHandlerUnexpected | xargs
+      expect: 0

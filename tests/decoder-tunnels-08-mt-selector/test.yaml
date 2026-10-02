@@ -1,0 +1,38 @@
+requires:
+  min-version: 9
+
+pcap: ../decoder-tunnels-01/tunnels.pcap
+
+args:
+  - --set decoder.vxlan.enabled=true
+  - --set multi-detect.config-path=${TEST_DIR}
+  - --set multi-detect.1.default-rule-path=${TEST_DIR}
+  - --set multi-detect.2.default-rule-path=${TEST_DIR}
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 100
+        tenant_id: 1
+        tunnel_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 200
+        tenant_id: 2
+        tunnel_id: 2
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        proto: ICMP
+        tenant_id: 2
+        tunnel_id: 2

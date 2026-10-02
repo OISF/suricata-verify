@@ -1,0 +1,27 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert
+
+multi-detect:
+  enabled: yes
+  selector: tunnel
+  loaders: 1
+
+  tenants:
+  - id: 1
+    yaml: a.yaml
+  - id: 2
+    yaml: b.yaml
+
+  mappings:
+  - tunnel-id: 1
+    tenant-id: 1
+  - tunnel-id: 2
+    tenant-id: 2
