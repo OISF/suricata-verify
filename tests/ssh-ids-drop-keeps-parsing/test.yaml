@@ -1,0 +1,29 @@
+# A drop rule in IDS mode does not end parsing: the drop must not consume
+# the one-shot ssh record with a success record. The condition stays
+# failure-first and the record is emitted by the flow-end flush, so it
+# carries both banners.
+#
+# The pcap is crafted by craft-pcap.py (see that file): the client banner is
+# parsed and released for inspection before the server banner arrives.
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: ssh
+        ssh.client.proto_version: "2.0"
+        ssh.client.software_version: "OpenSSH_for_Windows_7.7"
+        ssh.server.proto_version: "2.0"
+        ssh.server.software_version: "OpenSSH_7.4"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1

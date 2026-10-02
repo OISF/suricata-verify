@@ -1,0 +1,39 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - -k none
+
+checks:
+  # Both banners parse, then the drop rule matches the server banner: the
+  # flow action is set after the readiness the old success condition used.
+  # In IDS mode the drop does not stop parsing, so the later invalid record
+  # must still be logged - the drop must not consume the one-shot tx log
+  # with the success record.
+  - filter:
+      count: 1
+      match:
+        event_type: ssh
+        ssh.client.proto_version: "2.0"
+        ssh.server.proto_version: "2.0"
+        ssh.server.error: "invalid_record"
+        ssh.server.state: "kex"
+        not-has-key:
+          - ssh.client.error
+          - ssh.client.state
+  # no success record was emitted before the failure
+  - filter:
+      count: 0
+      match:
+        event_type: ssh
+        ssh.server.software_version: "TestServer_1.0"
+        not-has-key:
+          - ssh.server.error
+          - ssh.server.state
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
