@@ -1,0 +1,16 @@
+# Same three request bodies as transform_result/file-data: two fail to
+# decode, one decodes to "decoded-content". from_base64 is followed by
+# to_uppercase, so the can-fail transform is not the last in the chain; the
+# error flag it sets must still reach transform_result.
+
+alert http any any -> any any (msg:"chain must_error"; \
+    file.data; from_base64; to_uppercase; transform_result: must_error; sid:1;)
+alert http any any -> any any (msg:"chain must_succeed decoded content"; \
+    file.data; from_base64; to_uppercase; transform_result: must_succeed; \
+    content:"DECODED-CONTENT"; sid:2;)
+alert http any any -> any any (msg:"chain must_succeed undecoded content"; \
+    file.data; from_base64; to_uppercase; transform_result: must_succeed; \
+    content:"NOT-BASE64"; sid:3;)
+alert http any any -> any any (msg:"chain error_or"; \
+    file.data; from_base64; to_uppercase; transform_result: error_or; \
+    content:"DECODED-CONTENT"; sid:4;)

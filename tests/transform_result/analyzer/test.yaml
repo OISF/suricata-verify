@@ -1,0 +1,41 @@
+requires:
+  min-version: 9
+  pcap: false
+
+args:
+  - --engine-analysis
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 1
+      engines[0].name: "http_uri"
+      engines[0].transforms[0].name: "from_base64"
+      engines[0].matches[0].name: "transform_result"
+      engines[0].matches[0].transform_result.mode: "must_succeed"
+      engines[0].matches[1].name: "content"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 2
+      engines[0].matches[0].name: "transform_result"
+      engines[0].matches[0].transform_result.mode: "must_error"
+      engines[0].matches.__len: 1
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 3
+      engines[0].matches[0].name: "transform_result"
+      engines[0].matches[0].transform_result.mode: "error_or"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 4
+      engines[0].name: "http_referer"
+      engines[0].matches[0].name: "absent"
+      engines[0].matches[0].absent.mode: "only"
