@@ -1,0 +1,82 @@
+# A TLS session whose ClientHello is truncated (too short for the
+# random field) and whose server certificate carries a garbage DER
+# body: both messages fail to decode. The hello phase is entered when
+# the message starts, so the failed ClientHello leaves the client
+# track in client_hello (no hand-over to client_cert: the hello data
+# never existed). The valid ServerHello completes and hands the server
+# track to server_cert before any certificate byte; the malformed
+# certificate message then re-evaluates server_cert without the
+# advance to data being possible (the certificate phase data does not
+# exist for a message that failed to parse). Pins:
+# - the client_hello rule (sid 1520) fires: the failed hello is in
+#   the hello phase, where its accept decides (no drop);
+# - the server_hello rule (sid 1521) fires once, in the walk-over of
+#   the completing ServerHello record (ts server_cert);
+# - the server_cert rule (sid 1522) fires on the ServerHello record
+#   and on the malformed certificate record;
+# - the decode failures are visible in the anomaly events
+#   (HANDSHAKE_INVALID_LENGTH on the truncated hello,
+#   INVALID_CERTIFICATE on the garbage certificate).
+# The pcap is crafted by craft-pcap.py (see that file).
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1520
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1521
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 1522
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1525
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1526
+- filter:
+    count: 1
+    match:
+      event_type: anomaly
+      anomaly.event: HANDSHAKE_INVALID_LENGTH
+      anomaly.app_proto: tls
+- filter:
+    count: 1
+    match:
+      event_type: anomaly
+      anomaly.event: INVALID_CERTIFICATE
+      anomaly.app_proto: tls
+# no drop at all: the decode failures suppress the phase advance of
+# their own messages only, they are not an app-layer error
+- filter:
+    count: 0
+    match:
+      event_type: flow
+      flow.action: drop
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.firewall.accepted: 7
+      stats.firewall.blocked: 0
+      stats.firewall.drop_reason.rules: 0
+      stats.firewall.drop_reason.default_app_policy: 0

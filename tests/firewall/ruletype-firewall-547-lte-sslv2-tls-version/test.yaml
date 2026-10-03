@@ -1,0 +1,44 @@
+# An SSLv2-compatible ClientHello carries its version in the hello body (the
+# SSLv2 record header has no version field). tls.version must match it: the
+# accept rule at tls:client_hello is gated on tls.version:0x0300, so before the
+# fix - the keyword required a decoded hello, which only the TLS hello decoder
+# set - the rule never matched and the flow fell to the default app policy drop.
+#
+# The pcap is crafted by craft-pcap.py (see that file): SYN, SYN/ACK, v2 client
+# hello (version 0x0300), v2 server hello, FIN.
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 5471
+      alert.action: allowed
+      firewall.hook: tls:client_hello
+      pcap_cnt: 3
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      drop.reason: firewall default app policy
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      app_proto: tls
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.app_layer.flow.tls: 1
+      stats.firewall.accepted: 5
+      stats.firewall.blocked: 0
+      stats.firewall.drop_reason.default_app_policy: 0

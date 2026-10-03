@@ -1,5 +1,9 @@
+# the ssh eve object is logged mid-flow (8.x) vs at the flow-end
+# flush (9.0, failure-only log condition): 9.0 expectations live in
+# the -9 sibling.
 requires:
   min-version: 6
+  lt-version: 9
 
 args:
 - -k none

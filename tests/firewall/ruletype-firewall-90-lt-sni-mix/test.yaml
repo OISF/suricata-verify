@@ -1,7 +1,10 @@
 pcap: ../../tls/tls-client-hello-frag-01/dump_mtu300.pcap
 
+# old-name TLS state variant (renamed states need 9.0, see the -tls-states copy)
 requires:
   min-version: 8.0.6
+  # renamed TLS state hooks need 9.0; this variant covers the 8.0.x line
+  lt-version: 9
 
 args:
   - --simulate-ips

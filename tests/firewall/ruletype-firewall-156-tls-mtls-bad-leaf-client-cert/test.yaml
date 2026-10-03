@@ -1,0 +1,101 @@
+# An mTLS session whose client Certificate message carries a garbage
+# leaf (not an ASN.1 SEQUENCE) followed by a valid certificate, sent
+# after a CertificateRequest (which sets the need-client-cert flag)
+# and followed by an empty ClientKeyExchange (pcap_cnt 8). No server
+# certificate is sent. The bad leaf is skipped without aborting the
+# message; the incomplete client certificate data must not establish
+# the data phase:
+# - one INVALID_CERTIFICATE decoder event for the bad leaf
+#   (pcap_cnt 7);
+# - the client_cert phase is entered by the ClientHello hand-over
+#   before any client certificate byte (sid 1562) and re-evaluated on
+#   the certificate and ClientKeyExchange records;
+# - the incomplete-data condition survives the ClientKeyExchange: the
+#   data phase is never established from the client certificate data
+#   (sid 1563 never fires) and the client track stays in client_cert;
+# - the server track ends in server_cert (entered by the ServerHello
+#   hand-over, re-evaluated on the CertificateRequest record; sid
+#   1568); the server sends no certificate, so server_data stays out;
+# - nothing is dropped: the decode failure is not an app-layer error
+#   and every entered state carries an explicit accept.
+# The pcap is crafted by craft-pcap.py (see that file); the valid
+# client certificate body is the committed client_cert.der.
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+# the client and server hello phases are entered by the valid hellos
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1560
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1564
+# the client_hello rule is evaluated in the walk-over of the
+# ClientHello record
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1561
+# the server_hello rule is evaluated in the walk-over of the
+# ServerHello record
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1565
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 1568
+# the cert phase is entered by the hello hand-over, by the client
+# certificate message and re-evaluated on the ClientKeyExchange
+# record; incomplete data only blocks the data phase
+- filter:
+    count: 3
+    match:
+      event_type: alert
+      alert.signature_id: 1562
+# the incomplete-data condition survives the ClientKeyExchange: the
+# data phase is not established from the incomplete certificate data
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 1563
+# the bad leaf is flagged once on the certificate record
+- filter:
+    count: 1
+    match:
+      event_type: anomaly
+      anomaly.event: INVALID_CERTIFICATE
+      anomaly.app_proto: tls
+      pcap_cnt: 7
+# no drop at all: the decode failure is not an app-layer error
+- filter:
+    count: 0
+    match:
+      event_type: flow
+      flow.action: drop
+# no packet or app state was dropped by rules or by the implicit
+# default app policy
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.firewall.accepted: 9
+      stats.firewall.blocked: 0
+      stats.firewall.drop_reason.rules: 0
+      stats.firewall.drop_reason.default_app_policy: 0

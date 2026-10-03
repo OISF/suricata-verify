@@ -1,0 +1,44 @@
+# # Two flows with a response Content-Length of 34 whose body arrives in
+# # two TCP segments (20 x "A" then 14 bytes):
+#
+# * flow A (port 49163): second segment "secondBBBBBBBB" (keyword present);
+# * flow B (port 49164): second segment "nomatchBBBBBBBB" (keyword absent).
+#
+# The response body (file data) can still grow while the progress is at
+# response_body (BODY), so the provisional no match of the first segment must
+# not be converted to CANT_MATCH (the response-body/file buffers are
+# streaming).
+#
+# * flow A: the keyword matches in the second body segment and the accept:flow
+#   accepts the flow.
+# * flow B: the completed body never matches; the eof CANT_MATCH kills the
+#   rule and the flow drops by the default app policy.
+#
+# The to_server side is fully authorized by bare accept:hook shield rules.
+#
+# Expected: exactly 1 `firewall default app policy` drop (flow B).
+#
+# accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+# accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+# rules (state-scoped, not flow-scoped) so the to_server side never drops and
+# does not mask the to_client adjudication
+# accept:hook http1:request_started $HOME_NET any -> $EXTERNAL_NET any (sid:701;)
+# accept:hook http1:request_line $HOME_NET any -> $EXTERNAL_NET any (sid:702;)
+# accept:hook http1:request_headers $HOME_NET any -> $EXTERNAL_NET any (sid:703;)
+# accept:hook http1:request_body $HOME_NET any -> $EXTERNAL_NET any (sid:704;)
+# accept:hook http1:request_trailer $HOME_NET any -> $EXTERNAL_NET any (sid:705;)
+# accept:hook http1:request_complete $HOME_NET any -> $EXTERNAL_NET any (sid:706;)
+
+# allow session setup
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:not_established; sid:1021;)
+accept:hook tcp:all $HOME_NET any <> $EXTERNAL_NET any (flow:established; sid:1022;)
+
+# to_server shield: authorize every to_server HTTP state with bare accept:hook rules (state-scoped, not flow-scoped) so the to_server side never drops and does not mask the to_client adjudication
+accept:hook,alert http1:request_started $HOME_NET any -> $EXTERNAL_NET any (sid:701;)
+accept:hook,alert http1:request_line $HOME_NET any -> $EXTERNAL_NET any (sid:702;)
+accept:hook,alert http1:request_headers $HOME_NET any -> $EXTERNAL_NET any (sid:703;)
+accept:hook,alert http1:request_body $HOME_NET any -> $EXTERNAL_NET any (sid:704;)
+accept:hook,alert http1:request_trailer $HOME_NET any -> $EXTERNAL_NET any (sid:705;)
+accept:hook,alert http1:request_complete $HOME_NET any -> $EXTERNAL_NET any (sid:706;)
+
+accept:flow,alert http1:<response_body $EXTERNAL_NET any -> $HOME_NET any (http.response_body; content:"second"; sid:211;)

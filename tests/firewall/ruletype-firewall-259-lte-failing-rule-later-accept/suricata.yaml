@@ -1,0 +1,21 @@
+%YAML 1.1
+---
+
+firewall:
+  policies:
+    app:
+      http1:
+        default-policy: ["drop:flow", "alert"]
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - stats
+        - flow
+        - alert
+        - drop:
+            alerts: yes
+            flows: all

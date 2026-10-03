@@ -1,0 +1,4 @@
+# Minimal firewall scaffold: one bare <hook rule is enough for the firewall
+# analyzer to dump every protocol's application state table to firewall.json.
+# This test pins the state names, not the rule behaviour.
+accept:hook http1:<request_headers $HOME_NET any -> $EXTERNAL_NET any (sid:9001;)

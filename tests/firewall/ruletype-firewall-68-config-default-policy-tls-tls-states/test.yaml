@@ -1,0 +1,52 @@
+requires:
+  min-version: 9
+
+pcap: ../../tls/tls-client-hello-frag-01/dump_mtu300.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 110
+      pcap_cnt: 20
+- filter:
+    count: 1
+    match:
+      event_type: drop
+      alert.signature_id: 110
+      pcap_cnt: 20
+# specifically check the first app-layer packet
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      pcap_cnt: 4
+- filter:
+    count: 42
+    match:
+      event_type: drop
+      drop.reason: "firewall flow drop"
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      app_proto: tls
+      flow.action: drop
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.app_layer.flow.tls: 1
+      stats.flow.total: 1
+      stats.decoder.pkts: 62
+      stats.ips.accepted: 19
+      stats.ips.blocked: 0
+      stats.firewall.accepted: 19
+      stats.firewall.blocked: 43
+      stats.firewall.drop_reason.flow_drop: 42
+      stats.firewall.drop_reason.rules: 1

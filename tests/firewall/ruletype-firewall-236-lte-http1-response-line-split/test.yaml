@@ -1,0 +1,132 @@
+requires:
+  min-version: 9
+
+args:
+  - --simulate-ips
+  - -k none
+
+pcap: input.pcap
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: drop
+      drop.reason: "firewall default app policy"
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 701
+      alert.action: allowed
+      firewall.hook: http:request_started
+      firewall.policy: accept:hook,alert
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 702
+      alert.action: allowed
+      firewall.hook: http:request_line
+      firewall.policy: accept:hook,alert
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 703
+      alert.action: allowed
+      firewall.hook: http:request_headers
+      firewall.policy: accept:hook,alert
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 704
+      alert.action: allowed
+      firewall.hook: http:request_body
+      firewall.policy: accept:hook,alert
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 705
+      alert.action: allowed
+      firewall.hook: http:request_trailer
+      firewall.policy: accept:hook,alert
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 706
+      alert.action: allowed
+      firewall.hook: http:request_complete
+      firewall.policy: accept:hook,alert
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 701
+      alert.action: allowed
+      firewall.hook: http:request_started
+      firewall.policy: accept:hook,alert
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 702
+      alert.action: allowed
+      firewall.hook: http:request_line
+      firewall.policy: accept:hook,alert
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 703
+      alert.action: allowed
+      firewall.hook: http:request_headers
+      firewall.policy: accept:hook,alert
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 704
+      alert.action: allowed
+      firewall.hook: http:request_body
+      firewall.policy: accept:hook,alert
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 705
+      alert.action: allowed
+      firewall.hook: http:request_trailer
+      firewall.policy: accept:hook,alert
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 706
+      alert.action: allowed
+      firewall.hook: http:request_complete
+      firewall.policy: accept:hook,alert
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 211
+      alert.action: allowed
+      firewall.hook: http:response_line
+      firewall.policy: accept:flow,alert
+      pcap_cnt: 8
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.action: drop
+      flow.alerted: true
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.action: accept
+      flow.alerted: true

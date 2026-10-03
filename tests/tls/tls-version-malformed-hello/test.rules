@@ -1,0 +1,5 @@
+# tls.version must only match a version that was decoded from a hello. The
+# malformed hello (flow A) never decodes, so the application-data record must
+# not turn its legacy version into a match. The valid hello (flow B) is the
+# control.
+alert tls any any -> any any (msg:"tls.version 1.2"; tls.version:1.2; sid:1;)

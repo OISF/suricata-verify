@@ -1,0 +1,2 @@
+# Valid firewall rules load normally; the rejected rule comes from td.rules.
+accept:hook tls:client_cert $HOME_NET any -> $EXTERNAL_NET any (alert; sid:5483;)

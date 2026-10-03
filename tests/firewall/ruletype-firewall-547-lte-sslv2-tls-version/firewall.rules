@@ -1,0 +1,16 @@
+# An SSLv2-compatible ClientHello carries its version in the hello body (the
+# SSLv2 record header has no version field). tls.version must match it: the
+# accept rule at tls:client_hello is gated on tls.version:0x0300, so before the
+# fix - the keyword required a decoded hello, which only the TLS hello decoder
+# set - the rule never matched and the flow fell to the default app policy drop.
+accept:hook tls:client_started $HOME_NET any -> $EXTERNAL_NET any (alert; sid:5470; msg:"client_started walk-over of the SSLv2 client hello";)
+accept:hook tls:client_hello $HOME_NET any -> $EXTERNAL_NET any (alert; tls.version:0x0300; sid:5471; msg:"tls.version matches the SSLv2-compatible ClientHello version";)
+# the started accept is required for the first toclient packet
+accept:hook tls:server_started $EXTERNAL_NET any -> $HOME_NET any (alert; sid:5472;)
+accept:hook tls:server_hello $EXTERNAL_NET any -> $HOME_NET any (alert; sid:5473;)
+# terminal states, accepted so the teardown walk does not fall to the default
+# policy
+accept:hook tls:client_data $HOME_NET any -> $EXTERNAL_NET any (sid:5474;)
+accept:hook tls:client_finished $HOME_NET any -> $EXTERNAL_NET any (sid:5475;)
+accept:hook tls:server_data $EXTERNAL_NET any -> $HOME_NET any (sid:5476;)
+accept:hook tls:server_finished $EXTERNAL_NET any -> $HOME_NET any (sid:5477;)

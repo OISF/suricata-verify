@@ -1,0 +1,1 @@
+alert ssh any any -> any any (msg:"SV ssh long banner event"; flow:established; app-layer-event:ssh.long_banner; sid:1; rev:1;)

@@ -1,0 +1,52 @@
+requires:
+  min-version: 9
+  pcap: false
+
+args:
+  - -T
+
+checks:
+  # The firewall analyzer writes firewall.json in firewall mode. Each check
+  # below pins the exact sorted state-table keys of one protocol. A renamed,
+  # added or removed state fails the matching check. Update the expected list
+  # deliberately when the state machine changes (see README.md).
+
+  - shell:
+      args: >
+        python3 -c 'import json,sys; t=json.load(open("firewall.json"))["tables"]; exp=["app:http:request_body", "app:http:request_complete", "app:http:request_headers", "app:http:request_line", "app:http:request_started", "app:http:request_trailer", "app:http:response_body", "app:http:response_complete", "app:http:response_headers", "app:http:response_line", "app:http:response_started", "app:http:response_trailer"]; act=sorted(t["http"]); sys.exit("http state table mismatch:\n  expected: %r\n  actual:   %r" % (exp,act)) if act!=exp else None'
+
+  - shell:
+      args: >
+        python3 -c 'import json,sys; t=json.load(open("firewall.json"))["tables"]; exp=["app:tls:client_cert", "app:tls:client_data", "app:tls:client_finished", "app:tls:client_hello", "app:tls:client_started", "app:tls:server_cert", "app:tls:server_data", "app:tls:server_finished", "app:tls:server_hello", "app:tls:server_started"]; act=sorted(t["tls"]); sys.exit("tls state table mismatch:\n  expected: %r\n  actual:   %r" % (exp,act)) if act!=exp else None'
+
+  - shell:
+      args: >
+        python3 -c 'import json,sys; t=json.load(open("firewall.json"))["tables"]; exp=["app:http2:global:request_complete", "app:http2:global:request_started", "app:http2:global:response_complete", "app:http2:global:response_started", "app:http2:stream:request_closed", "app:http2:stream:request_complete", "app:http2:stream:request_data", "app:http2:stream:request_headers", "app:http2:stream:request_started", "app:http2:stream:response_closed", "app:http2:stream:response_complete", "app:http2:stream:response_data", "app:http2:stream:response_headers", "app:http2:stream:response_started"]; act=sorted(t["http2"]); sys.exit("http2 state table mismatch:\n  expected: %r\n  actual:   %r" % (exp,act)) if act!=exp else None'
+
+  - shell:
+      args: >
+        python3 -c 'import json,sys; t=json.load(open("firewall.json"))["tables"]; exp=["app:doh2:global:request_complete", "app:doh2:global:request_started", "app:doh2:global:response_complete", "app:doh2:global:response_started", "app:doh2:stream:request_closed", "app:doh2:stream:request_complete", "app:doh2:stream:request_data", "app:doh2:stream:request_headers", "app:doh2:stream:request_started", "app:doh2:stream:response_closed", "app:doh2:stream:response_complete", "app:doh2:stream:response_data", "app:doh2:stream:response_headers", "app:doh2:stream:response_started"]; act=sorted(t["doh2"]); sys.exit("doh2 state table mismatch:\n  expected: %r\n  actual:   %r" % (exp,act)) if act!=exp else None'
+
+  - shell:
+      args: >
+        python3 -c 'import json,sys; t=json.load(open("firewall.json"))["tables"]; exp=["app:ssh:request-complete", "app:ssh:request_banner", "app:ssh:request_kex", "app:ssh:request_session", "app:ssh:response-complete", "app:ssh:response_banner", "app:ssh:response_kex", "app:ssh:response_session"]; act=sorted(t["ssh"]); sys.exit("ssh state table mismatch:\n  expected: %r\n  actual:   %r" % (exp,act)) if act!=exp else None'
+
+  - shell:
+      args: >
+        python3 -c 'import json,sys; t=json.load(open("firewall.json"))["tables"]; exp=["app:smtp:request_complete", "app:smtp:request_data", "app:smtp:request_started", "app:smtp:response_complete", "app:smtp:response_data", "app:smtp:response_started"]; act=sorted(t["smtp"]); sys.exit("smtp state table mismatch:\n  expected: %r\n  actual:   %r" % (exp,act)) if act!=exp else None'
+
+  - shell:
+      args: >
+        python3 -c 'import json,sys; t=json.load(open("firewall.json"))["tables"]; exp=["app:dns:request-complete", "app:dns:request-started", "app:dns:response-complete", "app:dns:response-started"]; act=sorted(t["dns"]); sys.exit("dns state table mismatch:\n  expected: %r\n  actual:   %r" % (exp,act)) if act!=exp else None'
+
+  - shell:
+      args: >
+        python3 -c 'import json,sys; t=json.load(open("firewall.json"))["tables"]; exp=["app:ntp:request-complete", "app:ntp:request-started", "app:ntp:response-complete", "app:ntp:response-started"]; act=sorted(t["ntp"]); sys.exit("ntp state table mismatch:\n  expected: %r\n  actual:   %r" % (exp,act)) if act!=exp else None'
+
+  - shell:
+      args: >
+        python3 -c 'import json,sys; t=json.load(open("firewall.json"))["tables"]; exp=["app:ftp:request-complete", "app:ftp:request-started", "app:ftp:response-complete", "app:ftp:response-started"]; act=sorted(t["ftp"]); sys.exit("ftp state table mismatch:\n  expected: %r\n  actual:   %r" % (exp,act)) if act!=exp else None'
+
+  - shell:
+      args: >
+        python3 -c 'import json,sys; t=json.load(open("firewall.json"))["tables"]; exp=["app:ftp-data:request-complete", "app:ftp-data:request-started", "app:ftp-data:response-complete", "app:ftp-data:response-started"]; act=sorted(t["ftp-data"]); sys.exit("ftp-data state table mismatch:\n  expected: %r\n  actual:   %r" % (exp,act)) if act!=exp else None'

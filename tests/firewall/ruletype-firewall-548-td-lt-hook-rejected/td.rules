@@ -1,0 +1,3 @@
+# A threat detection rule using the lower-bound hook header: the '<' form is
+# reserved for firewall policy rules, so this must fail to load.
+alert tls:<client_hello $HOME_NET any -> $EXTERNAL_NET any (msg:"td lte rule"; tls.version:1.2; sid:5482;)

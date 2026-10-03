@@ -1,0 +1,3 @@
+# app-layer-state '<' at the starting state: the tx progress can never be
+# below it, so the comparison can never hold. Rejected at load.
+accept:flow,alert http1:request_started $HOME_NET any -> $EXTERNAL_NET any (app-layer-state:<request_started; sid:100;)

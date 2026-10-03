@@ -1,0 +1,68 @@
+# The firewall sweep bound, pinned on a non-TLS protocol with a
+# geometry that actually exercises the sweep. Two complete pipelined
+# requests put tx1 into the non-last state; the line-only response to
+# tx1 then triggers the mid-walk match of the started-state rule (sid
+# 1641, hook below the packet's progress) and the walked-over-states
+# default-policy sweep.
+#
+# For a non-last tx the swept accepts are non-decisive (they apply to
+# the packet only for the last tx at its progress state), so the
+# branch's sweep - bounded at tx_progress, the response-line state -
+# ends without a verdict and the packet survives; the base release's
+# sweep runs to tx_end_state, reaches the response-body drop:flow
+# above the packet's progress, and drops the packet (and flow). That
+# is the divergence this test pins: on this branch P5 is not dropped.
+# The non-last status of tx1 is load-bearing: were tx1 the last tx,
+# the accept at its progress state would be decisive on the very
+# first swept hook under either bound, and the test would be parity
+# again. The pipelining keeps it true: the response arrives while tx2
+# (whose response has not started) is still the newest open tx, so do
+# not add a completing response to tx2 after P5.
+#
+# The pcap is crafted by craft-pcap.py (see that file); input.pcap
+# written by it.
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+# the discriminating axis: P5, the response-line packet the base
+# release drops via the over-wide sweep
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      pcap_cnt: 5
+# global sweep of drop events: subsumes the P5 pin above; if this one
+# goes red alone, some other packet regressed, not the sweep bound
+- filter:
+    count: 0
+    match:
+      event_type: drop
+# the flow closes with a drop on both sides: policy application at
+# flow teardown covers the states the incomplete response never
+# walked over during the run; the packet-level difference (P5) is
+# pinned above
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.action: drop
+# nothing was blocked, so no drop reason carries a count
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.firewall.blocked: 0
+      stats.firewall.drop_reason.default_app_policy: 0
+# both pipelined requests are logged (tx1 with a gap: its response
+# never completes; the run asserts only the count)
+- filter:
+    count: 2
+    match:
+      event_type: http

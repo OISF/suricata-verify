@@ -1,0 +1,60 @@
+# A ClientHello fragmented across two TLS records is in the
+# client_hello phase for every fragment: the state names the message
+# being parsed (entered when the message starts, left when it
+# completes - the HTTP1 unit model). The SNI buffer is only filled
+# once the final fragment completes the message; completion hands the
+# track over to client_cert, before any certificate byte arrives.
+# Pins:
+# - the fragments are decided at client_hello and need an accept at
+#   that state (sid 1513) - the sni rule there cannot match yet;
+# - on the completing record the verdict is rendered at client_cert
+#   (sid 1514, sni available); the client_hello sni rule (sid 1512)
+#   matches in the walk-over of that packet, with ts_progress
+#   client_cert;
+# - the flow is accepted through the hand-over, nothing is dropped.
+# The pcap is crafted by craft-pcap.py (see that file).
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+  # started state evaluated on the first fragment, rendered at the packet's
+  # final progress (hello)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1511
+        ts_progress: client_hello
+  # the sni rule matches on the record that completes the hello; the verdict
+  # is rendered at client_cert (the hand-over state)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1512
+        ts_progress: client_cert
+  # the fragment in flight: accepted at the hello state itself
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1513
+        ts_progress: client_hello
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.action: accept
+        app_proto: tls
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.firewall.accepted: 5
+        stats.firewall.blocked: 0

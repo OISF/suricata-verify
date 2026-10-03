@@ -1,0 +1,6 @@
+alert ssh:request_banner any any -> any any (msg:"SSH lua state: request banner"; lua:lua-c2s-2.0.lua; sid:1; rev:1;)
+alert ssh:request_kex any any -> any any (msg:"SSH lua state: request kex"; lua:lua-c2s-2.0.lua; sid:2; rev:1;)
+alert ssh:request_session any any -> any any (msg:"SSH lua state: request session"; lua:lua-c2s-2.0.lua; sid:3; rev:1;)
+alert ssh:response_banner any any -> any any (msg:"SSH lua state: response banner"; lua:lua-s2c-2.0.lua; sid:4; rev:1;)
+alert ssh:response_kex any any -> any any (msg:"SSH lua state: response kex"; lua:lua-s2c-2.0.lua; sid:5; rev:1;)
+alert ssh:response_session any any -> any any (msg:"SSH lua state: response session"; lua:lua-s2c-2.0.lua; sid:6; rev:1;)

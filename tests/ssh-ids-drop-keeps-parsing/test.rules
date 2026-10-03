@@ -1,0 +1,5 @@
+# A stateful drop rule matching the client banner. In IDS mode the flow action
+# is set but parsing continues (StreamTcpCheckFlowDrops only acts in IPS mode),
+# so the one-shot ssh record must wait for the same readiness main used (both
+# banners) - it must not be emitted while only the client banner is known.
+drop tcp any any -> any 22 (msg:"drop on client banner"; content:"SSH-2.0-OpenSSH_for_Windows_7.7"; sid:1; rev:1;)

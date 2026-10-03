@@ -1,0 +1,3 @@
+# app-layer-state with mode '>' at the tls completion state can never match
+# and is rejected at load.
+accept:flow,alert tls:client_started $HOME_NET any -> $EXTERNAL_NET any (app-layer-state:>client_finished; sid:100;)

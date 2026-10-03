@@ -1,0 +1,5 @@
+# The positive `absent` case: a GET request has no body buffer, so the absent
+# rule matches at the request_body hook and accepts the flow.
+accept:hook http1:<response_complete any any <> any any (sid:9001;)
+
+accept:flow,alert http1:<request_body any any -> any any (http.request_body; absent; sid:100;)

@@ -1,0 +1,50 @@
+requires:
+  min-version: 9
+
+args:
+  - --simulate-ips
+  - -k none
+
+pcap: ../../tls/tls-client-hello-frag-01/dump_mtu300.pcap
+
+checks:
+  # Both < rules fail. sid:101 (<client_cert) is the last pending covering rule
+  # and decides with its own hook default (accept), so the lower state's
+  # tls:client_hello default (drop:flow, alert) must not be applied: no drop
+  # and no client_hello policy alert.
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: tls
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+        drop.reason: firewall default app policy
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+        drop.reason: firewall rules
+  - filter:
+      count: 0
+      match:
+        event_type: flow
+        flow.action: drop
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2201001
+        firewall.hook: tls:client_hello
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 100
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 101

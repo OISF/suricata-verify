@@ -1,0 +1,28 @@
+# The tls-client-hello-frag-01 fixture carries a full TLS 1.2 handshake: the
+# client hello completes at frame 6 and the ClientKeyExchange is in frame 22.
+#
+# ssl_state is registered on the shared tls_generic buffer at the started
+# state (progress 0). The engine must run on every tx update (run-always),
+# otherwise the prefilter records progress past state 0 after the first
+# evaluation and skips the engine: the client_keyx state set by the
+# ClientKeyExchange is then never inspected and the rule never fires.
+#
+# The keyword is evaluated on the first app layer update after the
+# ClientKeyExchange (frame 23), so the alert is pinned to that packet. Before
+# the fix the rule did not fire at all.
+requires:
+  min-version: 9
+
+pcap: ../tls-client-hello-frag-01/dump_mtu300.pcap
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 23
+        ts_progress: client_data

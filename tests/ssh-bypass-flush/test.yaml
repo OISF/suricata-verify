@@ -1,0 +1,27 @@
+# An SSH flow that gets bypassed after both banners but before either side
+# sends NewKeys must still produce an `ssh` event: the bypass frees the
+# app-layer state and bypassed flows get no flow-end pseudo packets, so the
+# bypass transition has to schedule the pending tx loggers like a drop does.
+requires:
+  min-version: 9
+
+pcap: ../ssh-ips-drop-flush/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: ssh
+        ssh.client.proto_version: "2.0"
+        ssh.client.software_version: "OpenSSH_for_Windows_7.7"
+        ssh.server.proto_version: "2.0"
+        ssh.server.software_version: "OpenSSH_7.4"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2

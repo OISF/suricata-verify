@@ -1,0 +1,23 @@
+# The SNI firewall from the user guide example. The record that
+# completes the ClientHello is decided in the client certificate
+# phase, not in the hello phase: the non-matching SNI is dropped by
+# the negated-SNI rule (sid 102) on that same record - the drop is
+# rule-scoped, so it alerts. There is no accept at the certificate
+# state: an accepted flow is carried by the flow action (checked
+# before any further firewall rule of a packet), and a SNI-less hello
+# matches no SNI rule (the buffer only exists once the message is
+# fully parsed) and falls on the implicit default policy (drop:flow)
+# - the committed verdict for a SNI-less hello.
+accept:hook tcp:all any any <> any any (flow:not_established; sid:1; msg:"session setup";)
+accept:hook tcp:all any any <> any any (flow:established; sid:2; msg:"established";)
+accept:hook tls:client_started any any -> any any (sid:100;)
+accept:flow tls:client_hello any any -> any any (tls.sni; pcre:"/^(suricata.io|oisf.net)$/R"; sid:101; msg:"good sni accept";)
+drop:flow tls:client_hello any any -> any any (alert; tls.sni; pcre:!"/^(suricata.io|oisf.net)$/R"; sid:102; msg:"bad sni drop";)
+accept:hook tls:client_hello any any -> any any (sid:103; msg:"hello fragment accept";)
+accept:hook tls:client_data any any -> any any (sid:105;)
+accept:hook tls:client_finished any any -> any any (sid:106;)
+accept:hook tls:server_started any any -> any any (sid:200;)
+accept:hook tls:server_hello any any -> any any (sid:201;)
+accept:hook tls:server_cert any any -> any any (sid:202;)
+accept:hook tls:server_data any any -> any any (sid:204;)
+accept:hook tls:server_finished any any -> any any (sid:205;)

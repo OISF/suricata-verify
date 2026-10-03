@@ -1,5 +1,6 @@
 requires:
   min-version: 8
+  lt-version: 9
 
 pcap: ../../issue-5466-alert-then-pass-02/icmp_and_ssh-s0.pcap
 

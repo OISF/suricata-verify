@@ -1,0 +1,1 @@
+alert tls any any -> any any (msg:"SNI on fragmented client hello"; tls.sni; content:"google"; sid:1;)

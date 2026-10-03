@@ -1,0 +1,13 @@
+# The last candidate of the walk (no next rule to peek at) must also consult
+# the per-hook coverage counts: while a pending LTE rule at the same hook still
+# covers it, its no match must not apply the hook's default policy. The default
+# is applied only once the pending rule resolves.
+#
+# sid:100 is a failing LTE rule at request_line; sid:101 is the out of scope
+# sibling at the same hook, last by sid. At packet 4 sid:100 is still pending,
+# so sid:101 must not apply the request_line default; the drop only happens at
+# packet 6, when sid:100's no match becomes final.
+accept:hook http1:<response_complete $EXTERNAL_NET any -> $HOME_NET any (sid:9001;)
+
+accept:flow,alert http1:<request_line $HOME_NET any -> $EXTERNAL_NET any (http.uri; content:"/nope"; sid:100;)
+accept:flow,alert http1:<request_line 198.51.100.0/24 any -> 198.51.100.0/24 any (sid:101;)

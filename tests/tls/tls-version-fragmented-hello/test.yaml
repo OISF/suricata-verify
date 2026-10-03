@@ -1,0 +1,56 @@
+# A ClientHello split across two TLS records: the first record carries only
+# the handshake header and has record layer version 0x0301 (TLS 1.0), the
+# second completes the hello body with negotiated version 0x0303 (TLS 1.2).
+# The client_hello phase is entered on the first record, before the hello
+# version is decoded.
+#
+# tls.version matches the negotiated version and is registered at the hello
+# states, so the early miss stays revisitable and it matches the completed
+# hello (sid 1); a version the hello never carries must not fire (sid 3).
+# The keyword is evaluated on the first to-server app layer update after the
+# hello completes (frame 8), so the alert is pinned to that packet.
+# ssl_version reads the connp version and stays on the shared tls_generic
+# buffer, which is now run-always (stateful keyword): sid 2 matches the record
+# layer version (0x0301) early, and sid 4 (tls1.2) matches once the hello has
+# decoded and overwritten the connp version with the negotiated 0x0303.
+#
+# Before the fix tls.version was registered at the started state (progress 0),
+# so the miss became final as soon as the phase advanced - a fragmentation
+# evasion (sid 1 never fired).
+#
+# The pcap is crafted by craft-pcap.py (see that file).
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 8
+        ts_progress: client_cert
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        pcap_cnt: 6
+        ts_progress: client_hello
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
+        pcap_cnt: 8
+        ts_progress: client_cert

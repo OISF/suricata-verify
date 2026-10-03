@@ -1,0 +1,7 @@
+# this pass should prevent match of 998, but it should not affect the fw rules.
+# the pass rides the record layer version of the first hello fragment (0x0301);
+# tls.version is the negotiated version (0x0303 here) and is evaluated once the
+# hello is decoded, so it can no longer express this early pass.
+pass:flow tls any any -> any any (flow:to_server; ssl_version:tls1.0; sid:999; alert;)
+# would match if 999 didn't set a flow pass
+alert tls any any -> any any (tls.sni; content:"google"; sid:998;)

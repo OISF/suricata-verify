@@ -1,0 +1,27 @@
+# Let the TCP handshake and TLS data packets through to the app layer
+# so the TLS state rules are evaluated (established fw-test idiom):
+accept:hook tcp:all $HOME_NET any <> $HOME_NET any (flow:not_established; sid:1556; msg:"session setup";)
+accept:hook tcp:all $HOME_NET any <> $HOME_NET any (flow:established; sid:1557; msg:"established";)
+
+# The session explicitly allows every phase state it enters. The
+# server_cert phase is entered despite the malformed leaf (the hello
+# hand-over and the certificate message itself both announce it), so
+# sid 1552 accepts and observes it. The incomplete-data condition is
+# what must keep the tracks out of the data phase: sid 1555 must never
+# fire, before or after the following ServerHelloDone. Without a rule
+# for an entered state the implicit default app policy (drop:flow)
+# would apply - which this test must not see: the decode failure is
+# not an app-layer error, so there is no drop at all.
+accept:hook tls:client_started $HOME_NET any -> $HOME_NET any (alert; sid:1553; msg:"client_started";)
+accept:hook tls:client_hello $HOME_NET any -> $HOME_NET any (alert; sid:1550; msg:"client_hello phase entered and left";)
+# the record that completes the hello is decided at client_cert; the
+# flow-scoped accept carries the flow past the hand-over
+accept:hook tls:client_cert $HOME_NET any -> $HOME_NET any (alert; sid:1558; msg:"hand-over to client_cert";)
+accept:hook tls:server_started $HOME_NET any -> $HOME_NET any (alert; sid:1554; msg:"server_started";)
+accept:hook tls:server_hello $HOME_NET any -> $HOME_NET any (alert; sid:1551; msg:"server_hello phase entered";)
+accept:hook tls:server_cert $HOME_NET any -> $HOME_NET any (alert; sid:1552; msg:"server_cert phase entered";)
+accept:hook tls:server_data $HOME_NET any -> $HOME_NET any (alert; sid:1555; msg:"server_data phase established from incomplete certificate data";)
+# the finished states need explicit accepts or the flow ends on the
+# default app policy (drop:flow)
+accept:hook tls:client_finished $HOME_NET any -> $HOME_NET any (sid:1559; msg:"client_finished";)
+accept:hook tls:server_finished $HOME_NET any -> $HOME_NET any (sid:1560; msg:"server_finished";)

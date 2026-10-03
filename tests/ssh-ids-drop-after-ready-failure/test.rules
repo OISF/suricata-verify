@@ -1,0 +1,5 @@
+# A stateful drop rule matching the server banner. The rule fires after both
+# banners were parsed (readiness reached). In IDS mode the drop does not stop
+# parsing, so the one-shot ssh tx log must stay failure-first: the malformed
+# record that follows still has to be logged.
+drop tcp any 22 -> any any (msg:"drop on server banner"; content:"SSH-2.0-TestServer_1.0"; sid:1; rev:1;)

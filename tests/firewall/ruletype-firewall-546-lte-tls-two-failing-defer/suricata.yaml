@@ -1,0 +1,36 @@
+%YAML 1.1
+---
+vars:
+  address-groups:
+    HOME_NET: "[10.0.0.0/8]"
+    EXTERNAL_NET: "!$HOME_NET"
+
+stats:
+  enabled: yes
+  interval: 8
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - stats
+        - flow
+        - alert
+        - drop:
+            alerts: yes
+            flows: all
+
+firewall:
+  policies:
+    # accept the session packets without per-test boilerplate rules
+    packet:
+      default-policy: ["accept:hook"]
+    app:
+      tls:
+        # default for the states the two rules do not name
+        default-policy: ["accept:hook"]
+        # the lower state says drop, the covering state says accept
+        client-hello: ["drop:flow", "alert"]
+        client-cert: ["accept:hook"]
