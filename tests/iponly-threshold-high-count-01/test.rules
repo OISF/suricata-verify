@@ -1,0 +1,2 @@
+alert ip any any -> any any (msg:"iponly high-count threshold track by_flow - never fires, per-flow ceiling"; threshold:type threshold, count 5, seconds 3600, track by_flow; sid:1; rev:1;)
+alert ip any any -> any any (msg:"iponly low-count threshold track by_flow - fires once per flow"; threshold:type threshold, count 2, seconds 3600, track by_flow; sid:2; rev:1;)
