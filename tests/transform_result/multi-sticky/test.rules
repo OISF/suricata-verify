@@ -1,0 +1,19 @@
+# pcap contains an HTTP GET with multiple request headers (User-Agent, Host,
+# Accept, etc.). Header values such as "Mozilla/5.0 (Windows; ...)" contain
+# characters that are not valid strict base64, so from_base64: mode strict
+# fails on at least one header.
+#
+# http.request_header is a multi-value sticky buffer built by
+# DetectGetMultiData, which ORs DETECT_CI_FLAGS_SINGLE into the buffer flags
+# after the transforms run, so the transform's error flag reaches content
+# inspection.
+
+# must_error: at least one header fails strict base64 decode -> alert
+alert http any any -> any any (msg:"transform_result must_error on multi-value http.request_header"; \
+    flow:established,to_server; http.request_header; from_base64: mode strict; \
+    transform_result: must_error; sid:1;)
+
+# must_succeed: header fails strict base64 decode -> no alert
+alert http any any -> any any (msg:"transform_result must_succeed on multi-value http.request_header"; \
+    flow:established,to_server; http.request_header; from_base64: mode strict; \
+    transform_result: must_succeed; content:"anything"; sid:2;)
