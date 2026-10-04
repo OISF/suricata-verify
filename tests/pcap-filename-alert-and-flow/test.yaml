@@ -1,0 +1,27 @@
+requires:
+  min-version: 8
+
+pcap: ../bug-7414-decoder-event-01/ip_secopt.pcap
+
+checks:
+  # Alert event - exercises the p != NULL path in OutputJsonBuilderBuffer
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2200005
+        pcap_filename.__endswith: "ip_secopt.pcap"
+
+  # Flow event - exercises the p == NULL path in OutputJsonBuilderBuffer
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        pcap_filename.__endswith: "ip_secopt.pcap"
+
+  # Stats event - exercises the p == NULL, f == NULL global fallback path
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        pcap_filename.__endswith: "ip_secopt.pcap"
