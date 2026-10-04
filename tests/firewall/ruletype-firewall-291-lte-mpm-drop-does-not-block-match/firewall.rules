@@ -1,0 +1,12 @@
+# A pending < rule with a failing keyword must not decide the hook: its sibling
+# that matches must win. The MPM only makes the matching rule a candidate at
+# the hook state; the failing rule stays pending and blocks the rules after it
+# until the state is final (P+1), where the match can still decide.
+
+accept:hook http1:<response_complete $EXTERNAL_NET any -> $HOME_NET any (sid:9001;)
+
+# lower sid, failing keyword: pending at the hook
+accept:flow,alert http1:<request_headers $HOME_NET any -> $EXTERNAL_NET any (http.host; content:"nope.example"; sid:100;)
+
+# higher sid, matching: decides once the pending rule is resolved
+accept:flow,alert http1:<request_headers $HOME_NET any -> $EXTERNAL_NET any (http.host; content:"www.example.com"; sid:101;)

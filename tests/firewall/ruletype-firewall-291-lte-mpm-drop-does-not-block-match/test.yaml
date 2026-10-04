@@ -1,0 +1,29 @@
+requires:
+  min-version: 9
+
+args:
+- --simulate-ips
+- -k none
+
+pcap: ../lte-matrix-data/http1.pcap
+
+checks:
+# the matching rule decides at the hook state once the pending rule resolved
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 101
+      alert.action: allowed
+      firewall.hook: http:request_headers
+      pcap_cnt: 10
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 100
+# no default policy may fire: the match decides
+- filter:
+    count: 0
+    match:
+      event_type: drop
