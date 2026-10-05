@@ -1,0 +1,45 @@
+requires:
+    min-version: 9
+
+pcap: false
+
+args:
+  - --engine-analysis
+
+# A diamond rather than a chain. sid:4 reads two bits that are produced at
+# different depths:
+#
+#   sid:1 set A -> sid:2 isset A
+#   sid:1 set A -> sid:4 isset A      (depth 1)
+#   sid:2 set B -> sid:3 isset B
+#   sid:3 set C -> sid:4 isset C      (depth 3)
+#
+# 1, 2, 3, 4 is the only order that satisfies both of sid:4's inputs. The
+# point of the test, as test.rules spells out, is that a breadth first walk
+# would emit sid:4 as soon as it saw the A edge and produce 1,4,2,3 or
+# 1,2,4,3, violating the C edge. These checks pin the topological result.
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      __lineno: 1
+      id: 1           # produces A
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      __lineno: 2
+      id: 2           # needs A, produces B
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      __lineno: 3
+      id: 3           # needs B, produces C
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      __lineno: 4
+      id: 4           # needs both A and C, so it must come last
