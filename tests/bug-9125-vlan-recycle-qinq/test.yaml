@@ -1,0 +1,35 @@
+requires:
+  min-version: 8
+
+args:
+  - --runmode
+  - single
+
+checks:
+  # The priming frames carry 2 vlan tags, so only the slots that the
+  # recycle path also cleared before the fix are involved.
+  - filter:
+      count: 3
+      match:
+        event_type: flow
+        src_ip: 192.0.2.200
+        vlan: [100, 200]
+
+  # The stream itself stays one flow: its 5 to-server packets, the two
+  # segments included, are all keyed the same way.
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_ip: 10.0.0.1
+        src_port: 1234
+        flow.pkts_toserver: 5
+
+  # And with the stream in one piece the signature that matches across the
+  # two segments fires. This is the case that ../bug-9125-vlan-recycle-split
+  # only reaches once the third vlan id slot is cleared too.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
