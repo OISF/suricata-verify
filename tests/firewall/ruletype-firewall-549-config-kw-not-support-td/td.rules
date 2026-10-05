@@ -1,0 +1,2 @@
+# should error out, as 'config' is not supported in firewall mode, with TD rules
+alert http any any -> any any (msg:"Test config keyword for TD rules in firewall mode"; config:tracking disable, type flow, scope tx; sid:2000001;)

@@ -1,0 +1,15 @@
+requires:
+  min-version: 9
+
+pcap: ../../tls/tls-random/input.pcap
+
+args:
+  - --simulate-ips
+  - -v
+exit-code: 1
+
+checks:
+  - shell:
+      args: grep "keyword 'config' is not supported in threat detection rules with firewall mode" stderr | wc -l
+      expect: 1
+
