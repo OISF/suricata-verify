@@ -6,9 +6,20 @@ pcap: false
 args:
   - --engine-analysis
 
+# suricata.yaml sets detect.flowbits.max-cycle-resolution to 1, so the
+# resolver is allowed exactly one attempt at breaking a cycle.
+#
+# The ruleset needs more than that: sid:2/sid:3 form one cycle through B and
+# C, and sid:4/sid:5 form another through C and D. Breaking one still leaves
+# the other, so the second pass runs out of budget.
+#
+# This pins the budget being enforced, not the cycles themselves; raising the
+# setting would let this ruleset resolve.
 exit-code: 1
 
 checks:
+  # Message names the configured limit, so it also proves the setting was read
+  # from suricata.yaml rather than the built in default of 100.
   - filter:
       count: 1
       match:

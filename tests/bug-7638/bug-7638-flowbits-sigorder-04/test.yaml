@@ -6,35 +6,44 @@ pcap: false
 args:
   - --engine-analysis
 
+# Same shape as sigorder-03 except sid:5 unsets E instead of setting it, which
+# removes the edge that closed the ring and leaves a plain chain:
+#
+#   sid:4 set D -> sid:3 isset D
+#   sid:3 set C -> sid:2 isset C
+#   sid:2 set B -> sid:1 isset B
+#   sid:1 set A -> sid:5 isset A
+#
+# so the resolved order is 4, 3, 2, 1, 5, the exact reverse of how test.rules
+# lists them. Each check pins one position in rules.json.
 checks:
 - filter:
     filename: rules.json
     count: 1
     match:
       __lineno: 1
-      id: 4
+      id: 4           # sets D, nothing it reads is set by another rule
 - filter:
     filename: rules.json
     count: 1
     match:
       __lineno: 2
-      id: 3
+      id: 3           # needs D from sid:4
 - filter:
     filename: rules.json
     count: 1
     match:
       __lineno: 3
-      id: 2
+      id: 2           # needs C from sid:3
 - filter:
     filename: rules.json
     count: 1
     match:
       __lineno: 4
-      id: 1
+      id: 1           # needs B from sid:2
 - filter:
     filename: rules.json
     count: 1
     match:
       __lineno: 5
-      id: 5
-
+      id: 5           # needs A from sid:1, tail of the chain

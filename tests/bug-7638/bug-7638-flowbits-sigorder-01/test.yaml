@@ -6,28 +6,40 @@ pcap: false
 args:
   - --engine-analysis
 
+# One setter per bit, so the dependencies form a single chain:
+#
+#   sid:11 set uritest   -> sid:12 isset uritest
+#   sid:12 set headtest  -> sid:10 isset headtest
+#   sid:10 set moz       -> sid:14 isset moz
+#
+# The only order that lets every rule match is 11, 12, 10, 14. test.rules
+# deliberately lists them as 11, 10, 12, 14, so the checks below prove the
+# resolver reordered 10 and 12.
+#
+# rules.json lists the rules in their final evaluation order, one per line, so
+# each check pins one rule to one position.
 checks:
 - filter:
     filename: rules.json
     count: 1
     match:
       __lineno: 1
-      id: 11
+      id: 11          # head of the chain, depends on nothing
 - filter:
     filename: rules.json
     count: 1
     match:
       __lineno: 2
-      id: 12
+      id: 12          # needs uritest from sid:11
 - filter:
     filename: rules.json
     count: 1
     match:
       __lineno: 3
-      id: 10
+      id: 10          # needs headtest from sid:12, moved down from line 2
 - filter:
     filename: rules.json
     count: 1
     match:
       __lineno: 4
-      id: 14
+      id: 14          # needs moz from sid:10, tail of the chain

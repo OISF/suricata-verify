@@ -6,9 +6,19 @@ pcap: false
 args:
   - --engine-analysis
 
+# The same deadlock as sigorder-02 but stretched over five rules, to show the
+# resolver walks the whole ring rather than only spotting adjacent pairs:
+#
+#   sid:2 -> sid:1 (B), sid:3 -> sid:2 (C), sid:4 -> sid:3 (D),
+#   sid:5 -> sid:4 (E), sid:1 -> sid:5 (A)
+#
+# Every edge is a set edge, so the ring has uniform weight and cannot be
+# broken.
 exit-code: 1
 
 checks:
+  # The sid list in this message is built from an unordered set, so its order
+  # varies between runs; __find matches the stable prefix only.
   - filter:
       count: 1
       match:
