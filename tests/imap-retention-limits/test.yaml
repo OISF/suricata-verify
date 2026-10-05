@@ -1,0 +1,124 @@
+requires:
+  min-version: 9
+args:
+  - -k none
+  - --set app-layer.protocols.imap.enabled=yes
+  - --set stream.reassembly.depth=0
+pcap: input.pcap
+
+checks:
+  # imap-body-too-large
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A001 APPEND INBOX {10485813+}
+        imap.responses[0]: A001 OK APPEND completed
+        src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: imap
+        anomaly.event: body_too_large
+        dest_port: 42010
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 101
+        flow.src_port: 42010
+  # imap-fetch-metadata-limit
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 201
+        flow.src_port: 42020
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 202
+        flow.src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 203
+        flow.src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 204
+        flow.src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 205
+        flow.src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 206
+        flow.src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: imap
+        anomaly.event: data_limit_reached
+        src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: imap
+        anomaly.event: line_too_long
+        src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A1 FETCH 1 BODY[TEXT]
+        imap.responses.__len: 2
+        imap.responses[1]: A1 OK FETCH completed
+        src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A2 NOOP
+        imap.responses[0]: A2 OK NOOP completed
+        src_port: 42020
+  # imap-retention-completion
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 301
+        flow.src_port: 42030
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 302
+        flow.src_port: 42030
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: imap
+        anomaly.event: data_limit_reached
+        src_port: 42030
+  # Shared checks
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - stats:
+      app_layer.error.imap.parser: 0

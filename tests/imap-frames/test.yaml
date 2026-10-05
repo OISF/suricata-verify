@@ -1,0 +1,138 @@
+requires:
+  min-version: 9
+args:
+  - -k none
+  - --set app-layer.protocols.imap.enabled=yes
+pcap: input.pcap
+
+checks:
+  # imap-append-frames
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 101
+        flow.src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 102
+        flow.src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 103
+        flow.src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 104
+        flow.src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 105
+        flow.src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 106
+        flow.src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 107
+        flow.src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 108
+        flow.src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 109
+        flow.src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 110
+        flow.src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: A1 APPEND INBOX {32}
+        imap.responses.__len: 2
+        imap.responses[0]: + Ready for literal data
+        imap.responses[1]: A1 OK APPEND completed
+        src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: A2 APPEND INBOX {60}
+        imap.responses.__len: 2
+        imap.responses[0]: + Ready for literal data
+        imap.responses[1]: A2 OK APPEND completed
+        src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A3 FETCH 1 BODY[]
+        imap.responses.__len: 2
+        imap.responses[0]: '* 1 FETCH (BODY[] {32})'
+        imap.responses[1]: A3 OK FETCH completed
+        src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: A4 APPEND INBOX {32+}
+        imap.responses.__len: 1
+        imap.responses[0]: A4 OK APPEND completed
+        src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A5 NOOP
+        imap.responses.__len: 1
+        imap.responses[0]: A5 OK NOOP completed
+        src_port: 42010
+  # imap-frame-tx-association
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 201
+        imap.requests[0]: A1 FETCH 1 BODY[]
+        flow.src_port: 42020
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 201
+        imap.requests[0]: A2 APPEND INBOX {5+}
+        flow.src_port: 42020
+  # Shared checks
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - stats:
+      app_layer.error.imap.parser: 0
