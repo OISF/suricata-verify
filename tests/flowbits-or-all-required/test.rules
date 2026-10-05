@@ -1,0 +1,10 @@
+# Both alternatives of the "A|B" check are set by a rule of their own, and
+# neither setter depends on the reader, so every edge the graph draws for the
+# OR is a real constraint.
+#
+# This is the case the current all-alternatives-are-mandatory treatment gets
+# right: no artificial cycle, and the setters are ordered ahead of the reader.
+alert tcp any any -> any any (flowbits:set,A; sid:1;)
+alert tcp any any -> any any (flowbits:set,B; sid:2;)
+alert tcp any any -> any any (flowbits:isset,A|B; flowbits:set,D; sid:3;)
+alert tcp any any -> any any (flowbits:isset,D; sid:4;)

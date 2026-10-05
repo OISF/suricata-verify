@@ -1,0 +1,12 @@
+# sid:3 sets B, which alone satisfies the "A|B" check in sid:1. A is
+# inconsequential here: no flow ever needs it for sid:1 to match.
+#
+# A valid runtime order exists: sid:3 sets B, sid:1 matches on B and sets C,
+# sid:2 matches on C and sets A.
+#
+# The graph disagrees. isset,A|B records sid:1 as a mandatory reader of both A
+# and B, so "sid:2 sets A" becomes an edge sid:2 -> sid:1, which together with
+# "sid:1 sets C" -> sid:2 forms a cycle that does not exist at runtime.
+alert tcp any any -> any any (flowbits:isset,A|B; flowbits:set,C; sid:1;)
+alert tcp any any -> any any (flowbits:isset,C; flowbits:set,A; sid:2;)
+alert tcp any any -> any any (flowbits:set,B; sid:3;)
