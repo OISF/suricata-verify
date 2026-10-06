@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """Craft an http2 pcap whose request stream carries a trailer HEADERS frame.
 
-TCP seq/ack bookkeeping matters: the SYN and the SYN/ACK each consume one
-sequence number, so payload must not overlap the handshake. Getting this wrong
-is silent - the stream engine never delivers the 24-byte preface to proto
-detection, which reports app_proto "failed" and produces no events at all, and
-the frames still look fine in tshark.
+Same as h2late.py, but with correct TCP seq/ack bookkeeping: the SYN and the
+SYN/ACK each consume one sequence number, so payload does not overlap the
+handshake (that overlap made the stream engine drop the preface, so http2 was
+never detected).
 """
 from scapy.all import Ether, IP, TCP, wrpcap
 import struct
@@ -24,7 +23,7 @@ def lit(name, value):
     return b"\x00" + bytes([len(n)]) + n + bytes([len(v)]) + v
 
 
-HEADERS, DATA, SETTINGS, END_STREAM, END_HEADERS = 0x1, 0x0, 0x4, 0x1, 0x4
+HEADERS, DATA, SETTINGS, END_STREAM, END_HEADERS = 0x1, 0x0, 0x6, 0x1, 0x4
 
 req = (
     lit(":method", "POST") + lit(":path", "/upload") + lit(":authority", "www.example.com") + lit("content-type", "text/plain")
@@ -34,6 +33,7 @@ preface = b"PRI * HTTP/2.0\r\n\r\nSM\r\n\r\n"
 c2s_head = preface + frame(SETTINGS, 0x00, 0) + frame(HEADERS, END_HEADERS, 1, req)
 c2s_body = frame(DATA, 0x00, 1, b"hello")
 c2s_trail = frame(HEADERS, END_HEADERS | END_STREAM, 1, trailer)
+s2c = frame(HEADERS, 0x00, 1, lit(":status", "200")) + frame(DATA, END_HEADERS | END_STREAM, 1, b"ok") + frame(SETTINGS, 0x00, 0)
 
 
 def main():
