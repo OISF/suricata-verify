@@ -1,6 +1,5 @@
 requires:
-    min-version: 8.0.1
-    lt-version: 9
+    min-version: 9
 
 pcap: ../entropy-01/input.pcap
 
@@ -9,4 +8,4 @@ checks:
         count: 1
         match:
           event_type: http
-          metadata.entropy.content: 4.137370175000773
+          metadata.entropy[0]: {"buffer":"content","value":4.137370175000773}
