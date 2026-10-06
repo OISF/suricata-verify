@@ -1,0 +1,24 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+args:
+  - --simulate-ips
+  - -k none
+pcap: input.pcap
+checks:
+  # the trailer header field lands in a HEADERS frame after the body, so the rule
+  # hooked at request_headers can only match above its hook, in the sub-state
+  # revisit band: request_closed is 3, the hook (request_headers) is 1.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 110
+        firewall.hook: "http2:stream:request_headers"
+        sub_state: stream
+        pcap_cnt: 8
+  - filter:
+      count: 0
+      match:
+        event_type: drop
