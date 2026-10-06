@@ -1,0 +1,5 @@
+# Accept the ssh flow up to and including the server banner. The next server
+# packet matches no rule and falls through to the packet.filter default policy.
+accept:hook tcp:all any any -> any 22 (sid:1;)
+accept:hook tcp:all any 22 -> any any (dsize:>0; flowbits:set,srv_banner; sid:2;)
+accept:hook tcp:all any 22 -> any any (flowbits:isnotset,srv_banner; sid:3;)

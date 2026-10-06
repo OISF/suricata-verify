@@ -1,0 +1,27 @@
+requires:
+  min-version: 9
+
+pcap: ../../ssh-ips-drop-flush/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+  # The server ACK after the banner (pcap_cnt 14) is dropped by the
+  # packet.filter drop:flow default policy. The pending ssh record must be
+  # logged by the output stage of that packet, as the flow-end flush is
+  # skipped for dropped flows.
+  - filter:
+      count: 1
+      match:
+        event_type: ssh
+        pcap_cnt: 14
+        ssh.client.software_version: "OpenSSH_for_Windows_7.7"
+        ssh.server.software_version: "OpenSSH_7.4"
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: ssh
+        flow.action: drop
