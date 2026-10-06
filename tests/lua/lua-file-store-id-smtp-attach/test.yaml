@@ -1,0 +1,13 @@
+requires:
+  min-version: 8.0.8
+
+pcap: input.pcap
+
+checks:
+  # File::file_store_id (the file_id() accessor) is assigned per file by
+  # the filedata path (output-filedata.c) when the file-store output is
+  # enabled: both files of the flow must get a non-zero id and the ids
+  # must be distinct, so a script can key per-file state on file_id()
+  - shell:
+      args: awk '/^id=/ {n++; ids[n]=$2} END {ok = (n>=2 && ids[1]>=1 && ids[2]>=1 && ids[1]!=ids[2]); if (!ok) exit 1}' results.log && echo OK || cat results.log
+      expect: OK
