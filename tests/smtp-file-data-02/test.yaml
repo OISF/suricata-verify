@@ -27,28 +27,6 @@ checks:
       src_ip: 10.10.1.4
       src_port: 1470
       tx_id: 0
-# Pre-8.0.7 does not defer tx completion to the server response, so the
-# SMTP event lands two packets earlier. Backported to 8.0.7.
-- filter:
-    requires:
-      lt-version: 8.0.7
-    count: 1
-    match:
-      dest_ip: 74.53.140.153
-      dest_port: 25
-      email.attachment[0]: NEWS.txt
-      email.from: '"Gurpartap Singh" <gurpartap@patriots.in>'
-      email.status: PARSE_DONE
-      email.to[0]: <raj_deol2002in@yahoo.co.in>
-      event_type: smtp
-      pcap_cnt: 51
-      proto: TCP
-      smtp.helo: GP
-      smtp.mail_from: <gurpartap@patriots.in>
-      smtp.rcpt_to[0]: <raj_deol2002in@yahoo.co.in>
-      src_ip: 10.10.1.4
-      src_port: 1470
-      tx_id: 0
 - filter:
     count: 1
     match:
@@ -85,21 +63,6 @@ checks:
       src_ip: 10.10.1.4
       src_port: 1470
       tx_id: 0
-# Pre-8.0.7 creates/logs a trailing QUIT transaction with inherited HELO.
-- filter:
-    requires:
-      lt-version: 8.0.7
-    count: 1
-    match:
-      dest_ip: 74.53.140.153
-      dest_port: 25
-      event_type: smtp
-      pcap_cnt: 58
-      proto: TCP
-      smtp.helo: GP
-      src_ip: 10.10.1.4
-      src_port: 1470
-      tx_id: 1
 - filter:
     requires:
       min-version: 8.0.7

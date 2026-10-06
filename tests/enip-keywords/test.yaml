@@ -8,13 +8,6 @@ args:
 
 checks:
   - filter:
-      requires:
-        lt-version: 8
-      count: 41
-      match:
-        event_type: alert
-        alert.signature_id: 1
-  - filter:
       # version 8 also works on responses
       requires:
         min-version: 8
