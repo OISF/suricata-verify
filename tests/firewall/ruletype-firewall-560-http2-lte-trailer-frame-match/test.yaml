@@ -9,7 +9,7 @@ pcap: input.pcap
 checks:
   # the trailer header field lands in a HEADERS frame after the body, so the rule
   # hooked at request_headers can only match above its hook, in the sub-state
-  # revisit band: http2 stream progress, request_closed 3, request_headers 1.
+  # revisit band: request_closed is 3, the hook (request_headers) is 1.
   - filter:
       count: 1
       match:
