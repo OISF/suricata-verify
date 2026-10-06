@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"Windows PE file detected (should not match)"; flow:established,to_client; windows_pe; content:"ZM"; depth:2; sid:1; rev:1;)

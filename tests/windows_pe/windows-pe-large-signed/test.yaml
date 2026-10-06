@@ -1,0 +1,29 @@
+requires:
+  min-version: 9.0.0
+
+# The signing certificate sits at the end of a ~130 KB PE, past the default
+# response-body-limit (100 KiB) and response-body-minimal-inspect-size (40 KiB).
+# Raising the three buffering limits keeps the whole file available from offset 0
+# so cert_* can match. Without them, only the header-based `signature` flag fires.
+args:
+- -k none
+- --set stream.reassembly.depth=1mb
+- --set app-layer.protocols.http.libhtp.default-config.response-body-limit=1mb
+- --set app-layer.protocols.http.libhtp.default-config.response-body-minimal-inspect-size=1mb
+
+checks:
+# header-based presence flag matches
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+# with the raised buffering limits, the certificate at the end of the file is
+# reached, so the thumbprint matches and the cert identity is logged
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2
+      files[0].executable.signed: true
+      files[0].executable.cert_thumbprint: 29D492AD11646EB10B9F0BC7CB816D4318C7F4D6

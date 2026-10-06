@@ -1,0 +1,3 @@
+alert http any any -> any any (msg:"WPE leaf signer subject"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: cert_subject "Real Leaf Signer"; sid:1; rev:1;)
+alert http any any -> any any (msg:"WPE non-leaf chain cert subject"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: cert_subject "Decoy Chain Cert"; sid:2; rev:1;)
+alert http any any -> any any (msg:"WPE leaf thumbprint"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: cert_thumbprint A6D8167BD096A391D8C68472E14B7B7F37D78468; sid:3; rev:1;)

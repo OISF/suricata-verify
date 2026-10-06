@@ -1,0 +1,11 @@
+# Test windows_pe size_of_headers keyword
+# All test PEs have size_of_headers=512 (0x200)
+
+# Match: size_of_headers 512 (all 5 PEs match)
+alert http any any -> any any ( msg:"TEST size_of_headers 512"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: size_of_headers 512; sid:1; rev:1;)
+
+# No match: size_of_headers > 1024 (none match)
+alert http any any -> any any ( msg:"TEST size_of_headers >1024"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: size_of_headers >1024; sid:2; rev:1;)
+
+# Match: size_of_headers range 256-1024 (all 5 match)
+alert http any any -> any any ( msg:"TEST size_of_headers range"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: size_of_headers 256-1024; sid:3; rev:1;)

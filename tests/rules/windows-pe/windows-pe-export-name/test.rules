@@ -1,0 +1,17 @@
+# Detect PE with export name "mylib.dll" — only the DLL has it (1 alert)
+alert http any any -> any any (msg:"PE export name mylib.dll"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: export_name mylib.dll; sid:1; rev:1;)
+
+# Negative test: export name that doesn't exist (0 alerts)
+alert http any any -> any any (msg:"PE export name notexist.dll"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: export_name notexist.dll; sid:2; rev:1;)
+
+# Combined: arch x86 + export name — DLL PE only (1 alert)
+alert http any any -> any any (msg:"x86 PE export mylib.dll"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, export_name mylib.dll; sid:3; rev:1;)
+
+# Combined: wrong arch + valid export name — no match (0 alerts)
+alert http any any -> any any (msg:"x64 PE export mylib.dll"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86_64, export_name mylib.dll; sid:4; rev:1;)
+
+# Case insensitivity test: MYLIB.DLL uppercase — export_name is lowercased (1 alert)
+alert http any any -> any any (msg:"PE export name MYLIB.DLL"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: export_name MYLIB.DLL; sid:5; rev:1;)
+
+# Combined: export name + num_exports — DLL has 3 exports (1 alert)
+alert http any any -> any any (msg:"PE mylib.dll with exports >0"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: export_name mylib.dll, num_exports >0; sid:6; rev:1;)

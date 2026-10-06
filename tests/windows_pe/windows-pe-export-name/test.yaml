@@ -1,0 +1,55 @@
+requires:
+  min-version: 9
+
+args:
+- -k none
+
+checks:
+# SID 1: export_name mylib.dll — only DLL PE has it (1 match)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+
+# SID 2: export_name notexist.dll — no PE has it (0 matches)
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 2
+
+# SID 3: arch x86 + export_name mylib.dll (1 match)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 3
+
+# SID 4: arch x86_64 + export_name — wrong arch (0 matches)
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 4
+
+# SID 5: MYLIB.DLL uppercase — case insensitive (1 match)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 5
+
+# SID 6: export_name + num_exports combined (1 match)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 6
+
+# Verify fileinfo events
+- filter:
+    count: 2
+    match:
+      event_type: fileinfo
+      executable.type: windows_pe

@@ -1,0 +1,41 @@
+pcap: ../windows-pe-basic/multi_pe.pcap
+
+requires:
+  min-version: 9
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 5
+    match:
+      event_type: alert
+      alert.signature_id: 70
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 71
+- filter:
+    count: 5
+    match:
+      event_type: alert
+      alert.signature_id: 72
+- filter:
+    count: 5
+    match:
+      event_type: alert
+      alert.signature_id: 73
+
+# Verify characteristics fields are correctly logged in fileinfo events
+- filter:
+    count: 5
+    match:
+      event_type: fileinfo
+      executable.characteristics: 258
+- filter:
+    count: 5
+    match:
+      event_type: fileinfo
+      has-key: executable.characteristics_names

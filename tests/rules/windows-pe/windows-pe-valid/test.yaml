@@ -1,0 +1,16 @@
+# Test: Valid Windows PE file detection (positive case)
+# Validates that a properly formatted PE file with correct MZ header and PE signature is detected
+
+
+checks:
+  # Verify that we get an alert for the valid PE file
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+
+  # Verify the alert is in fast.log
+  - shell:
+      args: cat fast.log | grep -c "Windows PE malware detected"
+      expect: 1

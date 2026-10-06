@@ -1,0 +1,52 @@
+requires:
+  min-version: 9.0.0
+
+args:
+- -k none
+
+checks:
+# signature presence: only the signed PE
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+# correct thumbprint matches the signed PE
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2
+# wrong thumbprint matches nothing
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 3
+# serial (separator-insensitive)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 4
+# subject substring
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 5
+# issuer substring
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 6
+# the signed PE's certificate identity is logged
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2
+      files[0].executable.signed: true
+      files[0].executable.cert_thumbprint: 29D492AD11646EB10B9F0BC7CB816D4318C7F4D6
+      files[0].executable.cert_serial: "0A:1B:2C:3D:4E:5F"

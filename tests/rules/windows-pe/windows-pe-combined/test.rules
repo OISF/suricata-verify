@@ -1,0 +1,17 @@
+# Test combined PE metadata keywords
+# PE metadata: x86 (0x014C), 1 section, entry_point=0x1000, subsystem=3, SizeOfImage: 512/1024/512/4096/2048
+
+# Test 1: x86 PE with few sections and standard entry point (all 5 match)
+alert http any any -> any any ( msg:"TEST x86 PE with few sections"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, sections <3, entry_point >4000; sid:60; rev:1;)
+
+# Test 2: Console app with SizeOfImage > 500 (all 5 match)
+alert http any any -> any any ( msg:"TEST Console application >500"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, size >500, subsystem 3; sid:61; rev:1;)
+
+# Test 3: Console with small size and few sections (all 5 match)
+alert http any any -> any any ( msg:"TEST Small console utility"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, size <5000, sections <3, subsystem 3; sid:62; rev:1;)
+
+# Test 4: PE with specific entry point and section count (all 5 match)
+alert http any any -> any any ( msg:"TEST PE exact entry point and sections"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, sections <3, entry_point 4096; sid:63; rev:1;)
+
+# Test 5: Large PE files with x86 characteristics (matches: 1024, 4096, 2048 = 3)
+alert http any any -> any any ( msg:"TEST Larger x86 PE files"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, size >1000, entry_point 4000-5000; sid:64; rev:1;)
