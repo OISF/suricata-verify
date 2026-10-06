@@ -1,0 +1,12 @@
+# absent takes no argument or or_else. The transform-outcome arguments
+# belong to transform_result: absent rejects them, and each error names
+# the transform_result form to use instead.
+
+alert http any any -> any any (msg:"absent with must_succeed"; \
+    http.uri; from_base64: mode strict; absent: must_succeed; content:"x"; sid:1;)
+
+alert http any any -> any any (msg:"absent with must_error"; \
+    http.uri; from_base64: mode strict; absent: must_error; sid:2;)
+
+alert http any any -> any any (msg:"absent with error_or"; \
+    http.uri; from_base64: mode strict; absent: error_or; content:"x"; sid:3;)

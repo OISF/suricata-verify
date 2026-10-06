@@ -1,0 +1,4 @@
+alert http any any -> any any (msg:"must_succeed"; http.uri; from_base64; transform_result: must_succeed; content:"x"; sid:1;)
+alert http any any -> any any (msg:"must_error"; http.uri; from_base64; transform_result: must_error; sid:2;)
+alert http any any -> any any (msg:"error_or"; http.uri; from_base64; transform_result: error_or; content:"x"; sid:3;)
+alert http any any -> any any (msg:"absent"; http.referer; absent; sid:4;)

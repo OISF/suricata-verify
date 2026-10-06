@@ -1,0 +1,23 @@
+# Each rule exercises one failure the transform_result parser or validator
+# must reject. The test asserts the specific error-message substrings.
+
+# No argument
+alert http any any -> any any (msg:"no arg"; \
+    http.uri; from_base64; transform_result; content:"x"; sid:1;)
+
+# Invalid value
+alert http any any -> any any (msg:"invalid value"; \
+    http.uri; from_base64; transform_result: wibble; content:"x"; sid:2;)
+
+# Duplicate: absent and transform_result on the same buffer
+alert http any any -> any any (msg:"absent and transform_result"; \
+    http.uri; from_base64; absent: or_else; transform_result: must_succeed; content:"x"; sid:3;)
+
+# Duplicate: two transform_result on the same buffer
+alert http any any -> any any (msg:"double transform_result"; \
+    http.uri; from_base64; transform_result: error_or; transform_result: must_succeed; \
+    content:"x"; sid:4;)
+
+# transform_result + fast_pattern on the same buffer
+alert http any any -> any any (msg:"transform_result + fast_pattern"; \
+    http.uri; from_base64; transform_result: error_or; content:"x"; fast_pattern; sid:5;)
