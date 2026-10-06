@@ -1,0 +1,28 @@
+# Each rule breaks one rule-load constraint shared by absent and
+# transform_result; the test asserts the matching error message.
+
+# keyword must come first on its buffer (content precedes it here)
+alert http any any -> any any (msg:"content before transform_result"; \
+    http.uri; from_base64; content:"x"; transform_result: must_succeed; content:"y"; sid:1;)
+
+# transform_result needs a transform that can fail; strip_whitespace cannot
+alert dns any any -> any any (msg:"must_error after a transform that cannot fail"; \
+    dns.query; strip_whitespace; transform_result: must_error; sid:2;)
+alert dns any any -> any any (msg:"must_succeed after a transform that cannot fail"; \
+    dns.query; strip_whitespace; transform_result: must_succeed; content:"x"; sid:3;)
+
+# error_or and or_else need another keyword on the buffer to fall through to
+alert http any any -> any any (msg:"error_or alone"; \
+    http.uri; from_base64; transform_result: error_or; sid:4;)
+alert http any any -> any any (msg:"or_else alone"; \
+    http.referer; absent: or_else; sid:5;)
+
+# absent with fast_pattern on the same buffer
+alert http any any -> any any (msg:"absent with fast_pattern"; \
+    http.referer; absent: or_else; content:"x"; fast_pattern; sid:6;)
+
+# neither keyword works on a frame
+alert http any any -> any any (msg:"transform_result on a frame"; \
+    frame:http1.request; transform_result: must_error; sid:7;)
+alert http any any -> any any (msg:"absent on a frame"; \
+    frame:http1.request; absent; sid:8;)
