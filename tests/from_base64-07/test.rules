@@ -1,0 +1,12 @@
+# pcap has one HTTP request with URI /?arg=Zm 9v Ym Fy. The 11 bytes after
+# offset 6 decode to "foobar" in rfc2045 mode.
+
+# bytes equal to the input left after offset decodes all of it
+alert http any any -> any any (msg:"bytes equal to the remaining input decodes"; flow:established,to_server; \
+    http.uri; from_base64: offset 6, bytes 11, mode rfc2045; content:"foobar"; sid:1;)
+
+# bytes larger than the input left after offset leaves the buffer undecoded
+alert http any any -> any any (msg:"bytes past the remaining input does not decode"; flow:established,to_server; \
+    http.uri; from_base64: offset 6, bytes 12, mode rfc2045; content:"foobar"; sid:2;)
+alert http any any -> any any (msg:"bytes past the remaining input keeps the original"; flow:established,to_server; \
+    http.uri; from_base64: offset 6, bytes 12, mode rfc2045; content:"Zm 9v Ym Fy"; sid:3;)
