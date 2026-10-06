@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Craft an http2 pcap whose request stream carries a trailer HEADERS frame.
 
-Same as h2late.py, but with correct TCP seq/ack bookkeeping: the SYN and the
-SYN/ACK each consume one sequence number, so payload does not overlap the
-handshake (that overlap made the stream engine drop the preface, so http2 was
-never detected).
+TCP seq/ack bookkeeping matters: the SYN and the SYN/ACK each consume one
+sequence number, so payload must not overlap the handshake. Getting this wrong
+is silent - the stream engine never delivers the 24-byte preface to proto
+detection, which reports app_proto "failed" and produces no events at all, and
+the frames still look fine in tshark.
 """
 from scapy.all import Ether, IP, TCP, wrpcap
 import struct
