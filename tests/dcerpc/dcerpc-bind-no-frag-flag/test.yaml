@@ -13,7 +13,19 @@ checks:
 
   # SID 2 matches the real UUID. There are two connections with opnum 42 in the PCAP.
   - filter:
+      requires:
+        lt-version: 9
       count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+
+  # Since Suricata 9.0, a minor-version-0 BIND with pfc_flags=0 is treated as
+  # implicitly unfragmented, so SID 2 matches both connections in the PCAP.
+  - filter:
+      requires:
+        min-version: 9.0
+      count: 2
       match:
         event_type: alert
         alert.signature_id: 2
