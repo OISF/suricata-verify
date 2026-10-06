@@ -1,0 +1,1 @@
+protocols: [data, dcerpc, eth, gss-api, ip, nbss, smb, spnego, spnego-krb5, tcp]
