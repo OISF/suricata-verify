@@ -1,0 +1,38 @@
+# curl over FTP with 68 byte EICAR file carried in a single data packet (IP len 120),
+# followed by the server's FIN.
+
+requires:
+  min-version: 8
+
+pcap: ftp_eicar_allowed.pcapng
+
+args:
+  - --simulate-ips
+  - -k none
+  - --runmode=single
+
+checks:
+  # The file is hashed and the rule matched
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        alert.action: blocked
+
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: EICAR-Test-File
+        fileinfo.md5: 44d88612fea8a8f36de82e1278abb02f
+        fileinfo.state: CLOSED
+
+  # The drop should match the packet carrying the file (frame 26, IP len 120), not on
+  # the teardown, so the client should never receive it
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        pcap_cnt: 26
+        drop.len: 120
