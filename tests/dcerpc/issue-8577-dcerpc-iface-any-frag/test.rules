@@ -1,0 +1,8 @@
+alert dcerpc any any -> any any (msg:"dcerpc.iface to_server"; flow:established,to_server; dcerpc.iface:12345678-1234-abcd-ef00-01234567cffb; sid:1;)
+alert dcerpc any any -> any any (msg:"dcerpc.iface to_server any_frag"; flow:established,to_server; dcerpc.iface:12345678-1234-abcd-ef00-01234567cffb,any_frag; sid:2;)
+alert dcerpc any any -> any any (msg:"dcerpc.iface to_client"; flow:established,to_client; dcerpc.iface:12345678-1234-abcd-ef00-01234567cffb; sid:3;)
+alert dcerpc any any -> any any (msg:"dcerpc.iface to_client any_frag"; flow:established,to_client; dcerpc.iface:12345678-1234-abcd-ef00-01234567cffb,any_frag; sid:4;)
+alert dcerpc any any -> any any (msg:"dcerpc.iface version match"; flow:established,to_server; dcerpc.iface:12345678-1234-abcd-ef00-01234567cffb,=3; sid:5;)
+alert dcerpc any any -> any any (msg:"dcerpc.iface version mismatch any_frag"; flow:established,to_server; dcerpc.iface:12345678-1234-abcd-ef00-01234567cffb,>3,any_frag; sid:6;)
+alert dcerpc any any -> any any (msg:"dcerpc.iface other uuid"; flow:established; dcerpc.iface:22222222-2222-2222-2222-222222222222; sid:7;)
+alert dcerpc any any -> any any (msg:"dcerpc.iface other uuid any_frag"; flow:established; dcerpc.iface:22222222-2222-2222-2222-222222222222,any_frag; sid:8;)
