@@ -1,0 +1,1 @@
+alert http any any => any any (msg:"Bidirectional: byte_extract from http.request_body (toserver) -> byte_test in http.stat_code (toclient)"; flow:established; http.request_body; content:"size="; byte_extract:2,0,post_val,relative,string,dec; http.stat_code; content:"2"; byte_test:1,>,post_val,0,relative; sid:1;)

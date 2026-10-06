@@ -1,0 +1,1 @@
+alert http any any => any any (msg:"Bidirectional: byte_extract from http.uri (toserver) -> byte_test in http.stat_code (toclient)"; flow:established; http.uri; content:"/data/"; fast_pattern; byte_extract:2,0,uri_val,relative,string,dec; http.stat_code; content:"200"; file.data: to_client; content: "test"; byte_test:0,>,uri_val,0,relative,string; sid:1;)
