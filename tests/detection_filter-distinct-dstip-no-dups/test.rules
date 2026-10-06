@@ -1,0 +1,2 @@
+## Expect 0 alerts: only 2 distinct dst IPs present but threshold is 3
+alert ip any any -> any any (msg:"DF distinct dst_ip no dup"; detection_filter: track by_src, count 3, seconds 60, unique_on dst_ip; sid:100022; rev:1;)
