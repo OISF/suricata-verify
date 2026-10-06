@@ -1,4 +1,4 @@
 requires:
-  min-version: 9
+  min-version: 8.0.7
 
 pcap: ../../dns-over-http2/dns_over_https.pcap
