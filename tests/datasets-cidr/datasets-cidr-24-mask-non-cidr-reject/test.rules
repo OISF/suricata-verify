@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"mask with non-CIDR type"; ip.src; dataset:set,my-ipv4,type ipv4,mask 24; sid:1;)

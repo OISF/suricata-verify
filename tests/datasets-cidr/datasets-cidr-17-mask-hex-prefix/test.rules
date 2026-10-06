@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"CIDR set with mask 0x18 (hex prefix == /24)"; ip.src; dataset:set,masked-cidr,type cidr,mask 0x18; sid:1;)
