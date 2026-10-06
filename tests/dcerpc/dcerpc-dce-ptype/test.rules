@@ -1,0 +1,6 @@
+alert tcp any any -> any any (msg:"DCERPC ptype bind"; flow:established,to_server; dcerpc.ptype:11; sid:1;)
+alert tcp any any -> any any (msg:"DCERPC ptype bind_ack"; flow:established,to_client; dcerpc.ptype:12; sid:2;)
+alert tcp any any -> any any (msg:"DCERPC ptype request"; flow:established,to_server; dcerpc.ptype:0; sid:3;)
+alert tcp any any -> any any (msg:"DCERPC ptype response"; flow:established,to_client; dcerpc.ptype:2; sid:4;)
+alert tcp any any -> any any (msg:"DCERPC ptype >10"; flow:established,to_server; dcerpc.ptype:>10; sid:5;)
+alert tcp any any -> any any (msg:"DCERPC ptype not request"; flow:established,to_server; dcerpc.ptype:!0; sid:6;)
