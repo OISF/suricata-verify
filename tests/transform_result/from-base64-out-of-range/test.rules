@@ -1,0 +1,35 @@
+# pcap has one HTTP request with URI /?arg=Zm 9v Ym Fy. The 11 bytes after
+# offset 6 decode to "foobar" in rfc2045 mode.
+#
+# from_base64 signals an error when it has nothing to decode: offset at or
+# past the end of the buffer, or bytes larger than the input left after
+# offset. The buffer is left undecoded, so must_succeed must not let content
+# inspect it.
+
+alert http any any -> any any (msg:"offset past end, must_succeed"; flow:established,to_server; \
+    http.uri; from_base64: offset 100; transform_result: must_succeed; content:"/?arg"; sid:1;)
+alert http any any -> any any (msg:"offset past end, must_error"; flow:established,to_server; \
+    http.uri; from_base64: offset 100; transform_result: must_error; sid:2;)
+alert http any any -> any any (msg:"bytes past end, must_succeed"; flow:established,to_server; \
+    http.uri; from_base64: bytes 1000; transform_result: must_succeed; content:"/?arg"; sid:3;)
+alert http any any -> any any (msg:"bytes past end, error_or"; flow:established,to_server; \
+    http.uri; from_base64: bytes 1000; transform_result: error_or; content:"nomatch"; sid:4;)
+
+# control for sid 3: without transform_result the undecoded URI is inspected
+alert http any any -> any any (msg:"bytes past end without transform_result"; flow:established,to_server; \
+    http.uri; from_base64: bytes 1000; content:"/?arg"; sid:5;)
+
+# bytes equal to the input left after offset decodes all of it
+alert http any any -> any any (msg:"bytes equal to the remaining input"; flow:established,to_server; \
+    http.uri; from_base64: offset 6, bytes 11, mode rfc2045; transform_result: must_succeed; \
+    content:"foobar"; sid:6;)
+
+# one byte more than the remaining input is an error
+alert http any any -> any any (msg:"bytes one past the remaining input"; flow:established,to_server; \
+    http.uri; from_base64: offset 6, bytes 12, mode rfc2045; transform_result: must_error; sid:7;)
+
+# offset exactly at the end of the 17-byte URI leaves nothing to decode
+alert http any any -> any any (msg:"offset at end, must_succeed"; flow:established,to_server; \
+    http.uri; from_base64: offset 17; transform_result: must_succeed; content:"/?arg"; sid:8;)
+alert http any any -> any any (msg:"offset at end, must_error"; flow:established,to_server; \
+    http.uri; from_base64: offset 17; transform_result: must_error; sid:9;)

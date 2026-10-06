@@ -1,0 +1,20 @@
+# pcap has one request line: "GET /z4d4kWk.jpg HTTP/1.1"
+
+# pcrexform extracts "/z4d4kWk.jpg"; must_succeed lets content match it
+alert http any any -> any any (msg:"pcrexform must_succeed extracted match"; \
+    http.request_line; pcrexform:"[a-zA-Z]+\s+(.*)\s+HTTP"; \
+    transform_result: must_succeed; content:"/z4d4kWk.jpg"; sid:1;)
+
+# pcrexform fails; must_succeed keeps content from matching the original line
+alert http any any -> any any (msg:"pcrexform must_succeed on failure"; \
+    http.request_line; pcrexform:"(XXXNOMATCHXXX)"; \
+    transform_result: must_succeed; content:"GET"; sid:2;)
+
+# pcrexform succeeds; "GET" is in the original line but not the extracted text
+alert http any any -> any any (msg:"pcrexform must_succeed inspects extracted text only"; \
+    http.request_line; pcrexform:"[a-zA-Z]+\s+(.*)\s+HTTP"; \
+    transform_result: must_succeed; content:"GET"; sid:3;)
+
+# control for sid 2: without transform_result the original line is inspected
+alert http any any -> any any (msg:"pcrexform failure without transform_result"; \
+    http.request_line; pcrexform:"(XXXNOMATCHXXX)"; content:"GET"; sid:4;)
