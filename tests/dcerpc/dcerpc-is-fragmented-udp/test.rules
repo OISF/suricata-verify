@@ -1,0 +1,2 @@
+alert dcerpc any any -> any any (msg:"dcerpc.is_fragmented udp true (frag flag)"; dcerpc.is_fragmented:true; sid:1;)
+alert dcerpc any any -> any any (msg:"dcerpc.is_fragmented udp false"; dcerpc.is_fragmented:false; sid:2;)
