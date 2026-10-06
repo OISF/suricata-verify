@@ -1,0 +1,24 @@
+requires:
+  min-version: 8.0.7
+
+pcap: input.pcap
+
+checks:
+  # a fragmented PUTFH; OPEN; GETFH request: the request scanner skips
+  # the OPEN (request) args to reach the GETFH, so the record completes
+  # and the OPEN's filename association survives (via the namemap) to
+  # the following PUTFH; READ -- NOT rejected as malformed.
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.size: 8192
+        fileinfo.filename: opengetfhfile
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: READ
+        nfs.filename: opengetfhfile
+  - shell:
+      args: test "$(grep -Ec 'malformed_data' eve.json)" -eq 0

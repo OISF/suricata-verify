@@ -1,0 +1,33 @@
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+  - --set app-layer.protocols.nfs.max-write-queue-size=1024
+  - --set app-layer.protocols.nfs.max-write-queue-cnt=0
+
+requires:
+  min-version: 8.0.7
+
+pcap: input.pcap
+
+checks:
+  # the OOO chunk continuation crosses the queue limit: the chunk path
+  # rejects with an event attributed to the file's own transaction
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: write_queue_size_exceeded
+        tx_id: 0
+  # the rejection's consume/skip follows the record's unbuffered tail
+  # (file_len-based), not the count-based promise: the following RPC
+  # (the 1000-byte WRITE on the second handle) stays in the stream and
+  # its file is logged
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.size: 1000
+  - shell:
+      args: test "$(grep -Ec 'malformed' eve.json)" -eq 0

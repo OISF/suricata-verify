@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"lua hash UAF"; flow:to_server; lua:match.lua; sid:8508005;)

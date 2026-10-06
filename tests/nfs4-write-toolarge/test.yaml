@@ -1,0 +1,26 @@
+requires:
+  min-version: 8.0.7
+
+pcap: input.pcap
+args:
+  - --set app-layer.protocols.nfs.max-write-size=1024
+
+checks:
+  - shell:
+      args: test "$(grep -Ec 'write_request_too_large' eve.json)" -ge 1
+  - filter:
+      count: 2
+      match:
+        event_type: nfs
+        nfs.procedure: WRITE
+  # the rejected (too large) write is refused without file data and the
+  # peer never replies for it: the file tx must still complete (and be
+  # logged) right after the request instead of waiting for flow teardown
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.file_tx: true
+        nfs.procedure: WRITE
+        pcap_cnt: 9
+        rpc.xid: 305419777

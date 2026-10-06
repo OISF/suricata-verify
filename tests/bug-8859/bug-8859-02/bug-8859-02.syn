@@ -1,0 +1,4 @@
+flow default tcp 1.1.1.1:5555 > 2.2.2.2:21 (tcp.initialize;);
+default < (content:"220 ready\x0d\x0a";);
+default > (content:"USER a\x0d\x0a";);
+default < (content:"331 ok\x0d\x0a550 BBBBBBBBBBBBBBBBBBBBBBBBBBBB";);

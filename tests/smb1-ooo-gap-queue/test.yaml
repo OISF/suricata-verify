@@ -1,0 +1,17 @@
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+
+requires:
+  min-version: 8.0.7
+
+checks:
+  - shell:
+      args: test "$(grep -Ec 'read_queue_(size|cnt)_exceeded' eve.json)" -ge 1
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.command: SMB1_COMMAND_NEGOTIATE_PROTOCOL
+

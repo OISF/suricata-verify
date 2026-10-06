@@ -1,0 +1,40 @@
+requires:
+  min-version: 8.0.7
+
+args:
+  - -k none
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: ldap
+        src_ip: 1.1.1.1
+        ldap.request.message_id: 3
+        ldap.request.operation: unbind_request
+  - filter:
+      count: 1
+      match:
+        event_type: ldap
+        src_ip: 3.3.3.3
+        ldap.request.message_id: 2
+        ldap.responses[0].operation: bind_response
+        ldap.responses[0].bind_response.result_code: success
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.tcp.reassembly_gap: 2
+        stats.app_layer.error.ldap_tcp.parser: 0

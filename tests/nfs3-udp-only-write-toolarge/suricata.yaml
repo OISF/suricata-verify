@@ -1,0 +1,28 @@
+%YAML 1.1
+---
+# Minimal configuration for this only. NFS is enabled with the TCP
+# parser disabled: the configured limits must still be loaded via the
+# UDP parser registration.
+
+app-layer:
+  protocols:
+    nfs:
+      enabled: yes
+      tcp:
+        enabled: no
+      udp:
+        enabled: yes
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - nfs:
+            enabled: yes
+        - anomaly:
+            enabled: yes
+            types:
+              applayer: yes
+        - flow

@@ -1,0 +1,45 @@
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+  - --set app-layer.protocols.nfs.max-write-queue-size=4096
+  - --set app-layer.protocols.nfs.max-write-queue-cnt=0
+  - --set stream.reassembly.depth=33554432
+
+requires:
+  min-version: 8.0.7
+
+pcap: input.pcap
+
+checks:
+  # the queue is rejected on the chunk continuation, on the second tx
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: write_queue_size_exceeded
+        tx_id: 1
+  # the skip covers the record's XDR padding: the next record parses
+  - shell:
+      args: test "$(grep -Ec 'malformed' eve.json)" -eq 0
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: WRITE
+        nfs.file_tx: true
+        rpc.xid: 3
+  # the in-order file and the later file are stored intact
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: "3cd415359b70f2455b7601ea31f625e6a781a59d95b541e630c7b860ee048bd8"
+        fileinfo.stored: true
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: "7aaf34db1c7fcb2b24da4106424293956f66c4762412ec0a963e61abcb672d92"
+        fileinfo.stored: true

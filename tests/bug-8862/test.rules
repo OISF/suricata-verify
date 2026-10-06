@@ -1,0 +1,5 @@
+alert ip any any -> any any (msg:"pcre flowvar capture, named group"; pcre:"/(?P<flow_x>EVIL)/"; sid:1; rev:1;)
+alert ip any any -> any any (msg:"pcre flowvar capture, comma form"; pcre:"/(EVIL)/, flow:y"; sid:2; rev:1;)
+alert ip any any -> any any (msg:"pcre pktvar capture"; pcre:"/(?P<pkt_p>EVIL)/"; sid:3; rev:1;)
+alert ip any any -> any any (msg:"pcre alertvar capture"; pcre:"/(?P<alert_a>EVIL)/"; sid:4; rev:1;)
+alert ip any any -> any any (msg:"pcre flowvar and pktvar captures"; pcre:"/(?P<flow_q>EV)(?P<pkt_r>IL)/"; sid:5; rev:1;)

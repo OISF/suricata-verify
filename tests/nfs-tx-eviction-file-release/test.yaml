@@ -1,0 +1,32 @@
+%YAML 1.1
+---
+# Memory bound across file handles: 1100 handles each open a file with
+# one in-order write, so the transaction list exceeds NFS_MAX_TX
+# (1024). Each new transaction evicts one open transaction; the
+# evicted transaction's file tracker must be truncated so the file
+# logger releases the file and its queued data immediately, instead of
+# retaining it until flow teardown. The eviction is pinned both by the
+# TooManyTransactions events and by the evicted files being logged
+# truncated mid-flow.
+
+requires:
+  min-version: 8.0.7
+
+pcap: input.pcap
+args:
+  - -k none
+
+checks:
+  # the evictions happen: 1100 - 1025 = 75 transactions evicted
+  - shell:
+      args: test "$(grep -Ec 'too_many_transactions' eve.json)" -eq 75
+  # and each evicted file is released at eviction time (mid-flow,
+  # truncated), not held open until flow teardown
+  - shell:
+      args: test "$(grep '"event_type":"fileinfo"' eve.json | grep '"state":"TRUNCATED"' | grep -c '"pcap_cnt"')" -eq 75
+  # every file is logged eventually
+  - shell:
+      args: test "$(grep -c '"event_type":"fileinfo"' eve.json)" -eq 1100
+  # no desync
+  - shell:
+      args: test "$(grep -Ec 'malformed' eve.json)" -eq 0

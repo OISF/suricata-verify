@@ -1,0 +1,3 @@
+# Regression test for stream-tcp.c StreamTcp3whsStoreSynApplyToSsn() flag-wipe bug.
+# SID 1 matches the HTTP GET so we can confirm data reaches app-layer after the fix.
+alert http any any -> any any (msg:"REGRESSION: HTTP request reached AL"; flow:established,to_server; content:"GET"; http_method; sid:1; rev:1;)

@@ -1,0 +1,1 @@
+alert tls any any -> any any (msg:"ticket 8853 invalid SSLv2 record"; flow:established,to_server; app-layer-event:tls.invalid_ssl_record; sid:8853001; rev:1;)

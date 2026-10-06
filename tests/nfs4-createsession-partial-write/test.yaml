@@ -1,0 +1,18 @@
+requires:
+  min-version: 8.0.7
+
+pcap: input.pcap
+
+checks:
+  # Three v4 COMPOUND requests, each leading with a CREATE_SESSION op
+  # (a valid, variable-length op: AUTH_NONE, AUTH_SYS, and a non-empty
+  # RDMA channel variant) and carrying an oversized WRITE (17 MiB claim,
+  # above the 16 MiB default max-write-size) as its second op, in a record
+  # claiming 8 KiB. The scanner must NOT advance past the CREATE_SESSION
+  # op (its channel/RDMA attributes are variable-length): a non-last op
+  # whose arguments cannot be reliably skipped makes the whole compound
+  # Malformed. The record is rejected and skipped to its marker boundary,
+  # so the 17 MiB claim can never drive buffering (Redmine #8791). The
+  # check asserts the three malformed_data events.
+  - shell:
+      args: test "$(grep -Ec 'malformed_data' eve.json)" -ge 3

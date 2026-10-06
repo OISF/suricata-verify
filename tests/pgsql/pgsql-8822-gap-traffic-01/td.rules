@@ -1,0 +1,1 @@
+alert pgsql any any -> any any (msg:"PGSQL query seen"; pgsql.query; content:"SELECT"; sid:1;)

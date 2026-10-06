@@ -1,0 +1,27 @@
+%YAML 1.1
+---
+
+stats:
+  enabled: true
+  decoder-events: true
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - pgsql:
+            enabled: yes
+        - flow
+        - alert
+        - anomaly:
+            enabled: true
+            types:
+              applayer: yes
+
+app-layer:
+  protocols:
+    pgsql:
+      enabled: yes
+      max-responses: 21

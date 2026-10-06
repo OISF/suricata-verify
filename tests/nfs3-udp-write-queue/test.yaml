@@ -1,0 +1,25 @@
+requires:
+  min-version: 8.0.7
+
+pcap: input.pcap
+
+args:
+  - --set app-layer.protocols.nfs.max-write-queue-size=65536
+
+checks:
+  # The write-queue limit bounds *in-flight, not-yet-orderable* bytes in
+  # the per-file tracker. The 10 x 32KiB WRITE datagrams use UNSTABLE
+  # writes (a FILE_SYNC write closes the file tracker immediately, making
+  # each write a separate file) and shuffled offsets so the missing
+  # pieces keep earlier chunks in flight. With a 64KiB queue limit the
+  # in-flight window passes the limit on the third datagram and every
+  # later datagram is refused with write_queue_size_exceeded.
+  - shell:
+      args: test "$(grep -Ec 'write_queue_size_exceeded' eve.json)" -ge 1
+  - shell:
+      args: test "$(grep -Ec 'malformed_data' eve.json)" -eq 0
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: nfs

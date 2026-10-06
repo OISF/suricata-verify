@@ -1,0 +1,3 @@
+alert http any any -> any any (msg:"HTTP request chunk extension"; flow:established,to_server; app-layer-event:http.request_chunk_extension; sid:1; rev:1;)
+alert http any any -> any any (msg:"HTTP response chunk extension"; flow:established,to_client; app-layer-event:http.response_chunk_extension; sid:2; rev:1;)
+alert http any any -> any any (msg:"HTTP 100 Continue already seen"; flow:established,to_client; app-layer-event:http.100_continue_already_seen; sid:3; rev:1;)

@@ -1,0 +1,42 @@
+%YAML 1.1
+---
+# A partial (incomplete) NFSv4 compound reply whose CREATE result carries
+# an empty attribute bitmap (attr_cnt=0) before the READ: the RPC fragment
+# claims the full record but only a fraction is present (CREATE result with
+# change info + empty bitmap, READ with a claimed 4096-byte data blob).
+# Before the fix the scan delegated the CREATE result to the regular
+# parser, which reads a first bitmap word even for attr_cnt=0, consuming
+# the READ op's tag: the next tag read was misaligned, the scan aborted,
+# the oversized READ was never rejected and the reply kept buffering toward
+# the claimed (up to 31-bit RPC length) record size. After the fix the scan
+# advances leading ops by their declared length fields only (change info +
+# attr_cnt words) and rejects the READ mid-flow.
+
+requires:
+  min-version: 8.0.7
+
+pcap: input.pcap
+args:
+  - --set app-layer.protocols.nfs.max-read-size=1024
+
+checks:
+  - shell:
+      args: test "$(grep -Ec 'read_response_too_large' eve.json)" -ge 1
+  - shell:
+      args: test "$(grep -Ec 'malformed_data' eve.json)" -eq 0
+  - shell:
+      args: test "$(grep -Ec 'too_many_transactions' eve.json)" -eq 0
+  # the rejected READ response is logged mid-flow (pcap_cnt present) with
+  # the file transaction completed, not left open
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: READ
+        nfs.file_tx: true
+        pcap_cnt: 11
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: nfs

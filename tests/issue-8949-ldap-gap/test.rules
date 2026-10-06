@@ -1,0 +1,2 @@
+alert ldap any any -> any any (msg:"LDAP unbind after request gap"; ldap.request.operation:unbind_request; sid:1;)
+alert ldap any any -> any any (msg:"LDAP bind response after response gap"; ldap.responses.result_code:success; sid:2;)

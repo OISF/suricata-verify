@@ -1,0 +1,33 @@
+pcap: ../../cond-log-dns-dig/input.pcap
+
+requires:
+  min-version: 8.0.7
+
+args:
+  - --set security.lua.allow-rules=true
+  - --set default-rule-path=.
+
+# The Lua rule script calls a suricata.packet method with a wrong-type userdata
+# (a flowint) as "self".
+#
+# On affected versions the methods use a raw lua_touserdata() with no type
+# check, reinterpret the foreign object as a Packet and dereference it ->
+# SIGSEGV. The process is killed by signal 11, so the run exits with code -11
+# and this test FAILS on the exit code.
+#
+# Once fixed (luaL_checkudata type validation) the wrong-type call raises a
+# catchable Lua error naming the expected type; lua_pcall catches it, the rule
+# is counted as an error and matches nothing, and the engine runs to completion.
+# So: no crash (clean exit), no alert, and the type error is logged.
+checks:
+  # match() aborted on the type error -> the rule never alerts.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+
+  # Prove the abort was the type-check firing (and that match() actually ran),
+  # not a vacuous pass: the wrong-type argument was rejected by name.
+  - shell:
+      args: 'grep -q "suricata:packet expected, got suricata:flowint:mt" suricata.log && echo ok'
+      expect: ok

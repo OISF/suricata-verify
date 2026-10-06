@@ -1,0 +1,30 @@
+requires:
+  min-version: 8.0.7
+
+pcap: input.pcap
+args:
+  - -k none
+  - --set app-layer.protocols.nfs.max-read-size=4096
+
+checks:
+  # the rejected (claimed-size over limit) write raises the event
+  - shell:
+      args: test "$(grep -Ec 'read_response_too_large' eve.json)" -ge 1
+  # the following (benign) record must still parse: no desync
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: READ
+        nfs.file_tx: true
+        rpc.xid: 3
+  # the benign file is stored intact
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: "7aaf34db1c7fcb2b24da4106424293956f66c4762412ec0a963e61abcb672d92"
+        fileinfo.stored: true
+  # a desync would surface as malformed data
+  - shell:
+      args: test "$(grep -Ec 'malformed' eve.json)" -eq 0

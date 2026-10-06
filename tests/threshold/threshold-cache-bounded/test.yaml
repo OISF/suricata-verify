@@ -1,0 +1,32 @@
+# Regression test for the unbounded growth of the per-thread threshold
+# decision cache (limit/both thresholds tracked by_src/by_dst, IPv4).
+#
+# See README.md in this directory. The test fails on builds where the
+# cache has no memory bound (the detect.thresholds.cache.memuse counter
+# does not exist, or its value exceeds the bound). It must be added
+# together with the fix that bounds the cache.
+requires:
+  min-version: 8.0.7
+
+args:
+  # single detection thread so the per-thread cache is a single cache
+  - --runmode=single
+  - -k none
+
+checks:
+  # Functional part: exactly one alert per unique source (first packet in
+  # the window) plus the final packet; the 2nd and 3rd packet of every
+  # source are suppressed (the 3rd one is served by the decision cache).
+  - filter:
+      count: 100001
+      match:
+        event_type: alert
+        alert.signature_id: 9000009
+
+  # Regression part: after 100000 distinct cache keys were inserted the
+  # decision cache memory must stay bounded. With the default cap of 256
+  # entries per thread the worst case is ~22.5 KiB (256 entries x 88 bytes
+  # item + bucket); 64 KiB leaves margin for entry-size drift while still
+  # catching unbounded growth (pre-fix this capture retains ~10 MiB).
+  - stats:
+      detect.thresholds.cache.memuse.__lte: 65536

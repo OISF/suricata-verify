@@ -1,0 +1,17 @@
+requires:
+  min-version: 8.0.7
+
+pcap: input.pcap
+
+checks:
+  # a fragmented NFSv4.1 SEQUENCE; PUTFH; READ reply: the response scanner
+  # skips the 36-byte successful SEQUENCE result (and the PUTFH status) to
+  # reach the within-limit READ, so the record completes and the 8192-byte
+  # read is inspected (fileinfo), NOT rejected as malformed.
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.size: 8192
+  - shell:
+      args: test "$(grep -Ec 'malformed_data' eve.json)" -eq 0

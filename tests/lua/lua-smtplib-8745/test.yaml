@@ -1,0 +1,12 @@
+requires:
+  min-version: 8.0.7
+
+args:
+ - -k none
+ - --set security.lua.allow-rules=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        alert.signature_id: 1

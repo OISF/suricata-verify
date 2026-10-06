@@ -1,0 +1,2 @@
+alert enip any any -> any any (msg:"SURICATA ENIP CIP Multiple Service DoS PoC"; enip_command:111; sid:6450111; rev:1;)
+alert enip any any -> any any (msg:"SURICATA ENIP invalid PDU"; app-layer-event:enip.invalid_pdu; classtype:protocol-command-decode; sid:2234001; rev:1;)

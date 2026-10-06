@@ -1,0 +1,41 @@
+%YAML 1.1
+---
+# A partial (incomplete) NFSv4 compound reply whose leading GETFH response
+# carries a 33-byte file handle (3 bytes of XDR padding): the RPC fragment
+# claims a 4196-byte record but only 244 bytes are present (GETFH + READ
+# with a claimed 4096-byte data blob). Before the fix the scan delegated the
+# GETFH to the regular parser, which leaves the handle's padding unconsumed,
+# so the next op tag started 3 bytes early, decoded to opcode zero and the
+# scan aborted: the oversized READ was never rejected early and the reply
+# kept buffering toward the claimed (up to 31-bit RPC length) record size.
+# After the fix the scan consumes the handle's XDR padding and rejects the
+# READ mid-flow at its claimed length.
+
+requires:
+  min-version: 8.0.7
+
+pcap: input.pcap
+args:
+  - --set app-layer.protocols.nfs.max-read-size=1024
+
+checks:
+  - shell:
+      args: test "$(grep -Ec 'read_response_too_large' eve.json)" -ge 1
+  - shell:
+      args: test "$(grep -Ec 'malformed_data' eve.json)" -eq 0
+  - shell:
+      args: test "$(grep -Ec 'too_many_transactions' eve.json)" -eq 0
+  # the rejected READ response is logged mid-flow (pcap_cnt present) with the
+  # file transaction completed, not left open
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: READ
+        nfs.file_tx: true
+        pcap_cnt: 11
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: nfs

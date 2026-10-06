@@ -1,0 +1,44 @@
+# Test a partial (incomplete) NFSv4 compound reply whose first READ
+# operation FAILED (nonzero status, no result words) and whose second
+# READ operation is successful and oversized (claim 4096 >
+# max-read-size 1024). The reply's RPC fragment claims a ~4.1 KiB
+# record; the capture contains the reply truncated after 140 bytes of
+# the second READ's data.
+#
+# Before the fix the scan aborted at the failed READ op, so the later
+# successful READ was never seen and the oversized reply buffered
+# toward the claimed record length without max-read-size ever running.
+# The scan must keep walking the remaining operations (only
+# non-conforming servers can execute an operation after a failed one;
+# the scan must not let that hide a limit).
+#
+# Run with: --set app-layer.protocols.nfs.max-read-size=1024
+
+requires:
+  min-version: 8.0.7
+
+pcap: input.pcap
+args:
+  - --set app-layer.protocols.nfs.max-read-size=1024
+
+checks:
+  - shell:
+      args: test "$(grep -Ec 'read_response_too_large' eve.json)" -ge 1
+  - shell:
+      args: test "$(grep -Ec 'malformed_data' eve.json)" -eq 0
+  - shell:
+      args: test "$(grep -Ec 'too_many_transactions' eve.json)" -eq 0
+  # the rejected READ response is logged mid-flow with the file
+  # transaction completed, not left open
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: READ
+        nfs.file_tx: true
+        pcap_cnt: 11
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: nfs

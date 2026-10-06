@@ -1,0 +1,19 @@
+requires:
+  min-version: 8.0.7
+
+pcap: input.pcap
+
+checks:
+  # the v4 COMPOUND request is RPCSEC_GSS integrity wrapped (procedure 0,
+  # service 2) and claims an 8 KiB record. The enclosed compound carries a
+  # WRITE claiming 17 MiB, above the 16 MiB default max-write-size. The
+  # partial scan must unwrap the integrity envelope before scanning:
+  # scanning the raw envelope would read its length field as the compound
+  # tag length and buffer toward the claimed record length (the
+  # memory-exhaustion path of Redmine #8791) instead of rejecting.
+  - shell:
+      args: test "$(grep -Ec 'write_request_too_large' eve.json)" -ge 1
+  # no record may be buffered toward the claim: nothing beyond the
+  # rejected WRITE transaction is parsed
+  - shell:
+      args: test "$(grep -Ec '"event":"malformed_data"' eve.json)" -eq 0

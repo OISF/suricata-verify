@@ -1,0 +1,32 @@
+requires:
+  min-version: 8.0.7
+  os: linux
+  script:
+    - command -v gdb >/dev/null
+    - nm ./src/suricata | grep -q ' FileOpenFileWithId$'
+  features:
+    - USE_GDB
+
+env:
+  ASAN_OPTIONS: detect_leaks=0
+
+command: |
+  gdb --batch --return-child-result \
+      -x "${TEST_DIR}/fail-file-open.gdb" \
+      --args "${SRCDIR}/src/suricata" --init-errors-fatal \
+      -l "${OUTPUT_DIR}" -c "${SRCDIR}/suricata.yaml" \
+      -r "${TEST_DIR}/input.pcap" --disable-detection -k none \
+      --runmode single
+
+checks:
+  - shell:
+      args: "grep -qx 'SV_FAULT_INJECTION: FileOpenFileWithId -> -1' stdout"
+
+  - filter:
+      count: 0
+      match:
+        event_type: fileinfo
+
+  - stats:
+      app_layer.flow.smtp: 1
+      app_layer.tx.smtp: 1

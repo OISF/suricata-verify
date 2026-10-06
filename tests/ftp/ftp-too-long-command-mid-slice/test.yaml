@@ -1,0 +1,42 @@
+# Over-long command with no LF, mid-slice; see README.md.
+
+requires:
+  min-version: 8.0.7
+
+args:
+- -k none --set app-layer.protocols.ftp.max-line-length=32
+
+checks:
+  - filter:
+      count: 4
+      match:
+        event_type: ftp
+
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: PORT
+        ftp.command_data: "AAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        ftp.command_truncated: true
+
+  # "PASS s3cret" is the remainder of the truncated PORT command, not a command
+  # of its own, so it must not reach a transaction.
+  - filter:
+      count: 0
+      match:
+        event_type: ftp
+        ftp.command: PASS
+
+  # The command behind that remainder is a command of its own and must survive.
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: QUIT
+
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: request_command_too_long

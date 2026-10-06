@@ -1,0 +1,55 @@
+requires:
+  min-version: 8.0.7
+
+args:
+  - -k none
+
+checks:
+  # 3 transactions per flow: startup/auth, query + CopyInResponse, copy data
+  - filter:
+      count: 6
+      match:
+        event_type: pgsql
+  # only the malformed flow raises the event
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: pgsql
+        anomaly.type: applayer
+        anomaly.event: "malformed_response"
+        anomaly.layer: "proto_parser"
+  # the malformed CopyInResponse is still logged, bounded by the informed length
+  - filter:
+      count: 1
+      match:
+        event_type: pgsql
+        pgsql.response.copy_in_response.malformed: true
+        pgsql.response.copy_in_response.columns: 0
+  # control flow: same message, well-formed
+  - filter:
+      count: 1
+      match:
+        event_type: pgsql
+        pgsql.response.copy_in_response.malformed: false
+        pgsql.response.copy_in_response.columns: 0
+  # the regression guard: a malformed CopyInResponse must not stop the frontend
+  # from entering CopyIn mode, so both flows must account for the CopyData
+  # messages identically
+  - filter:
+      count: 2
+      match:
+        event_type: pgsql
+        pgsql.request.copy_data_in.msg_count: 2
+        pgsql.request.copy_data_in.data_size: 15
+        pgsql.request.message: "copy_done"
+        pgsql.response.command_completed: "COPY 2"
+  - filter:
+      count: 2
+      match:
+        event_type: flow
+        app_proto: pgsql

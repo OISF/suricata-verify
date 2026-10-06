@@ -1,0 +1,4 @@
+alert dns any any -> any any (msg:"TEST dataset type confusion survived"; \
+      flow:to_server; \
+      dns.queries.rrname; content: "www.suricata-ids.org"; \
+      lua:type-confusion.lua; sid:1; rev:1;)

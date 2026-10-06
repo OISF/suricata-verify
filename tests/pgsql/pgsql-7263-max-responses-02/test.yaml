@@ -1,0 +1,69 @@
+requires:
+  min-version: 8.0.7
+
+args:
+  - -k none
+
+checks:
+  # 2 transactions per flow: the startup sequence, then one query
+  - filter:
+      count: 8
+      match:
+        event_type: pgsql
+  - filter:
+      count: 4
+      match:
+        event_type: flow
+        app_proto: pgsql
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # the traffic is well-formed: no desync either
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  # no caps, so we see data from BackendKeyData for all four flows
+  - filter:
+      count: 1
+      match:
+        event_type: pgsql
+        pgsql.response.process_id: 20002
+        pgsql.response.secret_key: 1234
+  - filter:
+      count: 1
+      match:
+        event_type: pgsql
+        pgsql.response.process_id: 20004
+        pgsql.response.secret_key: 1234
+  - filter:
+      count: 0
+      match:
+        event_type: pgsql
+        pgsql.response.process_id: 20001
+  - filter:
+      count: 0
+      match:
+        event_type: pgsql
+        pgsql.response.process_id: 20003
+
+  # Every flow parses its query normally
+  - filter:
+      count: 4
+      match:
+        event_type: pgsql
+        pgsql.request.simple_query: "SELECT * from dummy_table;"
+        pgsql.response.field_count: 1
+        pgsql.response.data_rows: 1
+        pgsql.response.data_size: 1
+        pgsql.response.command_completed: "SELECT 1"
+
+  - filter:
+      count: 3
+      match:
+        event_type: anomaly
+        anomaly.app_proto: pgsql
+        anomaly.event: "too_many_responses"

@@ -1,0 +1,32 @@
+%YAML 1.1
+---
+# Repeated first-chunk queue-limit rejections must not accumulate
+# transactions. Each of the 1100 fresh handles sends a single
+# out-of-order write larger than the (lowered) max-write-queue-size,
+# so the first chunk is rejected before any file is opened. The
+# rejected transaction must be completed and its file accounting
+# balanced so it can be cleaned up; otherwise the file logger keeps
+# every dangling transaction live until flow teardown, the list grows
+# past NFS_MAX_TX and evictions fire.
+
+requires:
+  min-version: 8.0.7
+
+pcap: input.pcap
+args:
+  - -k none
+  - --set app-layer.protocols.nfs.max-write-queue-size=100
+
+checks:
+  # every rejected first chunk raises the queue-limit event
+  - shell:
+      args: test "$(grep -Ec 'write_queue_size_exceeded' eve.json)" -eq 1100
+  # the rejected transactions are cleaned up: no evictions
+  - shell:
+      args: test "$(grep -Ec 'too_many_transactions' eve.json)" -eq 0
+  # no files were opened (all chunks rejected)
+  - shell:
+      args: test "$(grep -c '"event_type":"fileinfo"' eve.json)" -eq 0
+  # no desync
+  - shell:
+      args: test "$(grep -Ec 'malformed' eve.json)" -eq 0

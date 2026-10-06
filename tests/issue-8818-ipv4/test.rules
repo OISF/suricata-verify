@@ -1,0 +1,1 @@
+alert pkthdr any any -> any any (msg:"SURICATA FRAG IPv4 Packet size too large"; decode-event:ipv4.frag_pkt_too_large; sid:1;)

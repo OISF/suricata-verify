@@ -1,0 +1,29 @@
+# Response split-slice: a rejected reply, then an unterminated oversized reply
+# whose tail (a would-be 226) lands in the next slice. See README.md.
+
+requires:
+  min-version: 8.0.7
+
+args:
+- -k none --set app-layer.protocols.ftp.max-line-length=32
+
+checks:
+  - filter:
+      count: 3
+      match:
+        event_type: ftp
+
+  # The 221 stays with QUIT; it is not pulled onto a fabricated reply.
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: QUIT
+        ftp.completion_code: ["221"]
+
+  # No phantom reply: the "226 done" is the tail of the oversized 550 reply.
+  - filter:
+      count: 0
+      match:
+        event_type: ftp
+        ftp.completion_code: ["226"]

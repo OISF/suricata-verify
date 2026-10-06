@@ -1,0 +1,79 @@
+# A pcre capture into a flow variable used to abort the process when the
+# packet had no flow. See ../README.md for the mechanism.
+#
+# The variable checks use __contains rather than an index: the order of the
+# pktvars and flowvars arrays follows post-match evaluation order, not sid
+# order, so pinning positions would break on unrelated prefilter changes.
+# Each is guarded by has-key, because __contains on a missing array raises
+# inside run.py instead of failing the check.
+
+requires:
+  min-version: 8.0.7
+
+pcap: ../input.pcap
+rules: ../test.rules
+
+checks:
+  # Every signature alerts on the flowless ICMP packet: the process used to
+  # die here instead.
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        proto: ICMP
+        not-has-key: metadata.flowvars
+
+  # The captures that do not need a flow still land.
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        proto: ICMP
+        has-key: metadata.pktvars
+        metadata.pktvars.__contains: {p: EVIL}
+
+  # ... including the pktvar of the rule whose other capture targets a flow
+  # variable: dropping one capture must not skip the rest.
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        proto: ICMP
+        has-key: metadata.pktvars
+        metadata.pktvars.__contains: {r: IL}
+
+  # The alert variable is unaffected by the missing flow.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        proto: ICMP
+        alert.signature_id: 4
+        alert.context.a: EVIL
+
+  # Same rules, same payload, but now on a packet that has a flow: the flow
+  # variables are stored as before, from both capture syntaxes and from the
+  # rule that mixes a flow capture with a pkt one.
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        proto: UDP
+        has-key: metadata.flowvars
+        metadata.flowvars.__contains: {x: EVIL}
+
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        proto: UDP
+        has-key: metadata.flowvars
+        metadata.flowvars.__contains: {y: EVIL}
+
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        proto: UDP
+        has-key: metadata.flowvars
+        metadata.flowvars.__contains: {q: EV}
