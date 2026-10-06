@@ -1,0 +1,54 @@
+requires:
+  min-version: 9
+
+pcap: ../../flowbit-oring/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 103
+      pcap_cnt: 4
+      verdict.action: accept
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 100002
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      alert.signature_id: 100002
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 100001
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.state: bypassed
+      flow.bypass: local
+      flow.alerted: true
+      flow.action: accept
+      flow.pkts_toserver: 6
+      flow.pkts_toclient: 4
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.ips.blocked: 0
+      stats.ips.accepted: 3
+      stats.ips.drop_reason.rules: 0
+      stats.flow.end.state.local_bypassed: 1
+      stats.flow_bypassed.local_pkts: 6
+      stats.detect.alert: 1
+      stats.firewall.accepted: 4
+      stats.firewall.blocked: 0

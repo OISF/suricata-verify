@@ -1,0 +1,71 @@
+requires:
+  min-version: 9
+
+args:
+  - --simulate-ips
+  - -k none
+  - --runmode single
+
+pcap: ../ruletype-firewall-155-bypass-td-post-match-side-effects/input.pcap
+
+checks:
+# The firewall rule matched and bypassed the first flow.
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 103
+      pcap_cnt: 4
+      verdict.action: accept
+
+# Threat detection is not consulted for the bypassed packet, so no alert.
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 100003
+
+# Control: the second flow is inspected.
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 100005
+
+# The point: the bypassed packet's TD post-match must not have set the xbit.
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 100004
+
+# If these fail, the first flow was not bypassed and the test proves nothing.
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      flow.state: closed
+      flow.action: accept
+      flow.alerted: true
+      flow.pkts_toserver: 6
+      flow.pkts_toclient: 4
+- filter:
+    count: 2
+    match:
+      event_type: flow
+      flow.state: closed
+      flow.alerted: true
+      flow.pkts_toserver: 6
+      flow.pkts_toclient: 4
+
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.flow.end.state.local_bypassed: 0
+      stats.flow.end.state.closed: 2
+      stats.flow_bypassed.local_pkts: 0
+      stats.ips.blocked: 0
+      stats.ips.accepted: 20
+      stats.firewall.blocked: 0
+      stats.firewall.accepted: 20
