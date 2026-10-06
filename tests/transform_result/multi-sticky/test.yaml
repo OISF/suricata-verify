@@ -1,0 +1,21 @@
+requires:
+  min-version: 9
+
+pcap: ../../http-all-headers/input.pcap
+
+args:
+  - -k none
+
+checks:
+  # must_error fires because at least one header fails strict base64 decode
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # must_succeed does not fire because the transform signals an error
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
