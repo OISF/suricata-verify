@@ -1,0 +1,14 @@
+# sid 1: runs stale-tx.lua. It never alerts by design: the script caches
+# the handle of the flow's first transaction and, only once a second
+# transaction is the current one (so the first has been freed), reads the
+# cached handle. That read raises at the accessor check and aborts the
+# run; the logged error is what the test asserts on (red on base, where
+# the read of the freed memory completes silently).
+alert tcp any any -> any any (msg:"LUA SMTP stale tx handle refused"; lua:stale-tx.lua; sid:1; rev:1;)
+# sid 2: pin, the live path must alert on base and with the fix.
+alert tcp any any -> any any (msg:"LUA SMTP tx handle read"; lua:fresh-tx.lua; sid:2; rev:1;)
+# sid 3: a content rule over the DATA command, pinned in test.yaml. The
+# parser has tx 0 gone by the time the second MAIL FROM is inspected, with
+# or without this rule; it is the observable that the first DATA exchange
+# was seen at all.
+alert tcp any any -> any any (msg:"SMTP DATA command"; content:"DATA"; sid:3; rev:1;)
