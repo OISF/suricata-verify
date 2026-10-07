@@ -1,0 +1,34 @@
+requires:
+  min-version: 9
+
+args:
+  - --runmode=single
+
+checks:
+  # every frame is logged as captured, whether it matches a configured
+  # tunnel, an unknown tunnel or is not tunneled at all
+  - file-compare:
+      filename: log.pcap.1700000000
+      expected: input.pcap
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_ip: 10.1.2.4
+        tunnel_id: 1
+        flow.pkts_toserver: 2
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_ip: 10.1.2.4
+        tunnel_id: 2
+        flow.pkts_toserver: 2
+  # unknown tunnel and not tunneled
+  - filter:
+      count: 2
+      match:
+        event_type: flow
+        src_ip: 10.1.2.4
+        flow.pkts_toserver: 2
+        not-has-key: tunnel_id

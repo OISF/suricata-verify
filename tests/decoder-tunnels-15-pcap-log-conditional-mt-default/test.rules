@@ -1,0 +1,3 @@
+alert udp any any -> any any (content:"vxlan-known-1"; sid:1;)
+alert udp any any -> any any (content:"vxlan-unknown-1"; sid:2;)
+alert udp any any -> any any (content:"plain-1"; sid:3;)

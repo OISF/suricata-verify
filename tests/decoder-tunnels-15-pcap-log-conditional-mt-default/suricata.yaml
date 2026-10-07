@@ -1,0 +1,50 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert
+        - flow
+  - pcap-log:
+      enabled: yes
+      filename: log.pcap
+      mode: normal
+      conditional: alerts
+
+decoder:
+  vxlan:
+    enabled: true
+    ports: 4789
+  tunnels:
+    - id: 1
+      type: erspan2
+      src: 192.168.1.4
+      dst: 192.168.1.2
+      session: 321
+    - id: 2
+      type: vxlan
+      src: 192.168.1.3
+      dst: 192.168.1.2
+      session: 123
+
+multi-detect:
+  enabled: yes
+  selector: tunnel
+  default: yes
+  loaders: 1
+
+  tenants:
+  - id: 1
+    yaml: tenant-1.yaml
+  - id: 2
+    yaml: tenant-2.yaml
+
+  mappings:
+  - tunnel-id: 1
+    tenant-id: 1
+  - tunnel-id: 2
+    tenant-id: 2

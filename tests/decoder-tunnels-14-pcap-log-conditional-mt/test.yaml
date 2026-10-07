@@ -1,0 +1,27 @@
+requires:
+  min-version: 9
+
+args:
+  - --runmode=single
+  - --set multi-detect.config-path=${TEST_DIR}
+  - --set multi-detect.1.default-rule-path=${TEST_DIR}
+  - --set multi-detect.2.default-rule-path=${TEST_DIR}
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        tenant_id: 2
+        tunnel_id: 2
+  # only the frames of the alerting flow in tunnel 2. The unknown tunnel
+  # and not tunneled traffic have no tenant and the default tenant has no
+  # rules.
+  - file-compare:
+      filename: log.pcap.1700000000
+      expected: expected/log.pcap.1700000000
