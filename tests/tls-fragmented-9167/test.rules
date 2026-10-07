@@ -1,0 +1,2 @@
+alert tls any any -> any any (msg:"SNI extracted from fragmented ClientHello"; tls.sni; content:"example.attacker.test"; sid:1; rev:1;)
+alert tcp any any -> any any (msg:"control: SNI bytes present in stream"; flow:to_server; content:"example.attacker.test"; sid:2; rev:1;)
