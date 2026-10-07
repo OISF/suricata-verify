@@ -1,0 +1,7 @@
+# 211 has its fast pattern at its own hook and the pattern is absent, so it is pending and
+# the walk credits its hooks. 212 is a real candidate at the same state whose pattern hits
+# and whose second keyword fails: it is the rule asking whether another rule covers the
+# state. If the pending credit survives the resolution of 211, 212 is answered by a count
+# for a rule that is no longer in the running, and the state decides nothing.
+accept:flow,alert http1:<request_headers $HOME_NET any -> 93.184.216.34 80 (http.host.raw; content:"absent.pending"; sid:211;)
+accept:flow,alert http1:request_headers $HOME_NET any -> 93.184.216.34 80 (http.host.raw; content:"www.example.com"; content:"absent.kw"; sid:212;)
