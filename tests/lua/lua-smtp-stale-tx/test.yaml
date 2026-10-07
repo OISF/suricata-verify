@@ -1,0 +1,67 @@
+pcap: input.pcap
+
+requires:
+  features:
+    - HAVE_LUA
+  min-version: 9.0.0
+
+checks:
+  # Both messages are delivered as their own transaction: tx 0 is complete
+  # and reaped by the parser when the second message opens tx 1, while the
+  # flow is still live.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 0
+        smtp.mail_from: <alice@example.com>
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 1
+        smtp.mail_from: <carol@example.com>
+
+  # Leg 1: the handle cached from tx 0 is read once a second
+  # transaction is the current one - gated on that transition so the
+  # first read that can raise is the packet where the parser freed
+  # tx 0. The accessors fail closed: the accessor check raises, the
+  # run aborts, and the engine logs the error. The sandbox blocks
+  # pcall, so the script cannot catch it and sid 1 never alerts -
+  # the logged error is the observable. Red on base: there the
+  # accessor dereferences the freed transaction and no such error is
+  # logged.
+  - shell:
+      args: grep -q "tx no longer valid" suricata.log && echo OK || tail -5 suricata.log
+      expect: OK
+
+  # Pin: sid 1 never alerts - the raise aborts the run before any alert.
+  # The negative is asserted so the claim is not comment-only.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+
+  # Leg 2 (pin): reading through a handle taken from the current
+  # transaction keeps working, base and fixed alike. It also shows that leg
+  # 1 does not go silent because the Lua SMTP library never ran.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        pcap_cnt: 8
+
+  # Leg 3 (pin): sid 3 is a plain content rule over the literal "DATA". It
+  # is not what retires tx 0 - leg 1 still errors with that rule deleted -
+  # but tx 0 only becomes retireable once its DATA exchange completed, so
+  # it is the closest observable to "the parser saw the first DATA command".
+  # Pin it so a change there shows up here rather than as an unexplained
+  # leg 1 failure.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+        pcap_cnt: 13
