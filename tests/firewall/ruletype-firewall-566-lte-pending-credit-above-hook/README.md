@@ -1,18 +1,21 @@
-Pending LTE credit seen by a candidate bound above its hook
-===========================================================
+The state in between must still be decided by its own default
+==============================================================
 
-sid 211 is a less-than rule bound at `request_headers` whose fast pattern is
-silent, so the walk borrows a coverage count on its behalf. sid 212 is a live
-candidate bound strictly above that state, at `request_body`: its pattern hits and
-its second keyword fails.
+sid 211 is hooked less-than at `request_headers` and its fast pattern is
+absent, so it is pending at that state. sid 212 is a live candidate bound
+strictly above it, at `request_body`: its pattern hits and its second
+keyword fails.
 
-This is the pairing where a borrowed count can only be seen by an index-derived
-number: the higher candidate asks whether rules are missing for the states in
-between, which is a question about hooks below itself. If the credit for 211
-outlives 211, the answer is yes when nothing is pending, and the default policy
-of the state in between is never applied.
+The pairing asks the question a lower hook cannot answer on its own. A
+candidate bound above a pending rule wants to know whether anything is
+missing for the states in between - and the only correct answer comes from
+what is pending *right now*, not from what a rule once needed. If the
+coverage 211 required is still on the books after 211 left the running,
+the in-between states look covered, 212 never triggers the default, and
+the flow is blocked by nothing deciding anything.
 
-Expected outcome is the app default of `http1` firing at `request_headers`
-and neither crafted sid alerting, the same verdict main reaches with no pending
-machinery at all. Sibling cases: 561 (pending rule alone), 562 (candidate bound
-below the hook), 565 (candidate at the pending rule's own state).
+Expected outcome is the app default of the in-between state firing, which
+is what `main` does with no pending machinery at all. This is therefore a
+tripwire, not evidence of a behaviour change: it exists so that a future
+accounting shortcut that borrows coverage across a rule's lifetime shows
+up as a named failure instead of a silent verdict shift.
