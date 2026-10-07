@@ -1,0 +1,4 @@
+alert tcp any any -> any any (msg:"ToServer Elephant flow found!"; flow.elephant:toserver; sid:1;)
+alert tcp any any -> any any (msg:"ToClient Elephant flow found!"; flow.elephant:toclient; sid:2;)
+alert tcp any any -> any any (msg:"Both directions Elephant flow found!"; flow.elephant:both; sid:3;)
+alert tcp any any -> any any (msg:"Either direction Elephant flow found!"; flow.elephant:either; sid:4;)
