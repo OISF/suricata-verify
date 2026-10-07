@@ -24,7 +24,7 @@ def lit(name, value):
     return b"\x00" + bytes([len(n)]) + n + bytes([len(v)]) + v
 
 
-HEADERS, DATA, SETTINGS, END_STREAM, END_HEADERS = 0x1, 0x0, 0x6, 0x1, 0x4
+HEADERS, DATA, SETTINGS, END_STREAM, END_HEADERS = 0x1, 0x0, 0x4, 0x1, 0x4
 
 req = (
     lit(":method", "POST") + lit(":path", "/upload") + lit(":authority", "www.example.com") + lit("content-type", "text/plain")
@@ -34,7 +34,6 @@ preface = b"PRI * HTTP/2.0\r\n\r\nSM\r\n\r\n"
 c2s_head = preface + frame(SETTINGS, 0x00, 0) + frame(HEADERS, END_HEADERS, 1, req)
 c2s_body = frame(DATA, 0x00, 1, b"hello")
 c2s_trail = frame(HEADERS, END_HEADERS | END_STREAM, 1, trailer)
-s2c = frame(HEADERS, 0x00, 1, lit(":status", "200")) + frame(DATA, END_HEADERS | END_STREAM, 1, b"ok") + frame(SETTINGS, 0x00, 0)
 
 
 def main():
