@@ -1,0 +1,36 @@
+requires:
+  min-version: 9.0.0
+
+args:
+  - -k none
+
+pcap: input.pcap
+
+checks:
+  # Control: the SNI bytes are present in the reassembled stream, so protocol
+  # detection and delivery work regardless of the TLS parser. This always fires
+  # and anchors the test.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+
+  # The ClientHello's handshake header is split across two TLS records, which is
+  # RFC-compliant fragmentation. The SNI must still be extracted and matchable.
+  # On vulnerable builds this alert does NOT fire (the parser aborts on the small
+  # record and disables TLS parsing for the flow) -- that failure reproduces the
+  # bug. After the fix this alert fires exactly once.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+
+  # A fixed parser accepts the fragmented header, so the generic decoder anomaly
+  # must not be raised for this RFC-compliant traffic.
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.event: INVALID_SSL_RECORD
