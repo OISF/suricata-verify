@@ -1,18 +1,21 @@
-Pending LTE credit read by a candidate's coverage question
-==========================================================
+A pending rule must stop deferring once it is out of the running
+================================================================
 
-sid 211 is less-than at `request_headers` with a silent fast pattern: the walk
-credits its hooks so the states below it stay open. sid 212 is hooked exactly at
-the same state, its pattern hits and its second keyword fails, so it is a real
-candidate that no-matches.
+Two rules at the same state. sid 211 is hooked less-than at
+`request_headers` and its fast pattern is absent from the traffic, so the
+walk never reaches it: it is pending, and while it is pending the states
+below its hook must stay open. sid 212 is hooked exactly at
+`request_headers`, its pattern hits and its second keyword fails, so it is
+a live candidate that no-matches and asks its own coverage question.
 
-Those two together exercise the one path where a pending rule's borrowed count can
-be seen by somebody else: `DetectFwOtherLteCoversHook()` is called with the *current
-candidate's* signature, at three sites in the candidate loop, and none of them is
-deciding about a pending rule. If the credit for 211 survived 211 leaving the
-running, 212 would be answered by a count for a rule that is no longer in play, and
-the state would appear covered when nothing covers it.
+The contract is that a candidate's coverage question is answered only by
+rules that are still in play. If the coverage that 211 needed outlives
+211 leaving the running, 212 is answered by an account for a rule nobody
+is waiting for: the state looks covered, no default is deferred, and no
+rule decides it either.
 
-Expected outcome is the app default of `http1` firing, as it does without the
-pending leg at all: coverage that has to be borrowed should never change what a
-fully inspected candidate decides.
+An implementation that tracks pending coverage per rule, per walk or per
+state can all fail this in different ways, which is why the expectation is
+`pcap_cnt`, `firewall.hook` and sid 212: the verdict, not the bookkeeping.
+A build that never defers for a pending rule passes it too, so this is a
+guard rather than evidence of a behaviour change.
