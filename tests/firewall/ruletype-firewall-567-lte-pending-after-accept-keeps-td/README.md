@@ -25,7 +25,9 @@ Be clear about what this case does and does not prove. Measured on a build witho
 the accept guard, the step-through path is entered 26 times across the whole suite
 and in 6 of those the flow already carried an accept; all 26 entries end the walk
 immediately. No expectation anywhere in the corpus changes as a result, and this
-fixture passes identically with and without the guard. So it is a tripwire: it
+fixture passes identically with and without the guard, and identically on `main`, where no
+pending machinery exists at all - three arms, one verdict, which is the definition
+of a guard that cannot yet fail. So it is a tripwire: it
 asserts the correct verdict in the shape where the bug would show, so that a future
 change which makes the walk-ending observable fails something named instead of
 silencing threat detection on a live sensor. The bug is reachable in the mechanism
