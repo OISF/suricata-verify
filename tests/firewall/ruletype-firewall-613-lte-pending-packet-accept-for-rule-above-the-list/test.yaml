@@ -1,0 +1,37 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+args:
+  - --simulate-ips
+  - -k none
+pcap: input.pcap
+checks:
+  # the pending rule is above every candidate of the walk, so the walk has to
+  # still account for it: its accept has to reach the packet. Without it the
+  # built-in packet policy (drop:packet) drops the request packets of a flow
+  # that ends up accepted.
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.action: blocked
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 110
+        alert.action: allowed
+        firewall.hook: http:request_headers
+        firewall.policy: accept:flow,alert
+        pcap_cnt: 6
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.action: accept
+        flow.alerted: true
