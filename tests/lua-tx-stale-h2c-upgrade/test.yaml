@@ -1,0 +1,43 @@
+requires:
+  min-version: 9.0.0
+
+args:
+  - -k none
+  - --set stream.midstream=true
+  - --set detection-engine.threading=disabled
+  - --set default-rule-path=${TEST_DIR}
+
+# h2c upgrade (pcap shared with tests/http2-keywords2): the stashed HTTP/1
+# tx handle must fail closed once the upgrade swaps the app-layer state.
+# Without the alproto/flow-id pin in the anchor, the HTTP/1 handle passes
+# the checks on the upgraded flow and request_headers() walks an
+# HTTP2Transaction (type confusion).
+#
+# detection threading is disabled so one thread sees the flow in order:
+# the HTTP/1 tx first (stash, alert), then the HTTP/2 txs where the
+# stashed handle must raise.
+#
+# Expected behaviour:
+#   - alert 9000001 from the live HTTP/1 handle: 1
+#   - the stashed handle raises "tx no longer valid" on the two HTTP/2
+#     txs with a matching uri: stats.detect.lua.errors == 2, and the
+#     error is logged once (logging is once per thread per error type)
+
+checks:
+  - filter:
+      filename: suricata.log
+      count: 1
+      match:
+        engine.message.__contains: "tx no longer valid: the transaction or its flow state was freed"
+
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.lua.errors: 2
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9000001
