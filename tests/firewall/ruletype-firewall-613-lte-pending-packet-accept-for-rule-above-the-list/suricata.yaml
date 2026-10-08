@@ -1,0 +1,33 @@
+%YAML 1.1
+---
+
+vars:
+  address-groups:
+    HOME_NET: "[10.0.0.0/8]"
+    EXTERNAL_NET: "!$HOME_NET"
+
+stats:
+  enabled: yes
+  interval: 8
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - stats
+        - flow
+        - alert
+        - drop:
+            alerts: yes
+            flows: all
+
+firewall:
+  policies:
+    # drop and alert on the app states no rule covers, for the richer logging
+    app:
+      tls:
+        default-policy: ["drop:flow", "alert"]
+      http1:
+        default-policy: ["drop:flow", "alert"]
