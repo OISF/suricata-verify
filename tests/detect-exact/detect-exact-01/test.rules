@@ -1,0 +1,5 @@
+# 'exact' is shorthand for a bsize equal to the preceding content's length: the
+# content spans the whole buffer. For a lone content that means it is marked
+# startswith+endswith, exactly like writing bsize:<content-length>.
+alert dns any any -> any any (msg:"exact"; dns.query; content:"google.com"; exact; sid:1;)
+alert dns any any -> any any (msg:"equivalent bsize"; dns.query; content:"google.com"; bsize:10; sid:2;)

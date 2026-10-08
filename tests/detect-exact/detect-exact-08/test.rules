@@ -1,0 +1,6 @@
+# 'exact' on buffers other than dns.query. The HTTP host is "www.aieov.com"
+# and the URI is "/". sids 1 and 2 match; sid 3 has a content that is in the
+# host but does not fill it.
+alert http any any -> any any (msg:"host exact"; http.host; content:"www.aieov.com"; exact; sid:1;)
+alert http any any -> any any (msg:"uri exact"; http.uri; content:"/"; exact; sid:2;)
+alert http any any -> any any (msg:"host partial"; http.host; content:"aieov.com"; exact; sid:3;)

@@ -1,0 +1,7 @@
+# A buffer may carry more than one bsize; the smallest upper bound applies.
+# When the required content is longer than that bound the signature can never
+# match, and it is rejected at load in either keyword order. bsize:<=N counts
+# as an upper bound too.
+alert dns any any -> any any (msg:"tight bound first"; dns.query; content:"abcdefghij"; bsize:<8; bsize:<20; sid:1;)
+alert dns any any -> any any (msg:"tight bound last"; dns.query; content:"abcdefghij"; bsize:<20; bsize:<8; sid:2;)
+alert dns any any -> any any (msg:"less-than-or-equal bound"; dns.query; content:"abcdefghij"; bsize:<=8; sid:3;)

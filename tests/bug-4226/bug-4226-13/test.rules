@@ -1,0 +1,7 @@
+# bsize sets that leave exactly one valid length, or where an exact bsize sits
+# at the edge of another bound. All four load. Ranges are exclusive, so
+# bsize:5<>20 allows 6 to 19. The rejected neighbors are in bug-4226-08.
+alert dns any any -> any any (msg:"one length left"; dns.query; content:"abc"; bsize:>9; bsize:<11; sid:1;)
+alert dns any any -> any any (msg:"exact at upper bound"; dns.query; content:"abc"; bsize:10; bsize:<=10; sid:2;)
+alert dns any any -> any any (msg:"lower equals upper"; dns.query; content:"abc"; bsize:>=10; bsize:<=10; sid:3;)
+alert dns any any -> any any (msg:"exact inside range"; dns.query; content:"abc"; bsize:5<>20; bsize:10; sid:4;)

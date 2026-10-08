@@ -1,0 +1,14 @@
+# bsize as a depth on HTTP buffers. The request is "GET /" with host
+# "www.aieov.com" (13 bytes) and user agent "Wget/1.20.3 (linux-gnu)"
+# (23 bytes); the response body is 108 bytes.
+# sids 1, 2, 4, 6 and 7 match. sid 3 has a content that is in the host and as
+# long as its bsize, but the host is longer. sid 5 and sid 8 have a bsize the
+# buffer is too long for.
+alert http any any -> any any (msg:"uri exact"; http.uri; content:"/"; bsize:1; sid:1;)
+alert http any any -> any any (msg:"host exact"; http.host; content:"www.aieov.com"; bsize:13; sid:2;)
+alert http any any -> any any (msg:"host content not at start"; http.host; content:"aieov.com"; bsize:9; sid:3;)
+alert http any any -> any any (msg:"user agent less-than"; http.user_agent; content:"Wget"; bsize:<30; sid:4;)
+alert http any any -> any any (msg:"user agent too long"; http.user_agent; content:"linux"; bsize:<10; sid:5;)
+alert http any any -> any any (msg:"body exact"; file.data; content:"Coming soon."; bsize:108; sid:6;)
+alert http any any -> any any (msg:"body range"; http.response_body; content:"<html>"; bsize:100<>200; sid:7;)
+alert http any any -> any any (msg:"body too long"; file.data; content:"Coming soon."; bsize:<50; sid:8;)

@@ -1,0 +1,15 @@
+requires:
+    min-version: 9
+    pcap: false
+
+args:
+    - --engine-analysis
+
+exit-code: 1
+
+# All three rules are rejected, because the required content length (10)
+# exceeds the smallest upper bound (8).
+checks:
+    - shell:
+        args: grep -c "can't match as required content length 10 exceeds bsize value.*8" suricata.log | xargs
+        expect: 3

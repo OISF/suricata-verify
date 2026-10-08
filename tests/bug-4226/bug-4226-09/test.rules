@@ -1,0 +1,6 @@
+# The bsize range suggestion needs a lower-bound and an upper-bound bsize. Two
+# upper bounds, two lower bounds, or a range next to an exact bsize don't get
+# it. All three signatures load.
+alert dns any any -> any any (msg:"two upper bounds"; dns.query; content:"ab"; bsize:<8; bsize:<20; sid:1;)
+alert dns any any -> any any (msg:"two lower bounds"; dns.query; content:"ab"; bsize:>2; bsize:>1; sid:2;)
+alert dns any any -> any any (msg:"range plus exact"; dns.query; content:"abc"; bsize:2<>20; bsize:5; sid:3;)
