@@ -1,0 +1,7 @@
+alert http2:stream:request_headers any any -> any any (msg: "Test HTTP2 Lua"; lua: http2.lua; sid:1;)
+alert http1:request_line any any -> any any (msg: "Test HTTP2 Lua"; lua: http2.lua; sid:2;)
+
+alert http any any -> any any (msg: "Test HTTPX Lua"; lua: httpx.lua; sid:3;)
+
+alert http any any -> any any (msg: "Test HTTPX1 Lua"; lua: httpx1.lua; sid:4;)
+alert http any any -> any any (msg: "Test HTTPX2 Lua"; lua: httpx2.lua; sid:5;)
