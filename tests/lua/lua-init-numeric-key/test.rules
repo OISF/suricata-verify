@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"numeric init key"; http.uri; content:"/"; lua:rule.lua; sid:1;)
