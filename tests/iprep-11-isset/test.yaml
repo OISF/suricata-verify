@@ -7,8 +7,7 @@ command: |
       -r ../issue-4280-iprep/input.pcap -S ${TEST_DIR}/iprep.rules                              \
       --data-dir="${OUTPUT_DIR}"                                                        \
       --set default-reputation-path=${TEST_DIR}                                         \
-      --set reputation-categories-file=${TEST_DIR}/scirius-categories.txt               \
-      --set reputation-files=${TEST_DIR}/scirius-iprep.list
+      --set reputation-categories-file=${TEST_DIR}/scirius-categories.txt
 
 checks:
   - filter:
