@@ -1,0 +1,41 @@
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # the queue limits are off, so nothing is rejected at enqueue time: the
+  # only cap that fires is the chunk-count backstop, on the first call
+  # carrying data after the queue went over the cap
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: smb
+        anomaly.event: truncated_file_data
+        tx_id: 0
+  - shell:
+      args: test "$(grep -Ec 'write_queue_(cnt|size)_exceeded' eve.json)" -eq 0
+  # the backstop truncates the file: only the in-order data of w1 is stored,
+  # the 1050 queued chunks are dropped and the following in-order write is
+  # consumed without being stored
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.gaps: false
+        fileinfo.stored: true
+        fileinfo.size: 100
+        fileinfo.sha256: "d82c6aa133a0fc25b087f46ad7ed2a3042772e612e015571e61753ff55ba6da8"
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.command: SMB2_COMMAND_WRITE
+  - shell:
+      args: test "$(grep -Ec 'malformed' eve.json)" -eq 0
