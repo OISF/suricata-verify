@@ -1,0 +1,19 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+
+args:
+  # inline makes it easier to reason about pcap_cnt
+  - -k none --set stream.inline=true
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 20
+        # the trailer state is reached when the last chunk is parsed
+        pcap_cnt: 7
