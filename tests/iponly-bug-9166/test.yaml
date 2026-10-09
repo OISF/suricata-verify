@@ -1,0 +1,24 @@
+requires:
+  min-version: 9.0.0
+
+args:
+- -k none
+- --simulate-ips
+
+checks:
+  # The rule must drop the packet from 203.0.113.5, which is inside
+  # 203.0.113.0/255.255.255.0.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        alert.action: blocked
+        src_ip: 203.0.113.5
+  # The rule must not match the packet from 0.0.0.5, which is outside
+  # 203.0.113.0/255.255.255.0.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        src_ip: 0.0.0.5
