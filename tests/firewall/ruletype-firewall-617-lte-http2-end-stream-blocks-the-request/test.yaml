@@ -1,0 +1,37 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+args:
+  - --simulate-ips
+  - -k none
+pcap: input.pcap
+checks:
+  # the request is a single HEADERS frame with END_STREAM, so nothing can add to
+  # http.host after it: the allow rule's miss is final on packet 4 and the app
+  # default policy decides there. Pre-fix this deferred to packet 6 - the first
+  # response packet - and the request was delivered.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 110
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2201001
+        alert.action: blocked
+        firewall.hook: http2:stream:request_headers
+        pcap_cnt: 4
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        pcap_cnt: 4
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.action: drop
+        flow.alerted: true
