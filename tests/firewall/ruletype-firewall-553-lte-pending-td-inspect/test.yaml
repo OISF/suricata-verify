@@ -1,0 +1,37 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+args:
+  - --simulate-ips
+  - -k none
+pcap: ../lte-matrix-data/http1.pcap
+checks:
+  # the firewall match at hook 2 still decides the flow
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 110
+        alert.action: allowed
+        firewall.hook: http:request_headers
+        firewall.policy: accept:flow,alert
+        pcap_cnt: 10
+  # the TD rule after the pending LTE rule is inspected
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 120
+        pcap_cnt: 10
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.action: accept
+        flow.alerted: true
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2201001

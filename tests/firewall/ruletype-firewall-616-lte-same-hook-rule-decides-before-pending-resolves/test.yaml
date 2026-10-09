@@ -1,0 +1,40 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+args:
+  - --simulate-ips
+  - -k none
+pcap: input.pcap
+checks:
+  # sid 110 is an LTE rule pending at its own hook: its pattern (Host
+  # never.example.com) does not arrive, and the header buffer is not closed in
+  # this update. sid 120 is a listed rule of a higher id AT that same hook and
+  # its pattern does arrive. The walk reaches 120 in the same update, so its
+  # drop decides the flow while 110 is still in the running: 110 never alerts.
+  # Same outcome on main (215961d67), so this pins a preserved property; it turns
+  # red if the walk is ever made to end at a pending rule of the same hook.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 110
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 120
+        alert.action: blocked
+        firewall.hook: http:request_headers
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.action: drop
+  # no packet of an accepted flow: the drop is the flow's own decision, not the
+  # built-in packet policy acting through a pending rule.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.action: allowed

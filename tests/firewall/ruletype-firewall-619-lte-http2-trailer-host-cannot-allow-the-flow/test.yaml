@@ -1,0 +1,26 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+args:
+  - --simulate-ips
+  - -k none
+pcap: input.pcap
+checks:
+  # a trailer HEADERS frame cannot reintroduce the authority: HTTP/2 forbids
+  # pseudo-headers in trailers and keeps routing fields out of them, so http.host
+  # comes from the request header section only. Pre-fix the trailer matched the
+  # allow rule above its hook while it was held pending, and the whole flow was
+  # accepted. The deciding packet is not pinned here: main and this branch agree
+  # on the outcome, not on which packet closes the request.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 110
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.action: drop
+        flow.alerted: true
