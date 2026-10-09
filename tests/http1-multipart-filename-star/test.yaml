@@ -1,0 +1,70 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+  - --runmode=single
+
+checks:
+  # All seven flows reached the HTTP parser.
+  - filter:
+      count: 7
+      match:
+        event_type: alert
+        alert.signature_id: 1000000
+
+  # Ordinary dangerous filenames are visible through file.name.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 41001
+        alert.signature_id: 1000001
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 41002
+        alert.signature_id: 1000002
+
+  # Paired filename plus filename*
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 41003
+        alert.signature_id: 1000000
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 41003
+        alert.signature_id: 1000001
+
+  # Bare filename*
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 41004
+        alert.signature_id: 1000000
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 41004
+        alert.signature_id: 1000001
+
+  # The same paired behavior also occurs for .htaccess.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 41006
+        alert.signature_id: 1000000
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 41006
+        alert.signature_id: 1000002
