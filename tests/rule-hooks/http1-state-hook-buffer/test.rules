@@ -1,0 +1,5 @@
+# A buffer registered at an earlier state must be usable from a later state hook.
+# Without the clamp this is rejected at load ("engine progress value 2 doesn't
+# match hook 4"). The trailer fields of this request are not asserted here: that
+# needs dedicated trailer buffers and its own test.
+alert http1:request_trailer any any -> any any (msg:"header buffer under trailer hook"; http.header; content:"User-Agent:"; sid:20; rev:1;)
