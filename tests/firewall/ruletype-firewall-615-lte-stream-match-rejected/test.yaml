@@ -1,0 +1,18 @@
+# Rule-load rejection: an auto-accept ('<hook') rule cannot match the raw stream,
+# because a stream pattern can still arrive above any hook and the retirement above
+# the hook depends on a miss there being final. Fatal under --init-errors-fatal,
+# checked with -T and no pcap.
+requires:
+  min-version: 9
+
+pcap: false
+
+args:
+  - -T
+
+exit-code: 1
+
+checks:
+- shell:
+    args: grep -c "cannot match the raw stream" stderr
+    expect: 1
