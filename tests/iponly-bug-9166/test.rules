@@ -1,0 +1,1 @@
+drop ip 203.0.113.0/255.255.255.0 any -> any any (msg:"drop traffic from 203.0.113.0/24, written with a dotted netmask"; sid:1; rev:1;)
