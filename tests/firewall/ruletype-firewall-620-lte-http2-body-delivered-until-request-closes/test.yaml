@@ -1,0 +1,24 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+args:
+  - --simulate-ips
+  - -k none
+pcap: input.pcap
+checks:
+  # body DATA frames carry no host, so the allow rule cannot gain a match above
+  # its hook: the flow is dropped once the request closes on the last END_STREAM
+  # frame. Which packet that is differs from main (see README): this is the
+  # remaining window, so the frame number is deliberately not asserted.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 110
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.action: drop
+        flow.alerted: true
