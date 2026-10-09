@@ -1,0 +1,1 @@
+alert dnp3 any any -> any any (msg:"dnp3 write"; dnp3_func:2; sid:1;)
