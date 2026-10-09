@@ -1,0 +1,21 @@
+requires:
+  min-version: 9.0.0
+  pcap: false
+
+args:
+  - --engine-analysis
+  - --set security.lua.allow-rules=true
+  - --set security.lua.max-bytes=-1
+
+exit-code: 1
+
+checks:
+  - shell:
+      args: "grep -q 'detect-lua: security.lua.max-bytes must be non-negative' suricata.log && echo found"
+      expect: found
+  - shell:
+      args: "grep -q 'detect-transform-luaxform: security.lua.max-bytes must be non-negative' suricata.log && echo found"
+      expect: found
+  - shell:
+      args: "grep -q 'Loading signatures failed' suricata.log && echo found"
+      expect: found
