@@ -1,0 +1,17 @@
+requires:
+  min-version: 9.0.0
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - shell:
+      args: 'grep -q "log point 1: 0 of 40" stdout && echo found'
+      expect: found
+  - shell:
+      args: 'grep -q "deinit point 2: nil" stdout && echo found'
+      expect: found
