@@ -6,6 +6,10 @@ holds the ethernet header's type, the VLAN tag ethertype (``0x8100``). The
 ``decoder.vlan.unknown_type`` event raised for the same frame carries the
 same ``unknown_ether_type``.
 
+The alert from a ``decode-event:ethernet.unknown_ethertype`` rule carries
+the RARP value in the top-level ``unknown_ether_type`` field, and its
+``ether.ether_type`` is the VLAN tag ethertype.
+
 The input pcap is a single VLAN-tagged (0x8100, VID 100) frame whose
 VLAN tag is followed by RARP (0x8035), which the decoder does not
 handle.

@@ -28,3 +28,18 @@ checks:
         anomaly.type: decode
         anomaly.event: decoder.vlan.unknown_type
         unknown_ether_type: 32821
+  # The alert for the tunneled packet's event carries the value.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        unknown_ether_type: 32821
+  # The alert for the outer GRE packet, which has no such event, does not
+  # carry the field.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        not-has-key: unknown_ether_type
