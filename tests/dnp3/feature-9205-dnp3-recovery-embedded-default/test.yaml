@@ -1,0 +1,31 @@
+requires:
+  min-version: 9
+
+skip:
+  - feature: FUZZ
+
+checks:
+  # A frame whose block CRC fails, with a complete request embedded in its
+  # body, then a valid request. With resync-on-bad-start off the parser skips
+  # the failed frame by its LENGTH: the embedded request is not parsed, the
+  # request after it is logged and marked as the first frame behind the error.
+  - filter:
+      count: 2
+      match:
+        event_type: dnp3
+        dnp3.type: request
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2270003
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2270010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2270011
