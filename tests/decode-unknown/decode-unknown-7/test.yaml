@@ -1,0 +1,30 @@
+requires:
+    min-version: 9
+
+args:
+- -k none
+
+checks:
+  # The tunneled packet's ethernet unknown_ethertype event reports the RARP
+  # value after the VLAN tag in the inner frame (0x8035 = 32821). Its ether
+  # object describes the inner frame, whose type is the VLAN tag
+  # ethertype (0x8100 = 33024).
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.type: decode
+        anomaly.event: decoder.ethernet.unknown_ethertype
+        unknown_ether_type: 32821
+        ether.ether_type: 33024
+        ether.src_mac: "00:20:94:55:00:02"
+        vlan[0]: 9
+  # The VLAN unknown-type event is also raised, and its record carries
+  # the same unknown_ether_type.
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.type: decode
+        anomaly.event: decoder.vlan.unknown_type
+        unknown_ether_type: 32821

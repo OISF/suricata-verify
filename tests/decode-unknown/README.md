@@ -28,6 +28,10 @@ Test cases:
                     ethertype in ether.ether_type.
   decode-unknown-6  9.0+ VN-Tag (802.1Qbh) frame: same, with the VN-Tag
                     ethertype in ether.ether_type.
+  decode-unknown-7  9.0+ GRE tunnel carrying a VLAN-tagged ethernet
+                    frame: the event raised for the tunneled packet
+                    reports the ethertype after the inner frame's VLAN
+                    tag.
 
 https://redmine.openinfosecfoundation.org/issues/7849
 https://redmine.openinfosecfoundation.org/issues/8142
