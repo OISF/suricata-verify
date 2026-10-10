@@ -35,6 +35,11 @@ Test cases:
                     tag; the alert for the tunneled packet has
                     unknown_ether_type and the alert for the outer packet
                     does not.
+  decode-unknown-8  9.0+ GRE tunnel with protocol 0x8100: the tunneled
+                    packet starts at a VLAN header, with no ethernet
+                    header; its event and alert report the ethertype
+                    after the second VLAN tag, and the alert for the
+                    outer packet has no unknown_ether_type.
 
 https://redmine.openinfosecfoundation.org/issues/7849
 https://redmine.openinfosecfoundation.org/issues/8142
