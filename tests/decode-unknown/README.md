@@ -40,6 +40,10 @@ Test cases:
                     header; its event and alert report the ethertype
                     after the second VLAN tag, and the alert for the
                     outer packet has no unknown_ether_type.
+  decode-unknown-9  9.0+ SLL2 capture with no ethernet header: the
+                    protocol field comes first in the SLL2 header, and the
+                    event and alert report the ethertype after the VLAN
+                    tag that follows the header.
 
 https://redmine.openinfosecfoundation.org/issues/7849
 https://redmine.openinfosecfoundation.org/issues/8142
