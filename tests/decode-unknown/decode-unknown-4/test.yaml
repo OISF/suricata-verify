@@ -6,8 +6,8 @@ args:
 
 checks:
   # For a VLAN-tagged frame the ethernet unknown_ethertype event reports the
-  # inner RARP value (0x8035 = 32821), while ether.ether_type is the outer
-  # VLAN tag ethertype (0x8100 = 33024).
+  # RARP value after the tag (0x8035 = 32821), while ether.ether_type is the
+  # ethernet header's type, the VLAN tag ethertype (0x8100 = 33024).
   - filter:
       count: 1
       match:
@@ -24,3 +24,4 @@ checks:
         event_type: anomaly
         anomaly.type: decode
         anomaly.event: decoder.vlan.unknown_type
+        unknown_ether_type: 32821

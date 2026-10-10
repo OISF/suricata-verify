@@ -5,8 +5,8 @@ args:
 - -k none
 
 checks:
-  # For an E-Tag frame the ethernet unknown_ethertype event reports the inner
-  # RARP value (0x8035 = 32821), while ether.ether_type is the outer E-Tag
+  # For an E-Tag frame the ethernet unknown_ethertype event reports the RARP
+  # value after the tag (0x8035 = 32821), while ether.ether_type is the E-Tag
   # ethertype (0x893F = 35135).
   - filter:
       count: 1
@@ -24,3 +24,4 @@ checks:
         event_type: anomaly
         anomaly.type: decode
         anomaly.event: decoder.etag.unknown_type
+        unknown_ether_type: 32821
