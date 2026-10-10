@@ -8,7 +8,9 @@ same ``unknown_ether_type``.
 
 The alert from a ``decode-event:ethernet.unknown_ethertype`` rule carries
 the RARP value in the top-level ``unknown_ether_type`` field, and its
-``ether.ether_type`` is the VLAN tag ethertype.
+``ether.ether_type`` is the VLAN tag ethertype. A second rule, on the
+``decoder.vlan.unknown_type`` event, alerts on the same packet, and that alert
+carries the field too.
 
 The input pcap is a single VLAN-tagged (0x8100, VID 100) frame whose
 VLAN tag is followed by RARP (0x8035), which the decoder does not

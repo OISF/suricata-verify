@@ -34,3 +34,16 @@ checks:
         alert.signature_id: 1
         unknown_ether_type: 32821
         ether.ether_type: 33024
+  # A second alert on the same packet, from a rule on the VLAN event,
+  # carries the field too: every alert for the packet has it.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        unknown_ether_type: 32821
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        has-key: unknown_ether_type

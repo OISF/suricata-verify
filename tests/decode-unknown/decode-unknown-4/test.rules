@@ -1,1 +1,2 @@
 alert pkthdr any any -> any any (msg:"Ethertype unknown"; decode-event:ethernet.unknown_ethertype; sid:1;)
+alert pkthdr any any -> any any (msg:"VLAN unknown type"; decode-event:vlan.unknown_type; sid:2;)
