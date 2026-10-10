@@ -1,0 +1,70 @@
+requires:
+  min-version: 9
+
+skip:
+  - feature: FUZZ
+
+checks:
+  # Baseline flow: no link-layer error, no event.
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        src_ip: 10.0.0.1
+        dnp3.type: request
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        src_ip: 10.0.0.1
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        src_ip: 10.0.0.2
+
+  # Octets without a start sequence mid-stream: with resync-on-bad-start off,
+  # DNP3 inspection of the flow ends there, so the request behind them is not
+  # logged and no recovery event is set.
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        src_ip: 10.0.1.1
+        dnp3.type: request
+
+  # Bad link-header CRC: the parser already resynchronizes, logs the request
+  # behind it and marks it with dnp3.policy_divergence.
+  - filter:
+      count: 2
+      match:
+        event_type: dnp3
+        src_ip: 10.0.2.1
+        dnp3.type: request
+
+  # Octets without a start sequence at the start of the flow: the request is
+  # not logged.
+  - filter:
+      count: 0
+      match:
+        event_type: dnp3
+        src_ip: 10.0.3.1
+        dnp3.type: request
+
+  # Events over the whole capture: one bad link CRC and one divergence (flow
+  # 10.0.2.x); no bad start bytes event while the option is off.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2270002
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2270010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2270011
