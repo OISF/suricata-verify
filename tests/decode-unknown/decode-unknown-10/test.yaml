@@ -1,0 +1,32 @@
+requires:
+    min-version: 9
+
+args:
+- -k none
+
+checks:
+  # Each of the three RARP frames on VLAN 2015 raises an alert that reports
+  # the RARP value after the tag (0x8035 = 32821), while ether.ether_type is
+  # the VLAN tag ethertype (0x8100 = 33024).
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        vlan[0]: 2015
+        ether.ether_type: 33024
+        unknown_ether_type: 32821
+  # The ethernet and VLAN anomaly records for each frame carry the same value.
+  - filter:
+      count: 3
+      match:
+        event_type: anomaly
+        anomaly.event: decoder.ethernet.unknown_ethertype
+        ether.ether_type: 33024
+        unknown_ether_type: 32821
+  - filter:
+      count: 3
+      match:
+        event_type: anomaly
+        anomaly.event: decoder.vlan.unknown_type
+        unknown_ether_type: 32821

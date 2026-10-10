@@ -44,6 +44,10 @@ Test cases:
                     protocol field comes first in the SLL2 header, and the
                     event and alert report the ethertype after the VLAN
                     tag that follows the header.
+  decode-unknown-10 9.0+ the pcap from Redmine 8142: three RARP frames on
+                    VLAN 2015; every alert and anomaly record reports
+                    unknown_ether_type 32821 while ether.ether_type is
+                    0x8100.
 
 https://redmine.openinfosecfoundation.org/issues/7849
 https://redmine.openinfosecfoundation.org/issues/8142
