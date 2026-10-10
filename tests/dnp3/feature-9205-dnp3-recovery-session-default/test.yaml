@@ -1,0 +1,49 @@
+requires:
+  min-version: 9
+
+skip:
+  - feature: FUZZ
+
+checks:
+  # Long session: one bad link-header CRC, then four valid requests. All are
+  # logged; dnp3.policy_divergence marks only the first request behind the
+  # error, not the rest of the session.
+  - filter:
+      count: 5
+      match:
+        event_type: dnp3
+        src_ip: 10.0.4.1
+        dnp3.type: request
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2270002
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: 10.0.4.1
+        alert.signature_id: 2270011
+
+  # More than a link header of octets without a start sequence in the first
+  # segment: with resync-on-bad-start off, the to-server side is not detected
+  # as DNP3 and the request is not logged; no recovery event is raised.
+  - filter:
+      count: 0
+      match:
+        event_type: dnp3
+        src_ip: 10.0.5.1
+        dnp3.type: request
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2270010
+
+  # Over the whole capture: the one divergence of the long session.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2270011

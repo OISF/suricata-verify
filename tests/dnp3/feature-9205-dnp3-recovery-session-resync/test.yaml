@@ -1,0 +1,61 @@
+requires:
+  min-version: 9
+
+skip:
+  - feature: FUZZ
+
+pcap: ../feature-9205-dnp3-recovery-session-default/input.pcap
+
+args:
+  - --set app-layer.protocols.dnp3.resync-on-bad-start=yes
+
+checks:
+  # Long session: unchanged by the option. dnp3.policy_divergence marks only
+  # the first request behind the bad link-header CRC.
+  - filter:
+      count: 5
+      match:
+        event_type: dnp3
+        src_ip: 10.0.4.1
+        dnp3.type: request
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2270002
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: 10.0.4.1
+        alert.signature_id: 2270011
+
+  # More than a link header of octets without a start sequence in the first
+  # segment, the request in the next one: protocol detection keeps looking
+  # past the first link header, the octets are skipped and the request is
+  # logged and marked.
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        src_ip: 10.0.5.1
+        dnp3.type: request
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: 10.0.5.1
+        alert.signature_id: 2270010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: 10.0.5.1
+        alert.signature_id: 2270011
+
+  # Over the whole capture: one divergence per flow.
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 2270011
