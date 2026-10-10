@@ -1,0 +1,37 @@
+requires:
+  min-version: 9
+
+skip:
+  - feature: FUZZ
+
+pcap: ../feature-9205-dnp3-recovery-embedded-default/input.pcap
+
+args:
+  - --set app-layer.protocols.dnp3.resync-on-bad-start=yes
+
+checks:
+  # Same capture, option on: after the bad block CRC the parser searches for
+  # the next start sequence from the next octet, so the request embedded in
+  # the failed frame is parsed and marked; the rest of the failed frame is
+  # skipped as bad start bytes (a second error), and the request after it is
+  # parsed and marked as well.
+  - filter:
+      count: 3
+      match:
+        event_type: dnp3
+        dnp3.type: request
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2270003
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2270010
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 2270011
