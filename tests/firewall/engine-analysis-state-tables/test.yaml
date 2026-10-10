@@ -21,11 +21,11 @@ checks:
 
   - shell:
       args: >
-        python3 -c 'import json,sys; t=json.load(open("firewall.json"))["tables"]; exp=["app:http2:global:request_complete", "app:http2:global:request_started", "app:http2:global:response_complete", "app:http2:global:response_started", "app:http2:stream:request_closed", "app:http2:stream:request_complete", "app:http2:stream:request_data", "app:http2:stream:request_headers", "app:http2:stream:request_started", "app:http2:stream:response_closed", "app:http2:stream:response_complete", "app:http2:stream:response_data", "app:http2:stream:response_headers", "app:http2:stream:response_started"]; act=sorted(t["http2"]); sys.exit("http2 state table mismatch:\n  expected: %r\n  actual:   %r" % (exp,act)) if act!=exp else None'
+        python3 -c 'import json,sys; t=json.load(open("firewall.json"))["tables"]; exp=["app:http2:global:request_complete", "app:http2:global:request_started", "app:http2:global:response_complete", "app:http2:global:response_started", "app:http2:stream:request_closed", "app:http2:stream:request_complete", "app:http2:stream:request_data", "app:http2:stream:request_headers", "app:http2:stream:request_started", "app:http2:stream:request_trailers", "app:http2:stream:response_closed", "app:http2:stream:response_complete", "app:http2:stream:response_data", "app:http2:stream:response_headers", "app:http2:stream:response_started", "app:http2:stream:response_trailers"]; act=sorted(t["http2"]); sys.exit("http2 state table mismatch:\n  expected: %r\n  actual:   %r" % (exp,act)) if act!=exp else None'
 
   - shell:
       args: >
-        python3 -c 'import json,sys; t=json.load(open("firewall.json"))["tables"]; exp=["app:doh2:global:request_complete", "app:doh2:global:request_started", "app:doh2:global:response_complete", "app:doh2:global:response_started", "app:doh2:stream:request_closed", "app:doh2:stream:request_complete", "app:doh2:stream:request_data", "app:doh2:stream:request_headers", "app:doh2:stream:request_started", "app:doh2:stream:response_closed", "app:doh2:stream:response_complete", "app:doh2:stream:response_data", "app:doh2:stream:response_headers", "app:doh2:stream:response_started"]; act=sorted(t["doh2"]); sys.exit("doh2 state table mismatch:\n  expected: %r\n  actual:   %r" % (exp,act)) if act!=exp else None'
+        python3 -c 'import json,sys; t=json.load(open("firewall.json"))["tables"]; exp=["app:doh2:global:request_complete", "app:doh2:global:request_started", "app:doh2:global:response_complete", "app:doh2:global:response_started", "app:doh2:stream:request_closed", "app:doh2:stream:request_complete", "app:doh2:stream:request_data", "app:doh2:stream:request_headers", "app:doh2:stream:request_started", "app:doh2:stream:request_trailers", "app:doh2:stream:response_closed", "app:doh2:stream:response_complete", "app:doh2:stream:response_data", "app:doh2:stream:response_headers", "app:doh2:stream:response_started", "app:doh2:stream:response_trailers"]; act=sorted(t["doh2"]); sys.exit("doh2 state table mismatch:\n  expected: %r\n  actual:   %r" % (exp,act)) if act!=exp else None'
 
   - shell:
       args: >
@@ -50,3 +50,10 @@ checks:
   - shell:
       args: >
         python3 -c 'import json,sys; t=json.load(open("firewall.json"))["tables"]; exp=["app:ftp-data:request-complete", "app:ftp-data:request-started", "app:ftp-data:response-complete", "app:ftp-data:response-started"]; act=sorted(t["ftp-data"]); sys.exit("ftp-data state table mismatch:\n  expected: %r\n  actual:   %r" % (exp,act)) if act!=exp else None'
+
+  # The HTTP/2 trailer states must not fall back to the state default (drop:flow):
+  # a stream that merely reaches a trailer block must stay open until detection
+  # has had its hook. doh2 shares the table, so assert both.
+  - shell:
+      args: >
+        python3 -c 'import json,sys; t=json.load(open("firewall.json"))["tables"]; bad=[(p,s,t[p]["app:%s:stream:%s"%(p,s)].get("policy")) for p in ("http2","doh2") for s in ("request_trailers","response_trailers") if t[p]["app:%s:stream:%s"%(p,s)].get("policy")!="accept:hook"]; sys.exit("trailer state policy is not accept:hook: %r" % (bad,)) if bad else None'
