@@ -1,0 +1,73 @@
+requires:
+  min-version: 9
+
+skip:
+  - feature: FUZZ
+
+pcap: ../feature-9205-dnp3-recovery-default/input.pcap
+
+args:
+  - --set app-layer.protocols.dnp3.resync-on-bad-start=yes
+
+checks:
+  # Baseline flow: no link-layer error, no event.
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        src_ip: 10.0.0.1
+        dnp3.type: request
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        src_ip: 10.0.0.1
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        src_ip: 10.0.0.2
+
+  # Octets without a start sequence mid-stream: skipped, the request behind
+  # them is logged.
+  - filter:
+      count: 2
+      match:
+        event_type: dnp3
+        src_ip: 10.0.1.1
+        dnp3.type: request
+
+  # Bad link-header CRC: unchanged by the option.
+  - filter:
+      count: 2
+      match:
+        event_type: dnp3
+        src_ip: 10.0.2.1
+        dnp3.type: request
+
+  # Octets without a start sequence at the start of the flow: the probing
+  # parser finds the start sequence further in and the request is logged.
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        src_ip: 10.0.3.1
+        dnp3.type: request
+
+  # Events over the whole capture: one bad link CRC (10.0.2.x), two bad start
+  # bytes (10.0.1.x, 10.0.3.x) and a divergence on each of those three flows.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2270002
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 2270010
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 2270011
