@@ -1,0 +1,30 @@
+requires:
+  min-version: 9
+
+skip:
+  - feature: FUZZ
+
+pcap: ../feature-9205-dnp3-qut-overlap-default/input.pcap
+
+args:
+  - --set app-layer.protocols.dnp3.resync-on-bad-start=yes
+
+checks:
+  # Same capture, option on: the tail is skipped (bad start bytes, once), the twelve transactions behind
+  # it are logged, and the seven to-client frames after the error are marked policy-dependent.
+  - filter:
+      count: 12
+      match:
+        event_type: dnp3
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2270010
+        direction: to_client
+  - filter:
+      count: 7
+      match:
+        event_type: alert
+        alert.signature_id: 2270011
+        direction: to_client
