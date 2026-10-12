@@ -15,5 +15,6 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 20
-        # the trailer state is reached when the last chunk is parsed
-        pcap_cnt: 7
+        # the buffer engine runs from its own state, so the rule is decided where the
+        # header data is complete, well before the trailer block arrives
+        pcap_cnt: 5
