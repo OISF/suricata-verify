@@ -1,0 +1,4 @@
+# A stray DATA frame ahead of the opening HEADERS block must not move that block to the
+# trailer section: its fields stay reachable through the header buffers.
+alert http2 any any -> any any (msg:"opening fields in the header section"; flow:to_server; http.header; content:"user-agent"; sid:10; rev:1;)
+alert http2 any any -> any any (msg:"field keyword still sees the opening block"; flow:to_server; http.user_agent; content:"Mozilla"; sid:11; rev:1;)
