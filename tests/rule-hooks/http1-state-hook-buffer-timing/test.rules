@@ -1,0 +1,4 @@
+# A rule hooked at the trailer state may use a buffer that completes earlier. The engine
+# runs from the buffer's own state, so the rule is decided at the headers, not at the
+# trailer hook. Pinned here because the load-time check is the only hook/buffer tie.
+alert http1:request_trailer any any -> any any (msg:"header buffer under trailer hook"; http.header; content:"User-Agent:"; sid:10; rev:1;)
