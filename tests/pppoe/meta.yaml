@@ -1,0 +1,1 @@
+protocols: [ccp, eth, ipcp, ipv6cp, lcp, ppp, pppoed, pppoes]
