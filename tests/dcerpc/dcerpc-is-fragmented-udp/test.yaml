@@ -1,0 +1,21 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+- -k none
+
+checks:
+  # first request has the fragment flag (flags1 0x04) set -> fragmented
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # second request has no fragment flag -> not fragmented
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
