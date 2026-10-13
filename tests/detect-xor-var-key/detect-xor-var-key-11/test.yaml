@@ -1,0 +1,36 @@
+requires:
+  min-version: 9
+
+pcap: false
+
+args:
+  - --engine-analysis
+  - --set
+  - engine-analysis.rules=yes
+
+checks:
+  # The static-key rule can be precomputed, so its content becomes the MPM /
+  # fast_pattern and the signature is prefiltered.
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1
+        mpm.buffer: http_client_body
+        mpm.pattern: SECRET
+
+  # The variable-key rule loads successfully...
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 2
+
+  # ...but its key is only known at inspection time, so the buffer cannot be
+  # precomputed: no MPM is assigned and the signature is kept out of prefilter.
+  - filter:
+      filename: rules.json
+      count: 0
+      match:
+        id: 2
+        mpm.buffer: http_client_body

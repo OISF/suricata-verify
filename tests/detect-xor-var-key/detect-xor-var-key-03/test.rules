@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"XOR var key from byte_math"; http.uri; byte_math:bytes 1, offset 2, oper -, rvalue 1, result xkey; http.request_body; xor:var xkey 1; content:"SECRET"; sid:1;)
