@@ -1,0 +1,1 @@
+alert tcp any any -> any 80 (msg:"no threshold"; flags:S; flow:stateless; sid:1;)
