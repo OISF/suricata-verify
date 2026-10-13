@@ -1,0 +1,20 @@
+requires:
+    min-version: 9
+
+pcap: false
+
+args:
+  - --engine-analysis
+
+# Two independent deadlocks in one ruleset, to show that resolution does not
+# stop after finding the first one and does not accidentally accept the
+# second:
+#
+#   sid:3 and sid:4 each set the bit the other reads (C and D)
+#   sid:7 and sid:8 each set the bit the other reads (G and F)
+#
+# sid:1, sid:2, sid:5 and sid:6 form ordinary chain links around them. All
+# edges are set edges, so neither cycle can be broken and the ruleset is
+# refused. The exit code is the whole assertion here; the specific message is
+# covered by sigorder-03 and sigorder-07.
+exit-code: 1

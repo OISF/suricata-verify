@@ -1,0 +1,21 @@
+requires:
+    min-version: 9
+
+pcap: false
+
+args:
+  - --engine-analysis
+
+# The ruleset is rejected: resolution cannot break the A/C cycle because both
+# of its edges are set edges of equal weight.
+exit-code: 1
+
+checks:
+  # The sid list in this message comes from an unordered set, so only the
+  # prefix is matched.
+  - shell:
+      args: 'grep -c "Cyclic dependency found between flowbits from signatures" suricata.log'
+      expect: 1
+  - shell:
+      args: 'grep -c "Flowbits have circular dependencies that cannot be met at runtime" suricata.log'
+      expect: 1

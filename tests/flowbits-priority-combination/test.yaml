@@ -1,0 +1,57 @@
+requires:
+    min-version: 9
+
+pcap: false
+
+args:
+  - --engine-analysis
+
+# Same rules as bug-7638-flowbits-sigorder-04, with a priority keyword added to
+# every rule. The chain is unchanged:
+#
+#   sid:4 set D -> sid:3 isset D
+#   sid:3 set C -> sid:2 isset C
+#   sid:2 set B -> sid:1 isset B
+#   sid:1 set A -> sid:5 isset A
+#
+# Priority would order them 4, 2, 5, 3, 1 (priority 1, 2, 3, 4, 5). The
+# dependency order is 4, 3, 2, 1, 5. The checks below pin the dependency
+# order, so they assert that flowbit resolution wins over an explicitly set
+# priority for these rules.
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      __lineno: 1
+      id: 4           # priority 1 and head of the chain, so both agree here
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      __lineno: 2
+      id: 3           # priority 4, placed second because it needs D
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      __lineno: 3
+      id: 2           # priority 2, placed third because it needs C
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      __lineno: 4
+      id: 1           # priority 5, placed fourth because it needs B
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      __lineno: 5
+      id: 5           # priority 3, placed last because it needs A
+# Overriding a priority the user asked for is worth telling them about, so one
+# warning is emitted per affected rule. sid:4 keeps its position but is still
+# reported, since the override is decided per rule and not per outcome.
+- shell:
+    args: 'grep "detect: sid 4: explicitly set priority is overridden by flowbits dependency resolution ordering" suricata.log | wc -l'
+    expect: 1
