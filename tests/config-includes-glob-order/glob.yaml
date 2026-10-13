@@ -1,0 +1,10 @@
+%YAML 1.1
+---
+
+# The pattern expands to 01-order.yaml, 50-order.yaml and 99-order.yaml.
+# glob(3) returns matches in sorted (lexicographic) order, so the drop-in files
+# are included in ascending numeric-prefix order. Each file defines its own
+# unique marker key; the order the keys appear in --dump-config output reflects
+# the order the files were merged.
+include:
+  - "*-order.yaml"
