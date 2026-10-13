@@ -1,0 +1,1 @@
+drop ftp-data any any -> any any (msg:"MD5"; filemd5:md5.txt; sid:1; rev:1;)
