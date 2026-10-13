@@ -1,0 +1,29 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - -k none
+
+checks:
+  # set+mask 24 fires once per unique /24 prefix; 2 packets per /24 → 2 alerts total
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # first packet from 192.168.1.5 adds 192.168.1.0/24 (fires)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_ip: "192.168.1.5"
+  # first packet from 192.168.2.1 adds 192.168.2.0/24 (fires)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_ip: "192.168.2.1"

@@ -1,0 +1,45 @@
+requires:
+  min-version: 9
+
+pcap: ../datasets-cidr-01-ipv4-isset/input-ipv4.pcap
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_ip: "1.2.3.4"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_ip: "203.0.113.1"
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        src_ip: "192.168.1.5"
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        src_ip: "10.0.0.50"
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        src_ip: "172.17.0.1"

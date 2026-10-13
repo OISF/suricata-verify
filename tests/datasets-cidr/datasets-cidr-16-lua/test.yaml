@@ -1,0 +1,26 @@
+requires:
+  min-version: 9
+
+pcap: ../datasets-cidr-01-ipv4-isset/input-ipv4.pcap
+
+args:
+  - -k none
+  - --set default-rule-path=.
+
+checks:
+  # sid:1 (isset) fires for RFC1918 sources: 192.168.1.5, 10.0.0.50, 172.17.0.1
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # sid:2 (lua) fires for every packet when Lua can access the CIDR dataset
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  # no warning about "CIDR dataset get failed" in the log
+  - shell:
+      args: grep "CIDR dataset get failed" suricata.log | wc -l | xargs
+      expect: 0

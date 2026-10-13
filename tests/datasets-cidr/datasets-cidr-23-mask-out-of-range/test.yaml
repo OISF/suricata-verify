@@ -1,0 +1,13 @@
+requires:
+  min-version: 9
+  pcap: false
+
+exit-code: 1
+
+args:
+  - --engine-analysis
+
+checks:
+  - shell:
+      args: grep "not a contiguous IPv4 netmask" suricata.log | wc -l | xargs
+      expect: 1
