@@ -1,0 +1,33 @@
+requires:
+  min-version: 9
+
+pcap: ../dcerpc-dce-iface-02/input.pcap
+
+args:
+- -k none
+
+checks:
+  # request side (to_server): the request PDU's pfc_flags is 0x83
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # response side (to_client): bind_ack and response PDUs both have pfc_flags 0x03
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  # per-direction isolation: the request's 0x83 is not seen on to_client
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  # bitmask on the request side: both request-side PDUs have the low two bits set
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 4

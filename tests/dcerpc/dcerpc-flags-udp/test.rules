@@ -1,0 +1,5 @@
+alert dcerpc any any -> any any (msg:"dcerpc.flags udp req_flags 0x0201 on to_server"; flow:to_server; dcerpc.flags:0x0201; sid:1;)
+alert dcerpc any any -> any any (msg:"dcerpc.flags udp resp_flags 0x0403 on to_client"; flow:to_client; dcerpc.flags:0x0403; sid:2;)
+alert dcerpc any any -> any any (msg:"dcerpc.flags udp req flags not visible on to_client"; flow:to_client; dcerpc.flags:0x0201; sid:3;)
+alert dcerpc any any -> any any (msg:"dcerpc.flags udp low byte flags1 via bitmask on to_server"; flow:to_server; dcerpc.flags:&0x00ff=0x01; sid:4;)
+alert dcerpc any any -> any any (msg:"dcerpc.flags udp high byte flags2 via bitmask on to_client"; flow:to_client; dcerpc.flags:&0xff00=0x0400; sid:5;)
