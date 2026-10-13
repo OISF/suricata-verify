@@ -1,0 +1,6 @@
+alert http any any -> any any (msg:"WPE version_info substring"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: version_info "Microsoft"; sid:1; rev:1;)
+alert http any any -> any any (msg:"WPE version_info keyed field"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: version_info "OriginalFilename: svchost"; sid:2; rev:1;)
+alert http any any -> any any (msg:"WPE version_info regex"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: version_info "/OriginalFilename: .*\.scr$/i"; sid:3; rev:1;)
+alert http any any -> any any (msg:"WPE version_info AND"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: version_info "Acme Software", version_info "acme_update"; sid:4; rev:1;)
+alert http any any -> any any (msg:"WPE version_info alternation"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: version_info "/(svchost|\.scr)/i"; sid:5; rev:1;)
+alert http any any -> any any (msg:"WPE version_info no match"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: version_info "NonexistentVendor"; sid:6; rev:1;)

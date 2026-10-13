@@ -1,0 +1,23 @@
+# Detect PE with .UPX0 section — only packed PE has it (1 alert)
+alert http any any -> any any (msg:"PE with .UPX0 section"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: section_name .UPX0; sid:1; rev:1;)
+
+# Detect PE with .text section — both PEs have it (2 alerts)
+alert http any any -> any any (msg:"PE with .text section"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: section_name .text; sid:2; rev:1;)
+
+# Detect PE with .rdata section — only normal PE has it (1 alert)
+alert http any any -> any any (msg:"PE with .rdata section"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: section_name .rdata; sid:3; rev:1;)
+
+# Detect PE with .rsrc section — both PEs have it (2 alerts)
+alert http any any -> any any (msg:"PE with .rsrc section"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: section_name .rsrc; sid:4; rev:1;)
+
+# Negative test: section that doesn't exist in either PE (0 alerts)
+alert http any any -> any any (msg:"PE with .reloc section"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: section_name .reloc; sid:5; rev:1;)
+
+# Combined: arch x86 + .UPX0 section — packed PE only (1 alert)
+alert http any any -> any any (msg:"x86 PE with .UPX0 section"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, section_name .UPX0; sid:6; rev:1;)
+
+# Case insensitivity test: .upx0 lowercase — should still match (1 alert)
+alert http any any -> any any (msg:"PE with .upx0 section (lowercase)"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: section_name .upx0; sid:7; rev:1;)
+
+# Detect PE with .data section — only normal PE has it (1 alert)
+alert http any any -> any any (msg:"PE with .data section"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: section_name .data; sid:8; rev:1;)

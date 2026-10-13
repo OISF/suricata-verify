@@ -1,0 +1,14 @@
+# Test windows_pe timestamp keyword
+# All test PEs have timestamp=1770997154
+
+# Match: timestamp > 0 (all 5 PEs match)
+alert http any any -> any any ( msg:"TEST timestamp >0"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: timestamp >0; sid:1; rev:1;)
+
+# Match: exact timestamp value (all 5 PEs match)
+alert http any any -> any any ( msg:"TEST timestamp exact"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: timestamp 1770997154; sid:2; rev:1;)
+
+# No match: timestamp > 2000000000 (none match)
+alert http any any -> any any ( msg:"TEST timestamp too high"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: timestamp >2000000000; sid:3; rev:1;)
+
+# Match: timestamp range (all 5 match)
+alert http any any -> any any ( msg:"TEST timestamp range"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: timestamp 1770000000-1771000000; sid:4; rev:1;)

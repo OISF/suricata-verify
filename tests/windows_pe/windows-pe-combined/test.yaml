@@ -1,0 +1,62 @@
+pcap: ../windows-pe-basic/multi_pe.pcap
+
+requires:
+  min-version: 9
+  features:
+    - RUST
+
+args:
+- -k none
+
+checks:
+# Test: x86 PE + few sections + entry_point > 4000 (all 5 match)
+- filter:
+    count: 5
+    match:
+      event_type: alert
+      alert.signature_id: 60
+
+# Test: Console + size > 500 (all 5 match)
+- filter:
+    count: 5
+    match:
+      event_type: alert
+      alert.signature_id: 61
+
+# Test: Console + size < 5000 + sections < 3 (all 5 match)
+- filter:
+    count: 5
+    match:
+      event_type: alert
+      alert.signature_id: 62
+
+# Test: entry_point 4096 + sections < 3 (all 5 match)
+- filter:
+    count: 5
+    match:
+      event_type: alert
+      alert.signature_id: 63
+
+# Test: x86 + size > 1000 + entry_point range (matches 3: SizeOfImage 1024, 4096, 2048)
+- filter:
+    count: 3
+    match:
+      event_type: alert
+      alert.signature_id: 64
+
+# Verify PE metadata fields are correctly logged in fileinfo events
+- filter:
+    count: 5
+    match:
+      event_type: fileinfo
+      executable.arch: "0x014c"
+- filter:
+    count: 5
+    match:
+      event_type: fileinfo
+      executable.sections: 1
+- filter:
+    count: 5
+    match:
+      event_type: fileinfo
+      executable.entry_point: 4096
