@@ -1,0 +1,68 @@
+requires:
+  min-version: 8.0.8
+
+args:
+  - -k none
+  - --runmode single
+  - --set stream.midstream=true
+
+# input.pcap: packets 1-85 of the ticket's capture, one NFSv3 TCP connection
+# (client port 1013) picked up midstream.
+checks:
+  # test.doc, written by one FILE_SYNC WRITE spanning many segments, is
+  # complete.
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: test.doc
+        fileinfo.state: CLOSED
+        fileinfo.size: 71680
+        fileinfo.sha256: d91d58507c90886d60c4fb1def0a76ba0c7aa3dab79b190e7ee525b1b8a66a13
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+
+  # file.data inspects the file past the first 12528 bytes.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 8009003
+
+  # LOOKUP and CREATE of test.doc before the WRITE, and of test.docx after
+  # it.
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 8009001
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 8009002
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: LOOKUP
+        nfs.filename: test.docx
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: CREATE
+        nfs.filename: test.docx
+
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+
+  - stats:
+      app_layer.flow.nfs_tcp: 1
+      app_layer.error.nfs_tcp.parser: 0
