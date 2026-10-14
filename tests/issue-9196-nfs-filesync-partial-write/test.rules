@@ -1,0 +1,2 @@
+alert nfs any any -> any any (msg:"ticket 9196 NFSv3 REMOVE after WRITE"; nfs_procedure:12; sid:9196001; rev:1;)
+alert tcp any any -> any 2049 (msg:"ticket 9196 raw REMOVE name on the wire"; flow:established,to_server; content:"NFSSYNC_REMOVE_MARKER"; sid:9196002; rev:1;)

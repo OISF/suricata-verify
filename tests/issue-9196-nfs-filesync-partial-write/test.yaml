@@ -1,0 +1,110 @@
+requires:
+  min-version: 8.0.8
+
+args:
+  - -k none
+  - --runmode single
+
+# Flows (client port -> 2049), each an 800-byte WRITE followed by a REMOVE:
+#   34632: DATA_SYNC WRITE split after 48 bytes of file data
+#   43218: FILE_SYNC WRITE in one segment (control)
+#   43234: FILE_SYNC WRITE split after 48 bytes of file data
+checks:
+  # The REMOVE is on the wire in every flow (raw stream match).
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 34632
+        alert.signature_id: 9196002
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 43218
+        alert.signature_id: 9196002
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 43234
+        alert.signature_id: 9196002
+
+  # The NFS parser sees the REMOVE in every flow.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 34632
+        alert.signature_id: 9196001
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 43218
+        alert.signature_id: 9196001
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 43234
+        alert.signature_id: 9196001
+
+  # DATA_SYNC never marks a last chunk and there is no COMMIT, so the
+  # file stays open and is truncated at the end of the flow, but all
+  # 800 bytes are tracked.
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 34632
+        fileinfo.state: TRUNCATED
+        fileinfo.size: 800
+
+  # One-segment FILE_SYNC control.
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 43218
+        fileinfo.state: CLOSED
+        fileinfo.size: 800
+        fileinfo.sha256: 7d017cd51077237c827342d9ad063d07b93a76e1c53399d72bfd33b74cc9cff5
+
+  # Split FILE_SYNC: same file as the control.
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 43234
+        fileinfo.state: CLOSED
+        fileinfo.size: 800
+        fileinfo.sha256: 7d017cd51077237c827342d9ad063d07b93a76e1c53399d72bfd33b74cc9cff5
+
+  # One file per flow.
+  - filter:
+      count: 3
+      match:
+        event_type: fileinfo
+
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+
+  # The split FILE_SYNC flow keeps both transactions and never hits the
+  # app-layer error exception policy.
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_port: 43234
+        flow.tx_cnt: 2
+        not-has-key: flow.exception_policy
+
+  - stats:
+      app_layer.flow.nfs_tcp: 3
+      app_layer.tx.nfs_tcp: 6
+      app_layer.error.nfs_tcp.parser: 0

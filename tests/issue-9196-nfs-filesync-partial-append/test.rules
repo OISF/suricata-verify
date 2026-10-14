@@ -1,0 +1,2 @@
+alert nfs any any -> any any (msg:"ticket 9196 NFSv3 REMOVE after split FILE_SYNC WRITE"; nfs_procedure:12; sid:9196101; rev:1;)
+alert nfs any any -> any any (msg:"ticket 9196 NFSv3 WRITE file data marker after a truncated file"; flow:to_server; file.data; content:"9196-TRUNCATED-FILE-MARKER"; sid:9196102; rev:1;)
