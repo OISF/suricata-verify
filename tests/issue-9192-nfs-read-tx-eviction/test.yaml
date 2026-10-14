@@ -1,0 +1,170 @@
+requires:
+  min-version: 8.0.8
+
+# Same capture as issue-9192-nfs-read-requestmap-eviction, replayed with
+# different NFS limits.
+pcap: ../issue-9192-nfs-read-requestmap-eviction/input.pcap
+
+# max-requests=1024 keeps every xid of this capture in the request map,
+# so only the max-tx limit can take the READ away. Any max-tx <= 520
+# force-closes the in-progress READ file tx before its continuation
+# arrives; 64 does so early in the 521 call burst and stays far above
+# the control flow's 4 transactions.
+args:
+  - -k none
+  - --runmode single
+  - --set app-layer.protocols.nfs.max-requests=1024
+  - --set app-layer.protocols.nfs.max-tx=64
+
+checks:
+  # Control flow, client port 41011: no transaction pressure. Initial
+  # READ (xid 0x10000001) is CLOSED with all 512 bytes, followed by a
+  # LOOKUP and a second 20 byte READ (xid 0x20000002).
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192001
+        dest_port: 41011
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192002
+        src_port: 41011
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192003
+        dest_port: 41011
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192004
+        src_port: 41011
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192005
+        dest_port: 41011
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 41011
+        nfs.read.last_xid: 268435457
+        fileinfo.state: CLOSED
+        fileinfo.size: 512
+        fileinfo.sha256: 9d5057ddf3f696e1203cb10bae97e44300e25e9daabbe15b3b8d31e0eed0fd4c
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 41011
+        nfs.read.last_xid: 536870914
+        fileinfo.state: CLOSED
+        fileinfo.size: 20
+        fileinfo.sha256: 0c8a5c5353966bfe4c15341a4bdd70dc9f18ae2942ed9c0bbc286f44ac0d2420
+  - filter:
+      count: 2
+      match:
+        event_type: fileinfo
+        dest_port: 41011
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_port: 41011
+        app_proto: nfs
+        not-has-key: flow.exception_policy
+
+  # Eviction flow, client port 41012: the 521 NULL calls exceed max-tx,
+  # so the oldest open transaction, the partially received READ file
+  # (tx_id 0), is force-closed while its 360 byte continuation is still
+  # pending.
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        dest_port: 41012
+        tx_id: 0
+        anomaly.event: too_many_transactions
+
+  # The force-closed READ keeps only the 152 bytes of the first segment
+  # and is TRUNCATED. Its continuation must be skipped to the known
+  # record boundary: not added to any file, not parsed as RPC.
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 41012
+        nfs.read.last_xid: 268435457
+        fileinfo.state: TRUNCATED
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 9192005
+        dest_port: 41012
+
+  # The stream stays in sync: the LOOKUP and the second READ are parsed.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192001
+        dest_port: 41012
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192002
+        src_port: 41012
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192003
+        dest_port: 41012
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192004
+        src_port: 41012
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 41012
+        nfs.read.last_xid: 536870914
+        fileinfo.state: CLOSED
+        fileinfo.size: 20
+        fileinfo.sha256: 0c8a5c5353966bfe4c15341a4bdd70dc9f18ae2942ed9c0bbc286f44ac0d2420
+  - filter:
+      count: 2
+      match:
+        event_type: fileinfo
+        dest_port: 41012
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_port: 41012
+        app_proto: nfs
+        not-has-key: flow.exception_policy
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.event: malformed_data
+
+  # control: READ, NULL, LOOKUP, READ; eviction flow: READ, 521 NULL,
+  # LOOKUP, READ
+  - stats:
+      app_layer.flow.nfs_tcp: 2
+      app_layer.tx.nfs_tcp: 528
+      app_layer.error.nfs_tcp.parser: 0

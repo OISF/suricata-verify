@@ -1,0 +1,5 @@
+alert nfs any any -> any any (msg:"NFS READ file data after continuation"; flow:established,to_client; file.data; content:"NFSMAP_FILE_MARKER"; sid:9192001; rev:1;)
+alert nfs any any -> any 2049 (msg:"NFS LOOKUP after continuation"; flow:established,to_server; nfs_procedure:3; sid:9192002; rev:1;)
+alert tcp any any -> any any (msg:"raw stream file marker"; flow:established; content:"NFSMAP_FILE_MARKER"; sid:9192003; rev:1;)
+alert tcp any any -> any 2049 (msg:"raw stream LOOKUP name"; flow:established,to_server; content:"NFSMAP_LOOKUP_NAME"; sid:9192004; rev:1;)
+alert nfs any any -> any any (msg:"NFS READ continuation bytes in file data"; flow:established,to_client; file.data; content:"|00 00 00 10|BBBB"; sid:9192005; rev:1;)

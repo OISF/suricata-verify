@@ -1,0 +1,6 @@
+alert nfs any any -> any any (msg:"NFS READ reply sharing a segment with the evicted continuation"; flow:established,to_client; file.data; content:"R9192-NEXT-RECORD-MARKER"; sid:9192101; rev:1;)
+alert nfs any any -> any 2049 (msg:"NFS LOOKUP after the evicted continuation"; flow:established,to_server; nfs_procedure:3; sid:9192102; rev:1;)
+alert tcp any any -> any any (msg:"raw stream next record marker"; flow:established,to_client; content:"R9192-NEXT-RECORD-MARKER"; sid:9192103; rev:1;)
+alert nfs any any -> any any (msg:"NFS READ continuation bytes in file data"; flow:established,to_client; file.data; content:"|00 00 00 10|R9192 continuation"; sid:9192104; rev:1;)
+alert nfs any any -> any any (msg:"NFS READ reply after the replaced READ file transaction"; flow:established,to_client; file.data; content:"R9192-REPLACEMENT-READ-MARKER"; sid:9192105; rev:1;)
+alert tcp any any -> any any (msg:"raw stream replacement READ marker"; flow:established,to_client; content:"R9192-REPLACEMENT-READ-MARKER"; sid:9192106; rev:1;)

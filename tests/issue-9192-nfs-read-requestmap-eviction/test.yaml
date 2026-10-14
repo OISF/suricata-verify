@@ -1,0 +1,153 @@
+requires:
+  min-version: 8.0.8
+
+# max-requests is pinned to 512, the current default, so the 521 NULL
+# calls of the eviction flow keep evicting the READ xid from the request
+# map even if the default changes. Any value up to 521 reproduces.
+args:
+  - -k none
+  - --runmode single
+  - --set app-layer.protocols.nfs.max-requests=512
+
+checks:
+  # Control flow, client port 41011: chunked READ without request map
+  # pressure. Initial READ (xid 0x10000001) is CLOSED with all 512 bytes,
+  # followed by a LOOKUP and a second 20 byte READ (xid 0x20000002).
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192001
+        dest_port: 41011
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192002
+        src_port: 41011
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192003
+        dest_port: 41011
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192004
+        src_port: 41011
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192005
+        dest_port: 41011
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 41011
+        nfs.read.last_xid: 268435457
+        fileinfo.state: CLOSED
+        fileinfo.size: 512
+        fileinfo.sha256: 9d5057ddf3f696e1203cb10bae97e44300e25e9daabbe15b3b8d31e0eed0fd4c
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 41011
+        nfs.read.last_xid: 536870914
+        fileinfo.state: CLOSED
+        fileinfo.size: 20
+        fileinfo.sha256: 0c8a5c5353966bfe4c15341a4bdd70dc9f18ae2942ed9c0bbc286f44ac0d2420
+  - filter:
+      count: 2
+      match:
+        event_type: fileinfo
+        dest_port: 41011
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_port: 41011
+        app_proto: nfs
+        not-has-key: flow.exception_policy
+
+  # Eviction flow, client port 41012: same exchange, but 521 NULL calls
+  # are sent while the READ reply continuation is pending, evicting the
+  # READ xid from the default 512 entry request map. Expected to behave
+  # exactly like the control flow.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192001
+        dest_port: 41012
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192002
+        src_port: 41012
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192003
+        dest_port: 41012
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192004
+        src_port: 41012
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192005
+        dest_port: 41012
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 41012
+        nfs.read.last_xid: 268435457
+        fileinfo.state: CLOSED
+        fileinfo.size: 512
+        fileinfo.sha256: 9d5057ddf3f696e1203cb10bae97e44300e25e9daabbe15b3b8d31e0eed0fd4c
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 41012
+        nfs.read.last_xid: 536870914
+        fileinfo.state: CLOSED
+        fileinfo.size: 20
+        fileinfo.sha256: 0c8a5c5353966bfe4c15341a4bdd70dc9f18ae2942ed9c0bbc286f44ac0d2420
+  - filter:
+      count: 2
+      match:
+        event_type: fileinfo
+        dest_port: 41012
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_port: 41012
+        app_proto: nfs
+        not-has-key: flow.exception_policy
+
+  # The continuation is file data, never an RPC header: no malformed_data.
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+
+  # control: READ, NULL, LOOKUP, READ; eviction flow: READ, 521 NULL,
+  # LOOKUP, READ
+  - stats:
+      app_layer.flow.nfs_tcp: 2
+      app_layer.tx.nfs_tcp: 528
+      app_layer.error.nfs_tcp.parser: 0

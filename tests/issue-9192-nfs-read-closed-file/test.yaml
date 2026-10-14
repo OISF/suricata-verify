@@ -1,0 +1,406 @@
+requires:
+  # Fixed in 8.0.8 and 9.0.0 (Redmine #9192 / backport #9193).
+  min-version: 8.0.8
+
+args:
+  - -k none
+  - --runmode single
+
+# Redmine #9192: the continuation of a partial READ reply must not go to a file
+# transaction whose file is already closed. A complete READ reply with eof set
+# closes the file, but its transaction can still be found by its file handle
+# until it is logged and freed. The continuation must then be consumed exactly
+# up to the end of its record, so that the next record in the same delivery,
+# the complete reply to the READ of a second file, is parsed.
+#
+# Flows (see README.md for the segment layout):
+#   readahead 44101-44103: READ calls for offset 0 and offset 1024 (eof) of a
+#     file and for a second file. The eof reply is answered first, complete,
+#     and closes the file with no data, as it is out of order.
+#   reread 44111-44113: two READ calls for the same file from offset 0 and one
+#     for a second file. The complete eof reply to the first READ closes the
+#     file with its 600 bytes.
+#   The reply to the other READ of the file is then complete in the second
+#   server segment (controls 44101, 44111), split over the two segments, both
+#   sent before the client ACKs them (44102, 44112), or split with each
+#   segment ACKed before the next one is sent (44103, 44113). The second
+#   segment ends with the complete reply to the READ of the second file (64
+#   bytes, starting with R9192-NEXT-FILE-MARKER). A LOOKUP call and its reply
+#   follow.
+#
+# Port pinning: to_server alerts have src_port = client; to_client alerts and
+# READ fileinfo records have dest_port = client. nfs events can be logged on a
+# packet of either direction, so the LOOKUP is matched by its unique per-flow
+# name. Anomalies are counted globally.
+checks:
+  # No NFS parser error and every transaction parsed. Each flow has 3: the file
+  # transaction created by the first READ call of the file (the other READ call
+  # of that file finds it), the file transaction of the READ of the second
+  # file, and the LOOKUP.
+  - stats:
+      app_layer.flow.nfs_tcp: 6
+      app_layer.tx.nfs_tcp: 18
+      app_layer.error.nfs_tcp.parser: 0
+
+  # The continuation is never parsed as an RPC record.
+  - filter:
+      comment: "no anomaly on any flow"
+      count: 0
+      match:
+        event_type: anomaly
+
+  # --- 44101 readahead-control: the reply to the offset 0 READ is complete
+  #     in the second segment ---
+  - filter:
+      comment: "44101: marker in file.data of the next READ reply"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192201
+        dest_port: 44101
+  - filter:
+      comment: "44101: LOOKUP after the next READ reply"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192202
+        src_port: 44101
+  - filter:
+      comment: "44101: LOOKUP logged"
+      count: 1
+      match:
+        event_type: nfs
+        nfs.filename: r9192-after-44101
+  - filter:
+      comment: "44101: raw stream marker (sanity)"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192203
+        dest_port: 44101
+  - filter:
+      comment: "44101: file CLOSED by the out of order eof reply, with no data"
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 44101
+        rpc.xid: 2442264592
+        fileinfo.state: CLOSED
+        fileinfo.size: 0
+        fileinfo.sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - filter:
+      comment: "44101: next READ file CLOSED"
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 44101
+        rpc.xid: 2442264594
+        fileinfo.state: CLOSED
+        fileinfo.size: 64
+        fileinfo.sha256: 34ebc57d53ed5b7aa99f89ea4cfefd71740c296b5bed30dd2d882f4efe7c20ce
+  - filter:
+      comment: "44101: no other file"
+      count: 2
+      match:
+        event_type: fileinfo
+        dest_port: 44101
+
+  # --- 44102 readahead: the reply to the offset 0 READ is split. Its
+  #     continuation finds the transaction whose file the eof reply closed: it
+  #     is consumed to the end of its record without going to that file ---
+  - filter:
+      comment: "44102: marker in file.data of the next READ reply"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192201
+        dest_port: 44102
+  - filter:
+      comment: "44102: LOOKUP after the next READ reply"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192202
+        src_port: 44102
+  - filter:
+      comment: "44102: LOOKUP logged"
+      count: 1
+      match:
+        event_type: nfs
+        nfs.filename: r9192-after-44102
+  - filter:
+      comment: "44102: raw stream marker (sanity)"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192203
+        dest_port: 44102
+  - filter:
+      comment: "44102: file CLOSED by the out of order eof reply, with no data"
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 44102
+        rpc.xid: 2442264848
+        fileinfo.state: CLOSED
+        fileinfo.size: 0
+        fileinfo.sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - filter:
+      comment: "44102: closed file not grown by the continuation and the next reply (884 bytes)"
+      count: 0
+      match:
+        event_type: fileinfo
+        dest_port: 44102
+        rpc.xid: 2442264848
+        fileinfo.size: 884
+  - filter:
+      comment: "44102: next READ file CLOSED"
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 44102
+        rpc.xid: 2442264850
+        fileinfo.state: CLOSED
+        fileinfo.size: 64
+        fileinfo.sha256: 34ebc57d53ed5b7aa99f89ea4cfefd71740c296b5bed30dd2d882f4efe7c20ce
+  - filter:
+      comment: "44102: no other file"
+      count: 2
+      match:
+        event_type: fileinfo
+        dest_port: 44102
+
+  # --- 44103 readahead-acked: as 44102, but each segment is ACKed before the
+  #     next one is sent. The transaction with the closed file is logged and
+  #     freed before the continuation, which then finds no transaction ---
+  - filter:
+      comment: "44103: marker in file.data of the next READ reply"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192201
+        dest_port: 44103
+  - filter:
+      comment: "44103: LOOKUP after the next READ reply"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192202
+        src_port: 44103
+  - filter:
+      comment: "44103: LOOKUP logged"
+      count: 1
+      match:
+        event_type: nfs
+        nfs.filename: r9192-after-44103
+  - filter:
+      comment: "44103: raw stream marker (sanity)"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192203
+        dest_port: 44103
+  - filter:
+      comment: "44103: file CLOSED by the out of order eof reply, with no data"
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 44103
+        rpc.xid: 2442265104
+        fileinfo.state: CLOSED
+        fileinfo.size: 0
+        fileinfo.sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - filter:
+      comment: "44103: next READ file CLOSED"
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 44103
+        rpc.xid: 2442265106
+        fileinfo.state: CLOSED
+        fileinfo.size: 64
+        fileinfo.sha256: 34ebc57d53ed5b7aa99f89ea4cfefd71740c296b5bed30dd2d882f4efe7c20ce
+  - filter:
+      comment: "44103: no other file"
+      count: 2
+      match:
+        event_type: fileinfo
+        dest_port: 44103
+
+  # --- 44111 reread-control: the re-read reply is complete in the second
+  #     segment ---
+  - filter:
+      comment: "44111: marker in file.data of the next READ reply"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192201
+        dest_port: 44111
+  - filter:
+      comment: "44111: LOOKUP after the next READ reply"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192202
+        src_port: 44111
+  - filter:
+      comment: "44111: LOOKUP logged"
+      count: 1
+      match:
+        event_type: nfs
+        nfs.filename: r9192-after-44111
+  - filter:
+      comment: "44111: raw stream marker (sanity)"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192203
+        dest_port: 44111
+  - filter:
+      comment: "44111: file CLOSED by the eof reply to the first READ, with its 600 bytes"
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 44111
+        rpc.xid: 2442265376
+        fileinfo.state: CLOSED
+        fileinfo.size: 600
+        fileinfo.sha256: c83a220b0e3153249dcc6279b970ea35242498879510c672cc3bd6bf3b829b2f
+  - filter:
+      comment: "44111: next READ file CLOSED"
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 44111
+        rpc.xid: 2442265378
+        fileinfo.state: CLOSED
+        fileinfo.size: 64
+        fileinfo.sha256: 34ebc57d53ed5b7aa99f89ea4cfefd71740c296b5bed30dd2d882f4efe7c20ce
+  - filter:
+      comment: "44111: no other file"
+      count: 2
+      match:
+        event_type: fileinfo
+        dest_port: 44111
+
+  # --- 44112 reread: the re-read reply is split. Its continuation finds the
+  #     transaction whose file the eof reply to the first READ closed: it is
+  #     consumed to the end of its record without going to that file ---
+  - filter:
+      comment: "44112: marker in file.data of the next READ reply"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192201
+        dest_port: 44112
+  - filter:
+      comment: "44112: LOOKUP after the next READ reply"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192202
+        src_port: 44112
+  - filter:
+      comment: "44112: LOOKUP logged"
+      count: 1
+      match:
+        event_type: nfs
+        nfs.filename: r9192-after-44112
+  - filter:
+      comment: "44112: raw stream marker (sanity)"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192203
+        dest_port: 44112
+  - filter:
+      comment: "44112: file CLOSED by the eof reply to the first READ, with its 600 bytes"
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 44112
+        rpc.xid: 2442265632
+        fileinfo.state: CLOSED
+        fileinfo.size: 600
+        fileinfo.sha256: c83a220b0e3153249dcc6279b970ea35242498879510c672cc3bd6bf3b829b2f
+  - filter:
+      comment: "44112: closed file not grown by the continuation and the next reply (1060 bytes)"
+      count: 0
+      match:
+        event_type: fileinfo
+        dest_port: 44112
+        rpc.xid: 2442265632
+        fileinfo.size: 1060
+  - filter:
+      comment: "44112: next READ file CLOSED"
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 44112
+        rpc.xid: 2442265634
+        fileinfo.state: CLOSED
+        fileinfo.size: 64
+        fileinfo.sha256: 34ebc57d53ed5b7aa99f89ea4cfefd71740c296b5bed30dd2d882f4efe7c20ce
+  - filter:
+      comment: "44112: no other file"
+      count: 2
+      match:
+        event_type: fileinfo
+        dest_port: 44112
+
+  # --- 44113 reread-acked: as 44112, but each segment is ACKed before the
+  #     next one is sent. The transaction with the closed file is logged and
+  #     freed before the continuation, which then finds no transaction ---
+  - filter:
+      comment: "44113: marker in file.data of the next READ reply"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192201
+        dest_port: 44113
+  - filter:
+      comment: "44113: LOOKUP after the next READ reply"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192202
+        src_port: 44113
+  - filter:
+      comment: "44113: LOOKUP logged"
+      count: 1
+      match:
+        event_type: nfs
+        nfs.filename: r9192-after-44113
+  - filter:
+      comment: "44113: raw stream marker (sanity)"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192203
+        dest_port: 44113
+  - filter:
+      comment: "44113: file CLOSED by the eof reply to the first READ, with its 600 bytes"
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 44113
+        rpc.xid: 2442265888
+        fileinfo.state: CLOSED
+        fileinfo.size: 600
+        fileinfo.sha256: c83a220b0e3153249dcc6279b970ea35242498879510c672cc3bd6bf3b829b2f
+  - filter:
+      comment: "44113: next READ file CLOSED"
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 44113
+        rpc.xid: 2442265890
+        fileinfo.state: CLOSED
+        fileinfo.size: 64
+        fileinfo.sha256: 34ebc57d53ed5b7aa99f89ea4cfefd71740c296b5bed30dd2d882f4efe7c20ce
+  - filter:
+      comment: "44113: no other file"
+      count: 2
+      match:
+        event_type: fileinfo
+        dest_port: 44113

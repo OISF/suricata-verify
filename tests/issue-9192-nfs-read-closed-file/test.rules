@@ -1,0 +1,3 @@
+alert nfs any any -> any any (msg:"Redmine 9192 READ reply after the continuation for a closed file"; flow:established,to_client; file.data; content:"R9192-NEXT-FILE-MARKER"; sid:9192201; rev:1;)
+alert nfs any any -> any 2049 (msg:"Redmine 9192 LOOKUP after the continuation for a closed file"; flow:established,to_server; nfs_procedure:3; sid:9192202; rev:1;)
+alert tcp any 2049 -> any any (msg:"Redmine 9192 raw marker of the next READ reply on the wire"; flow:established,to_client; content:"R9192-NEXT-FILE-MARKER"; sid:9192203; rev:1;)
