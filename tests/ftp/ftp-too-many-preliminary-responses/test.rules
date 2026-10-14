@@ -1,0 +1,1 @@
+alert ftp any any -> any any (msg:"SURICATA FTP too many preliminary responses"; flow:to_client; app-layer-event:ftp.too_many_preliminary_responses; classtype:protocol-command-decode; sid:2232005; rev:1;)
