@@ -1,0 +1,2 @@
+alert nfs any any -> any 2049 (msg:"R9190 NFS LOOKUP parsed after partial record"; flow:to_server,established; nfs_procedure:3; sid:9906101; rev:1;)
+alert tcp any any -> any 2049 (msg:"R9190 NFS marker bytes present on wire"; flow:to_server,established; content:"NFSERRMARK"; sid:9906102; rev:1;)

@@ -1,0 +1,79 @@
+requires:
+  min-version: 8.0.8
+
+args:
+  - -k none
+  - --runmode single
+
+checks:
+  # --- Control flow (src port 42470): NULL, a complete 80-byte invalid WRITE
+  #     (stable=3), then a LOOKUP carrying NFSERRMARK. The complete invalid
+  #     record is only marked malformed, so later NFS parsing survives and the
+  #     LOOKUP alerts. This already passes on the vulnerable baseline. ---
+  - filter:
+      comment: "control flow 42470 must alert on the LOOKUP"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9906101
+        src_port: 42470
+        dest_port: 2049
+
+  # --- Attack flow (src port 35566): NULL, 72 bytes of an 804-byte WRITE record
+  #     that ends on the invalid stable=3, then the 732-byte record tail plus a
+  #     complete LOOKUP (NFSERRMARK) in one segment. The partial WRITE's content
+  #     error must NOT be fatal: malformed data is recorded, the known record
+  #     boundary is skipped, and the following LOOKUP still alerts.
+  #     This is the R9190 regression: it FAILS on the vulnerable baseline. ---
+  - filter:
+      comment: "attack flow 35566 must alert on the LOOKUP (R9190)"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9906101
+        src_port: 35566
+        dest_port: 2049
+
+  # --- Raw TCP marker bytes reach the sensor on BOTH flows (framing-independent,
+  #     passes on the baseline too; proves the LOOKUP bytes were present). ---
+  - filter:
+      comment: "raw TCP marker on control flow 42470"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9906102
+        src_port: 42470
+  - filter:
+      comment: "raw TCP marker on attack flow 35566"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9906102
+        src_port: 35566
+
+  # --- nfs malformed_data anomaly recorded on BOTH flows, on the NULL call's
+  #     tx (the invalid WRITE never creates one). EVE records carry the
+  #     direction of the packet they are logged on; in IDS mode to-server data
+  #     is parsed on the server's ACK, so the anomaly has dest_port = client. ---
+  - filter:
+      comment: "malformed_data anomaly on control flow 42470"
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+        dest_port: 42470
+  - filter:
+      comment: "malformed_data anomaly on attack flow 35566"
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+        dest_port: 35566
+
+  # --- No fatal NFS parser error anywhere in the capture. On the vulnerable
+  #     baseline the attack flow's partial WRITE raises exactly one, so this
+  #     FAILS on the baseline (got 1) and passes once R9190 is fixed. ---
+  - stats:
+      app_layer.error.nfs_tcp.parser: 0
