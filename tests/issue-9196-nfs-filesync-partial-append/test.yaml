@@ -1,0 +1,212 @@
+requires:
+  min-version: 8.0.8
+
+args:
+  - -k none
+  - --runmode single
+
+# Flows (client port -> 2049), see make-pcap.py:
+#   40001: UNSTABLE WRITE (512 bytes), then FILE_SYNC WRITE (1024 bytes)
+#          to the open file, split into 2 segments
+#   40002: as 40001, FILE_SYNC WRITE in one segment (control)
+#   40003: FILE_SYNC WRITE (1024 bytes) as the only chunk, split into 3
+#          segments
+#   40004: as 40003, FILE_SYNC WRITE in one segment (control)
+#   40005: as 40003, split into 2 segments, the REMOVE follows the end of
+#          the continuation in the same segment
+#   40006: UNSTABLE WRITE (512 bytes), then FILE_SYNC WRITE (1024 bytes)
+#          after a hole, split into 2 segments (the file is truncated), then
+#          FILE_SYNC WRITE (128 bytes) at offset 0 starting with a marker
+#   40007: as 40006, FILE_SYNC WRITE after the hole in one segment (control)
+checks:
+  # The REMOVE after the WRITE is seen on every flow.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 40001
+        alert.signature_id: 9196101
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 40002
+        alert.signature_id: 9196101
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 40003
+        alert.signature_id: 9196101
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 40004
+        alert.signature_id: 9196101
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 40005
+        alert.signature_id: 9196101
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 40006
+        alert.signature_id: 9196101
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 40007
+        alert.signature_id: 9196101
+
+  # Existing open file: both chunks, closed by the FILE_SYNC WRITE.
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 40001
+        fileinfo.state: CLOSED
+        fileinfo.size: 1536
+        fileinfo.sha256: b5ffc202e1ff86cf186d2a5ae86f584f357ce18d71e6caa3a4d92851eecf3e4a
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 40002
+        fileinfo.state: CLOSED
+        fileinfo.size: 1536
+        fileinfo.sha256: b5ffc202e1ff86cf186d2a5ae86f584f357ce18d71e6caa3a4d92851eecf3e4a
+
+  # New file written by a single FILE_SYNC WRITE.
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 40003
+        fileinfo.state: CLOSED
+        fileinfo.size: 1024
+        fileinfo.sha256: 2cfc17f9a31e9838ab3a5fef7d6cbfee7f176df75dc54a5e667c24c96da7149f
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 40004
+        fileinfo.state: CLOSED
+        fileinfo.size: 1024
+        fileinfo.sha256: 2cfc17f9a31e9838ab3a5fef7d6cbfee7f176df75dc54a5e667c24c96da7149f
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 40005
+        fileinfo.state: CLOSED
+        fileinfo.size: 1024
+        fileinfo.sha256: 2cfc17f9a31e9838ab3a5fef7d6cbfee7f176df75dc54a5e667c24c96da7149f
+
+  # The FILE_SYNC WRITE after the hole truncates the file and, split or not,
+  # closes its transaction. The marker WRITE (xid 0x91960603 on 40006,
+  # 0x91960703 on 40007) then starts a new file in its own transaction, and
+  # its data is inspected.
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 40006
+        fileinfo.state: TRUNCATED
+        fileinfo.size: 512
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 40006
+        rpc.xid: 2442528259
+        fileinfo.state: CLOSED
+        fileinfo.size: 128
+        fileinfo.sha256: 6a0a72d3568eb1475e6760a815896cca021a47099135914966d4eebe8ef9cb85
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 40006
+        alert.signature_id: 9196102
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 40007
+        fileinfo.state: TRUNCATED
+        fileinfo.size: 512
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 40007
+        rpc.xid: 2442528515
+        fileinfo.state: CLOSED
+        fileinfo.size: 128
+        fileinfo.sha256: 6a0a72d3568eb1475e6760a815896cca021a47099135914966d4eebe8ef9cb85
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 40007
+        alert.signature_id: 9196102
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 9196102
+
+  # One file per flow, two on 40006 and 40007.
+  - filter:
+      count: 9
+      match:
+        event_type: fileinfo
+
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+
+  # The split flows keep the file and REMOVE transactions (two file
+  # transactions on 40006) and never hit the app-layer error exception
+  # policy.
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_port: 40001
+        flow.tx_cnt: 2
+        not-has-key: flow.exception_policy
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_port: 40003
+        flow.tx_cnt: 2
+        not-has-key: flow.exception_policy
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_port: 40005
+        flow.tx_cnt: 2
+        not-has-key: flow.exception_policy
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_port: 40006
+        flow.tx_cnt: 3
+        not-has-key: flow.exception_policy
+
+  - stats:
+      app_layer.flow.nfs_tcp: 7
+      app_layer.tx.nfs_tcp: 16
+      app_layer.error.nfs_tcp.parser: 0
