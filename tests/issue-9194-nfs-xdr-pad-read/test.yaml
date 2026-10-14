@@ -1,0 +1,797 @@
+requires:
+  min-version: 8.0.8
+
+args:
+  - -k none
+  - --runmode single
+
+checks:
+  # The parser stays in sync on every flow: no parser error and three NFS
+  # transactions per flow (two READ file transactions and the LOOKUP).
+  - stats:
+      app_layer.flow.nfs_tcp: 28
+      app_layer.tx.nfs_tcp: 84
+      app_layer.error.nfs_tcp.parser: 0
+
+  # No NFS anomaly (malformed_data) on any flow.
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+
+  # Sanity: the marker reaches raw stream inspection on every flow.
+  - filter:
+      count: 28
+      match:
+        event_type: alert
+        alert.signature_id: 9194003
+
+  # The 32 byte MARK_FH file after the padded record is complete.
+  - filter:
+      count: 26
+      match:
+        event_type: fileinfo
+        rpc.xid: 2442403842
+        fileinfo.state: CLOSED
+        fileinfo.size: 32
+        fileinfo.sha256: da8f9d06f5829eed4f2d509ebbb20c84ce1c40a0d8e755e13677e53deb405a31
+
+  # Per flow: the marker reply alert (9194001), the LOOKUP alert (9194002)
+  # and the first file (xid 0x91941001): CLOSED with its exact size and
+  # sha256, or TRUNCATED at flow end when the reply has eof=0.
+
+  # 40100: pad 1, control: complete reply in one segment
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194001
+        src_port: 2049
+        dest_port: 40100
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194002
+        src_port: 40100
+        dest_port: 2049
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40100
+        rpc.xid: 2442399745
+        fileinfo.state: CLOSED
+        fileinfo.size: 515
+        fileinfo.sha256: 5a76aa04b9e9070d486123aa4256225decbc87e81140026ead23a6d7b842b80c
+
+  # 40101: pad 1, (a) first delivery ends on the last data byte
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194001
+        src_port: 2049
+        dest_port: 40101
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194002
+        src_port: 40101
+        dest_port: 2049
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40101
+        rpc.xid: 2442399745
+        fileinfo.state: CLOSED
+        fileinfo.size: 515
+        fileinfo.sha256: 5a76aa04b9e9070d486123aa4256225decbc87e81140026ead23a6d7b842b80c
+
+  # 40104: pad 1, (c) continuation ends on the last data byte
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194001
+        src_port: 2049
+        dest_port: 40104
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194002
+        src_port: 40104
+        dest_port: 2049
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40104
+        rpc.xid: 2442399745
+        fileinfo.state: CLOSED
+        fileinfo.size: 515
+        fileinfo.sha256: 5a76aa04b9e9070d486123aa4256225decbc87e81140026ead23a6d7b842b80c
+
+  # 40107: pad 1, (a) with the pad alone in its own segment
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194001
+        src_port: 2049
+        dest_port: 40107
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194002
+        src_port: 40107
+        dest_port: 2049
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40107
+        rpc.xid: 2442399745
+        fileinfo.state: CLOSED
+        fileinfo.size: 515
+        fileinfo.sha256: 5a76aa04b9e9070d486123aa4256225decbc87e81140026ead23a6d7b842b80c
+
+  # 40110: pad 1, control: complete reply + start of a split
+  # 600 byte reply
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194001
+        src_port: 2049
+        dest_port: 40110
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194002
+        src_port: 40110
+        dest_port: 2049
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40110
+        rpc.xid: 2442399745
+        fileinfo.state: CLOSED
+        fileinfo.size: 515
+        fileinfo.sha256: 5a76aa04b9e9070d486123aa4256225decbc87e81140026ead23a6d7b842b80c
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40110
+        rpc.xid: 2442403842
+        fileinfo.state: CLOSED
+        fileinfo.size: 600
+        fileinfo.sha256: b024ee7fc9a9d5ca814194b3fc07271fdd4d5fbf6bc1e02e683b226f07b55fe8
+
+  # 40111: pad 1, (a) pad + start of a split 600 byte reply
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194001
+        src_port: 2049
+        dest_port: 40111
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194002
+        src_port: 40111
+        dest_port: 2049
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40111
+        rpc.xid: 2442399745
+        fileinfo.state: CLOSED
+        fileinfo.size: 515
+        fileinfo.sha256: 5a76aa04b9e9070d486123aa4256225decbc87e81140026ead23a6d7b842b80c
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40111
+        rpc.xid: 2442403842
+        fileinfo.state: CLOSED
+        fileinfo.size: 600
+        fileinfo.sha256: b024ee7fc9a9d5ca814194b3fc07271fdd4d5fbf6bc1e02e683b226f07b55fe8
+
+  # 40200: pad 2, control: complete reply in one segment
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194001
+        src_port: 2049
+        dest_port: 40200
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194002
+        src_port: 40200
+        dest_port: 2049
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40200
+        rpc.xid: 2442399745
+        fileinfo.state: CLOSED
+        fileinfo.size: 514
+        fileinfo.sha256: 7e2a49f54d395a42c42049542883c99d0832cf6f6766033774cc4511b0f6473c
+
+  # 40201: pad 2, (a) first delivery ends on the last data byte
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194001
+        src_port: 2049
+        dest_port: 40201
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194002
+        src_port: 40201
+        dest_port: 2049
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40201
+        rpc.xid: 2442399745
+        fileinfo.state: CLOSED
+        fileinfo.size: 514
+        fileinfo.sha256: 7e2a49f54d395a42c42049542883c99d0832cf6f6766033774cc4511b0f6473c
+
+  # 40202: pad 2, (b) first delivery ends 1 byte into the pad
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194001
+        src_port: 2049
+        dest_port: 40202
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194002
+        src_port: 40202
+        dest_port: 2049
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40202
+        rpc.xid: 2442399745
+        fileinfo.state: CLOSED
+        fileinfo.size: 514
+        fileinfo.sha256: 7e2a49f54d395a42c42049542883c99d0832cf6f6766033774cc4511b0f6473c
+
+  # 40204: pad 2, (c) continuation ends on the last data byte
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194001
+        src_port: 2049
+        dest_port: 40204
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194002
+        src_port: 40204
+        dest_port: 2049
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40204
+        rpc.xid: 2442399745
+        fileinfo.state: CLOSED
+        fileinfo.size: 514
+        fileinfo.sha256: 7e2a49f54d395a42c42049542883c99d0832cf6f6766033774cc4511b0f6473c
+
+  # 40205: pad 2, (d) continuation ends 1 byte into the pad
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194001
+        src_port: 2049
+        dest_port: 40205
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194002
+        src_port: 40205
+        dest_port: 2049
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40205
+        rpc.xid: 2442399745
+        fileinfo.state: CLOSED
+        fileinfo.size: 514
+        fileinfo.sha256: 7e2a49f54d395a42c42049542883c99d0832cf6f6766033774cc4511b0f6473c
+
+  # 40300: pad 3, control: complete reply in one segment
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194001
+        src_port: 2049
+        dest_port: 40300
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194002
+        src_port: 40300
+        dest_port: 2049
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40300
+        rpc.xid: 2442399745
+        fileinfo.state: CLOSED
+        fileinfo.size: 513
+        fileinfo.sha256: 019d419453b0d069042762a41afefac5f92bae790df038e9687edb199ff52825
+
+  # 40301: pad 3, (a) first delivery ends on the last data byte
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194001
+        src_port: 2049
+        dest_port: 40301
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194002
+        src_port: 40301
+        dest_port: 2049
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40301
+        rpc.xid: 2442399745
+        fileinfo.state: CLOSED
+        fileinfo.size: 513
+        fileinfo.sha256: 019d419453b0d069042762a41afefac5f92bae790df038e9687edb199ff52825
+
+  # 40302: pad 3, (b) first delivery ends 1 byte into the pad
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194001
+        src_port: 2049
+        dest_port: 40302
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194002
+        src_port: 40302
+        dest_port: 2049
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40302
+        rpc.xid: 2442399745
+        fileinfo.state: CLOSED
+        fileinfo.size: 513
+        fileinfo.sha256: 019d419453b0d069042762a41afefac5f92bae790df038e9687edb199ff52825
+
+  # 40303: pad 3, (b) first delivery ends 2 bytes into the pad
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194001
+        src_port: 2049
+        dest_port: 40303
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194002
+        src_port: 40303
+        dest_port: 2049
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40303
+        rpc.xid: 2442399745
+        fileinfo.state: CLOSED
+        fileinfo.size: 513
+        fileinfo.sha256: 019d419453b0d069042762a41afefac5f92bae790df038e9687edb199ff52825
+
+  # 40304: pad 3, (c) continuation ends on the last data byte
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194001
+        src_port: 2049
+        dest_port: 40304
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194002
+        src_port: 40304
+        dest_port: 2049
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40304
+        rpc.xid: 2442399745
+        fileinfo.state: CLOSED
+        fileinfo.size: 513
+        fileinfo.sha256: 019d419453b0d069042762a41afefac5f92bae790df038e9687edb199ff52825
+
+  # 40305: pad 3, (d) continuation ends 1 byte into the pad
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194001
+        src_port: 2049
+        dest_port: 40305
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194002
+        src_port: 40305
+        dest_port: 2049
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40305
+        rpc.xid: 2442399745
+        fileinfo.state: CLOSED
+        fileinfo.size: 513
+        fileinfo.sha256: 019d419453b0d069042762a41afefac5f92bae790df038e9687edb199ff52825
+
+  # 40306: pad 3, (d) continuation ends 2 bytes into the pad
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194001
+        src_port: 2049
+        dest_port: 40306
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194002
+        src_port: 40306
+        dest_port: 2049
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40306
+        rpc.xid: 2442399745
+        fileinfo.state: CLOSED
+        fileinfo.size: 513
+        fileinfo.sha256: 019d419453b0d069042762a41afefac5f92bae790df038e9687edb199ff52825
+
+  # 40308: pad 3, (c) with the pad alone in its own segment
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194001
+        src_port: 2049
+        dest_port: 40308
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194002
+        src_port: 40308
+        dest_port: 2049
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40308
+        rpc.xid: 2442399745
+        fileinfo.state: CLOSED
+        fileinfo.size: 513
+        fileinfo.sha256: 019d419453b0d069042762a41afefac5f92bae790df038e9687edb199ff52825
+
+  # 40309: pad 3, control: continuation carries the data end,
+  # the pad and the next reply
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194001
+        src_port: 2049
+        dest_port: 40309
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194002
+        src_port: 40309
+        dest_port: 2049
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40309
+        rpc.xid: 2442399745
+        fileinfo.state: CLOSED
+        fileinfo.size: 513
+        fileinfo.sha256: 019d419453b0d069042762a41afefac5f92bae790df038e9687edb199ff52825
+
+  # 40310: pad 3, (a) then 1 pad byte alone, then the last 2
+  # pad bytes with the next reply
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194001
+        src_port: 2049
+        dest_port: 40310
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194002
+        src_port: 40310
+        dest_port: 2049
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40310
+        rpc.xid: 2442399745
+        fileinfo.state: CLOSED
+        fileinfo.size: 513
+        fileinfo.sha256: 019d419453b0d069042762a41afefac5f92bae790df038e9687edb199ff52825
+
+  # 40311: pad 3, (b) first delivery ends 1 byte into the pad,
+  # then 1 pad byte alone, then the last pad byte with
+  # the next reply
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194001
+        src_port: 2049
+        dest_port: 40311
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194002
+        src_port: 40311
+        dest_port: 2049
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40311
+        rpc.xid: 2442399745
+        fileinfo.state: CLOSED
+        fileinfo.size: 513
+        fileinfo.sha256: 019d419453b0d069042762a41afefac5f92bae790df038e9687edb199ff52825
+
+  # 40312: pad 3, (c) then each pad byte alone, then the next
+  # reply
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194001
+        src_port: 2049
+        dest_port: 40312
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194002
+        src_port: 40312
+        dest_port: 2049
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40312
+        rpc.xid: 2442399745
+        fileinfo.state: CLOSED
+        fileinfo.size: 513
+        fileinfo.sha256: 019d419453b0d069042762a41afefac5f92bae790df038e9687edb199ff52825
+
+  # 40400: attributes, pad 1, control: complete reply in one segment
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194001
+        src_port: 2049
+        dest_port: 40400
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194002
+        src_port: 40400
+        dest_port: 2049
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40400
+        rpc.xid: 2442399745
+        fileinfo.state: CLOSED
+        fileinfo.size: 415
+        fileinfo.sha256: 45415afb8120c1f9ff4ee34b6c3ae9e0563e548afbe905fa302a3e2d6e40d088
+
+  # 40401: attributes, pad 1, (a) first delivery ends on the last
+  # data byte
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194001
+        src_port: 2049
+        dest_port: 40401
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194002
+        src_port: 40401
+        dest_port: 2049
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40401
+        rpc.xid: 2442399745
+        fileinfo.state: CLOSED
+        fileinfo.size: 415
+        fileinfo.sha256: 45415afb8120c1f9ff4ee34b6c3ae9e0563e548afbe905fa302a3e2d6e40d088
+
+  # 40404: attributes, pad 1, (c) continuation ends on the last
+  # data byte
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194001
+        src_port: 2049
+        dest_port: 40404
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194002
+        src_port: 40404
+        dest_port: 2049
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40404
+        rpc.xid: 2442399745
+        fileinfo.state: CLOSED
+        fileinfo.size: 415
+        fileinfo.sha256: 45415afb8120c1f9ff4ee34b6c3ae9e0563e548afbe905fa302a3e2d6e40d088
+
+  # 40500: eof=0, pad 3, control: complete reply in one segment
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194001
+        src_port: 2049
+        dest_port: 40500
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194002
+        src_port: 40500
+        dest_port: 2049
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40500
+        rpc.xid: 2442399745
+        fileinfo.state: TRUNCATED
+        fileinfo.size: 513
+
+  # 40504: eof=0, pad 3, (c) continuation ends on the last data
+  # byte
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194001
+        src_port: 2049
+        dest_port: 40504
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194002
+        src_port: 40504
+        dest_port: 2049
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 2049
+        dest_port: 40504
+        rpc.xid: 2442399745
+        fileinfo.state: TRUNCATED
+        fileinfo.size: 513

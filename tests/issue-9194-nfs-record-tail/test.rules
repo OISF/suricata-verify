@@ -1,0 +1,8 @@
+alert nfs any any -> any 2049 (msg:"Redmine 9194 NFS LOOKUP parsed"; flow:established,to_server; nfs_procedure:3; sid:9194101; rev:1;)
+alert nfs any any -> any any (msg:"Redmine 9194 READ reply file data READMARKER"; flow:established,to_client; file.data; content:"READMARKER"; sid:9194102; rev:1;)
+alert nfs any any -> any any (msg:"Redmine 9194 READ reply file data LASTMARKER"; flow:established,to_client; file.data; content:"LASTMARKER"; sid:9194103; rev:1;)
+alert nfs any any -> any any (msg:"Redmine 9194 record tail parsed as a READ reply (FAKEMARKER)"; flow:established,to_client; file.data; content:"FAKEMARKER"; sid:9194104; rev:1;)
+alert nfs any any -> any any (msg:"Redmine 9194 duplicate READ reply parsed (DUPMARKER)"; flow:established,to_client; file.data; content:"DUPMARKER"; sid:9194105; rev:1;)
+alert tcp any any -> any 2049 (msg:"Redmine 9194 raw record tail LOOKUP name on the wire"; flow:established,to_server; content:"FAKE-"; sid:9194106; rev:1;)
+alert tcp any 2049 -> any any (msg:"Redmine 9194 raw FAKEMARKER on the wire"; flow:established,to_client; content:"FAKEMARKER"; sid:9194107; rev:1;)
+alert tcp any 2049 -> any any (msg:"Redmine 9194 raw DUPMARKER on the wire"; flow:established,to_client; content:"DUPMARKER"; sid:9194108; rev:1;)

@@ -1,0 +1,76 @@
+requires:
+  # Fixed in 8.0.8 and 9.0.0 (Redmine #9194 / backport #9195).
+  min-version: 8.0.8
+
+args:
+  - -k none
+  - --runmode single
+
+# Redmine #9194, the capture from the ticket (a bridge capture). Two NFSv3/TCP
+# flows send the same valid UNSTABLE WRITE (415-byte file, one XDR pad byte)
+# followed by the same LOOKUP. The control flow (sport 55734) keeps the pad
+# with the file data; the attack flow (sport 36492) ends a segment on the last
+# file byte so the pad starts the next segment. Fixed expectation: both flows
+# parse the LOOKUP and alert, each WRITE file holds exactly 415 bytes (the pad
+# is not file data, UNSTABLE with no COMMIT so the state is TRUNCATED at flow
+# end), with no malformed_data anomaly and no NFS parser error.
+checks:
+  # Control flow: LOOKUP parsed and alerts.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 55734
+        alert.signature_id: 9903101
+
+  # Attack flow: LOOKUP parsed and alerts (lost on vulnerable builds).
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 36492
+        alert.signature_id: 9903101
+
+  # The LOOKUP marker reaches the sensor on both flows via raw TCP, so the
+  # alert loss above is a parser desync, not a missing packet.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 55734
+        alert.signature_id: 9903102
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 36492
+        alert.signature_id: 9903102
+
+  # Control WRITE file: 415 bytes, TRUNCATED (UNSTABLE, no COMMIT).
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 55734
+        fileinfo.state: TRUNCATED
+        fileinfo.size: 415
+
+  # Attack WRITE file: same 415 bytes and state; the pad is not counted as data.
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 36492
+        fileinfo.state: TRUNCATED
+        fileinfo.size: 415
+
+  # No NFS record desynchronized into a malformed_data anomaly.
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.event: malformed_data
+
+  # No NFS TCP parser error on either flow.
+  - stats:
+      app_layer.error.nfs_tcp.parser: 0
