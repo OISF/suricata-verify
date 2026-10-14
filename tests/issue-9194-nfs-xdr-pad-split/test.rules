@@ -1,0 +1,2 @@
+alert nfs any any -> any any (msg:"Redmine 9194 NFS follow-up LOOKUP parsed"; flow:to_server,established; nfs_procedure:3; sid:9903101; rev:1;)
+alert tcp any any -> any 2049 (msg:"Redmine 9194 raw LOOKUP marker on the wire"; flow:to_server,established; content:"NFSXDRPAD"; sid:9903102; rev:1;)

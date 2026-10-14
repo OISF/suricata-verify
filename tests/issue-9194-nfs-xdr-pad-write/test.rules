@@ -1,0 +1,1 @@
+alert nfs any any -> any any (msg:"Redmine 9194 NFS follow-up LOOKUP parsed"; flow:to_server,established; nfs_procedure:3; sid:9194001; rev:1;)

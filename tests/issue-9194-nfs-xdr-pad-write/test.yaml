@@ -1,0 +1,368 @@
+requires:
+  # Fixed in 8.0.8 and 9.0.0 (Redmine #9194 / backport #9195).
+  min-version: 8.0.8
+
+args:
+  - -k none
+  - --runmode single
+
+# Redmine #9194 NFSv3 WRITE XDR-padding split. Each flow writes one file,
+# COMMITs it (FILE_SYNC for the e-case), then LOOKUPs. Fixed expectation for
+# every flow: the LOOKUP is parsed and alerts, the file is CLOSED with its
+# exact length and the sha256 of its data (pad is not file data), with no
+# malformed_data anomaly and no NFS parser error. On vulnerable builds the
+# split/continuation flows lose the LOOKUP alert and truncate the file.
+#
+# The chunk2 flows (h-k) write a second, aligned 512-byte chunk to the same
+# handle right after the first chunk's pad: 926 bytes, sha256 over both
+# chunks. They only pass if the late pad bytes reached the file tracker; a
+# fix that only skips them in the stream keeps the parser in sync (alert, no
+# anomaly, no parser error) but leaves the tracker's fill bytes set, so the
+# second chunk truncates the file at 414 bytes.
+checks:
+  # control-pad1 (sport 41001)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 41001
+        alert.signature_id: 9194001
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 41001
+        fileinfo.state: CLOSED
+        fileinfo.size: 415
+        fileinfo.sha256: "c129edc074593d4f0841a4d97383735dab0df174edc5c8260e9a692fbb31cab9"
+  # control-pad2 (sport 41002)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 41002
+        alert.signature_id: 9194001
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 41002
+        fileinfo.state: CLOSED
+        fileinfo.size: 414
+        fileinfo.sha256: "d239f944e8a08eae7259549b5a060f3bafd3df3e5f4fb8183e9511f7b712680b"
+  # control-pad3 (sport 41003)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 41003
+        alert.signature_id: 9194001
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 41003
+        fileinfo.state: CLOSED
+        fileinfo.size: 413
+        fileinfo.sha256: "b63bf51637bac2889f9186fa8b2a01e07620287869f094fcc78bba76cae3186a"
+  # split-a-pad1 (sport 42001)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 42001
+        alert.signature_id: 9194001
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 42001
+        fileinfo.state: CLOSED
+        fileinfo.size: 415
+        fileinfo.sha256: "3aeaa2b3c3191ee1808195d3d8acd3ea4968fff11823b331acea399037719d21"
+  # split-a-pad2 (sport 42002)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 42002
+        alert.signature_id: 9194001
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 42002
+        fileinfo.state: CLOSED
+        fileinfo.size: 414
+        fileinfo.sha256: "30c8aa48b7ad69bd9ac4751e2302c60768c58875b9d00d39a8a5e3808ec7bc1b"
+  # split-a-pad3 (sport 42003)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 42003
+        alert.signature_id: 9194001
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 42003
+        fileinfo.state: CLOSED
+        fileinfo.size: 413
+        fileinfo.sha256: "6e11eff14873330732e61ea85391ef5f50e61b51aee855a26af183ff9c2b8638"
+  # split-b-pad2 (sport 43002)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 43002
+        alert.signature_id: 9194001
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 43002
+        fileinfo.state: CLOSED
+        fileinfo.size: 414
+        fileinfo.sha256: "e30504012e2376fbe540a86f0425ba520365a64d924ba9b4157dc28e1a0b916a"
+  # split-b-pad3 (sport 43003)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 43003
+        alert.signature_id: 9194001
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 43003
+        fileinfo.state: CLOSED
+        fileinfo.size: 413
+        fileinfo.sha256: "ee6ba00a25fa6a17d39811ad6512eb410d0a7f66b79a42a7aba3ba70cca00cdc"
+  # cont-c-pad1 (sport 44001)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 44001
+        alert.signature_id: 9194001
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 44001
+        fileinfo.state: CLOSED
+        fileinfo.size: 415
+        fileinfo.sha256: "783f60d0aab98d426c46a93a7329df004820525c86b9e0d76b3cf772b4df83eb"
+  # cont-c-pad2 (sport 44002)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 44002
+        alert.signature_id: 9194001
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 44002
+        fileinfo.state: CLOSED
+        fileinfo.size: 414
+        fileinfo.sha256: "af23f0cbac41d411e4b83b3a108cdd71766a305f7e8542a0cd7ac229ead96dba"
+  # cont-c-pad3 (sport 44003)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 44003
+        alert.signature_id: 9194001
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 44003
+        fileinfo.state: CLOSED
+        fileinfo.size: 413
+        fileinfo.sha256: "bb016525f1ed0e4e6ce2c6196a79df674d555e1a733431ec7f90eee5e9d70ad7"
+  # cont-d-pad2 (sport 45002)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 45002
+        alert.signature_id: 9194001
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 45002
+        fileinfo.state: CLOSED
+        fileinfo.size: 414
+        fileinfo.sha256: "e5828af90751fb02e2588bfebbda8bd890a5a3b59f9096b8efc094286c372e61"
+  # cont-d-pad3 (sport 45003)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 45003
+        alert.signature_id: 9194001
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 45003
+        fileinfo.state: CLOSED
+        fileinfo.size: 413
+        fileinfo.sha256: "1589d655077eeaaf7e1a1a5a4e28650603a9e607d62d22e9e6193bad02ffd167"
+  # filesync-e-pad3 (sport 46003): also needs the companion #9196 fix (the
+  # partial FILE_SYNC tx must stay open for its continuation data).
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 46003
+        alert.signature_id: 9194001
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 46003
+        fileinfo.state: CLOSED
+        fileinfo.size: 413
+        fileinfo.sha256: "47545881ddb97aee0e97e6facc8957e862adc8b9dd2a3d501f7f7feee9f2b4da"
+  # split-f-pad3 (sport 47003): each pad byte but the last arrives alone.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 47003
+        alert.signature_id: 9194001
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 47003
+        fileinfo.state: CLOSED
+        fileinfo.size: 413
+        fileinfo.sha256: "94f3b98450e742fb71387cc690eaf93f3946fc737337cb8d8abcf6c63e4e075d"
+  # cont-g-pad1 (sport 48001): the pad arrives alone.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 48001
+        alert.signature_id: 9194001
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 48001
+        fileinfo.state: CLOSED
+        fileinfo.size: 415
+        fileinfo.sha256: "aa9fab1ee083dac6f38fdb6cbb46a211345ff0d8c6b34fecc42f71cffbfd7ce6"
+  # cont-g-pad2 (sport 48002)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 48002
+        alert.signature_id: 9194001
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 48002
+        fileinfo.state: CLOSED
+        fileinfo.size: 414
+        fileinfo.sha256: "50d573101669becc07b3106b0cb556fa99f5e49e60c89c6e769d34260757da22"
+  # cont-g-pad3 (sport 48003)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 48003
+        alert.signature_id: 9194001
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 48003
+        fileinfo.state: CLOSED
+        fileinfo.size: 413
+        fileinfo.sha256: "4c5d562d113fd066a41f567fb0792e231d2ba2c433bb8dbec39dad6ea832463e"
+  # chunk2-h-pad2 (sport 49002): control for the chunk2 flows, the pad
+  # travels with the data (passes on vulnerable builds too).
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 49002
+        alert.signature_id: 9194001
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 49002
+        fileinfo.state: CLOSED
+        fileinfo.size: 926
+        fileinfo.sha256: "223be88d39f7054c7dd4a114f81d8601ea06172a29398be29faf7aff2ca9d6c5"
+  # chunk2-i-pad2 (sport 50002): continuation ends on the last data byte,
+  # the pad arrives with the second WRITE.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 50002
+        alert.signature_id: 9194001
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 50002
+        fileinfo.state: CLOSED
+        fileinfo.size: 926
+        fileinfo.sha256: "48fd67b637af4c6e47426967515ba7776f596af9a3b7849e2c5badf4e07fd30d"
+  # chunk2-j-pad2 (sport 51002): the pad is split across the continuation
+  # and the delivery with the second WRITE.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 51002
+        alert.signature_id: 9194001
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 51002
+        fileinfo.state: CLOSED
+        fileinfo.size: 926
+        fileinfo.sha256: "9468bdf50726f17afefe846df082ca721a9f8d68471093391f6c62e97717b107"
+  # chunk2-k-pad2 (sport 52002): the first delivery holds all file data but
+  # no pad byte, the pad arrives with the second WRITE.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 52002
+        alert.signature_id: 9194001
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 52002
+        fileinfo.state: CLOSED
+        fileinfo.size: 926
+        fileinfo.sha256: "eedf11a019ac44e889468dcb13306d4df261eea5541bb933e9429981cd1a9ce1"
+
+  # No NFS record desynchronized into a malformed_data anomaly.
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.event: malformed_data
+
+  # No NFS TCP parser error on any flow.
+  - stats:
+      app_layer.error.nfs_tcp.parser: 0

@@ -1,0 +1,878 @@
+requires:
+  # Fixed in 8.0.8 and 9.0.0 (Redmine #9194 / backport #9195).
+  min-version: 8.0.8
+
+args:
+  - -k none
+  - --runmode single
+
+# Redmine #9194: the continuation of a partial NFS record must consume exactly
+# the rest of the record, as given by its record marker, including the bytes
+# after the file data and its XDR padding (the record tail). Flows:
+#   WRITE (to server) 41000-41011: partial WRITE + REAL-<port> LOOKUP +
+#     LAST-<port> LOOKUP + COMMIT; the tail is a LOOKUP for FAKE-<port>.
+#   READ (to client) 42000-42011: partial READ reply + real reply
+#     (READMARKER) + last reply (LASTMARKER) + LOOKUP; the tail is a fake
+#     reply (FAKEMARKER) to the outstanding second READ.
+#   DUP (to client) 43000-43002: split READ reply (501 bytes, 3 pad bytes) +
+#     duplicate reply with the same xid (DUPMARKER) + LOOKUP.
+#   CLOSED (to client) 44000-44002: complete eof READ reply that closes the
+#     file + split re-read reply for the same handle (601 bytes, 3 pad
+#     bytes) + reply to a third READ (READMARKER) + LOOKUP.
+# See README.md for the segment layout of each flow.
+#
+# Port pinning: to_server alerts and WRITE fileinfo have src_port = client;
+# to_client alerts and READ fileinfo have dest_port = client. nfs events can
+# be logged on a packet of either direction, so they are matched by their
+# unique per-flow LOOKUP name instead. Anomalies are counted globally.
+checks:
+  # No NFS parser error and no anomaly on any flow.
+  - stats:
+      app_layer.error.nfs_tcp.parser: 0
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+
+  # Sanity: the record tails are on the wire (raw stream rules). FAKE-:
+  # 41001 41002 41004 41005 41011; FAKEMARKER: 42001 42002 42003 42011;
+  # DUPMARKER: 43000 43001 43002.
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        alert.signature_id: 9194106
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 9194107
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 9194108
+
+  # A record tail is never parsed as an RPC record: no FAKE- LOOKUP is
+  # logged or alerted on, and no FAKEMARKER reply reaches a file.
+  - filter:
+      count: 0
+      match:
+        event_type: nfs
+        nfs.filename.__startswith: FAKE-
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        nfs.filename.__startswith: FAKE-
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 9194104
+  - filter:
+      count: 0
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: eff1daeb5e0749bc19d12dad45a061e6e0ecbef44b5f3b9a655b7edc9b68bfa0
+
+  # A duplicate reply is never processed as a READ reply.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 9194105
+  - filter:
+      count: 0
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: 4eaa576b2680034783344d5f4e31562a61a030531caf83207a0723ade8b9b973
+
+  # ---- WRITE flows: REAL and LAST are parsed and alert, FAKE never is, and
+  # ---- the file is CLOSED by the COMMIT with exactly its data.
+
+  # 41000 w-control: no record tail (control)
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 9194101
+        src_port: 41000
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194101
+        src_port: 41000
+        nfs.filename: REAL-41000
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.filename: REAL-41000
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.filename: LAST-41000
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 41000
+        fileinfo.state: CLOSED
+        fileinfo.size: 600
+        fileinfo.sha256: 3af60be97089d7c4f48280fec8e83dedc3afb7693d7d0d2a939bcbb37d5979be
+
+  # 41001 a: LOOKUP tail in the delivery that completes the file data
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 9194101
+        src_port: 41001
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194101
+        src_port: 41001
+        nfs.filename: REAL-41001
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.filename: REAL-41001
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.filename: LAST-41001
+  - filter:
+      count: 0
+      match:
+        event_type: nfs
+        nfs.filename: FAKE-41001
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 41001
+        fileinfo.state: CLOSED
+        fileinfo.size: 600
+        fileinfo.sha256: 3af60be97089d7c4f48280fec8e83dedc3afb7693d7d0d2a939bcbb37d5979be
+
+  # 41002 b: LOOKUP tail in its own delivery
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 9194101
+        src_port: 41002
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194101
+        src_port: 41002
+        nfs.filename: REAL-41002
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.filename: REAL-41002
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.filename: LAST-41002
+  - filter:
+      count: 0
+      match:
+        event_type: nfs
+        nfs.filename: FAKE-41002
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 41002
+        fileinfo.state: CLOSED
+        fileinfo.size: 600
+        fileinfo.sha256: 3af60be97089d7c4f48280fec8e83dedc3afb7693d7d0d2a939bcbb37d5979be
+
+  # 41003 c: zero-filled tail in the delivery that completes the file data
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 9194101
+        src_port: 41003
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194101
+        src_port: 41003
+        nfs.filename: REAL-41003
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.filename: REAL-41003
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.filename: LAST-41003
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 41003
+        fileinfo.state: CLOSED
+        fileinfo.size: 600
+        fileinfo.sha256: 3af60be97089d7c4f48280fec8e83dedc3afb7693d7d0d2a939bcbb37d5979be
+
+  # 41004 split: LOOKUP tail split between the delivery that completes the
+  # file data and the delivery of REAL
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 9194101
+        src_port: 41004
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194101
+        src_port: 41004
+        nfs.filename: REAL-41004
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.filename: REAL-41004
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.filename: LAST-41004
+  - filter:
+      count: 0
+      match:
+        event_type: nfs
+        nfs.filename: FAKE-41004
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 41004
+        fileinfo.state: CLOSED
+        fileinfo.size: 600
+        fileinfo.sha256: 3af60be97089d7c4f48280fec8e83dedc3afb7693d7d0d2a939bcbb37d5979be
+
+  # 41005 w-whole: the record of a, delivered complete (control)
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 9194101
+        src_port: 41005
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194101
+        src_port: 41005
+        nfs.filename: REAL-41005
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.filename: REAL-41005
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.filename: LAST-41005
+  - filter:
+      count: 0
+      match:
+        event_type: nfs
+        nfs.filename: FAKE-41005
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 41005
+        fileinfo.state: CLOSED
+        fileinfo.size: 600
+        fileinfo.sha256: 3af60be97089d7c4f48280fec8e83dedc3afb7693d7d0d2a939bcbb37d5979be
+
+  # 41010 w-control-pad3: 3 pad bytes, no record tail (control)
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 9194101
+        src_port: 41010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194101
+        src_port: 41010
+        nfs.filename: REAL-41010
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.filename: REAL-41010
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.filename: LAST-41010
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 41010
+        fileinfo.state: CLOSED
+        fileinfo.size: 601
+        fileinfo.sha256: 9438e1e6ab8c97db4ece0dd3fc0fb3c08abfd222e0b708bf307c3a517336136b
+
+  # 41011 a-pad3: a, with 3 pad bytes before the tail
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 9194101
+        src_port: 41011
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194101
+        src_port: 41011
+        nfs.filename: REAL-41011
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.filename: REAL-41011
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.filename: LAST-41011
+  - filter:
+      count: 0
+      match:
+        event_type: nfs
+        nfs.filename: FAKE-41011
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 41011
+        fileinfo.state: CLOSED
+        fileinfo.size: 601
+        fileinfo.sha256: 9438e1e6ab8c97db4ece0dd3fc0fb3c08abfd222e0b708bf307c3a517336136b
+
+  # ---- READ flows: the READMARKER and LASTMARKER replies are parsed and
+  # ---- alert, and each READ has its own CLOSED file with exactly its data
+  # ---- (three files per flow; never a FAKEMARKER one), then the LOOKUP.
+
+  # 42000 r-control: no record tail (control)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194102
+        dest_port: 42000
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194103
+        dest_port: 42000
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194101
+        src_port: 42000
+  - filter:
+      count: 3
+      match:
+        event_type: fileinfo
+        dest_port: 42000
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 42000
+        fileinfo.state: CLOSED
+        fileinfo.size: 600
+        fileinfo.sha256: 0d27b9fe901844745b6a9a868090d78e3d0337898e06a892005174034bb376b7
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 42000
+        fileinfo.state: CLOSED
+        fileinfo.size: 64
+        fileinfo.sha256: 72d0d2a3d6578d281b5c47948a151abee40d25d07a843d13d31e8a59eb4b0855
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 42000
+        fileinfo.state: CLOSED
+        fileinfo.size: 64
+        fileinfo.sha256: 9a2e42a6f5ef0bed774fbf13bdee8c398bbdb08465307d568d51cdfebbd4ceac
+
+  # 42001 d: fake reply tail in the delivery that completes the file data
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194102
+        dest_port: 42001
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194103
+        dest_port: 42001
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194101
+        src_port: 42001
+  - filter:
+      count: 3
+      match:
+        event_type: fileinfo
+        dest_port: 42001
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 42001
+        fileinfo.state: CLOSED
+        fileinfo.size: 600
+        fileinfo.sha256: 0d27b9fe901844745b6a9a868090d78e3d0337898e06a892005174034bb376b7
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 42001
+        fileinfo.state: CLOSED
+        fileinfo.size: 64
+        fileinfo.sha256: 72d0d2a3d6578d281b5c47948a151abee40d25d07a843d13d31e8a59eb4b0855
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 42001
+        fileinfo.state: CLOSED
+        fileinfo.size: 64
+        fileinfo.sha256: 9a2e42a6f5ef0bed774fbf13bdee8c398bbdb08465307d568d51cdfebbd4ceac
+
+  # 42002 d-own: fake reply tail in its own delivery
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194102
+        dest_port: 42002
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194103
+        dest_port: 42002
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194101
+        src_port: 42002
+  - filter:
+      count: 3
+      match:
+        event_type: fileinfo
+        dest_port: 42002
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 42002
+        fileinfo.state: CLOSED
+        fileinfo.size: 600
+        fileinfo.sha256: 0d27b9fe901844745b6a9a868090d78e3d0337898e06a892005174034bb376b7
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 42002
+        fileinfo.state: CLOSED
+        fileinfo.size: 64
+        fileinfo.sha256: 72d0d2a3d6578d281b5c47948a151abee40d25d07a843d13d31e8a59eb4b0855
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 42002
+        fileinfo.state: CLOSED
+        fileinfo.size: 64
+        fileinfo.sha256: 9a2e42a6f5ef0bed774fbf13bdee8c398bbdb08465307d568d51cdfebbd4ceac
+
+  # 42003 r-whole: the record of d, delivered complete (control)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194102
+        dest_port: 42003
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194103
+        dest_port: 42003
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194101
+        src_port: 42003
+  - filter:
+      count: 3
+      match:
+        event_type: fileinfo
+        dest_port: 42003
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 42003
+        fileinfo.state: CLOSED
+        fileinfo.size: 600
+        fileinfo.sha256: 0d27b9fe901844745b6a9a868090d78e3d0337898e06a892005174034bb376b7
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 42003
+        fileinfo.state: CLOSED
+        fileinfo.size: 64
+        fileinfo.sha256: 72d0d2a3d6578d281b5c47948a151abee40d25d07a843d13d31e8a59eb4b0855
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 42003
+        fileinfo.state: CLOSED
+        fileinfo.size: 64
+        fileinfo.sha256: 9a2e42a6f5ef0bed774fbf13bdee8c398bbdb08465307d568d51cdfebbd4ceac
+
+  # 42010 r-control-pad3: 3 pad bytes, no record tail (control)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194102
+        dest_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194103
+        dest_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194101
+        src_port: 42010
+  - filter:
+      count: 3
+      match:
+        event_type: fileinfo
+        dest_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 42010
+        fileinfo.state: CLOSED
+        fileinfo.size: 601
+        fileinfo.sha256: 0bc194284333f1582a3fa09319369db6b88f7316ecbe9a0f38e1d860ff1150fa
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 42010
+        fileinfo.state: CLOSED
+        fileinfo.size: 64
+        fileinfo.sha256: 72d0d2a3d6578d281b5c47948a151abee40d25d07a843d13d31e8a59eb4b0855
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 42010
+        fileinfo.state: CLOSED
+        fileinfo.size: 64
+        fileinfo.sha256: 9a2e42a6f5ef0bed774fbf13bdee8c398bbdb08465307d568d51cdfebbd4ceac
+
+  # 42011 d-pad3: d, with 3 pad bytes before the tail
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194102
+        dest_port: 42011
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194103
+        dest_port: 42011
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194101
+        src_port: 42011
+  - filter:
+      count: 3
+      match:
+        event_type: fileinfo
+        dest_port: 42011
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 42011
+        fileinfo.state: CLOSED
+        fileinfo.size: 601
+        fileinfo.sha256: 0bc194284333f1582a3fa09319369db6b88f7316ecbe9a0f38e1d860ff1150fa
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 42011
+        fileinfo.state: CLOSED
+        fileinfo.size: 64
+        fileinfo.sha256: 72d0d2a3d6578d281b5c47948a151abee40d25d07a843d13d31e8a59eb4b0855
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 42011
+        fileinfo.state: CLOSED
+        fileinfo.size: 64
+        fileinfo.sha256: 9a2e42a6f5ef0bed774fbf13bdee8c398bbdb08465307d568d51cdfebbd4ceac
+
+  # ---- DUP flows: one CLOSED file with the 501 bytes of the first reply,
+  # ---- the duplicate reply is ignored (no DUPMARKER alert, no second file),
+  # ---- and the LOOKUP alerts.
+
+  # 43000 e-control: first delivery cut inside the file data (control)
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 9194105
+        dest_port: 43000
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 43000
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 43000
+        fileinfo.state: CLOSED
+        fileinfo.size: 501
+        fileinfo.sha256: 06660f440f8810d32e196273f3d16acfcad371224d8efdf8d4a71fdf2c902aa0
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194101
+        src_port: 43000
+
+  # 43001 e: first delivery holds all file data and 1 of the 3 pad bytes
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 9194105
+        dest_port: 43001
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 43001
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 43001
+        fileinfo.state: CLOSED
+        fileinfo.size: 501
+        fileinfo.sha256: 06660f440f8810d32e196273f3d16acfcad371224d8efdf8d4a71fdf2c902aa0
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194101
+        src_port: 43001
+
+  # 43002 e-pad0: first delivery ends on the last file data byte
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 9194105
+        dest_port: 43002
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 43002
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 43002
+        fileinfo.state: CLOSED
+        fileinfo.size: 501
+        fileinfo.sha256: 06660f440f8810d32e196273f3d16acfcad371224d8efdf8d4a71fdf2c902aa0
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194101
+        src_port: 43002
+
+  # ---- CLOSED flows: the eof reply to the first READ closes its file, so the
+  # ---- re-read reply has no open file to go to. Exactly two CLOSED files:
+  # ---- the 601 bytes of the first reply (never with the re-read reply's
+  # ---- padding counted) and the READMARKER reply, which alerts. The LOOKUP
+  # ---- alerts.
+
+  # 44000 f-whole: the re-read reply arrives complete (control)
+  - filter:
+      count: 2
+      match:
+        event_type: fileinfo
+        dest_port: 44000
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 44000
+        fileinfo.state: CLOSED
+        fileinfo.size: 601
+        fileinfo.sha256: 0b4b12aa09f2f0acbe4079455311928c1156dc44ccd15abf4288d966d70dbe53
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 44000
+        fileinfo.state: CLOSED
+        fileinfo.size: 64
+        fileinfo.sha256: 72d0d2a3d6578d281b5c47948a151abee40d25d07a843d13d31e8a59eb4b0855
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194102
+        dest_port: 44000
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194101
+        src_port: 44000
+
+  # 44001 f: the first delivery of the re-read reply holds all file data and
+  # 1 of the 3 pad bytes
+  - filter:
+      count: 2
+      match:
+        event_type: fileinfo
+        dest_port: 44001
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 44001
+        fileinfo.state: CLOSED
+        fileinfo.size: 601
+        fileinfo.sha256: 0b4b12aa09f2f0acbe4079455311928c1156dc44ccd15abf4288d966d70dbe53
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 44001
+        fileinfo.state: CLOSED
+        fileinfo.size: 64
+        fileinfo.sha256: 72d0d2a3d6578d281b5c47948a151abee40d25d07a843d13d31e8a59eb4b0855
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194102
+        dest_port: 44001
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194101
+        src_port: 44001
+
+  # 44002 f-pad0: the first delivery of the re-read reply ends on the last
+  # file data byte
+  - filter:
+      count: 2
+      match:
+        event_type: fileinfo
+        dest_port: 44002
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 44002
+        fileinfo.state: CLOSED
+        fileinfo.size: 601
+        fileinfo.sha256: 0b4b12aa09f2f0acbe4079455311928c1156dc44ccd15abf4288d966d70dbe53
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 44002
+        fileinfo.state: CLOSED
+        fileinfo.size: 64
+        fileinfo.sha256: 72d0d2a3d6578d281b5c47948a151abee40d25d07a843d13d31e8a59eb4b0855
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194102
+        dest_port: 44002
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9194101
+        src_port: 44002

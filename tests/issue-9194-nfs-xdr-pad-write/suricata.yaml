@@ -1,0 +1,19 @@
+%YAML 1.1
+---
+# Minimal config: this REPLACES the default suricata.yaml (passed with -c), so
+# every eve type the checks use is listed here. NFS app-layer is enabled by the
+# built-in defaults.
+outputs:
+  - eve-log:
+      enabled: yes
+      filename: eve.json
+      types:
+        - alert
+        - anomaly:
+            enabled: yes
+        - nfs
+        - files:
+            force-hash: [sha256]
+        - flow
+        - stats:
+            totals: yes
