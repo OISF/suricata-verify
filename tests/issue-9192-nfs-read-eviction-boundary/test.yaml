@@ -1,0 +1,540 @@
+requires:
+  min-version: 8.0.8
+
+# max-tx=64 makes the 600 unanswered NULL calls of the eviction flows
+# force-close the partially received READ file transaction (tx_id 0) early
+# in the burst, long before its continuation arrives. max-requests keeps
+# its default of 512, so the same calls also evict the READ xid from the
+# request map.
+args:
+  - -k none
+  - --runmode single
+  - --set app-layer.protocols.nfs.max-tx=64
+
+checks:
+  # ========================================================================
+  # Each flow uses a distinct client port. In every flow the rest of the
+  # first READ reply record (xid 0x91921001, file A) and the complete reply
+  # to a second READ (xid 0x91922002, 32 bytes) share one segment.
+  #   41021 control : 512 data bytes, 1 NULL call before the continuation
+  #   41022 eviction: 512 data bytes, 600 NULL calls before the continuation
+  #   41023 control : 513 data bytes (3 byte XDR pad), 1 NULL call
+  #   41024 eviction: 513 data bytes (3 byte XDR pad), 600 NULL calls
+  # On these the second READ is for file B and its data is MARKER.
+  #
+  # On the following flows the second READ's data is REREAD_MARKER:
+  #   41025 control    : 512 data bytes, 1 NULL call, second READ for file A
+  #   41026 replacement: 512 data bytes, 600 NULL calls, second READ for
+  #                      file A, which creates a new file A tx (tx_id 601)
+  #                      after the first one (tx_id 0) was force-closed
+  #   41027 eviction   : as 41026, but the second READ is for file B
+  #
+  # Port pinning: to_client alerts and READ fileinfo records have
+  # dest_port = client, to_server alerts have src_port = client. The READ
+  # tx is force-closed while the NULL calls are parsed, which happens when
+  # the server ACKs them, so its anomaly also has dest_port = client.
+  # ========================================================================
+
+  # No NFS parser error and every transaction parsed: control flows READ,
+  # NULL, READ, LOOKUP (4 each), eviction flows READ, 600 NULL, READ,
+  # LOOKUP (603 each).
+  - stats:
+      app_layer.flow.nfs_tcp: 7
+      app_layer.tx.nfs_tcp: 2424
+      app_layer.error.nfs_tcp.parser: 0
+
+  # The continuation is never parsed as an RPC record.
+  - filter:
+      comment: "no malformed_data anomaly on any flow"
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.event: malformed_data
+
+  # --- 41021: control, 512 data bytes ---
+  - filter:
+      comment: "41021: marker in file.data of the next READ reply"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192101
+        dest_port: 41021
+  - filter:
+      comment: "41021: LOOKUP after the continuation"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192102
+        src_port: 41021
+  - filter:
+      comment: "41021: raw stream marker (sanity)"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192103
+        dest_port: 41021
+  - filter:
+      comment: "41021: continuation bytes are file data of the first READ"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192104
+        dest_port: 41021
+  - filter:
+      comment: "41021: first READ file CLOSED with all 512 bytes"
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 41021
+        rpc.xid: 2442268673
+        fileinfo.state: CLOSED
+        fileinfo.size: 512
+        fileinfo.sha256: 0a4ff0d4bb671145ccb550bcda48ff330e828f75756aa7ba5a9fffdc357eba83
+  - filter:
+      comment: "41021: marker READ file CLOSED"
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 41021
+        rpc.xid: 2442272770
+        fileinfo.state: CLOSED
+        fileinfo.size: 32
+        fileinfo.sha256: 58f1a32da542c513446439e3ad5451faa02ebaf99aa711f4d833905d7fadb614
+  - filter:
+      comment: "41021: no other file"
+      count: 2
+      match:
+        event_type: fileinfo
+        dest_port: 41021
+  - filter:
+      comment: "41021: no exception policy (no parser error)"
+      count: 1
+      match:
+        event_type: flow
+        src_port: 41021
+        app_proto: nfs
+        not-has-key: flow.exception_policy
+
+  # --- 41022: eviction, 512 data bytes. The READ xid is evicted from the
+  #     request map and its file tx (tx_id 0) is force-closed by max-tx
+  #     before the continuation arrives. The fixed parser consumes exactly
+  #     the 360 byte rest of the record and parses the marker reply that
+  #     follows it in the same segment. ---
+  - filter:
+      comment: "41022: first READ file tx force-closed by max-tx"
+      count: 1
+      match:
+        event_type: anomaly
+        dest_port: 41022
+        tx_id: 0
+        anomaly.event: too_many_transactions
+  - filter:
+      comment: "41022: first READ file TRUNCATED with the 152 bytes of the first segment"
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 41022
+        rpc.xid: 2442268673
+        fileinfo.state: TRUNCATED
+        fileinfo.size: 152
+  - filter:
+      comment: "41022: continuation bytes not added to any file"
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 9192104
+        dest_port: 41022
+  - filter:
+      comment: "41022: marker in file.data of the next READ reply"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192101
+        dest_port: 41022
+  - filter:
+      comment: "41022: LOOKUP after the continuation"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192102
+        src_port: 41022
+  - filter:
+      comment: "41022: raw stream marker (sanity)"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192103
+        dest_port: 41022
+  - filter:
+      comment: "41022: marker READ file CLOSED"
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 41022
+        rpc.xid: 2442272770
+        fileinfo.state: CLOSED
+        fileinfo.size: 32
+        fileinfo.sha256: 58f1a32da542c513446439e3ad5451faa02ebaf99aa711f4d833905d7fadb614
+  - filter:
+      comment: "41022: no other file"
+      count: 2
+      match:
+        event_type: fileinfo
+        dest_port: 41022
+  - filter:
+      comment: "41022: no exception policy (no parser error)"
+      count: 1
+      match:
+        event_type: flow
+        src_port: 41022
+        app_proto: nfs
+        not-has-key: flow.exception_policy
+
+  # --- 41023: control, 513 data bytes and a 3 byte XDR pad ---
+  - filter:
+      comment: "41023: marker in file.data of the next READ reply"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192101
+        dest_port: 41023
+  - filter:
+      comment: "41023: LOOKUP after the continuation"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192102
+        src_port: 41023
+  - filter:
+      comment: "41023: raw stream marker (sanity)"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192103
+        dest_port: 41023
+  - filter:
+      comment: "41023: continuation bytes are file data of the first READ"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192104
+        dest_port: 41023
+  - filter:
+      comment: "41023: first READ file CLOSED with all 513 bytes"
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 41023
+        rpc.xid: 2442268673
+        fileinfo.state: CLOSED
+        fileinfo.size: 513
+        fileinfo.sha256: 7f041f499392a53396c35ddcdca1756fe107c41a8c6c7943cfdd866b12f1c143
+  - filter:
+      comment: "41023: marker READ file CLOSED"
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 41023
+        rpc.xid: 2442272770
+        fileinfo.state: CLOSED
+        fileinfo.size: 32
+        fileinfo.sha256: 58f1a32da542c513446439e3ad5451faa02ebaf99aa711f4d833905d7fadb614
+  - filter:
+      comment: "41023: no other file"
+      count: 2
+      match:
+        event_type: fileinfo
+        dest_port: 41023
+  - filter:
+      comment: "41023: no exception policy (no parser error)"
+      count: 1
+      match:
+        event_type: flow
+        src_port: 41023
+        app_proto: nfs
+        not-has-key: flow.exception_policy
+
+  # --- 41024: eviction, 513 data bytes. The record tail is 361 data bytes
+  #     plus the 3 byte XDR pad: consuming only the data would leave the
+  #     pad in front of the marker reply. ---
+  - filter:
+      comment: "41024: first READ file tx force-closed by max-tx"
+      count: 1
+      match:
+        event_type: anomaly
+        dest_port: 41024
+        tx_id: 0
+        anomaly.event: too_many_transactions
+  - filter:
+      comment: "41024: first READ file TRUNCATED with the 152 bytes of the first segment"
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 41024
+        rpc.xid: 2442268673
+        fileinfo.state: TRUNCATED
+        fileinfo.size: 152
+  - filter:
+      comment: "41024: continuation bytes not added to any file"
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 9192104
+        dest_port: 41024
+  - filter:
+      comment: "41024: marker in file.data of the next READ reply"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192101
+        dest_port: 41024
+  - filter:
+      comment: "41024: LOOKUP after the continuation"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192102
+        src_port: 41024
+  - filter:
+      comment: "41024: raw stream marker (sanity)"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192103
+        dest_port: 41024
+  - filter:
+      comment: "41024: marker READ file CLOSED"
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 41024
+        rpc.xid: 2442272770
+        fileinfo.state: CLOSED
+        fileinfo.size: 32
+        fileinfo.sha256: 58f1a32da542c513446439e3ad5451faa02ebaf99aa711f4d833905d7fadb614
+  - filter:
+      comment: "41024: no other file"
+      count: 2
+      match:
+        event_type: fileinfo
+        dest_port: 41024
+  - filter:
+      comment: "41024: no exception policy (no parser error)"
+      count: 1
+      match:
+        event_type: flow
+        src_port: 41024
+        app_proto: nfs
+        not-has-key: flow.exception_policy
+
+  # --- The first READ file tx (tx_id 0) is force-closed by max-tx on all
+  #     four eviction flows: 41022, 41024 (also checked above), 41026 and
+  #     41027. Counted over all flows, so the check does not depend on the
+  #     direction the anomaly is logged in. ---
+  - filter:
+      comment: "first READ file tx force-closed by max-tx on the 4 eviction flows"
+      count: 4
+      match:
+        event_type: anomaly
+        tx_id: 0
+        anomaly.event: too_many_transactions
+
+  # --- 41025: control, second READ for the same file A while its first
+  #     file tx is still open. The continuation completes file A, then the
+  #     second READ's reply is extracted as a new file. ---
+  - filter:
+      comment: "41025: marker in file.data of the second READ reply"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192105
+        dest_port: 41025
+  - filter:
+      comment: "41025: LOOKUP after the continuation"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192102
+        src_port: 41025
+  - filter:
+      comment: "41025: raw stream marker (sanity)"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192106
+        dest_port: 41025
+  - filter:
+      comment: "41025: continuation bytes are file data of the first READ"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192104
+        dest_port: 41025
+  - filter:
+      comment: "41025: first READ file CLOSED with all 512 bytes"
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 41025
+        rpc.xid: 2442268673
+        fileinfo.state: CLOSED
+        fileinfo.size: 512
+        fileinfo.sha256: 0a4ff0d4bb671145ccb550bcda48ff330e828f75756aa7ba5a9fffdc357eba83
+  - filter:
+      comment: "41025: second READ file CLOSED"
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 41025
+        rpc.xid: 2442272770
+        fileinfo.state: CLOSED
+        fileinfo.size: 32
+        fileinfo.sha256: 3627f43293a5ce60281708e872be2782e921078c1cb216cd806977c48ccaef34
+  - filter:
+      comment: "41025: no other file"
+      count: 2
+      match:
+        event_type: fileinfo
+        dest_port: 41025
+  - filter:
+      comment: "41025: no exception policy (no parser error)"
+      count: 1
+      match:
+        event_type: flow
+        src_port: 41025
+        app_proto: nfs
+        not-has-key: flow.exception_policy
+
+  # --- 41026: replacement. The READ xid is evicted from the request map
+  #     and the file A tx (tx_id 0) is force-closed by max-tx. The second
+  #     READ call, for file A again, then creates a new file A tx
+  #     (tx_id 601) before the continuation of the first reply arrives.
+  #     That tx belongs to the second READ: the fixed parser consumes the
+  #     360 byte rest of the first record without touching it, and the
+  #     second READ's reply in the same segment is extracted with it. ---
+  - filter:
+      comment: "41026: first READ file TRUNCATED with the 152 bytes of the first segment"
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 41026
+        rpc.xid: 2442268673
+        fileinfo.state: TRUNCATED
+        fileinfo.size: 152
+  - filter:
+      comment: "41026: continuation bytes not added to any file"
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 9192104
+        dest_port: 41026
+  - filter:
+      comment: "41026: marker in file.data of the second READ reply"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192105
+        dest_port: 41026
+  - filter:
+      comment: "41026: LOOKUP after the continuation"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192102
+        src_port: 41026
+  - filter:
+      comment: "41026: raw stream marker (sanity)"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192106
+        dest_port: 41026
+  - filter:
+      comment: "41026: second READ file CLOSED, extracted with the tx its call created"
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 41026
+        rpc.xid: 2442272770
+        fileinfo.state: CLOSED
+        fileinfo.size: 32
+        fileinfo.sha256: 3627f43293a5ce60281708e872be2782e921078c1cb216cd806977c48ccaef34
+        fileinfo.tx_id: 601
+  - filter:
+      comment: "41026: no other file"
+      count: 2
+      match:
+        event_type: fileinfo
+        dest_port: 41026
+  - filter:
+      comment: "41026: no exception policy (no parser error)"
+      count: 1
+      match:
+        event_type: flow
+        src_port: 41026
+        app_proto: nfs
+        not-has-key: flow.exception_policy
+
+  # --- 41027: as 41026, but the second READ is for file B, so no file A tx
+  #     replaces the force-closed one: the continuation has no file tx. ---
+  - filter:
+      comment: "41027: first READ file TRUNCATED with the 152 bytes of the first segment"
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 41027
+        rpc.xid: 2442268673
+        fileinfo.state: TRUNCATED
+        fileinfo.size: 152
+  - filter:
+      comment: "41027: continuation bytes not added to any file"
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 9192104
+        dest_port: 41027
+  - filter:
+      comment: "41027: marker in file.data of the second READ reply"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192105
+        dest_port: 41027
+  - filter:
+      comment: "41027: LOOKUP after the continuation"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192102
+        src_port: 41027
+  - filter:
+      comment: "41027: raw stream marker (sanity)"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9192106
+        dest_port: 41027
+  - filter:
+      comment: "41027: second READ file CLOSED"
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 41027
+        rpc.xid: 2442272770
+        fileinfo.state: CLOSED
+        fileinfo.size: 32
+        fileinfo.sha256: 3627f43293a5ce60281708e872be2782e921078c1cb216cd806977c48ccaef34
+  - filter:
+      comment: "41027: no other file"
+      count: 2
+      match:
+        event_type: fileinfo
+        dest_port: 41027
+  - filter:
+      comment: "41027: no exception policy (no parser error)"
+      count: 1
+      match:
+        event_type: flow
+        src_port: 41027
+        app_proto: nfs
+        not-has-key: flow.exception_policy
