@@ -2,13 +2,21 @@ requires:
   min-version: 7
 
 args:
-- -k none
+- -k none --set stream.inline=true
 
 checks:
 - filter:
     count: 1
     match:
       event_type: http
+      http.request_headers[6].name: namenamenamenamenamenamenamenamenamename
+      http.request_headers[6].value: valuevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevalue
+- filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      event_type: alert
       http.request_headers[6].name: namenamenamenamenamenamenamenamenamename
       http.request_headers[6].value: valuevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevalue
 - filter:
