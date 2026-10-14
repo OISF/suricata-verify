@@ -1,0 +1,8 @@
+alert nfs any any -> any any (msg:"R9190 NFS READ file.data marker"; flow:to_client,established; file.data; content:"R9190MARK"; sid:9190201; rev:1;)
+alert nfs any any -> any 2049 (msg:"R9190 NFS LOOKUP parsed after partial record"; flow:to_server,established; nfs_procedure:3; sid:9190202; rev:1;)
+alert tcp any any -> any 2049 (msg:"R9190 raw LOOKUP name bytes present on wire"; flow:to_server,established; content:"R9190LOOKUP"; sid:9190203; rev:1;)
+alert nfs any any -> any any (msg:"R9190 NFS READ file.data embedded marker (must never parse)"; flow:to_client,established; file.data; content:"R9190EMBEDTC"; sid:9190204; rev:1;)
+alert nfs any any -> any any (msg:"R9190 NFS READ file.data genuine marker after exact skip"; flow:to_client,established; file.data; content:"R9190MARK-G-"; sid:9190205; rev:1;)
+alert tcp any any -> any any (msg:"R9190 raw embedded record bytes present on wire"; flow:established; content:"R9190EMBED"; sid:9190206; rev:1;)
+alert nfs any any -> any any (msg:"R9190 NFS READ file.data duplicate-xid marker (must never parse)"; flow:to_client,established; file.data; content:"R9190DUPXID"; sid:9190207; rev:1;)
+alert tcp any any -> any any (msg:"R9190 raw duplicate-xid reply bytes present on wire"; flow:to_client,established; content:"R9190DUPXID"; sid:9190208; rev:1;)

@@ -1,0 +1,580 @@
+requires:
+  min-version: 8.0.8
+
+args:
+  - -k none
+  - --runmode single
+
+checks:
+  # ========================================================================
+  # Each flow uses a distinct client source port. Every attack flow takes a
+  # known-boundary content-error arm of the NFS partial-record fast paths;
+  # its control flow carries an invalid record of the same kind complete
+  # (un-split), which is only marked malformed on every build.
+  #   3001 a-attack : partial READ reply, eof=2               (to_client)
+  #   3002 a-control: short complete READ reply, eof=2        (to_client)
+  #   3003 b-attack : partial reply, reply_state=2            (to_client)
+  #   3006 b-control: same reply_state=2 record, complete     (to_client)
+  #   3004 c-attack : partial v3 WRITE, creds_len 0x2000      (to_server)
+  #   3007 c-control: same WRITE record, complete             (to_server)
+  #   3008 e-attack : partial v4 COMPOUND, creds_len 0x2000   (to_server)
+  #   3009 e-control: same COMPOUND record, complete          (to_server)
+  #   3005 d-neg    : undecodable record marker (len < 24)    (to_server)
+  # Exact-boundary flows: the unread tail of the malformed record starts with
+  # a complete embedded record (bait) followed by zero filler; the genuine
+  # record follows the true boundary in the same segment.
+  #   3010 f-attack : partial v3 WRITE, stable=3, embeds LOOKUP (to_server)
+  #   3011 f-control: same WRITE record + LOOKUP, complete      (to_server)
+  #   3012 g-attack : partial READ reply, eof=2, embeds reply   (to_client)
+  #   3013 g-control: same reply record + reply, complete       (to_client)
+  # Duplicate-xid flows: the malformed READ reply is followed by a valid
+  # reply reusing its xid, which must be ignored, then a sentinel reply to a
+  # second READ and a LOOKUP.
+  #   3014 h-attack : partial READ reply, eof=2, xid reused     (to_client)
+  #   3015 h-control: same reply record, complete, xid reused   (to_client)
+  #
+  # Port pinning: EVE records carry the direction of the packet they were
+  # logged on. In IDS mode data is parsed when the peer ACKs it, so the
+  # malformed_data anomaly of to-client data is logged on a client packet
+  # (src_port = client) and that of to-server data on a server packet
+  # (dest_port = client). Alerts and fileinfo are logged on a packet in the
+  # direction of the rule/file: to_server alerts have src_port = client,
+  # to_client alerts and READ fileinfo have dest_port = client. The
+  # malformed_data anomalies of h-attack and h-control are covered by the
+  # global count at the end instead of a port pin.
+  # ========================================================================
+
+  # --- (a) partial READ reply with eof=2. FIXED: the content error is not
+  #     fatal, the record tail is skipped, the following good reply's marker
+  #     alerts and its file is extracted. FAILS on the vulnerable baseline. ---
+  - filter:
+      comment: "a-attack 3001: READ marker alert after partial eof=2 reply"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9190201
+        dest_port: 3001
+  - filter:
+      comment: "a-attack 3001: good READ file extracted (36 bytes, MARKER_A)"
+      count: 1
+      match:
+        event_type: fileinfo
+        app_proto: nfs
+        dest_port: 3001
+        fileinfo.state: CLOSED
+        fileinfo.size: 36
+        fileinfo.sha256: "87cc86fc4c217cfbb4db739bd65636d342a109eed81da12526cce305dc2670b4"
+  - filter:
+      comment: "a-attack 3001: nfs malformed_data recorded"
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+        src_port: 3001
+
+  # --- (a-control) a short complete READ reply with the same invalid eof=2:
+  #     already non-fatal on the baseline, so the marker alerts and the file
+  #     is extracted. ---
+  - filter:
+      comment: "a-control 3002: READ marker alert (complete invalid reply)"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9190201
+        dest_port: 3002
+  - filter:
+      comment: "a-control 3002: good READ file extracted (36 bytes, MARKER_A)"
+      count: 1
+      match:
+        event_type: fileinfo
+        app_proto: nfs
+        dest_port: 3002
+        fileinfo.state: CLOSED
+        fileinfo.size: 36
+        fileinfo.sha256: "87cc86fc4c217cfbb4db739bd65636d342a109eed81da12526cce305dc2670b4"
+  - filter:
+      comment: "a-control 3002: nfs malformed_data recorded"
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+        src_port: 3002
+
+  # --- (b) partial reply whose RPC reply header is invalid (reply_state=2).
+  #     FIXED: non-fatal, tail skipped, following good reply's marker alerts
+  #     and its file is extracted. FAILS on the vulnerable baseline. ---
+  - filter:
+      comment: "b-attack 3003: READ marker alert after partial reply_state=2"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9190201
+        dest_port: 3003
+  - filter:
+      comment: "b-attack 3003: good READ file extracted (36 bytes, MARKER_B)"
+      count: 1
+      match:
+        event_type: fileinfo
+        app_proto: nfs
+        dest_port: 3003
+        fileinfo.state: CLOSED
+        fileinfo.size: 36
+        fileinfo.sha256: "fde99405ee4e4ec4935d505c8373ed814522e5e5cba6c1fe75286d7c4803c05f"
+  - filter:
+      comment: "b-attack 3003: nfs malformed_data recorded"
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+        src_port: 3003
+
+  # --- (b-control) the identical reply_state=2 record delivered complete:
+  #     already non-fatal on the baseline. ---
+  - filter:
+      comment: "b-control 3006: READ marker alert (complete reply_state=2)"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9190201
+        dest_port: 3006
+  - filter:
+      comment: "b-control 3006: good READ file extracted (36 bytes, MARKER_B)"
+      count: 1
+      match:
+        event_type: fileinfo
+        app_proto: nfs
+        dest_port: 3006
+        fileinfo.state: CLOSED
+        fileinfo.size: 36
+        fileinfo.sha256: "fde99405ee4e4ec4935d505c8373ed814522e5e5cba6c1fe75286d7c4803c05f"
+  - filter:
+      comment: "b-control 3006: nfs malformed_data recorded"
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+        src_port: 3006
+
+  # --- (c) partial NFSv3 WRITE whose RPC call header is invalid at the RPC
+  #     level (AUTH_UNIX creds_len >= 4096) with a valid marker/xid/msgtype/
+  #     proc. FIXED: non-fatal, tail skipped, the following LOOKUP alerts.
+  #     FAILS on the vulnerable baseline. ---
+  - filter:
+      comment: "c-attack 3004: NFS LOOKUP alert after partial WRITE creds error"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9190202
+        src_port: 3004
+        dest_port: 2049
+  - filter:
+      comment: "c-attack 3004: nfs malformed_data recorded"
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+        dest_port: 3004
+  - filter:
+      comment: "c-attack 3004: raw LOOKUP bytes on the wire"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9190203
+        src_port: 3004
+
+  # --- (c-control) the identical WRITE record delivered complete: already
+  #     non-fatal on the baseline. ---
+  - filter:
+      comment: "c-control 3007: NFS LOOKUP alert (complete WRITE creds error)"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9190202
+        src_port: 3007
+        dest_port: 2049
+  - filter:
+      comment: "c-control 3007: nfs malformed_data recorded"
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+        dest_port: 3007
+
+  # --- (e) partial NFSv4 COMPOUND call with the same RPC-level creds error,
+  #     taking the NFSv4 partial-WRITE scan instead of the v3 WRITE fast
+  #     path. FIXED: non-fatal, tail skipped, the following LOOKUP alerts.
+  #     FAILS on the vulnerable baseline. ---
+  - filter:
+      comment: "e-attack 3008: NFS LOOKUP alert after partial v4 creds error"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9190202
+        src_port: 3008
+        dest_port: 2049
+  - filter:
+      comment: "e-attack 3008: nfs malformed_data recorded"
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+        dest_port: 3008
+  - filter:
+      comment: "e-attack 3008: raw LOOKUP bytes on the wire"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9190203
+        src_port: 3008
+
+  # --- (e-control) the identical NFSv4 record delivered complete: already
+  #     non-fatal on the baseline. ---
+  - filter:
+      comment: "e-control 3009: NFS LOOKUP alert (complete v4 creds error)"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9190202
+        src_port: 3009
+        dest_port: 2049
+  - filter:
+      comment: "e-control 3009: nfs malformed_data recorded"
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+        dest_port: 3009
+
+  # --- (d) NEGATIVE CONTROL: record marker is undecodable (fragment length
+  #     16 < 24), so the boundary is unknown and the error MUST stay fatal
+  #     even after R9190. The following LOOKUP must NOT be parsed. This holds
+  #     on both the vulnerable baseline and the fixed build. The raw LOOKUP
+  #     bytes still reach the sensor. ---
+  - filter:
+      comment: "d-neg 3005: NFS LOOKUP must NOT alert (boundary unknown, fatal)"
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 9190202
+        src_port: 3005
+  - filter:
+      comment: "d-neg 3005: the LOOKUP is never parsed (any direction)"
+      count: 0
+      match:
+        event_type: nfs
+        nfs.filename: R9190LOOKUPD
+  - filter:
+      comment: "d-neg 3005: raw LOOKUP bytes on the wire"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9190203
+        src_port: 3005
+
+  # ========================================================================
+  # Exact-boundary flows (f, g): the skip must land EXACTLY on the record
+  # boundary given by the record marker. The unread tail of each malformed
+  # partial record starts with a complete, well-formed embedded record (bait)
+  # followed by zero filler to the record end, and the genuine record follows
+  # the true boundary in the same segment. A parser that resynchronises by
+  # scanning for something that looks like an RPC record (like the post-GAP
+  # nfs_probe catch-up), or that resumes right after the buffered bytes,
+  # parses the bait and then fails on the zero filler. Skipping too few or too
+  # many bytes loses the genuine record. NFS has no sticky buffer for a LOOKUP
+  # name, so the to-server LOOKUP alerts (sid 9190202) are told apart by the
+  # nfs.filename logged with the alert.
+  # ========================================================================
+
+  # --- (f) partial NFSv3 WRITE with stable=3 (first delivery 76 bytes, ending
+  #     after stable and the data length); its unread 728-byte tail is the
+  #     embedded LOOKUP R9190EMBEDTS + zeros, then the genuine LOOKUP
+  #     R9190LOOKUPF. FIXED: only the genuine LOOKUP is parsed. FAILS on the
+  #     vulnerable baseline. ---
+  - filter:
+      comment: "f-attack 3010: genuine LOOKUP R9190LOOKUPF parsed after the exact skip"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9190202
+        src_port: 3010
+        nfs.filename: R9190LOOKUPF
+  - filter:
+      comment: "f-attack 3010: nfs malformed_data recorded"
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+        dest_port: 3010
+  - filter:
+      comment: "f-attack 3010: raw embedded LOOKUP bytes on the wire"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9190206
+        src_port: 3010
+
+  # --- (f-control) the identical WRITE record delivered complete, with the
+  #     genuine LOOKUP in the same segment: the complete-record path skips the
+  #     whole record on every build. ---
+  - filter:
+      comment: "f-control 3011: genuine LOOKUP R9190LOOKUPF parsed (complete record)"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9190202
+        src_port: 3011
+        nfs.filename: R9190LOOKUPF
+  - filter:
+      comment: "f-control 3011: nfs malformed_data recorded"
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+        dest_port: 3011
+
+  # --- (f, f-control) the embedded LOOKUP is never parsed: no alert and no
+  #     nfs record anywhere carries its name. ---
+  - filter:
+      comment: "f: no alert for the embedded LOOKUP R9190EMBEDTS"
+      count: 0
+      match:
+        event_type: alert
+        nfs.filename: R9190EMBEDTS
+  - filter:
+      comment: "f: no nfs record for the embedded LOOKUP R9190EMBEDTS"
+      count: 0
+      match:
+        event_type: nfs
+        nfs.filename: R9190EMBEDTS
+
+  # --- (g) partial NFSv3 READ reply with eof=2 (attributes present; first
+  #     delivery 132 bytes, ending after eof and the data length); its unread
+  #     672-byte tail is an embedded READ reply for outstanding xid 0x1C2
+  #     (marker R9190EMBEDTC) + zeros, then the genuine reply to xid 0x1C3
+  #     (marker R9190MARK-G). FIXED: only the genuine reply is parsed. FAILS
+  #     on the vulnerable baseline. ---
+  - filter:
+      comment: "g-attack 3012: genuine READ marker alert after the exact skip"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9190205
+        dest_port: 3012
+  - filter:
+      comment: "g-attack 3012: genuine READ file extracted (36 bytes, MARKER_G)"
+      count: 1
+      match:
+        event_type: fileinfo
+        app_proto: nfs
+        dest_port: 3012
+        fileinfo.state: CLOSED
+        fileinfo.size: 36
+        fileinfo.sha256: "3e470af3a1a3ce54d30042739ae88c4438c40cc0b202e43a5dd5f9362145b746"
+  - filter:
+      comment: "g-attack 3012: nfs malformed_data recorded"
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+        src_port: 3012
+  - filter:
+      comment: "g-attack 3012: raw embedded reply bytes on the wire"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9190206
+        dest_port: 3012
+
+  # --- (g-control) the identical READ reply record delivered complete, with
+  #     the genuine reply in the same segment: the complete-record path skips
+  #     the whole record on every build. ---
+  - filter:
+      comment: "g-control 3013: genuine READ marker alert (complete record)"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9190205
+        dest_port: 3013
+  - filter:
+      comment: "g-control 3013: genuine READ file extracted (36 bytes, MARKER_G)"
+      count: 1
+      match:
+        event_type: fileinfo
+        app_proto: nfs
+        dest_port: 3013
+        fileinfo.state: CLOSED
+        fileinfo.size: 36
+        fileinfo.sha256: "3e470af3a1a3ce54d30042739ae88c4438c40cc0b202e43a5dd5f9362145b746"
+  - filter:
+      comment: "g-control 3013: nfs malformed_data recorded"
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+        src_port: 3013
+
+  # --- (g, g-control) the embedded READ reply is never parsed: its marker
+  #     never alerts and its file is never logged. ---
+  - filter:
+      comment: "g: no alert for the embedded READ marker R9190EMBEDTC"
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 9190204
+  - filter:
+      comment: "g: no file for the embedded READ reply (MARKER_EMB)"
+      count: 0
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: "d317870c11c8e1135f88754be80a4bfcaa579ea7a29c1d2069f7c66f825385b9"
+
+  # ========================================================================
+  # Duplicate-xid flows (h): skipping a malformed partial READ reply must also
+  # end its request, as the complete-record path does by removing the xid
+  # from the request map before it parses the reply body. A later valid reply
+  # reusing the xid (data R9190DUPXID) then matches no request and is
+  # ignored: no marker alert and no file for it. If the skip leaves the
+  # request behind, the duplicate is taken as the data of the skipped READ.
+  # A sentinel reply to a second READ (data R9190MARK-H) follows the
+  # duplicate, showing the to-client direction still parses records after it
+  # (the duplicate is ignored, not lost to a misplaced skip), and a final
+  # LOOKUP (R9190LOOKUPH) shows the to-server direction is still parsed.
+  # ========================================================================
+
+  # --- (h) partial READ reply to xid 0x1D1 with eof=2 (first delivery 140
+  #     bytes, then the 664-byte record tail), then a valid reply reusing xid
+  #     0x1D1, the sentinel reply to xid 0x1D2 and the LOOKUP, each in its
+  #     own segment. FIXED: the duplicate is ignored exactly as in h-control,
+  #     the sentinel file is the only file of the flow, the LOOKUP alerts.
+  #     FAILS on the vulnerable baseline (fatal: no sentinel, no LOOKUP) and
+  #     when the skip leaves the request in the request map (duplicate file
+  #     and marker alert). ---
+  - filter:
+      comment: "h-attack 3014: exactly one file, the sentinel's (none for the duplicate)"
+      count: 1
+      match:
+        event_type: fileinfo
+        app_proto: nfs
+        dest_port: 3014
+  - filter:
+      comment: "h-attack 3014: sentinel READ file extracted (36 bytes, MARKER_H)"
+      count: 1
+      match:
+        event_type: fileinfo
+        app_proto: nfs
+        dest_port: 3014
+        fileinfo.state: CLOSED
+        fileinfo.size: 36
+        fileinfo.sha256: "e272261ca49d265b9eb230a6cf40413c8e4ae5b3a80bda7697dac00f8b25223a"
+  - filter:
+      comment: "h-attack 3014: sentinel READ marker alert after the duplicate"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9190201
+        dest_port: 3014
+  - filter:
+      comment: "h-attack 3014: LOOKUP R9190LOOKUPH parsed after the skipped reply"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9190202
+        src_port: 3014
+        nfs.filename: R9190LOOKUPH
+  - filter:
+      comment: "h-attack 3014: raw duplicate-xid reply bytes on the wire"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9190208
+        dest_port: 3014
+
+  # --- (h-control) the identical READ reply record delivered complete, then
+  #     the same duplicate, sentinel and LOOKUP: the complete-record path
+  #     removes the request on every build, so the duplicate is ignored. ---
+  - filter:
+      comment: "h-control 3015: exactly one file, the sentinel's (none for the duplicate)"
+      count: 1
+      match:
+        event_type: fileinfo
+        app_proto: nfs
+        dest_port: 3015
+  - filter:
+      comment: "h-control 3015: sentinel READ file extracted (36 bytes, MARKER_H)"
+      count: 1
+      match:
+        event_type: fileinfo
+        app_proto: nfs
+        dest_port: 3015
+        fileinfo.state: CLOSED
+        fileinfo.size: 36
+        fileinfo.sha256: "e272261ca49d265b9eb230a6cf40413c8e4ae5b3a80bda7697dac00f8b25223a"
+  - filter:
+      comment: "h-control 3015: sentinel READ marker alert after the duplicate"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9190201
+        dest_port: 3015
+  - filter:
+      comment: "h-control 3015: LOOKUP R9190LOOKUPH parsed (complete record)"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9190202
+        src_port: 3015
+        nfs.filename: R9190LOOKUPH
+  - filter:
+      comment: "h-control 3015: raw duplicate-xid reply bytes on the wire"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9190208
+        dest_port: 3015
+
+  # --- (h, h-control) the duplicate-xid reply is never taken as READ data:
+  #     its marker never alerts and its file is never logged. ---
+  - filter:
+      comment: "h: no alert for the duplicate-xid marker R9190DUPXID"
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 9190207
+  - filter:
+      comment: "h: no file for the duplicate-xid reply (MARKER_DUP)"
+      count: 0
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: "439d8245f9eff756f2e7e334baffc6099c3c3005a985eb5eebaf6922f56081b5"
+
+  # --- malformed_data over the whole capture: every one of the 15 flows,
+  #     d-neg included, records it exactly once (the a, b, c, e, f and g
+  #     flows are also pinned per flow above). The global count covers
+  #     h-attack and h-control without depending on the packet direction
+  #     the anomaly is logged on. Holds on every build. ---
+  - filter:
+      comment: "nfs malformed_data recorded once per flow (15 flows, global count)"
+      count: 15
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+
+  # --- Exactly one NFS parser error over the whole capture, and it comes from
+  #     the negative-control flow d alone (undecodable marker). On the
+  #     vulnerable baseline flows a, b, c, e, f, g and h each raise one as
+  #     well, for a total of 8, so this FAILS on the baseline. ---
+  - stats:
+      app_layer.error.nfs_tcp.parser: 1
