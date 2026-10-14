@@ -1,0 +1,23 @@
+requires:
+  min-version: 9
+
+pcap: ../ftp-too-many-preliminary-responses/input.pcap
+
+args:
+  - --runmode=single
+  - --set app-layer.protocols.ftp.max-preliminary-responses=4
+
+checks:
+  # 4 preliminary responses and the final reply.
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: USER
+        ftp.completion_code.__len: 5
+
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: too_many_preliminary_responses
