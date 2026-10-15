@@ -1,0 +1,59 @@
+requires:
+  min-version: 9
+
+checks:
+  # Control stays under the default bomb cap. The gzip plaintext is inspected.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000001
+        http.url: "/c/gzip-marker"
+
+  # The same control flow still parses a later uncompressed response.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000002
+        http.url: "/c/after-plain"
+
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.url: "/c/after-plain"
+
+  # Attack fills the cap. The same gzip body does not reach file_data.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1000001
+        http.url: "/a/gzip-marker"
+
+  # The follow-up response should create a HTTP transaction and a http.uri alert.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000003
+
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.url: "/a/after-plain"
+
+  # Two control bombs plus three attack bombs. The limit event is separate.
+  - filter:
+      count: 5
+      match:
+        event_type: anomaly
+        anomaly.event: COMPRESSION_BOMB
+
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: COMPRESSION_BOMB_LIMIT_REACHED
