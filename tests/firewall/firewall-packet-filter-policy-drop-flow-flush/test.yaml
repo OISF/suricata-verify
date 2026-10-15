@@ -1,5 +1,5 @@
 requires:
-  min-version: 9
+  min-version: 8.0.8
 
 pcap: ../../ssh-ips-drop-flush/input.pcap
 
@@ -13,10 +13,23 @@ checks:
   # logged by the output stage of that packet, as the flow-end flush is
   # skipped for dropped flows.
   - filter:
+      requires:
+        min-version: 9
       count: 1
       match:
         event_type: ssh
         pcap_cnt: 14
+        ssh.client.software_version: "OpenSSH_for_Windows_7.7"
+        ssh.server.software_version: "OpenSSH_7.4"
+  # Before 9, the ssh record is logged once both banners are parsed, i.e. at
+  # the server banner (pcap_cnt 13), before the flow is dropped.
+  - filter:
+      requires:
+        lt-version: 9
+      count: 1
+      match:
+        event_type: ssh
+        pcap_cnt: 13
         ssh.client.software_version: "OpenSSH_for_Windows_7.7"
         ssh.server.software_version: "OpenSSH_7.4"
   - filter:
