@@ -1,0 +1,7 @@
+alert nfs any any -> any 2049 (msg:"R9188 NFS REMOVE parsed after zero-count record"; flow:to_server,established; nfs_procedure:12; sid:9188101; rev:1;)
+alert nfs any any -> any 2049 (msg:"R9188 NFS LOOKUP embedded in a skipped record tail (must never parse)"; flow:to_server,established; nfs_procedure:3; sid:9188102; rev:1;)
+alert tcp any any -> any any (msg:"R9188 raw embedded record bytes present on wire"; flow:established; content:"R9188BAIT"; sid:9188103; rev:1;)
+alert nfs any any -> any any (msg:"R9188 NFS READ file.data genuine marker"; flow:to_client,established; file.data; content:"R9188MARK"; sid:9188104; rev:1;)
+alert nfs any any -> any any (msg:"R9188 NFS READ file.data embedded reply (must never parse)"; flow:to_client,established; file.data; content:"R9188BAIT-TC"; sid:9188105; rev:1;)
+alert nfs any any -> any any (msg:"R9188 NFS READ file.data duplicate-xid reply (must never parse)"; flow:to_client,established; file.data; content:"R9188DUPXID"; sid:9188106; rev:1;)
+alert tcp any any -> any any (msg:"R9188 raw duplicate-xid reply bytes present on wire"; flow:to_client,established; content:"R9188DUPXID"; sid:9188107; rev:1;)

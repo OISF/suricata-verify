@@ -1,0 +1,71 @@
+requires:
+  min-version: 8.0.8
+
+args:
+  - -k none
+  - --runmode single
+
+checks:
+  # Three flows, each a NULL, a 512-byte WRITE record, and a REMOVE whose
+  # name is NFSC0_CANARY_HIT:
+  #   40146: zero-count WRITE complete, REMOVE in the same segment (control)
+  #   40154: WRITE with count 436 split after its 76-byte header (control)
+  #   56892: zero-count WRITE split after its 76-byte header (attack)
+  # Alerts are on to_server packets, so src_port is the client.
+
+  - filter:
+      comment: "NULL parsed on all three flows"
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 9901701
+
+  - filter:
+      comment: "control 40146: REMOVE after the complete zero-count WRITE"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9901702
+        src_port: 40146
+  - filter:
+      comment: "control 40154: REMOVE after the split WRITE with count 436"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9901702
+        src_port: 40154
+  # Fails on the vulnerable build: the rest of the WRITE record is parsed as
+  # an RPC header, which fails and disables NFS parsing for the flow.
+  - filter:
+      comment: "attack 56892: REMOVE after the split zero-count WRITE"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9901702
+        src_port: 56892
+
+  # The REMOVE bytes reach the sensor on every flow.
+  - filter:
+      comment: "attack 56892: REMOVE name bytes on the wire"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9901703
+        src_port: 56892
+  - filter:
+      comment: "REMOVE name bytes on the wire on all three flows"
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 9901703
+
+  # Like the complete record, the split zero-count WRITE is not malformed.
+  # The vulnerable build raises malformed_data and a parser error.
+  - filter:
+      comment: "no NFS anomaly"
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+  - stats:
+      app_layer.error.nfs_tcp.parser: 0

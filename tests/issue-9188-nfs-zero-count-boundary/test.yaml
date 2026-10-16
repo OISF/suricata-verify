@@ -1,0 +1,227 @@
+requires:
+  min-version: 8.0.8
+
+args:
+  - -k none
+  - --runmode single
+
+checks:
+  # ========================================================================
+  # Each flow uses a distinct client source port. Every attack flow delivers
+  # a zero-count record of 512 bytes or more split, so it takes an NFS TCP
+  # partial-record fast path; its control flow carries the same bytes with
+  # the record complete (un-split), skipped by its marker on every build.
+  # Every flow ends with a REMOVE call (sid 9188101).
+  #   3101 w-attack     : zero-count WRITE split after its 76-byte header;
+  #                       the tail embeds a LOOKUP (bait)        (to_server)
+  #   3102 w-control    : same bytes, WRITE record complete      (to_server)
+  #   3103 w-consecutive: header + 24 tail bytes first, then a second
+  #                       zero-count WRITE, partial mid-segment  (to_server)
+  #   3104 w-multiseg   : 4004-byte zero-count WRITE, the tail
+  #                       across three segments                  (to_server)
+  #   3105 w-gap        : as w-attack, but 300 tail bytes are lost (stream
+  #                       gap) and the bait follows the gap      (to_server)
+  #   3106 r-attack     : zero-count READ reply (attributes) split after its
+  #                       132-byte header; the tail embeds a reply (bait)
+  #                       to an outstanding READ                 (to_client)
+  #   3107 r-control    : same bytes, reply record complete      (to_client)
+  #   3108 r-dupxid     : zero-count READ reply (no attributes) split, then a
+  #                       valid reply reusing its xid            (to_client)
+  #   3109 r-dupxid-ctl : same bytes, reply record complete      (to_client)
+  #   3110 r-consecutive: two zero-count READ replies, the second partial
+  #                       mid-segment with a tail across three
+  #                       segments                               (to_client)
+  #   3111 z-short      : ordinary short complete zero-count WRITE and READ
+  #                       reply                                  (both)
+  #
+  # On the vulnerable build the unread tail of every attack flow's record
+  # is parsed as a new RPC record. Where it starts with a bait record, the
+  # bait is parsed; then the zero filler fails as an RPC header, which
+  # disables NFS parsing for the flow (7 parser errors): its later records,
+  # REMOVE included, are never parsed.
+  #
+  # Port pinning: to_server alerts have src_port = client; to_client alerts
+  # and READ fileinfo have dest_port = client.
+  # ========================================================================
+
+  # --- REMOVE parsed on every flow: fails for each attack flow on the
+  #     vulnerable build. ---
+  - filter:
+      comment: "w-attack 3101: REMOVE after the split zero-count WRITE"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9188101
+        src_port: 3101
+  - filter:
+      comment: "w-consecutive 3103: REMOVE after two zero-count WRITEs"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9188101
+        src_port: 3103
+  - filter:
+      comment: "w-multiseg 3104: REMOVE after a tail across three segments"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9188101
+        src_port: 3104
+  - filter:
+      comment: "w-gap 3105: REMOVE after a tail with a stream gap"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9188101
+        src_port: 3105
+  - filter:
+      comment: "r-attack 3106: REMOVE after the split zero-count READ reply"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9188101
+        src_port: 3106
+  - filter:
+      comment: "r-dupxid 3108: REMOVE after the split zero-count READ reply"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9188101
+        src_port: 3108
+  - filter:
+      comment: "r-consecutive 3110: REMOVE after two zero-count READ replies"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9188101
+        src_port: 3110
+  - filter:
+      comment: "REMOVE parsed on all 11 flows (controls included)"
+      count: 11
+      match:
+        event_type: alert
+        alert.signature_id: 9188101
+
+  # --- Exact boundary: the records embedded in a skipped tail are never
+  #     parsed. The raw rule proves their bytes reached the sensor (the gap
+  #     flow is left out: its raw match count depends on gap handling). ---
+  - filter:
+      comment: "no embedded LOOKUP is ever parsed"
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 9188102
+  - filter:
+      comment: "no embedded READ reply is ever parsed"
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 9188105
+  - filter:
+      comment: "w-attack 3101: embedded LOOKUP bytes on the wire"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9188103
+        src_port: 3101
+  - filter:
+      comment: "r-attack 3106: embedded reply bytes on the wire"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9188103
+        dest_port: 3106
+
+  # --- The zero-count READ reply ends its request, as on the complete
+  #     path: a later reply reusing its xid is ignored. ---
+  - filter:
+      comment: "no duplicate-xid reply data is ever parsed"
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 9188106
+  - filter:
+      comment: "r-dupxid 3108: duplicate-xid reply bytes on the wire"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9188107
+        dest_port: 3108
+
+  # --- The genuine READ replies after the zero-count replies are parsed
+  #     and their files extracted exactly. ---
+  - filter:
+      comment: "r-attack 3106: genuine READ reply data alert"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9188104
+        dest_port: 3106
+  - filter:
+      comment: "r-dupxid 3108: genuine READ reply data alert"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9188104
+        dest_port: 3108
+  - filter:
+      comment: "r-consecutive 3110: genuine READ reply data alert"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9188104
+        dest_port: 3110
+  - filter:
+      comment: "genuine READ reply data alert on all 6 to_client flows"
+      count: 6
+      match:
+        event_type: alert
+        alert.signature_id: 9188104
+  - filter:
+      comment: "r-attack 3106: R9188MARK-R file (36 bytes)"
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 3106
+        fileinfo.state: CLOSED
+        fileinfo.size: 36
+        fileinfo.sha256: 637c5cf1c57411f37aacb6afcd06d2a47ba5166674a40ac539450e152b63f88d
+  - filter:
+      comment: "r-dupxid 3108: R9188MARK-D file (36 bytes)"
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 3108
+        fileinfo.state: CLOSED
+        fileinfo.size: 36
+        fileinfo.sha256: 341a2f20e094950291a9e522ceaf8c4398e0afb2e5bf4ddc789b07eb7bef3a8c
+  - filter:
+      comment: "r-consecutive 3110: R9188MARK-E file (36 bytes)"
+      count: 1
+      match:
+        event_type: fileinfo
+        dest_port: 3110
+        fileinfo.state: CLOSED
+        fileinfo.size: 36
+        fileinfo.sha256: be9d45bcbcc33b77496212e0752cdaf5f1861143d4241149aa8569777287cf81
+  - filter:
+      comment: "only the 6 genuine files are logged"
+      count: 6
+      match:
+        event_type: fileinfo
+
+  # --- A zero-count record is not malformed: like the complete path, the
+  #     partial path raises no NFS event and no parser error. On the
+  #     vulnerable build each attack flow raises malformed_data and a parser
+  #     error. ---
+  - filter:
+      comment: "no NFS anomaly"
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+  - stats:
+      app_layer.error.nfs_tcp.parser: 0
+  # The w-gap flow does have a stream gap.
+  - stats:
+      tcp.reassembly_gap: 1
