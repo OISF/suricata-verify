@@ -1,0 +1,35 @@
+%YAML 1.1
+---
+# This config REPLACES the default suricata.yaml (run.py passes it with -c),
+# so every eve type used by the checks is enabled explicitly here.
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert
+        - anomaly:
+            enabled: yes
+            types:
+              decode: yes
+              stream: yes
+              applayer: yes
+        - nfs
+        - files:
+            force-hash: [sha256]
+        - flow
+        - stats
+  - stats:
+      enabled: yes
+      filename: stats.log
+      totals: yes
+
+stats:
+  enabled: yes
+  interval: 8
+
+app-layer:
+  protocols:
+    nfs:
+      enabled: yes
