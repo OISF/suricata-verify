@@ -10,7 +10,7 @@ args:
   - --set app-layer.protocols.dnp3.resync-on-bad-start=yes
 
 checks:
-  # Same capture, option on: after the bad block CRC the parser searches for
+  # Flow 10.0.6.x, option on: after the bad block CRC the parser searches for
   # the next start sequence from the next octet, so the request embedded in
   # the failed frame is parsed and marked; the rest of the failed frame is
   # skipped as bad start bytes (a second error), and the request after it is
@@ -19,9 +19,25 @@ checks:
       count: 3
       match:
         event_type: dnp3
+        src_ip: 10.0.6.1
         dnp3.type: request
+
+  # Flow 10.0.7.x, the other direction: the parser searches the failed
+  # response's body from the next octet, finds the start sequence and fails
+  # its link-header CRC (a second error), then resynchronizes to the valid
+  # response, which is logged and marked.
   - filter:
-      count: 1
+      count: 2
+      match:
+        event_type: dnp3
+        src_ip: 10.0.7.1
+        dnp3.type: response
+
+  # Events over the whole capture: one bad transport CRC on each flow; one bad
+  # start bytes (10.0.6.x) and one bad link CRC (10.0.7.x); three after_resync
+  # (two on 10.0.6.x, one on 10.0.7.x).
+  - filter:
+      count: 2
       match:
         event_type: alert
         alert.signature_id: 2270003
@@ -29,9 +45,14 @@ checks:
       count: 1
       match:
         event_type: alert
+        alert.signature_id: 2270002
+  - filter:
+      count: 1
+      match:
+        event_type: alert
         alert.signature_id: 2270010
   - filter:
-      count: 2
+      count: 3
       match:
         event_type: alert
         alert.signature_id: 2270011

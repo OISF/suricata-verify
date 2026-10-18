@@ -13,6 +13,25 @@ BAD_REQUEST = bytes.fromhex("05640844010002004c6cc0c0016da0")
 GARBAGE = bytes.fromhex("deadbeef0011")
 
 
+def dnp3_crc(data):
+    crc = 0
+    for byte in data:
+        crc ^= byte
+        for _ in range(8):
+            crc = (crc >> 1) ^ 0xA6BC if crc & 1 else crc >> 1
+    return (~crc & 0xFFFF).to_bytes(2, "little")
+
+
+def short_header(header):
+    """A link header with LENGTH 4 (below the minimum of 5) and a valid CRC."""
+    header = header[:2] + b"\x04" + header[3:8]
+    return header + dnp3_crc(header)
+
+
+SHORT_REQUEST = short_header(VALID_REQUEST)
+SHORT_RESPONSE = short_header(VALID_RESPONSE)
+
+
 def make_flow(client, server, sport, segments, start_time):
     client_mac = "00:00:00:00:00:01"
     server_mac = "00:00:00:00:00:02"
@@ -102,6 +121,23 @@ def main():
         # a valid request in the same TCP segment.
         ("10.0.3.1", "10.0.3.2", 10004,
          [("toserver", GARBAGE + VALID_REQUEST),
+          ("toclient", VALID_RESPONSE)]),
+
+        # Valid exchange, then a link header with a valid CRC but LENGTH below
+        # the minimum followed by a valid frame in the same TCP segment, in
+        # each direction.
+        ("10.0.4.1", "10.0.4.2", 10005,
+         [("toserver", VALID_REQUEST),
+          ("toclient", VALID_RESPONSE),
+          ("toserver", SHORT_REQUEST + VALID_REQUEST),
+          ("toclient", SHORT_RESPONSE + VALID_RESPONSE)]),
+
+        # Octets without a start sequence at the start of the flow, followed by
+        # the first six octets of a valid request in the same TCP segment; the
+        # rest of the request comes in the next segment.
+        ("10.0.5.1", "10.0.5.2", 10006,
+         [("toserver", GARBAGE + VALID_REQUEST[:6]),
+          ("toserver", VALID_REQUEST[6:]),
           ("toclient", VALID_RESPONSE)]),
     ]
 

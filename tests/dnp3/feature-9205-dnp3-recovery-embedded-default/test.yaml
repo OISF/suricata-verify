@@ -5,17 +5,33 @@ skip:
   - feature: FUZZ
 
 checks:
-  # A frame whose block CRC fails, with a complete request embedded in its
-  # body, then a valid request. With resync-on-bad-start off the parser skips
-  # the failed frame by its LENGTH: the embedded request is not parsed, the
-  # request after it is logged and marked as the first frame behind the error.
+  # Flow 10.0.6.x: a frame whose block CRC fails, with a complete request
+  # embedded in its body, then a valid request. With resync-on-bad-start off
+  # the parser skips the failed frame by its LENGTH: the embedded request is
+  # not parsed, the request after it is logged and marked as the first frame
+  # behind the error.
   - filter:
       count: 2
       match:
         event_type: dnp3
+        src_ip: 10.0.6.1
         dnp3.type: request
+
+  # Flow 10.0.7.x, the other direction: a response whose block CRC fails, with
+  # a start sequence and an invalid link header in its body, then a valid
+  # response. The failed frame is skipped by its LENGTH, its body is not
+  # examined, and the valid response is logged and marked.
   - filter:
-      count: 1
+      count: 2
+      match:
+        event_type: dnp3
+        src_ip: 10.0.7.1
+        dnp3.type: response
+
+  # Events over the whole capture: one bad transport CRC and one after_resync
+  # on each flow; no bad link CRC and no bad start bytes.
+  - filter:
+      count: 2
       match:
         event_type: alert
         alert.signature_id: 2270003
@@ -23,9 +39,14 @@ checks:
       count: 0
       match:
         event_type: alert
+        alert.signature_id: 2270002
+  - filter:
+      count: 0
+      match:
+        event_type: alert
         alert.signature_id: 2270010
   - filter:
-      count: 1
+      count: 2
       match:
         event_type: alert
         alert.signature_id: 2270011
