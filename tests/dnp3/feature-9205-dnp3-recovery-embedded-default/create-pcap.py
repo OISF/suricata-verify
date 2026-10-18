@@ -35,6 +35,17 @@ def embedded_frame():
     return header + block + bad
 
 
+def bad_crc_response():
+    """A response with a valid link header whose 16-octet data block fails its
+    CRC. The block holds a start sequence followed by an invalid link header."""
+    block = VALID_RESPONSE[10:15] + bytes.fromhex("05640a43") + bytes(7)
+    header = VALID_RESPONSE[:2] + bytes([5 + len(block)]) + VALID_RESPONSE[3:8]
+    header += dnp3_crc(header)
+    good = dnp3_crc(block)
+    bad = bytes([good[0] ^ 0xFF, good[1]])
+    return header + block + bad
+
+
 def make_flow(client, server, sport, segments, start_time):
     client_mac = "00:00:00:00:00:01"
     server_mac = "00:00:00:00:00:02"
@@ -107,6 +118,15 @@ def main():
           ("toclient", VALID_RESPONSE),
           ("toserver", embedded_frame() + VALID_REQUEST),
           ("toclient", VALID_RESPONSE)]),
+
+        # The same in the other direction: a valid exchange, a request, then a
+        # response whose block CRC fails, with a start sequence and an invalid
+        # link header in its body, followed by a valid response.
+        ("10.0.7.1", "10.0.7.2", 10008,
+         [("toserver", VALID_REQUEST),
+          ("toclient", VALID_RESPONSE),
+          ("toserver", VALID_REQUEST),
+          ("toclient", bad_crc_response() + VALID_RESPONSE)]),
     ]
 
     packets = []

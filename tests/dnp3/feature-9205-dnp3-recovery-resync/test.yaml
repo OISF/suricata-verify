@@ -54,20 +54,65 @@ checks:
         src_ip: 10.0.3.1
         dnp3.type: request
 
-  # Events over the whole capture: one bad link CRC (10.0.2.x), two bad start
-  # bytes (10.0.1.x, 10.0.3.x) and an after_resync on each of those three flows.
+  # Link header with a valid CRC but LENGTH below the minimum, in each
+  # direction: unchanged by the option.
+  - filter:
+      count: 2
+      match:
+        event_type: dnp3
+        src_ip: 10.0.4.1
+        dnp3.type: request
+  - filter:
+      count: 2
+      match:
+        event_type: dnp3
+        src_ip: 10.0.4.1
+        dnp3.type: response
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: 10.0.4.1
+        alert.signature_id: 2270011
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: 10.0.4.2
+        alert.signature_id: 2270011
+
+  # Octets without a start sequence at the start of the flow, the start
+  # sequence of the request at the end of the first segment: the probing
+  # parser waits for the rest of the header, then finds it and the request is
+  # logged.
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        src_ip: 10.0.5.1
+        dnp3.type: request
+
+  # Events over the whole capture: one bad link CRC (10.0.2.x), three bad start
+  # bytes (10.0.1.x, 10.0.3.x, 10.0.5.x), two LENGTH below the minimum
+  # (10.0.4.x), and six after_resync (one on each of 10.0.1.x, 10.0.2.x,
+  # 10.0.3.x and 10.0.5.x, two on 10.0.4.x).
   - filter:
       count: 1
       match:
         event_type: alert
         alert.signature_id: 2270002
   - filter:
-      count: 2
+      count: 3
       match:
         event_type: alert
         alert.signature_id: 2270010
   - filter:
-      count: 3
+      count: 6
       match:
         event_type: alert
         alert.signature_id: 2270011
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 2270001
