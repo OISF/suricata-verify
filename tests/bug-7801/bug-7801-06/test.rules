@@ -1,0 +1,1 @@
+alert http any any => any any (msg:"Pipelined multi-TX byte_math cache test"; flow:established; http.uri; content:"/calc/"; byte_extract:2,0,base,relative,string,dec; content:"/"; distance:0; byte_math:bytes 2, offset 0, oper +, rvalue base, result total, relative, string dec; http.stat_code; content:"2"; byte_test:1,>,total,0,relative; sid:1;)

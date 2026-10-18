@@ -1,0 +1,2 @@
+alert http any any => any any (msg:"A: byte_extract http.uri -> byte_test http.stat_code"; flow:established; http.uri; content:"/data/"; byte_extract:2,0,uri_val,relative,string,dec; http.stat_code; content:"2"; byte_test:1,>,uri_val,0,relative; sid:1;)
+alert http any any => any any (msg:"B: byte_math http.uri -> byte_test http.stat_code, never matches"; flow:established; http.uri; content:"/data/"; byte_math:bytes 2, offset 0, oper +, rvalue 50, result w, relative, string dec; http.stat_code; content:"2"; byte_test:1,>,w,0,relative; sid:2;)

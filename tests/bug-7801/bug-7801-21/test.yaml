@@ -1,0 +1,24 @@
+%YAML 1.1
+---
+
+requires:
+  min-version: 9.0
+
+args:
+  - -k none
+
+checks:
+  # ZZ sits exactly 3 bytes after AA, so only distance 3 with within 2 finds
+  # it
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        http.url: "/d/3/"
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        http.url: "/d/1/"
