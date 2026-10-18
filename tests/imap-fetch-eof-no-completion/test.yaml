@@ -1,0 +1,60 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+  - --set app-layer.protocols.imap.enabled=yes
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        alert.signature_id: 4
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        dest_port: 40744
+        tc_progress: response_complete
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        dest_port: 40745
+        tc_progress: response_complete
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_port: 40746
+        ts_progress: request_complete
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_port: 40747
+        ts_progress: request_complete
+  - stats:
+      app_layer.error.imap.parser: 0

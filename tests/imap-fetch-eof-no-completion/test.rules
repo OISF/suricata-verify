@@ -1,0 +1,4 @@
+alert tcp any any -> any any (email.subject; content:"SECRETSUBJECT"; sid:1; rev:1;)
+alert tcp any any -> any any (email.from; content:"alice@example.com"; sid:2; rev:1;)
+alert tcp any any -> any any (imap.response; content:"FETCH"; sid:3; rev:1;)
+alert tcp any any -> any any (email.body; content:"BODYMARKER"; sid:4; rev:1;)

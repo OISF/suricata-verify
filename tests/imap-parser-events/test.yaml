@@ -1,0 +1,40 @@
+requires:
+  min-version: 9
+args:
+  - -k none
+  - --set app-layer.protocols.imap.enabled=yes
+pcap: input.pcap
+
+checks:
+  # imap-line-too-long
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 9
+        event_type: imap
+        imap.responses[0]: A001 OK NOOP completed
+        src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: imap
+        anomaly.event: line_too_long
+        dest_port: 42010
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 101
+        flow.src_port: 42010
+  # imap-too-many-headers
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: imap
+        anomaly.event: too_many_headers
+        src_port: 42020
+  # Shared checks
+  - stats:
+      app_layer.error.imap.parser: 0
