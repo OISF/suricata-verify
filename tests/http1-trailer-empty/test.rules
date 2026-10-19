@@ -1,0 +1,8 @@
+# the flow parses normally
+alert http any any -> any any (msg:"request body"; flow:to_server; http.request_body; content:"p=0123456789"; sid:10; rev:1;)
+alert http any any -> any any (msg:"response header"; flow:to_client; http.header; content:"Server|3a 20|Apache|0d 0a|"; sid:11; rev:1;)
+# a trailer section with no fields is only the section terminator: no buffer
+alert http any any -> any any (msg:"raw terminator ts"; flow:to_server; http.trailer.raw; content:"|0d 0a|"; sid:20; rev:1;)
+alert http any any -> any any (msg:"raw terminator tc"; flow:to_client; http.trailer.raw; content:"|0d 0a|"; sid:21; rev:1;)
+alert http any any -> any any (msg:"names empty"; flow:to_server; http.trailer_names; content:"|0d 0a|"; sid:22; rev:1;)
+alert http any any -> any any (msg:"buffer empty"; flow:to_server; http.trailer; content:"|0d 0a|"; sid:23; rev:1;)
