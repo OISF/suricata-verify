@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"sandbox-limits transform failure keeps the buffer"; flow:established,to_client; http.response_body; luaxform:limit.lua; content:"PLAINBODY"; sid:1; rev:1;)
