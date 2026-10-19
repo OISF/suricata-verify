@@ -28,11 +28,11 @@ accept:flow,alert http1:<request_body $HOME_NET any -> $EXTERNAL_NET any (http.r
 
 # Foreign tls LTE rules: hook 1 (request_line) with raw request bytes, and
 # hook 2 out of scope.
-accept:flow,alert tls:<client_hello $HOME_NET any -> $EXTERNAL_NET any (content:"/index"; sid:200;)
-accept:flow,alert tls:<client_cert 198.51.100.0/24 any -> 198.51.100.0/24 any (content:"/index"; sid:201;)
+accept:flow,alert tls:<client_hello $HOME_NET any -> $EXTERNAL_NET any (tls.sni; content:"never.index.example"; sid:200;)
+accept:flow,alert tls:<client_cert 198.51.100.0/24 any -> 198.51.100.0/24 any (tls.cert_subject; content:"never.index.example"; sid:201;)
 
 # Foreign smtp LTE rule: hook 1 (request_line)
-accept:flow,alert smtp:<request_data $HOME_NET any -> $EXTERNAL_NET any (content:"/index"; sid:202;)
+accept:flow,alert smtp:request_data $HOME_NET any -> $EXTERNAL_NET any (content:"/index"; sid:202; rev:1;)
 
 # Foreign http2 stream LTE rule: hook 1 (request_line)
-accept:flow,alert http2:stream:<request_headers any any -> any any (content:"/index"; sid:203;)
+accept:flow,alert http2:stream:<request_headers any any -> any any (http.uri; content:"/index"; sid:203;)

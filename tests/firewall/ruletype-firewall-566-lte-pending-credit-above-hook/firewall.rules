@@ -1,0 +1,6 @@
+# 211 is a pending LTE rule bound at hook 2 (request_headers) whose fast pattern is silent.
+# 212 is a live candidate bound strictly above it, at request_body: its pattern hits and its
+# second keyword fails. The peek at the higher rule asks whether rules are missing for the
+# states in between, which is where a count borrowed by a rule below can only be seen.
+accept:flow,alert http1:<request_headers $HOME_NET any -> 93.184.216.34 80 (http.host.raw; content:"absent.pending"; sid:211;)
+accept:flow,alert http1:request_body $HOME_NET any -> 93.184.216.34 80 (http.request_body; content:"a"; content:"absent.kw"; sid:212;)

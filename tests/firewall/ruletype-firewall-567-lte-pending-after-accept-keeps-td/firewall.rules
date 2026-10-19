@@ -1,0 +1,11 @@
+# Shape taken from the http2 state matrix (493): sid 100 is a pattern-less less-than
+# rule that accepts the FLOW, and sid 101 is a less-than rule whose fast pattern is
+# absent, so it stays pending with an iid above 100. Once the flow carries an accept,
+# a candidate above 101 must not cost itself its inspection by stepping through 101:
+# see OISF/suricata#16392. The packet:filter default policy accepts the session.
+accept:hook http2:stream:<request_complete any any <> any any (sid:9001;)
+accept:hook http2:global:<request_complete any any -> any any (sid:9002;)
+accept:hook http2:global:<response_complete any any -> any any (sid:9003;)
+
+accept:flow,alert http2:stream:<response_complete any any -> any any (sid:100;)
+accept:flow,alert http2:stream:<response_headers any any -> any any (http2.header_name; content:"x-absent"; sid:101;)

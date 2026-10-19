@@ -1,0 +1,35 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+args:
+  - --simulate-ips
+  - -k none
+pcap: ../../http2-bugfixes/input.pcap
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 100
+        alert.action: allowed
+        firewall.hook: http2:stream:response_complete
+  # The TD rule sits above the pending one and must still be inspected. Nine, not
+  # one: the pattern is in the request body and the stream engine reports it per
+  # DATA segment, so the count is a property of this pcap, not a threshold.
+  - filter:
+      count: 9
+      match:
+        event_type: alert
+        alert.signature_id: 200
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.action: accept
+        flow.alerted: true
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 101
