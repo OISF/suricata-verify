@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"missing length keeps the lowercased buffer"; flow:established,to_client; http.response_body; to_lowercase; luaxform:missing.lua; content:"plainbody"; sid:1; rev:1;)
