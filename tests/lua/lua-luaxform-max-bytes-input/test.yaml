@@ -25,5 +25,9 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 1
+  # the transform succeeds (input exempt from the cap), so no transform
+  # error at all - neither the aggregate nor the category counter
+  - stats:
+      transform.lua.errors: 0
   - stats:
       transform.lua.memory_limit_errors: 0
