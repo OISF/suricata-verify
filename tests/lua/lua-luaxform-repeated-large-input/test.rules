@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"repeated large transform under max-bytes"; flow:established,to_client; http.response_body; luaxform:upper.lua; content:"MARKER42"; sid:1; rev:1;)

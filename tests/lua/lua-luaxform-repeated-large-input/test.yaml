@@ -1,0 +1,40 @@
+%YAML 1.1
+---
+
+# Repeated large inputs on the same Lua state: each call pushes a 200 KB
+# input and the script allocates a same-size copy (string.upper's growth
+# buffer peaks at 256 KB plus the previous 128 KB block, so the call's
+# working set is ~600 KB over the baseline). The input exemption is the
+# gross allocation between the Reset and the Update, so a GC step during
+# the setup pushes reclaiming the previous call's input (and copy) cannot
+# shrink it and pull the cap under the working set. max-bytes (450000)
+# is above the input but below the working set: the fixed gross-exempt
+# cap (baseline + 450 KB + 200 KB input) clears the peak, while the
+# old net-delta exemption re-bases on the reclaimed live set and trips
+# the memory limit on the repeated calls. Single runmode keeps the four
+# sessions on one Lua state: under autofp they spread over the workers
+# by the per-run flow hash and the old engine passes some runs.
+
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --runmode=single
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+  - --set security.lua.max-bytes=450000
+  - --set app-layer.protocols.http.libhtp.default-config.response-body-limit=1mb
+  - --set app-layer.protocols.http.libhtp.default-config.response-body-inspect-window=1mb
+  - --set app-layer.protocols.http.libhtp.default-config.response-body-minimal-inspect-size=1mb
+
+checks:
+  # four sessions, each transform must succeed
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - stats:
+      transform.lua.memory_limit_errors: 0
