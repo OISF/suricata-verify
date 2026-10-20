@@ -1,0 +1,54 @@
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+  # 4096 over the 3000 file bytes the queue holds, under the 5048 bytes
+  # the queue would hold if the record slack counted too
+  - --set app-layer.protocols.nfs.max-write-queue-size=4096
+
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # the continuation of the out-of-order chunk must not be rejected: the
+  # 2048 bytes of record slack are not file data, so they never grow the
+  # queue (file bytes 3000 <= 4096 < 5048)
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: write_queue_size_exceeded
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: truncated_file_data
+  # the slack is drained to the record boundary, not parsed: the in-order
+  # WRITE after it lands on a marker
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+  # the three WRITE calls are one file transfer: the chunk carrying the
+  # slack record is queued and stored like the others
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: WRITE
+        nfs.file_tx: true
+        nfs.write.chunks: 3
+        nfs.write.last_xid: 822083587
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: 5e9b7e94eb5255facf8f6eb3723b790f1d8eb413c42337530168804af7f000f5
+        fileinfo.size: 7096
+        fileinfo.stored: true
