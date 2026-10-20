@@ -1,0 +1,35 @@
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # WRITE 2's record slack starts in the segment that ends its file data and
+  # runs into the next one: all of it must be drained to the record boundary,
+  # none of it parsed as an RPC record
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+  # WRITE 3 after the slack lands on its marker and completes the file
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: WRITE
+        nfs.file_tx: true
+        nfs.write.last_xid: 822083587
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: 5e9b7e94eb5255facf8f6eb3723b790f1d8eb413c42337530168804af7f000f5
+        fileinfo.size: 7096
+        fileinfo.state: CLOSED
