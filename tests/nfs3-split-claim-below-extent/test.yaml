@@ -1,0 +1,114 @@
+requires:
+  min-version: 9
+
+args:
+  - -k
+  - none
+
+pcap: input.pcap
+
+checks:
+  # ========================================================================
+  # 939/941 take the partial-record path, so they pin the claim-below-extent
+  # reject. In IDS mode to-server data is parsed on the server's ACK and
+  # to-client data on the client's, so the anomaly of the WRITE (939) is
+  # stamped 2049->939 and that of the READ reply (941) 941->2049.
+  # 940/942 deliver the same records whole: the args are parsed against the
+  # complete record, so the WRITE control logs no anomaly at all and the READ
+  # control fails its record walk instead.
+  # ========================================================================
+
+  # --- WRITE, split (regression) ------------------------------------------
+  - filter:
+      comment: "939: claim-below-extent WRITE rejected with an event"
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+        dest_port: 939
+  - filter:
+      comment: "939: the rejected WRITE still gets a transaction"
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: WRITE
+        nfs.file_tx: true
+        src_port: 939
+  - filter:
+      comment: "939: LOOKUP in the bytes right after the boundary is parsed"
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: LOOKUP
+        nfs.filename: cbe-marker-name
+        src_port: 939
+
+  # --- WRITE, whole (control) ---------------------------------------------
+  - filter:
+      comment: "940: LOOKUP parsed after the unsplit record"
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: LOOKUP
+        nfs.filename: cbe-marker-name
+        src_port: 940
+
+  # --- READ reply, split (regression) -------------------------------------
+  - filter:
+      comment: "941: claim-below-extent READ reply rejected with an event"
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+        src_port: 941
+  - filter:
+      comment: "941: the rejected READ gets a transaction"
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: READ
+        nfs.file_tx: true
+        src_port: 941
+  - filter:
+      comment: "941: LOOKUP reply in the bytes after the boundary is parsed"
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: LOOKUP
+        nfs.filename: cbe-marker-name
+        src_port: 941
+
+  # --- READ reply, whole (control) ----------------------------------------
+  - filter:
+      comment: "942: LOOKUP reply parsed after the unsplit reply"
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: LOOKUP
+        nfs.filename: cbe-marker-name
+        src_port: 942
+
+  # the promised 4000 bytes never arrive: no file may be opened or stored for
+  # either the WRITE or the READ, and the skipped record tails must not be
+  # handed to a file either
+  - filter:
+      comment: "no file for data that is not in the record"
+      count: 0
+      match:
+        event_type: fileinfo
+        app_proto: nfs
+
+  # the marker bytes are on the wire in both directions of every flow, so a
+  # missed resync shows up as a parsed LOOKUP without a raw alert or the other
+  # way round
+  - filter:
+      comment: "raw LOOKUP marker reaches the sensor on all 4 flows"
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 9196101
+
+  - stats:
+      app_layer.error.nfs_tcp.parser: 0

@@ -1,0 +1,2 @@
+# marker reaches the sensor regardless of NFS framing
+alert tcp any any -> any 2049 (msg:"cbe raw marker"; flow:to_server; content:"cbe-marker-name"; sid:9196101; rev:1;)
