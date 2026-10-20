@@ -1,0 +1,17 @@
+requires:
+  min-version: 9
+
+pcap: ../../http2-trailer/input.pcap
+
+args:
+  # checksums are not computed in the pcap
+  - --simulate-ips
+  - -k none
+
+# refused while the ruleset loads, so the engine exits before the pcap is read
+exit-code: 1
+
+checks:
+  - shell:
+      args: grep -c 'buffer http_header completes in state .* before the hooked state' stderr
+      expect: 1
