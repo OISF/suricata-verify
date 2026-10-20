@@ -1,0 +1,25 @@
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # five well-formed COMPOUND {PUTFH, LOCK} calls: LOCK is a defined v4 op the
+  # request parser does not implement, so these records are unparsed, not
+  # malformed - no malformed_data tx or anomaly per compound
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+  - filter:
+      count: 0
+      match:
+        event_type: nfs
+        nfs.procedure: COMPOUND
