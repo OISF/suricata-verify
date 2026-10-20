@@ -1,0 +1,71 @@
+requires:
+  min-version: 8.0.7
+
+# disables checksum verification
+args:
+- -k none
+
+checks:
+  # ---- CONTIGUOUS flow (client port 40001): both PDUs in one segment ----
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_port: 40001
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        src_port: 40001
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+        src_port: 40001
+  - filter:
+      count: 1
+      match:
+        event_type: enip
+        src_port: 40001
+        enip.request.command: send_r_r_data
+        enip.request.cip.service: "Get Attribute List"
+
+  # ---- SPLIT flow (client port 40002): SendRRData body arrives in a 2nd segment ----
+  # The header-only PDU no longer disables parsing; it is reassembled and the CIP
+  # inside is inspected exactly like the contiguous flow.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_port: 40002
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        src_port: 40002
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+        src_port: 40002
+  # Both PDUs are logged for the split flow: the ListIdentity ...
+  - filter:
+      count: 1
+      match:
+        event_type: enip
+        src_port: 40002
+        enip.request.command: list_identity
+  # ... and the reassembled SendRRData carrying the CIP request.
+  - filter:
+      count: 1
+      match:
+        event_type: enip
+        src_port: 40002
+        enip.request.command: send_r_r_data
+        enip.request.cip.service: "Get Attribute List"

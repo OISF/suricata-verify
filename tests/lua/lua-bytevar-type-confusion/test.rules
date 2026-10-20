@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"bytevar type confusion"; byte_extract:1,0,var1; lua:type-confusion.lua; sid:1; rev:1;)

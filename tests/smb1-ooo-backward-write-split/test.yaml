@@ -1,0 +1,40 @@
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+
+requires:
+  min-version: 8.0.7
+
+pcap: input.pcap
+
+checks:
+  # a SPLIT backward WRITE_ANDX (offset below the tracked region) must be
+  # discarded AND its continuation consumed, so the following command
+  # parses: no desync
+  - shell:
+      args: test "$(grep -Ec 'malformed' eve.json)" -eq 0
+  # the backward (retransmitted) write is detected
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: smb
+        anomaly.event: file_overlap
+  # the file tx is logged; its content proves the third (in-order, after
+  # the split) write was applied: the stream stayed in sync
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.command: SMB1_COMMAND_WRITE_ANDX
+  # the retransmitted region is discarded: the file is stored with the
+  # in-order writes only (4096 x 0x44 + 200 x 0x46)
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: "98897b7fa5b30044a98b553f5de74a901b41aebe3399e810eb06ebd5bd7b7cfa"
+        fileinfo.stored: true
+  - shell:
+      args: test "$(grep -Ec 'truncated_file_data' eve.json)" -eq 0

@@ -1,0 +1,34 @@
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+
+requires:
+  min-version: 8.0.7
+
+pcap: input.pcap
+
+checks:
+  # response side of the padded OOO completion: a padded OOO READ reply
+  # must not leave the ToClient tracker's OOO state stale, so the
+  # following in-order reply is stored and the stream stays in sync
+  # (the file tx is logged)
+  - shell:
+      args: test "$(grep -Ec 'malformed' eve.json)" -eq 0
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: READ
+        nfs.file_tx: true
+        rpc.xid: 1
+  # the queued OOO reply data (4001 x 0x45) is flushed once tracked
+  # reaches 8096: the read file is stored with all three regions
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: "44de13ae788963528fa85f2ae7884b454890f36c83da296811cebe26fc0621c4"
+        fileinfo.stored: true
+  - shell:
+      args: test "$(grep -Ec 'truncated_file_data' eve.json)" -eq 0

@@ -1,0 +1,41 @@
+%YAML 1.1
+---
+# A partial (incomplete) NFSv4 compound request with an empty GETATTR
+# attribute bitmap (attr_cnt=0) before the WRITE: the RPC fragment claims a
+# 4200-byte record but only 248 bytes are present (PUTFH + GETATTR(empty) +
+# WRITE with a claimed 4096-byte payload). Before the fix the scan delegated
+# the GETATTR to the regular parser, which reads a first bitmap word even
+# for attr_cnt=0, so the WRITE op tag was consumed as that bitmap word and
+# the next tag read was misaligned: the scan aborted, the oversized WRITE
+# was never rejected and the record kept buffering toward the claimed (up to
+# 31-bit RPC length) record size. After the fix the scan advances exactly
+# the declared bitmap count and rejects the WRITE mid-flow.
+
+requires:
+  min-version: 8.0.7
+
+pcap: input.pcap
+args:
+  - --set app-layer.protocols.nfs.max-write-size=1024
+
+checks:
+  - shell:
+      args: test "$(grep -Ec 'write_request_too_large' eve.json)" -ge 1
+  - shell:
+      args: test "$(grep -Ec 'malformed_data' eve.json)" -eq 0
+  - shell:
+      args: test "$(grep -Ec 'too_many_transactions' eve.json)" -eq 0
+  # the rejected WRITE is logged mid-flow (pcap_cnt present) with the file
+  # transaction completed, not left open
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: "38"
+        nfs.file_tx: true
+        pcap_cnt: 7
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: nfs

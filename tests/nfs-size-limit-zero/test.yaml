@@ -1,0 +1,30 @@
+requires:
+  min-version: 8.0.7
+
+pcap: input.pcap
+args:
+  # zero disables the read/write size checks (16 MiB defaults would
+  # otherwise reject both 17.5 MiB transfers)
+  - --set app-layer.protocols.nfs.max-read-size=0
+  - --set app-layer.protocols.nfs.max-write-size=0
+  # both transfers exceed the default 1 MB stream reassembly depth
+  - --set stream.reassembly.depth=33554432
+
+checks:
+  # no size limit may be active: no too-large events for either direction
+  - shell:
+      args: test "$(grep -Ec 'too_large' eve.json)" -eq 0
+  # the 17.5 MiB WRITE completes with the full file
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.size: 18350080
+        nfs.procedure: WRITE
+  # the 17.5 MiB READ completes with the full file
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.size: 18350080
+        nfs.procedure: READ

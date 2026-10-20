@@ -1,0 +1,29 @@
+requires:
+  min-version: 8.0.7
+
+pcap: input.pcap
+args:
+  - -k none
+  - --set app-layer.protocols.nfs.max-write-size=4096
+  - --set stream.reassembly.depth=33554432
+
+checks:
+  # every oversized write raises the event
+  - shell:
+      args: test "$(grep -Ec 'write_request_too_large' eve.json)" -ge 768
+  # rejected file transactions must not accumulate: with the file logger
+  # enabled their dangling files_opened count used to freeze the tx list,
+  # forcing too_many_transactions on the incomplete writes
+  - shell:
+      args: test "$(grep -Ec 'too_many_transactions' eve.json)" -eq 0
+  # the stream stays in sync: the benign write after all rejections is
+  # stored intact
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: "b096a99d155a0e9ea95c29c3f5c3528a4534534048d9fd3ea4cf45cde030d19a"
+        fileinfo.stored: true
+  # a desync would surface as malformed data
+  - shell:
+      args: test "$(grep -Ec 'malformed' eve.json)" -eq 0

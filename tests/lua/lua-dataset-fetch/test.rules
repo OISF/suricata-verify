@@ -1,0 +1,11 @@
+# Alerts only if the preloaded dataset reads back correctly.
+alert dns any any -> any any (msg:"TEST dataset fetch from lua"; \
+      flow:to_server; \
+      dns.queries.rrname; content:"www.suricata-ids.org"; \
+      lua:dataset-fetch.lua; sid:1; rev:1;)
+
+# Registers and preloads the "known-hosts" dataset from disk so the Lua
+# script can bind to it by name.
+alert dns any any -> any any (msg:"register known-hosts dataset"; \
+      dns.queries.rrname; content:"|00|never-matches|00|"; \
+      dataset:isset,known-hosts,type string,load known-hosts.csv; sid:2; rev:1;)

@@ -1,0 +1,19 @@
+pcap: ../../cond-log-dns-dig/input.pcap
+
+requires:
+  min-version: 8.0.7
+
+args:
+  - --set security.lua.allow-rules=true
+  - --set default-rule-path=${TEST_DIR}
+  - -k none
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+
+  - shell:
+      args: 'grep -q "suricata:flow expected, got suricata:flowint:mt" suricata.log && echo ok'
+      expect: ok

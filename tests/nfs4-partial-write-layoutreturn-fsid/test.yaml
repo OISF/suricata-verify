@@ -1,0 +1,39 @@
+# A partial (incomplete) NFSv4 compound request with a LAYOUTRETURN
+# using the FSID return type before the WRITE: the RPC fragment claims a
+# 4200-byte record but only the visible bytes are present (PUTFH +
+# LAYOUTRETURN(lr_returntype=FSID=2, no lrf structure) + WRITE
+# with a claimed 4096-byte payload). Per RFC 8881 18.44 the
+# layoutreturn4 union is void for FSID/ALL: the scanner must advance
+# over the return-type word only to still find the WRITE and reject it
+# mid-flow; any extra advance consumes the WRITE tag, the scan aborts,
+# and the oversized WRITE is never rejected while the record keeps
+# buffering toward the claimed (up to 31-bit RPC length) record size.
+
+requires:
+  min-version: 8.0.7
+
+pcap: input.pcap
+args:
+  - --set app-layer.protocols.nfs.max-write-size=1024
+
+checks:
+  - shell:
+      args: test "$(grep -Ec 'write_request_too_large' eve.json)" -ge 1
+  - shell:
+      args: test "$(grep -Ec 'malformed_data' eve.json)" -eq 0
+  - shell:
+      args: test "$(grep -Ec 'too_many_transactions' eve.json)" -eq 0
+  # the rejected WRITE is logged mid-flow (pcap_cnt present) with the file
+  # transaction completed, not left open
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: "38"
+        nfs.file_tx: true
+        pcap_cnt: 7
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: nfs

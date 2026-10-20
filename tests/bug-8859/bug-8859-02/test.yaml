@@ -1,0 +1,36 @@
+# Redmine 8859, response direction.  Same defect, reached through
+# FTPParseResponse instead of FTPParseRequest.
+#
+# The server sends "331 ok\r\n" followed by "550 " + 28 'B's (32 bytes, no LF)
+# in a single segment.  With max-line-length set to 32, the second reply line
+# is truncated.  Before the fix the truncated window started at the beginning
+# of the slice, so the already-consumed "331 ok" line was reported a second
+# time and the real 550 reply was dropped.
+
+requires:
+  min-version: 8.0.7
+
+args:
+- -k none --set app-layer.protocols.ftp.max-line-length=32
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: ftp
+
+  # The truncated reply is the 550 line, not a repeat of the 331 line.
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: USER
+        ftp.completion_code: ["331", "550"]
+        ftp.reply: ["ok", "BBBBBBBBBBBBBBBBBBBBBBBBBBBB"]
+        ftp.reply_truncated: true
+
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: response_command_too_long

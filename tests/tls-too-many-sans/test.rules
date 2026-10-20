@@ -1,0 +1,13 @@
+# Ticket 8864.
+#
+# The leaf certificate in input.pcap carries 65537 subjectAltName entries, one
+# more than fits in a u16.
+
+# Mirrors rules/tls-events.rules; 2230032 is the next free sid in the TLS event
+# range. Fires when the SAN count saturates at u16::MAX.
+alert tls any any -> any any (msg:"SURICATA TLS too many subject alternative names"; flow:established,to_client; app-layer-event:tls.too_many_subject_alternative_names; flowint:tls.anomaly.count,+,1; classtype:protocol-command-decode; sid:2230032; rev:1;)
+
+# The SAN at index 1 is "evil.example". A truncating u16 cast of a 65537-entry
+# list yields a count of 1, which exposes index 0 only -- so this rule fires
+# only when the count saturates instead of wrapping.
+alert tls any any -> any any (msg:"SURICATA TEST evil SAN"; flow:established,to_client; tls.subjectaltname; content:"evil.example"; sid:1000001; rev:1;)

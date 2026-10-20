@@ -1,0 +1,15 @@
+requires:
+  min-version: 8.0.7
+
+pcap: input.pcap
+
+checks:
+  # the reply is a GSS integrity wrapped v4 COMPOUND (the request
+  # recorded the (0, 2) combination in the xidmap) claiming an 8 KiB
+  # record. The enclosed compound carries a READ claiming 17 MiB, above
+  # the 16 MiB default max-read-size. The reply-side partial scan must
+  # unwrap the integrity envelope via the xidmap before scanning and
+  # reject the claim instead of buffering toward the claimed record
+  # length (the memory-exhaustion path of Redmine #8791).
+  - shell:
+      args: test "$(grep -Ec 'read_response_too_large' eve.json)" -ge 1

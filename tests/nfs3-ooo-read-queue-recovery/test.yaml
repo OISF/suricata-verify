@@ -1,0 +1,27 @@
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+  # the first reply exactly fills the read queue
+  - --set app-layer.protocols.nfs.max-read-queue-size=4096
+  - --set app-layer.protocols.nfs.max-read-queue-cnt=0
+
+requires:
+  min-version: 8.0.7
+
+checks:
+  # an in-order append can only drain the queue: it must not be
+  # rejected even though the queue is at the limit
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: read_queue_size_exceeded
+  # the file completes with the drained chunk (8192x0x31 + 4096x0x42)
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: b4b4c6dc564c3cb795d74d2ea65a2a6626f99537797f65b2078355e1be61cdda
+        fileinfo.stored: true

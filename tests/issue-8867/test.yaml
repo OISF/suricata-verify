@@ -1,0 +1,73 @@
+requires:
+  min-version: 8.0.7
+
+args:
+  - -k none --set app-layer.protocols.http.libhtp.default-config.max-tx=1024
+
+checks:
+  # One event on the repeated-extension flow, plus one on each of the 513
+  # transactions used to cross the HTP message boundary.
+  - filter:
+      count: 514
+      match:
+        event_type: alert
+        alert.signature_id: 1
+
+  # The event after message 512 must still be consumed and attached to tx 512.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_ip: 192.0.2.4
+        tx_id: 512
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+
+  # Repeated warning sources must update each transaction only once. Anomaly
+  # output exposes each update, unlike an alert on an already-set event bit.
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: REQUEST_CHUNK_EXTENSION
+        dest_ip: 192.0.2.1
+
+  - filter:
+      count: 513
+      match:
+        event_type: anomaly
+        anomaly.event: REQUEST_CHUNK_EXTENSION
+        dest_ip: 192.0.2.4
+
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: RESPONSE_CHUNK_EXTENSION
+
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: 100_CONTINUE_ALREADY_SEEN
+
+  # Only the boundary flow should reach 512 queued HTP messages. Repeated
+  # warnings within one transaction are deduplicated before reaching the queue.
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: TOO_MANY_WARNINGS
+        dest_ip: 192.0.2.4
+        tx_id: 511

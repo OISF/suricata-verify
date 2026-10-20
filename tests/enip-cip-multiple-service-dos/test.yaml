@@ -1,0 +1,22 @@
+%YAML 1.1
+---
+
+requires:
+  min-version: 8.0.7
+
+# ENIP is disabled by default; enable it. -k none disables checksum checks.
+args:
+- -k none --set app-layer.protocols.enip.enabled=yes
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 6450111
+  # The parser errors out on this invalid packet
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2234001

@@ -1,0 +1,41 @@
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+  - --set app-layer.protocols.nfs.max-write-queue-size=4096
+  - --set app-layer.protocols.nfs.max-write-queue-cnt=0
+
+requires:
+  min-version: 8.0.7
+
+pcap: input.pcap
+
+checks:
+  # the OOO chunk continuation crosses the queue limit: the chunk path
+  # rejects with an event attributed to the file's own transaction
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: write_queue_size_exceeded
+        tx_id: 0
+  # a SPLIT follow-up WRITE on the same (truncated) file must have its
+  # continuation (payload + XDR padding) consumed, so the following
+  # record parses: no desync
+  - shell:
+      args: test "$(grep -Ec 'malformed' eve.json)" -eq 0
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: WRITE
+        nfs.file_tx: true
+        rpc.xid: 4
+  # the new file is stored intact
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: "79f5111c048c744fd8eac59ef7a57de53c82f2cb559a092cc7cb95e95b2d49e2"
+        fileinfo.stored: true

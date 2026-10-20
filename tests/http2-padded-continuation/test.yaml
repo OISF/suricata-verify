@@ -1,0 +1,36 @@
+requires:
+  min-version: 8.0.7
+
+args:
+  - -k none
+
+checks:
+  # Both connections: response decoded, :status 200.
+  - filter:
+      count: 2
+      match:
+        event_type: http
+        http.status: 200
+  # Marker field: last field of the split block, only present when the
+  # reassembled HPACK stream is complete.
+  - filter:
+      count: 2
+      match:
+        event_type: http
+        http.response_headers[11].name: "x-splitpad"
+  # Connection 1: PADDED split continuation.
+  - filter:
+      requires:
+        min-version: 9
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9043
+  # Connection 2: PADDED response + PADDED + PRIORITY request.
+  - filter:
+      requires:
+        min-version: 9
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 9044

@@ -1,0 +1,37 @@
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+  - --set app-layer.protocols.nfs.max-write-queue-size=4096
+  - --set app-layer.protocols.nfs.max-write-queue-cnt=0
+  # the OOO file data of a gapped stream is buffered by the TCP reassembler
+  # until the app consumes it; give the reassembly queue room for it.
+  - --set stream.reassembly.depth=33554432
+
+requires:
+  min-version: 8.0.7
+
+pcap: input.pcap
+
+checks:
+  # backward (retransmitted) chunks are discarded by the file tracker, so
+  # the queue never crosses the 1024-entry backstop: no truncation
+  - shell:
+      args: test "$(grep -Ec 'truncated_file_data' eve.json)" -eq 0
+  - shell:
+      args: test "$(grep -Ec 'malformed' eve.json)" -eq 0
+  # the stream stays in sync: the last WRITE transaction is logged
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: WRITE
+        nfs.file_tx: true
+        rpc.xid: 1103
+  # the new file is stored intact
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: "7aaf34db1c7fcb2b24da4106424293956f66c4762412ec0a963e61abcb672d92"
+        fileinfo.stored: true

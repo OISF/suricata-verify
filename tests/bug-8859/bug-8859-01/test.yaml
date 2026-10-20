@@ -1,0 +1,53 @@
+# Redmine 8859: an over-long FTP command that follows a shorter, complete
+# command in the same stream slice must be reported starting at the unconsumed
+# remainder -- not at the start of the slice.
+#
+# The client sends "USER a\r\n" followed by "PORT " + 27 'A's (32 bytes, no LF)
+# in a single segment.  With max-line-length set to 32, the second line is
+# truncated.  Before the fix the truncated window started at the beginning of
+# the slice, so the transaction was mis-classified as a second USER command
+# carrying "a\r\nPORT AAAAAAAAAAAAAAAAAAA".
+
+requires:
+  min-version: 8.0.7
+
+args:
+- -k none --set app-layer.protocols.ftp.max-line-length=32
+
+checks:
+  - filter:
+      count: 3
+      match:
+        event_type: ftp
+
+  # The truncated line is the PORT command, and it holds the whole 32-byte
+  # window starting at "PORT ".
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: PORT
+        ftp.command_data: "AAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        ftp.command_truncated: true
+
+  # Exactly one USER transaction: the truncated line must not be attributed to
+  # the preceding command a second time.
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: USER
+
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: USER
+        ftp.command_data: "a"
+        ftp.command_truncated: false
+
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: request_command_too_long

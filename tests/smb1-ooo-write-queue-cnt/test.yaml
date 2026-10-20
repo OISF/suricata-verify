@@ -1,0 +1,39 @@
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+
+requires:
+  min-version: 8.0.7
+
+pcap: input.pcap
+
+checks:
+  # the write queue count limit (max-write-queue-cnt 3) is hit by the
+  # fourth out-of-order WRITE_ANDX (3 + 1 > 3): the event is attached to
+  # the affected file transaction
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: smb
+        anomaly.event: write_queue_cnt_exceeded
+        tx_id: 4
+  # the record after the rejected one is parsed and applied: the stored
+  # file holds the in-order writes only (8192 x 0x41 + 8192 x 0x46), so
+  # the stream stayed in sync
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.sha256: "5a0b0e545e9c0afa8b1ce9877a6e2238ea005ed410f0f4aee27c4127f0d50282"
+        fileinfo.stored: true
+  - filter:
+      count: 1
+      match:
+        event_type: smb
+        smb.command: SMB1_COMMAND_WRITE_ANDX
+  - shell:
+      args: test "$(grep -Ec 'malformed' eve.json)" -eq 0
+  - shell:
+      args: test "$(grep -Ec 'truncated_file_data' eve.json)" -eq 0

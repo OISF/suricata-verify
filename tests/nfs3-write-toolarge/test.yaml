@@ -1,0 +1,15 @@
+requires:
+  min-version: 8.0.7
+
+pcap: input.pcap
+args:
+  - --set app-layer.protocols.nfs.max-write-size=1024
+
+checks:
+  - shell:
+      args: test "$(grep -Ec 'write_request_too_large' eve.json)" -ge 1
+  - filter:
+      count: 2
+      match:
+        event_type: nfs
+        nfs.procedure: WRITE

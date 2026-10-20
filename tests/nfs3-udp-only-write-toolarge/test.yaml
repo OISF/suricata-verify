@@ -1,0 +1,35 @@
+%YAML 1.1
+---
+# With the TCP parser disabled, the NFS limit settings must still be
+# loaded by the UDP parser registration. A single 64512-byte WRITE
+# datagram must be rejected by the (lowered) max-write-size exactly as
+# on TCP: before the fix the UDP registration loaded only max-tx, so
+# the limit silently stayed at its 16 MiB default and the datagram was
+# never rejected (processing it desynced the flow); with the fix it is
+# rejected at the shared size check and logged.
+
+requires:
+  min-version: 8.0.7
+
+pcap: input.pcap
+args:
+  - --set app-layer.protocols.nfs.max-write-size=49152
+
+checks:
+  - shell:
+      args: test "$(grep -Ec 'write_request_too_large' eve.json)" -ge 1
+  # the rejection is the only too-large event and the datagram itself is well formed
+  - shell:
+      args: test "$(grep -Ec 'too_large' eve.json)" -eq "$(grep -Ec 'write_request_too_large' eve.json)"
+  - shell:
+      args: test "$(grep -Ec 'malformed_data' eve.json)" -eq 0
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: WRITE
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: nfs

@@ -1,0 +1,7 @@
+requires:
+  min-version: 8.0.7
+
+args:
+  - --runmode single
+
+# just test that we exit ok without OOM

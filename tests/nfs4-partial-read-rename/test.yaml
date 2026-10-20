@@ -1,0 +1,39 @@
+# A partial (incomplete) NFSv4 compound reply with a successful RENAME
+# result before the READ: the RPC fragment claims a 4156-byte record but
+# only the visible bytes are present (RENAME result -- status + two
+# change_info4 structs, 44 bytes -- + READ with a claimed 4096-byte data
+# blob). The scanner must consume both change_info4 structs to still find
+# the READ and reject it mid-flow; skipping only the status lands inside
+# the first change_info4, whose first word is misread as an op tag, the
+# scan aborts, and the oversized READ is never rejected while the reply
+# keeps buffering toward the claimed (up to 31-bit RPC length) record
+# size.
+
+requires:
+  min-version: 8.0.7
+
+pcap: input.pcap
+args:
+  - --set app-layer.protocols.nfs.max-read-size=1024
+
+checks:
+  - shell:
+      args: test "$(grep -Ec 'read_response_too_large' eve.json)" -ge 1
+  - shell:
+      args: test "$(grep -Ec 'malformed_data' eve.json)" -eq 0
+  - shell:
+      args: test "$(grep -Ec 'too_many_transactions' eve.json)" -eq 0
+  # the rejected READ response is logged mid-flow (pcap_cnt present) with
+  # the file transaction completed, not left open
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: READ
+        nfs.file_tx: true
+        pcap_cnt: 11
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: nfs

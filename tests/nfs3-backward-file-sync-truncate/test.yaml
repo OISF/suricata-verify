@@ -1,0 +1,47 @@
+%YAML 1.1
+---
+# A terminal (FILE_SYNC) backward write must truncate the in-progress
+# file. An in-order UNSTABLE write per handle opens the file, then a
+# FILE_SYNC write at a lower offset retransmits an already tracked
+# region. Such data is never flushed, so the file can no longer be
+# completed: the tracker must be truncated at the backward write,
+# logging the file mid-flow instead of stranding it open for flow
+# teardown while the caller marks the transaction closed.
+
+requires:
+  min-version: 8.0.7
+
+pcap: input.pcap
+args:
+  - -k none
+
+checks:
+  # each of the three files is logged truncated, with the in-order data
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.state: TRUNCATED
+        fileinfo.size: 100
+        fileinfo.sha256: "d82c6aa133a0fc25b087f46ad7ed2a3042772e612e015571e61753ff55ba6da8"
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.state: TRUNCATED
+        fileinfo.size: 100
+        fileinfo.sha256: "cfbe7d2db2f3dcdec7c2799f0b7c611e5bdfc145a7639516e8ec1e51a65c70ac"
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.state: TRUNCATED
+        fileinfo.size: 100
+        fileinfo.sha256: "d7f16b579c04dfbf05a9688190279d2f3ba008417884c9f4568a626a56c2a2e7"
+  # the truncation happens at the backward write (mid-flow), not at
+  # flow teardown: all three fileinfo events carry a pcap_cnt
+  - shell:
+      args: test "$(grep '"event_type":"fileinfo"' eve.json | grep -c '"pcap_cnt"')" -eq 3
+  # no desync
+  - shell:
+      args: test "$(grep -Ec 'malformed' eve.json)" -eq 0

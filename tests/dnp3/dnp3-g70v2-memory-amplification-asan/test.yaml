@@ -1,0 +1,42 @@
+requires:
+  min-version: 8.0.7
+  os: linux
+  features:
+    - ASAN
+
+pcap: input.pcap
+
+env:
+  ASAN_OPTIONS: detect_leaks=0:print_stats=1:atexit=1
+
+args:
+  - -k none
+  - --runmode single
+
+checks:
+  - shell:
+      args: >-
+        awk '/Stats: LargeMmapAllocator/ {
+          for (i = 1; i <= NF; i++) {
+            if ($i ~ /^17:/) {
+              sub(/^17:/, "", $i);
+              sub(/;$/, "", $i);
+              count = $i;
+            }
+          }
+        }
+        END { exit !(count != "" && (count + 0) < 100) }' stderr
+
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        dnp3.type: request
+        dnp3.application.function_code: 2
+        dnp3.application.objects[0].group: 70
+        dnp3.application.objects[0].variation: 2
+        dnp3.application.objects[0].qualifier: 8
+        dnp3.application.objects[0].count: 512
+        dnp3.application.objects[0].points[511].index: 511
+        dnp3.application.objects[0].points[511].username_size: 0
+        dnp3.application.objects[0].points[511].password_size: 0

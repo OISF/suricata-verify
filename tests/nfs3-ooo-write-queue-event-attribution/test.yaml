@@ -1,0 +1,24 @@
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+  # handle A's queue fills to the limit; handle B stays within it
+  - --set app-layer.protocols.nfs.max-write-queue-size=4096
+  - --set app-layer.protocols.nfs.max-write-queue-cnt=0
+
+requires:
+  min-version: 8.0.7
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: write_queue_size_exceeded
+  # the event must be attached to handle A's transaction (hhash
+  # f079d4b8, the file whose queue overflowed), not to the newest
+  # transaction (handle B, hhash 5550c5c4). The anomaly tx_id is the
+  # 0-based app-layer transaction index; the nfs record id is 1-based.
+  - shell:
+      args: python3 -c "import json; recs=[json.loads(l) for l in open('eve.json')]; an=[d for d in recs if d.get('event_type')=='anomaly' and d.get('anomaly',{}).get('event')=='write_queue_size_exceeded']; a=[d for d in recs if d.get('event_type')=='nfs' and d.get('nfs',{}).get('hhash')=='f079d4b8']; b=[d for d in recs if d.get('event_type')=='nfs' and d.get('nfs',{}).get('hhash')=='5550c5c4']; assert len(an)==1 and len(a)==1 and len(b)==1 and a[0]['nfs']['id']!=b[0]['nfs']['id'], (an, a, b); assert an[0].get('tx_id')==a[0]['nfs']['id']-1, (an[0].get('tx_id'), a[0]['nfs']['id'], b[0]['nfs']['id'])"
