@@ -1,0 +1,42 @@
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # three RPCSEC_GSS privacy (krb5p) COMPOUND calls and replies, each record
+  # split over two segments: the compound is encrypted, so neither the
+  # partial-record scan nor the record parser can read it - that is opaque
+  # traffic, not malformed, in either direction
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+  # no reject transaction for the calls: the request parser never runs
+  - filter:
+      count: 0
+      match:
+        event_type: nfs
+        nfs.procedure: COMPOUND
+  # none for the replies either: a privacy COMPOUND4res must not reach the
+  # response parser, which would reject it on a transaction of its own
+  - filter:
+      count: 0
+      match:
+        event_type: nfs
+        nfs.type: response
+        nfs.procedure: "NULL"
+  # the capture is dissected: the open REMOVE transaction is logged once, so
+  # the checks above have a live transaction to stamp if a side regresses
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: REMOVE
