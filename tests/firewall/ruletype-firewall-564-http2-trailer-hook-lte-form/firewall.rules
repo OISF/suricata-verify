@@ -1,0 +1,7 @@
+# The rule under test, alone: hooked with the LTE form up to the trailer state
+# and matching http.header, a buffer that completes two states below that bound.
+# A firewall rule is only evaluated at its hooks, and the bound is the hook
+# checked here, so this is refused the same way the exact form is in
+# ruletype-firewall-564-http2-trailer-hook-lte-form
+# request_headers, where the buffer completes, is the form that works.
+accept:flow,alert http2:stream:<request_trailers any any -> any any (http.header; content:"suricata.io"; sid:101;)

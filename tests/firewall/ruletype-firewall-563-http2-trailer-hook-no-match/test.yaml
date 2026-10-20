@@ -1,0 +1,25 @@
+requires:
+  min-version: 9
+
+pcap: ../../http2-trailer/input.pcap
+
+args:
+  # checksums are not computed in the pcap
+  - --simulate-ips
+  - -k none
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 100
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.state: closed
