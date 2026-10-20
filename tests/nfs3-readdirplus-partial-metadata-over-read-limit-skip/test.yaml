@@ -1,0 +1,47 @@
+requires:
+  min-version: 9
+
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+  # same capture as the sibling test, with max-read-size=8192 kept well below
+  # the reply record (12284 bytes): what bounds a partial metadata reply is
+  # max-metadata-size, and at 1024 (+64 headroom) the record is over that
+  # bound, so it is skipped to its record boundary instead of buffered.
+  - --set app-layer.protocols.nfs.max-read-size=8192
+  - --set app-layer.protocols.nfs.max-metadata-size=1024
+
+pcap: ../nfs3-readdirplus-partial-metadata-over-read-limit/input.pcap
+
+checks:
+  # the reply never reaches the namemap, so the follow-up ACCESS response
+  # logs without a filename
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        proto: TCP
+        nfs.version: 3
+        nfs.procedure: ACCESS
+        nfs.type: response
+        nfs.filename: ""
+        rpc.xid: 553648130
+  # the skip lands on the record boundary: the ACCESS record parses and the
+  # READDIRPLUS transaction still completes, and nothing is rejected
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        proto: TCP
+        nfs.version: 3
+        nfs.procedure: READDIRPLUS
+        nfs.type: response
+        rpc.xid: 553648129
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+  - shell:
+      args: test "$(grep -Ec 'malformed_data' eve.json)" -eq 0
