@@ -1,0 +1,3 @@
+alert http any any => any any (msg:"A: alerts when 48 > uri value"; flow:established; http.uri; content:"/data/"; byte_extract:2,0,a_val,relative,string,dec; http.stat_code; content:"2"; byte_test:1,>,a_val,0,relative; sid:1;)
+alert http any any => any any (msg:"B: uri value + 50, never matches"; flow:established; http.uri; content:"/data/"; byte_math:bytes 2, offset 0, oper +, rvalue 50, result b_val, relative, string dec; http.stat_code; content:"2"; byte_test:1,>,b_val,0,relative; sid:2;)
+alert http any any => any any (msg:"C: alerts when 48 < uri value"; flow:established; http.uri; content:"/data/"; byte_extract:2,0,c_val,relative,string,dec; http.stat_code; content:"2"; byte_test:1,<,c_val,0,relative; sid:3;)
