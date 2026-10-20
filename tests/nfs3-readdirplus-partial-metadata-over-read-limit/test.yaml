@@ -1,0 +1,41 @@
+requires:
+  min-version: 9
+
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+  # the reply record (12284 bytes) is well over max-read-size, and the
+  # metadata knob is left at its default: a partial metadata reply must be
+  # bounded by max-metadata-size, not by max-read-size
+  - --set app-layer.protocols.nfs.max-read-size=8192
+
+pcap: input.pcap
+
+checks:
+  # the segmented READDIRPLUS reply is parsed, so the entry's
+  # handle->name mapping reaches the namemap and the follow-up ACCESS
+  # response carries the filename
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        proto: TCP
+        nfs.version: 3
+        nfs.procedure: ACCESS
+        nfs.type: response
+        nfs.filename: entry042
+        rpc.xid: 553648130
+  # the reply itself is logged as a normal READDIRPLUS transaction
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        proto: TCP
+        nfs.version: 3
+        nfs.procedure: READDIRPLUS
+        nfs.type: response
+        nfs.status: OK
+        rpc.xid: 553648129
+  - shell:
+      args: test "$(grep -Ec 'malformed_data' eve.json)" -eq 0
