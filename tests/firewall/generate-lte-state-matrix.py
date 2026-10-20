@@ -16,9 +16,11 @@
 # directions as well.
 #
 # Content keywords must be registered at exactly the hook state
-# (detect-parse.c rejects a mismatch). http1 has no keyword at the trailer and
-# complete states, http2 only has http2.header_name (registered at the headers
-# state), so those states skip the content dependent cases.
+# (detect-parse.c rejects a mismatch). http1 has no keyword at the complete
+# state and http2 only has http2.header_name (registered at the headers state),
+# so those states skip the content dependent cases. http1's trailer states do
+# have a keyword (http.trailer), but their cells are appended after every
+# pre-existing cell: see TRAILER_KW in main().
 #
 # The first state of each direction (progress 0) is skipped: an LTE (<) rule
 # there has no prior hooks and is rejected by rule parsing.
@@ -65,6 +67,10 @@ PROTOCOLS = [
     ("smtp", "ts", SMTP_TS, "../lte-matrix-data/smtp.pcap"),
     ("smtp", "tc", SMTP_TC, "../lte-matrix-data/smtp.pcap"),
 ]
+
+# Off until main() reaches the appended trailer round, so the pre-existing
+# numbering is reproduced exactly.
+TRAILER_KW = False
 
 SURICATA_YAML = """%YAML 1.1
 ---
@@ -140,6 +146,13 @@ def content(pkey, direction, state):
             return {"kw": "http2.header_name", "match": ":method" if direction == "ts" else ":status",
                     "nomatch": "x-absent"}
         return None
+    if state.endswith("_trailer"):
+        if not TRAILER_KW:
+            return None
+        if direction == "ts":
+            return {"kw": "http.trailer", "match": "X-Trailer: yes", "nomatch": "X-Trailer: no"}
+        return {"kw": "http.trailer", "match": "X-RTrailer: done",
+                "nomatch": "X-RTrailer: pending"}
     if state.endswith("_line"):
         if direction == "ts":
             return {"kw": "http.uri", "match": "/index", "nomatch": "/nope"}
@@ -492,13 +505,15 @@ WHEN = {
     ("http1", "ts", "request_line"): {"bare": 4, "match": 6, "content_drop": 6, "ip_drop": 4},
     ("http1", "ts", "request_headers"): {"bare": 6, "match": 10, "content_drop": 10, "ip_drop": 4},
     ("http1", "ts", "request_body"): {"bare": 10, "match": 12, "content_drop": 12, "ip_drop": 4},
-    ("http1", "ts", "request_trailer"): {"bare": 12, "ip_drop": 4},
+    ("http1", "ts", "request_trailer"): {"bare": 12, "ip_drop": 4, "match": 12,
+                                         "content_drop": 12},
     ("http1", "ts", "request_complete"): {"bare": 12, "ip_drop": 4},
     ("http1", "tc", "response_started"): {"bare": 14, "match": 14, "content_drop": 22, "ip_drop": 14},
     ("http1", "tc", "response_line"): {"bare": 14, "match": 16, "content_drop": 16, "ip_drop": 14},
     ("http1", "tc", "response_headers"): {"bare": 16, "match": 20, "content_drop": 20, "ip_drop": 14},
     ("http1", "tc", "response_body"): {"bare": 20, "match": 22, "content_drop": 22, "ip_drop": 14},
-    ("http1", "tc", "response_trailer"): {"bare": 22, "ip_drop": 14},
+    ("http1", "tc", "response_trailer"): {"bare": 22, "ip_drop": 14, "match": 22,
+                                          "content_drop": 22},
     ("http1", "tc", "response_complete"): {"bare": 22, "ip_drop": 14},
     ("tls", "ts", "client_started"): {"bare": 4, "match": 6, "content_drop": 6, "ip_drop": 4},
     ("tls", "ts", "client_hello"): {"bare": 6, "match": 6, "content_drop": 6, "ip_drop": 4},
@@ -558,17 +573,20 @@ def excluded(pkey, direction, state, slug):
 
 
 def main():
-    # remove a previous run (the numbering can shift when a case is added)
-    import glob
+    # remove a previous run (the numbering can shift when a case is added). Only the cell names
+    # this script writes are matched: a hand-written LTE test, such as
+    # ruletype-firewall-546-lte-tls-two-failing-defer, must survive a rerun.
+    import re
     import shutil
-    for d in glob.glob(os.path.join(BASE, "ruletype-firewall-[3-9][0-9][0-9]-lte-http1-*")) + \
-            glob.glob(os.path.join(BASE, "ruletype-firewall-[3-9][0-9][0-9]-lte-tls-*")) + \
-            glob.glob(os.path.join(BASE, "ruletype-firewall-[3-9][0-9][0-9]-lte-http2-*")) + \
-            glob.glob(os.path.join(BASE, "ruletype-firewall-[3-9][0-9][0-9]-lte-smtp-*")):
-        shutil.rmtree(d)
+    cell = re.compile(r"ruletype-firewall-[3-9]\d\d-lte-"
+                      r"(?:(?:http1|tls|smtp)-(?:ts|tc)-|http2-(?:stream|global)-(?:ts|tc)-)")
+    for d in sorted(os.listdir(BASE)):
+        if cell.match(d) and os.path.isdir(os.path.join(BASE, d)):
+            shutil.rmtree(os.path.join(BASE, d))
 
     number = START
     names = []
+    written = set()
     # The cells added later are numbered after the pre-existing ones so their
     # test directories keep their numbers.
     added_later = {"multi-content-nomatch-next-match",
@@ -596,6 +614,7 @@ def main():
                                 continue
                         elif slug != pass_slug:
                             continue
+                        written.add((pkey, direction, state, slug))
                         names.append(write_test(number, pkey, direction, state, slug,
                                                 rules, checks, note, pcap))
                         number += 1
@@ -612,9 +631,34 @@ def main():
                     for slug, rules, checks, note in cases_for(pkey, direction, state, states):
                         if slug != pass_slug or excluded(pkey, direction, state, slug):
                             continue
+                        written.add((pkey, direction, state, slug))
                         names.append(write_test(number, pkey, direction, state, slug,
                                                 rules, checks, note, pcap))
                         number += 1
+    # Last round: the cells that exist only because the http1 trailer states now have a keyword of
+    # their own. Numbered after every number in use, so a hand-written test is never collided with.
+    # The shapes the trailer keywords enable one state earlier (a failing rule for S, a matching one
+    # for S + 1) come along for free.
+    global TRAILER_KW
+    TRAILER_KW = True
+    import re
+    number = max([int(re.match(r"ruletype-firewall-(\d+)", d).group(1))
+                  for d in os.listdir(BASE) if re.match(r"ruletype-firewall-\d+", d)]
+                 or [number - 1]) + 1
+    for pkey, direction, states, pcap in PROTOCOLS:
+        if pkey != "http1":
+            continue
+        for state in states:
+            if state == states[0]:  # progress 0: no valid LTE rule
+                continue
+            for slug, rules, checks, note in cases_for(pkey, direction, state, states):
+                if (pkey, direction, state, slug) in written or \
+                        excluded(pkey, direction, state, slug):
+                    continue
+                written.add((pkey, direction, state, slug))
+                names.append(write_test(number, pkey, direction, state, slug,
+                                        rules, checks, note, pcap))
+                number += 1
     print(f"wrote {len(names)} tests")
 
 
