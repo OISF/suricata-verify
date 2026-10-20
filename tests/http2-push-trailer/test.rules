@@ -1,0 +1,10 @@
+# a PUSH_PROMISE block continued on the parent stream is not the response's trailer section
+alert http any any -> any any (msg:"push fields not trailers"; flow:to_client; http.trailer; content:"x-pushed|3a 20|yes"; sid:1; rev:1;)
+alert http any any -> any any (msg:"push path not trailers"; flow:to_client; http.trailer; content:"pushed.css"; sid:2; rev:1;)
+# the trailer block split over HEADERS plus CONTINUATION is trailers, in both frames
+alert http any any -> any any (msg:"ts trailer frame 1"; flow:to_client; http.trailer; content:"x-checksum|3a 20|abc"; sid:3; rev:1;)
+alert http any any -> any any (msg:"ts trailer frame 2"; flow:to_client; http.trailer; content:"x-status|3a 20|ok"; sid:4; rev:1;)
+alert http any any -> any any (msg:"trailer raw"; flow:to_client; http.trailer.raw; content:"x-checksum|3a 20|abc|0d 0a|"; sid:5; rev:1;)
+# controls
+alert http any any -> any any (msg:"resp header control"; flow:to_client; http.header; content:"text/html"; sid:11; rev:1;)
+alert http any any -> any any (msg:"resp body control"; flow:to_client; http.response_body; content:"<html>body"; sid:12; rev:1;)
