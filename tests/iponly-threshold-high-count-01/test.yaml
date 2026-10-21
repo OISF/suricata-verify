@@ -1,0 +1,36 @@
+requires:
+  min-version: 8
+
+# This test documents that a count-based `threshold` tracked by_flow can never
+# fire on an IP-only rule when the count exceeds the number of per-flow match
+# events.
+#
+# An IP-only rule matches purely on addresses, so the detection engine runs it
+# only ONCE per flow direction (first to_server + first to_client packet), not
+# per packet. For a bidirectional flow that is at most 2 match events per flow.
+# With `track by_flow` the threshold counter is per-flow and resets per-flow, so
+# an IP-only rule can never contribute more than 2 events to it: any count > 2
+# can NEVER fire, for any traffic volume.
+#
+# Traffic: icmp-multiflow.pcap is 5 independent bidirectional ICMP echo flows
+# (10.1.1.1..5 <-> 10.2.2.2), i.e. 2 IP-only match events per flow.
+
+checks:
+  # IP-only + high count (5), track by_flow. Each flow contributes at most 2
+  # events to its own per-flow counter, so 5 is never reached in any flow and
+  # this rule NEVER fires -- across all 5 flows.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+
+  # Control: IP-only + low count (2), track by_flow. Each flow reaches exactly
+  # 2 events, so it fires once per flow: 5 flows = 5 alerts. Proves the rule
+  # matches and that by_flow thresholds DO work on IP-only rules -- so sid:1's 0
+  # is the per-flow ceiling, not a rule that simply never matched.
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        alert.signature_id: 2
