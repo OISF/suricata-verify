@@ -1,0 +1,29 @@
+requires:
+  # The lazy points userdata and its __pairs iterator are 9.0 features.
+  min-version: 9
+
+pcap: test.pcap
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+
+checks:
+  # Two complete write requests on one flow: 33 points (lazy userdata,
+  # above the 32-point eager threshold) then 32 points (plain table
+  # copy). The script walks both with the same pairs() loop and pins
+  # the (position, point table) contract: count equals #points, keys
+  # are 1..n in order, and each point table carries index == key.
+  # Before the __pairs fix the 33-point loop raises (the lazy value
+  # had no __pairs) and only the 32-point alert fires.
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - shell:
+      args: 'grep -q "points-pairs: 33 lazy count=33 ok" stdout && echo found'
+      expect: found
+  - shell:
+      args: 'grep -q "points-pairs: 32 table count=32 ok" stdout && echo found'
+      expect: found
