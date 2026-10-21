@@ -1,0 +1,19 @@
+requires:
+    min-version: 9
+
+pcap: false
+
+args:
+  - --engine-analysis
+
+# sid:1 and sid:2 form a cycle made only of unset -> isnotset edges:
+#
+#   sid:1 unset B -> sid:2 isnotset B
+#   sid:2 unset A -> sid:1 isnotset A
+#
+# An unset edge is not a hard dependency, so the cycle is broken by dropping
+# it and no error is logged.
+checks:
+  - shell:
+      args: 'grep -c " Error: " suricata.log || true'
+      expect: 0
