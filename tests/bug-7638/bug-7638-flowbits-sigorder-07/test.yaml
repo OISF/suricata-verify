@@ -1,0 +1,33 @@
+requires:
+    min-version: 9
+
+pcap: false
+
+args:
+  - --engine-analysis
+
+# A real two rule deadlock with a third rule hanging off it:
+#
+#   sid:12 set headtest -> sid:10 isset headtest
+#   sid:10 set moz      -> sid:12 isset moz        (closes the cycle)
+#   sid:20 set other    -> sid:10 isset other      (satisfiable, not in the cycle)
+#
+# sid:10 and sid:12 cannot be ordered against each other.
+#
+# Before the engine starts, one error names the signatures in the cycle and
+# one says the dependencies could not be resolved. The rest of the resolver's
+# details are only logged at debug level.
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: engine
+        log_level: Error
+        engine.message: "Cyclic dependency found between flowbits from signatures: [10, 12]"
+  - filter:
+      count: 1
+      match:
+        event_type: engine
+        log_level: Error
+        engine.message: "Error resolving flowbit dependencies"
