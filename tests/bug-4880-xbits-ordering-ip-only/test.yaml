@@ -1,0 +1,42 @@
+requires:
+  min-version: 9
+
+pcap: ../flowbit-oring/input.pcap
+
+args:
+  - -k none
+
+checks:
+# xbits chain: each rule matches once per flow direction.
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 2
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 3
+
+# Control: hostbits chain.
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 11
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 12
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 13

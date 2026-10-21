@@ -1,0 +1,12 @@
+# Rules from the ticket. IP-only: they run on the first packet of each flow
+# direction.
+alert ip any any -> any any (msg:"test xbits set fakehost"; xbits:set, fakehost, track ip_dst; sid:1;)
+alert ip any any -> any any (msg:"test xbits isset set fakehost and set fakerservice"; xbits:isset, fakehost, track ip_dst; xbits:set, fakeservice, track ip_dst; sid:2;)
+alert ip any any -> any any (msg:"test xbits isset set fakeservice"; xbits:isset, fakeservice, track ip_dst; sid:3;)
+
+# Control: the hostbits version from the ticket, which already works. Bit
+# names differ from the xbits ones, as xbits `track ip_dst` shares the
+# hostbits storage.
+alert ip any any -> any any (msg:"test hostbits set fakehost"; hostbits:set, hfakehost, dst; sid:11;)
+alert ip any any -> any any (msg:"test hostbits isset hostbits and set fakerservice"; hostbits:isset, hfakehost, dst; hostbits:set, hfakeservice, dst; sid:12;)
+alert ip any any -> any any (msg:"test hostbits isset fakerservice"; hostbits:isset, hfakeservice, dst; sid:13;)

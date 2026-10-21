@@ -1,0 +1,24 @@
+requires:
+  min-version: 9
+
+pcap: ../flowbit-oring/input.pcap
+
+args:
+  - -k none
+
+checks:
+# The setter matched.
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+      pcap_cnt: 7
+
+# The point: the reader sees the xbit set on the same packet.
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2
+      pcap_cnt: 7
