@@ -1,0 +1,16 @@
+requires:
+    min-version: 9
+
+pcap: false
+
+args:
+  - --engine-analysis
+
+# One setter per bit, so the dependencies form a single chain with no cycle:
+#
+#   sid:11 set uritest   -> sid:12 isset uritest
+#   sid:12 set headtest  -> sid:10 isset headtest
+#   sid:10 set moz       -> sid:14 isset moz
+#
+# The resolver must accept this ruleset and Suricata must load it
+# successfully.
