@@ -1,6 +1,6 @@
 requires:
   # Fixed in 8.0.8 and 9.0.0 (Redmine #9194 / backport #9195).
-  min-version: 8.0.8
+  min-version: 9
 
 args:
   - -k none

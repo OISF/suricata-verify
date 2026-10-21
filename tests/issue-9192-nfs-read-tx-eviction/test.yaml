@@ -1,5 +1,5 @@
 requires:
-  min-version: 8.0.8
+  min-version: 9
 
 # Same capture as issue-9192-nfs-read-requestmap-eviction, replayed with
 # different NFS limits.
