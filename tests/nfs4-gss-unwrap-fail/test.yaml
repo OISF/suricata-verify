@@ -1,0 +1,105 @@
+requires:
+  min-version: 9
+
+args:
+  - -k
+  - none
+
+pcap: input.pcap
+
+checks:
+  # --- 939: integrity CALL whose envelope length fails the credentials
+  #     bound, as the first RPC of the flow. The reject must carry the event
+  #     itself: with no earlier transaction there is nothing for a state event
+  #     to mark, and the record left no trace at all.
+  - filter:
+      comment: "939: broken request envelope is recorded"
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+        dest_port: 939
+  - filter:
+      comment: "939: the compound after the boundary is still parsed"
+      count: 1
+      match:
+        event_type: nfs
+        rpc.xid: 37778
+        src_port: 939
+
+  # --- 940: same, through the incomplete arm of the unwrap
+  - filter:
+      comment: "940: envelope past the end of the record is recorded"
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+        dest_port: 940
+  - filter:
+      comment: "940: the compound after the boundary is still parsed"
+      count: 1
+      match:
+        event_type: nfs
+        rpc.xid: 37890
+        src_port: 940
+
+  # --- 941: two integrity calls, replies out of order, reply of A broken. B is
+  #     the newest transaction when A is rejected, so a state event would be
+  #     stamped on B; A must be the one that closes.
+  - filter:
+      comment: "941: one anomaly on the flow, stamped or not"
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+        src_port: 941
+  - filter:
+      comment: "941: one anomaly, on the transaction that owns the xid"
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+        src_port: 941
+        tx_id: 0
+  - filter:
+      comment: "941: call A is completed by its (rejected) reply"
+      count: 1
+      match:
+        event_type: nfs
+        rpc.xid: 40961
+        src_port: 941
+  - filter:
+      comment: "941: call B is untouched by the reject"
+      count: 1
+      match:
+        event_type: nfs
+        rpc.xid: 40962
+        src_port: 941
+
+  # --- 944: a compound that opens no transaction (PUTFH+GETATTR) and a broken
+  #     reply envelope. The reject has to carry the procedure the request map
+  #     recorded: a tx left at 0 reads as NULL in EVE.
+  - filter:
+      comment: "944: reply of a transactionless compound is recorded"
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+        src_port: 944
+  - filter:
+      comment: "944: the reject tx says COMPOUND, not NULL"
+      count: 1
+      match:
+        event_type: nfs
+        nfs.version: 4
+        nfs.procedure: COMPOUND
+        rpc.xid: 45313
+        src_port: 944
+
+  - stats:
+      app_layer.error.nfs_tcp.parser: 0

@@ -1,0 +1,20 @@
+%YAML 1.1
+---
+# Minimal configuration for this test only.
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - nfs:
+            enabled: yes
+        - alert
+        - anomaly:
+            enabled: yes
+            types:
+              applayer: yes
+        - stats:
+            totals: yes
+            threads: no
