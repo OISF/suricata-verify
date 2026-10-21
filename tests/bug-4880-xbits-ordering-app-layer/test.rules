@@ -1,0 +1,6 @@
+# Setter and reader match the same packet. Rule ordering should put the setter
+# first.
+alert http any any -> any any (msg:"xbits set"; flow:to_server,established; http.host; content:"www.testmyids.com"; xbits:set,same_packet,track ip_src,expire 3600; sid:1;)
+
+# Matches only if sid:1's xbit is visible on the same packet.
+alert http any any -> any any (msg:"xbits isset on the same packet"; flow:to_server,established; http.host; content:"www.testmyids.com"; xbits:isset,same_packet,track ip_src; sid:2;)
