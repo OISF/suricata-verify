@@ -19,7 +19,7 @@ checks:
       event_type: alert
       alert.signature_id: 211
       alert.action: allowed
-      firewall.hook: http:request_body
+      firewall.hook: http:request_headers
       firewall.policy: accept:flow,alert
       pcap_cnt: 4
 - filter:
