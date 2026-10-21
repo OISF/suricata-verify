@@ -1,5 +1,5 @@
 requires:
-  min-version: 8.0.8
+  min-version: 9
 
 # max-requests is pinned to 512, the current default, so the 521 NULL
 # calls of the eviction flow keep evicting the READ xid from the request
