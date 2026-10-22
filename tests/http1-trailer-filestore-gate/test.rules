@@ -1,0 +1,6 @@
+# a filestore match on the response body must not open the trailer block's completeness gate
+alert http any any -> any any (msg:"store the body"; flow:established,to_client; file.data; content:"BODYBODY"; filestore; sid:1; rev:1;)
+# matches only a partial trailer block: it ends right after X-Mid
+alert http any any -> any any (msg:"partial trailer view"; flow:established,to_client; http.trailer.raw; content:"X-Mid: 2|0d 0a|"; endswith; sid:2; rev:1;)
+# control: the complete trailer block is inspected once its blank line arrives
+alert http any any -> any any (msg:"complete trailer"; flow:established,to_client; http.trailer.raw; content:"X-Other: 1"; sid:3; rev:1;)
