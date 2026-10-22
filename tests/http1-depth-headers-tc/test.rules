@@ -1,0 +1,8 @@
+# request direction healthy: inspected normally
+alert http any any -> any any (msg:"ts raw"; flow:to_server; http.header.raw; content:"X-ReqA|3a 20|a1"; sid:10; rev:1;)
+alert http any any -> any any (msg:"ts uri"; flow:to_server; http.uri; content:"/depth-resp"; sid:11; rev:1;)
+# response block cut by depth: out of inspection on main as well
+alert http any any -> any any (msg:"tc raw"; flow:to_client; http.header.raw; content:"X-RespA|3a 20|a2"; sid:12; rev:1;)
+alert tcp any any -> any any (msg:"tc payload"; flow:to_client; content:"X-RespA"; sid:13; rev:1;)
+# control: complete response
+alert http any any -> any any (msg:"ctl tc raw"; flow:to_client; http.header.raw; content:"X-RespB|3a 20|b2"; sid:20; rev:1;)
