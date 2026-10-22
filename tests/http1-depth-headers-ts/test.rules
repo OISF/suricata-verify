@@ -1,0 +1,7 @@
+# block cut by stream depth: what reached htp must still be inspected, as on main
+alert http any any -> any any (msg:"depth raw"; flow:to_server; http.header.raw; content:"X-DepthOnly|3a 20|a1"; sid:10; rev:1;)
+alert http any any -> any any (msg:"depth uri"; flow:to_server; http.uri; content:"/depth"; sid:11; rev:1;)
+alert tcp any any -> any any (msg:"depth payload"; flow:to_server; content:"GET /depth"; sid:12; rev:1;)
+# control: a complete transaction in the same run
+alert http any any -> any any (msg:"ctl raw"; flow:to_server; http.header.raw; content:"X-CtlOnly|3a 20|b1"; sid:20; rev:1;)
+alert http any any -> any any (msg:"ctl uri"; flow:to_server; http.uri; content:"/control"; sid:21; rev:1;)
