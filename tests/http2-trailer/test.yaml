@@ -65,3 +65,20 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 23
+  - filter:
+      comment: "the trailer block's fields keep their entries in the dump and land in their own array"
+      count: 1
+      match:
+        event_type: http
+        http.request_headers[7].name: grpc-message
+        http.request_headers[7].value: trailval
+        http.request_headers[8].name: user-agent
+        http.request_headers[8].value: TRAILER-UA
+        http.request_headers[9].name: server-timing
+        http.request_headers[9].value: done
+        http.request_trailers[0].name: grpc-message
+        http.request_trailers[0].value: trailval
+        http.request_trailers[1].name: user-agent
+        http.request_trailers[1].value: TRAILER-UA
+        http.request_trailers[2].name: server-timing
+        http.request_trailers[2].value: done
