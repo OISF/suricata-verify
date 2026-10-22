@@ -1,0 +1,8 @@
+alert http2 any any -> any any (msg:"ts part 1 name"; flow:to_server,established; http.trailer.raw; content:"grpc-message"; sid:10; rev:1;)
+alert http2 any any -> any any (msg:"ts continuation name"; flow:to_server,established; http.trailer.raw; content:"user-agent"; sid:11; rev:1;)
+alert http2 any any -> any any (msg:"ts continuation value"; flow:to_server,established; http.trailer; content:"TRAILER-UA"; sid:12; rev:1;)
+alert http2 any any -> any any (msg:"ts second continuation name"; flow:to_server,established; http.trailer_names; content:"server-timing"; sid:13; rev:1;)
+alert http2 any any -> any any (msg:"tc part 1 name"; flow:to_client,established; http.trailer.raw; content:"x-trailer-c"; sid:14; rev:1;)
+alert http2 any any -> any any (msg:"tc continuation name"; flow:to_client,established; http.trailer.raw; content:"x-trailer-d"; sid:15; rev:1;)
+alert http2 any any -> any any (msg:"tc continuation value"; flow:to_client,established; http.trailer; content:"SPLITTRAILERD"; sid:16; rev:1;)
+alert http2 any any -> any any (msg:"absent value"; flow:to_server,established; http.trailer; content:"NOPE-HERE"; sid:19; rev:1;)
