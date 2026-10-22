@@ -1,0 +1,33 @@
+requires:
+    min-version: 9
+
+pcap: false
+
+args:
+  - --engine-analysis
+
+# The same deadlock as sigorder-02 but stretched over five rules:
+#
+#   sid:2 -> sid:1 (B), sid:3 -> sid:2 (C), sid:4 -> sid:3 (D),
+#   sid:5 -> sid:4 (E), sid:1 -> sid:5 (A)
+#
+# Every edge is a set edge, so the ring has uniform weight and cannot be
+# broken.
+#
+# Before the engine starts, one error names the signatures in the cycle and
+# one says the dependencies could not be resolved. The rest of the resolver's
+# details are only logged at debug level.
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: engine
+        log_level: Error
+        engine.message: "Cyclic dependency found between flowbits from signatures: [1, 2, 3, 4, 5]"
+  - filter:
+      count: 1
+      match:
+        event_type: engine
+        log_level: Error
+        engine.message: "Error resolving flowbit dependencies"
