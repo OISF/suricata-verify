@@ -1,0 +1,36 @@
+%YAML 1.1
+---
+
+vars:
+  address-groups:
+    HOME_NET: "[10.0.0.0/8]"
+    EXTERNAL_NET: "!$HOME_NET"
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - flow
+        - alert
+        - drop:
+            alerts: yes
+            flows: all
+
+app-layer:
+  protocols:
+    smtp:
+      enabled: yes
+      detection-ports:
+        dp: 25
+
+firewall:
+  policies:
+    packet:
+      default-policy: ["accept:hook"]
+    app:
+      http1:
+        default-policy: ["drop:flow", "alert"]
+      smtp:
+        default-policy: ["drop:flow", "alert"]
