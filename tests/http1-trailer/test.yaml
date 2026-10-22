@@ -1,0 +1,87 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+
+args:
+  # checksums are not computed in the pcap
+  - -k none
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 5
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 10
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 11
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 12
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 20
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 21
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 22
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 23
+  - filter:
+      comment: "the dump keeps the blocks apart: header value alone, trailer fields as own entries"
+      count: 1
+      match:
+        event_type: http
+        http.request_headers[0].name: Host
+        http.request_headers[0].value: localhost
+        http.request_headers[1].name: User-Agent
+        http.request_headers[1].value: Mozilla
+        http.request_headers[5].name: Server-Timing
+        http.request_headers[5].value: trailval
+        http.request_headers[6].name: User-Agent
+        http.request_headers[6].value: TRAILER-UA
+        http.request_headers[7].name: Host
+        http.request_headers[7].value: TRAILER-HOST

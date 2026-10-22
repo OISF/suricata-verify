@@ -1,0 +1,13 @@
+# Exact-state rules for the http2 stream states this stream passes through, other
+# than the trailer states. They carry accept:hook, which is also the protocol
+# default policy in suricata.yaml that every state not listed here falls to.
+# No LTE (<) rule on purpose: the engine builds an LTE rule per state up to its
+# bound, so it would be evaluated at the trailer state as well and shadow the
+# policy under test.
+accept:hook http2:stream:request_closed any any -> any any (sid:102;)
+accept:hook http2:stream:request_complete any any -> any any (sid:103;)
+accept:hook http2:stream:response_started any any <> any any (sid:104;)
+accept:hook http2:stream:response_headers any any <> any any (sid:105;)
+accept:hook http2:stream:response_data any any <> any any (sid:106;)
+accept:hook http2:stream:response_closed any any <> any any (sid:107;)
+accept:hook http2:stream:response_complete any any <> any any (sid:108;)

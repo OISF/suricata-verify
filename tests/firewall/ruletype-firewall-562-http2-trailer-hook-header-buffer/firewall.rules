@@ -1,0 +1,5 @@
+# The rule under test, alone: a firewall rule hooked at the HTTP/2 trailer state
+# that matches http.header, a buffer that completes one state earlier. A firewall
+# rule is only evaluated at its hook, so this pair can never match and the engine
+# refuses it at load.
+accept:hook http2:stream:request_trailers any any -> any any (http.header; content:"suricata.io"; sid:201;)
