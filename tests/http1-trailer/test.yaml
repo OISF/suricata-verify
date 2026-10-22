@@ -70,3 +70,18 @@ checks:
       match:
         event_type: alert
         alert.signature_id: 23
+  - filter:
+      comment: "the dump keeps the blocks apart: header value alone, trailer fields as own entries"
+      count: 1
+      match:
+        event_type: http
+        http.request_headers[0].name: Host
+        http.request_headers[0].value: localhost
+        http.request_headers[1].name: User-Agent
+        http.request_headers[1].value: Mozilla
+        http.request_headers[5].name: Server-Timing
+        http.request_headers[5].value: trailval
+        http.request_headers[6].name: User-Agent
+        http.request_headers[6].value: TRAILER-UA
+        http.request_headers[7].name: Host
+        http.request_headers[7].value: TRAILER-HOST
