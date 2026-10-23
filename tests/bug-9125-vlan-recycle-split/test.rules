@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"PacketReinit vlan_id[2] stale"; content:"FOOBAR"; sid:1; rev:1;)
