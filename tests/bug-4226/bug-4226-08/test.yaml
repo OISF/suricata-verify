@@ -1,0 +1,39 @@
+requires:
+    min-version: 9
+    pcap: false
+
+args:
+    - --engine-analysis
+    - --set engine-analysis.rules=yes
+
+# A flagged content is dumped three times (two dns_query inspect engines and
+# the mpm object).
+checks:
+    # sid 1: nocase, flagged
+    - shell:
+        args: grep '"id":1,' rules.json | grep -o '"starts_with":true' | wc -l | xargs
+        expect: 3
+    - shell:
+        args: grep '"id":1,' rules.json | grep -o '"ends_with":true' | wc -l | xargs
+        expect: 3
+    # sid 2: offset:0, flagged
+    - shell:
+        args: grep '"id":2,' rules.json | grep -o '"starts_with":true' | wc -l | xargs
+        expect: 3
+    - shell:
+        args: grep '"id":2,' rules.json | grep -o '"ends_with":true' | wc -l | xargs
+        expect: 3
+    # sid 3: negated, not flagged
+    - shell:
+        args: grep '"id":3,' rules.json | grep -o '"starts_with":true' | wc -l | xargs
+        expect: 0
+    - shell:
+        args: grep '"id":3,' rules.json | grep -o '"ends_with":true' | wc -l | xargs
+        expect: 0
+    # sid 4: variable depth, not flagged
+    - shell:
+        args: grep '"id":4,' rules.json | grep -o '"starts_with":true' | wc -l | xargs
+        expect: 0
+    - shell:
+        args: grep '"id":4,' rules.json | grep -o '"ends_with":true' | wc -l | xargs
+        expect: 0
