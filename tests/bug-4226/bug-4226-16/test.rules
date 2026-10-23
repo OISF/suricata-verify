@@ -1,0 +1,15 @@
+# The bsize depth on file.data when the HTTP response body is inspected in
+# pieces. The body is capped at 30010 bytes and inspected in 2000-byte pieces,
+# and the content is the last 10 bytes, so only a later piece holds it.
+# sid 1: no bsize; matches.
+# sids 2-4: bsize:<=, an exact bsize and a range, all with a bound of 30010 or
+#           more, so the content ends at or within the depth; all match.
+# sid 5: bsize:<30010 is shorter than the body; no match.
+# sid 10: matches only when the inspected piece doesn't hold the start of the
+#         body, so the content is found in a later piece.
+alert http any any -> any any (msg:"late content"; flow:established,to_client; file.data; content:"|b7 27 f7 8a 23 71 f2 a8 4a d9|"; sid:1;)
+alert http any any -> any any (msg:"late content, bsize:<="; flow:established,to_client; file.data; content:"|b7 27 f7 8a 23 71 f2 a8 4a d9|"; bsize:<=30010; sid:2;)
+alert http any any -> any any (msg:"late content, exact bsize"; flow:established,to_client; file.data; content:"|b7 27 f7 8a 23 71 f2 a8 4a d9|"; bsize:30010; sid:3;)
+alert http any any -> any any (msg:"late content, range"; flow:established,to_client; file.data; content:"|b7 27 f7 8a 23 71 f2 a8 4a d9|"; bsize:30000<>30020; sid:4;)
+alert http any any -> any any (msg:"late content, bound too small"; flow:established,to_client; file.data; content:"|b7 27 f7 8a 23 71 f2 a8 4a d9|"; bsize:<30010; sid:5;)
+alert http any any -> any any (msg:"start not in the inspected piece"; flow:established,to_client; file.data; content:!"|21 3c 61 72 63 68 3e 0a 64 65|"; content:"|b7 27 f7 8a 23 71 f2 a8 4a d9|"; sid:10;)
