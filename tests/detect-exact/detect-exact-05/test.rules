@@ -1,0 +1,4 @@
+# The reverse direction: a single content anchored the long way with
+# startswith/endswith spans the whole buffer, which the 'exact' keyword
+# expresses directly, so engine-analysis suggests it.
+alert dns any any -> any any (msg:"anchored suggests exact"; dns.query; content:"abc"; startswith; endswith; sid:1;)

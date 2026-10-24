@@ -1,0 +1,11 @@
+# engine-analysis suggests 'exact' when a single content has both startswith
+# and endswith (isdataat:!1,relative sets the endswith flag). No note when
+# only one of them is set, when bsize already exists, for a content with
+# neither, or for a negated content, which 'exact' rejects.
+alert dns any any -> any any (msg:"startswith+endswith"; dns.query; content:"example.com"; startswith; endswith; sid:1;)
+alert http any any -> any any (msg:"startswith+isdataat"; http.uri; content:"/a/b/"; startswith; isdataat:!1,relative; sid:2;)
+alert dns any any -> any any (msg:"endswith only"; dns.query; content:"com"; endswith; sid:3;)
+alert dns any any -> any any (msg:"startswith only"; dns.query; content:"example"; startswith; sid:4;)
+alert dns any any -> any any (msg:"already has bsize"; dns.query; content:"example.com"; startswith; endswith; bsize:11; sid:5;)
+alert dns any any -> any any (msg:"plain content"; dns.query; content:"example.com"; sid:6;)
+alert dns any any -> any any (msg:"negated"; dns.query; content:!"example.com"; startswith; endswith; sid:7;)

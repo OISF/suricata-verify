@@ -1,0 +1,60 @@
+requires:
+    min-version: 9
+    pcap: false
+
+args:
+    - --engine-analysis
+    - --set engine-analysis.rules=yes
+
+# rules.json has one line per rule. A content is dumped once per inspect engine
+# (two for dns_query, doh2 and dns) and once more in the mpm object when it is
+# the fast pattern.
+checks:
+    # sid 1: 65535 fits
+    - shell:
+        args: grep '"id":1,' rules.json | grep -o '"depth":65535' | wc -l | xargs
+        expect: 3
+    # sid 2: 65536 does not
+    - shell:
+        args: grep '"id":2,' rules.json | grep -o '"depth":' | wc -l | xargs
+        expect: 0
+    # sid 3: both contents get the depth
+    - shell:
+        args: grep '"id":3,' rules.json | grep -o '"depth":10' | wc -l | xargs
+        expect: 5
+    # sid 4: only the first content gets the depth
+    - shell:
+        args: grep '"id":4,' rules.json | grep -o '"depth":10' | wc -l | xargs
+        expect: 2
+    # sid 5: depth:20 lowered to 10
+    - shell:
+        args: grep '"id":5,' rules.json | grep -o '"depth":10' | wc -l | xargs
+        expect: 3
+    - shell:
+        args: grep '"id":5,' rules.json | grep -o '"depth":20' | wc -l | xargs
+        expect: 0
+    # sid 6: depth:5 kept, and no note since bsize changed nothing
+    - shell:
+        args: grep '"id":6,' rules.json | grep -o '"depth":5' | wc -l | xargs
+        expect: 3
+    - shell:
+        args: grep '"id":6,' rules.json | grep -o 'applied as a 'depth'' | wc -l | xargs
+        expect: 0
+    # sid 7: variable offset, no depth
+    - shell:
+        args: grep '"id":7,' rules.json | grep -o '"depth":' | wc -l | xargs
+        expect: 0
+    # sid 8: http.uri gets 20 (fast pattern), http.host gets 30
+    - shell:
+        args: grep '"id":8,' rules.json | grep -o '"depth":20' | wc -l | xargs
+        expect: 3
+    - shell:
+        args: grep '"id":8,' rules.json | grep -o '"depth":30' | wc -l | xargs
+        expect: 2
+    # sid 9: tcp.hdr is dumped once as a packet engine and once in mpm
+    - shell:
+        args: grep '"id":9,' rules.json | grep -o '"depth":32' | wc -l | xargs
+        expect: 2
+    - shell:
+        args: grep '"id":9,' rules.json | grep -o "applied as a 'depth'" | wc -l | xargs
+        expect: 1
