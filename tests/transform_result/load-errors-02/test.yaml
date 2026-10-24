@@ -1,0 +1,32 @@
+requires:
+  min-version: 9
+
+pcap: ../load-no-transform-error-or/empty.pcap
+
+args:
+  - --init-errors-fatal
+
+exit-code: 1
+
+checks:
+  - shell:
+      args: 'grep "transform_result must come first right after buffer" suricata.log | wc -l | xargs'
+      expect: 1
+  - shell:
+      args: 'grep "transform_result requires a transform that can fail" suricata.log | wc -l | xargs'
+      expect: 2
+  - shell:
+      args: 'grep "transform_result: error_or expects other keywords" suricata.log | wc -l | xargs'
+      expect: 1
+  - shell:
+      args: 'grep "absent: or_else expects other keywords" suricata.log | wc -l | xargs'
+      expect: 1
+  - shell:
+      args: 'grep "absent and fast_pattern on the same buffer" suricata.log | wc -l | xargs'
+      expect: 1
+  - shell:
+      args: 'grep "transform_result does not work with frames" suricata.log | wc -l | xargs'
+      expect: 1
+  - shell:
+      args: 'grep "absent does not work with frames" suricata.log | wc -l | xargs'
+      expect: 1

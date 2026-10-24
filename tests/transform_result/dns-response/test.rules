@@ -1,0 +1,18 @@
+# pcap contains a DNS NXDOMAIN response with an SOA record. The authority
+# section's rrname values contain '.' and other characters that are not
+# valid strict base64, so from_base64: mode strict fails.
+#
+# dns.response.rrname is a multi-value sticky buffer built by its own
+# InspectionBufferSetupMulti caller in src/detect-dns-response.c, which ORs
+# DETECT_CI_FLAGS_SINGLE into the buffer flags after the transforms run, so
+# the transform's error flag reaches content inspection.
+
+# must_error: at least one rrname fails strict base64 decode -> alert
+alert dns any any -> any any (msg:"transform_result must_error on dns.response.rrname"; \
+    dns.response.rrname; from_base64: mode strict; \
+    transform_result: must_error; sid:1;)
+
+# must_succeed: rrname fails strict base64 decode -> no alert
+alert dns any any -> any any (msg:"transform_result must_succeed on dns.response.rrname"; \
+    dns.response.rrname; from_base64: mode strict; \
+    transform_result: must_succeed; content:"anything"; sid:2;)

@@ -1,0 +1,44 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+  # only flow 2's body, inspected in one piece, counts as a decode error
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_port: 40301
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_port: 40300
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        src_port: 40301
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        src_port: 40300
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+        src_port: 40301
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 3
+        src_port: 40300
