@@ -1,0 +1,36 @@
+requires:
+  min-version: 9
+
+pcap: .
+
+args:
+- --pcap-file-recursive
+
+checks:
+  # Race-condition regression: two pcap files are processed sequentially, so
+  # the global pcap_filename ends up pointing to whichever was processed last.
+  # Each event must still report the pcap it actually belongs to (via the
+  # per-flow/per-packet pfv), not the stale global.
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        pcap_filename.__endswith: "alert.pcap"
+
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        pcap_filename.__endswith: "http.pcap"
+
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        pcap_filename.__endswith: "http.pcap"
+
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        pcap_filename.__endswith: "http.pcap"
