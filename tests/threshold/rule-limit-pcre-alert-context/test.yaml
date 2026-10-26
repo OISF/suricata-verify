@@ -1,7 +1,7 @@
 %YAML 1.1
 ---
 requires:
-  min-version: 8
+  min-version: 9
 
 checks:
   # sid 1 alerts once: the first packet of the flow.
