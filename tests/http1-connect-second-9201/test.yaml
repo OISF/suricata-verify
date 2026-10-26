@@ -1,0 +1,137 @@
+requires:
+  min-version: 9
+
+args:
+ - --runmode single -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000001
+        src_port: 41001
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000002
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000003
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000004
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        src_port: 41001
+        http.http_method: GET
+        http.url: /ctrl-get-marker-9f3a
+        http.status: 200
+  - filter:
+      count: 3
+      match:
+        event_type: http
+        src_port: 41001
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.url: /atk-empty-marker-9f3a
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.url: /atk-bind-marker-9f3a
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.url: /atk-search-marker-9f3a
+  - filter:
+      count: 4
+      match:
+        event_type: http
+        src_port: 41002
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        src_port: 41002
+        http.http_method: CONNECT
+        http.status: 200
+  - filter:
+      count: 5
+      match:
+        event_type: http
+        src_port: 41003
+  - filter:
+      count: 5
+      match:
+        event_type: http
+        src_port: 41004
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_port: 41002
+        app_proto: http
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_port: 41003
+        app_proto: http
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_port: 41004
+        app_proto: http
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000005
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.url: /lone-get-marker-9f3a
+        http.http_method: GET
+        http.status: 200
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000006
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.url: /lone-bind-marker-9f3a
+        http.http_method: GET
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000102
+        src_port: 41002
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000103
+        src_port: 41003
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000104
+        src_port: 41004
