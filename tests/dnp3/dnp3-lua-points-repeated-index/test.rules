@@ -1,0 +1,1 @@
+alert dnp3 any any -> any any (msg:"repeated reads of the same dnp3 point index return the same point"; dnp3_func:2; lua:repeated-index.lua; sid:1; rev:1;)
