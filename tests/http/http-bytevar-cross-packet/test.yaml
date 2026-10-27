@@ -1,0 +1,22 @@
+requires:
+  # runs on both lines: the bytevar .value fix is backported to 8.0
+  min-version: 8.0.8
+
+pcap: test.pcap
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+
+checks:
+  # One signature, two sticky-buffer sections on separate packets.
+  # The headers section (packet 1) matches and extracts the "1" byte
+  # of "Content-Length: 100" (ASCII 49) into v1; the body section
+  # (packet 2) matches "MARK" at depth:v1. With the surviving 49 the
+  # body section matches and the signature fires; if the value is
+  # zeroed at the packet boundary, depth:v1 is 0 and the body section
+  # cannot match - pre-fix no alert at all.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
