@@ -1,0 +1,4 @@
+# The alert is logged before the pass verdict. Each rule owns a separate
+# pcre capture, but only the counted alert may transfer its context to the packet.
+alert udp any any -> any 9999 (flow:to_server; content:"id="; pcre:"/id=([a-z0-9]+)/,alert:logged"; sid:1; rev:1;)
+pass udp any any -> any 9999 (flow:to_server; content:"id="; pcre:"/id=([a-z0-9]+)/,alert:pass_capture"; sid:2; rev:1;)

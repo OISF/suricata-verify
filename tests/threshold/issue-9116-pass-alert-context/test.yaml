@@ -1,0 +1,175 @@
+requires:
+  min-version: 8.0.8
+  lt-version: 9
+
+pcap: ../rule-limit-pcre-alert-context/input.pcap
+
+args:
+  - --runmode single
+  - -k none
+  - --simulate-ips
+
+checks:
+  # One counted alert per packet, with a pass verdict from the uncounted slot.
+  - filter:
+      count: 20
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        verdict.action: pass
+  # The pass rule must not become a counted/logged alert.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        has-key: alert.context.pass_capture
+  - filter:
+      count: 20
+      match:
+        event_type: alert
+  # Every logged capture belongs to this packet, not a prior alert or the pass.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 1
+        alert.context.logged: abc00
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 2
+        alert.context.logged: abc01
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 3
+        alert.context.logged: abc02
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 4
+        alert.context.logged: abc03
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 5
+        alert.context.logged: abc04
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 6
+        alert.context.logged: abc05
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 7
+        alert.context.logged: abc06
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 8
+        alert.context.logged: abc07
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 9
+        alert.context.logged: abc08
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 10
+        alert.context.logged: abc09
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 11
+        alert.context.logged: abc10
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 12
+        alert.context.logged: abc11
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 13
+        alert.context.logged: abc12
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 14
+        alert.context.logged: abc13
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 15
+        alert.context.logged: abc14
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 16
+        alert.context.logged: abc15
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 17
+        alert.context.logged: abc16
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 18
+        alert.context.logged: abc17
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 19
+        alert.context.logged: abc18
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 20
+        alert.context.logged: abc19

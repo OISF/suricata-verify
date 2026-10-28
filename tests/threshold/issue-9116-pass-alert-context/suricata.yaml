@@ -1,0 +1,16 @@
+%YAML 1.1
+---
+
+action-order:
+  - alert
+  - pass
+  - drop
+  - reject
+
+outputs:
+  - eve-log:
+      enabled: yes
+      types:
+        - alert:
+            verdict: yes
+        - flow
