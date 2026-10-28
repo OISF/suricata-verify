@@ -1,0 +1,2 @@
+alert tcp any any -> any any (msg:"offline determinism request"; content:"A-REQ"; sid:1; rev:1;)
+alert tcp any any -> any any (msg:"offline determinism keep alive"; content:"B-KEEP"; sid:2; rev:1;)
