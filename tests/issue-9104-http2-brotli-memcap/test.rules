@@ -1,0 +1,3 @@
+alert http2 any any -> any any (msg:"SURICATA HTTP2 failed decompression"; flow:established; app-layer-event:http2.failed_decompression; classtype:protocol-command-decode; sid:2290009; rev:1;)
+alert http2 any any -> any any (msg:"Brotli memcap control body"; flow:established,to_client; file.data; content:"SV_BROTLI_MEMCAP_CONTROL_"; sid:1; rev:1;)
+alert http2 any any -> any any (msg:"Brotli memcap recovery body"; flow:established,to_client; file.data; content:"SV_BROTLI_MEMCAP_RECOVERY_"; sid:2; rev:1;)

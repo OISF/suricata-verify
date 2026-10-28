@@ -1,0 +1,73 @@
+requires:
+  min-version: 8.0.8
+
+args:
+  - --runmode single
+  - -k none
+
+checks:
+  # Only the pressure transaction (HTTP/2 stream 33) has an anomaly.
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        tx_id: 18
+        anomaly.app_proto: http2
+        anomaly.event: failed_decompression
+  # The shipped bidirectional event rule alerts once in each direction.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        tx_id: 18
+        alert.signature_id: 2290009
+        http.url: /pressure
+        http.http2.stream_id: 33
+        direction: to_client
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        tx_id: 18
+        alert.signature_id: 2290009
+        http.url: /pressure
+        http.http2.stream_id: 33
+        direction: to_server
+  # Body inspection works before pressure and after the held bodies finish.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        http.url: /control
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        http.url: /control
+        fileinfo.size: 400
+        fileinfo.state: CLOSED
+  - filter:
+      count: 15
+      match:
+        event_type: fileinfo
+        http.url.__startswith: /hold/
+        fileinfo.size: 1024
+        fileinfo.state: CLOSED
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        http.url: /recovery
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        http.url: /recovery
+        fileinfo.size: 1026
+        fileinfo.state: CLOSED

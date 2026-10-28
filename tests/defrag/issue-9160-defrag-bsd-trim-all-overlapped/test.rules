@@ -1,0 +1,13 @@
+# Controls: clean fragmented UDP is reassembled and inspected.
+alert udp any any -> any any (msg:"IPv4 control"; content:"SV9160-V4-CTRLOK"; sid:1; rev:1;)
+alert udp any any -> any any (msg:"IPv6 control"; content:"SV9160-V6-CTRLOK"; sid:2; rev:1;)
+
+# Tokens that only survive correct BSD reassembly.
+alert udp any any -> any any (msg:"IPv4 preferred fragment starts inside previous"; content:"SV9160-V4-INSIDE"; sid:3; rev:1;)
+alert udp any any -> any any (msg:"IPv4 preferred fragment starts before previous"; content:"SV9160-V4-BEFORE"; sid:4; rev:1;)
+alert udp any any -> any any (msg:"IPv6 preferred fragment starts inside previous"; content:"SV9160-V6-INSIDE"; sid:5; rev:1;)
+alert udp any any -> any any (msg:"IPv6 preferred fragment starts before previous"; content:"SV9160-V6-BEFORE"; sid:6; rev:1;)
+
+# Stale bytes from an untrimmed later fragment. Must never be seen.
+alert udp any any -> any any (msg:"Stale overlapped fragment data (inside)"; content:"cccccccccccccccc"; sid:7; rev:1;)
+alert udp any any -> any any (msg:"Stale overlapped fragment data (before)"; content:"ffffffffffffffff"; sid:8; rev:1;)

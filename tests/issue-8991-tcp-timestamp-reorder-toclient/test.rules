@@ -1,0 +1,2 @@
+alert tcp any any -> any any (msg:"marker spanning the gap filling segment A and segment B"; flow:to_client; content:"S2C-A-TAIL:S2C-B-HEAD"; sid:1;)
+alert tcp any any -> any any (msg:"invalid timestamp"; stream-event:pkt_invalid_timestamp; sid:2;)

@@ -1,0 +1,5 @@
+# Fires when the reassembled to-server stream still contains what segment A
+# delivered -- i.e. what the destination host actually processes.
+alert tcp any any -> any 9999 (msg:"ANT-2026-NVCQH2RV marker seen in reassembled stream"; flow:to_server,established; content:"EXPLOITMARKER"; sid:1; rev:1;)
+# Suricata's own overlap-with-different-data anomaly.
+alert tcp any any -> any any (msg:"ANT-2026-NVCQH2RV overlap with different data"; stream-event:reassembly_overlap_different_data; sid:2; rev:1;)

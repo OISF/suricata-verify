@@ -1,0 +1,38 @@
+# ANT-2026-NVCQH2RV -- CheckOverlap() (src/stream-tcp-list.c) tests only the
+# immediate RB-tree predecessor/successor. An attacker inserts a small "shield"
+# segment S that sorts as C's immediate predecessor and does NOT reach C, so C's
+# overlap with an earlier, larger segment A is never detected:
+# DoHandleDataCheckBackwards() breaks at S ("no more overlap will be found").
+# C then silently overwrites A's already-reassembled bytes with no
+# reassembly_overlap_different_data event, evading a signature on A's content.
+# (stream->segs_right_edge, the max right edge of all segments, is maintained but
+# not consulted in the overlap check.)
+#
+# input.pcap: A (SEQ 1050, "EXPLOITMARKER..."), shield S (small, between A and C
+# in tree order, not reaching C), then C (overlaps A with different data).
+#
+# EXPECTED (fixed): the A/C overlap is detected -> reassembly_overlap_different_data
+# fires (sid:2) and A's content is retained under the default overlap policy, so
+# the marker signature fires (sid:1).
+# ACTUAL (vulnerable, main d996d85d): neither fires (both count 0) -- C silently
+# overwrote A and no overlap anomaly was raised.
+pcap: input.pcap
+
+requires:
+  min-version: 8.0.8
+
+args:
+- -k none
+- --set stream.reassembly.check-overlap-different-data=true
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2

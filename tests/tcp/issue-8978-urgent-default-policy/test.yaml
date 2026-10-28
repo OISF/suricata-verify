@@ -1,0 +1,25 @@
+requires:
+  min-version: 8.0.8
+
+pcap: ../../tcp-urgp-01-oob/tcp-urgent1.pcap
+rules: ../../tcp-urgp-01-oob/suricata.rules
+
+args:
+- --runmode single
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000001
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000002
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000003

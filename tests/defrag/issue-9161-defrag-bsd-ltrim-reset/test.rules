@@ -1,0 +1,5 @@
+# Control: proves fragmented UDP is reassembled and inspected. Always fires.
+alert udp any any -> any any (msg:"CONTROL reassembled fragment token"; content:"SVCTRLOK"; sid:1; rev:1;)
+# Attack: token that belongs at IP payload [40,48) under correct BSD reassembly.
+# Only fires when Suricata reassembles the same bytes a BSD host would.
+alert udp any any -> any any (msg:"OVERLAP marker survived reassembly"; content:"SVOVLBUG"; sid:2; rev:1;)

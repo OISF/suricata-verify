@@ -1,0 +1,2 @@
+alert udp any any -> any any (msg:"set"; content:"AAAA"; flowbits:set,x; sid:1;)
+alert udp any any -> any 80 (msg:"isset"; flowbits:isset,x; prefilter; sid:2;)

@@ -1,0 +1,25 @@
+requires:
+  min-version: 8.0.8
+
+args:
+  - -k none --set detect.guess-applayer-tx=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 2
+        app_proto: tftp
+        alert.signature_id: 1
+
+  # Before the fix, the request transaction is retained and guessed as the
+  # transaction for the reply-side UDP alert, adding stale request metadata.
+  # After the fix, cleanup has freed it before the reply arrives.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        tx_id: 0
+        tftp.packet: read

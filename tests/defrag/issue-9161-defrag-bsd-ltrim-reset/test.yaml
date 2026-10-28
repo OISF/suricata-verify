@@ -1,0 +1,31 @@
+requires:
+  min-version: 8.0.8
+
+# Process the pcap single-threaded. This keeps the test deterministic and
+# portable across machines regardless of CPU count; it does not affect the
+# defragmentation behavior being tested.
+args:
+  - "--runmode single"
+
+# IP defragmentation uses Suricata's built-in BSD default policy. A later,
+# shorter overlap must not lower the left trim already set on a following
+# fragment, because doing so revives bytes replaced by an earlier preferred
+# fragment and produces a datagram that differs from BSD host reassembly.
+#
+# The pcap carries two datagrams:
+#   * CONTROL (10.0.0.1): clean fragments -> sid 1 must alert once. This guards
+#     the harness; if it fails, the test setup is broken.
+#   * REGRESSION (10.0.0.2): overlapping fragments where "SVOVLBUG" belongs at
+#     IP payload [40,48). Fixed BSD reassembly preserves it, so sid 2 must alert
+#     once; vulnerable code lowers the existing trim and produces no alert.
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2

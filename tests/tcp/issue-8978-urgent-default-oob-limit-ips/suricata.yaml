@@ -1,0 +1,17 @@
+%YAML 1.1
+---
+
+stream:
+  reassembly:
+    urgent:
+      policy: oob
+      # Deliberately omit oob-limit-policy.
+
+outputs:
+  - eve-log:
+      enabled: yes
+      types:
+        - alert
+        - http
+        - stats:
+            totals: yes

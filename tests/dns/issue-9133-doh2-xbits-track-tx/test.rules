@@ -1,0 +1,21 @@
+# 8.0.x uses DNS hooks for the inner transaction, not doh2:stream hooks.
+alert dns:request_complete any any -> any 8053 (xbits:set,doh1,track tx; sid:1; rev:1;)
+alert dns:response_complete any 8053 -> any any (xbits:isset,doh1,track tx; sid:2; rev:1;)
+alert dns:response_complete any 8053 -> any any (xbits:isset,never_set,track tx; sid:3; rev:1;)
+alert dns:request_complete any any -> any 8053 (xbits:isset,never_set,track tx; sid:4; rev:1;)
+alert dns:request_complete any any -> any 8053 (xbits:set,request_bit,track tx; sid:5; rev:1;)
+alert dns:request_complete any any -> any 8053 (xbits:isset,request_bit,track tx; sid:6; rev:1;)
+# Plain HTTP/2 controls: the same transaction storage through its outer engine.
+alert http2 any any -> any 8054 (flow:to_server; http.uri; content:"/index.html"; xbits:set,h2bit,track tx; sid:7; rev:1;)
+# Stable requires an explicit hook for isset, and response completion (7)
+# cannot share a rule with http.stat_code (5). Pin status on the readback
+# alert in EVE and inspect the status buffer independently with sid 9.
+alert http2:response_complete any 8054 -> any any (flow:to_client; xbits:isset,h2bit,track tx; sid:8; rev:1;)
+alert http2 any 8054 -> any any (flow:to_client; http.stat_code; content:"200"; sid:9; rev:1;)
+# Set different bits on the two DoH transactions and read each on its own reply.
+alert dns:request_complete any any -> any 8053 (dns.query; content:"tx1.example.com"; xbits:set,tx1bit,track tx; sid:13; rev:1;)
+alert dns:response_complete any 8053 -> any any (dns.query.name; content:"tx1.example.com"; xbits:isset,tx1bit,track tx; sid:14; rev:1;)
+alert dns:response_complete any 8053 -> any any (dns.query.name; content:"tx2.example.com"; xbits:isset,tx1bit,track tx; sid:15; rev:1;)
+alert dns:request_complete any any -> any 8053 (dns.query; content:"tx2.example.com"; xbits:set,tx2bit,track tx; sid:16; rev:1;)
+alert dns:response_complete any 8053 -> any any (dns.query.name; content:"tx2.example.com"; xbits:isset,tx2bit,track tx; sid:17; rev:1;)
+alert dns:response_complete any 8053 -> any any (dns.query.name; content:"tx1.example.com"; xbits:isset,tx2bit,track tx; sid:18; rev:1;)
