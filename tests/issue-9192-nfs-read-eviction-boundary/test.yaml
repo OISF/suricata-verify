@@ -1,5 +1,5 @@
 requires:
-  min-version: 9
+  min-version: 8.0.8
 
 # max-tx=64 makes the 600 unanswered NULL calls of the eviction flows
 # force-close the partially received READ file transaction (tx_id 0) early

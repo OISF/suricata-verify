@@ -301,7 +301,7 @@ checks:
       tx_id: 1
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -476,7 +476,7 @@ checks:
       tx_id: 2
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -651,7 +651,7 @@ checks:
       tx_id: 3
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -875,7 +875,7 @@ checks:
       tx_id: 4
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -1099,7 +1099,7 @@ checks:
       tx_id: 5
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -1277,7 +1277,7 @@ checks:
       tx_id: 6
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -1652,7 +1652,7 @@ checks:
       tx_id: 8
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -1876,7 +1876,7 @@ checks:
       tx_id: 9
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -2100,7 +2100,7 @@ checks:
       tx_id: 10
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -2324,7 +2324,7 @@ checks:
       tx_id: 11
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -2549,7 +2549,7 @@ checks:
       tx_id: 12
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -2745,7 +2745,7 @@ checks:
       tx_id: 13
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -2972,7 +2972,7 @@ checks:
       tx_id: 14
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -3197,7 +3197,7 @@ checks:
       tx_id: 15
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -3421,7 +3421,7 @@ checks:
       tx_id: 16
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -3608,7 +3608,7 @@ checks:
       tx_id: 17
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -3832,7 +3832,7 @@ checks:
       tx_id: 18
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -4056,7 +4056,7 @@ checks:
       tx_id: 19
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -4234,7 +4234,7 @@ checks:
       tx_id: 20
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -4458,7 +4458,7 @@ checks:
       tx_id: 21
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -4687,7 +4687,7 @@ checks:
       tx_id: 22
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -5013,7 +5013,7 @@ checks:
       tx_id: 24
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -5237,7 +5237,7 @@ checks:
       tx_id: 25
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -5462,7 +5462,7 @@ checks:
       tx_id: 26
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -5638,7 +5638,7 @@ checks:
       tx_id: 27
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -5862,7 +5862,7 @@ checks:
       tx_id: 28
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -6040,7 +6040,7 @@ checks:
       tx_id: 29
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -6265,7 +6265,7 @@ checks:
       tx_id: 30
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -6443,7 +6443,7 @@ checks:
       tx_id: 31
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -6999,7 +6999,7 @@ checks:
       tx_id: 34
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -7378,7 +7378,7 @@ checks:
       tx_id: 36
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -7719,7 +7719,7 @@ checks:
       tx_id: 38
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -7990,7 +7990,7 @@ checks:
       tx_id: 39
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -8316,7 +8316,7 @@ checks:
       tx_id: 41
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -8494,7 +8494,7 @@ checks:
       tx_id: 42
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -8661,7 +8661,7 @@ checks:
       tx_id: 43
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -8886,7 +8886,7 @@ checks:
       tx_id: 44
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -9119,7 +9119,7 @@ checks:
       tx_id: 45
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -9298,7 +9298,7 @@ checks:
       tx_id: 46
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -9523,7 +9523,7 @@ checks:
       tx_id: 47
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -9732,7 +9732,7 @@ checks:
       tx_id: 48
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -9911,7 +9911,7 @@ checks:
       tx_id: 49
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -10136,7 +10136,7 @@ checks:
       tx_id: 50
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -10361,7 +10361,7 @@ checks:
       tx_id: 51
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -10537,7 +10537,7 @@ checks:
       tx_id: 52
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -10761,7 +10761,7 @@ checks:
       tx_id: 53
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -10940,7 +10940,7 @@ checks:
       tx_id: 54
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
@@ -11165,7 +11165,7 @@ checks:
       tx_id: 55
 - filter:
     requires:
-      min-version: 9
+      min-version: 8.0.8
     count: 1
     match:
       community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
