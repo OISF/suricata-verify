@@ -6,6 +6,10 @@ args:
 - --set stream.midstream=true
 - --set app-layer.protocols.nfs.enabled=yes
 - --set app-layer.protocols.nfs.max-read-size=1048576
+# the fixture's premise is that the engine cannot see the whole claimed
+# record: pin the reassembly depth rather than rely on a branch default
+# (1 MiB on main, unlimited on 8.0.x)
+- --set stream.reassembly.depth=1048576
 
 pcap: input.pcap
 
