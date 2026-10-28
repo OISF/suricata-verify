@@ -1,0 +1,25 @@
+requires:
+  min-version: 8.0.8
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: sip
+        sip.method: "REGISTER"
+        sip.request_line: "REGISTER sip:example.com SIP/2.0"
+  - filter:
+      count: 1
+      match:
+        event_type: sip
+        sip.code: "200"
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.app_layer.flow.sip_tcp: 1
+        stats.app_layer.tx.sip_tcp: 3
+        stats.app_layer.error.sip_tcp.parser: 0

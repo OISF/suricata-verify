@@ -1,0 +1,1 @@
+alert tftp any any -> any any (msg:"TFTP transaction"; sid:1; rev:1;)

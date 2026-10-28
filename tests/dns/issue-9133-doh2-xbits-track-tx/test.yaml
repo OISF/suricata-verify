@@ -1,0 +1,107 @@
+requires:
+  min-version: 8.0.8
+  lt-version: 9
+
+pcap: ../../doh2-xbits-track-tx/input.pcap
+
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      app_proto: doh2
+      app_proto_orig: http2
+- filter:
+    count: 1
+    match:
+      event_type: dns
+      dns.type: response
+      dns.queries[0].rrname: tx1.example.com
+- filter:
+    count: 1
+    match:
+      event_type: dns
+      dns.type: response
+      dns.queries[0].rrname: tx2.example.com
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      app_proto: http2
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 2
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 3
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 4
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 5
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 6
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 7
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 8
+      http.status: 200
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 9
+      http.status: 200
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 13
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 14
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 15
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 16
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 17
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 18

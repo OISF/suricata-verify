@@ -1,0 +1,2 @@
+alert tcp any any -> any any (msg:"SURI-02 attacker request that the endpoint executed"; content:"malicious"; nocase; sid:9100001; rev:1;)
+alert tcp any any -> any any (msg:"SURI-02 PAWS invalid timestamp observed"; stream-event:pkt_invalid_timestamp; sid:9100002; rev:1;)

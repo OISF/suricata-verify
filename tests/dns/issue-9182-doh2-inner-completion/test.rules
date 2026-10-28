@@ -1,0 +1,6 @@
+alert dns any any -> any any (msg:"DoH query control"; flow:to_server; dns.query; content:"evil.com"; sid:1; rev:1;)
+# No answer exists in the request. Empty multi-buffer inspection must check
+# completion using the inner DNS type, not the outer HTTP/2 transaction type.
+alert dns any any -> any any (msg:"DoH request has no DNS answers"; flow:to_server; dns.answer.name; absent; sid:2; rev:1;)
+alert dns any any -> any any (msg:"DoH request must not contain an answer buffer"; flow:to_server; dns.answer.name; isdataat:1; sid:3; rev:1;)
+alert dns any any -> any any (msg:"DoH response answer control"; flow:to_client; dns.answer.name; content:"evil.com"; sid:4; rev:1;)

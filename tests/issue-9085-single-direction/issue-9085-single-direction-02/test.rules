@@ -1,0 +1,2 @@
+alert tftp any any -> any any (msg:"TFTP toserver"; flow:to_server; sid:1; rev:1;)
+alert tftp any any -> any any (msg:"TFTP toclient"; flow:to_client; sid:2; rev:1;)

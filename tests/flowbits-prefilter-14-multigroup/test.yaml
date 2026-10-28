@@ -1,0 +1,26 @@
+# Engine fix: 06234451 on main, backported as fbc10274; 8.0.8 is the first
+# release with it.
+requires:
+  min-version: 8.0.8
+
+pcap: input.pcap
+
+args:
+  - -k none
+
+# sid:1 is a multi port rule, so it is also part of the port 81 group, which
+# has no isset rule and so no post-rule-match engine. Each of the 2000 new
+# flows queues work there; the last packet picks the port 80 group, where the
+# whole queue is expanded at once.
+checks:
+  - filter:
+      count: 2001
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        pcap_cnt: 2001
+        alert.signature_id: 2

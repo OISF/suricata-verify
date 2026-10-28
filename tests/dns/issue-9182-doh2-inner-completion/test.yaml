@@ -1,0 +1,32 @@
+requires:
+  min-version: 8.0.8
+  lt-version: 9
+
+pcap: ../issue-9117-doh2-split-data/input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: doh2
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4

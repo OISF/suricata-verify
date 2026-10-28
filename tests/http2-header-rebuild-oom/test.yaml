@@ -1,0 +1,47 @@
+requires:
+  min-version: 8.0.8
+
+args:
+  - -k none
+
+checks:
+  # the rule from the report alerts: the header buffer is built and inspected
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000001
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000002
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000003
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000004
+  # the event is raised on the request
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2290023
+        direction: to_server
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: http2
+        anomaly.event: too_long_repeated_headers
+  # the logger holds the repeated header once as well
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.request_headers.__len: 5

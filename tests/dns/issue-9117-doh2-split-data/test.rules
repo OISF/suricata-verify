@@ -1,0 +1,4 @@
+alert dns any any -> any any (msg:"DNS query evil.com"; dns.query; content:"evil.com"; sid:1; rev:1;)
+alert dns any any -> any any (msg:"DNS answer evil.com"; dns.answer.name; content:"evil.com"; sid:2; rev:1;)
+alert http2 any any -> any any (msg:"HTTP2 request"; flow:to_server; http.method; content:"POST"; sid:3; rev:1;)
+alert http2 any any -> any any (msg:"HTTP2 response"; flow:to_client; http.response_header; content:"content-type"; sid:4; rev:1;)

@@ -1,0 +1,7 @@
+# Threat detection rules that set a transaction bit outside of an app-layer
+# hook. Such a rule has no transaction of its own, so the set must be a no-op:
+# it must not act on whatever transaction the thread inspected last.
+# IP-only rule: runs on the first packet of each flow, before any app-layer.
+alert tcp any any -> any any (xbits:set,txb1,track tx; sid:200; rev:1;)
+# packet rule on established flows
+alert tcp any any -> any any (flow:established; xbits:set,txb2,track tx; sid:201; rev:1;)
