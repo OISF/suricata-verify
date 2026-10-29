@@ -1,0 +1,63 @@
+requires:
+  min-version: 9
+
+args:
+  - --simulate-ips
+
+pcap: input.pcap
+
+checks:
+  # The response condition never matches, so the pair cannot close. On
+  # 7ad9874c0 these alert once, on the toserver inspection of packet 6.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+
+  # sid 3 is the pair whose halves both match, so it alerts exactly once:
+  # the response is complete and inspected at packet 5, so the toserver
+  # pass of packet 6 inspects the toclient half itself and closes the pair.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+        pcap_cnt: 6
+
+  # sid 21 sets the flowbit on the response and does not alert itself; sid
+  # 22 alerting on packet 6 proves the response side matched on packet 5
+  # and the request side matched later, i.e. both halves do match.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 21
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 22
+        pcap_cnt: 6
+
+  # pin the exchange so the checks above cannot pass vacuously
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.hostname: example.com
+        http.url: /upload
+        http.http_method: POST
+        http.status: 200
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /upload
+        fileinfo.size: 6
+        fileinfo.state: CLOSED

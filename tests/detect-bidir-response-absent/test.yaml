@@ -1,0 +1,45 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # The toclient half can never match this tx, so no `=>` rule alerts.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 11
+  # The request side does match, so a plain rule proves the checks above
+  # are not vacuous.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 21
+
+  # pin the exchange: 1 request tx, no response tx at all
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.hostname: example.com
+        http.url: /upload
+        http.http_method: POST
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /upload
+        fileinfo.size: 14
+        fileinfo.state: CLOSED
