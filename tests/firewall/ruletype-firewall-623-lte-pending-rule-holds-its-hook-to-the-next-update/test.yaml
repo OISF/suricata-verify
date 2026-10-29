@@ -1,0 +1,38 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+args:
+  - --simulate-ips
+  - -k none
+pcap: input.pcap
+checks:
+  # Frame 4: the tx is AT request_headers with the header block still open. sid 110 is
+  # hooked less-than there and cannot be excluded yet, so it is pending; nothing at all
+  # decides this update - not sid 120 at the same hook, not the hook default (2201001).
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        pcap_cnt: 4
+  # Frame 6 closes the block: 110 misses on a buffer that is now final, and the walk
+  # then reaches 120, whose drop decides the flow in that same update. So 120 is never
+  # skipped - it is held to the update where the pending rule settles.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 110
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 120
+        alert.action: blocked
+        firewall.hook: http:request_headers
+        pcap_cnt: 6
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.action: drop

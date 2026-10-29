@@ -1,0 +1,33 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+args:
+  - --simulate-ips
+  - -k none
+pcap: input.pcap
+checks:
+  # sid 100 (<request_line) sets the flowbit and sid 200 (<request_headers)
+  # reads it, both in the walk of packet 4. sid 200's pattern only arrives on
+  # packet 6, so on packet 4 it is pending at its hook: the request_headers
+  # default must wait for it. It matches on packet 6 and accepts the flow, as
+  # on main.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 200
+        pcap_cnt: 6
+        alert.action: allowed
+        firewall.hook: http:request_headers
+        firewall.policy: accept:flow,alert
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.action: accept
+        flow.alerted: true

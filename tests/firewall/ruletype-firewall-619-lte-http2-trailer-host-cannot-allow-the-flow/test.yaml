@@ -1,0 +1,33 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+args:
+  - --simulate-ips
+  - -k none
+pcap: input.pcap
+checks:
+  # With an accept:hook default the flow outlives the first DATA frame, so the
+  # trailer update is reached, so a rule that read it could decide the flow here.
+  # The claim is that the trailer value does not satisfy http.host: no 110 alert at
+  # any packet. With the header-section fix reverted that filter fails - 110 alerts
+  # on packet 8. Where the hook-scope policy alert lands is left to 560 and 608:
+  # on musl and msys2 legs it does not appear at the packet the glibc legs show,
+  # so pinning it here would be a platform claim, not a firewall one. On musl and ucrt
+  # the walked-over hooks' default alerts are not logged at all: the firewall alert sort
+  # has no tie case, so equal iid and tx_id compares -1 both ways and qsort's order is
+  # whatever the C library does. That is main's code and a separate issue.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 110
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.alerted: true

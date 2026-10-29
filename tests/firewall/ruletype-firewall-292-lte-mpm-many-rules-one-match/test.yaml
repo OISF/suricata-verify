@@ -1,0 +1,44 @@
+requires:
+  min-version: 9
+
+args:
+- --simulate-ips
+- -k none
+
+pcap: ../lte-matrix-data/http1.pcap
+
+checks:
+# the matching host rule accepts at the hook state
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 102
+      alert.action: allowed
+      firewall.hook: http:request_headers
+      pcap_cnt: 10
+# no other rule decides
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 100
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 101
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 103
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 104
+- filter:
+    count: 0
+    match:
+      event_type: drop

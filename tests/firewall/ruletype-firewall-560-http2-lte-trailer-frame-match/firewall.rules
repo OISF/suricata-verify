@@ -1,0 +1,3 @@
+accept:hook tcp:all any any -> any any (flow:not_established; sid:1;)
+accept:hook tcp:all any any <> any any (flow:established; sid:2;)
+accept:flow,alert http2:stream:<request_headers $HOME_NET any -> $EXTERNAL_NET any (http.header; content:"x-note"; sid:110; rev:1;)
