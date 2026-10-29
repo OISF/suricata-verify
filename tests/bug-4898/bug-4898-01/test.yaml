@@ -1,0 +1,24 @@
+requires:
+  min-version: 9
+
+pcap: ../../bug-4482/bug-4482-01/input.pcap
+
+args:
+- --set app-layer.protocols.http.libhtp.default-config.swf-decompression.enabled=yes
+
+checks:
+  # file_data rule triggers SWF decompression which hits corrupt zlib data
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+
+  # The file decoder event appears as an EVE anomaly even though no
+  # app-layer-event rule is loaded — tests that det_ctx->decoder_events
+  # is transferred to p->app_layer_events for logging (issue #4898)
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: file.Z_DATA_ERROR
