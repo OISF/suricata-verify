@@ -1,0 +1,7 @@
+alert imap any any -> any any (app-layer-event:imap.invalid_data; sid:1; rev:1;)
+alert imap any 42010 <> any any (flow:to_server,established; imap.request; content:"A2 IDLE"; startswith; endswith; sid:101; rev:1;)
+alert imap any 42010 <> any any (flow:to_server,established; imap.request; content:"A4 IDLE"; startswith; endswith; sid:102; rev:1;)
+alert tcp any 42020 <> any any (imap.request; content:"SUBJECT secret"; sid:201; rev:1;)
+alert imap any 42030 <> any any (flow:to_client,established; imap.response; content:"A6 OK NOOP completed"; startswith; endswith; sid:301; rev:1;)
+alert imap any 42030 <> any any (flow:to_client,established; imap.response; content:"INBOX"; sid:302; rev:1;)
+alert imap any 42030 <> any any (flow:to_client,established; imap.response; content:"Archive"; sid:303; rev:1;)

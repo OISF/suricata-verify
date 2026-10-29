@@ -1,0 +1,69 @@
+requires:
+  min-version: 9
+args:
+  - --simulate-ips
+  - -k none
+  - --set app-layer.protocols.imap.enabled=yes
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        direction: to_client
+        tx_id: 1
+        flow.src_port: 42010
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        flow.src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: imap
+        anomaly.event: data_limit_reached
+        dest_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 201
+        flow.src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        direction: to_client
+        tx_id: 1
+        flow.src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        direction: to_client
+        tx_id: 2
+        flow.src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A2 NOOP
+        imap.responses[0]: A2 OK NOOP completed
+        src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.firewall.blocked: 0
+        stats.app_layer.error.imap.parser: 0

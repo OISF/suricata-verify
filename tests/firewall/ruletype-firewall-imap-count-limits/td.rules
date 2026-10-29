@@ -1,0 +1,1 @@
+alert imap any 42020 <> any any (app-layer-event:imap.data_limit_reached; sid:201; rev:1;)
