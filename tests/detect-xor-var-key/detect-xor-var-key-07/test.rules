@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"XOR var unknown variable"; http.request_body; xor:var nosuchvar; content:"SECRET"; sid:1;)

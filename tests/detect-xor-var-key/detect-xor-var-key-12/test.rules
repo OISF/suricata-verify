@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"XOR var key with decode offset"; http.uri; byte_extract:1,1,xkey; http.request_body; xor:offset 4,var xkey; content:"SECRET"; sid:1;)
