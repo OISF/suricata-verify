@@ -1,0 +1,3 @@
+alert icmp !$TEST_1 any -> any any (flow:stateless; msg:"ICMPv6 Test Sig 1 - IPv4 only"; itype:136; sid:1; rev:1;)
+alert icmp !$TEST_2 any -> any any (flow:stateless; msg:"ICMPv6 Test Sig 2 - IPv4 and IPv6"; itype:136; sid:2; rev:1;)
+alert icmp !$TEST_3 any -> any any (flow:stateless; msg:"ICMPv6 Test Sig 3 - IPv6 only"; itype:136; sid:3; rev:1;)
