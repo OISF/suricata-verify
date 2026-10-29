@@ -1,0 +1,25 @@
+requires:
+  min-version: 8.0.7
+
+env:
+  ASAN_OPTIONS: detect_leaks=0
+
+args:
+  - --set outputs.3.pcap-log.enabled=yes
+  - --set outputs.3.pcap-log.conditional=alerts
+  - --set outputs.3.pcap-log.filename=log.pcap
+  - -k none
+  - --runmode single
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 8835001
+
+  - shell:
+      args: "find . -maxdepth 1 -name 'log.pcap*' -type f -size +65549c | grep -q ."
+
+  - stats:
+      decoder.max_pkt_size: 65549

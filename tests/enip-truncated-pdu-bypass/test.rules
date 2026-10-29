@@ -1,0 +1,6 @@
+# Fires on the CIP request carried by the SendRRData PDU (service 0x03).
+alert enip any any -> any any (msg:"CIP service present"; cip_service:3; sid:1; rev:1;)
+# Fires on the ListIdentity PDU (cmd 0x0063) that precedes it.
+alert enip any any -> any any (msg:"ENIP ListIdentity"; enip_command:99; sid:2; rev:1;)
+# Fires on the SendRRData PDU (cmd 0x006f) that carries the CIP request.
+alert enip any any -> any any (msg:"ENIP SendRRData"; enip_command:111; sid:3; rev:1;)

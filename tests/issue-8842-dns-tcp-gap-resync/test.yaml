@@ -1,0 +1,40 @@
+requires:
+  min-version: 8.0.7
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        dns.queries[0].rrname: evil.test.com
+
+  - filter:
+      count: 1
+      match:
+        event_type: dns
+        dns.type: request
+        dns.queries[0].rrname: www.test.com
+
+  - filter:
+      count: 1
+      match:
+        event_type: dns
+        dns.type: request
+        dns.queries[0].rrname: evil.test.com
+
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: dns
+
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.tcp.reassembly_gap: 1
+        stats.app_layer.error.dns_tcp.parser: 0

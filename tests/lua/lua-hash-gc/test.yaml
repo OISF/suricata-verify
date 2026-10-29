@@ -1,0 +1,9 @@
+requires:
+  min-version: 8.0.7
+  features:
+    - HAVE_LUA
+
+args:
+   - --set default-rule-path=${TEST_DIR}
+   - --set security.lua.allow-rules=true
+   - --runmode single

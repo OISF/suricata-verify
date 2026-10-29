@@ -1,0 +1,10 @@
+# A RETR hidden behind an oversized command in the same client segment. The
+# oversized USER is reported truncated; the RETR behind it must still be parsed
+# and reach the data-channel negotiation, where -- with no PORT negotiated --
+# it raises file_before_port. See README.md.
+flow ctrl tcp 1.1.1.1:40000 > 2.2.2.2:21 (tcp.initialize;);
+ctrl < (content:"220 ready\x0d\x0a";);
+ctrl > (content:"USER AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\x0d\x0aRETR secret.txt\x0d\x0a";);
+ctrl < (content:"530 not logged in\x0d\x0a";);
+ctrl > (content:"QUIT\x0d\x0a";);
+ctrl < (content:"221 bye\x0d\x0a";);

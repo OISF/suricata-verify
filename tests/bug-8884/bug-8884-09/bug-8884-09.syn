@@ -1,0 +1,11 @@
+# Response direction: the remainder of an oversized reply arrives with a real
+# reply behind it in the same slice. The remainder is dropped, the 226 must
+# reach the pending transaction. See README.md.
+flow c tcp 1.1.1.1:40000 > 2.2.2.2:21 (tcp.initialize;);
+c < (content:"220 ready\x0d\x0a";);
+c > (content:"USER x\x0d\x0a";);
+c > (content:"PWD\x0d\x0a";);
+c < (content:"550 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";);
+c < (content:"AAAA\x0d\x0a226 done\x0d\x0a";);
+c > (content:"QUIT\x0d\x0a";);
+c < (content:"221 bye\x0d\x0a";);

@@ -1,0 +1,1 @@
+alert udp any any -> any any (msg:"IPv6 maximum payload inspected"; content:"IPV6-MAX-PAYLOAD-8818"; endswith; sid:1;)

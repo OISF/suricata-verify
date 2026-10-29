@@ -1,0 +1,55 @@
+# FTP commands padded with trailing whitespace must not leak the global FTP
+# memuse counter.
+#
+# CopyCommandLine allocated the whole request line, then stripped the trailing
+# whitespace and returned the reduced length. The transaction was later freed
+# with that reduced length, so every stripped byte stayed on the counter for
+# the life of the process. FTPCheckMemcap refuses any allocation that would
+# cross the memcap, so the counter stops just below it and request buffers are
+# the first allocations to fail.
+#
+# The pcap sends 30 "USER a" commands padded with 1000 spaces each, then a
+# separate, ordinary FTP flow. The memcap sits between the two sides: with the
+# accounting fixed, the padded flow keeps all 30 command_data values even with
+# the cap as low as 640 bytes; with it broken, the flow leaks 30000 bytes.
+
+requires:
+  min-version: 8.0.7
+
+args:
+- -k none --set app-layer.protocols.ftp.memcap=16384
+
+checks:
+  # Nothing is outstanding once the flows are gone.
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.ftp.memuse: 0
+
+  # Every padded command is parsed and its request buffer allocated: with the
+  # counter inflated, the allocations start failing 15 commands in, and the
+  # rest are logged without command_data.
+  - filter:
+      count: 30
+      match:
+        event_type: ftp
+        ftp.command: USER
+        ftp.command_data: "a"
+
+  # A flow that arrives after the padded one is still parsed. The broken parser
+  # manages that too at this cap -- the room left below it is enough for a
+  # 72 byte FtpState -- so this check records what is expected rather than
+  # catching the regression.
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: USER
+        ftp.command_data: "bob"
+
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: QUIT

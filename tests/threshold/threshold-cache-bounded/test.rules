@@ -1,0 +1,1 @@
+alert udp any any -> any 9999 (msg:"threshold cache cardinality test"; content:"CACHE9"; threshold:type limit, track by_src, count 1, seconds 1; sid:9000009; rev:1;)

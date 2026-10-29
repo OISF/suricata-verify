@@ -1,0 +1,14 @@
+requires:
+  min-version: 8.0.7
+
+args:
+  - -k none
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.app_layer.error.ike.parser: 3

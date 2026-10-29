@@ -1,0 +1,1 @@
+alert tcp any any -> any 80 (msg:"8805 LUA SANDBOX MEMORY LIMIT"; lua:limit.lua; sid:8805001; rev:1;)

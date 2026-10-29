@@ -1,0 +1,5 @@
+alert pgsql any any -> any any (msg:"PGSQL too many responses in a single transaction"; app-layer-event:pgsql.too_many_responses; flow:to_client; sid:1;)
+# Negative guard: the crafted traffic is well-formed pgsql. If capping the
+# responses ever desyncs the parser, this fires and tells us the cap broke
+# parsing rather than merely bounding it.
+alert pgsql any any -> any any (msg:"PGSQL malformed message"; app-layer-event:pgsql.malformed_response; flow:to_client; sid:2;)

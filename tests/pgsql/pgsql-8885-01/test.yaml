@@ -1,0 +1,66 @@
+requires:
+  min-version: 8.0.7
+
+args:
+  - -k none
+
+checks:
+  # 2 transactions per flow: startup/auth, and the query
+  - filter:
+      count: 10
+      match:
+        event_type: pgsql
+  # Every flow sends CommandComplete + ReadyForQuery after the crafted message,
+  # in a separate segment. A parser that cannot get past the crafted message
+  # loses them.
+  - filter:
+      count: 5
+      match:
+        event_type: pgsql
+        pgsql.response.command_completed: "SELECT 1"
+  # The four flows that follow the crafted message with a well-formed DataRow
+  - filter:
+      count: 4
+      match:
+        event_type: pgsql
+        pgsql.response.data_rows: 1
+        pgsql.response.data_size: 2
+  # 47830, whose only DataRow is the crafted one: counted, but contributes no size
+  - filter:
+      count: 1
+      match:
+        event_type: pgsql
+        pgsql.response.data_rows: 1
+        pgsql.response.data_size: 0
+  # The three crafted RowDescriptions
+  - filter:
+      count: 3
+      match:
+        event_type: pgsql
+        pgsql.response.row_description_malformed: true
+  # The control's RowDescription
+  - filter:
+      count: 1
+      match:
+        event_type: pgsql
+        pgsql.response.field_count: 1
+        pgsql.response.row_description_malformed: false
+  # The declared count is reported as the backend sent it, however implausible
+  - filter:
+      count: 1
+      match:
+        event_type: pgsql
+        pgsql.response.field_count: 65535
+        pgsql.response.row_description_malformed: true
+  # One per crafted flow; the control raises none
+  - filter:
+      count: 4
+      match:
+        event_type: anomaly
+        anomaly.app_proto: pgsql
+        anomaly.event: malformed_response
+  - filter:
+      count: 5
+      match:
+        event_type: flow
+        app_proto: pgsql

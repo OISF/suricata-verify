@@ -1,0 +1,2 @@
+alert udp any any -> any any (msg:"GC NOT EXPOSED"; lua:test.lua; sid:1; rev:1;)
+alert udp any any -> any any (msg:"USE AFTER FINALIZE"; lua:finalized.lua; sid:2; rev:1;)

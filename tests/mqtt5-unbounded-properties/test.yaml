@@ -1,0 +1,49 @@
+# Regression test for the MQTT v5 unknown-property handling.
+#
+# A single to-server CONNECT carries 300 UNKNOWN properties (a run of 0x7F bytes,
+# unknown property identifier 127). parse_properties() must DROP unknown
+# properties rather than store them, so they neither grow the retained
+# Vec<MQTTProperty> nor count toward the MQTT_MAX_PROPERTIES cap.
+#
+# Why 300 (> the 256 cap) and why the too_many_properties guard:
+#   - If unknown properties were stored again (regression), 256 of these 300
+#     would reach the cap and raise too_many_properties -- so a count of 0 for
+#     that event proves they are being dropped.
+#   - They render as {} in either case (UNKNOWN logs nothing), so the empty
+#     properties object alone cannot distinguish fixed from vulnerable; the
+#     too_many_properties guard below is what makes this a real regression test.
+
+requires:
+  min-version: 8.0.7
+
+args:
+  - -k none
+
+checks:
+
+  # The v5 CONNECT parses; all 300 unknown properties are dropped -> logs empty.
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.connect.qos: 0
+        mqtt.connect.protocol_string: MQTT
+        mqtt.connect.protocol_version: 5
+        mqtt.connect.client_id: ""
+        mqtt.connect.flags.clean_session: true
+        mqtt.connect.properties: {}
+
+  # Regression guard: unknown properties must NOT be stored, so they must not
+  # reach the cap. If retention regresses, 256 would be stored and this fires.
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.event: too_many_properties
+
+  # The unknown-property flood is otherwise accepted silently: no mqtt anomaly.
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.app_proto: mqtt
