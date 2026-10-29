@@ -1,0 +1,3 @@
+alert udp any any -> any 7777 (msg:"Replace contiguous datagram tail"; dsize:500; content:"|de ad be ef|"; offset:496; depth:4; replace:"|ca fe ba be|"; sid:1;)
+alert udp any any -> any 7777 (msg:"Replace 9 segment datagram tail"; dsize:8972; content:"|de ad be ef|"; offset:8968; depth:4; replace:"|ca fe ba be|"; sid:2;)
+alert tcp any any -> any 8080 (msg:"Overlap with different data"; stream-event:reassembly_overlap_different_data; sid:3;)
