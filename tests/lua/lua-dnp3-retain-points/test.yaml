@@ -1,7 +1,7 @@
 requires:
   # The lazy points userdata (and its lifetime guard) is a main/9.0.0 feature;
   # on 8.0.x obj["points"] is an eager table and this test cannot run.
-  min-version: 9
+  min-version: 8.0.8
 
 pcap: test.pcap
 

@@ -3,7 +3,7 @@ pcap: input.pcap
 requires:
   features:
     - HAVE_LUA
-  min-version: 9.0.0
+  min-version: 8.0.8
 
 checks:
   # Both messages are delivered as their own transaction: tx 0 is complete

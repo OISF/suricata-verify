@@ -7,7 +7,7 @@
 # 300 KB cap for the script's own allocations) must succeed.
 
 requires:
-  min-version: 9
+  min-version: 8.0.8
 
 pcap: input.pcap
 

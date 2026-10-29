@@ -16,7 +16,7 @@
 # by the per-run flow hash and the old engine passes some runs.
 
 requires:
-  min-version: 9
+  min-version: 8.0.8
 
 pcap: input.pcap
 
