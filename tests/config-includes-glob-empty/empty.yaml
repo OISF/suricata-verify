@@ -1,0 +1,12 @@
+%YAML 1.1
+---
+
+# conf.d/ is created empty by the test setup, so the pattern matches no files.
+# A pattern that matches nothing must only warn, so the keys before and after
+# the include are still loaded and Suricata exits successfully.
+glob-empty-before: present
+
+include:
+  - "conf.d/*.yaml"
+
+glob-empty-after: present
