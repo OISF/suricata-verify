@@ -1,0 +1,61 @@
+requires:
+  min-version: 9
+
+args:
+  - --simulate-ips
+
+pcap: input.pcap
+
+checks:
+  # The toclient half matches at packet 6, while the chunked response is
+  # still streaming. The request half matches at packet 8, when the
+  # part-secret segment arrives, so the toserver pass of packet 8 closes
+  # the pair: sid 1 alerts exactly once there. On 2e82e8472 the
+  # wrong-variant toclient engines hold the pair open in that pass
+  # (other_dir_pending) and the rule never alerts.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 8
+
+  # unfiltered count: main alerts twice (packets 8 and 10), so the
+  # exactly-one count pins the single alert and fails the duplicate
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+
+  # the standard halves prove both sides match independently: the response
+  # at packet 6, the request body at packet 8
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 21
+        pcap_cnt: 6
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 22
+        pcap_cnt: 8
+
+  # pin the exchange so the checks above cannot pass vacuously
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.hostname: example.com
+        http.url: /upload
+        http.http_method: POST
+        http.status: 200
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /upload
+        fileinfo.size: 26
+        fileinfo.state: CLOSED

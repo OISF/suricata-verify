@@ -1,0 +1,10 @@
+alert http any any => any any (msg:"body fast_pattern and stat_msg"; http.request_body; content:"secret"; fast_pattern; http.stat_msg; content:"OK"; sid:1; rev:1;)
+alert http any any => any any (msg:"file.data fast_pattern and stat_code"; file.data: to_server; content:"secret"; fast_pattern; http.stat_code; content:"200"; sid:2; rev:1;)
+
+alert http any any => any any (msg:"body fast_pattern and unmatched stat_msg"; http.request_body; content:"secret"; fast_pattern; http.stat_msg; content:"ZZZZZZ"; sid:11; rev:1;)
+alert http any any => any any (msg:"file.data fast_pattern and unmatched stat_code"; file.data: to_server; content:"secret"; fast_pattern; http.stat_code; content:"404"; sid:12; rev:1;)
+
+alert http any any -> any any (msg:"standard: body"; flow:established,to_server; http.request_body; content:"secret"; sid:21; rev:1;)
+alert http any any -> any any (msg:"standard: file.data"; flow:established,to_server; file.data; content:"secret"; sid:22; rev:1;)
+alert http any any -> any any (msg:"standard: body, set flowbit"; flow:established,to_server; http.request_body; content:"secret"; flowbits:set,body_secret; flowbits:noalert; sid:23; rev:1;)
+alert http any any -> any any (msg:"standard: flowbit and stat_msg"; flow:established,to_client; flowbits:isset,body_secret; http.stat_msg; content:"OK"; sid:24; rev:1;)

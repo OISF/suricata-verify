@@ -1,0 +1,9 @@
+alert http any any => any any (msg:"uri, body and stat_msg"; http.uri; content:"/upload"; fast_pattern; http.request_body; content:"secret"; http.stat_msg; content:"OK"; sid:1; rev:1;)
+alert http any any => any any (msg:"host, body and stat_code"; http.host; content:"example"; fast_pattern; http.request_body; content:"secret"; http.stat_code; content:"200"; sid:2; rev:1;)
+alert http any any => any any (msg:"uri, file.data and stat_code"; http.uri; content:"/upload"; fast_pattern; file.data: to_server; content:"secret"; http.stat_code; content:"200"; sid:3; rev:1;)
+alert http any any => any any (msg:"body fast_pattern and host and stat_msg"; http.request_body; content:"secret"; fast_pattern; http.host; content:"example"; http.stat_msg; content:"OK"; sid:4; rev:1;)
+
+alert http any any => any any (msg:"uri, body and unmatched stat_msg"; http.uri; content:"/upload"; fast_pattern; http.request_body; content:"secret"; http.stat_msg; content:"ZZZZZZ"; sid:11; rev:1;)
+alert http any any => any any (msg:"host, body and unmatched stat_code"; http.host; content:"example"; fast_pattern; http.request_body; content:"secret"; http.stat_code; content:"404"; sid:12; rev:1;)
+alert http any any => any any (msg:"uri, file.data and unmatched stat_code"; http.uri; content:"/upload"; fast_pattern; file.data: to_server; content:"secret"; http.stat_code; content:"404"; sid:13; rev:1;)
+alert http any any => any any (msg:"body fast_pattern and host and unmatched stat_msg"; http.request_body; content:"secret"; fast_pattern; http.host; content:"example"; http.stat_msg; content:"ZZZZZZ"; sid:14; rev:1;)

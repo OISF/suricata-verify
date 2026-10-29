@@ -1,0 +1,2 @@
+alert doh2 any any => any any (msg:"DoH2 POST pair completes on the response"; flow:established; http.uri; content:"/dns-query"; dns.response.rrname; content:"x"; sid:1; rev:1;)
+alert doh2 any any => any any (msg:"DoH2 POST pair, unmatched response half"; flow:established; http.uri; content:"/dns-query"; dns.response.rrname; content:"nomatchzzz"; sid:2; rev:1;)
