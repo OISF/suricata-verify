@@ -4,6 +4,13 @@ args:
 checks:
 - filter:
     requires:
+      min-version: 9
+    count: 1451
+    match:
+      event_type: dcerpc
+- filter:
+    requires:
+      lt-version: 9
       min-version: 8.0.5
     count: 1450
     match:

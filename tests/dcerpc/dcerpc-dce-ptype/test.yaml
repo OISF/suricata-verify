@@ -1,0 +1,46 @@
+pcap: ../../dcerpc/dcerpc-dce-iface-02/input.pcap
+
+requires:
+  min-version: 9
+
+args:
+- -k none
+
+checks:
+  # bind (11), to_server
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # bind_ack (12), to_client
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  # request (0), to_server
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  # response (2), to_client: only the real response matches now that the
+  # bind/bindack tx no longer defaults resp_cmd to RESPONSE
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
+  # ptype > 10 to_server matches the bind (req_cmd 11)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 5
+  # not a request (!0), to_server matches the bind
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 6

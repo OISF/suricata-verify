@@ -6,6 +6,6 @@ args:
 
 checks:
   - filter:
-      count: 16
+      count: 18
       match:
         event_type: dcerpc
