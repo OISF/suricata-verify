@@ -1,0 +1,8 @@
+# The capture allocates alert info for the match, and the drop verdict allocates
+# it a second time for the alert the packet keeps for the drop log. Both have to
+# stay valid until the packet is logged and released when it is recycled.
+drop udp any any -> any 9999 (flow:to_server; content:"q="; pcre:"/q=([a-z0-9]+)/,alert:captured"; msg:"drop with pcre capture"; sid:1; rev:1;)
+
+# Plain alert on the same packets, the reference that detection keeps running on
+# the flow after the first drop verdict.
+alert udp any any -> any 9999 (flow:to_server; content:"q="; sid:2; rev:1;)
