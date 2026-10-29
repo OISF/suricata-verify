@@ -1,0 +1,23 @@
+requires:
+  min-version: 9
+
+args:
+  - --runmode=single
+
+checks:
+  - filter:
+      count: 10
+      match:
+        event_type: alert
+
+  # 5 entries spread across 2 non-empty buckets (3 + 2). Real average is
+  # 2.5; the integer counter reports 2. Consumers can compute the exact
+  # average from `entries` / `nonempty_buckets`.
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.thresholds.entries: 5
+        stats.detect.thresholds.nonempty_buckets: 2
+        stats.detect.thresholds.max_bucket_depth: 3
+        stats.detect.thresholds.avg_bucket_depth: 2

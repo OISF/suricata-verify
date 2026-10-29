@@ -1,0 +1,1 @@
+alert tcp any any -> any 80 (msg:"detection_filter by_src"; flags:S; flow:stateless; detection_filter:track by_src, count 1, seconds 3600; sid:1;)
