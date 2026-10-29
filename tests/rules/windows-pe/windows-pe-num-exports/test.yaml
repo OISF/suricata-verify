@@ -1,0 +1,69 @@
+requires:
+  min-version: 9
+
+args:
+- -k none
+
+checks:
+# SID 1: num_exports >0 — both DLLs (2 matches)
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 1
+
+# SID 2: num_exports >3 — only many_exports.dll (1 match)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2
+
+# SID 3: num_exports 5 — only many_exports.dll (1 match)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 3
+
+# SID 4: num_exports 1 — only few_exports.dll (1 match)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 4
+
+# SID 5: num_exports 0 — only no_exports.exe (1 match)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 5
+
+# SID 6: num_exports <2 — few_exports.dll + no_exports.exe (2 matches)
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 6
+
+# SID 7: num_exports 99 — no match (0 matches)
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 7
+
+# SID 8: arch x86 + num_exports >3 (1 match)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 8
+
+# Verify fileinfo events for all 3 PEs
+- filter:
+    count: 3
+    match:
+      event_type: fileinfo
+      executable.type: windows_pe

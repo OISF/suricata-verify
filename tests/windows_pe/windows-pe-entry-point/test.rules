@@ -1,0 +1,13 @@
+# Test executable.entry_point keyword (all PEs have entry_point = 0x1000 = 4096)
+
+# Test 1: Detect PE files with entry point > 4000 (all match, 4096 > 4000)
+alert http any any -> any any ( msg:"TEST executable.entry_point >4000"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, entry_point >4000; sid:40; rev:1;)
+
+# Test 2: Detect PE files with entry point < 5000 (all match, 4096 < 5000)
+alert http any any -> any any ( msg:"TEST executable.entry_point <5000"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, entry_point <5000; sid:41; rev:1;)
+
+# Test 3: Detect PE files with very high entry point (>100000, none match)
+alert http any any -> any any ( msg:"TEST executable.entry_point >100000"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, entry_point >100000; sid:42; rev:1;)
+
+# Test 4: Detect PE files with entry point in range 4000-5000 (all match)
+alert http any any -> any any ( msg:"TEST executable.entry_point range 4000-5000"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, entry_point 4000-5000; sid:43; rev:1;)

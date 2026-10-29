@@ -1,0 +1,8 @@
+# Test windows_pe section_wx keyword
+# Basic test PEs do NOT have W+X sections
+
+# No match: section_wx (none have W+X sections)
+alert http any any -> any any ( msg:"TEST section_wx"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: section_wx; sid:1; rev:1;)
+
+# Verify bare windows_pe still matches (all 5)
+alert http any any -> any any ( msg:"TEST bare windows_pe"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe; sid:2; rev:1;)
