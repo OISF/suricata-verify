@@ -1,0 +1,6 @@
+# dns rules on the response side of a doh2 flow
+alert dns any any -> any any (dns.answers.rrname; content: "www.gstatic.com"; sid:20;)
+alert doh2 any any -> any any (dns.answers.rrname; content: "www.gstatic.com"; sid:21;)
+
+# this rule does not match, but causes crash
+alert http2 any any -> any any (http.response_header; content: "zzzz"; sid:30;)
