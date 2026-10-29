@@ -1,0 +1,24 @@
+%YAML 1.1
+---
+
+requires:
+  min-version: 9.0
+
+args:
+  - -k none
+
+checks:
+  # only the transaction whose URI carries 2 jumps to END; the pipelined one
+  # carries 0 and reads a letter
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        http.url: "/j/2/"
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        http.url: "/j/0/"

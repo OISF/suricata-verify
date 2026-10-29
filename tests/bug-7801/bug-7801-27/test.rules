@@ -1,0 +1,2 @@
+alert http any any -> any any (msg:"writes 45 to local_id 0 while b.bin is inspected"; flow:established,to_server; file.data; content:"and-some"; byte_extract:1,0,w,relative; byte_test:1,=,w,6; sid:1;)
+alert http any any -> any any (msg:"byte_extract http.uri, filesize can't match the first file, file.data of the second"; flow:established,to_server; http.uri; content:"/up/"; fast_pattern; byte_extract:2,0,v,relative,string,dec; filesize:>10; file.data; content:"DATA"; byte_test:2,=,v,0,relative,string,dec; sid:2;)

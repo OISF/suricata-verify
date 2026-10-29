@@ -1,0 +1,1 @@
+alert http any any => any any (msg:"byte_extract http.uri -> byte_jump offset in file.data"; flow:established; http.uri; content:"/j/"; fast_pattern; byte_extract:1,0,off,relative,string,dec; file.data: to_client; byte_jump:1,off,string,dec; content:"END"; within:3; sid:1;)

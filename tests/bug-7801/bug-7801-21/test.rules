@@ -1,0 +1,1 @@
+alert http any any => any any (msg:"byte_extract http.uri -> content distance in file.data"; flow:established; http.uri; content:"/d/"; fast_pattern; byte_extract:1,0,dist,relative,string,dec; file.data: to_client; content:"AA"; content:"ZZ"; distance:dist; within:2; sid:1;)
