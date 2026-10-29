@@ -1,0 +1,28 @@
+# Loader threads modify the global config tree in parallel during
+# reload-tenants. The first reload frees each tenant's original engine, which
+# removes its "multi-detect.<id>" config node. The second reload then has
+# every loader re-create its node under "multi-detect" at the same time, and
+# an insert can be lost ("failed to load yaml" or "failed to properly setup
+# yaml").
+#
+# The race is timing dependent, so it is repeated with new tenant ids in each
+# of 30 cycles.
+
+requires:
+  pcap: false
+  features:
+    - UNIX_SOCKET
+
+command: |
+  sh ${TEST_DIR}/commands.sh |
+  python3 ${TEST_DIR}/sc-driver.py ${SRCDIR}/src/suricata \
+      -c ${TEST_DIR}/suricata.yaml -l ${OUTPUT_DIR} \
+      --set classification-file=${SRCDIR}/etc/classification.config \
+      --set reference-config-file=${SRCDIR}/etc/reference.config
+
+checks:
+  - filter:
+      filename: sc.json
+      count: 540
+      match:
+        return: OK
