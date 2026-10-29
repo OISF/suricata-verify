@@ -11,8 +11,8 @@ checks:
       match:
         event_type: smtp
 
-  # Message 1: alice -> bob, delivered in two BDAT chunks. BDAT message content
-  # is not MIME parsed, so no email fields are expected.
+  # Message 1: alice -> bob, delivered in two BDAT chunks. The payload is not a
+  # MIME message, so nothing is asserted about email fields here.
   - filter:
       count: 1
       match:
