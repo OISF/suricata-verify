@@ -1,6 +1,6 @@
 requires:
   # The lazy points userdata and its __pairs iterator are 9.0 features.
-  min-version: 9
+  min-version: 8.0.8
 
 pcap: test.pcap
 

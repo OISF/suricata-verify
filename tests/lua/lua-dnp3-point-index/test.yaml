@@ -1,5 +1,5 @@
 requires:
-  min-version: 9
+  min-version: 8.0.8
 
 pcap: ../../dnp3/dnp3-max-points/test.pcap
 

@@ -7,7 +7,7 @@
 # setup (output scripts). Number keys must be skipped.
 
 requires:
-  min-version: 9
+  min-version: 8.0.8
 
 pcap: ../../lua-output-http/input.pcap
 

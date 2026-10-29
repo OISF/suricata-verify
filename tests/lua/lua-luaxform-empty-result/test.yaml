@@ -15,7 +15,7 @@
 # the second session loses its content and only one alert fires.
 
 requires:
-  min-version: 9
+  min-version: 8.0.8
 
 pcap: input.pcap
 

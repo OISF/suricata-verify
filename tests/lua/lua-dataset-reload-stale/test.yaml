@@ -1,5 +1,5 @@
 requires:
-  min-version: 9
+  min-version: 8.0.8
 
 # The pcap is paced through a FIFO so the rule reload is guaranteed to
 # land between the pre- and post-reload traffic.
