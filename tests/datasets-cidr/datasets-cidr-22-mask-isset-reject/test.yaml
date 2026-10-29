@@ -1,0 +1,13 @@
+requires:
+  min-version: 9
+  pcap: false
+
+exit-code: 1
+
+args:
+  - --engine-analysis
+
+checks:
+  - shell:
+      args: grep "mask is only supported for CIDR datasets with 'set' and 'unset' commands" suricata.log | wc -l | xargs
+      expect: 1
