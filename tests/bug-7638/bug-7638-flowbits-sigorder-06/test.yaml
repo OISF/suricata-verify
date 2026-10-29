@@ -1,0 +1,28 @@
+requires:
+    min-version: 9
+
+pcap: false
+
+args:
+  - --engine-analysis
+
+# Two independent deadlocks in one ruleset:
+#
+#   sid:3 and sid:4 each set the bit the other reads (C and D)
+#   sid:7 and sid:8 each set the bit the other reads (G and F)
+#
+# F has two setters (sid:6 and sid:8), so the first resolution round drops one
+# of its edges. The next round hits a set/set cycle of uniform weight, which
+# cannot be broken.
+#
+# Before the engine starts, one error names the signatures in the cycle and
+# one says the dependencies could not be resolved. The rest of the resolver's
+# details are only logged at debug level.
+
+checks:
+  - shell:
+      args: 'grep -cF "Error: flowbits_resolver: Cyclic dependency found between flowbits from signatures: [3, 4]" suricata.log || true'
+      expect: 1
+  - shell:
+      args: 'grep -c "Error: detect-flowbits: Error resolving flowbit dependencies" suricata.log || true'
+      expect: 1

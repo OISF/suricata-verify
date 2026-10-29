@@ -1,0 +1,22 @@
+requires:
+    min-version: 9
+
+pcap: false
+
+args:
+  - --engine-analysis
+
+# Same shape as sigorder-03 except sid:5 unsets E instead of setting it, which
+# removes the edge that closed the ring and leaves a plain chain:
+#
+#   sid:4 set D -> sid:3 isset D
+#   sid:3 set C -> sid:2 isset C
+#   sid:2 set B -> sid:1 isset B
+#   sid:1 set A -> sid:5 isset A
+#
+# There is no cycle, so the ruleset must load. The expected diagnostic is the
+# one about E: sid:4 checks it but no rule ever sets it.
+checks:
+  - shell:
+      args: 'grep -c "flowbit ''E'' is checked but not set. Checked in 4 and 0 other sigs" suricata.log || true'
+      expect: 1
