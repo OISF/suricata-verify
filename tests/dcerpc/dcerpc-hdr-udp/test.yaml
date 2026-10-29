@@ -1,0 +1,39 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+- -k none
+
+checks:
+  # to_server exposes the request-side connectionless header (udp_req_hdr)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # to_client exposes the response-side connectionless header (udp_resp_hdr)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  # direction isolation: request header is not visible on to_client
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  # direction isolation: response header is not visible on to_server
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 4
+  # the full 80-byte header is inspectable: drep byte at offset 4
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 5
