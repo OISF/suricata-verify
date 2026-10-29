@@ -1,0 +1,28 @@
+requires:
+  min-version: 9
+
+pcap: ../load-no-transform-error-or/empty.pcap
+
+args:
+  - --init-errors-fatal
+
+exit-code: 1
+
+checks:
+  # transform_result requires an argument (framework-level rejection)
+  - shell:
+      args: 'grep "malformed option to transform_result keyword" suricata.log | wc -l | xargs'
+      expect: 1
+  # unknown argument is rejected with the valid-options list
+  - shell:
+      args: 'grep "unhandled value for transform_result keyword: wibble" suricata.log | wc -l | xargs'
+      expect: 1
+  # absent + transform_result on the same buffer, and two transform_result on
+  # the same buffer, both fail at parse time because the keyword must come
+  # first right after the buffer
+  - shell:
+      args: 'grep "transform_result must come first right after buffer" suricata.log | wc -l | xargs'
+      expect: 2
+  - shell:
+      args: 'grep "transform_result and fast_pattern on the same buffer" suricata.log | wc -l | xargs'
+      expect: 1

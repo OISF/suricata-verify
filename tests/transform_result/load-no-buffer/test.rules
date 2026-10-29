@@ -1,0 +1,3 @@
+# transform_result with no sticky buffer before it fails to load
+alert http any any -> any any (msg:"transform_result without a buffer"; \
+    flow:established,to_server; transform_result: error_or; content:"fail"; sid:1;)

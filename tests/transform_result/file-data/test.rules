@@ -1,0 +1,25 @@
+# pcap has three HTTP POSTs whose request bodies reach file.data:
+#   1. "!!!not-base64!!!"                     -- from_base64 fails
+#   2. base64 of "decoded-content"            -- from_base64 succeeds
+#   3. "!!!invalid-but-no-useful-content!!!"  -- from_base64 fails
+
+# must_error: fires on the two bodies that fail to decode
+alert http any any -> any any (msg:"file.data must_error"; \
+    file.data; from_base64; transform_result: must_error; sid:1;)
+
+# must_succeed: fires on the body that decodes and contains the content
+alert http any any -> any any (msg:"file.data must_succeed decoded content"; \
+    file.data; from_base64; transform_result: must_succeed; content:"decoded-content"; sid:2;)
+
+# must_succeed: "not-base64" is only in the undecoded body, which must_succeed
+# keeps content from inspecting
+alert http any any -> any any (msg:"file.data must_succeed undecoded content"; \
+    file.data; from_base64; transform_result: must_succeed; content:"not-base64"; sid:3;)
+
+# error_or: fires on both decode failures and on the decoded content match
+alert http any any -> any any (msg:"file.data error_or"; \
+    file.data; from_base64; transform_result: error_or; content:"decoded-content"; sid:4;)
+
+# control for sid 3: without transform_result the undecoded body is inspected
+alert http any any -> any any (msg:"file.data undecoded content without transform_result"; \
+    file.data; from_base64; content:"not-base64"; sid:5;)

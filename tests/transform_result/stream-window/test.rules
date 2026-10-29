@@ -1,0 +1,12 @@
+# Flow 1 posts 60000 bytes of valid base64 with no line breaks. The body is
+# inspected in windows, and a strict decode of a window that does not start
+# or end on a 4-byte boundary fails. Flow 2 posts a short body that is not
+# base64 and is inspected in one piece.
+
+alert http any any -> any any (msg:"request body must_error"; flow:established,to_server; \
+    http.request_body; from_base64: mode strict; transform_result: must_error; sid:1;)
+alert http any any -> any any (msg:"file.data must_error"; flow:established,to_server; \
+    file.data; from_base64: mode strict; transform_result: must_error; sid:2;)
+alert http any any -> any any (msg:"request body error_or"; flow:established,to_server; \
+    http.request_body; from_base64: mode strict; transform_result: error_or; \
+    content:"no-such-content"; sid:3;)
