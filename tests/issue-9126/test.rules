@@ -1,0 +1,3 @@
+alert udp any any -> any any (msg:"POC byte_extract within-var truncation - sid 1 SHOULD fire per rule semantics, currently does not due to 64-to-32-bit truncation bug"; content:"len="; byte_extract:10,0,len,relative,string,dec; content:"EVIL"; within:len; sid:1; rev:1;)
+alert udp any any -> any any (msg:"CONTROL within-const 1000 - proves EVIL is reachable within a generous fixed window"; content:"len="; content:"EVIL"; distance:0; within:1000; sid:2; rev:1;)
+alert udp any any -> any any (msg:"CONTROL raw EVIL present - proves the packet is inspected at all"; content:"EVIL"; sid:3; rev:1;)
