@@ -1,0 +1,10 @@
+# bsize as a depth on a packet buffer. Every TCP header in the capture carries
+# the timestamp option, so the handshake headers are 40 bytes and the rest
+# are 32 bytes. Byte 12 of the header holds the data offset.
+# sid 1: data offset 0x80 (32 bytes) with bsize:32; matches the 32-byte headers.
+# sid 2: same content with bsize:<32; never matches.
+# sid 3: destination port 80 (bytes 2-3) with bsize:40; matches the client's
+#        40-byte SYN.
+alert tcp any any -> any any (msg:"hdr 32 bytes"; tcp.hdr; content:"|80|"; offset:12; bsize:32; sid:1;)
+alert tcp any any -> any any (msg:"hdr under 32 bytes"; tcp.hdr; content:"|80|"; offset:12; bsize:<32; sid:2;)
+alert tcp any any -> any any (msg:"syn to port 80"; tcp.hdr; content:"|00 50|"; offset:2; bsize:40; sid:3;)
