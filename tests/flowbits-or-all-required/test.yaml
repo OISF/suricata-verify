@@ -1,0 +1,26 @@
+requires:
+    min-version: 9
+
+pcap: false
+
+args:
+  - --engine-analysis
+
+checks:
+  # No artificial cycle here, every OR edge is a real constraint.
+  - shell:
+      args: 'grep -c "Cyclic dependency found" suricata.log || true'
+      expect: 0
+  # Both setters land ahead of the OR reader, which lands ahead of sid:4.
+  - shell:
+      args: 'grep -n ''"id":1,'' rules.json | cut -d: -f1'
+      expect: 1
+  - shell:
+      args: 'grep -n ''"id":2,'' rules.json | cut -d: -f1'
+      expect: 2
+  - shell:
+      args: 'grep -n ''"id":3,'' rules.json | cut -d: -f1'
+      expect: 3
+  - shell:
+      args: 'grep -n ''"id":4,'' rules.json | cut -d: -f1'
+      expect: 4

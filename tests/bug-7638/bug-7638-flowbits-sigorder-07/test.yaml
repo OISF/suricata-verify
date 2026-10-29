@@ -1,0 +1,27 @@
+requires:
+    min-version: 9
+
+pcap: false
+
+args:
+  - --engine-analysis
+
+# A real two rule deadlock with a third rule hanging off it, to confirm the
+# extra edge does not disguise the cycle:
+#
+#   sid:12 set headtest -> sid:10 isset headtest
+#   sid:10 set moz      -> sid:12 isset moz        (closes the cycle)
+#   sid:20 set other    -> sid:10 isset other      (satisfiable, not in the cycle)
+#
+# sid:20 can be ordered before sid:10 without trouble, but sid:10 and sid:12
+# still cannot be ordered against each other, so the ruleset is refused.
+exit-code: 1
+
+checks:
+  # The sid list in this message is built from an unordered set, so its order
+  # varies between runs; __find matches the stable prefix only.
+  - filter:
+      count: 1
+      match:
+        log_level: Error
+        engine.message.__find: "Cyclic dependency found between flowbits from signatures"
