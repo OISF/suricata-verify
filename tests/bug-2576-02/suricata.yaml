@@ -53,6 +53,10 @@ outputs:
         header: X-Forwarded-For
 
       types:
+        - anomaly:
+            enabled: yes
+            types:
+              stream: yes
         - alert:
             # payload: yes             # enable dumping payload in Base64
             # payload-buffer-size: 4kb # max size of payload buffer to output in eve-log
