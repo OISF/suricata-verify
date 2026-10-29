@@ -1,0 +1,26 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+args:
+  - --simulate-ips
+  - -k none
+pcap: input.pcap
+checks:
+  - filter:
+      comment: "nothing is dropped"
+      count: 0
+      match:
+        event_type: drop
+  - filter:
+      comment: "no default policy decides"
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2201001
+  - filter:
+      comment: "the allow-list rule matches once the headers are complete"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 102
