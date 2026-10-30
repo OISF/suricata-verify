@@ -1,0 +1,19 @@
+requires:
+  min-version: 9
+
+args:
+  - --set decoder.vxlan.enabled=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        proto: "ICMP"
+        tunnel_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        proto: "ICMP"
+        tunnel_id: 2
