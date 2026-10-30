@@ -1,0 +1,14 @@
+# IP-only: matches the first packet of the first flow, which is not bypassed, so
+# the bit it sets stands.
+alert tcp any 40001 -> any any (msg:"TD IP-only rule setting xbits"; xbits:set,td_unset_undo,track ip_src,expire 3600; sid:100001;)
+
+# Matches the same packet as firewall sid:103. `tcp-pkt` puts it in the packet
+# detect table, so its post-match xbits unset runs before the app-layer firewall
+# rule bypasses the flow.
+alert tcp-pkt any any -> any any (msg:"TD packet rule unsetting xbits on the bypassed packet"; flow:to_server,established; content:"/alpha"; xbits:unset,td_unset_undo,track ip_src; sid:100003;)
+
+# The probe, on the second flow. Matches only if sid:100003's unset was undone.
+alert http any any -> any any (msg:"TD post-match unset undone by firewall bypass"; flow:to_server,established; http.uri; content:"/beta"; xbits:isset,td_unset_undo,track ip_src; sid:100004;)
+
+# Control: proves the second flow is inspected.
+alert http any any -> any any (msg:"Control: second flow is inspected"; flow:to_server,established; http.uri; content:"/beta"; sid:100005;)
