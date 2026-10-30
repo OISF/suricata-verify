@@ -1,0 +1,3 @@
+alert websocket any any -> any any (msg:"ws opcode"; flow:established,to_client; websocket.opcode:text; sid:3;)
+alert websocket any any -> any any (msg:"ws fin"; flow:established,to_client; websocket.flags:fin; sid:5;)
+alert websocket any any -> any any (msg:"ws pl"; flow:established,to_client; websocket.payload; content:"123"; sid:6;)
