@@ -1,0 +1,63 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      comment: "field in the HEADERS part of the trailer block, to_server"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 10
+  - filter:
+      comment: "field in the CONTINUATION part, to_server"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 11
+  - filter:
+      comment: "value in the CONTINUATION part, to_server"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 12
+  - filter:
+      comment: "name only, CONTINUATION part, to_server"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 13
+  - filter:
+      comment: "field in the HEADERS part, to_client"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 14
+  - filter:
+      comment: "field in the CONTINUATION part, to_client"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 15
+  - filter:
+      comment: "value in the CONTINUATION part, to_client"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 16
+  - filter:
+      comment: "no match on a value that is not in the stream"
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 19
+  - filter:
+      count: 2
+      match:
+        event_type: http

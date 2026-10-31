@@ -1,0 +1,6 @@
+# a header block ended by FIN, not by a blank line, is still inspected
+alert http any any -> any any (msg:"partial request raw"; flow:to_server; http.header.raw; content:"User-Agent|3a 20|TruncatedProbe|0d 0a|"; sid:10; rev:1;)
+alert http any any -> any any (msg:"partial response raw"; flow:to_client; http.header.raw; content:"Server|3a 20|TruncatedServer|0d 0a|"; sid:11; rev:1;)
+# control: the field keyword saw these bytes before this change too
+alert http any any -> any any (msg:"request field"; flow:to_server; http.user_agent; content:"TruncatedProbe"; sid:12; rev:1;)
+alert http any any -> any any (msg:"response field"; flow:to_client; http.server; content:"TruncatedServer"; sid:13; rev:1;)

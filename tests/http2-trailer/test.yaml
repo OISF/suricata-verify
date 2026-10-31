@@ -1,0 +1,78 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+
+args:
+  # checksums are not computed in the pcap
+  - -k none
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 10
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 5
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 11
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 20
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 21
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 22
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 23
+  - filter:
+      comment: "the trailer block's fields keep their entries in the dump"
+      count: 1
+      match:
+        event_type: http
+        http.request_headers[7].name: grpc-message
+        http.request_headers[7].value: trailval
+        http.request_headers[8].name: user-agent
+        http.request_headers[8].value: TRAILER-UA
+        http.request_headers[9].name: server-timing
+        http.request_headers[9].value: done
