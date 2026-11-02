@@ -1,0 +1,58 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 6
+      match:
+        event_type: flow
+        app_proto: sip
+        dest_port: 5060
+  - filter:
+      count: 5
+      match:
+        event_type: flow
+        app_proto: http
+        dest_port: 80
+  - filter:
+      count: 3
+      match:
+        event_type: sip
+        sip.method: "OPTIONS"
+  - filter:
+      count: 2
+      match:
+        event_type: sip
+        sip.method: "UPDATE"
+  - filter:
+      count: 1
+      match:
+        event_type: sip
+        sip.method: "NOTIFY"
+  - filter:
+      count: 6
+      match:
+        event_type: sip
+        sip.code: "200"
+  - filter:
+      count: 4
+      match:
+        event_type: http
+        http.http_method: "OPTIONS"
+        http.status: 200
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.http_method: "UPDATE"
+        http.status: 200
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.app_layer.flow.sip_tcp: 6
+        stats.app_layer.flow.http: 5
+        stats.app_layer.tx.sip_tcp: 12
