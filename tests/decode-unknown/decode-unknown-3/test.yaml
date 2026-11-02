@@ -1,0 +1,24 @@
+requires:
+    min-version: 9
+
+args:
+- -k none
+
+pcap: ../decode-unknown-1/input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.type: decode
+        anomaly.event: decoder.ethernet.unknown_ethertype
+        unknown_ether_type: 64439
+        ether.ether_type: 64439
+  # The alert for the unknown ethertype event carries the value too.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        unknown_ether_type: 64439
