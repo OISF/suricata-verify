@@ -1,0 +1,23 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2290024
+        src_port: 50635
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2290025
+        src_port: 50641
