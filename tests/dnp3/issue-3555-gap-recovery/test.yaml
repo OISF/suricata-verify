@@ -1,0 +1,202 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 14
+      match:
+        event_type: dnp3
+        dnp3.application.complete: true
+  - filter:
+      count: 0
+      match:
+        event_type: dnp3
+        dnp3.application.complete: false
+  - filter:
+      count: 3
+      match:
+        event_type: dnp3
+        src_port: 40000
+        dnp3.type: request
+  - filter:
+      count: 4
+      match:
+        event_type: dnp3
+        src_port: 40000
+        dnp3.type: response
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        src_port: 40000
+        dnp3.type: request
+        dnp3.application.complete: true
+        dnp3.application.control.sequence: 0
+        dnp3.application.objects[0].start: 286331153
+        dnp3.application.objects[0].stop: 286331153
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        src_port: 40000
+        dnp3.type: response
+        dnp3.application.complete: true
+        dnp3.application.control.sequence: 0
+        dnp3.application.objects[0].points[0].value: 286331153
+        dnp3.application.objects[0].points[4].value: 286331153
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        src_port: 40000
+        dnp3.type: request
+        dnp3.application.complete: true
+        dnp3.application.control.sequence: 2
+        dnp3.application.objects[0].start: 858993459
+        dnp3.application.objects[0].stop: 858993459
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        src_port: 40000
+        dnp3.type: response
+        dnp3.application.complete: true
+        dnp3.application.control.sequence: 2
+        dnp3.application.objects[0].points[0].value: 858993459
+        dnp3.application.objects[0].points[4].value: 858993459
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        src_port: 40000
+        dnp3.type: request
+        dnp3.application.complete: true
+        dnp3.application.control.sequence: 3
+        dnp3.application.objects[0].start: 1145324612
+        dnp3.application.objects[0].stop: 1145324612
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        src_port: 40000
+        dnp3.type: response
+        dnp3.application.complete: true
+        dnp3.application.control.sequence: 3
+        dnp3.application.objects[0].points[0].value: 1145324612
+        dnp3.application.objects[0].points[4].value: 1145324612
+  - filter:
+      count: 4
+      match:
+        event_type: dnp3
+        src_port: 40001
+        dnp3.type: request
+  - filter:
+      count: 3
+      match:
+        event_type: dnp3
+        src_port: 40001
+        dnp3.type: response
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        src_port: 40001
+        dnp3.type: request
+        dnp3.application.complete: true
+        dnp3.application.control.sequence: 0
+        dnp3.application.objects[0].start: 286331153
+        dnp3.application.objects[0].stop: 286331153
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        src_port: 40001
+        dnp3.type: response
+        dnp3.application.complete: true
+        dnp3.application.control.sequence: 0
+        dnp3.application.objects[0].points[0].value: 286331153
+        dnp3.application.objects[0].points[4].value: 286331153
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        src_port: 40001
+        dnp3.type: request
+        dnp3.application.complete: true
+        dnp3.application.control.sequence: 2
+        dnp3.application.objects[0].start: 858993459
+        dnp3.application.objects[0].stop: 858993459
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        src_port: 40001
+        dnp3.type: response
+        dnp3.application.complete: true
+        dnp3.application.control.sequence: 2
+        dnp3.application.objects[0].points[0].value: 858993459
+        dnp3.application.objects[0].points[4].value: 858993459
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        src_port: 40001
+        dnp3.type: request
+        dnp3.application.complete: true
+        dnp3.application.control.sequence: 3
+        dnp3.application.objects[0].start: 1145324612
+        dnp3.application.objects[0].stop: 1145324612
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        src_port: 40001
+        dnp3.type: response
+        dnp3.application.complete: true
+        dnp3.application.control.sequence: 3
+        dnp3.application.objects[0].points[0].value: 1145324612
+        dnp3.application.objects[0].points[4].value: 1145324612
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 4
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 5
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 6
+  - filter:
+      count: 2
+      match:
+        event_type: flow
+        app_proto: dnp3
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.tcp.reassembly_gap: 2
+        stats.app_layer.error.dnp3.gap: 0
+        stats.app_layer.error.dnp3.parser: 0
