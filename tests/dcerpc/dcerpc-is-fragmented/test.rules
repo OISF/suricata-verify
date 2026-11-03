@@ -1,0 +1,2 @@
+alert dcerpc any any -> any any (msg:"dcerpc.is_fragmented true: multi-PDU fragmented request"; flow:to_server; dcerpc.is_fragmented:true; sid:1;)
+alert dcerpc any any -> any any (msg:"dcerpc.is_fragmented false: complete request"; flow:to_server; dcerpc.is_fragmented:false; sid:2;)
