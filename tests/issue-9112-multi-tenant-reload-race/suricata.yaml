@@ -1,0 +1,14 @@
+%YAML 1.1
+---
+
+multi-detect:
+  enabled: yes
+  selector: vlan
+  # Tenants are assigned to loaders round-robin. Registering exactly 8 tenants
+  # per cycle gives each tenant its own loader, which rules out the loader
+  # deadlock.
+  loaders: 8
+  tenants: []
+  mappings:
+    - vlan-id: 1000
+      tenant-id: 1
