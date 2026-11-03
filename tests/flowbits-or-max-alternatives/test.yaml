@@ -1,0 +1,21 @@
+requires:
+    min-version: 9
+
+pcap: false
+
+args:
+  - --engine-analysis
+
+checks:
+  # 100 alternatives is accepted, and all 100 become mandatory incoming edges
+  # on the reader even though one satisfied alternative would do at runtime.
+  - shell:
+      args: 'python3 -c ''import json;print(len(json.load(open("flowbits_dependency_graph.json"))["1"]["in"]))'''
+      expect: 100
+  # All 100 setters are therefore forced ahead of the reader.
+  - shell:
+      args: 'grep -n ''"id":1,'' rules.json | cut -d: -f1'
+      expect: 101
+  - shell:
+      args: 'grep -n ''"id":102,'' rules.json | cut -d: -f1'
+      expect: 102

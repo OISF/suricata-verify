@@ -37,7 +37,7 @@ logger.setLevel(logging.DEBUG)
 yaml.add_representer(defaultdict, Representer.represent_dict)
 
 WIN32 = sys.platform == "win32"
-suricata_bin = "src\suricata.exe" if WIN32 else "./src/suricata"
+suricata_bin = "src\\suricata.exe" if WIN32 else "./src/suricata"
 suricata_yaml = "suricata.yaml" if WIN32 else "./suricata.yaml"
 CUR_DIR = os.path.dirname(os.path.realpath(__file__))
 DEFAULT_TEST_DIR = os.path.join(CUR_DIR, "tests")

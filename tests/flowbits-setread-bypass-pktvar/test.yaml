@@ -1,0 +1,43 @@
+requires:
+    min-version: 9
+
+pcap: false
+
+args:
+  - --engine-analysis
+
+# Current behaviour. sid:1 and sid:2 are both flowbits SET_READ, so the
+# shortcut in SCSigLessThan returns early and the pair keeps the order the
+# flowbit dependency graph left them in: the reader (sid:2) ends up ahead of
+# the setter (sid:1).
+#
+# sid:3 and sid:4 carry the same dependency but no flowbits, so the comparator
+# runs and keeps the setter (sid:3) ahead of the reader (sid:4).
+#
+# Once the shortcut stops swallowing the remaining comparators, lines 1 and 2
+# become sid:1 then sid:2, matching the control pair.
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      __lineno: 1
+      id: 2
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      __lineno: 2
+      id: 1
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      __lineno: 3
+      id: 3
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      __lineno: 4
+      id: 4

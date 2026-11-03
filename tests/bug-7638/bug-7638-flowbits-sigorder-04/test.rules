@@ -1,0 +1,9 @@
+alert http any any -> any any (flowbits:set,A; flowbits:isset,B; sid:1;)
+alert http any any -> any any (flowbits:set,B; flowbits:isset,C; sid:2;)
+alert http any any -> any any (flowbits:set,C; flowbits:isset,D; sid:3;)
+# sid: 4 will never match but handling that is out of the scope of the
+# bugfix for 7638. suricata-update can easily handle such a dependency
+# resolution by commenting this rule out.
+alert http any any -> any any (flowbits:set,D; flowbits:isset,E; sid:4;)
+alert http any any -> any any (flowbits:unset,E; flowbits:isset,A; sid:5;)
+
