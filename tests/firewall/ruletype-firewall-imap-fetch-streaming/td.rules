@@ -1,0 +1,1 @@
+alert imap any any -> any any (flow:to_client,established; imap.response; content:"A2 OK NOOP completed"; sid:101; rev:1;)

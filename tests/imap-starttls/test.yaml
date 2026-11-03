@@ -1,0 +1,23 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+  - --set app-layer.protocols.imap.enabled=yes
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: tls
+        tls.from_proto: imap
+        tls.subject: CN=LDAP SSL test
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - stats:
+      app_layer.error.imap.parser: 0
