@@ -1,0 +1,13 @@
+# An LTE rule the fast pattern did not add is pending at its hook, so the walk has to
+# behave as if it were in the list: that is what keeps a rule with a higher id from deciding
+# the flow before the pending rule had its chance. A rule that is out of the flows scope is
+# not that rule: the walk inspects it, gets a header no match and carries on.
+#
+# sid:211 is out of scope by destination address and carries a host the buffer never gets,
+# so it is the lowest id the pattern does not add. It stays in the port group of the flow,
+# which a port scope would not. sid:212 is in scope and matches the Host of the first
+# segment: the accept has to come from it, not from the default policies at the end of the
+# tx. Both variants give the same verdict here; what the scope check buys is that the walk
+# does not stop at a rule the flow would never have been inspected against.
+accept:flow,alert http1:<request_headers $HOME_NET any -> 198.51.100.0/24 80 (http.host.raw; content:"nope.example.com"; sid:211;)
+accept:flow,alert http1:<request_headers $HOME_NET any -> $EXTERNAL_NET any (http.host.raw; content:"www.example.com"; sid:212;)

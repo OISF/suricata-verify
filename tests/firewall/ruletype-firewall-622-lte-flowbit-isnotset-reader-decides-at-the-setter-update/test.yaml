@@ -1,0 +1,38 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+args:
+  - --simulate-ips
+  - -k none
+pcap: input.pcap
+checks:
+  # sid 100 (<request_line) sets `blocked` in the walk of packet 4, and sid 200
+  # (<request_headers) requires it unset. Reached after the setter, sid 200 is
+  # out of the running on packet 4, so nothing is pending at request_headers and
+  # its default policy drops packet 4, as on main. Packet 4 carries the request
+  # line and the Host header: a later drop forwards them first.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2201001
+        pcap_cnt: 4
+        alert.action: blocked
+        firewall.hook: http:request_headers
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        pcap_cnt: 4
+        drop.reason: firewall default app policy
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 200
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.action: drop

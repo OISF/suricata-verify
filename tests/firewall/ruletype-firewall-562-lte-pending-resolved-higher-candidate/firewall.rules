@@ -1,0 +1,7 @@
+# As 561, plus a rule at a higher state that is a real candidate and fails on a keyword
+# after its fast pattern matched. The pending chain empties before that candidate runs
+# DetectRunTxFirewallRuleNoMatch(), which reads fw_defer_defaults - a bool computed once
+# at walk start from a pointer the walk advances in place. If the stale true suppresses
+# the policy here, the packet is accepted where BASE drops it.
+accept:flow,alert http1:<request_headers $HOME_NET any -> 93.184.216.34 80 (http.host.raw; content:"nope.invalid"; sid:211;)
+accept:flow,alert http1:request_line $HOME_NET any -> 93.184.216.34 80 (http.uri; content:"/"; content:"nope.token"; sid:212;)

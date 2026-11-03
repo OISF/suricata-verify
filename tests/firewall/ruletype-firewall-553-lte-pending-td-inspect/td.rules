@@ -1,0 +1,1 @@
+alert http1:request_headers $HOME_NET any -> $EXTERNAL_NET any (http.host; content:"www.example.com"; sid:120;)

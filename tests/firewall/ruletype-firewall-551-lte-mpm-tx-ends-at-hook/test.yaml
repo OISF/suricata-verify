@@ -1,0 +1,26 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+  # the pending rule cannot match and the header block is complete at the last
+  # packet of the flow: the state is decided by the default policy, not by an
+  # implicit accept.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2201001
+        firewall.hook: "http:request_headers"
+        firewall.policy: "drop:flow,alert"
+        pcap_cnt: 4
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 100
