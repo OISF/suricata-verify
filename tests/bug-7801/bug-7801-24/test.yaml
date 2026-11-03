@@ -1,0 +1,12 @@
+%YAML 1.1
+---
+
+requires:
+  min-version: 9.0
+
+pcap: ../bug-7801-01/input.pcap
+
+exit-code: 1
+
+args:
+  - -k none

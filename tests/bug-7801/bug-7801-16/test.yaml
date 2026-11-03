@@ -1,0 +1,23 @@
+%YAML 1.1
+---
+
+requires:
+  min-version: 9.0
+
+pcap: ../bug-7801-09/input.pcap
+
+args:
+  - -k none
+
+checks:
+  # A is inspected first, B second: B's value must not replace A's.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2

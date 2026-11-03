@@ -1,0 +1,1 @@
+alert http2 any any => any any (msg:"HTTP/2: byte_extract http.uri -> byte_test http.response_header, concurrent streams"; flow:established; http.uri; content:"/doc/manual/html/"; startswith; fast_pattern; byte_extract:1,8,v,relative; http.response_header; content:"server|3a 20|"; nocase; byte_test:1,>,v,0,relative; sid:1;)

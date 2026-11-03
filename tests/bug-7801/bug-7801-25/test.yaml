@@ -1,0 +1,25 @@
+%YAML 1.1
+---
+
+requires:
+  min-version: 9.0
+
+pcap: ../bug-7801-01/input.pcap
+
+args:
+  - -k none
+
+checks:
+  # v255 has the highest local_id a signature can hold and is read in the
+  # other direction
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        http.url: "/data/05/index.html"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
