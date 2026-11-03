@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"HTTP request"; flow:to_server,established; sid:1;)
