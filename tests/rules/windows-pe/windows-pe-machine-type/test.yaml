@@ -1,0 +1,50 @@
+pcap: ../windows-pe-basic/input.pcap
+
+requires:
+  min-version: 9
+  features:
+    - RUST
+
+args:
+- -k none
+
+checks:
+# Test: machine_type 0x014C (x86) - all match
+- filter:
+    count: 5
+    match:
+      event_type: alert
+      alert.signature_id: 30
+
+# Test: machine_type 0x8664 (x64) - none match
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 31
+
+# Test: machine_type 0x01C0 (ARM) - none match
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 32
+
+# Test: machine_type 0x014C duplicate - all match
+- filter:
+    count: 5
+    match:
+      event_type: alert
+      alert.signature_id: 33
+
+# Verify arch and arch_name are correctly logged in fileinfo events
+- filter:
+    count: 5
+    match:
+      event_type: fileinfo
+      executable.arch: "0x014c"
+- filter:
+    count: 5
+    match:
+      event_type: fileinfo
+      executable.arch_name: x86

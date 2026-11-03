@@ -1,0 +1,33 @@
+requires:
+  min-version: 9.0.0
+
+# The embedded PKCS#7 carries two certificates with the actual signer (the leaf,
+# "Real Leaf Signer") deliberately placed SECOND in the certificates SET, behind
+# a "Decoy Chain Cert". This exercises signer resolution: matching must consider
+# every embedded cert, but the logged identity must be the resolved leaf signer,
+# not the first cert in the SET.
+args:
+- -k none
+
+checks:
+# the leaf signer matches
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+# a non-leaf chain certificate also matches (matching checks all embedded certs)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2
+# the leaf thumbprint matches, and the LOGGED cert identity is the leaf signer
+# (CN=Real Leaf Signer) even though it is the second cert in the SET
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 3
+      files[0].executable.cert_subject: CN=Real Leaf Signer
+      files[0].executable.cert_thumbprint: A6D8167BD096A391D8C68472E14B7B7F37D78468

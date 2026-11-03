@@ -1,0 +1,60 @@
+pcap: ../windows-pe-basic/multi_pe.pcap
+
+requires:
+  min-version: 9
+  features:
+    - RUST
+
+args:
+- -k none
+
+checks:
+# Test: PE SizeOfImage > 1000 (matches 1024, 4096, 2048)
+- filter:
+    count: 3
+    match:
+      event_type: alert
+      alert.signature_id: 10
+
+# Test: PE SizeOfImage > 100000 (none match)
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 11
+
+# Test: PE SizeOfImage > 1000, < 1000000 (matches 1024, 4096, 2048)
+- filter:
+    count: 3
+    match:
+      event_type: alert
+      alert.signature_id: 12
+
+# Test: PE SizeOfImage > 100000000 (none match)
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 13
+
+# Verify size_of_image is correctly logged in fileinfo events
+- filter:
+    count: 2
+    match:
+      event_type: fileinfo
+      executable.size_of_image: 512
+- filter:
+    count: 1
+    match:
+      event_type: fileinfo
+      executable.size_of_image: 1024
+- filter:
+    count: 1
+    match:
+      event_type: fileinfo
+      executable.size_of_image: 2048
+- filter:
+    count: 1
+    match:
+      event_type: fileinfo
+      executable.size_of_image: 4096
