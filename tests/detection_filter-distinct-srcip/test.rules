@@ -1,0 +1,2 @@
+## Expect 1 alert after seeing >1 distinct source IPs (unique_on src_ip, count 1)
+alert ip any any -> any any (msg:"DF distinct src_ip"; detection_filter: track by_dst, count 1, seconds 60, unique_on src_ip; sid:100023; rev:1;)
