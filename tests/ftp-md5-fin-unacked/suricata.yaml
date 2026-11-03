@@ -1,0 +1,22 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert
+        - drop:
+            alerts: yes
+            flows: all
+        - ftp
+        - files:
+            force-hash: [md5]
+        - flow
+
+app-layer:
+  protocols:
+    ftp:
+      enabled: yes
