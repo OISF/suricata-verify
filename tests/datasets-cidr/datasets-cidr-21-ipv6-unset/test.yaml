@@ -1,0 +1,33 @@
+requires:
+  min-version: 9
+
+pcap: input-ipv6.pcap
+
+args:
+  - -k none
+
+checks:
+  # unset fires once per pre-loaded IPv6 address (removes it on first match)
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_ip: "fc00::1"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_ip: "2001:db8::1"
+  # fe80::1 was never in the set, unset does not fire
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        src_ip: "fe80::1"

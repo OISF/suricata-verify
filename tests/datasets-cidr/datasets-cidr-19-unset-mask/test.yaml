@@ -1,0 +1,35 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - -k none
+
+checks:
+  # unset,mask 24 fires once per /24 loaded from file (removes it on first match)
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # first packet from 192.168.1.5 masks to 192.168.1.0/24 and removes it
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_ip: "192.168.1.5"
+  # second packet from 192.168.1.5: /24 already removed, does not fire
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_ip: "192.168.2.1"
+  # 10.0.0.0/24 was not in the dataset, never fires
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        src_ip: "10.0.0.1"

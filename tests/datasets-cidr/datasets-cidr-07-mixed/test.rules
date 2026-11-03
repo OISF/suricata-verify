@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"Mixed CIDR src"; ip.src; dataset:isset,mixed,type cidr,load mixed.lst; sid:1;)

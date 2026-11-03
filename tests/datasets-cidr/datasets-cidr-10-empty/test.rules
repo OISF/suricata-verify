@@ -1,0 +1,2 @@
+alert ip any any -> any any (msg:"Empty CIDR isset"; ip.src; dataset:isset,empty-cidr,type cidr,load empty.lst; sid:1;)
+alert ip any any -> any any (msg:"Empty CIDR isnotset"; ip.src; dataset:isnotset,empty-cidr,type cidr,load empty.lst; sid:2;)
