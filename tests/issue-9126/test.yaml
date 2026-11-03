@@ -1,0 +1,33 @@
+requires:
+  min-version: "8.0"
+
+checks:
+  # sid 1 uses the attacker-controlled byte_extract value in "within". Per the
+  # rule's semantics, "EVIL" is well within the length the payload declares
+  # (4294967300 bytes), so sid 1 is EXPECTED to fire (count: 1). On unpatched
+  # Suricata (8.0.7 and main as of 2026-09-20) this check FAILS instead - the
+  # engine truncates the 64-bit extracted value to 32 bits without a bounds
+  # check, the match window collapses to 4 bytes, and sid 1 does not fire.
+  # This is the bug reproducer: it should fail on unpatched code and pass
+  # once the truncation is fixed.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # Control: same anchor + EVIL, but with a plain fixed-size within (no
+  # byte_extract var). This must fire regardless of the bug, proving EVIL is
+  # reachable within a generous window.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  # Control: raw content match with no relative/within logic at all. Must
+  # fire regardless of the bug, proving the packet is inspected and EVIL is
+  # present in the payload at all.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
