@@ -1,0 +1,3 @@
+drop:packet http any any -> any any (msg:"TD packet drop on HTTP host"; flow:to_server, established; http.host; content:"www.testmyids.com"; sid:100002;)
+
+alert http any any -> any any (msg:"Response body inspected after bypass"; flow:to_client,established; http.response_body; content:"uid=0|28|root|29|"; sid:100001;)
