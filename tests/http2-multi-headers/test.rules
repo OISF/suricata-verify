@@ -1,0 +1,35 @@
+# HTTP2 app layer event rules
+#
+# SID's fall in the 2290000+ range. See rules/README.md
+#
+# These sigs fire at most once per connection.
+#
+
+alert http2 any any -> any any (msg:"SURICATA HTTP2 invalid frame header"; flow:established; app-layer-event:http2.invalid_frame_header; classtype:protocol-command-decode; sid:2290000; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 invalid client magic"; flow:established; app-layer-event:http2.invalid_client_magic; classtype:protocol-command-decode; sid:2290001; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 invalid frame data"; flow:established; app-layer-event:http2.invalid_frame_data; classtype:protocol-command-decode; sid:2290002; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 invalid header"; flow:established; app-layer-event:http2.invalid_header; classtype:protocol-command-decode; sid:2290003; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 invalid frame length"; flow:established; app-layer-event:http2.invalid_frame_length; classtype:protocol-command-decode; sid:2290004; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 header frame with extra data"; flow:established; app-layer-event:http2.extra_header_data; classtype:protocol-command-decode; sid:2290005; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 too long frame data"; flow:established; app-layer-event:http2.long_frame_data; classtype:protocol-command-decode; sid:2290006; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 stream identifier reuse"; flow:established; app-layer-event:http2.stream_id_reuse; classtype:protocol-command-decode; sid:2290007; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 invalid HTTP1 settings during upgrade"; flow:established; app-layer-event:http2.invalid_http1_settings; classtype:protocol-command-decode; sid:2290008; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 failed decompression"; flow:established; app-layer-event:http2.failed_decompression; classtype:protocol-command-decode; sid:2290009; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 invalid range header"; flow:established; app-layer-event:http2.invalid_range; classtype:protocol-command-decode; sid:2290010; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 variable-length integer overflow"; flow:established; app-layer-event:http2.header_integer_overflow; classtype:protocol-command-decode; sid:2290011; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 too many streams"; flow:established; app-layer-event:http2.too_many_streams; classtype:protocol-command-decode; sid:2290012; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 authority host mismatch"; flow:established,to_server; app-layer-event:http2.authority_host_mismatch; classtype:protocol-command-decode; sid:2290013; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 user info in uri"; flow:established,to_server; app-layer-event:http2.userinfo_in_uri; classtype:protocol-command-decode; sid:2290014; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 reassembly limit reached"; flow:established; app-layer-event:http2.reassembly_limit_reached; classtype:protocol-command-decode; sid:2290015; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 dns request too long"; flow:established,to_server; app-layer-event:http2.dns_request_too_long; classtype:protocol-command-decode; sid:2290016; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 dns response too long"; flow:established,to_client; app-layer-event:http2.dns_response_too_long; classtype:protocol-command-decode; sid:2290017; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 data on stream zero"; flow:established; app-layer-event:http2.data_stream_zero; classtype:protocol-command-decode; sid:2290018; rev:1;)
+# disabled by default, as it can happen in legit cases depending on the max-frames config value
+# alert http2 any any -> any any (msg:"SURICATA HTTP2 too many frames"; flow:established; app-layer-event:http2.too_many_frames; classtype:protocol-command-decode; sid:2290019; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 compression bomb"; flow:established; app-layer-event:http2.compression_bomb; classtype:protocol-command-decode; sid:2290020; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 headers table overflow"; flow:established; app-layer-event:http2.header_table_overflow; classtype:protocol-command-decode; sid:2290021; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 continuation without headers"; flow:established; app-layer-event:http2.continuation_without_headers; classtype:protocol-command-decode; sid:2290022; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 too long repeated headers"; flow:established; app-layer-event:http2.too_long_repeated_headers; classtype:protocol-command-decode; sid:2290023; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 different hosts"; flow:established,to_server; app-layer-event:http2.different_hosts; classtype:protocol-command-decode; sid:2290024; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 different authorities"; flow:established,to_server; app-layer-event:http2.different_authorities; classtype:protocol-command-decode; sid:2290025; rev:1;)
+alert http2 any any -> any any (msg:"SURICATA HTTP2 multiple client header frames"; flow:established,to_server; app-layer-event:http2.multiple_client_header_frames; classtype:protocol-command-decode; sid:2290026; rev:1;)
