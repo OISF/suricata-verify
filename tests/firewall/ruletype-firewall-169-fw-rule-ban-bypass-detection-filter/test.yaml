@@ -1,0 +1,16 @@
+requires:
+  min-version: 9
+
+pcap: ../../flowbit-oring/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+exit-code: 1
+
+checks:
+# bypass and detection_filter cannot be combined in firewall rules
+  - shell:
+      args: grep "bypass is not supported with 'detection_filter' in firewall rules" stderr | wc -l
+      expect: 1
