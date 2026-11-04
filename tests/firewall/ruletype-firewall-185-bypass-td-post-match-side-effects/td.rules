@@ -1,0 +1,13 @@
+# Matches the same packet as firewall sid:103. `tcp-pkt` puts it in the packet
+# detect table, so it is evaluated -- and its post-match xbits setter runs --
+# before the app-layer firewall rule bypasses the flow.
+alert tcp-pkt any any -> any any (msg:"TD packet rule on the bypassed packet"; flow:to_server,established; content:"/alpha"; xbits:set,td_post_match_ran,track ip_src,expire 3600; sid:100003;)
+
+# The probe, on the second flow, which is not bypassed. It can only match if
+# sid:100003's post-match ran, i.e. if threat detection mutated host state for a
+# packet the firewall had already bypassed.
+alert http any any -> any any (msg:"TD post-match state survived firewall bypass"; flow:to_server,established; http.uri; content:"/beta"; xbits:isset,td_post_match_ran,track ip_src; sid:100004;)
+
+# Control: the probe without the xbit condition. Proves the second flow is
+# inspected, so sid:100004 staying silent cannot mean nothing was inspected.
+alert http any any -> any any (msg:"Control: second flow is inspected"; flow:to_server,established; http.uri; content:"/beta"; sid:100005;)
