@@ -1,0 +1,17 @@
+requires:
+  min-version: 9
+  features:
+    - LIBNET1.1
+
+pcap: ../../tls/tls-random/input.pcap
+
+# the invalid combination rules should make the engine error out
+exit-code: 1
+
+args:
+  - --simulate-ips
+
+checks:
+- shell:
+    args: grep "keyword 'bypass' is only supported in firewall rules with 'accept:flow'" stderr | wc -l
+    expect: 1
