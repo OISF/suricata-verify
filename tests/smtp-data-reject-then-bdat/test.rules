@@ -1,0 +1,1 @@
+alert smtp any any -> any any (msg:"data-rejected bdat file_data"; file_data; content:"behind a rejected DATA"; sid:1; rev:1;)
