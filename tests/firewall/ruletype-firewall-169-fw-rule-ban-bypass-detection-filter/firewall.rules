@@ -1,0 +1,14 @@
+# Packet rules
+
+accept:hook tcp:all any any -> any any (sid:100;)
+
+# default drop
+
+# App-layer rules
+
+accept:hook http1:request_started any any -> any any (sid:101;)
+accept:hook http1:request_line any any -> any any (sid:102;)
+
+# Rule under test: `bypass` can't be combined with `detection_filter` in
+# firewall rules, so loading this ruleset must fail.
+accept:flow http1:request_headers any any -> any any (msg:"FW accept flow, bypass with detection_filter"; http.host; content:"www.testmyids.com"; bypass; detection_filter:track by_src, count 2, seconds 60; sid:103;)
