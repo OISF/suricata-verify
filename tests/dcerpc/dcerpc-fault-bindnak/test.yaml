@@ -1,0 +1,48 @@
+requires:
+  min-version: 9
+
+args:
+- -k none
+
+checks:
+# BINDNAK is paired with the BIND it rejects
+- filter:
+    count: 1
+    match:
+      event_type: dcerpc
+      dcerpc.call_id: 1
+      dcerpc.request: BIND
+      dcerpc.response: BINDNAK
+- filter:
+    count: 1
+    match:
+      event_type: dcerpc
+      dcerpc.call_id: 2
+      dcerpc.request: BIND
+      dcerpc.response: BINDACK
+# AUTH3 never gets a reply, so no response is logged for it
+- filter:
+    count: 1
+    match:
+      event_type: dcerpc
+      dcerpc.call_id: 2
+      dcerpc.request: AUTH3
+      not-has-key: dcerpc.response
+# FAULT is paired with the REQUEST it answers
+- filter:
+    count: 1
+    match:
+      event_type: dcerpc
+      dcerpc.call_id: 3
+      dcerpc.request: REQUEST
+      dcerpc.req.opnum: 9
+      dcerpc.response: FAULT
+- filter:
+    count: 4
+    match:
+      event_type: dcerpc
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.app_layer.error.dcerpc_tcp.parser: 0
