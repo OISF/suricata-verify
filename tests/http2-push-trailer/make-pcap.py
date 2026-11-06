@@ -4,6 +4,11 @@ The promised fields arrive as a CONTINUATION on the parent stream, after the par
 section completed. They must not be read as the parent's trailers. The response then closes with
 a trailer block split over HEADERS plus CONTINUATION, which must be trailers.
 
+A second stream takes the same frames the other way round: the PUSH_PROMISE is issued before the
+response, so the CONTINUATION that finishes the promised block carries a :status while the parent
+has not sent its header section yet. Behind it the real response HEADERS must stay a header
+section.
+
 HPACK literals without indexing only, so no dynamic table state is needed.
 
 usage: python3 make-pcap.py [out.pcap]
@@ -56,6 +61,12 @@ req = frame(HEADERS, END_HEADERS, 1, hdr([
     (b":method", b"POST"), (b":path", b"/index.html"), (b":scheme", b"http"),
     (b":authority", b"push.example"),
 ])) + frame(DATA, END_STREAM, 1, b"q=1")
+# stream 3 is requested in the same segment: the handshake leaves a one byte gap in the
+# to-server stream, and a later segment sits behind it, unread by the parser
+req += frame(HEADERS, END_HEADERS | END_STREAM, 3, hdr([
+    (b":method", b"GET"), (b":path", b"/early-push.html"), (b":scheme", b"http"),
+    (b":authority", b"push.example"),
+]))
 packets.append(pkt(True, preface + frame(SETTINGS, 0, 0) + req, PSHACK))
 packets.append(pkt(False, frame(SETTINGS, ACK, 0), PSHACK))
 packets.append(pkt(False, frame(HEADERS, END_HEADERS, 1, hdr([
@@ -71,6 +82,18 @@ packets.append(pkt(False, push, PSHACK))
 tr = frame(HEADERS, 0, 1, hdr([(b"x-checksum", b"abc")]))
 tr += frame(CONTINUATION, END_HEADERS | END_STREAM, 1, hdr([(b"x-status", b"ok")]))
 packets.append(pkt(False, tr, PSHACK))
+
+# second stream: the push opens before the response, so its CONTINUATION finishes the block
+# while the parent header section is still unseen
+early = frame(PUSH_PROMISE, 0, 3, struct.pack("!I", 4) + hdr([(b":method", b"GET")]))
+early += frame(CONTINUATION, END_HEADERS, 3,
+               hdr([(b":status", b"200"), (b"x-early-push", b"yes")]))
+early += frame(HEADERS, END_HEADERS, 3, hdr([
+    (b":status", b"200"), (b"content-type", b"text/plain"),
+    (b"x-real-response", b"only-in-the-response")]))
+early += frame(DATA, END_STREAM, 3, b"early-push body")
+packets.append(pkt(False, early, PSHACK))
+
 packets.append(pkt(True, b"", ACK))
 packets.append(pkt(False, b"", FIN))
 packets.append(pkt(True, b"", FIN))
