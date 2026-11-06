@@ -1,0 +1,24 @@
+pcap: ../http2-header-redaction/http2.pcap
+
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+  # The default output stays redacted although another output opted in.
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.url: /redact
+        http.request_headers[2].name: cookie
+        http.request_headers[2].redacted: true
+        not-has-key:
+          - http.request_headers[2].value
+
+  # The opt-in output logs the values.
+  - shell:
+      args: python3 -c "import json;d=[json.loads(l) for l in open('eve-optin.json') if json.loads(l).get('event_type')=='http' and json.loads(l)['http'].get('url')=='/redact'];print(d[0]['http']['request_headers'][2]['value'])"
+      expect: 'session=secret123'

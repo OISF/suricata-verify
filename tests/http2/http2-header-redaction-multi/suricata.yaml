@@ -1,0 +1,24 @@
+%YAML 1.1
+---
+
+app-layer:
+  protocols:
+    http2:
+      enabled: yes
+      detection-ports:
+        dp: 443
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - http2
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve-optin.json
+      types:
+        - http2:
+            sensitive-headers: yes
