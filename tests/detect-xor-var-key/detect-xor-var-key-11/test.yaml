@@ -1,0 +1,45 @@
+requires:
+  min-version: 9
+
+pcap: false
+
+args:
+  - --engine-analysis
+  - --set
+  - engine-analysis.rules=yes
+
+checks:
+  # The static-key rule's content becomes the fast pattern.
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1
+        mpm.buffer: http_client_body
+        mpm.pattern: SECRET
+
+  # The variable-key rule loads successfully...
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 2
+
+  # ...but gets no fast pattern: its key variable is set during rule
+  # inspection, after prefilter, and the rule has no other content.
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 2
+        not-has-key: mpm
+
+  # A content in a buffer without the variable-key transform can still be
+  # the fast pattern.
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 3
+        mpm.buffer: http_uri
+        mpm.pattern: "|2F|CD|2F|"

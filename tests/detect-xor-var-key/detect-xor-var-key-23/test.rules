@@ -1,0 +1,3 @@
+# A byte_extract on the packet payload can't key xor:var; the error names that
+# case instead of reporting an unknown variable.
+alert http any any -> any any (msg:"XOR var key from packet payload"; content:"POST"; byte_extract:1,1,k,relative; http.request_body; xor:var k; content:"SECRET"; sid:1;)

@@ -1,0 +1,14 @@
+requires:
+  min-version: 9
+
+pcap: ../detect-xor-var-key-01/input.pcap
+
+args:
+  - -k none
+
+exit-code: 1
+
+checks:
+  - shell:
+      args: grep -c "byte variable 'k' is set on the packet payload" stderr | xargs
+      expect: 1
