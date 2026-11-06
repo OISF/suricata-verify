@@ -1,0 +1,52 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # The impossible chunk, and the message that follows it.
+  - filter:
+      count: 2
+      match:
+        event_type: smtp
+
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 0
+        smtp.mail_from: <alice@example.com>
+        smtp.rcpt_to[0]: <bob@example.com>
+
+  # Message 2 must be inspected as usual: the oversized declaration has to
+  # release the parser instead of holding it for 4 GB of octets.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 1
+        smtp.mail_from: <carol@example.com>
+        smtp.rcpt_to[0]: <dave@example.com>
+        email.from: carol@example.com
+        email.to[0]: dave@example.com
+        email.status: PARSE_DONE
+
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        tx_id: 0
+        anomaly.event: BDAT_MAX_CHUNK_LEN_EXCEEDED
+
+  # the chunk was not abandoned by a missing LAST, it could not exist at all
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.event: BDAT_LAST_MISSING
+
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.event: BDAT_INCOMPLETE_CHUNK

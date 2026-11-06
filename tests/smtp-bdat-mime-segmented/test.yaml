@@ -1,0 +1,18 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - -k none
+
+checks:
+  # one BDAT LAST chunk in 100-byte segments: every segment edge lands
+  # mid-line, so the line carry is reused many times. Run under LSan.
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: att.bin
+        fileinfo.state: CLOSED
+        fileinfo.size: 4096

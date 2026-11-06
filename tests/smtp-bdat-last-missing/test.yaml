@@ -1,0 +1,57 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # Two messages: the chunked one that was never closed, and the one the
+  # sender started afterwards.
+  - filter:
+      count: 2
+      match:
+        event_type: smtp
+
+  # Message 1: alice -> bob, delivered in two BDAT chunks. The payload is not a
+  # MIME message, so nothing is asserted about email fields here.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 0
+        smtp.mail_from: <alice@example.com>
+        smtp.rcpt_to[0]: <bob@example.com>
+        not-has-key: ["smtp.rcpt_to[1]"]
+
+  # Message 2: carol -> dave over DATA. The email fields prove the abandoned
+  # chunk did not take this message in: it must start its own transaction and
+  # its body must be inspected.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 1
+        smtp.mail_from: <carol@example.com>
+        smtp.rcpt_to[0]: <dave@example.com>
+        email.from: carol@example.com
+        email.to[0]: dave@example.com
+        email.status: PARSE_DONE
+
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        tx_id: 0
+        anomaly.event: BDAT_LAST_MISSING
+
+  # the chunks themselves were all delivered, so nothing is missing octets
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.event: BDAT_INCOMPLETE_CHUNK
+
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.event: BDAT_MAX_CHUNK_LEN_EXCEEDED

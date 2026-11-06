@@ -1,0 +1,29 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # The message that never finished is still a transaction.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        tx_id: 0
+        smtp.mail_from: <alice@example.com>
+        smtp.rcpt_to[0]: <bob@example.com>
+
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        tx_id: 0
+        anomaly.event: BDAT_INCOMPLETE_CHUNK
+
+  # the sender did not move on to another command, so a missing LAST is not
+  # what happened here
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.event: BDAT_LAST_MISSING
