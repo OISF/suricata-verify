@@ -1,0 +1,85 @@
+requires:
+  min-version: 9
+
+args:
+  - --simulate-ips
+
+pcap: input.pcap
+
+checks:
+  # sids 1, 2, 21, 22 and 24 alert, nothing else.
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+
+  # The transactional rules alert once each, on the response (packet 7).
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 7
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        pcap_cnt: 7
+
+  # The response condition does not match, so these never alert.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 11
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 12
+
+  # Standard rules on the same buffers: the request side matches "secret"
+  # on packet 5, while the body is still in progress.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 21
+        pcap_cnt: 5
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 22
+        pcap_cnt: 5
+
+  # Standard flowbits pair for sid 1: the request body sets the flowbit,
+  # the response alerts on packet 7.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 24
+        pcap_cnt: 7
+
+  # pin the exchange so the checks above cannot pass vacuously
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.hostname: example.com
+        http.url: /upload
+        http.http_method: POST
+        http.status: 200
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /upload
+        fileinfo.size: 6
+        fileinfo.state: CLOSED
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
