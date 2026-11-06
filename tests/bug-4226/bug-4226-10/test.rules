@@ -1,0 +1,6 @@
+# bsize as a depth on tls.sni. The SNI is "example.com" (11 bytes).
+# sids 1 and 2 match. sid 3 has a content that is in the SNI and as long as
+# its bsize, but the SNI is one byte longer.
+alert tls any any -> any any (msg:"sni exact"; tls.sni; content:"example.com"; bsize:11; sid:1;)
+alert tls any any -> any any (msg:"sni less-than"; tls.sni; content:"example"; bsize:<20; sid:2;)
+alert tls any any -> any any (msg:"sni content not at start"; tls.sni; content:"xample.com"; bsize:10; sid:3;)

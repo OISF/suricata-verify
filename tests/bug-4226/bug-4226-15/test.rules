@@ -1,0 +1,7 @@
+# The bsize depth on a buffer with a transform. bsize and the content are both
+# checked against the transformed buffer, so the depth applies the same way.
+# sid 1: an exact bsize equal to the content length after to_uppercase gives
+#        depth 10 and the startswith and endswith flags.
+# sid 2: bsize:<20 after strip_whitespace gives depth 20 and no anchoring.
+alert dns any any -> any any (msg:"exact bsize after to_uppercase"; dns.query; to_uppercase; content:"GOOGLE.COM"; bsize:10; sid:1;)
+alert dns any any -> any any (msg:"upper bound after strip_whitespace"; dns.query; strip_whitespace; content:"google"; bsize:<20; sid:2;)

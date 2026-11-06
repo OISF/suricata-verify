@@ -1,0 +1,20 @@
+requires:
+    min-version: 9
+    pcap: false
+
+args:
+    - --engine-analysis
+    - --set engine-analysis.rules=yes
+
+# Each dns.query instance has two inspect engines (doh2 and dns). The first
+# instance's content is the fast pattern, so it also appears in the mpm object.
+checks:
+    - shell:
+        args: grep -o '"depth":10' rules.json | wc -l | xargs
+        expect: 3
+    - shell:
+        args: grep -o '"depth":20' rules.json | wc -l | xargs
+        expect: 2
+    - shell:
+        args: grep -o "applied as a 'depth'" rules.json | wc -l | xargs
+        expect: 4
