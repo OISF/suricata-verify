@@ -1,0 +1,16 @@
+requires:
+  min-version: 9
+
+pcap: ../../flowbit-oring/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+  - --set threshold-file=threshold.config
+
+exit-code: 1
+
+checks:
+  - shell:
+      args: grep "can't threshold sid 103, gid 1" stderr | wc -l
+      expect: 1
