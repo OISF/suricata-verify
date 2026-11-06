@@ -1,0 +1,31 @@
+requires:
+  min-version: 9
+
+skip:
+  - feature: FUZZ
+
+checks:
+  # 230 link frames (tshark) on a connection joined mid-stream; the 18 CONFIRM frames are not transactions.
+  - filter:
+      count: 101
+      match:
+        event_type: dnp3
+        dnp3.type: request
+  - filter:
+      count: 101
+      match:
+        event_type: dnp3
+        dnp3.type: response
+  - filter:
+      count: 10
+      match:
+        event_type: dnp3
+        dnp3.type: unsolicited_response
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
