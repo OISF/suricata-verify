@@ -1,0 +1,17 @@
+%YAML 1.1
+---
+requires:
+  features:
+    - HAVE_LUA
+  min-version: 9
+
+args:
+  # checksums are not computed in the pcap
+  - -k none
+
+pcap: input.pcap
+
+checks:
+  - file-compare:
+      filename: trailer_lua.log
+      expected: expected/trailer_lua.log

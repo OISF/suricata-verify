@@ -1,0 +1,32 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+
+yaml: suricata.yaml
+
+args:
+  # checksums are not computed in the pcap
+  - -k none
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      comment: "the filestore rule stores the body"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      comment: "the trailer block is never handed over half-finished"
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      comment: "the complete trailer block is inspected"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
