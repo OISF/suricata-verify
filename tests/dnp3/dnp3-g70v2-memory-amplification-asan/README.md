@@ -12,6 +12,9 @@ build reported 515 allocations and the fixed build reported 3.
 This fixture is restricted to Linux ASAN builds because its regression oracle
 depends on the allocator statistics emitted by ASAN.
 
+The 512-point transaction also exceeds the 256-point log cap, so the EVE
+record carries 256 points and `dnp3.points_truncated`.
+
 Generated with:
 
 ```

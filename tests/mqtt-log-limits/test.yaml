@@ -1,0 +1,48 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+  # A 60000-byte CONNECT protocol string is cut with a marker, and the
+  # password is not logged by default.
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.connect.password_redacted: true
+        mqtt.connect.protocol_string.__endswith: "[truncated 58976 additional bytes]"
+        not-has-key:
+          - mqtt.connect.password
+
+  # SUBACK with 100 return codes: the logged list stops at 64.
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.truncated: true
+        mqtt.subscribe.message_id: 1
+        mqtt.suback.qos_granted.__len: 64
+
+  # 2000-byte PUBLISH payload is cut with a marker.
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.publish.topic: topic/t
+        mqtt.publish.message.__endswith: "[truncated 976 additional bytes]"
+
+  # UNSUBSCRIBE topics stop at the per-record topic budget.
+  - filter:
+      count: 1
+      match:
+        event_type: mqtt
+        mqtt.truncated: true
+        mqtt.unsubscribe.message_id: 2
+        mqtt.unsubscribe.topics.__len: 2
+        mqtt.unsubscribe.topics[1].__endswith: "[truncated 976 additional bytes]"
+
+  - shell:
+      args: grep -c 'hunter2' eve.json || true
+      expect: '0'

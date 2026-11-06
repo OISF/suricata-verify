@@ -1,5 +1,5 @@
 requires:
-  min-version: 8
+  min-version: 9
 
 checks:
 - filter:
@@ -20,7 +20,7 @@ checks:
     match:
       dest_ip: 74.208.5.11
       pop3.request.command: "USER"
-      pop3.request.args[0]: "moises.nunez@ingenierianumar.com"
+      pop3.request.credentials_redacted: true
       pop3.response.success: true
       pop3.response.status: "OK"
       pop3.response.header: "password required for user \"moises.nunez@ingenierianumar.com\""
@@ -29,6 +29,7 @@ checks:
     count: 1
     match:
       pop3.request.command: "PASS"
+      pop3.request.credentials_redacted: true
       pop3.response.success: true
 
 - filter:

@@ -1,0 +1,39 @@
+requires:
+  min-version: 9
+
+# HTTP/1 log limits: per-field strings and header budget.
+#
+# Flow A sends a 17-KB request line in one segment, flow B sends the
+# same bytes in 200-B segments. Both must log the same truncated url:
+# the logger cap (16 KiB) is applied to the final value, not to the
+# per-chunk buffers, so segmentation cannot change the logged length.
+#
+# Flow C sends 66 x 400-B X-Forwarded-For lines; htp concatenates them
+# into 26530 B and the logger cuts the xff string at 16384 B.
+#
+# Flow D sends 40 unique 1-KiB headers: the 32-KiB per-direction header
+# budget is hit and request_headers_truncated is set. No rule, no drop.
+checks:
+- filter:
+    count: 4
+    match:
+      event_type: http
+      http.status: 200
+- shell:
+    # A and B: same truncated url length; both carry the marker
+    args: python3 -c "import json;d=[json.loads(l) for l in open('eve.json') if json.loads(l).get('event_type')=='http'];u=[j['http']['url'] for j in d if j['http']['url'].startswith('/AAA')];print(len(u),len(u[0])==len(u[1]),'[truncated' in u[0],len(u[0])>16384)"
+    expect: '2 True True True'
+- shell:
+    # C: concatenated xff cut at the 16-KiB string limit
+    args: python3 -c "import json;d=[json.loads(l) for l in open('eve.json') if json.loads(l).get('event_type')=='http'];x=[j['http']['xff'] for j in d if j['http']['url']=='/xff'];print(len(x),'[truncated' in x[0],len(x[0])<16440)"
+    expect: '1 True True'
+- filter:
+    count: 1
+    match:
+      event_type: http
+      http.url: /headers
+      http.request_headers_truncated: true
+- shell:
+    # no MAX_LIMIT drop anywhere
+    args: grep -c 'Mem buffer asked' stdout || true
+    expect: '0'

@@ -7,7 +7,8 @@ outputs:
       filetype: regular
       filename: eve.json
       types:
-        - mqtt
+        - mqtt:
+            passwords: yes
         - alert
 
 app-layer:

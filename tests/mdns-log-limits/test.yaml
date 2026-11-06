@@ -1,0 +1,14 @@
+requires:
+  min-version: 9
+
+# mDNS inherits the DNS name-compression axis: the record is bounded.
+checks:
+- shell:
+    args: python3 -c "import json;d=[j['mdns'] for j in map(json.loads,open('eve.json')) if j.get('event_type')=='mdns' and j.get('mdns',{}).get('id')==22136 and j['mdns'].get('type')=='response'];print(len(d)>=1,all(x.get('truncated') and x.get('answers_truncated') for x in d))"
+    expect: 'True True'
+- shell:
+    args: grep -c 'Mem buffer asked' stdout || true
+    expect: '0'
+- shell:
+    args: python3 -c "import json;print(max(len(l) for l in open('eve.json'))<2*1024*1024)"
+    expect: 'True'
