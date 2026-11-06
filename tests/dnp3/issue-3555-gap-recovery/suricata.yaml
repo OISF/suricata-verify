@@ -1,0 +1,27 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filename: eve.json
+      types:
+        - alert
+        - dnp3
+        - flow
+        - stats:
+            totals: yes
+            threads: no
+
+stream:
+  reassembly:
+    toserver-chunk-size: 1
+    toclient-chunk-size: 1
+    randomize-chunk-size: no
+
+app-layer:
+  protocols:
+    dnp3:
+      enabled: yes
+      detection-ports:
+        dp: 20000
