@@ -1,0 +1,29 @@
+requires:
+  min-version: 9
+
+args:
+  - --set stream.midstream=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: dns
+        src_ip: 192.168.1.10
+        src_port: 40001
+        dest_port: 53
+  - filter:
+      count: 1
+      match:
+        event_type: dns
+        dns.type: request
+        dns.id: 2
+        dns.queries[0].rrname: query.example
+  - filter:
+      count: 1
+      match:
+        event_type: dns
+        dns.type: response
+        dns.id: 2
+        dns.answers[0].rdata: 10.0.0.2
