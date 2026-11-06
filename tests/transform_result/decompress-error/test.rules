@@ -1,0 +1,19 @@
+# pcap has one HTTP request with URI /Zm9vYmFyYmF6cXV4!!, which is neither
+# gzip nor zlib data, so gunzip and zlib_deflate fail on it.
+
+# a failed decompression keeps the input and flags an error
+alert http any any -> any any (msg:"gunzip must_error"; flow:established,to_server; \
+    http.uri; gunzip; transform_result: must_error; sid:1;)
+alert http any any -> any any (msg:"gunzip keeps the URI"; flow:established,to_server; \
+    http.uri; gunzip; content:"/Zm9vYmFyYmF6cXV4!!"; startswith; endswith; sid:2;)
+alert http any any -> any any (msg:"gunzip must_succeed"; flow:established,to_server; \
+    http.uri; gunzip; transform_result: must_succeed; content:"Zm9v"; sid:3;)
+
+# after strip_whitespace the input is in the buffer's own memory, and
+# zlib_deflate must still leave it as it was
+alert http any any -> any any (msg:"zlib_deflate after a transform must_error"; \
+    flow:established,to_server; http.uri; strip_whitespace; zlib_deflate; \
+    transform_result: must_error; sid:4;)
+alert http any any -> any any (msg:"zlib_deflate after a transform keeps the URI"; \
+    flow:established,to_server; http.uri; strip_whitespace; zlib_deflate; \
+    content:"/Zm9vYmFyYmF6cXV4!!"; startswith; endswith; sid:5;)
