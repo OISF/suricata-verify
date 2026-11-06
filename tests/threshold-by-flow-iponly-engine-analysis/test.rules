@@ -1,0 +1,4 @@
+alert ip 1.2.3.4 any -> any any (msg:"IP Only threshold by_flow"; threshold:type limit, track by_flow, count 5, seconds 60; sid:1;)
+alert ip 1.2.3.4 any -> any any (msg:"IP Only detection_filter by_flow"; detection_filter:track by_flow, count 5, seconds 60; sid:2;)
+alert ip 1.2.3.4 any -> any any (msg:"IP Only threshold by_src"; threshold:type limit, track by_src, count 5, seconds 60; sid:3;)
+alert tcp any any -> any any (msg:"Non IP Only threshold by_flow"; content:"x"; threshold:type limit, track by_flow, count 5, seconds 60; sid:4;)

@@ -1,0 +1,32 @@
+requires:
+  min-version: 9.0.0
+  pcap: false
+
+args:
+  - --engine-analysis
+
+checks:
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 1
+      warnings[0]: "threshold by_flow with an IP Only rule is ineffective for higher counts"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 2
+      warnings[0]: "threshold by_flow with an IP Only rule is ineffective for higher counts"
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 3
+      not-has-key: warnings
+- filter:
+    filename: rules.json
+    count: 1
+    match:
+      id: 4
+      not-has-key: warnings
