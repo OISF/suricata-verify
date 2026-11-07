@@ -1,9 +1,15 @@
-NFS logger bounds an EVE record (RFC 1813 names over 1024 bytes).
+NFS name and record size bounds.
 
-Names are kept whole on the transaction so `nfs.name` and `nfs.filename` can
-match past the protocol bound, which leaves the logger with strings whose size
-is only limited by stream reassembly. Here a v3 stream carries a 4 KiB CREATE
-name, a 40 KiB LOOKUP name and a RENAME with two 20 KiB names. Each is past the
-1024-byte NFCString3 limit so it raises `malformed_data`, the 4 KiB one is still
-logged whole, and the rest come back at the logger's 8 KiB cap with an in-value
-truncation marker and `nfs.truncated` set on the record.
+RFC 1813 3.2 declares ``filename3<>`` and ``nfspath3<>`` unbounded, so a v3 name
+can be as large as stream reassembly allows and it is the logger that has to
+bound what it writes. RFC 1094 3.6 does bound a v2 name at MAXNAMLEN (255).
+
+The v3 stream carries a 4 KiB CREATE name (logged whole, under the 8 KiB per
+field cap), a 40 KiB LOOKUP name and a RENAME with a 70 KiB source and 20 KiB
+target (shortened to the cap with the in-value marker, record marked
+``nfs.truncated``). The RENAME source is logged twice, as ``filename`` and as
+``rename.from``, so the budget has to be charged for what is written: charging
+the parsed length dropped the field although the record was well inside it.
+
+The v2 stream carries a 300 byte name: ``malformed_data`` and the whole name in
+the log, which is the only place either version flags a name at parse level.
