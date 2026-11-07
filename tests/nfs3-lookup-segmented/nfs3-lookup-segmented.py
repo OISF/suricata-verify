@@ -26,7 +26,7 @@ lookup_req = v3_call(
 # LOOKUP reply: status + filehandle + dir_attr_follows=0
 lookup_reply = v3_reply(XID, be32(0) + v3_fh(0x20) + be32(0))
 
-p = Pcap(os.path.join(os.path.dirname(os.path.abspath(__file__)), "nfs3-lookup-segmented.pcap"))
+p = Pcap(os.path.join(os.path.dirname(os.path.abspath(__file__)), "input.pcap"))
 p.tcp(CLIENT, SERVER, syn=True)
 p.tcp(SERVER, CLIENT, synack=True)
 p.tcp(CLIENT, SERVER, pure_ack=True)

@@ -68,7 +68,7 @@ reply_header = be32(XID) + be32(1) + be32(0) + be32(0) + be32(0) + be32(0)
 claim = 8192
 seg1 = struct.pack(">I", (1 << 31) | claim) + reply_header + reply_prog[:128]
 
-p = Pcap(os.path.join(os.path.dirname(os.path.abspath(__file__)), "nfs4-gss-none-read.pcap"))
+p = Pcap(os.path.join(os.path.dirname(os.path.abspath(__file__)), "input.pcap"))
 p.tcp(CLIENT, SERVER, syn=True)
 p.tcp(SERVER, CLIENT, synack=True)
 p.tcp(CLIENT, SERVER, pure_ack=True)
