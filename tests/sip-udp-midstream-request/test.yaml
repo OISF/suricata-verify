@@ -1,0 +1,30 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+  - --set stream.midstream=true
+
+checks:
+  - filter:
+      count: 3
+      match:
+        event_type: flow
+        app_proto: sip
+        src_ip: 192.168.1.10
+        dest_port: 5060
+  - filter:
+      count: 2
+      match:
+        event_type: sip
+        sip.method: "OPTIONS"
+  - filter:
+      count: 3
+      match:
+        event_type: sip
+        sip.method: "REGISTER"
+  - filter:
+      count: 3
+      match:
+        event_type: sip
+        sip.code: "200"
