@@ -59,7 +59,7 @@ access_req = v3_call(XID2, 4, v3_fh(0x40) + be32(0x01))
 # (nfs3-01's ACCESS replies end the same way).
 access_reply = v3_reply(XID2, be32(0) + be32(0) + be32(1))
 
-p = Pcap(os.path.join(os.path.dirname(os.path.abspath(__file__)), "nfs3-readdirplus-segmented.pcap"))
+p = Pcap(os.path.join(os.path.dirname(os.path.abspath(__file__)), "input.pcap"))
 p.tcp(CLIENT, SERVER, syn=True)
 p.tcp(SERVER, CLIENT, synack=True)
 p.tcp(CLIENT, SERVER, pure_ack=True)
