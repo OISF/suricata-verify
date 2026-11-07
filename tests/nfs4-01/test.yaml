@@ -13,13 +13,12 @@ checks:
       fileinfo.size: 5
       fileinfo.state: CLOSED
       fileinfo.stored: false
-      fileinfo.tx_id: 26
+      fileinfo.tx_id: 6
       nfs.file_tx: true
       nfs.filename: ''
       nfs.hhash: a4c60877
-      nfs.id: 27
+      nfs.id: 7
       nfs.procedure: WRITE
-      nfs.status: OK
       nfs.type: response
       nfs.version: 4
       proto: TCP
@@ -37,9 +36,8 @@ checks:
       nfs.file_tx: true
       nfs.filename: ''
       nfs.hhash: a4c60877
-      nfs.id: 27
+      nfs.id: 7
       nfs.procedure: WRITE
-      nfs.status: OK
       nfs.type: response
       nfs.version: 4
       pcap_cnt: 63
@@ -50,9 +48,33 @@ checks:
       src_ip: 192.168.0.26
       src_port: 880
 - filter:
-    # every v4 response event (incl. the tracked session ops) carries the
-    # default app-layer rule now
-    count: 33
+    # the test's own sid 1 (nfs_version:4, flow:to_server) matches one
+    # response per newly tracked op: EXCHANGE_ID, CREATE_SESSION,
+    # RECLAIM_COMPLETE, SECINFO_NO_NAME, LAYOUTGET, GETDEVINFO, WRITE, CLOSE,
+    # DELEGRETURN, LAYOUTRETURN, DESTROY_SESSION, DESTROY_CLIENTID. A
+    # PUTFH+GETATTR compound names no object, so it opens no tx (mainline).
+    count: 12
     match:
       event_type: alert
       app_proto: nfs
+# v4.1 backchannel: this capture has a server CB_NULL call to the client and the
+# client's reply, which is normal traffic, so no anomaly may come out of it in
+# either direction
+- filter:
+    count: 0
+    match:
+      event_type: anomaly
+      anomaly.app_proto: nfs
+      anomaly.event: response_to_server
+- filter:
+    count: 0
+    match:
+      event_type: anomaly
+      anomaly.app_proto: nfs
+      anomaly.event: request_to_client
+- filter:
+    count: 0
+    match:
+      event_type: anomaly
+      anomaly.app_proto: nfs
+      anomaly.event: malformed_data
