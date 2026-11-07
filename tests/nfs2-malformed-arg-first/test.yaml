@@ -1,0 +1,37 @@
+requires:
+  min-version: 9
+
+args:
+  - -k
+  - none
+  - --set app-layer.protocols.nfs.enabled=yes
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.version: 2
+        nfs.procedure: LOOKUP
+        nfs.type: response
+        nfs.filename: ""
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.version: 2
+        nfs.procedure: READLINK
+        nfs.hhash: 91267e8a
+  - filter:
+      count: 2
+      match:
+        event_type: nfs
+        nfs.version: 2

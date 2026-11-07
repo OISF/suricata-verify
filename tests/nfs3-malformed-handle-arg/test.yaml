@@ -1,0 +1,34 @@
+requires:
+  min-version: 9
+
+args:
+  - -k
+  - none
+
+pcap: input.pcap
+
+checks:
+  # the READLINK argument is too short for a filehandle3, so wiring the
+  # handle fails and malformed_data is raised on that transaction
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.version: 3
+        nfs.procedure: READLINK
+        nfs.filename: ""
+  # the next record does get a handle, so the anomaly is about the argument
+  # and not about the session or the record framing
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.version: 3
+        nfs.procedure: FSSTAT
+        nfs.hhash: 91267e8a
