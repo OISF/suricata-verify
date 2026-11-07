@@ -13,11 +13,11 @@ checks:
       fileinfo.size: 5
       fileinfo.state: CLOSED
       fileinfo.stored: false
-      fileinfo.tx_id: 0
+      fileinfo.tx_id: 26
       nfs.file_tx: true
       nfs.filename: ''
       nfs.hhash: a4c60877
-      nfs.id: 1
+      nfs.id: 27
       nfs.procedure: WRITE
       nfs.status: OK
       nfs.type: response
@@ -37,12 +37,12 @@ checks:
       nfs.file_tx: true
       nfs.filename: ''
       nfs.hhash: a4c60877
-      nfs.id: 1
+      nfs.id: 27
       nfs.procedure: WRITE
       nfs.status: OK
       nfs.type: response
       nfs.version: 4
-      pcap_cnt: 81
+      pcap_cnt: 63
       proto: TCP
       rpc.auth_type: 'NULL'
       rpc.status: ACCEPTED
@@ -50,7 +50,9 @@ checks:
       src_ip: 192.168.0.26
       src_port: 880
 - filter:
-    count: 1
+    # every v4 response event (incl. the tracked session ops) carries the
+    # default app-layer rule now
+    count: 33
     match:
       event_type: alert
       app_proto: nfs
