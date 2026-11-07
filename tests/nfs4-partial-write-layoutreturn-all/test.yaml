@@ -26,10 +26,21 @@ checks:
   # the rejected WRITE is logged mid-flow (pcap_cnt present) with the file
   # transaction completed, not left open
   - filter:
+      requires:
+        lt-version: 9
       count: 1
       match:
         event_type: nfs
         nfs.procedure: "38"
+        nfs.file_tx: true
+        pcap_cnt: 7
+  - filter:
+      requires:
+        min-version: 9
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: "WRITE"
         nfs.file_tx: true
         pcap_cnt: 7
   - filter:
