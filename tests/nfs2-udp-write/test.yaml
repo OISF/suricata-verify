@@ -1,0 +1,42 @@
+requires:
+  min-version: 9
+
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+  - --set app-layer.protocols.nfs.enabled=yes
+
+pcap: input.pcap
+
+checks:
+  # the LOOKUP reply pins the v2 reply path; its plain tx is logged at
+  # flow end, after the reply set the state version to 2
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.version: 2
+        nfs.procedure: LOOKUP
+        nfs.type: response
+        nfs.filename: cfile
+        rpc.xid: 1879048192
+  # a v2 WRITE in the RFC 1094 shape (raw 32-byte fh, beginoffset/
+  # offset/totalcount, raw data -- 8 words shorter than the v3 write
+  # args) is a plain record: RFC 1094 has neither a stable flag nor
+  # COMMIT, so there is no completion signal for a file transaction, and
+  # one file per record would split anything above the 8192 byte limit.
+  # Its data reaches detection through the stream, not through file.data.
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.version: 2
+        nfs.procedure: WRITE
+        nfs.type: response
+        nfs.status: OK
+        rpc.xid: 1879048193
+  - shell:
+      args: test "$(grep -Ec '"event_type":"fileinfo"' eve.json)" -eq 0
+  - shell:
+      args: test "$(grep -Ec 'malformed_data' eve.json)" -eq 0
