@@ -54,7 +54,7 @@ filler = b"\x5a" * (CLAIM - len(overclaim_reply))
 access_req = v3_call(XID2, 4, FH + be32(0x01))
 access_reply = v3_reply(XID2, be32(0))
 
-p = Pcap(os.path.join(os.path.dirname(os.path.abspath(__file__)), "nfs3-lookup-overclaim-skip.pcap"))
+p = Pcap(os.path.join(os.path.dirname(os.path.abspath(__file__)), "input.pcap"))
 p.tcp(CLIENT, SERVER, syn=True)
 p.tcp(SERVER, CLIENT, synack=True)
 p.tcp(CLIENT, SERVER, pure_ack=True)
