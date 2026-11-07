@@ -1,0 +1,4 @@
+alert nfs any any -> any any (msg:"NFS name blns"; nfs.name; content:"blns"; sid:1; rev:1;)
+alert nfs any any -> any any (msg:"NFS handle of nfs3-01 root"; nfs.handle; content:"|00 10 10 85 00 00 03 e7 00 0a 00 00 00 00 b2 5a 00 00 00 29 00 0a 00 00 00 00 b2 5a 00 00 00 29|"; sid:2; rev:1;)
+alert nfs any any -> any any (msg:"NFS name not present"; nfs.name; content:"nosuchfile"; sid:3; rev:1;)
+alert nfs any any -> any any (msg:"NFS handle not present"; nfs.handle; content:"|de ad be ef de ad be ef de ad|"; sid:4; rev:1;)
