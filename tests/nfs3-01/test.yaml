@@ -3469,7 +3469,7 @@ checks:
       flow.pkts_toclient: 17
       flow.pkts_toserver: 18
       nfs.file_tx: false
-      nfs.filename: ''
+      nfs.filename: b
       nfs.id: 18
       nfs.procedure: LINK
       nfs.status: OK
@@ -3522,7 +3522,7 @@ checks:
       flow.pkts_toclient: 17
       flow.pkts_toserver: 18
       nfs.file_tx: false
-      nfs.filename: ''
+      nfs.filename: b
       nfs.id: 18
       nfs.procedure: LINK
       nfs.status: OK
@@ -3575,7 +3575,7 @@ checks:
       flow.pkts_toclient: 17
       flow.pkts_toserver: 18
       nfs.file_tx: false
-      nfs.filename: ''
+      nfs.filename: b
       nfs.id: 18
       nfs.procedure: LINK
       nfs.status: OK
@@ -3618,7 +3618,7 @@ checks:
       ether.dest_mac: 00:c0:95:f8:4d:d3
       event_type: nfs
       nfs.file_tx: false
-      nfs.filename: ''
+      nfs.filename: b
       nfs.id: 18
       nfs.procedure: LINK
       nfs.status: OK
@@ -4104,7 +4104,7 @@ checks:
       flow.pkts_toclient: 20
       flow.pkts_toserver: 21
       nfs.file_tx: false
-      nfs.filename: ''
+      nfs.filename: blns
       nfs.id: 21
       nfs.procedure: SYMLINK
       nfs.status: OK
@@ -4154,7 +4154,7 @@ checks:
       flow.pkts_toclient: 20
       flow.pkts_toserver: 21
       nfs.file_tx: false
-      nfs.filename: ''
+      nfs.filename: blns
       nfs.id: 21
       nfs.procedure: SYMLINK
       nfs.status: OK
@@ -4204,7 +4204,7 @@ checks:
       flow.pkts_toclient: 20
       flow.pkts_toserver: 21
       nfs.file_tx: false
-      nfs.filename: ''
+      nfs.filename: blns
       nfs.id: 21
       nfs.procedure: SYMLINK
       nfs.status: OK
@@ -4244,7 +4244,7 @@ checks:
       ether.dest_mac: 00:c0:95:f8:4d:d3
       event_type: nfs
       nfs.file_tx: false
-      nfs.filename: ''
+      nfs.filename: blns
       nfs.id: 21
       nfs.procedure: SYMLINK
       nfs.status: OK
@@ -4886,7 +4886,7 @@ checks:
       flow.pkts_toclient: 24
       flow.pkts_toserver: 25
       nfs.file_tx: false
-      nfs.filename: ''
+      nfs.filename: .
       nfs.id: 25
       nfs.procedure: READDIR
       nfs.status: OK
@@ -4935,7 +4935,7 @@ checks:
       flow.pkts_toclient: 24
       flow.pkts_toserver: 25
       nfs.file_tx: false
-      nfs.filename: ''
+      nfs.filename: .
       nfs.id: 25
       nfs.procedure: READDIR
       nfs.status: OK
@@ -4984,7 +4984,7 @@ checks:
       flow.pkts_toclient: 24
       flow.pkts_toserver: 25
       nfs.file_tx: false
-      nfs.filename: ''
+      nfs.filename: .
       nfs.id: 25
       nfs.procedure: READDIR
       nfs.status: OK
@@ -5023,7 +5023,7 @@ checks:
       ether.dest_mac: 00:c0:95:f8:4d:d3
       event_type: nfs
       nfs.file_tx: false
-      nfs.filename: ''
+      nfs.filename: .
       nfs.id: 25
       nfs.procedure: READDIR
       nfs.status: OK
@@ -10410,7 +10410,7 @@ checks:
       flow.pkts_toclient: 53
       flow.pkts_toserver: 54
       nfs.file_tx: false
-      nfs.filename: ''
+      nfs.filename: blns
       nfs.id: 53
       nfs.procedure: READLINK
       nfs.status: OK
@@ -10459,7 +10459,7 @@ checks:
       flow.pkts_toclient: 53
       flow.pkts_toserver: 54
       nfs.file_tx: false
-      nfs.filename: ''
+      nfs.filename: blns
       nfs.id: 53
       nfs.procedure: READLINK
       nfs.status: OK
@@ -10508,7 +10508,7 @@ checks:
       flow.pkts_toclient: 53
       flow.pkts_toserver: 54
       nfs.file_tx: false
-      nfs.filename: ''
+      nfs.filename: blns
       nfs.id: 53
       nfs.procedure: READLINK
       nfs.status: OK
@@ -10547,7 +10547,7 @@ checks:
       ether.dest_mac: 00:c0:95:f8:4d:d3
       event_type: nfs
       nfs.file_tx: false
-      nfs.filename: ''
+      nfs.filename: blns
       nfs.id: 53
       nfs.procedure: READLINK
       nfs.status: OK
