@@ -1,0 +1,50 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+  - --set
+  - app-layer.protocols.nfs.enabled=yes
+
+pcap: input.pcap
+
+checks:
+  # the mark claims 1 GiB; the cap follows the 31 bit field width, so the
+  # flow is abandoned with record_overflow instead of buffering toward the
+  # claim
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: record_overflow
+  # nothing was parsed as an NFS transaction: the event-only tx is not
+  # logged, so a forged mark must not produce tx records
+  - filter:
+      count: 0
+      match:
+        event_type: nfs
+  # The rule from test.rules must actually fire, or the two checks below
+  # would pass on a run that produced no alert at all. There are two: the
+  # packet carrying the forged mark, and the reply-direction packet seen
+  # while the event is still set.
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 2223010
+  # An alert on the event must not describe a call that was never parsed.
+  # The metadata path used to render the transaction as-is, which gave the
+  # alert an nfs block with procedure NULL, status OK, version 0 and the
+  # xid lifted from the forged mark.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        nfs.procedure: "NULL"
+  - shell:
+      args: test "$(jq -s '[.[] | select(.event_type == "alert" and (.nfs or .rpc))] | length' eve.json)" -eq 0
