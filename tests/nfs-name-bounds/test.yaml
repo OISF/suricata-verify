@@ -1,0 +1,64 @@
+requires:
+  min-version: 9
+
+args:
+  - -k
+  - none
+  - --set app-layer.protocols.nfs.enabled=yes
+
+pcap: input.pcap
+
+checks:
+  # all three names are past the RFC 1813 bound of 1024 bytes
+  - filter:
+      count: 3
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.version: 3
+        nfs.procedure: CREATE
+        nfs.type: response
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.version: 3
+        nfs.procedure: LOOKUP
+        nfs.type: response
+        nfs.truncated: true
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.version: 3
+        nfs.procedure: RENAME
+        nfs.type: response
+        nfs.truncated: true
+  # under the 8 KiB per-field cap the name is still logged whole
+  - shell:
+      args: jq -r 'select(.event_type=="nfs" and .nfs.procedure=="CREATE") | .nfs.filename | length' eve.json
+      expect: 4096
+  # past the cap each string comes back at the cap plus the in-value marker,
+  # so neither a 40 KiB name nor either half of a rename reaches disk in full
+  - shell:
+      args: jq -r 'select(.event_type=="nfs" and .nfs.procedure=="LOOKUP") | .nfs.filename | length' eve.json
+      expect: 8226
+  - shell:
+      args: jq -r 'select(.event_type=="nfs" and .nfs.procedure=="LOOKUP") | .nfs.filename' eve.json | grep -Ec '\[truncated 32768 additional bytes\]$'
+      expect: 1
+  - shell:
+      args: jq -r 'select(.event_type=="nfs" and .nfs.procedure=="RENAME") | .nfs.rename.from | length' eve.json
+      expect: 8226
+  - shell:
+      args: jq -r 'select(.event_type=="nfs" and .nfs.procedure=="RENAME") | .nfs.rename.to | length' eve.json
+      expect: 8226
+  # the cap holds for the whole record too: nothing here is anywhere near the
+  # 10 MiB MemBuffer limit that used to be the only bound
+  - shell:
+      args: awk '{ if (length($0) > m) m = length($0) } END { print m }' eve.json
+      expect: 25208

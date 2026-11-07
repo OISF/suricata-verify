@@ -61,10 +61,11 @@ def v3_reply(xid, prog_data):
 
 
 def v2_call(xid, proc, prog_data):
-    # AUTH_NULL: type 0, zero cred length (no body word)
+    # AUTH_NULL: cred flavor + zero length, then the same for the verifier, so
+    # four words before the program data
     body = (
         be32(xid) + be32(0) + be32(2) + be32(100003) + be32(2) + be32(proc)
-        + be32(0) + be32(0) + prog_data
+        + be32(0) + be32(0) + be32(0) + be32(0) + prog_data
     )
     return rpc_record(body)
 
