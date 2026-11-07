@@ -1,0 +1,1 @@
+alert nfs any any -> any any (msg:"SURICATA NFS record mark overflow"; app-layer-event:nfs.record_overflow; classtype:protocol-command-decode; sid:2223010; rev:1;)
