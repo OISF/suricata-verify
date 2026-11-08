@@ -1,0 +1,24 @@
+%YAML 1.1
+---
+
+# Defaults only: string-log-limit 16 KiB, header-log-limit 32 KiB.
+# The long request line (flows A/B), the concatenated xff (C) and the
+# 40-KiB header block (D) must all be cut by the logger, not by htp.
+app-layer:
+  protocols:
+    http:
+      enabled: yes
+      tcp:
+        enabled: yes
+        detection-ports:
+          dp: 80
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - http:
+            extended: yes
+            dump-all-headers: request

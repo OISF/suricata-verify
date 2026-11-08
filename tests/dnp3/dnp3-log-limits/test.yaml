@@ -1,0 +1,86 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+  # 1000 points in one object: the logged list stops at 256.
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        dnp3.type: request
+        dnp3.truncated: true
+        dnp3.points_truncated: true
+        dnp3.application.objects[0].group: 2
+        dnp3.application.objects[0].variation: 1
+        dnp3.application.objects[0].count: 1000
+        dnp3.application.objects[0].points.__len: 256
+        dnp3.application.objects[0].points[0].state: 1
+        dnp3.application.objects[0].points[255].index: 255
+
+  # 100 objects: the logged list stops at 64.
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        dnp3.truncated: true
+        dnp3.objects_truncated: true
+        dnp3.application.objects.__len: 64
+        dnp3.application.objects[0].group: 1
+        dnp3.application.objects[63].group: 1
+
+  # 9000-byte filename and data fields are cut at 8 KiB with a marker.
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        dnp3.truncated: true
+        dnp3.application.objects[0].group: 70
+        dnp3.application.objects[0].variation: 1
+        dnp3.application.objects[0].points[0].filename_size: 9000
+        dnp3.application.objects[0].points[0].filename.__endswith: "[truncated 808 additional bytes]"
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        dnp3.truncated: true
+        dnp3.application.objects[0].group: 70
+        dnp3.application.objects[0].variation: 1
+        dnp3.application.objects[0].points[0].data_size: 9000
+        dnp3.application.objects[0].points[0].filename_size: 0
+        dnp3.application.objects[0].points[0].data.__endswith: "[truncated 808 additional bytes]"
+
+  # The G70V2 password is not logged.
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        dnp3.password_redacted: true
+        dnp3.application.objects[0].group: 70
+        dnp3.application.objects[0].variation: 2
+        dnp3.application.objects[0].points[0].username: alice
+        dnp3.application.objects[0].points[0].password_size: 7
+        not-has-key:
+          - dnp3.application.objects[0].points[0].password
+
+  - shell:
+      args: grep -c 'hunter2' eve.json || true
+      expect: '0'
+
+  # A 9000-byte base64 field is cut at 8192 raw bytes (10924 base64 chars).
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        dnp3.truncated: true
+        dnp3.application.objects[0].group: 83
+        dnp3.application.objects[0].variation: 1
+        dnp3.application.objects[0].points[0].length: 9000
+        dnp3.application.objects[0].points[0].data->data_objects.__len: 10924
+
+  # Every record stays far below the whole-record drop threshold.
+  - shell:
+      args: python3 -c "print(max(len(l) for l in open('eve.json'))<160*1024)"
+      expect: 'True'

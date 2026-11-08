@@ -1,0 +1,19 @@
+requires:
+  min-version: 9
+
+pcap: ../bug-3519/input.pcap
+
+# credentials: yes restores the USER/PASS arguments.
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: ftp
+      ftp.command: USER
+      ftp.command_data: anonymous
+- filter:
+    count: 1
+    match:
+      event_type: ftp
+      ftp.command: PASS
+      ftp.command_data: anonymous

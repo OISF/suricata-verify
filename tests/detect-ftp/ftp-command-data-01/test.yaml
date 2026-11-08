@@ -6,6 +6,8 @@ requires:
 checks:
 
   - filter:
+      requires:
+        lt-version: 9
       count: 1
       match:
         event_type: alert
@@ -13,13 +15,38 @@ checks:
         ftp.command_data: anonymous
         alert.signature_id: 1
 
+  # Alert metadata never logs USER/PASS arguments since 9.0.
   - filter:
+      requires:
+        min-version: 9
+      count: 1
+      match:
+        event_type: alert
+        ftp.command: USER
+        alert.signature_id: 1
+        not-has-key:
+          - ftp.command_data
+
+  - filter:
+      requires:
+        lt-version: 9
       count: 1
       match:
         event_type: alert
         ftp.command: PASS
         ftp.command_data: anonymous
         alert.signature_id: 2
+
+  - filter:
+      requires:
+        min-version: 9
+      count: 1
+      match:
+        event_type: alert
+        ftp.command: PASS
+        alert.signature_id: 2
+        not-has-key:
+          - ftp.command_data
 
   - filter:
       count: 1
