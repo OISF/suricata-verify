@@ -1,0 +1,33 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+args:
+  - --simulate-ips
+  - -k none
+pcap: input.pcap
+checks:
+  # a denied host with a body: the first DATA frame is the last word on http.host,
+  # so the miss is final there and the app default policy drops on packet 6, the
+  # first body packet - as on main. Before the fix this deferred to the packet that
+  # closed the request (8, and 10 while the revisit arm held the rule), delivering
+  # a body the base blocks.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 110
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2201001
+        alert.action: blocked
+        firewall.hook: http2:stream:request_headers
+        pcap_cnt: 6
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.action: drop
+        flow.alerted: true

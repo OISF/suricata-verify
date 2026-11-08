@@ -57,3 +57,6 @@ python3 run.py --testdir tests/firewall --exact ruletype-firewall-284-lte-mixed-
 ## Related
 
 Redmine #8944.
+
+The cross-protocol rules here use buffer matches: an `<hook` rule cannot match the raw
+stream (see ruletype-firewall-615-lte-stream-match-rejected).

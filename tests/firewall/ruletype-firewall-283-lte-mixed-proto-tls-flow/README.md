@@ -61,3 +61,6 @@ The firewalls rules all share one ruleset. Isolation is enforced by the
 per-alproto transaction prefilter engines: a foreign rule is never a candidate
 for a TLS transaction (its engine is skipped because the flow alproto does not
 match). See Redmine #8944.
+
+The cross-protocol rules here use buffer matches: an `<hook` rule cannot match the raw
+stream (see ruletype-firewall-615-lte-stream-match-rejected).

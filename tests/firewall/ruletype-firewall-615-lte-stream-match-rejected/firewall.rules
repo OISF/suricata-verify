@@ -1,0 +1,8 @@
+accept:hook tcp:all any any -> any any (flow:not_established; sid:1;)
+accept:hook tcp:all any any <> any any (flow:established; sid:2;)
+
+# fine: a buffer of the hook
+accept:flow,alert http1:<request_headers $HOME_NET any -> $EXTERNAL_NET any (http.host; content:"ok.example.com"; sid:10; rev:1;)
+
+# rejected: the same rule matching the raw stream
+accept:flow,alert http1:<request_headers $HOME_NET any -> $EXTERNAL_NET any (content:"ok.example.com"; sid:11; rev:1;)
