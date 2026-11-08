@@ -1,0 +1,2 @@
+# this will match, and thus write some headers to the dataset
+alert http any any -> any any (msg:"HTTP learning"; http.request_header; content:"toto"; dataset:set,http_match,type string,save http_match.csv; sid:1;)
