@@ -1,0 +1,19 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+  # Each rule decodes the body with its own key. Both use variable slot 0,
+  # so a shared decoded buffer would leave one of them without a match.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
