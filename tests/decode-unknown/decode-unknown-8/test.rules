@@ -1,0 +1,2 @@
+alert pkthdr any any -> any any (msg:"Ethertype unknown"; decode-event:ethernet.unknown_ethertype; sid:1;)
+alert ip any any -> any any (msg:"GRE"; ip_proto:47; sid:2;)
