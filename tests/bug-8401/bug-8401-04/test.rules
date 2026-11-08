@@ -1,0 +1,1 @@
+alert tcp any any -> any 80 (msg:"threshold by_rule"; flags:S; flow:stateless; threshold:type limit, track by_rule, count 2, seconds 3600; sid:1;)
