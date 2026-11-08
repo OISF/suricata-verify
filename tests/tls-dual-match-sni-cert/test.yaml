@@ -1,0 +1,15 @@
+requires:
+  min-version: 8.0.0
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: tls
+        tls.sni: "bukifide.com"
+        tls.serial: "00:86:01:7D:67:30:5A:C7:F5:43:80:96:A1:80:8E:28:9C"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1337
