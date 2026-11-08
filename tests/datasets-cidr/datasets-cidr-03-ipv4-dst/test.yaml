@@ -1,0 +1,24 @@
+requires:
+  min-version: 9
+
+pcap: ../datasets-cidr-01-ipv4-isset/input-ipv4.pcap
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        dest_ip: "8.8.8.8"

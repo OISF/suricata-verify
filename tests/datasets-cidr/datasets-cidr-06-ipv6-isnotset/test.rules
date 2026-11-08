@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"Not ULA src"; ip.src; dataset:isnotset,ula,type cidr,load ula.lst; sid:1;)

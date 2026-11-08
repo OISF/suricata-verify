@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"CIDR set new host"; ip.src; dataset:set,dynamic-cidr,type cidr; sid:1;)
