@@ -1,0 +1,43 @@
+# Regression test for the IMAP firewall app-layer bug.
+#
+# EXPECTED TO FAIL on affected builds: IMAP is detection-only, so the
+# drop:flow imap:request_started rule never matches and the flow is not
+# blocked. This test asserts the CORRECT behaviour (the rule blocks the IMAP
+# flow) so that it starts passing once the underlying issue is fixed.
+#
+# See redmine: firewall app-layer hook rules for IMAP load but never match.
+
+requires:
+  min-version: 8
+
+pcap: ../../imap-detection/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+# Control: IMAP protocol detection works - the flow is classified as imap.
+# (Passes today and must keep passing after the fix.)
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      app_proto: imap
+
+# EXPECTED: the drop:flow rule matches once at the IMAP request hook and
+# blocks the flow. On affected builds this alert is never produced.
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2000
+      alert.engine: fw
+      alert.action: blocked
+      app_proto: imap
+
+# EXPECTED: the flow is actually dropped by the firewall rule (not merely
+# accepted). On affected builds nothing is dropped.
+- stats:
+    firewall.drop_reason.rules.__gte: 1
+    firewall.blocked.__gte: 1
