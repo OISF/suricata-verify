@@ -1,0 +1,25 @@
+requires:
+    min-version: 9
+
+pcap: false
+
+args:
+  - --engine-analysis
+
+# Smallest possible deadlock, two rules that each need the other's bit:
+#
+#   sid:12 set headtest -> sid:10 isset headtest
+#   sid:10 set moz      -> sid:12 isset moz
+#
+# Both edges are set edges, so they carry the same weight and cycle resolution
+# has no lower priority edge it could drop. No order exists, and the engine
+# must refuse the ruleset rather than invent one.
+exit-code: 1
+
+checks:
+  # The user facing message for an unresolvable flowbit cycle.
+  - filter:
+      count: 1
+      match:
+        log_level: Error
+        engine.message: "Flowbits have circular dependencies that cannot be met at runtime"

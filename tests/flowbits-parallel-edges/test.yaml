@@ -1,0 +1,44 @@
+requires:
+    min-version: 9
+
+pcap: false
+
+args:
+  - --engine-analysis
+
+# sid:1 and sid:2 are joined by three dependencies, two of them running the
+# same way between the same pair of rules:
+#
+#   sid:1 set x   -> sid:2 isset x        (set edge)
+#   sid:1 unset y -> sid:2 isnotset y     (unset edge)
+#   sid:2 set z   -> sid:1 isset z        (set edge)
+#
+# The first two are parallel edges. If the graph kept only one edge per pair of
+# rules, the set/x edge would be lost to the unset/y edge and what remained
+# would be a two edge cycle of mixed weight, which resolution would happily
+# break by dropping the unset edge, producing the order 2, 1.
+#
+# That order is wrong: sid:1 waits on z from sid:2 while sid:2 waits on x from
+# sid:1. With both parallel edges kept, dropping the unset edge still leaves a
+# set/set cycle of uniform weight, which cannot be broken, so the ruleset is
+# correctly refused.
+exit-code: 1
+
+checks:
+  # The sid list in this message is built from an unordered set, so its order
+  # varies between runs; grep matches the stable prefix only.
+  - shell:
+      args: 'grep -c "Cyclic dependency found between flowbits from signatures" suricata.log'
+      expect: 1
+  # One resolution round was spent dropping the unset edge before the
+  # unbreakable set/set cycle was reached.
+  - filter:
+      count: 1
+      match:
+        log_level: Error
+        engine.message: "Unable to resolve cycles after 1 tries"
+  - filter:
+      count: 1
+      match:
+        log_level: Error
+        engine.message: "Flowbits have circular dependencies that cannot be met at runtime"
