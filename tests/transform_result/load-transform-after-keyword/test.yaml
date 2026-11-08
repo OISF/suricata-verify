@@ -1,0 +1,23 @@
+requires:
+  min-version: 9
+
+pcap: ../load-no-transform-error-or/empty.pcap
+
+args:
+  - --init-errors-fatal
+
+exit-code: 1
+
+checks:
+  - shell:
+      args: 'grep "transform_result: error_or must come after the buffer.s transforms" suricata.log | wc -l | xargs'
+      expect: 1
+  - shell:
+      args: 'grep "transform_result: must_succeed must come after the buffer.s transforms" suricata.log | wc -l | xargs'
+      expect: 1
+  - shell:
+      args: 'grep "absent: or_else must come after the buffer.s transforms" suricata.log | wc -l | xargs'
+      expect: 1
+  - shell:
+      args: 'grep "transform_result: must_succeed expects other keywords" suricata.log | wc -l | xargs'
+      expect: 1
