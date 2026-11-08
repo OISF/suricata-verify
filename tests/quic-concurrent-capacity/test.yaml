@@ -1,0 +1,32 @@
+requires:
+  min-version: 9
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: quic
+        quic.sni: connection-1.example
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000001
+  - filter:
+      count: 1
+      match:
+        event_type: quic
+        quic.sni: connection-2.example
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000002
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1000100
+
+args:
+  - --set app-layer.protocols.quic.max-connections=2
