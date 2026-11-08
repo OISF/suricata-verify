@@ -1,0 +1,24 @@
+requires:
+  min-version: 9
+
+skip:
+  - feature: FUZZ
+
+checks:
+  # The attacker's segment overlaps the outstation's in sequence space with different octets; the
+  # reassembled to-client stream holds the tail of a frame where the next should start. With
+  # resync-on-bad-start off (shipped behaviour) DNP3 inspection ends there, silently.
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2270010
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2270011
