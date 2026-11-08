@@ -1,0 +1,6 @@
+accept:hook tcp:all any any -> any any (sid:100;)
+
+accept:hook imap:request_in_progress any any -> any any (sid:1;)
+accept:hook imap:request_complete any any -> any any (alert; sid:2;)
+accept:hook imap:response_in_progress any any -> any any (sid:3;)
+accept:hook imap:response_complete any any -> any any (alert; sid:4;)

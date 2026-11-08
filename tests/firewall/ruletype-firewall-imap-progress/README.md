@@ -1,0 +1,4 @@
+Verify that IMAP request and response progress is tracked independently.
+It places the server greeting, client request, untagged response, and tagged
+response in separate packets so the direction and timing of all four IMAP
+firewall hooks can be asserted.
