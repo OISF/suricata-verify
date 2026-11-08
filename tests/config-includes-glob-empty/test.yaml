@@ -1,0 +1,34 @@
+requires:
+  min-version: 9
+  # Same probes as config-includes-glob-order: skip builds without glob
+  # support in include:, and builds without glob(3) (notably Windows).
+  script:
+    - grep globfree src/conf-yaml-loader.c > /dev/null
+    - grep '^#define HAVE_GLOB_H 1' src/autoconf.h > /dev/null
+
+pcap: false
+
+# Git cannot track an empty directory, so create an empty conf.d/ drop-in
+# directory next to a copy of the config at run time. Relative include
+# patterns are resolved against the directory of the top-level config.
+setup:
+  - script: |
+      mkdir conf.d
+      cp ${TEST_DIR}/empty.yaml .
+
+command: |
+  ${SRCDIR}/src/suricata -c ${OUTPUT_DIR}/empty.yaml -l ${OUTPUT_DIR} --dump-config
+
+checks:
+  # Configuration before and after the empty include is still loaded.
+  - shell:
+      args: grep -c '^glob-empty-before = present' stdout
+      expect: 1
+  - shell:
+      args: grep -c '^glob-empty-after = present' stdout
+      expect: 1
+
+  # The empty match is reported as a warning, not an error.
+  - shell:
+      args: grep -c 'No files match include pattern .*conf.d/\*.yaml' stdout
+      expect: 1
