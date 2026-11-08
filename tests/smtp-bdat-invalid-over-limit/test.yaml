@@ -1,0 +1,45 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - -k none
+  - --set app-layer.protocols.smtp.max-bdat-chunk-len=1000
+
+checks:
+  # the command is refused for its syntax, not for the length of a chunk that
+  # is never going to arrive
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: INVALID_BDAT
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.event: BDAT_MAX_CHUNK_LEN_EXCEEDED
+
+  # and the refusal must not cost the transaction its next message: the chunk
+  # declared correctly after it is inspected and its attachment extracted
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        email.from: alice@example.com
+        email.status: PARSE_DONE
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: att.bin
+        fileinfo.size: 256
+        fileinfo.state: CLOSED
+
+  # the refused command did not leave a message hanging either
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.event: BDAT_LAST_MISSING

@@ -1,0 +1,23 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - -k none
+
+checks:
+  # the chunk stops half way through the attachment and the stream ends:
+  # the file is truncated, as it is for the same cut over DATA.
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: BDAT_INCOMPLETE_CHUNK
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: att.bin
+        fileinfo.state: TRUNCATED
+        fileinfo.size: 1968

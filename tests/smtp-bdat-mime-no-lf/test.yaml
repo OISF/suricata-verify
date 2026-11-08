@@ -1,0 +1,25 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - -k none
+
+checks:
+  # a 64 KiB body without LF is handed to the MIME parser in line-limit
+  # pieces. Run under LSan.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        email.status: PARSE_DONE
+  # the run is a body line, and body lines are not capped: nothing here may
+  # be dropped as a truncated line. The event is raised in the server->client
+  # record layout, so the client port is dest_port, not src_port.
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        dest_port: 40002
+        anomaly.event: TRUNCATED_LINE

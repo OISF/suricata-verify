@@ -1,0 +1,39 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - -k none
+
+checks:
+  # the same message over BDAT (port 40014) and DATA (port 40015): a base64
+  # attachment on one 8192-char line and an 8bit attachment that is one
+  # 12288-byte line. DATA does not cap body lines, so neither may BDAT.
+  - filter:
+      count: 2
+      match:
+        event_type: fileinfo
+        fileinfo.filename: b64line.bin
+        fileinfo.state: CLOSED
+        fileinfo.size: 6144
+  - filter:
+      count: 2
+      match:
+        event_type: fileinfo
+        fileinfo.filename: longline.txt
+        fileinfo.state: CLOSED
+        fileinfo.size: 12288
+  # the 5000-byte X-Long header line is capped on both framings
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        dest_port: 40014
+        anomaly.event: TRUNCATED_LINE
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        dest_port: 40015
+        anomaly.event: TRUNCATED_LINE
