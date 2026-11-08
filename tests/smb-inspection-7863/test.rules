@@ -1,0 +1,5 @@
+alert dcerpc any any -> any any (msg:"dcerpc uuid [lsarpc]"; flow:established, to_server; dcerpc.iface:12345778-1234-abcd-ef00-0123456789ab; flowbits:set,lsarpc; sid:1; rev:1;)
+
+alert smb any any -> any any (msg:"smb uuid [lsarpc]"; flow:established, to_server; content:"SMB"; content:"|05 00 0b|"; distance:0; content:"|78 57 34 12 34 12 cd ab ef 00 01 23 45 67 89 ab|"; distance:29; flowbits:set,lsarpc; sid:2; rev:1;)
+
+alert smb any any -> any any (msg:"DPAPI Backup Key Extraction"; flow:established, to_server; content:"B|00|C|00|K|00|U|00|P|00|K|00|E|00|Y"; flowbits:isset,lsarpc; sid:3; rev:1;)
