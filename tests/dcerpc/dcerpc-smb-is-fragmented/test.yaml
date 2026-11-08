@@ -1,0 +1,37 @@
+requires:
+  min-version: 9
+
+pcap: ../../filestore-filecontainer-smb/filecontainer-smb.pcap
+
+args:
+- -k none
+
+checks:
+  # This capture contains three DCE/RPC responses that are genuinely fragmented
+  # across multiple PDUs over SMB (call_id 14: first+last; call_id 3 and 573:
+  # first+middle+last). Each reassembles into one transaction whose response
+  # side is fragmented, so is_fragmented:true matches them on to_client.
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # No request in this capture is fragmented, so is_fragmented:true matches
+  # nothing on to_server.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  # Every other (complete) response is not fragmented -> is_fragmented:false.
+  - filter:
+      count: 1507
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  # All requests are single complete PDUs -> is_fragmented:false.
+  - filter:
+      count: 1507
+      match:
+        event_type: alert
+        alert.signature_id: 4
