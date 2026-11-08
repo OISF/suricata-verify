@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"Unidirectional split-packet: byte_extract in http.stat_code -> byte_test in file.data"; flow:established,to_client; http.stat_code; byte_extract:3,0,code_val,string,dec; file.data; byte_test:3,=,code_val,0,string,dec; sid:1;)

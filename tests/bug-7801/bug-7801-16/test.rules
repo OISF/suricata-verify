@@ -1,0 +1,2 @@
+alert http any any -> any any (msg:"A: byte_extract http.stat_code -> byte_test file.data"; flow:established,to_client; http.stat_code; byte_extract:3,0,code_val,string,dec; file.data; byte_test:3,=,code_val,0,string,dec; sid:1;)
+alert http any any -> any any (msg:"B: byte_math http.stat_code -> byte_test file.data, never matches"; flow:established,to_client; http.stat_code; byte_math:bytes 3, offset 0, oper +, rvalue 1, result w, string dec; file.data; byte_test:3,=,w,0,string,dec; sid:2;)

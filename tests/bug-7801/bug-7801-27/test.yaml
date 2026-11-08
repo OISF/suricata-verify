@@ -1,0 +1,33 @@
+%YAML 1.1
+---
+
+requires:
+  min-version: 9.0
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  # rule 1 did run on b.bin and left its value behind
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: a.txt
+        fileinfo.size: 6
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: b.bin
+        fileinfo.size: 20

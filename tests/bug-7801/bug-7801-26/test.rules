@@ -1,0 +1,1 @@
+alert udp any any -> any any (msg:"packet path: byte_extract in udp.hdr and byte_math in ipv4.hdr, read in the payload"; udp.hdr; byte_extract:2,4,ulen; ipv4.hdr; byte_math:bytes 1, offset 8, oper +, rvalue 0, result ttl; pkt_data; byte_test:1,=,ulen,0; sid:1;)

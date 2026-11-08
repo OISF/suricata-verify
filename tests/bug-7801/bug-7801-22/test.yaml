@@ -1,0 +1,41 @@
+%YAML 1.1
+---
+
+requires:
+  min-version: 9.0
+
+# a browser loading a documentation page over HTTP/2: index.html on stream 1,
+# then five static files requested together on streams 3 to 11
+pcap: ../../http2-keywords/input.pcap
+
+args:
+  - -k none
+
+checks:
+  # v is the ninth byte of the path after /doc/manual/html/ and the rule alerts
+  # when the first byte of the server header, 'n' (110), is greater:
+  #   stream  1  index.html            'm' 109  alert
+  #   stream  3  _static/css/...       'c'  99  alert
+  #   stream  5  _static/jquery.js     'j' 106  alert
+  #   stream  7  _static/underscore.js 'u' 117  no alert
+  #   stream  9  _static/doctools.js   'd' 100  alert
+  #   stream 11  _static/js/theme.js   'j' 106  alert
+  # Streams 3 to 11 are open at once, so every one of their requests is
+  # inspected before the first of their responses.
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        http.http2.stream_id: 7
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        http.http2.stream_id: 3

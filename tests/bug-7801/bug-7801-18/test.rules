@@ -1,0 +1,1 @@
+alert http any any => any any (msg:"byte_extract on a resumed pass: http.uri, then http.stat_code -> file.data"; flow:established; http.uri; content:"/r/"; fast_pattern; http.stat_code; byte_extract:3,0,code_val,string,dec; file.data: to_client; byte_test:3,=,code_val,0,string,dec; sid:1;)
