@@ -1,0 +1,13 @@
+# Test executable.sections keyword (all PEs have 1 section)
+
+# Test 1: Detect PE files with more than 2 sections (none match = 0)
+alert http any any -> any any ( msg:"TEST executable.sections >2"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, sections >2; sid:20; rev:1;)
+
+# Test 2: Detect PE files with many sections (>10, none match = 0)
+alert http any any -> any any ( msg:"TEST executable.sections >10"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, sections >10; sid:21; rev:1;)
+
+# Test 3: Detect PE files with few sections (<3, all match = 5)
+alert http any any -> any any ( msg:"TEST executable.sections <3"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, sections <3; sid:22; rev:1;)
+
+# Test 4: Detect PE files with section count in range 3-10 (none match = 0)
+alert http any any -> any any ( msg:"TEST executable.sections 3-10"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, sections 2-11; sid:23; rev:1;)

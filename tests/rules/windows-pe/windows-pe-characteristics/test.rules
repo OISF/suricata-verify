@@ -1,0 +1,13 @@
+# Test executable.windows_pe.characteristics keyword (all PEs are 0x0102)
+
+# Should match: EXECUTABLE_IMAGE flag (0x0002) - all PEs have this
+alert http any any -> any any ( msg:"TEST characteristics has EXECUTABLE_IMAGE"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, characteristics 0x0102; sid:70; rev:1;)
+
+# Should NOT match: DLL flag (0x2000) - none of our PEs are DLLs
+alert http any any -> any any ( msg:"TEST characteristics is DLL"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, characteristics 0x2000; sid:71; rev:1;)
+
+# Should match: range that includes 0x0102
+alert http any any -> any any ( msg:"TEST characteristics range 0x0100-0x0200"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, characteristics 0x0100-0x0200; sid:72; rev:1;)
+
+# Should match: exact value
+alert http any any -> any any ( msg:"TEST characteristics exact 258"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: arch x86, characteristics 258; sid:73; rev:1;)

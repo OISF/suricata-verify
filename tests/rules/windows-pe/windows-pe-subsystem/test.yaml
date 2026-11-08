@@ -1,0 +1,50 @@
+pcap: ../windows-pe-basic/input.pcap
+
+requires:
+  min-version: 9
+  features:
+    - RUST
+
+args:
+- -k none
+
+checks:
+# Test: subsystem 2 (GUI) - none match
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 50
+
+# Test: subsystem 3 (Console) - all match
+- filter:
+    count: 5
+    match:
+      event_type: alert
+      alert.signature_id: 51
+
+# Test: subsystem 1 (Native) - none match
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 52
+
+# Test: subsystem 3 (Console) duplicate - all match
+- filter:
+    count: 5
+    match:
+      event_type: alert
+      alert.signature_id: 53
+
+# Verify subsystem fields are correctly logged in fileinfo events
+- filter:
+    count: 5
+    match:
+      event_type: fileinfo
+      executable.subsystem: WINDOWS_CUI
+- filter:
+    count: 5
+    match:
+      event_type: fileinfo
+      executable.subsystem_id: 3

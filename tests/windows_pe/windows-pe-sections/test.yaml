@@ -1,0 +1,45 @@
+pcap: ../windows-pe-basic/multi_pe.pcap
+
+requires:
+  min-version: 9
+  features:
+    - RUST
+
+args:
+- -k none
+
+checks:
+# Test: sections > 2 (none match, all have 1 section)
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 20
+
+# Test: sections > 10 (none match)
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 21
+
+# Test: sections < 3 (all match, 1 < 3)
+- filter:
+    count: 5
+    match:
+      event_type: alert
+      alert.signature_id: 22
+
+# Test: sections 3-10 (none match)
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 23
+
+# Verify sections count is correctly logged in fileinfo events
+- filter:
+    count: 5
+    match:
+      event_type: fileinfo
+      executable.sections: 1
