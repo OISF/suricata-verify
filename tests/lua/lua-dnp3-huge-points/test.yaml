@@ -1,0 +1,21 @@
+requires:
+  min-version: 8.0.8
+
+pcap: ../../dnp3/dnp3-max-points/test.pcap
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+
+checks:
+  # dnp3.get_tx() materializes every point into Lua tables. A response
+  # with enough points exhausts the default security.lua.max-bytes
+  # budget, the call fails with a memory limit error and the rule
+  # silently does not match. The transaction must be bounded instead.
+  - stats:
+      detect.lua.memory_limit_errors: 0
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1

@@ -1,0 +1,30 @@
+requires:
+  # The lazy points userdata (and its lifetime guard) is a main/9.0.0 feature;
+  # on 8.0.x obj["points"] is an eager table and this test cannot run.
+  min-version: 8.0.8
+
+pcap: test.pcap
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+
+checks:
+  # Two DNP3 connections on the same 5-tuple. The first carries a 33-point
+  # object (above the 32-point eager threshold), so the lua points value is
+  # the lazy userdata; the first callback retains it in a module global. The
+  # gap between the connections exceeds the established-flow timeout, so the
+  # first connection's flow (and its DNP3 state/transaction) is freed before
+  # the second connection's callback runs on a new DNP3 state. The retained
+  # userdata's lifetime check then fails and points[i] reads nil, while the
+  # second connection's own points value is still alive. Pre-fix the retained
+  # userdata still followed its tx-owned pointers after the free (use-after-
+  # free / stale heap read, observable under ASan); the fixed code returns
+  # nil.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - stats:
+      detect.lua.memory_limit_errors: 0

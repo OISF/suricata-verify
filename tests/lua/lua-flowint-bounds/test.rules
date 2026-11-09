@@ -1,0 +1,1 @@
+alert dns any any -> any any (msg:"register big flowint"; lua:register.lua; sid:1; rev:1;)

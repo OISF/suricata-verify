@@ -1,0 +1,26 @@
+%YAML 1.1
+---
+
+# lua_tostring() on a number key of an init() table converts the key in
+# place, and the next lua_next() raises "invalid key to 'next'" outside
+# any pcall: the engine aborts at rule load (rule scripts) or at output
+# setup (output scripts). Number keys must be skipped.
+
+requires:
+  min-version: 8.0.8
+
+pcap: ../../lua-output-http/input.pcap
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - shell:
+      args: grep -c '^logged true$' results.log
+      expect: 1

@@ -1,0 +1,1 @@
+alert dnp3 any any -> any any (msg:"pairs() over the dnp3 points value walks the eager table contract"; dnp3_func:2; lua:points-pairs.lua; sid:1; rev:1;)

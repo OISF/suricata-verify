@@ -1,0 +1,31 @@
+%YAML 1.1
+---
+
+logging:
+  outputs:
+    - console:
+        enabled: yes
+    - file:
+        enabled: yes
+        level: info
+        filename: suricata.log
+        type: json
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filename: eve.json
+      types:
+        - alert
+  - lua:
+      enabled: yes
+      scripts-dir: .
+      scripts:
+        - out.lua
+
+app-layer:
+  protocols:
+    dnp3:
+      enabled: yes
+      detection-ports:
+        dp: 20000

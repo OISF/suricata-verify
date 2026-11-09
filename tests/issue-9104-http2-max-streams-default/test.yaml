@@ -1,0 +1,61 @@
+requires:
+  min-version: 8.0.8
+
+args:
+  - --runmode single
+  - -k none
+
+# Deliberately do not configure http2.max-streams: test the default of 256.
+checks:
+  - filter:
+      count: 256
+      match:
+        event_type: http
+        http.url.__startswith: /limit-256/
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 256
+      match:
+        event_type: http
+        http.url.__startswith: /limit-257/
+  - filter:
+      count: 0
+      match:
+        event_type: http
+        http.url: /limit-257/256
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 256
+      match:
+        event_type: anomaly
+  - filter:
+      count: 256
+      match:
+        event_type: anomaly
+        dest_port: 42001
+        anomaly.app_proto: http2
+        anomaly.event: too_many_streams
+  # Check one affected transaction; the per-packet alert queue limits the
+  # total number of alerts when all 256 transactions receive the event.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2290012
+        http.url: /limit-257/255
+        direction: to_server
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2290012
+        http.url: /limit-257/255
+        direction: to_client

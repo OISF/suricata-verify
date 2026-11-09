@@ -1,0 +1,13 @@
+requires:
+  min-version: 8.0.8
+
+pcap: ../../cond-log-dns-dig/input.pcap
+
+checks:
+  # LuaStateNeedProto() returns LuaCallbackError's 2 ("no flow") when there
+  # is no flow. ja3.get_tx() uses the result as a boolean and treats it as
+  # a TLS protocol match, so the failure surfaces as "no tx available"
+  # instead of a protocol/flow error.
+  - shell:
+      args: grep -q '^OK$' results.log && echo OK || cat results.log
+      expect: OK

@@ -1,0 +1,1 @@
+alert http any any -> any any (http.uri; content:"/"; lua:stash.lua; sid:9000001; rev:1;)

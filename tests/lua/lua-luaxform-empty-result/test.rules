@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"valid empty transform result"; flow:established,to_client; http.response_body; luaxform:empty.lua; content:"GONE"; sid:1; rev:1;)

@@ -1,0 +1,17 @@
+requires:
+  features:
+    - HAVE_LUA
+  min-version: 8.0.8
+
+pcap: ../lua-output-http/input.pcap
+
+args:
+  - --set security.lua.allow-rules=true
+  - --set security.lua.max-instructions=500
+
+checks:
+  # thread_init() must succeed (fresh budget), so the engine starts and matches.
+  - filter:
+      count: 6
+      match:
+        alert.signature_id: 1

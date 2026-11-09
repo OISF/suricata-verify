@@ -1,0 +1,1 @@
+alert dnp3 any any -> any any (msg:"retained dnp3 points read nil after their tx is freed on the same flow"; dnp3_func:2; lua:cursor.lua; sid:1; rev:1;)

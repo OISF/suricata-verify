@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"set returns argument"; http.uri; content:"/"; lua:setret.lua; sid:1; rev:1;)

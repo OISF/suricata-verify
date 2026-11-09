@@ -1,0 +1,8 @@
+# one signature, two sticky-buffer sections: the headers section
+# (packet 1) extracts the "1" byte of "Content-Length: 100" (ASCII
+# 49) into v1; the body section (packet 2) matches "MARK" at
+# depth:v1 in a later detect run, after the packet boundary: with
+# the surviving 49 it matches and the signature fires once; when
+# the value is zeroed at the boundary, depth:v1 is 0 and the
+# signature does not alert at all.
+alert http any any -> any any (msg:"bytevar cross-packet: depth from the prior packet's extract"; flow:to_server; http.header; content:"Content-Length: "; byte_extract:1,0,v1,relative; http.request_body; content:"MARK"; depth:v1; sid:1; rev:1;)

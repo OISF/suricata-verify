@@ -1,0 +1,1 @@
+alert dns 10.0.0.1 any -> 10.0.0.2 53 (msg:"lua flow app layer proto"; lua:flow-app-proto.lua; sid:1; rev:1;)

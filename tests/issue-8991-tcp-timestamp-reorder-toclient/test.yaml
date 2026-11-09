@@ -1,0 +1,32 @@
+# Ticket 8991 regression guard: a reordered gap filling segment carrying an
+# older, but valid, timestamp must be accepted.
+#
+# Real traffic between two Linux TCP stacks. The server sends 100 byte segments
+# A, B and C with increasing timestamps, and the network delays A, so the
+# client receives B, C, then A. Linux only updates TS.Recent from a segment
+# that starts at or before the last ACK it sent (RFC 7323 section 4.3), so the
+# out-of-order B and C do not update it. The client accepts A, acknowledges all
+# three segments echoing the TSval of A and delivers all of the data to the
+# application.
+#
+# Suricata must do the same: no invalid timestamp event, no reassembly gap, and
+# the marker spanning A and B is matched on the reassembled stream.
+requires:
+  min-version: 8.0.8
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.tcp.reassembly_gap: 0

@@ -1,0 +1,25 @@
+%YAML 1.1
+---
+
+# Lua output scripts run deinit() from the logger thread deinit, after the
+# thread's packet pool is destroyed. A packet handle kept from log(), and
+# rule.get_rule() (which reads the last packet alert), must fail closed
+# there instead of reading the freed packet.
+
+pcap: ../../lua-output-http/input.pcap
+
+args:
+  - --runmode single
+
+requires:
+  features:
+    - HAVE_LUA
+  min-version: 8.0.8
+
+checks:
+  - shell:
+      args: "grep -c '^timestamp: nil failed to get packet$' deinit-packet.log"
+      expect: 1
+  - shell:
+      args: "grep -c '^get_rule: nil internal error: no packet alert or signature$' deinit-alert.log"
+      expect: 1

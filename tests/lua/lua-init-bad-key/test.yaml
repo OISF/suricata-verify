@@ -1,0 +1,18 @@
+requires:
+  min-version: 8.0.8
+
+pcap: ../lua-flowintlib/rootx5.pcap
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+
+checks:
+  # lua_next iteration leaves the value of a rejected key on the stack, so
+  # the next lua_next dereferences a non-table and SEGVs the engine at rule
+  # load. With the fix the key is skipped and the rule alerts normally.
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        alert.signature_id: 1

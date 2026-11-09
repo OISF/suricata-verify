@@ -1,0 +1,1 @@
+alert dnp3:request_started any any -> any any (msg:"dnp3 retained points userdata accessed after tx cleanup"; dnp3_func:2; lua:retain.lua; sid:1; rev:1;)

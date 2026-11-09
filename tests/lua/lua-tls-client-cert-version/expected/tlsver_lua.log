@@ -1,0 +1,1 @@
+client: TLSv1 CN=test-client  server: TLS 1.2 CN=test-server

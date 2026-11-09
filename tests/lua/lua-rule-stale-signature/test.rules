@@ -1,0 +1,1 @@
+alert dns any any -> any any (msg:"stale signature"; dns.query; content:"q"; sid:1; rev:1;)

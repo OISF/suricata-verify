@@ -1,0 +1,17 @@
+requires:
+  min-version: 8.0.8
+
+pcap: ../lua-flowintlib/rootx5.pcap
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+
+checks:
+  # enable_hassh()/enable_ja3() return 1 without pushing a value, so Lua
+  # hands back the function object itself when called without arguments.
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        alert.signature_id: 1

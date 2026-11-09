@@ -1,0 +1,12 @@
+requires:
+  min-version: 8.0.8
+
+pcap: ../../cond-log-dns-dig/input.pcap
+
+checks:
+  # SCDnsTxGetResponseFlags() returns the rcode-masked flags and
+  # recursion_desired() tests bit 0x0080, which can never be set in that
+  # value. The pcap query has RD=1, so the function must report true.
+  - shell:
+      args: grep -q '^RD=true$' results.log && echo OK || cat results.log
+      expect: OK

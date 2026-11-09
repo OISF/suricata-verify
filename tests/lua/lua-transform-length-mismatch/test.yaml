@@ -1,0 +1,19 @@
+requires:
+  min-version: 8.0.8
+
+pcap: ../../lua-output-http/input.pcap
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+
+checks:
+  # The script returns length 100000 for a 1 byte string. The length must
+  # be validated against the real string length; an invalid length must
+  # not overwrite the inspection buffer, so the original URI is still
+  # matched by the content keyword.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1

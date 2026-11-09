@@ -1,0 +1,15 @@
+requires:
+  min-version: 8.0.8
+
+args:
+  - -k none --set app-layer.protocols.ftp.memcap=1024
+
+rules: input.rules
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.ftp.memcap: 1
+        stats.ftp.memuse: 0

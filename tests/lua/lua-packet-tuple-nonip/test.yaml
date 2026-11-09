@@ -1,0 +1,11 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # packet:tuple() documents 1 value for a non-IP packet (only the IP
+  # version 0) and 6 for IP. This pins the non-IP (ARP) arity of 1.
+  - shell:
+      args: grep -c 'ptup arity 1' suricata.log
+      expect: '1'

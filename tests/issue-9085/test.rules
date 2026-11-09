@@ -1,0 +1,3 @@
+# Keep this a UDP packet rule. With detect.guess-applayer-tx enabled, a stale
+# TFTP transaction will be attached to the reply alert on vulnerable builds.
+alert udp 10.0.0.1 69 -> 10.0.0.2 40000 (msg:"TFTP reply"; content:"|00 04|"; startswith; sid:1; rev:1;)

@@ -1,0 +1,2 @@
+alert http any any -> any any (msg:"thread init register"; http.uri; content:"/"; lua:threadinit.lua; sid:1; rev:1;)
+alert http any any -> any any (msg:"over limit register"; http.uri; content:"/"; lua:overflow.lua; sid:2; rev:1;)

@@ -1,0 +1,61 @@
+requires:
+  min-version: 8.0.8
+
+args:
+  - --runmode single
+
+# With the BSD defrag policy, a preferred fragment that overlaps more than
+# one following fragment must trim all of them. Vulnerable code only trims
+# the immediate right-hand neighbour, so a later fragment overwrites the
+# preferred bytes during reassembly. Both BSD overlap paths are covered for
+# IPv4 and IPv6. See README.md for the fragment layouts.
+checks:
+  # Controls: clean fragmented datagrams.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+
+  # Preferred fragment data survives reassembly.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+        src_ip: 10.0.0.2
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
+        src_ip: 10.0.0.3
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 5
+        src_ip: 2001:0db8:0000:0000:0000:0000:0000:0002
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 6
+        src_ip: 2001:0db8:0000:0000:0000:0000:0000:0003
+
+  # Stale bytes from untrimmed fragments are never reassembled.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 7
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 8

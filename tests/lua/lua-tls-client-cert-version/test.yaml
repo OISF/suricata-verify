@@ -1,0 +1,14 @@
+pcap: input.pcap
+
+requires:
+  min-version: 8.0.8
+
+args:
+  - -k none
+
+checks:
+  # one tls tx; the client cert info must report the client hello's
+  # version (TLSv1), the server cert info the server's (TLS 1.2)
+  - file-compare:
+      filename: tlsver_lua.log
+      expected: expected/tlsver_lua.log

@@ -1,0 +1,18 @@
+requires:
+  min-version: 8.0.8
+
+pcap: ../../smtp-rfc2231/input.pcap
+
+args:
+  - -k none
+  - --set security.lua.allow-rules=true
+  - --set default-rule-path=${TEST_DIR}
+
+checks:
+  # get_mime_list() starts its index at 1 and the FFI applies it 0-based,
+  # so the first MIME header (Content-Type) is silently dropped.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1

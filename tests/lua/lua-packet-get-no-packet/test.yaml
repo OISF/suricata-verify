@@ -1,0 +1,11 @@
+requires:
+  min-version: 8.0.8
+
+pcap: input.pcap
+
+checks:
+  # In the app-layer (tx) context there is no packet, so packet.get()
+  # must return nil plus the exact "failed to get packet" message.
+  - shell:
+      args: grep -c 'nopacket nil err=failed to get packet' suricata.log
+      expect: '1'

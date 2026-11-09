@@ -1,0 +1,10 @@
+# Fires only if Suricata reassembles the server's HTTP response and runs
+# app-layer inspection on it. Vulnerable code drops the response as
+# out-of-window, so this signature does not fire.
+alert http any any -> any any (msg:"WSCALE-OOW response body inspected"; flow:to_client; http.response_body; content:"EVILMARKER"; sid:1; rev:1;)
+
+# Fires when Suricata wrongly rejects an in-window server segment. This is
+# the symptom of the bug and must not happen for this capture.
+alert tcp any any -> any any (msg:"WSCALE-OOW stream established packet out of window"; stream-event:est_packet_out_of_window; sid:2; rev:1;)
+
+alert pkthdr any any -> any any (msg:"SURICATA TCP wscale max"; decode-event:tcp.opt_wscale_over_max; classtype:protocol-command-decode; sid:2200130; rev:1;)

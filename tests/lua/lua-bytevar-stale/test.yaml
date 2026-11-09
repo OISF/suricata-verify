@@ -1,0 +1,19 @@
+requires:
+  min-version: 8.0.8
+
+pcap: ../lua-output-log-error-stack/dns-flood.pcap
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+
+checks:
+  # byte_values is SCMalloc'd (not zeroed) and value() reads the slot with
+  # no validity check. The packet phase lua keyword runs before the
+  # dns.query byte_extract of the current tx, so every call must observe
+  # an unset value (nil/0), never the previous packet's value.
+  - filter:
+      count: 2200
+      match:
+        event_type: alert
+        alert.signature_id: 1

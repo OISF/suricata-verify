@@ -1,0 +1,32 @@
+requires:
+  # The lazy points userdata and its walk cursor are 9.0 features.
+  min-version: 8.0.8
+
+pcap: test.pcap
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+
+checks:
+  # One DNP3 connection, two complete write requests, each with a 33-point
+  # object (above the 32-point eager threshold, so the points value is the
+  # lazy userdata). The first callback retains tx1's points and indexes
+  # points[1], which sets the walk cursor. tx1 is freed before request 2;
+  # the second callback, on the same flow, reads retained[2]. The cursor
+  # belongs to the first invocation, so that access must re-resolve tx1 and
+  # return nil. Without the per-invocation generation the cursor is trusted
+  # on the same flow and walks tx1's freed point list (ASan:
+  # heap-use-after-free in Dnp3PointsIndex; plain build: a stale point and
+  # no alert).
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - shell:
+      args: 'grep -q "cursor-same-flow: call 1 point 1 of 33" stdout && echo found'
+      expect: found
+  - shell:
+      args: 'grep -q "cursor-same-flow: call 2 retained point 2: nil" stdout && echo found'
+      expect: found

@@ -1,0 +1,3 @@
+alert http2 any any -> any any (msg:"SURICATA HTTP2 too many streams"; flow:established; app-layer-event:http2.too_many_streams; classtype:protocol-command-decode; sid:2290012; rev:1;)
+alert http2 any any -> any any (msg:"HTTP2 default permits stream 256"; flow:established,to_server; http.uri; content:"/limit-256/255"; startswith; endswith; sid:1; rev:1;)
+alert http2 any any -> any any (msg:"HTTP2 default must reject stream 257"; flow:established,to_server; http.uri; content:"/limit-257/256"; startswith; endswith; sid:2; rev:1;)

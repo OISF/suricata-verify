@@ -1,0 +1,18 @@
+requires:
+  min-version: 8.0.8
+
+pcap: ../lua-flowintlib/rootx5.pcap
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+
+checks:
+  # set() returns 1 without pushing a value, so Lua hands back the last
+  # argument: fv:set("abc") == "abc", fi:set(5) == 5. Not the documented
+  # (empty) return.
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        alert.signature_id: 1

@@ -1,0 +1,43 @@
+requires:
+  min-version: 8.0.8
+
+pcap:
+  ../issue-9085-single-direction-01/input.pcap
+
+args:
+ - -k none
+
+# The same flow with directional rules. TFTP only ever has a to-server
+# transaction, so the to-client rule must never match one. Before the fix the
+# request transaction lacked the to-client SKIP_INSPECT bit, so the to-client
+# rule matched it on the server packet.
+checks:
+  # The to-server rule matches the read request exactly once.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        tftp.packet: read
+        tftp.file: rfc1350.txt
+
+  # The to-client rule must never match a TFTP transaction.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        tftp.packet: read
+
+  # Both rules still fire once each on their own packet; asserting it keeps
+  # the count: 0 check above from passing on a build that never alerts.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2

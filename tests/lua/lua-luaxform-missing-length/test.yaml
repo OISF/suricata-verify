@@ -1,0 +1,27 @@
+%YAML 1.1
+---
+
+# A transform script that returns only the buffer (no length) leaves the
+# second result nil. nil must be rejected, not read as a zero length:
+# zeroing the inspection buffer after an allocating transform (here
+# transform:lower) suppresses the content match with no error. The
+# rejected call keeps the (lowercased) buffer and counts in
+# transform.lua.errors.
+
+requires:
+  min-version: 8.0.8
+
+pcap: input.pcap
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - stats:
+      transform.lua.errors.__gte: 1

@@ -1,0 +1,51 @@
+requires:
+  min-version: 8.0.8
+
+args:
+ - -k none
+
+# A TFTP request is a standalone, single-direction transaction: it is built
+# from a to-server datagram and TFTPParseResponse is not implemented, so no
+# transaction is ever created to-client. Before the fix the transaction was
+# created with both SKIP_INSPECT bits clear, so the engine still considered it
+# to need to-client inspection -- a direction it would never be observed in.
+# The request transaction was therefore inspected, and alerted, on a to-client
+# packet of the same flow.
+checks:
+  # The read request alerts once on its own packet, carrying its transaction.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 1
+        tftp.packet: read
+        tftp.file: rfc1350.txt
+
+  # The request transaction must never be inspected in the to-client
+  # direction. Before the fix this alert exists on the server packet and
+  # carries the request transaction's fields.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 2
+        tftp.packet: read
+
+  # Exactly one TFTP transaction is logged, for the read request.
+  - filter:
+      count: 1
+      match:
+        event_type: tftp
+        tftp.packet: read
+        tftp.file: rfc1350.txt
+
+  # The rule itself fires on both packets of the flow either way; asserting it
+  # here keeps the count: 0 check above from passing on a build that simply
+  # never alerts.
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1

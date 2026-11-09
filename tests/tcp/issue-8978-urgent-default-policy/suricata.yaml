@@ -1,0 +1,13 @@
+%YAML 1.1
+---
+
+# Deliberately omit stream.reassembly.urgent and both policy keys.
+
+outputs:
+  - eve-log:
+      enabled: yes
+      types:
+        - alert
+        - http
+        - stats:
+            totals: yes

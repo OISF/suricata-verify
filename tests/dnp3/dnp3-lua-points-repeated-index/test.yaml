@@ -1,0 +1,25 @@
+requires:
+  # runs on both lines: the cursor and pairs fixes are backported to 8.0
+  min-version: 8.0.8
+
+pcap: test.pcap
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+
+checks:
+  # One 16384-point write request, at the parser's default max-points
+  # bound, so points is the lazy userdata. The script reads points[i]
+  # twice per iteration over 1..n and pins the same-position cursor
+  # path: both reads are non-nil and the second read's table carries
+  # the same index (the 1-based ordinal for a range object starting
+  # at 1).
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - shell:
+      args: 'grep -q "repeated-index: n=16384 ok" stdout && echo found'
+      expect: found

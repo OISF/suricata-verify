@@ -1,0 +1,30 @@
+%YAML 1.1
+---
+
+# A luaxform script that trips the sandbox memory limit fails the
+# transform (the buffer keeps the untransformed data) and must count in
+# both the aggregate transform.lua.errors and the category counter,
+# mirroring the detect.lua aggregate-plus-category behavior.
+
+requires:
+  min-version: 8.0.8
+
+pcap: input.pcap
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+  - --set security.lua.max-bytes=20000
+
+checks:
+  # the transform fails on the allocation; the rule matches the
+  # untransformed input
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - stats:
+      transform.lua.errors.__gte: 1
+  - stats:
+      transform.lua.memory_limit_errors.__gte: 1

@@ -1,0 +1,15 @@
+requires:
+  min-version: 8.0.8
+
+pcap: input.pcap
+
+checks:
+  # One http transaction, a file in each direction, both truncated,
+  # pcap ends without FINs. The file loggers run from the end-of-pcap
+  # pseudo passes (one per direction); the file handle must anchor the
+  # logger's dir - the file container's direction - so each file
+  # resolves against its own container. Both names must be present and
+  # distinct.
+  - shell:
+      args: grep -q '^both download.bin part1.bin$' results.log && echo OK || cat results.log
+      expect: OK

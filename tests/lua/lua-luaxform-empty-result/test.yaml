@@ -1,0 +1,37 @@
+%YAML 1.1
+---
+
+# A valid empty transform result: the script returns an empty string
+# with an explicit zero length. Zero must stay an accepted length and
+# must not be counted as a transform error - the rejection is pinned to
+# a non-numeric second result, not to the value zero.
+#
+# An accepted empty result must leave the buffer as it was, for every
+# thread history. The two sessions run that history on one thread
+# (single runmode: under autofp they could land on different workers):
+# the first expands the thread's inspection buffer (the script returns
+# the input), the second gets the empty result. On an engine that
+# empties the buffer with a zero-length copy on the expanded case,
+# the second session loses its content and only one alert fires.
+
+requires:
+  min-version: 8.0.8
+
+pcap: input.pcap
+
+args:
+  - --runmode=single
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+
+checks:
+  # zero is an accepted length: no transform error
+  - stats:
+      transform.lua.errors: 0
+  # both sessions match: the empty result did not depend on the
+  # thread's buffer history
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1

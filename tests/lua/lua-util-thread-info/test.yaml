@@ -1,0 +1,17 @@
+pcap: ../../ntp-keywords/input.pcap
+
+requires:
+  min-version: 8.0.8
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+
+checks:
+  # the hook context had no ThreadVars in the registry before the fix
+  # (only the packet match path set it), so util.thread_info() raised
+  # "internal error: no tv" and the rule never matched
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1

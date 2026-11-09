@@ -1,0 +1,1 @@
+alert tcp any any -> any any (msg:"retained"; flow:to_server; lua: retained.lua; sid:1; rev:1;)

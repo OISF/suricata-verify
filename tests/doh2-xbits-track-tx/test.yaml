@@ -1,0 +1,152 @@
+requires:
+  min-version: 9.0
+
+checks:
+  # the traffic really is DNS over HTTP/2 in an HTTP/2 flow
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: doh2
+        app_proto_orig: http2
+  - filter:
+      count: 1
+      match:
+        event_type: dns
+        dns.type: response
+        dns.queries[0].rrname: tx1.example.com
+  - filter:
+      count: 1
+      match:
+        event_type: dns
+        dns.type: response
+        dns.queries[0].rrname: tx2.example.com
+  # and a plain HTTP/2 flow next to it
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: http2
+
+  # xbits:set / xbits:isset with track tx on the doh2 engine, on both of the
+  # flow's transactions. Before the fix the isset read the HTTP/2 transaction
+  # data out of the inner DNS transaction and faulted the worker (exit code
+  # -11).
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  # isset of a bit that was never set, to client and to server
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 4
+  # the same pair on the to-server side of the doh2 engine
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 5
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 6
+
+  # xbits:track tx on the http2 engine: plain HTTP/2, and the HTTP/2 engine of
+  # the doh2 flow, where the transaction pointer is never swapped
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 7
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 8
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 9
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 10
+
+  # flowint on the doh2 path does not use transaction data at all
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 11
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 12
+
+  # the bits are stored per transaction, not per flow: 13 and 16 set a bit on
+  # one transaction, 14 and 17 read it back on that same transaction (so the
+  # bit really is set and the hook does run) and 15 and 18 read it from the
+  # other transaction, which must not see it. A store keyed by flow would
+  # alert on 15 and 18.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 13
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 14
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 15
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 16
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 17
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 18
+
+  # the same bits through the other engine: 19 reads through the http2 engine
+  # the bit 1 set through the doh2 engine, 20 reads through the doh2 engine
+  # the bit 9 set through the http2 engine. A fix that kept the bits of the
+  # two engines on different objects would alert on neither.
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 19
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 20

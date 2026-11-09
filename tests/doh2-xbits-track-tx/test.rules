@@ -1,0 +1,35 @@
+# xbits with track tx on a doh2 flow: the bits live on the HTTP/2
+# transaction, not on the inner DNS transaction detection inspects.
+alert doh2:stream:request_started any any -> any 8053 (xbits:set,doh1,track tx; sid:1; rev:1;)
+alert doh2:stream:response_started any 8053 -> any any (xbits:isset,doh1,track tx; sid:2; rev:1;)
+# isset of a bit that was never set, both directions
+alert doh2:stream:response_started any 8053 -> any any (xbits:isset,dohno,track tx; sid:3; rev:1;)
+alert doh2:stream:request_started any any -> any 8053 (xbits:isset,dohno,track tx; sid:4; rev:1;)
+# the same pair on the to-server side
+alert doh2:stream:request_started any any -> any 8053 (xbits:set,dts,track tx; sid:5; rev:1;)
+alert doh2:stream:request_started any any -> any 8053 (xbits:isset,dts,track tx; sid:6; rev:1;)
+# xbits:track tx on plain HTTP/2
+alert http2:stream:request_headers any any -> any 8054 (http.uri; content:"/index.html"; xbits:set,h2b,track tx; sid:7; rev:1;)
+alert http2:stream:response_started any 8054 -> any any (xbits:isset,h2b,track tx; sid:8; rev:1;)
+# xbits:track tx on the HTTP/2 engine of the doh2 flow
+alert http2:stream:request_headers any any -> any 8053 (http.uri; content:"/dns-query"; xbits:set,h2doh,track tx; sid:9; rev:1;)
+alert http2:stream:response_started any 8053 -> any any (xbits:isset,h2doh,track tx; sid:10; rev:1;)
+# flowint on the same path: no transaction data involved
+alert doh2:stream:request_started any any -> any 8053 (flowint:f1,+,1; sid:11; rev:1;)
+alert doh2:stream:response_started any 8053 -> any any (flowint:f1,isset; sid:12; rev:1;)
+# the flow carries two transactions with a DNS transaction of their own
+# (streams 1 and 5), so the bits of one must not be seen by the other. A bit
+# store keyed by flow instead of transaction would alert on sid 15 and 18.
+# The query name tells the transactions apart; dns buffers are only available
+# once the side they describe is complete, hence the "closed" hooks.
+alert doh2:stream:request_closed any any -> any 8053 (dns.query; content:"tx1.example.com"; xbits:set,tx1bit,track tx; sid:13; rev:1;)
+alert doh2:stream:response_closed any 8053 -> any any (dns.query.name; content:"tx1.example.com"; xbits:isset,tx1bit,track tx; sid:14; rev:1;)
+alert doh2:stream:response_closed any 8053 -> any any (dns.query.name; content:"tx2.example.com"; xbits:isset,tx1bit,track tx; sid:15; rev:1;)
+alert doh2:stream:request_closed any any -> any 8053 (dns.query; content:"tx2.example.com"; xbits:set,tx2bit,track tx; sid:16; rev:1;)
+alert doh2:stream:response_closed any 8053 -> any any (dns.query.name; content:"tx2.example.com"; xbits:isset,tx2bit,track tx; sid:17; rev:1;)
+alert doh2:stream:response_closed any 8053 -> any any (dns.query.name; content:"tx1.example.com"; xbits:isset,tx2bit,track tx; sid:18; rev:1;)
+# the bits are addressed through the transaction the parser knows, whatever
+# the engine of the rule: a bit set by a doh2 rule is read by an http2 rule on
+# the same flow and the other way around
+alert http2:stream:response_started any 8053 -> any any (xbits:isset,doh1,track tx; sid:19; rev:1;)
+alert doh2:stream:response_started any 8053 -> any any (xbits:isset,h2doh,track tx; sid:20; rev:1;)

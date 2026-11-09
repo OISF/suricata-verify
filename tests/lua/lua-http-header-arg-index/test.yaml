@@ -1,0 +1,18 @@
+requires:
+  min-version: 8.0.8
+
+pcap: ../lua-flowintlib/rootx5.pcap
+
+args:
+  - --set default-rule-path=${TEST_DIR}
+  - --set security.lua.allow-rules=true
+
+checks:
+  # LuaHttpGetHeader() reads the header name with lua_gettop() instead of
+  # the fixed argument index, so an extra argument changes the key that
+  # is looked up.
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        alert.signature_id: 1

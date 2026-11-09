@@ -1,0 +1,9 @@
+requires:
+  min-version: 8.0.8
+
+pcap: ../lua-flowintlib/rootx5.pcap
+
+checks:
+  - shell:
+      args: grep -c '^started$' results.log
+      expect: 1

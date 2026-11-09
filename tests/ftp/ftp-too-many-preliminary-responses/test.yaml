@@ -1,0 +1,44 @@
+requires:
+  min-version: 8.0.8
+
+args:
+  - --runmode=single
+
+checks:
+  # The USER transaction keeps 16 of the 100 preliminary responses, then
+  # the final reply.
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: USER
+        ftp.completion_code.__len: 17
+
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: too_many_preliminary_responses
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2232005
+
+  # The next transaction is parsed as usual.
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.command: PASS
+        ftp.completion_code: ['230']
+
+  # Multi-line replies are not limited: all 42 lines of the FEAT reply
+  # are logged. The parser does not name FEAT, so match on the code.
+  - filter:
+      count: 1
+      match:
+        event_type: ftp
+        ftp.completion_code: ['211']
+        ftp.reply.__len: 42

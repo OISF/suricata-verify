@@ -1,0 +1,1 @@
+alert dns any any -> any any (msg:"bytevar stale"; dns.query; byte_extract:4,0,uv; pkt_data; content:"|00|"; lua:bv.lua; sid:1; rev:1;)

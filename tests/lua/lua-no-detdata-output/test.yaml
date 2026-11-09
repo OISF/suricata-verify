@@ -1,0 +1,11 @@
+requires:
+  min-version: 8.0.8
+
+pcap: ../lua-flowintlib/rootx5.pcap
+
+checks:
+  # Output lua states never get DetectLuaData, so register()/map() must
+  # raise a clean Lua error instead of dereferencing NULL.
+  - shell:
+      args: grep -c '=false' results.log
+      expect: 3
