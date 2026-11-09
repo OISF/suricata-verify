@@ -1,0 +1,39 @@
+%YAML 1.1
+---
+
+stats:
+  interval: 3600
+
+# a fixed number of worker threads keeps the flow to thread mapping, and so
+# the result, the same for a given capture
+threading:
+  # only read when set-cpu-affinity is on (runmodes.c:961), but it is the way
+  # to pin an absolute worker count; without it the count follows host CPUs
+  set-cpu-affinity: "yes"
+  cpu-affinity:
+    worker-cpu-set:
+      threads: 4
+
+# short timeouts so that a clock running ahead of or behind the file changes the
+# answer rather than being masked by the 600 s default. The engine only reads
+# flow-timeouts.default.* and .tcp.* (src/flow.c:818), so the keys have to sit
+# under default. In a run this short the manager still makes no full hash pass
+# (its sweep cadence is wall clock, see issue 2608 in the mirror tracker), so both
+# flows here end with reason shutdown; what is being checked is the stamp they get.
+flow-timeouts:
+  default:
+    new: 1
+    established: 1
+    closed: 1
+    emergency-new: 1
+    emergency-established: 1
+    emergency-closed: 1
+
+outputs:
+  - eve-log:
+      enabled: "yes"
+      filename: eve.json
+      types:
+        - alert
+        - flow
+        - stats
