@@ -1,0 +1,24 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: flow
+        app_proto: dcerpc
+        dest_port: 49999
+  - filter:
+      count: 2
+      match:
+        event_type: dcerpc
+        dcerpc.request: BIND
+        dcerpc.response: BINDACK
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.event: APPLAYER_DETECT_PROTOCOL_ONLY_ONE_DIRECTION
