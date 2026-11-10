@@ -10,3 +10,5 @@ all ("engine progress value 2 doesn't match hook 4").
 
 That the buffer no longer grows at the trailer state, which is what stops the rule from
 matching a second time, is covered by the `count: 0` leak rules in tests/http1-trailer.
+
+Needs the state-hook buffer relaxation, so it is expected to fail before the engine side lands.

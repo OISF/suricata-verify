@@ -7,3 +7,5 @@ the PUSH_PROMISE is issued before the response, so the CONTINUATION that finishe
 carries a :status while no response header section has been seen yet. Arming the
 header section on such a frame makes the response behind it read as trailers and hides
 it from http.response_header. Regenerate with python3 make-pcap.py.
+
+Needs the trailer buffers, so it is expected to fail before the engine side lands.
