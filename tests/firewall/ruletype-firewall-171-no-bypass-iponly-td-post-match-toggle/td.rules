@@ -1,0 +1,9 @@
+# IP-only: matches the first packet of the first flow. Toggled once, the bit is
+# set; toggled twice, it is cleared.
+alert tcp any 40001 -> any any (msg:"TD IP-only rule toggling xbits"; xbits:toggle,td_iponly_toggle,track ip_src,expire 3600; sid:100003;)
+
+# The probe, on the second flow. Matches only if the bit was toggled once.
+alert http any any -> any any (msg:"TD IP-only post-match toggle applied once"; flow:to_server,established; http.uri; content:"/beta"; xbits:isset,td_iponly_toggle,track ip_src; sid:100004;)
+
+# Control: proves the second flow is inspected.
+alert http any any -> any any (msg:"Control: second flow is inspected"; flow:to_server,established; http.uri; content:"/beta"; sid:100005;)

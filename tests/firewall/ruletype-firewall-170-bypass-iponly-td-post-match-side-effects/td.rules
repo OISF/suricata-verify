@@ -1,0 +1,9 @@
+# IP-only: matches the first packet of the first flow, the one firewall sid:99
+# bypasses.
+alert tcp any 40001 -> any any (msg:"TD IP-only rule on the bypassed packet"; xbits:set,td_iponly_post_match_ran,track ip_src,expire 3600; sid:100003;)
+
+# The probe, on the second flow. Matches only if sid:100003's post-match ran.
+alert http any any -> any any (msg:"TD IP-only post-match state survived firewall bypass"; flow:to_server,established; http.uri; content:"/beta"; xbits:isset,td_iponly_post_match_ran,track ip_src; sid:100004;)
+
+# Control: proves the second flow is inspected.
+alert http any any -> any any (msg:"Control: second flow is inspected"; flow:to_server,established; http.uri; content:"/beta"; sid:100005;)

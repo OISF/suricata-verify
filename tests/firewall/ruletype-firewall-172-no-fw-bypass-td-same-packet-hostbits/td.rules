@@ -1,0 +1,5 @@
+# Setter and reader match the same packet. Rule ordering puts the setter first.
+alert http any any -> any any (msg:"TD rule setting hostbits"; flow:to_server,established; http.uri; content:"/alpha"; hostbits:set,td_same_packet,src; sid:100003;)
+
+# Matches only if sid:100003's hostbit is visible on the same packet.
+alert http any any -> any any (msg:"TD rule seeing hostbits on the same packet"; flow:to_server,established; http.uri; content:"/alpha"; hostbits:isset,td_same_packet,src; sid:100004;)

@@ -1,0 +1,51 @@
+requires:
+  min-version: 9
+
+args:
+  - --simulate-ips
+  - -k none
+  - --runmode single
+
+pcap: ../ruletype-firewall-185-bypass-td-post-match-side-effects/input.pcap
+
+checks:
+# The pre_stream firewall rule matched and bypassed the first flow.
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+      src_port: 40001
+      verdict.action: accept
+
+# The point: threat detection is not run on the bypassed packet.
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 100001
+
+# Control: the second flow is inspected.
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 100005
+
+# If this fails, the first flow was not bypassed and the test proves nothing.
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      src_port: 40001
+      flow.state: bypassed
+      flow.bypass: local
+      flow.action: accept
+
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.flow.end.state.local_bypassed: 1
+      stats.ips.blocked: 0
+      stats.firewall.blocked: 0
