@@ -10,3 +10,5 @@ section and matches content in the trailer section.
 
 Before the trailer state existed, no rule could match this trailer block at all: the header
 state it was reported in had already been declared complete.
+
+Needs the trailer buffers, so it is expected to fail before the engine side lands.

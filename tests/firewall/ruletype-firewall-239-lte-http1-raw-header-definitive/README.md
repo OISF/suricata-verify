@@ -6,6 +6,9 @@ so the no match there is definitive and the LTE conversion must fire. A bound
 above the buffer's state does not load at all: a firewall rule is only evaluated
 at its hook, so the copy for a lower state would never run.
 
+Needs the firewall load-time bound on hooks above the buffer's state,
+so it is expected to fail before the engine side lands.
+
 ## Scenario
 
 `accept:flow,alert http1:<request_headers $HOME_NET any -> $EXTERNAL_NET any (http.header.raw; content:"X-Marker: yes"; sid:211;)`.

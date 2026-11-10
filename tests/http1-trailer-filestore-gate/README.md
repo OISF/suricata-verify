@@ -8,4 +8,6 @@ Read as completion it would open the gate while the trailer block is still arriv
 which can only match the partial block - would fire early. It must stay at 0; sid 3 shows the
 complete block is inspected as usual.
 
+Needs the trailer buffers, so it is expected to fail before the engine side lands.
+
 Run `python3 make-pcap.py` to regenerate `input.pcap`.

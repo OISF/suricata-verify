@@ -491,6 +491,9 @@ def write_test(number, pkey, direction, state, slug, rules, checks, note, pcap):
             f.write("The opposite direction carries one scaffolding `accept:hook <last-state`\n"
                     "rule so its default policy does not drop the flow before this direction\n"
                     "reaches S + 1, where a phase no match becomes final.\n")
+        if TRAILER_KW:
+            f.write("\nNeeds the HTTP/1 trailer states, so it is expected to fail before\n"
+                    "the engine side lands.\n")
     return name
 
 

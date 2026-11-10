@@ -13,3 +13,6 @@ point behaving differently depending on how the hook is spelled.
 
 `ruletype-firewall-239-lte-http1-raw-header-definitive` covers the LTE form that
 does load, bounded at the state where its buffer completes.
+
+Needs the firewall load-time bound on hooks above the buffer's state,
+so it is expected to fail before the engine side lands.

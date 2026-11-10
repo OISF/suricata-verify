@@ -30,3 +30,6 @@ Threat rules (`-S`) are not affected, in either mode: they are evaluated on ever
 packet, so the buffer/hook pairing carries no constraint there. That case is
 pinned by sid 11 in `tests/http2-trailer/test.rules`, which keeps `http.header`
 behind the exact trailer hook.
+
+Needs the firewall load-time bound on hooks above the buffer's state,
+so it is expected to fail before the engine side lands.

@@ -15,3 +15,5 @@ block; the to_client case is covered by the trailer tests in `http2-trailer`.
 
 Regenerate with `python3 make-pcap.py input.pcap`; `tshark -r input.pcap -Y http2` shows the
 frame types and flags.
+
+Needs the trailer buffers, so it is expected to fail before the engine side lands.

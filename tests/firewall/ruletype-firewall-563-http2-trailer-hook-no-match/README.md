@@ -12,3 +12,6 @@ action, so the flow ends with no action recorded. Compare
 `ruletype-firewall-559-http2-trailer-default-policy`, where the state has no
 rule at all, and `ruletype-firewall-561-http2-trailer-policy-accept`, where the
 state's configured policy accepts the flow.
+
+Needs the HTTP/2 trailer states, so it is expected to fail before the
+engine side lands.

@@ -6,3 +6,6 @@ The pcap is the gRPC shaped stream from `tests/http2-trailer`, whose trailer
 block is the only thing that reaches `http2:stream:request_trailers`. The other
 stream states fall to the `accept:hook` protocol default policy in
 `suricata.yaml`, so the trailer state's own policy decides.
+
+Needs the HTTP/2 trailer states, so it is expected to fail before the
+engine side lands.

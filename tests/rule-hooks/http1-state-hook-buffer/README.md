@@ -12,3 +12,5 @@ in, not at the hooked state; the timing question is covered by
 `http1-state-hook-buffer-timing`.
 
 `make-pcap.py` generates the capture: header block at #4, trailer block at #6.
+
+Needs the state-hook buffer relaxation, so it is expected to fail before the engine side lands.
