@@ -7,3 +7,6 @@ LTE (`<`) state matrix, http1 tc `response_trailer`, case `single-content-match`
 The opposite direction carries one scaffolding `accept:hook <last-state`
 rule so its default policy does not drop the flow before this direction
 reaches S + 1, where a phase no match becomes final.
+
+Needs the HTTP/1 trailer states, so it is expected to fail before
+the engine side lands.

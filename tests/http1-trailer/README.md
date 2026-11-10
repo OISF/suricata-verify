@@ -7,3 +7,5 @@ buffers existed, matching them was left to packet timing and a trailer named `Us
 silently extended the user agent value.
 
 Crafted with `make-pcap.py` (no arguments).
+
+Needs the trailer buffers, so it is expected to fail before the engine side lands.

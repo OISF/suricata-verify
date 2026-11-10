@@ -28,3 +28,6 @@ Notes:
   `app:<proto>:global:*`.
 - `ssh` mixes `-` and `_` separators (`request-complete` vs `request_banner`);
   that is the current state naming and is pinned as-is.
+
+Needs the HTTP/2 trailer states, so it is expected to fail before the
+engine side lands.
