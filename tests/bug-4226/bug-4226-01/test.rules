@@ -1,0 +1,6 @@
+# bsize is applied as a depth to the content matches in the same buffer when
+# it yields a usable upper bound. bsize:>N has no upper bound, so no depth.
+alert dns any any -> any any (msg:"bsize exact -> depth"; dns.query; content:"google.com"; bsize:10; sid:1;)
+alert dns any any -> any any (msg:"bsize less-than -> depth"; dns.query; content:"google.com"; bsize:<26; sid:2;)
+alert dns any any -> any any (msg:"bsize range -> depth (upper bound)"; dns.query; content:"google.com"; bsize:13<>34; sid:3;)
+alert dns any any -> any any (msg:"bsize greater-than -> no depth"; dns.query; content:"google.com"; bsize:>8; sid:4;)
