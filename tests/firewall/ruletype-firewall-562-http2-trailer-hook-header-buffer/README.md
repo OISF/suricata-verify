@@ -10,7 +10,8 @@ engine has already run at `request_headers` and is not run again at the hook, so
 nothing inspects the buffer there and the rule could never match.
 Rather than load a rule that can only ever fail, the engine reports
 
-    buffer http_header completes in state N, before the hooked state M
+    buffer http_header completes in state request_headers (1), before the hooked
+    state request_trailers (3)
 
 and exits with an error, which is what this test asserts (`exit-code: 1` plus a
 grep of the message in `stderr`).

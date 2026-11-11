@@ -14,5 +14,7 @@ exit-code: 1
 
 checks:
   - shell:
-      args: grep -c 'buffer http_header completes in state .* before the hooked state' stderr
+      # pin the state names, not the enum numbers: a state added before the trailer
+      # states moves the numbers without changing what the user is told
+      args: grep -cE 'buffer http_header completes in state request_headers \([0-9]+\), before the hooked state request_trailers \([0-9]+\)' stderr
       expect: 1
