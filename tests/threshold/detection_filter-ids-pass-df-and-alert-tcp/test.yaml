@@ -1,0 +1,47 @@
+requires:
+  min-version: 8.0.8
+
+pcap: ../detection_filter-ids-alert-tcp-stream/input.pcap
+
+args:
+  - -k none
+
+checks:
+  # The pass rule trips on data segment 4 and, per packet, masks the alert
+  # rule from then on: only segments 1-3 (pcap_cnt 4, 6, 8) alert.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        pcap_cnt: 8
+  - filter:
+      requires:
+        lt-version: 9
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.engines[0].rules_loaded: 2
+        stats.detect.engines[0].rules_failed: 0
+        stats.detect.alert: 3
+        stats.detect.alerts_suppressed: 3
+  - filter:
+      requires:
+        min-version: 9
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.engines[0].rules_loaded: 2
+        stats.detect.engines[0].rules_failed: 0
+        stats.detect.alert: 6
+        stats.detect.alerts_suppressed: 3
