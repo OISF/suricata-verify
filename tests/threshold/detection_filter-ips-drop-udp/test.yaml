@@ -1,0 +1,41 @@
+requires:
+  min-version: 8.0.8
+
+pcap: input.pcap
+
+args:
+  - -k none
+  - --simulate-ips
+
+checks:
+  # Datagrams 4-6 are dropped one by one; the flow itself is not dropped.
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        alert.action: blocked
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 4
+  - filter:
+      count: 0
+      match:
+        event_type: flow
+        flow.action: drop
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.engines[0].rules_loaded: 1
+        stats.detect.engines[0].rules_failed: 0
+        stats.detect.alert: 3
+        stats.detect.alerts_suppressed: 3
+        stats.ips.accepted: 3
+        stats.ips.blocked: 3
+        stats.ips.drop_reason.rules: 3
+        stats.ips.drop_reason.flow_drop: 0
+        stats.ips.drop_reason.threshold_detection_filter: 0
