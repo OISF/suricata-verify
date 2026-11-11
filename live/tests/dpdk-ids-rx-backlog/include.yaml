@@ -1,0 +1,46 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert
+        - stats:
+            totals: yes
+            threads: no
+            interval: 1
+
+dpdk:
+  eal-params:
+    proc-type: primary
+    # The PMD cannot report kernel ring overflow, so give the ring room for
+    # the whole flood (requests and replies) regardless of worker speed.
+    vdev: "net_af_packet0,iface=br0,framecnt=2048"
+    no-huge:
+    no-pci:
+    m: 256
+
+  interfaces:
+    - interface: net_af_packet0
+      threads: 1
+      multicast: false
+      mempool-size: auto
+      mempool-cache-size: auto
+      rx-descriptors: 1024
+      tx-descriptors: 1024
+      rx-backlog-size: 64
+      copy-mode: none
+      copy-iface: none
+
+# DPDK requires CPU affinity.
+threading:
+  set-cpu-affinity: yes
+  cpu-affinity:
+    - management-cpu-set:
+        cpu: [ 0 ]
+    - worker-cpu-set:
+        cpu: [ "all" ]
+        mode: "exclusive"

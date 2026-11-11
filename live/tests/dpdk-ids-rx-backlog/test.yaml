@@ -1,0 +1,57 @@
+# DPDK IDS on the AF_PACKET virtual PMD with the per-worker RX backlog enabled.
+environment: tap
+
+requires:
+  min-version: 9
+  features:
+    - DPDK
+  command:
+    - python3
+    - ping
+    - pgrep
+    - jq
+    - grep
+  script:
+    - python3 -c 'import os; assert len(os.sched_getaffinity(0)) >= 2'
+
+args:
+  - --dpdk
+  - --runmode workers
+  - -v
+  - -S "${TESTDIR}/icmp.rules"
+
+# Pause Suricata while the flood is sent so that the PMD's kernel ring fills
+# up and the first poll after the resume returns a full 32-packet RX burst,
+# which switches the worker into backlog mode regardless of how fast it
+# processes packets. Then wait until it has alerted on every echo request
+# before the runner stops Suricata: packets still in the NIC queue at
+# shutdown are lost by design, while the backlog itself is flushed.
+client: |
+  pid=$(pgrep -f "unix-command.filename=${OUTDIR}/suricata.socket")
+  test "$(wc -w <<<"${pid}")" = 1
+  kill -STOP "${pid}"
+  ip netns exec client0 ping -f -c 512 -l 256 -W 2 10.200.0.1
+  kill -CONT "${pid}"
+  for _ in $(seq 1 40); do
+      alerts=$(jq -c 'select(.event_type == "alert")' "${OUTDIR}/eve.json" 2>/dev/null | wc -l)
+      if [ "${alerts}" -ge 512 ]; then
+          exit 0
+      fi
+      sleep 0.25
+  done
+  echo "only ${alerts} alerts after 10 s; letting the checks report the counts"
+
+checks:
+  - shell:
+      args: grep -F -- 'RX backlog size 64 per queue, RX burst 32, drain budget 1024, processing quantum 8' suricata.log
+  - stats:
+      capture.packets.__gt: 0
+      capture.dpdk.backlog.enqueued.__gt: 0
+      capture.dpdk.backlog.max.__gt: 0
+      # The backlog must be fully drained by shutdown.
+      capture.dpdk.backlog.current: 0
+  - filter:
+      count: 512
+      match:
+        event_type: alert
+        alert.signature_id: 1
