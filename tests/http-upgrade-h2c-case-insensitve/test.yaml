@@ -1,0 +1,14 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none --set stream.midstream=true
+
+checks:
+  # Flow should complete as http2
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: http2
+        app_proto_orig: http
