@@ -1,0 +1,20 @@
+requires:
+  min-version: 9
+
+pcap: ../../http2-trailer/input.pcap
+
+args:
+  # checksums are not computed in the pcap
+  - --simulate-ips
+  - -k none
+
+# the rule is refused while the ruleset loads, so the engine exits before the
+# pcap is read
+exit-code: 1
+
+checks:
+  - shell:
+      # pin the state names, not the enum numbers: a state added before the trailer
+      # states moves the numbers without changing what the user is told
+      args: grep -cE 'buffer http_header completes in state request_headers \([0-9]+\), before the hooked state request_trailers \([0-9]+\)' stderr
+      expect: 1

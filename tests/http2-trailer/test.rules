@@ -1,0 +1,12 @@
+# a gRPC shaped stream: HEADERS, DATA, then a trailer block that reuses two header names
+alert http any any -> any any (msg:"header section intact"; flow:to_server; http.header; content:"suricata.io"; sid:10; rev:1;)
+alert http any any -> any any (msg:"trailer name and value"; flow:to_server; http.trailer; content:"grpc-message|3a 20|trailval|0d 0a|"; sid:1; rev:1;)
+alert http any any -> any any (msg:"trailer value of reused name"; flow:to_server; http.trailer; content:"TRAILER-UA"; sid:2; rev:1;)
+alert http any any -> any any (msg:"trailer raw"; flow:to_server; http.trailer.raw; content:"server-timing|3a 20|done|0d 0a|"; sid:3; rev:1;)
+alert http any any -> any any (msg:"trailer names"; flow:to_server; http.trailer_names; content:"|0d 0a|grpc-message|0d 0a|"; sid:4; rev:1;)
+alert http any any -> any any (msg:"header fast pattern, trailer content"; flow:to_server; http.user_agent; content:"Mozilla"; http.trailer; content:"grpc-message"; sid:5; rev:1;)
+alert http2:stream:request_trailers any any -> any any (msg:"header buffer at the trailer hook"; http.header; content:"suricata.io"; sid:11; rev:1;)
+alert http any any -> any any (msg:"no trailer leak in header"; flow:to_server; http.header; content:"grpc-message"; sid:20; rev:1;)
+alert http any any -> any any (msg:"no trailer leak in raw header"; flow:to_server; http.header.raw; content:"server-timing"; sid:21; rev:1;)
+alert http any any -> any any (msg:"no trailer leak in header names"; flow:to_server; http.header_names; content:"grpc-message"; sid:22; rev:1;)
+alert http any any -> any any (msg:"no trailer leak in user agent"; flow:to_server; http.user_agent; content:"TRAILER-UA"; sid:23; rev:1;)

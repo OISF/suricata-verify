@@ -1,0 +1,40 @@
+%YAML 1.1
+---
+
+vars:
+  address-groups:
+    HOME_NET: "[10.0.0.0/8]"
+    EXTERNAL_NET: "!$HOME_NET"
+
+stats:
+  enabled: yes
+  interval: 8
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - stats
+        - flow
+        - alert
+        - drop:
+            alerts: yes
+            flows: all
+
+firewall:
+  policies:
+    # accept the session packets without per-test boilerplate rules
+    packet:
+      default-policy: ["accept:hook"]
+    # drop and alert on the app states no rule covers, for the richer logging
+    app:
+      tls:
+        default-policy: ["drop:flow", "alert"]
+      http1:
+        default-policy: ["drop:flow", "alert"]
+      http2:
+        # accepts the states this test does not exercise; the trailer state has
+        # no rule and no override, so this policy is what decides it
+        default-policy: ["accept:hook"]

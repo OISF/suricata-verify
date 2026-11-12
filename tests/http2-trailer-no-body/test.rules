@@ -1,0 +1,9 @@
+# trailers behind a message with no DATA frames, both directions
+alert http any any -> any any (msg:"ts trailer value"; flow:to_server; http.trailer; content:"x-checksum|3a 20|deadbeef|0d 0a|"; sid:1; rev:1;)
+alert http any any -> any any (msg:"ts trailer raw"; flow:to_server; http.trailer.raw; content:"server-timing|3a 20|done"; sid:2; rev:1;)
+alert http any any -> any any (msg:"tc trailer value"; flow:to_client; http.trailer; content:"user-agent|3a 20|TRAILER-UA|0d 0a|"; sid:3; rev:1;)
+alert http any any -> any any (msg:"tc trailer names"; flow:to_client; http.trailer_names; content:"|0d 0a|grpc-status|0d 0a|"; sid:4; rev:1;)
+# controls: the header sections are still headers, and trailer bytes stay out of them
+alert http any any -> any any (msg:"ts header control"; flow:to_server; http.header; content:"suricata.io"; sid:10; rev:1;)
+alert http any any -> any any (msg:"tc header control"; flow:to_client; http.header; content:"text/plain"; sid:11; rev:1;)
+alert http any any -> any any (msg:"no leak to headers"; flow:to_server; http.header; content:"deadbeef"; sid:20; rev:1;)
