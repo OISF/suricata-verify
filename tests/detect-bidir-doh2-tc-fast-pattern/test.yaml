@@ -1,0 +1,73 @@
+requires:
+  min-version: 9
+
+args:
+  - -k
+  - none
+
+pcap: input.pcap
+
+checks:
+  # pairs whose fast pattern is on the response half
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 24
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        pcap_cnt: 24
+  # controls: fast pattern on the request half
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+        pcap_cnt: 24
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
+        pcap_cnt: 24
+  # a half that does not match must keep the pair silent
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 5
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 6
+  - filter:
+      count: 1
+      match:
+        event_type: dns
+        dns.type: response
+        dns.answers[0].rrname: x.example.com

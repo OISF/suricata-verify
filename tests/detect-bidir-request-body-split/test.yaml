@@ -1,0 +1,77 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # Only the four rules whose response condition matches alert.
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+
+  # Each of them alerts once, on packet 9: the first response side
+  # inspection after the response is parsed (packet 8).
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 9
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        pcap_cnt: 9
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+        pcap_cnt: 9
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
+        pcap_cnt: 9
+
+  # The response condition does not match, so these never alert.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 11
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 12
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 13
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 14
+
+  # pin the exchange so the checks above cannot pass vacuously
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.hostname: example.com
+        http.url: /upload
+        http.http_method: POST
+        http.status: 200
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: /upload
+        fileinfo.size: 14
+        fileinfo.state: CLOSED
