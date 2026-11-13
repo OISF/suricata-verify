@@ -1,0 +1,24 @@
+requires:
+  min-version: 9
+
+pcap: ../../alert-testmyids-midstream3/input.pcap
+
+args:
+- --set stream.midstream=true
+- --set stream.async-oneside=true
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        dest_port: 80
+        flow.pkts_toserver: 4
+        flow.pkts_toclient: 3
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.flow.tcp: 1
+        stats.tcp.midstream_pickups: 1
+        stats.tcp.async_sessions: 0
