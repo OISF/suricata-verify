@@ -1,4 +1,4 @@
-# Port of qa/live/dpdk/dpdk-testsuite.sh: IDS: auto descriptors, auto mempool (OOM expected with nohuge)
+# IDS: auto descriptors, auto mempool (OOM expected with nohuge)
 environment: tap
 requires:
   features:

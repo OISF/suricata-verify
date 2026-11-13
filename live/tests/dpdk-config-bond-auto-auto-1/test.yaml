@@ -1,4 +1,4 @@
-# Port of qa/live/dpdk/dpdk-testsuite.sh: Bond: auto mempool, auto cache (1 thread)
+# Bond: auto mempool, auto cache (1 thread)
 environment: tap
 requires:
   features:
