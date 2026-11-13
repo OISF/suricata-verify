@@ -72,6 +72,10 @@ packets.append(pkt(False, frame(DATA, END_STREAM, 1, b"\x00\x00\x00\x00\x02OK"),
 # client trailer block: reuses two names from the header section
 trailers = hdr([
     (b"grpc-message", b"trailval"), (b"user-agent", b"TRAILER-UA"), (b"server-timing", b"done"),
+    # RFC 9110 forbids content-type in a trailer section
+    (b"content-type", b"application/grpc"),
+    # RFC 9113 section 8.1: pseudo-header fields in trailers are malformed
+    (b":path", b"/svc/Call"),
 ])
 packets.append(pkt(True, frame(HEADERS, END_HEADERS | END_STREAM, 1, trailers), PSHACK))
 packets.append(pkt(True, b"", FIN))

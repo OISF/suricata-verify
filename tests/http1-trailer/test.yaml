@@ -31,6 +31,12 @@ checks:
         event_type: alert
         alert.signature_id: 4
   - filter:
+      comment: "the Host trailer field raises the forbidden-field event"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 6
+  - filter:
       count: 1
       match:
         event_type: alert

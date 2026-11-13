@@ -66,6 +66,12 @@ checks:
         event_type: alert
         alert.signature_id: 23
   - filter:
+      comment: "a forbidden trailer field raises the trailer_forbidden_field event"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 12
+  - filter:
       comment: "the trailer block's fields keep their entries in the dump and land in their own array"
       count: 1
       match:
@@ -76,12 +82,20 @@ checks:
         http.request_headers[8].value: TRAILER-UA
         http.request_headers[9].name: server-timing
         http.request_headers[9].value: done
+        http.request_headers[10].name: content-type
+        http.request_headers[10].value: application/grpc
+        http.request_headers[11].name: :path
+        http.request_headers[11].value: /svc/Call
         http.request_trailers[0].name: grpc-message
         http.request_trailers[0].value: trailval
         http.request_trailers[1].name: user-agent
         http.request_trailers[1].value: TRAILER-UA
         http.request_trailers[2].name: server-timing
         http.request_trailers[2].value: done
+        http.request_trailers[3].name: content-type
+        http.request_trailers[3].value: application/grpc
+        http.request_trailers[4].name: :path
+        http.request_trailers[4].value: /svc/Call
         # the metadata fields come from the header block only: a trailer
         # user-agent must not become the logged user agent
         http.http_user_agent: Mozilla

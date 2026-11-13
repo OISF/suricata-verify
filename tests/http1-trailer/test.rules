@@ -13,3 +13,4 @@ alert http any any -> any any (msg:"leak http.header"; flow:to_server; http.head
 alert http any any -> any any (msg:"leak http.user_agent"; flow:to_server; http.user_agent; content:"TRAILER-UA"; sid:21; rev:1;)
 alert http any any -> any any (msg:"leak http.header.raw"; flow:to_server; http.header.raw; content:"TRAILER-HOST"; sid:22; rev:1;)
 alert http any any -> any any (msg:"leak http.header_names"; flow:to_server; http.header_names; content:"|0d 0a|Server-Timing|0d 0a|"; sid:23; rev:1;)
+alert http any any -> any any (msg:"forbidden field in trailer section"; flow:to_server; app-layer-event:http.request_trailer_forbidden_field; sid:6; rev:1;)

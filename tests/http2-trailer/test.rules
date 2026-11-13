@@ -10,3 +10,4 @@ alert http any any -> any any (msg:"no trailer leak in header"; flow:to_server; 
 alert http any any -> any any (msg:"no trailer leak in raw header"; flow:to_server; http.header.raw; content:"server-timing"; sid:21; rev:1;)
 alert http any any -> any any (msg:"no trailer leak in header names"; flow:to_server; http.header_names; content:"grpc-message"; sid:22; rev:1;)
 alert http any any -> any any (msg:"no trailer leak in user agent"; flow:to_server; http.user_agent; content:"TRAILER-UA"; sid:23; rev:1;)
+alert http any any -> any any (msg:"forbidden field in the trailer section"; flow:to_server; app-layer-event:http2.trailer_forbidden_field; sid:12; rev:1;)
