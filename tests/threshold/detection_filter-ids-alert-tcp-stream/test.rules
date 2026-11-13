@@ -1,0 +1,2 @@
+alert tcp any any -> any 9999 (msg:"df alert"; flow:established,to_server; content:"DFMATCH"; detection_filter:track by_src, count 3, seconds 60; sid:1;)
+alert tcp any any -> any 9999 (msg:"plain alert"; flow:established,to_server; content:"DFMATCH"; sid:2;)

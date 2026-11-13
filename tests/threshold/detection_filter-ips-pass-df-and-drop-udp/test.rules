@@ -1,0 +1,2 @@
+pass udp any any -> any 9999 (msg:"df pass"; content:"DFMATCH"; detection_filter:track by_src, count 3, seconds 60; sid:1;)
+drop udp any any -> any 9999 (msg:"plain drop"; content:"DFMATCH"; sid:2;)

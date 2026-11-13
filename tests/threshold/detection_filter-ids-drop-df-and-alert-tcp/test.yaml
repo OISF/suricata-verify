@@ -1,0 +1,34 @@
+requires:
+  min-version: 8.0.8
+
+pcap: ../detection_filter-ids-alert-tcp-stream/input.pcap
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        alert.action: allowed
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 10
+  - filter:
+      count: 6
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.engines[0].rules_loaded: 2
+        stats.detect.engines[0].rules_failed: 0
+        stats.detect.alert: 9
+        stats.detect.alerts_suppressed: 3
