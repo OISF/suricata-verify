@@ -1,0 +1,23 @@
+requires:
+  min-version: 9.0.0
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 4
+      match:
+        event_type: modbus
+  # only the short Read Holding Registers response (tid 4) is a mismatch
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2250008
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2250008
+        modbus.request.transaction_id: 4
