@@ -1,0 +1,64 @@
+environment: inline
+
+requires:
+  min-version: 9
+  command:
+    - grep
+    - ping
+    - python3
+  features:
+    - DPDK
+  script:
+    - python3 -c 'import os; assert len(os.sched_getaffinity(0)) >= 3'
+
+args:
+  - --dpdk
+  - --runmode workers
+
+# Jumbo frames need a 9000 byte MTU along the whole path.
+before: |
+  set -e
+  ip netns exec client0 ip link set client mtu 9000
+  ip netns exec server0 ip link set server mtu 9000
+  for iface in client0 server0; do
+    ip netns exec dut ip link set "${iface}" mtu 9000
+  done
+
+# 542 byte frames fit one mbuf, 1442 byte frames span 2 mbufs and 9014 byte
+# frames 9 mbufs. Only the 542 byte echo request may reach the server.
+client: |
+  set -e
+  ip netns exec client0 ping -c 1 -W 2 -s 500 -p deadbeef 10.200.0.1
+  for size in 1400 8972; do
+    if ip netns exec client0 ping -c 1 -W 2 -s ${size} -p deadbeef 10.200.0.1; then
+      echo "error: the ${size} byte echo request should have been dropped"
+      exit 1
+    fi
+  done
+
+checks:
+  - shell:
+      args: grep -F 'Segmented mbufs detected' suricata.log
+  - shell:
+      args: grep -F 'cannot be forwarded with tx-segmented-mbufs disabled' suricata.log
+  # The chained echo requests.
+  - stats:
+      capture.dpdk.segmented_drops: 2
+      capture.dpdk.segmented_too_large: 0
+      ips.blocked: 2
+      ips.drop_reason.capture_error: 2
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 3
