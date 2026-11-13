@@ -1,0 +1,52 @@
+---
+# RDP: invalid UTF-16LE client name in Client Core Data
+#
+# Pcaps: RDP-invalid-utf16.pcap - RDP-003.pcap with the 32-byte
+# client name in the Client Core Data child of the MCS
+# Connect-Initial (Connect-Request) patched to invalid UTF-16LE
+# (unpaired surrogate 0xd8 followed by zero padding) and a
+# recomputed TCP checksum.
+#
+# Pinned behaviour (same as `main`): `le_slice_to_string()`
+# converts the name with a *strict* UTF-16 conversion, so the
+# Client Core Data child fails to parse and the `connect_request`
+# event is logged **without** a `client` block. A lossy
+# conversion (U+FFFD replacement) would instead let the parse
+# succeed and log a `client` block containing replacement
+# characters - that is visible to detection and EVE and must not
+# happen.
+
+checks:
+
+  # Check if rdp is detected
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: rdp
+
+  # Negotiation starts normally
+  - filter:
+      count: 1
+      match:
+        event_type: rdp
+        rdp.event_type: "initial_request"
+        rdp.cookie: "A70067"
+
+  # ...and completes
+  - filter:
+      count: 1
+      match:
+        event_type: rdp
+        rdp.event_type: "connect_response"
+
+  # The connect_request event must be present, but must NOT carry
+  # a `client` block: the strict UTF-16 conversion of the invalid
+  # client name has to fail the Client Core Data parse. A lossy
+  # conversion would log a `client` block with U+FFFD characters.
+  - filter:
+      count: 1
+      match:
+        event_type: rdp
+        rdp.event_type: "connect_request"
+        not-has-key: "rdp.client"
