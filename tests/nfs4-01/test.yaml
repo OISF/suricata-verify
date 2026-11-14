@@ -143,3 +143,40 @@ checks:
       event_type: anomaly
       anomaly.app_proto: nfs
       anomaly.event: malformed_data
+  # The v4.1 session fields. minorversion comes off the compounds and
+  # client_id off EXCHANGE_ID and CREATE_SESSION; every record of this flow
+  # carries both, so a regression in either source lands here. The 8.0 line
+  # logs neither field, so the filters are gated to 9 and newer.
+- filter:
+    requires:
+      min-version: 9
+    count: 12
+    match:
+      event_type: nfs
+      nfs.version: 4
+      nfs.minorversion: 1
+- filter:
+    requires:
+      min-version: 9
+    count: 12
+    match:
+      event_type: nfs
+      nfs.client_id: "e0148200000002d2"
+- filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      event_type: nfs
+      nfs.procedure: EXCHANGE_ID
+      nfs.minorversion: 1
+      nfs.client_id: "e0148200000002d2"
+- filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      event_type: nfs
+      nfs.procedure: CREATE_SESSION
+      nfs.minorversion: 1
+      nfs.client_id: "e0148200000002d2"
