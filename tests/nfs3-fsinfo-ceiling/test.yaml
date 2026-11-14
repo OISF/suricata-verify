@@ -1,0 +1,46 @@
+requires:
+  min-version: 9
+
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+  - --set app-layer.protocols.nfs.enabled=yes
+
+pcap: input.pcap
+
+checks:
+  # the FSINFO reply (RFC 1813 3.3.19 layout) is parsed and logged
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.version: 3
+        nfs.procedure: FSINFO
+        nfs.type: response
+        rpc.xid: 1073741824
+  # the 1 KiB read reply is within the advertised 4 KiB ceiling and its
+  # file data is tracked
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.version: 3
+        nfs.procedure: READ
+        nfs.type: response
+        nfs.file_tx: true
+  # the 8 KiB write exceeds the advertised wtmax: advisory anomaly on
+  # the write request, data still tracked
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: fsinfo_too_large
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.size: 8192
+  - shell:
+      args: test "$(grep -Ec 'malformed_data' eve.json)" -eq 0

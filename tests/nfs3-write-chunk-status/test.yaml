@@ -1,0 +1,82 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+  - --set
+  - app-layer.protocols.nfs.enabled=yes
+
+pcap: input.pcap
+
+checks:
+  # flow A: chunk 1 answered with an error, chunk 2 answered OK
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        src_port: 941
+        nfs.procedure: WRITE
+        nfs.type: response
+        nfs.version: 3
+        nfs.status: ERR_IO
+        nfs.status_code: 5
+        nfs.write.offset: 0
+        nfs.write.size: 128
+        nfs.write.last_xid: 2
+  # flow B: both chunks out before either reply, same expectation
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        src_port: 942
+        nfs.procedure: WRITE
+        nfs.type: response
+        nfs.version: 3
+        nfs.status: ERR_IO
+        nfs.status_code: 5
+        nfs.write.offset: 0
+        nfs.write.size: 128
+        nfs.write.last_xid: 2
+  # no write may read as accepted because a later reply said OK; the two
+  # checks above show the records this filter runs over
+  - filter:
+      count: 0
+      match:
+        event_type: nfs
+        nfs.procedure: WRITE
+        nfs.type: response
+        nfs.status: OK
+  # the file record of flow A was written after a status had been seen
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 941
+        nfs.procedure: WRITE
+        nfs.status: ERR_IO
+        nfs.status_code: 5
+  # the file record of flow B was written when the file closed, before the
+  # replies reached the transaction, so it keeps the default name and leaves
+  # the numeric status out
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 942
+        nfs.procedure: WRITE
+        nfs.status: OK
+  - filter:
+      count: 0
+      match:
+        event_type: fileinfo
+        src_port: 942
+        nfs.status_code: 5
+  - filter:
+      count: 2
+      match:
+        event_type: flow
+        app_proto: nfs

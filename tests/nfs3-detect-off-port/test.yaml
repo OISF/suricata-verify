@@ -1,0 +1,56 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+  - --set
+  - app-layer.protocols.nfs.enabled=yes
+
+pcap: input.pcap
+
+checks:
+  # NFSv3 on a port outside the default set: detected by the record-marking
+  # pattern probe, so the flow and its records look like any other NFS flow
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        dest_port: 4040
+        app_proto: nfs
+  - shell:
+      args: jq -r 'select(.event_type=="nfs" and .nfs.procedure=="WRITE") | .nfs.write.size' eve.json
+      expect: 64
+  - shell:
+      args: jq -r 'select(.event_type=="nfs" and .nfs.procedure=="READ") | .nfs.read.size' eve.json
+      expect: 64
+  - shell:
+      args: jq -r 'select(.event_type=="fileinfo") | .fileinfo.size' eve.json | sort -u
+      expect: 64
+  # mountd on another odd port is a record marked ONC RPC CALL with a different
+  # program number: the probe must not claim it as NFS
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        dest_port: 4041
+        app_proto: failed
+  - filter:
+      count: 0
+      match:
+        event_type: nfs
+        dest_port: 4041
+  # a stream that starts with what looks like a record marked call but carries
+  # no RPC call header must have detection finish for it: a match that the probe
+  # refuses is only concluded once the to-server data reaches pp_max_len, 36
+  # bytes for TCP to-server, so a looser anchor leaves flows shorter than that
+  # with no app_proto at all
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        dest_port: 4042
+        app_proto: failed

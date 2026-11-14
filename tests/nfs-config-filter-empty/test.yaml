@@ -1,0 +1,24 @@
+requires:
+  min-version: 9
+
+args:
+  - -k
+  - none
+
+pcap: ../nfs3-01/input.pcap
+
+checks:
+  # filter: [] is a key that is present with nothing in it, so nothing is
+  # dropped: not even the v3 GETATTR the built-in default hides.
+  - filter:
+      count: 7
+      match:
+        event_type: nfs
+        nfs.version: 3
+        nfs.procedure: GETATTR
+  - filter:
+      count: 24
+      match:
+        event_type: nfs
+        nfs.version: 3
+        nfs.procedure: LOOKUP

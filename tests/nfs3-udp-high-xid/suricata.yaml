@@ -1,0 +1,31 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - flow
+        - nfs:
+            enabled: yes
+        - anomaly:
+            enabled: yes
+            types:
+              applayer: yes
+        - files:
+            force-hash: [md5, sha1, sha256]
+
+app-layer:
+  protocols:
+    nfs:
+      enabled: yes
+      udp:
+        enabled: yes
+      tcp:
+        enabled: yes
+
+stream:
+  reassembly:
+    depth: 0

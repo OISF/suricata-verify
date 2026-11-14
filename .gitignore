@@ -2,3 +2,5 @@ output/
 /private
 *~
 tests/datasets-bug-5109/datasets.csv
+__pycache__/
+*.pyc

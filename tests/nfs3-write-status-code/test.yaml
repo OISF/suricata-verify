@@ -1,0 +1,53 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+  - --set
+  - app-layer.protocols.nfs.enabled=yes
+
+pcap: input.pcap
+
+checks:
+  # a FILE_SYNC WRITE is logged when the request is parsed, before any reply:
+  # no status name, and no numeric status either, since status_code 0 reads as
+  # NFS3_OK and would report this rejected write as a successful one
+  - shell:
+      args: jq -r 'select(.event_type=="nfs" and .rpc.xid==1) | .nfs | has("status")' eve.json
+      expect: 'false'
+  - shell:
+      args: jq -r 'select(.event_type=="nfs" and .rpc.xid==1) | .nfs | has("status_code")' eve.json
+      expect: 'false'
+  # the UNSTABLE WRITE is not settled by its request, so its reply is parsed
+  # while the transaction is still open: the reply path finds a write's file
+  # transaction by the xid of its last chunk, so the answer has to reach the
+  # record. With the xid kept only for FILE_SYNC writes this reply had no
+  # transaction to land on, and a rejected write looked unanswered.
+  - shell:
+      args: jq -r 'select(.event_type=="nfs" and .rpc.xid==2) | .nfs.status' eve.json
+      expect: 'ERR_IO'
+  - shell:
+      args: jq -r 'select(.event_type=="nfs" and .rpc.xid==2) | .nfs.status_code' eve.json
+      expect: '5'
+  # the FILE_SYNC file closes with the flow, after the reply landed on its
+  # transaction: by then a status was seen, so the file record says ERR_IO and
+  # carries the number - a rejected write must not read back as a good file
+  - shell:
+      args: jq -r 'select(.event_type=="fileinfo" and .rpc.xid==1) | .nfs.status' eve.json
+      expect: 'ERR_IO'
+  - shell:
+      args: jq -r 'select(.event_type=="fileinfo" and .rpc.xid==1) | .nfs.status_code' eve.json
+      expect: '5'
+  # the UNSTABLE file record is written before its reply reaches the
+  # transaction, so it keeps the mainline default name and leaves the numeric
+  # form out, the way a file with no reply at all would
+  - shell:
+      args: jq -r 'select(.event_type=="fileinfo" and .rpc.xid==2) | .nfs.status' eve.json
+      expect: 'OK'
+  - shell:
+      args: jq -r 'select(.event_type=="fileinfo" and .rpc.xid==2) | .nfs | has("status_code")' eve.json
+      expect: 'false'

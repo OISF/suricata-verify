@@ -1,0 +1,36 @@
+requires:
+  min-version: 9
+
+args:
+  - -k
+  - none
+
+pcap: ../nfs3-udp-high-xid/input.pcap
+
+checks:
+  # NFS is enabled for UDP only here, and app-layer.protocols.nfs.filter
+  # used to be read in the TCP registration: with TCP off the configured
+  # list was never installed and the built-in default applied. READ is in
+  # the list, so it must be gone.
+  - filter:
+      count: 0
+      match:
+        event_type: nfs
+        nfs.procedure: READ
+  # the other procedures of the same run must survive
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: WRITE
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: "NULL"
+  # detection is unaffected by a logging filter
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: nfs

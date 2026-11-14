@@ -1,0 +1,32 @@
+requires:
+  min-version: 9
+
+args:
+  - -k
+  - none
+
+pcap: ../nfs3-01/input.pcap
+
+checks:
+  # LOOKUP is out of the list the config installs, so it is dropped even
+  # though the built-in default would log it.
+  - filter:
+      count: 0
+      match:
+        event_type: nfs
+        nfs.version: 3
+        nfs.procedure: LOOKUP
+  # GETATTR is dropped by default but kept here, which is what shows the
+  # configured list replaced the default rather than adding to it.
+  - filter:
+      count: 7
+      match:
+        event_type: nfs
+        nfs.version: 3
+        nfs.procedure: GETATTR
+  - filter:
+      count: 2
+      match:
+        event_type: nfs
+        nfs.version: 3
+        nfs.procedure: READDIR

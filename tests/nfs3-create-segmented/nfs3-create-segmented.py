@@ -34,7 +34,7 @@ access_req = v3_call(XID2, 4, CREATED_FH + be32(0x01))
 # ACCESS reply: status only
 access_reply = v3_reply(XID2, be32(0))
 
-p = Pcap(os.path.join(os.path.dirname(os.path.abspath(__file__)), "nfs3-create-segmented.pcap"))
+p = Pcap(os.path.join(os.path.dirname(os.path.abspath(__file__)), "input.pcap"))
 p.tcp(CLIENT, SERVER, syn=True)
 p.tcp(SERVER, CLIENT, synack=True)
 p.tcp(CLIENT, SERVER, pure_ack=True)

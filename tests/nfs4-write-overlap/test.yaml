@@ -1,0 +1,46 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+
+args:
+  - -k
+  - none
+
+pcap: input.pcap
+
+checks:
+  # The second write starts at 50, inside the 100 bytes the tracker already
+  # holds for this file. The v2 and v3 write paths flagged that; the v4 one
+  # did not, so the overlap stayed silent and the inspected file was not
+  # what the server wrote.
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: file_overlap
+  # one file transaction covers both writes: the first sets the offset, the
+  # second appends past the tracked end, so the size counts what the tracker
+  # kept rather than the bytes the server stored
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: WRITE
+        nfs.version: 4
+        nfs.write.offset: 0
+        nfs.write.size: 150
+        nfs.write.chunks: 1
+  - filter:
+      count: 0
+      match:
+        event_type: nfs
+        nfs.procedure: WRITE
+        nfs.write.size: 100
+  # a silent overlap must not cost the flow its protocol
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: nfs

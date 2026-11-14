@@ -1,0 +1,29 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+
+args:
+  - -k
+  - none
+
+pcap: input.pcap
+
+checks:
+  # The write is UNSTABLE, so nothing marks it last; but the server answered
+  # NFS4_OK, and a reply that was seen has to show up in the log.
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: WRITE
+        nfs.type: response
+        nfs.version: 4
+        nfs.status: OK
+        nfs.status_code: 0
+  # a transaction left open at end of flow must still be an NFS flow
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: nfs

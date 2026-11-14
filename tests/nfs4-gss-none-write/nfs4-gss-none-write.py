@@ -48,7 +48,7 @@ claim = len(header) + (len(prog_prefix) - 32) + WRITE_LEN
 seg = struct.pack(">I", (1 << 31) | claim) + header + prog_prefix
 assert len(seg) < claim, "the record must arrive segmented"
 
-p = Pcap(os.path.join(os.path.dirname(os.path.abspath(__file__)), "nfs4-gss-none-write.pcap"))
+p = Pcap(os.path.join(os.path.dirname(os.path.abspath(__file__)), "input.pcap"))
 p.tcp(CLIENT, SERVER, syn=True)
 p.tcp(SERVER, CLIENT, synack=True)
 p.tcp(CLIENT, SERVER, pure_ack=True)
