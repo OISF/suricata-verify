@@ -1,0 +1,6 @@
+alert udp any any -> any any (msg:"0 bytes converts 12"; udp.hdr; byte_test:0,=,12,6,string,dec; sid:1;)
+alert udp any any -> any any (msg:"0 bytes reads past the buffer"; udp.hdr; byte_test:0,=,12345,6,string,dec; sid:2;)
+alert udp any any -> any any (msg:"0 bytes at the end of the buffer"; udp.hdr; byte_test:0,=,345,8,string,dec; sid:3;)
+alert udp any any -> any any (msg:"0 bytes from a variable converts 12"; udp.hdr; byte_extract:1,3,n,string,dec; byte_test:n,=,12,6,string,dec; sid:4;)
+alert udp any any -> any any (msg:"0 bytes from a variable reads past the buffer"; udp.hdr; byte_extract:1,3,n,string,dec; byte_test:n,=,12345,6,string,dec; sid:5;)
+alert udp any any -> any any (msg:"control, 2 bytes"; udp.hdr; byte_test:2,=,12,6,string,dec; sid:6;)
