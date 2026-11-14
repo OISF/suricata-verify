@@ -1,0 +1,6 @@
+alert udp any any -> any any (msg:"0 bytes jumps by 12"; udp.hdr; byte_jump:0,6,string,dec,from_beginning,post_offset -10; content:"A0"; within:2; sid:1;)
+alert udp any any -> any any (msg:"0 bytes at the end of the buffer"; udp.hdr; byte_jump:0,8,string,dec,from_beginning,post_offset -345; sid:2;)
+alert udp any any -> any any (msg:"0 bytes from a variable jumps by 12"; udp.hdr; byte_extract:1,3,n,string,dec; byte_jump:n,6,string,dec,from_beginning,post_offset -10; content:"A0"; within:2; sid:3;)
+alert udp any any -> any any (msg:"control, 2 bytes"; udp.hdr; byte_jump:2,6,string,dec,from_beginning,post_offset -10; content:"A0"; within:2; sid:4;)
+alert udp any any -> any any (msg:"relative, 0 bytes at the end of the buffer"; udp.hdr; content:"12"; byte_jump:0,0,relative,string,dec,post_offset -351; sid:5;)
+alert udp any any -> any any (msg:"relative, 0 bytes steps over 2 digits"; udp.hdr; content:"|0c|"; byte_jump:0,0,relative,string,dec,post_offset -14; content:"12"; within:2; sid:6;)

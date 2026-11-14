@@ -1,0 +1,3 @@
+alert udp any any -> any any (msg:"0 bytes extracts 12"; udp.hdr; byte_extract:0,6,v,string,dec; byte_test:2,=,v,-2,relative,string,dec; sid:1;)
+alert udp any any -> any any (msg:"0 bytes at the end of the buffer"; udp.hdr; byte_extract:0,8,v,string,dec; content:"A0"; sid:2;)
+alert udp any any -> any any (msg:"control, 2 bytes"; udp.hdr; byte_extract:2,6,v,string,dec; byte_test:2,=,v,-2,relative,string,dec; sid:3;)
