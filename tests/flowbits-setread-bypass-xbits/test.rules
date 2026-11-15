@@ -1,0 +1,12 @@
+# sid:1 sets host bit hb, sid:2 reads it. Both are flowbits SET_READ, on
+# unrelated bits, so there is no flowbit dependency between them.
+#
+# The set side has to be written as "hostbits" and the read side as "xbits":
+# SCSigGetXbitsType only counts reads from xbits sigmatches and only counts
+# writes from hostbits sigmatches, so an xbits:set is never seen as a write.
+alert tcp any any -> any any (flowbits:isset,a1; flowbits:set,a2; hostbits:set,hb; sid:1;)
+alert tcp any any -> any any (flowbits:isset,b1; flowbits:set,b2; xbits:isset,hb,track ip_src; sid:2;)
+# Control: the same host bit dependency, listed in the same order, without
+# flowbits. SCSigOrderByHostbitsCompare keeps the setter ahead of the reader.
+alert tcp any any -> any any (hostbits:set,hb; sid:3;)
+alert tcp any any -> any any (xbits:isset,hb,track ip_src; sid:4;)

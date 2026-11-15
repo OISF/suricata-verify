@@ -1,0 +1,8 @@
+# sid:1 sets pktvar pv, sid:2 reads it. Both are flowbits SET_READ, on
+# unrelated bits, so there is no flowbit dependency between them.
+alert tcp any any -> any any (flowbits:isset,a1; flowbits:set,a2; pcre:"/(?P<pkt_pv>[a-z]+)/"; sid:1;)
+alert tcp any any -> any any (flowbits:isset,b1; flowbits:set,b2; pktvar:pv,"abc"; sid:2;)
+# Control: the same pktvar dependency, listed in the same order, without
+# flowbits. SCSigOrderByPktvarCompare keeps the setter ahead of the reader.
+alert tcp any any -> any any (pcre:"/(?P<pkt_pv>[a-z]+)/"; sid:3;)
+alert tcp any any -> any any (pktvar:pv,"abc"; sid:4;)

@@ -1,0 +1,3 @@
+alert tcp any any -> any any (msg:"First in chain"; content:"GET"; flowbits:set,1; sid:3;)
+alert tcp any any -> any any (msg:"Second in chain"; content:"flow"; flowbits:isset,1; flowbits:set,2; sid:2;)
+alert tcp any any -> any any (msg:"Third (Last) in chain"; content:"boss"; flowbits:isset,2; flowbits:set,3; sid:1;)

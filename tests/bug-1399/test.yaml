@@ -1,0 +1,48 @@
+requires:
+  min-version: 9
+
+args:
+- -k none
+
+# The only ordering test in this set that runs against a pcap rather than
+# --engine-analysis, so it checks the effect of the ordering instead of the
+# order itself.
+#
+#   sid:3 set 1 -> sid:2 isset 1
+#   sid:2 set 2 -> sid:1 isset 2
+#
+# test.rules lists them 3, 2, 1, which is already the resolved order. All three
+# can therefore fire on a single pass over the same packet: each rule sets the
+# bit the next one reads before that rule is evaluated. If the ordering were
+# wrong, the later rules would need a second packet and these alerts would not
+# appear.
+checks:
+# One alert per rule in the chain, all from the one pcap.
+- filter:
+    count: 1
+    match:
+      alert.signature_id: 3
+      event_type: alert
+- filter:
+    count: 1
+    match:
+      alert.signature_id: 2
+      event_type: alert
+- filter:
+    count: 1
+    match:
+      alert.signature_id: 1
+      event_type: alert
+# The http event carries the bits in the order they were set, which is the
+# second way of showing the chain ran start to finish in one pass.
+- filter:
+    count: 1
+    match:
+      event_type: http
+      http.http_method: GET
+      http.http_user_agent: Suricata Testing
+      http.protocol: HTTP/1.1
+      http.url: /flowboss.html
+      metadata.flowbits[0]: '1'
+      metadata.flowbits[1]: '2'
+      metadata.flowbits[2]: '3'
