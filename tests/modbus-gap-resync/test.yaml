@@ -1,0 +1,98 @@
+requires:
+  min-version: 9.0.0
+
+args:
+  - -k none
+
+checks:
+  # 40001: request 2 and its response are lost; 1, 3 and 4 are parsed
+  - filter:
+      count: 1
+      match:
+        event_type: modbus
+        src_port: 40001
+        modbus.request.transaction_id: 1
+        modbus.response.transaction_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: modbus
+        src_port: 40001
+        modbus.request.transaction_id: 3
+        modbus.response.transaction_id: 3
+  - filter:
+      count: 1
+      match:
+        event_type: modbus
+        src_port: 40001
+        modbus.request.transaction_id: 4
+        modbus.response.transaction_id: 4
+  - filter:
+      count: 0
+      match:
+        event_type: modbus
+        src_port: 40001
+        modbus.request.transaction_id: 2
+  # 40002: response 2 is lost; request 2 is closed without one
+  - filter:
+      count: 1
+      match:
+        event_type: modbus
+        src_port: 40002
+        modbus.request.transaction_id: 2
+        modbus.response: null
+  - filter:
+      count: 1
+      match:
+        event_type: modbus
+        src_port: 40002
+        modbus.request.transaction_id: 1
+        modbus.response.transaction_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: modbus
+        src_port: 40002
+        modbus.request.transaction_id: 3
+        modbus.response.transaction_id: 3
+  - filter:
+      count: 1
+      match:
+        event_type: modbus
+        src_port: 40002
+        modbus.request.transaction_id: 4
+        modbus.response.transaction_id: 4
+  # 40003: the first half of request 2 is lost; its tail is skipped
+  - filter:
+      count: 1
+      match:
+        event_type: modbus
+        src_port: 40003
+        modbus.request.transaction_id: 1
+        modbus.response.transaction_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: modbus
+        src_port: 40003
+        modbus.request.transaction_id: 3
+        modbus.response.transaction_id: 3
+  - filter:
+      count: 1
+      match:
+        event_type: modbus
+        src_port: 40003
+        modbus.request.transaction_id: 4
+        modbus.response.transaction_id: 4
+  - filter:
+      count: 0
+      match:
+        event_type: modbus
+        src_port: 40003
+        modbus.request.transaction_id: 2
+  # the response to the lost request is not reported as unsolicited
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.event: unsolicited_response
