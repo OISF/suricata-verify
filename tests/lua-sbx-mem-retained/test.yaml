@@ -1,18 +1,24 @@
 requires:
   features:
     - HAVE_LUA
+  # 8.0.8: retained-memory accounting landed there. lt-version: 9: with the cap
+  # above a single call's cost the check asserts accumulation across calls, and
+  # per-call state isolation on the development line removes exactly that; the
+  # ceiling is the line where the assertion can hold.
   min-version: 8.0.8
+  lt-version: 9
 
 pcap: ../lua-output-http/input.pcap
 
 args:
   - --set security.lua.allow-rules=true
-  - --set security.lua.max-bytes=32768
+  - --set security.lua.max-bytes=262144
 
 checks:
-  # the retained set must hit the cap: the script errors (memory limit), so
-  # fewer than the unbounded count of alerts fire.
-  - filter:
-      count: 0
-      match:
-        alert.signature_id: 1
+  # Cap sits above any single call's cost on any architecture (x86_64 trips a
+  # 16 KiB allocation under a 32 KiB cap; 32-bit ARM does not, which is where
+  # the alert-count check used to fail), so a non-zero count here can only come
+  # from accumulation across calls. Alert totals are not asserted: filter count
+  # is exact-match only, and the trip point tracks the interpreter baseline.
+  - stats:
+      detect.lua.memory_limit_errors.__gte: 1
