@@ -1,0 +1,51 @@
+
+requires:
+  # the pinned numbers were only measured against main
+  min-version: 9
+
+pcap: test.pcap
+
+checks:
+  # the two connections on tuple A and the one payload of the keep alive flow
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.alert: 3
+
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.flow.total: 2
+
+  # the flow to thread mapping held for every packet
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.tcp.pkt_on_wrong_thread: 0
+
+  # the clock the events are stamped with has to reach the end of the file,
+  # a worker that never gets a packet may not hold it at the start
+  - shell:
+      args: python3 ${TEST_DIR}/check-clock.py eve.json
+      expect: OK
+
+  # replay the capture a second time and compare: which thread a packet lands
+  # on may not decide the outcome, nor may how fast the host is
+  - shell:
+      args: mkdir -p rerun && ${SRCDIR}/src/suricata -c ${TEST_DIR}/suricata.yaml -r ${TEST_DIR}/test.pcap -S ${TEST_DIR}/test.rules -l rerun > /dev/null && python3 ${TEST_DIR}/compare.py eve.json rerun/eve.json
+      expect: IDENTICAL
