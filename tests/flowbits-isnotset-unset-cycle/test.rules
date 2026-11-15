@@ -1,0 +1,8 @@
+# sid:1 and sid:2 each unset the bit the other checks with isnotset. The graph
+# gets an unset -> isnotset edge in both directions, which forms a cycle.
+#
+# isnotset already matches before a bit was ever set, so neither rule has to
+# wait for the other and both can match on the first packet of a flow. The
+# cycle is not a real dependency and must not be reported.
+alert tcp any any -> any any (flowbits:isnotset,A; flowbits:unset,B; sid:1;)
+alert tcp any any -> any any (flowbits:isnotset,B; flowbits:unset,A; sid:2;)

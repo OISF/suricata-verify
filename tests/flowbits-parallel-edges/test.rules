@@ -1,0 +1,10 @@
+# sid:1 and sid:2 have two dependencies in the same direction: sid:1 sets x
+# (read by sid:2) and sid:1 unsets y (read by sid:2 as isnotset). Those are two
+# parallel graph edges between the same pair of signatures, with differing
+# weights (set vs unset).
+#
+# The pair is also a genuine deadlock: sid:1 needs z, only set by sid:2, and
+# sid:2 needs x, only set by sid:1. Neither can match first, so no order
+# exists and the cycle must be reported rather than silently resolved.
+alert tcp any any -> any any (flowbits:isset,z; flowbits:set,x; flowbits:unset,y; sid:1;)
+alert tcp any any -> any any (flowbits:isset,x; flowbits:isnotset,y; flowbits:set,z; sid:2;)
