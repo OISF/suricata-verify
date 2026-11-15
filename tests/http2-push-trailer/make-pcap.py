@@ -78,9 +78,10 @@ push = frame(PUSH_PROMISE, 0, 1, struct.pack("!I", 2) + hdr([(b":scheme", b"http
 push += frame(CONTINUATION, END_HEADERS, 1, hdr([(b":path", b"/pushed.css"), (b"x-pushed", b"yes")]))
 packets.append(pkt(False, push, PSHACK))
 
-# real trailers, also split over two frames, closing the stream
-tr = frame(HEADERS, 0, 1, hdr([(b"x-checksum", b"abc")]))
-tr += frame(CONTINUATION, END_HEADERS | END_STREAM, 1, hdr([(b"x-status", b"ok")]))
+# real trailers, also split over two frames, closing the stream. END_STREAM rides on the
+# HEADERS frame: a CONTINUATION has no such flag (RFC 9113 section 6.10)
+tr = frame(HEADERS, END_STREAM, 1, hdr([(b"x-checksum", b"abc")]))
+tr += frame(CONTINUATION, END_HEADERS, 1, hdr([(b"x-status", b"ok")]))
 packets.append(pkt(False, tr, PSHACK))
 
 # second stream: the push opens before the response, so its CONTINUATION finishes the block
