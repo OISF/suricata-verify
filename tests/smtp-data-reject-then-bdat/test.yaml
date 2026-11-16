@@ -1,0 +1,27 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - -k none
+
+checks:
+  # The 501 ends the DATA attempt, so the BDAT chunk that follows is the message
+  # of this transaction: its attachment has to be extracted and closed.
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: note.txt
+        fileinfo.state: CLOSED
+        fileinfo.size: 51
+
+  # and the extracted octets have to reach file_data inspection, not just the
+  # file record: the alert only fires on the decoded attachment content.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        files[0].filename: note.txt

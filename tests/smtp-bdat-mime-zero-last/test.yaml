@@ -1,0 +1,19 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - -k none
+
+checks:
+  # the message is ended by an empty "BDAT 0 LAST" (RFC 3030 section 2) and
+  # has no closing boundary, so the attachment is only closed by the end of
+  # the message - as with "BDAT <n> LAST" or DATA.
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: att.bin
+        fileinfo.state: CLOSED
+        fileinfo.size: 4096

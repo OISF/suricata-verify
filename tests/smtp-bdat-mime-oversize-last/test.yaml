@@ -1,0 +1,23 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - -k none
+  - --set app-layer.protocols.smtp.max-bdat-chunk-len=1000
+
+checks:
+  # chunks of 800 and 5042 LAST octets, the LAST one over the limit and
+  # skipped: only chunk 1 of the attachment was decoded
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: BDAT_MAX_CHUNK_LEN_EXCEEDED
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: att.bin
+        fileinfo.state: TRUNCATED
