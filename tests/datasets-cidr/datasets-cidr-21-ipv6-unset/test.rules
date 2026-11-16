@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"IPv6 CIDR unset host"; ip.src; dataset:unset,ipv6-host-unset,type cidr,load host.lst; sid:1;)
