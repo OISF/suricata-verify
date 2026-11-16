@@ -1,0 +1,24 @@
+requires:
+  min-version: 8.0.7
+
+pcap: ../dns-over-http2/dns_over_https.pcap
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 20
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 21
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 30
