@@ -1,0 +1,32 @@
+requires:
+    min-version: 9
+
+args:
+- -k none
+
+checks:
+  # The SLL2 header holds the protocol (0x8100) in its first field and is
+  # followed by a VLAN tag, then RARP (0x8035 = 32821). There is no
+  # ethernet header, so the record has no ether object.
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.type: decode
+        anomaly.event: decoder.ethernet.unknown_ethertype
+        unknown_ether_type: 32821
+        vlan[0]: 5
+        not-has-key: ether
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.type: decode
+        anomaly.event: decoder.vlan.unknown_type
+        unknown_ether_type: 32821
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        unknown_ether_type: 32821

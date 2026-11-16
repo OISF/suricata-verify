@@ -1,0 +1,27 @@
+requires:
+    min-version: 9
+
+args:
+- -k none
+
+checks:
+  # For a VN-Tag frame the ethernet unknown_ethertype event reports the RARP
+  # value after the tag (0x8035 = 32821), while ether.ether_type is the VN-Tag
+  # ethertype (0x8926 = 35110).
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.type: decode
+        anomaly.event: decoder.ethernet.unknown_ethertype
+        unknown_ether_type: 32821
+        ether.ether_type: 35110
+  # The VN-Tag unknown-type event is also raised, and its record carries
+  # the same unknown_ether_type.
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.type: decode
+        anomaly.event: decoder.vntag.unknown_type
+        unknown_ether_type: 32821
