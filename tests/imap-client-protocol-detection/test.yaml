@@ -1,0 +1,26 @@
+requires:
+  min-version: 9
+args:
+  - -k none
+  - --set app-layer.protocols.imap.enabled=yes
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: imap
+        proto: TCP
+        dest_port: 1143
+        src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: imap
+        proto: TCP
+        dest_port: 143
+        src_port: 42020
+  - stats:
+      app_layer.error.imap.parser: 0

@@ -1,0 +1,131 @@
+requires:
+  min-version: 9
+args:
+  - -k none
+  - --set app-layer.protocols.imap.enabled=yes
+  - --set stream.reassembly.depth=0
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 101
+        src_port: 42011
+        flow.src_port.__gte: 42010
+        flow.src_port.__lte: 42012
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 101
+        dest_port: 42012
+        flow.src_port.__gte: 42010
+        flow.src_port.__lte: 42012
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 102
+        src_port: 42010
+        flow.src_port.__gte: 42010
+        flow.src_port.__lte: 42012
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 102
+        flow.src_port.__gte: 42010
+        flow.src_port.__lte: 42012
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 103
+        flow.src_port.__gte: 42010
+        flow.src_port.__lte: 42012
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A4 LOGIN <redacted>
+        imap.responses[0]: A4 OK LOGIN completed
+        src_port.__gte: 42010
+        src_port.__lte: 42012
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[1]: SUBJECT secret
+        imap.responses[0]: A3 OK SEARCH completed
+        src_port.__gte: 42010
+        src_port.__lte: 42012
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0].__len: 8192
+        imap.responses[0].__len: 8192
+        src_port.__gte: 42010
+        src_port.__lte: 42012
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A9 NOOP
+        imap.responses[0]: A9 OK NOOP completed
+        src_port.__gte: 42010
+        src_port.__lte: 42012
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: imap
+        anomaly.event: line_too_long
+        dest_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 201
+        flow.src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests.__len: 1
+        imap.requests[0]: A2 NOOP
+        imap.responses[0]: A2 OK NOOP completed
+        src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_port: 42010
+        not-has-key: flow.exception_policy
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_port: 42020
+        not-has-key: flow.exception_policy
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_port: 42011
+        flow.exception_policy[0].target: app_layer_error
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        src_port: 42012
+        flow.exception_policy[0].target: app_layer_error
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - stats:
+      app_layer.error.imap.parser: 2
