@@ -1,0 +1,35 @@
+%YAML 1.1
+---
+
+requires:
+  min-version: 9.0
+
+pcap: ../bug-7801-01/input.pcap
+
+args:
+  - -k none
+
+checks:
+  # three signatures each write local_id 0 on both transactions; A wants the
+  # small value, C the large one, B neither
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        http.url: "/data/05/index.html"
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+        http.url: "/data/99/index.html"
+  - filter:
+      count: 2
+      match:
+        event_type: alert

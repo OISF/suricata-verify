@@ -1,0 +1,24 @@
+%YAML 1.1
+---
+
+requires:
+  min-version: 9.0
+
+args:
+  - -k none
+
+checks:
+  # TX2 (/val/08/b) is the only transaction that may alert. TX1 (/val/01/a)
+  # alerts only when TX2's byte value has clobbered TX1's.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        http.url: "/val/08/b"
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        http.url: "/val/01/a"

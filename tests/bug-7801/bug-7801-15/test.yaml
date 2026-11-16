@@ -1,0 +1,23 @@
+%YAML 1.1
+---
+
+requires:
+  min-version: 9.0
+
+pcap: ../bug-7801-01/input.pcap
+
+args:
+  - -k none
+
+checks:
+  # B is inspected first, A second: A's value must not reach B.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
