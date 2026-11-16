@@ -1,5 +1,6 @@
 requires:
     min-version: 8.0.1
+    lt-version: 9
 
 pcap: ../entropy-01/input.pcap
 
