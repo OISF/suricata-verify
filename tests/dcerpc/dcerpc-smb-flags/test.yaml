@@ -1,0 +1,62 @@
+requires:
+  min-version: 9
+
+pcap: ../../smb-dce_iface/input.pcap
+
+args:
+- -k none
+
+checks:
+  # DCE/RPC carried over SMB: the four request-side PDUs (bind + three
+  # requests, to_server) each carry pfc_flags 0x03 (PFC_FIRST_FRAG |
+  # PFC_LAST_FRAG), so dcerpc.flags matches req_flags for each.
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # decimal 3 is the same value as hex 0x03
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  # PFC_FIRST_FRAG (0x01) set on every request PDU
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  # PFC_LAST_FRAG (0x02) set on every request PDU
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 4
+  # 0x83 (adds PFC_OBJECT_UUID) is not present on any request PDU
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 5
+  # response side (to_client): the bind_ack and three responses each carry
+  # pfc_flags 0x03, matched against resp_flags
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 6
+  # PFC_LAST_FRAG (0x02) set on every response PDU
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 7
+  # regression guard: resp_flags must hold pfc_flags, not the PDU type. The
+  # bind_ack response has packet_type 0x0c; if that leaked into resp_flags this
+  # would match. It must not.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 8
