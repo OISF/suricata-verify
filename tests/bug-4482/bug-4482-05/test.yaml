@@ -1,0 +1,33 @@
+requires:
+  min-version: 9
+
+args:
+- --set app-layer.protocols.http.libhtp.default-config.swf-decompression.enabled=yes
+
+checks:
+  # First HTTP tx (corrupt SWF) triggers file_data match
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+
+  # First HTTP tx triggers Z_DATA_ERROR event match
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+
+  # Exactly one anomaly: events from first packet do not leak into second
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: file.Z_DATA_ERROR
+
+  # Second HTTP tx (plain text) produces no alerts
+  - filter:
+      count: 2
+      match:
+        event_type: http
