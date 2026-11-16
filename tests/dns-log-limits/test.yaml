@@ -1,0 +1,18 @@
+requires:
+  min-version: 9
+
+# DNS name-compression amplification: the response record is bounded.
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: dns
+      dns.type: response
+      dns.truncated: true
+      dns.answers_truncated: true
+- shell:
+    args: grep -c 'Mem buffer asked' stdout || true
+    expect: '0'
+- shell:
+    args: python3 -c "import json;print(max(len(l) for l in open('eve.json'))<2*1024*1024)"
+    expect: 'True'

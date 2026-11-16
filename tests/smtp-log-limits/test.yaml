@@ -1,0 +1,16 @@
+requires:
+  min-version: 9
+
+# SMTP log limits: 100 recipients (cap 64).
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: smtp
+      smtp.rcpt_to_truncated: true
+- shell:
+    args: python3 -c "import json;d=[json.loads(l) for l in open('eve.json') if json.loads(l).get('event_type')=='smtp'];print(len(d[0]['smtp']['rcpt_to']),d[0]['smtp']['truncated'])"
+    expect: '64 True'
+- shell:
+    args: grep -c 'Mem buffer asked' stdout || true
+    expect: '0'

@@ -1,0 +1,27 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+  # Sensitive header values are redacted by default, names are kept and
+  # neighbouring headers are unchanged.
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.url: /redact
+        http.request_headers[2].name: cookie
+        http.request_headers[2].redacted: true
+        http.request_headers[3].name: authorization
+        http.request_headers[3].redacted: true
+        http.request_headers[4].name: x-ok
+        http.request_headers[4].value: visible
+        not-has-key:
+          - http.request_headers[2].value
+          - http.request_headers[3].value
+
+  - shell:
+      args: grep -c 'secret123' eve.json || true
+      expect: '0'

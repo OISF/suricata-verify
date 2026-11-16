@@ -1,0 +1,22 @@
+requires:
+  min-version: 9
+
+pcap: ../bug-3519/input.pcap
+
+# USER/PASS arguments are not logged by default.
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: ftp
+      ftp.command: USER
+      not-has-key: ftp.command_data
+- filter:
+    count: 1
+    match:
+      event_type: ftp
+      ftp.command: PASS
+      not-has-key: ftp.command_data
+- shell:
+    args: grep -c anonymous eve.json || true
+    expect: '0'
