@@ -1,0 +1,30 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 3
+      match:
+        event_type: flow
+        app_proto: http
+        dest_port: 80
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: sip
+        dest_port: 5060
+  - filter:
+      count: 2
+      match:
+        event_type: http
+        http.http_method: "OPTIONS"
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.http_method: "UPDATE"
+        http.protocol: "SIP/2.0"

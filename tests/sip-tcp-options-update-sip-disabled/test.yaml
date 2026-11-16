@@ -1,0 +1,38 @@
+requires:
+  min-version: 9
+
+pcap: ../sip-tcp-options-update/input.pcap
+
+args:
+  - -k none
+  - --set app-layer.protocols.sip.enabled=no
+
+checks:
+  - filter:
+      count: 5
+      match:
+        event_type: flow
+        app_proto: http
+        dest_port: 80
+  - filter:
+      count: 5
+      match:
+        event_type: flow
+        app_proto: http
+        dest_port: 5060
+  - filter:
+      count: 4
+      match:
+        event_type: http
+        http.hostname: www.example.com
+        http.http_method: "OPTIONS"
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.hostname: www.example.com
+        http.http_method: "UPDATE"
+  - filter:
+      count: 0
+      match:
+        event_type: sip
