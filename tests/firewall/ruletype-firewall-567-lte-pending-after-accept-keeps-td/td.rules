@@ -1,0 +1,4 @@
+# Threat detection on the request body state, so it is inspected in the same tx
+# walk as the pending rule. TD loads after the firewall rules, so its iid is above
+# sid 101: this is the rule the walk must still reach.
+alert http2:stream:request_data any any -> any any (content:"latencyActionTicked"; sid:200;)

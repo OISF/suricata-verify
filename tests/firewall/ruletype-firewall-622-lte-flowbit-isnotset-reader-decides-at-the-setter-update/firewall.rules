@@ -1,0 +1,4 @@
+accept:hook tcp:all any any -> any any (flow:not_established; sid:1;)
+accept:hook tcp:all any any <> any any (flow:established; sid:2;)
+accept:hook http1:<request_line $HOME_NET any -> $EXTERNAL_NET any (flowbits:set,blocked; flowbits:noalert; sid:100;)
+accept:flow,alert http1:<request_headers $HOME_NET any -> $EXTERNAL_NET any (flowbits:isnotset,blocked; http.header; content:"X-Token|3a 20|yes"; sid:200;)

@@ -1,0 +1,6 @@
+# The only LTE rule is in the flows scope but its fast pattern is absent from the traffic:
+# the MPM does not add it, so it is pending at the hook and the defaults wait. It then
+# resolves as a definitive no match at its own state, which is where the app default
+# policy has to decide. If deferral outlives the pending rule, the packet is accepted
+# where BASE (which always has the rule in the list) drops it.
+accept:flow,alert http1:<request_headers $HOME_NET any -> 93.184.216.34 80 (http.host.raw; content:"nope.invalid"; sid:211;)

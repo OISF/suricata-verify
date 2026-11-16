@@ -1,0 +1,42 @@
+requires:
+  min-version: 9
+args:
+- --simulate-ips
+- -k none
+pcap: input.pcap
+checks:
+# no default app policy drop: the unmatched <request_headers rules must not
+# decide the request_headers default while the buffer is in progress, and
+# the in-progress pending window (flow C) must defer the line state defaults
+- filter:
+    count: 0
+    match:
+      event_type: drop
+      drop.reason: firewall default app policy
+# the single matching host rule accepts every flow at its hook
+- filter:
+    count: 3
+    match:
+      event_type: alert
+      alert.signature_id: 600
+      alert.action: allowed
+      firewall.hook: http:request_headers
+# two of the unmatched host rules: their content is absent, so with the MPM
+# prefilter they are not even candidates at the hook
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 100
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 599
+# every flow ends up accepted
+- filter:
+    count: 3
+    match:
+      event_type: flow
+      flow.action: accept
+      flow.alerted: true

@@ -1,0 +1,29 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+args:
+  - --simulate-ips
+  - -k none
+pcap: input.pcap
+checks:
+  # 560 with a second rule of the same hook and a higher iid. The trailer field only
+  # arrives at request_closed, two above the hook, so the group must stay live until
+  # then: the http.host rule is final at the hook, but it cannot retire the group.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 110
+        firewall.hook: "http2:stream:request_headers"
+        sub_state: stream
+        pcap_cnt: 8
+  - filter:
+      count: 0
+      match:
+        event_type: drop
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 120
