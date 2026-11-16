@@ -1,0 +1,34 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 78
+      match:
+        event_type: dnp3
+        dnp3.type: request
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        dnp3.type: request
+        dnp3.application.function_code: 2
+        dnp3.application.complete: false
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        dnp3.type: request
+        dnp3.application.function_code: 2
+        dnp3.application.complete: true
+        dnp3.application.objects[0].points[0].value: 1111638594
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.app_layer.error.dnp3.gap: 0

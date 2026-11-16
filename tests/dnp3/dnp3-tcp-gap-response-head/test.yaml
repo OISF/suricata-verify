@@ -1,0 +1,38 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 20
+      match:
+        event_type: dnp3
+        src_ip: 10.128.0.0
+        dnp3.type: request
+  - filter:
+      count: 20
+      match:
+        event_type: dnp3
+        src_ip: 10.128.0.1
+        dnp3.type: request
+  - filter:
+      count: 19
+      match:
+        event_type: dnp3
+        src_ip: 10.128.0.0
+        dnp3.type: response
+  - filter:
+      count: 20
+      match:
+        event_type: dnp3
+        src_ip: 10.128.0.1
+        dnp3.type: response
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.app_layer.error.dnp3.gap: 0
