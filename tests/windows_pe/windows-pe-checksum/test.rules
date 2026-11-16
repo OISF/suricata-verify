@@ -1,0 +1,8 @@
+# Test windows_pe checksum keyword
+# All test PEs have checksum=0
+
+# Match: checksum 0 (all 5 PEs match)
+alert http any any -> any any ( msg:"TEST checksum 0"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: checksum 0; sid:1; rev:1;)
+
+# No match: checksum > 0 (none match since all are 0)
+alert http any any -> any any ( msg:"TEST checksum >0"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: checksum >0; sid:2; rev:1;)

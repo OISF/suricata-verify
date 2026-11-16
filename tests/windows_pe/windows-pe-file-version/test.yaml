@@ -1,0 +1,38 @@
+requires:
+  min-version: 9.0.0
+
+args:
+- -k none
+
+checks:
+# <7.0.0.0 matches only the 6.1.x PE (unversioned PEs do not match)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+# >7.0.0.0 matches only the 10.0.x PE
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2
+# range 6-11 matches both versioned PEs
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 3
+# exact match on the 10.0.x PE
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 4
+# the version is logged in the executable object
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 4
+      files[0].executable.file_version: 10.0.19041.1

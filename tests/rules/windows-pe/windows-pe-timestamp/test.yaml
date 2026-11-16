@@ -1,0 +1,36 @@
+pcap: ../windows-pe-basic/input.pcap
+
+requires:
+  min-version: 9
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 5
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 5
+    match:
+      event_type: alert
+      alert.signature_id: 2
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 3
+- filter:
+    count: 5
+    match:
+      event_type: alert
+      alert.signature_id: 4
+
+# Verify timestamp is logged in fileinfo events
+- filter:
+    count: 5
+    match:
+      event_type: fileinfo
+      executable.timestamp: 1770997154

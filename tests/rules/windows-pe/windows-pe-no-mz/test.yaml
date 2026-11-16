@@ -1,0 +1,16 @@
+# Test: Invalid MZ header (negative case)
+# Validates that files without proper MZ header are NOT detected as PE files
+
+
+checks:
+  # Verify that NO alert is generated for invalid MZ header
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+
+  # Verify fast.log is empty (no alerts)
+  - shell:
+      args: test ! -s fast.log && echo "0" || cat fast.log | wc -l
+      expect: 0
