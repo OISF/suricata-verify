@@ -1,0 +1,29 @@
+requires:
+    min-version: 9
+    pcap: false
+
+args:
+    - --engine-analysis
+    - --set engine-analysis.rules=yes
+
+# Each rule's content is dumped three times in rules.json (two dns_query
+# inspect engines and the mpm object).
+checks:
+    - shell:
+        args: grep '"id":1,' rules.json | grep -o '"depth":8' | wc -l | xargs
+        expect: 3
+    - shell:
+        args: grep '"id":2,' rules.json | grep -o '"depth":8' | wc -l | xargs
+        expect: 3
+    - shell:
+        args: grep '"id":3,' rules.json | grep -o '"depth":10' | wc -l | xargs
+        expect: 3
+    - shell:
+        args: grep '"id":4,' rules.json | grep -o '"depth":5' | wc -l | xargs
+        expect: 3
+    - shell:
+        args: grep '"id":5,' rules.json | grep -o '"depth":6' | wc -l | xargs
+        expect: 3
+    - shell:
+        args: grep -o '"depth":' rules.json | wc -l | xargs
+        expect: 15

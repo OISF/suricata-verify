@@ -1,0 +1,43 @@
+requires:
+    min-version: 9
+
+pcap:
+  ../../http-body-inspect/http-aptget-ids-02-s2.pcap
+
+args:
+    - -k none
+    - --set app-layer.protocols.http.libhtp.default-config.response-body-limit=30010
+    - --set app-layer.protocols.http.libhtp.default-config.response-body-minimal-inspect-size=2000
+    - --set app-layer.protocols.http.libhtp.default-config.response-body-inspect-window=2000
+
+checks:
+    - filter:
+        count: 1
+        match:
+            event_type: alert
+            alert.signature_id: 1
+    - filter:
+        count: 1
+        match:
+            event_type: alert
+            alert.signature_id: 2
+    - filter:
+        count: 1
+        match:
+            event_type: alert
+            alert.signature_id: 3
+    - filter:
+        count: 1
+        match:
+            event_type: alert
+            alert.signature_id: 4
+    - filter:
+        count: 0
+        match:
+            event_type: alert
+            alert.signature_id: 5
+    - filter:
+        count: 1
+        match:
+            event_type: alert
+            alert.signature_id: 10
