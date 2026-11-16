@@ -1,0 +1,6 @@
+# IP-only: matches the first packet of the first flow, which the pre_stream
+# firewall rule bypassed.
+alert tcp any 40001 -> any any (msg:"TD IP-only rule on the pre_stream bypassed packet"; sid:100001;)
+
+# Control: proves the second flow is inspected.
+alert http any any -> any any (msg:"Control: second flow is inspected"; flow:to_server,established; http.uri; content:"/beta"; sid:100005;)

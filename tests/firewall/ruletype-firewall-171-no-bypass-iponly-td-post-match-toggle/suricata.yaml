@@ -1,0 +1,23 @@
+%YAML 1.1
+---
+
+stats:
+  enabled: yes
+  interval: 8
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - stats
+        - alert:
+            verdict: true
+        - flow
+        - http
+
+firewall:
+  policies:
+    # accept everything no rule covers, without per-test boilerplate rules
+    default-policy: ["accept:hook"]

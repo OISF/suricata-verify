@@ -1,0 +1,28 @@
+# Packet rules
+
+accept:hook tcp:all any any -> any any (sid:100;)
+
+# default drop
+
+# App-layer rules
+
+accept:hook http1:request_started any any -> any any (sid:101;)
+
+# Rule under test. Accepts and bypasses the first flow.
+accept:flow,alert http1:request_line any any -> any any (msg:"Firewall accept flow with bypass for /alpha"; http.uri; content:"/alpha"; sid:103;)
+
+# The second flow must stay under inspection, so it needs its own accept at this
+# hook. Ordered after sid:103 so the first flow still reaches sid:103.
+accept:hook http1:request_line any any -> any any (sid:107;)
+
+accept:hook http1:request_headers any any -> any any (sid:102;)
+accept:hook http1:request_body any any -> any any (sid:104;)
+accept:hook http1:request_trailer any any -> any any (sid:105;)
+accept:hook http1:request_complete any any -> any any (sid:106;)
+
+accept:hook http1:response_started any any -> any any (sid:201;)
+accept:hook http1:response_line any any -> any any (sid:202;)
+accept:hook http1:response_headers any any -> any any (sid:203;)
+accept:hook http1:response_body any any -> any any (sid:204;)
+accept:hook http1:response_trailer any any -> any any (sid:205;)
+accept:hook http1:response_complete any any -> any any (sid:206;)

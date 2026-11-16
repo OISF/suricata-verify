@@ -1,0 +1,37 @@
+requires:
+  min-version: 9
+
+pcap: ../../flowbit-oring/input.pcap
+
+args:
+  - --simulate-ips
+  - -k none
+  - --set threshold-file=threshold.config
+
+checks:
+# Control: the twin rule matches this traffic and is not suppressed.
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 100002
+
+# The point: suppress still works on the threat detection path in firewall mode.
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 100001
+
+# The firewall rule is untouched by the ban and still alerts.
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 103
+
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.detect.alerts_suppressed: 1

@@ -1,0 +1,1 @@
+reject:packet tcp:all any any -> any any (alert; bypass; sid:99;)
