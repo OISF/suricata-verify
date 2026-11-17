@@ -1,0 +1,8 @@
+# sid:1 initializes the flowint to 0 on the first packet of the flow.
+alert tcp any any -> any any (msg:"flowint init to 0"; flowint:cnt,notset; flowint:cnt,=,0; noalert; sid:1;)
+# sid:2 subtracts 1 from the flowint while it is 0, once per flow.
+alert tcp any any -> any any (msg:"flowint 0 - 1"; flowint:done,notset; flowint:cnt,isset; flowint:cnt,==,0; flowint:cnt,-,1; flowint:done,=,1; sid:2;)
+# sid:3 checks that the subtraction left the flowint at 0.
+alert tcp any any -> any any (msg:"flowint stays at 0"; flowint:done,==,1; flowint:cnt,==,0; sid:3;)
+# sid:4 must never match: the flowint must not wrap around.
+alert tcp any any -> any any (msg:"flowint wrapped"; flowint:cnt,==,4294967295; sid:4;)

@@ -1,0 +1,35 @@
+requires:
+  min-version: 9
+
+pcap: ../tls/tls-subjectaltname/input.pcap
+
+args:
+- -k none
+
+checks:
+# sid:1 is noalert
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 1
+# the addition happens exactly once per TCP flow (68 flows in the pcap)
+- filter:
+    count: 68
+    match:
+      event_type: alert
+      alert.signature_id: 2
+      metadata.flowints.cnt: 4294967295
+# after the addition the flowint saturates at UINT32_MAX
+- filter:
+    count: 2982
+    match:
+      event_type: alert
+      alert.signature_id: 3
+      metadata.flowints.cnt: 4294967295
+# the flowint must not wrap around
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 4
