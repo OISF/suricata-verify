@@ -280,6 +280,7 @@ jobs:
             mingw-w64-ucrt-x86_64-libtool
             mingw-w64-ucrt-x86_64-libyaml
             mingw-w64-ucrt-x86_64-pcre2
+            mingw-w64-ucrt-x86_64-pkgconf
             mingw-w64-ucrt-x86_64-python-yaml
             mingw-w64-ucrt-x86_64-rust
             mingw-w64-ucrt-x86_64-toolchain
