@@ -287,6 +287,16 @@ jobs:
             unzip
       - uses: actions/checkout@v7
       - run: git clone https://github.com/OISF/suricata -b ${{ matrix.branch }}
+      - name: Link the synchronisation import library
+        working-directory: suricata
+        run: |
+          # rust 1.100's windows-gnu std calls WaitOnAddress/WakeByAddressAll/
+          # WakeByAddressSingle and the engine's configure.ac does not list the
+          # import library, so the link fails. RUST_LDADD cannot be overridden
+          # from here: configure assigns it unconditionally in a host case branch.
+          # The grep guard makes this a no-op once the engine carries it.
+          grep -q -- '-lsynchronization' configure.ac || \
+            sed -i 's/-lntdll"/-lntdll -lsynchronization"/' configure.ac
       - name: Build Suricata
         working-directory: suricata
         run: |
