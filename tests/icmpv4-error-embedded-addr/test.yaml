@@ -1,0 +1,25 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+  - --runmode=single
+  - --set stats.decoder-events=true
+
+checks:
+  # packet 4 is sent to the source of the embedded SYN, so it is the flow's
+  # (to_client); packet 5 is sent between two unrelated hosts and is not
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        proto: TCP
+        src_ip: 10.0.0.1
+        dest_ip: 10.0.0.2
+        flow.pkts_toserver: 5
+        flow.pkts_toclient: 5
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.decoder.event.icmpv4.ipv4_emb_addr_mismatch: 1
