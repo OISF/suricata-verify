@@ -1,0 +1,25 @@
+requires:
+  min-version: 9.0.0
+
+args:
+  - -k none
+
+checks:
+  - filter:
+      count: 4
+      match:
+        event_type: modbus
+  # only the short Read Holding Registers response (2 registers, tid 4) is a
+  # mismatch; the correct one for 11 registers (tid 1) is not
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2250008
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2250008
+        modbus.request.function_code: RdHoldRegs
+        modbus.request.read.quantity: 2
