@@ -1,0 +1,2 @@
+alert http any any => any any (msg:"tocserver engine last in the engine list"; flow:established; http.host; content:"example"; http.stat_msg; content:"OK"; sid:1; rev:1;)
+alert http any any => any any (msg:"toclient engine last in the engine list"; flow:established; http.uri; content:"index"; http.stat_msg; content:"OK"; sid:2; rev:1;)

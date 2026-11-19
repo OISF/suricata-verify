@@ -1,0 +1,6 @@
+alert http any any => any any (msg:"no response, body matches"; http.request_body; content:"secret"; fast_pattern; http.stat_msg; content:"OK"; sid:1; rev:1;)
+alert http any any => any any (msg:"no response, file.data matches"; file.data: to_server; content:"secret"; fast_pattern; http.stat_code; content:"200"; sid:2; rev:1;)
+
+alert http any any => any any (msg:"no response, unmatched body"; http.request_body; content:"secret"; fast_pattern; http.stat_msg; content:"ZZZZZZ"; sid:11; rev:1;)
+
+alert http any any -> any any (msg:"standard: body"; flow:established,to_server; http.request_body; content:"secret"; sid:21; rev:1;)
