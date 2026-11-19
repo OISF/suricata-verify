@@ -1,0 +1,6 @@
+req Checksum=abc123 X-Req-Trailer=one
+resp Expires=never X-Resp-Trailer=two
+checksum abc123
+miss err:trailer not found
+reqraw X-Req-Trailer: one..Checksum: abc123....
+respraw X-Resp-Trailer: two..Expires: never....
