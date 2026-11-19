@@ -1,0 +1,8 @@
+# sid:1 initializes the flowint to UINT32_MAX - 1 on the first packet of the flow.
+alert tcp any any -> any any (msg:"flowint init to UINT32_MAX - 1"; flowint:cnt,notset; flowint:cnt,=,4294967294; noalert; sid:1;)
+# sid:2 adds 5 to the flowint once per flow, which would overflow a u32.
+alert tcp any any -> any any (msg:"flowint UINT32_MAX - 1 + 5"; flowint:done,notset; flowint:cnt,isset; flowint:cnt,==,4294967294; flowint:cnt,+,5; flowint:done,=,1; sid:2;)
+# sid:3 checks that the addition left the flowint at UINT32_MAX.
+alert tcp any any -> any any (msg:"flowint stays at UINT32_MAX"; flowint:done,==,1; flowint:cnt,==,4294967295; sid:3;)
+# sid:4 must never match: the flowint must not wrap around.
+alert tcp any any -> any any (msg:"flowint wrapped"; flowint:done,==,1; flowint:cnt,<,4294967294; sid:4;)
