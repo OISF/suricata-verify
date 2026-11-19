@@ -1,0 +1,1 @@
+alert modbus any any -> any any (msg:"SURICATA Modbus Data mismatch"; flow:to_client; app-layer-event:modbus.value_mismatch; classtype:protocol-command-decode; sid:2250008; rev:2;)
