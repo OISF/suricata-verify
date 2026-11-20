@@ -1,0 +1,13 @@
+# pcap has one HTTP request with URI / and an empty Referer header value.
+
+# "^/(.*)$" captures an empty string from "/": the buffer becomes empty
+alert http any any -> any any (msg:"empty capture must_succeed"; flow:established,to_server; \
+    http.uri; pcrexform:"^/(.*)$"; transform_result: must_succeed; content:"/"; sid:1;)
+alert http any any -> any any (msg:"empty capture leaves an empty buffer"; \
+    flow:established,to_server; http.uri; pcrexform:"^/(.*)$"; bsize:0; sid:2;)
+
+# an empty Referer is left as it is, with no error
+alert http any any -> any any (msg:"empty input must_error"; flow:established,to_server; \
+    http.referer; pcrexform:"^(x.*)$"; transform_result: must_error; sid:3;)
+alert http any any -> any any (msg:"empty input stays empty"; flow:established,to_server; \
+    http.referer; pcrexform:"^(x.*)$"; bsize:0; sid:4;)

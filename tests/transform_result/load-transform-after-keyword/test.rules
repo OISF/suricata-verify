@@ -1,0 +1,13 @@
+# A transform after transform_result or absent: or_else starts a new buffer,
+# and the content after it goes to that buffer. Each rule fails to load.
+alert http any any -> any any (msg:"transform after error_or"; flow:established,to_server; \
+    http.uri; transform_result: error_or; from_base64; content:"x"; sid:1;)
+alert http any any -> any any (msg:"transform after must_succeed"; flow:established,to_server; \
+    http.uri; transform_result: must_succeed; pcrexform:"^/(.*)$"; content:"x"; sid:2;)
+alert http any any -> any any (msg:"transform after or_else"; flow:established,to_server; \
+    http.uri; absent: or_else; to_lowercase; content:"x"; sid:3;)
+
+# A later buffer with no transform does not take the content from the
+# keyword, so this rule gets the usual "expects other keywords" error.
+alert http any any -> any any (msg:"later buffer without a transform"; flow:established,to_server; \
+    http.uri; from_base64; transform_result: must_succeed; http.uri; content:"x"; sid:4;)

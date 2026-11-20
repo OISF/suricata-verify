@@ -1,0 +1,12 @@
+requires:
+  min-version: 9
+
+pcap: ../error-or-request-body/input.pcap
+
+exit-code: 1
+
+checks:
+
+  - shell:
+      args: grep "no buffer for transform_result keyword" suricata.log | wc -l | xargs
+      expect: 1

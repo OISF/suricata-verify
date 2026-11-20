@@ -1,0 +1,24 @@
+requires:
+  min-version: 9
+
+pcap: ../load-no-transform-error-or/empty.pcap
+
+args:
+  - --init-errors-fatal
+
+exit-code: 1
+
+checks:
+  # each of the three rules is rejected and the error names a transform_result form
+  - shell:
+      args: 'grep "use .transform_result: [a-z_]*;. instead" suricata.log | wc -l | xargs'
+      expect: 3
+  - shell:
+      args: 'grep "use .transform_result: must_succeed;. instead" suricata.log | wc -l | xargs'
+      expect: 1
+  - shell:
+      args: 'grep "use .transform_result: must_error;. instead" suricata.log | wc -l | xargs'
+      expect: 1
+  - shell:
+      args: 'grep "use .transform_result: error_or;. instead" suricata.log | wc -l | xargs'
+      expect: 1
