@@ -1,0 +1,43 @@
+requires:
+  min-version: 9
+
+args:
+  - -k
+  - none
+  - --set app-layer.protocols.nfs.enabled=yes
+
+pcap: ../nfs3-01/input.pcap
+
+checks:
+  # nfs.name holds what the event logs as nfs.filename: the READLINK and
+  # READDIR transactions that name this file.
+  - filter:
+      count: 14
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        app_proto: nfs
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        nfs.filename: blns
+        nfs.procedure: READLINK
+  # nfs.handle holds the raw file handle, matched byte for byte.
+  - filter:
+      count: 31
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  # content that is not in any name or handle must not alert.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 4

@@ -1,0 +1,84 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+
+args:
+  - -k
+  - none
+
+pcap: input.pcap
+
+checks:
+  # flow B: each write reply arrives before the next call, so the COMMIT that
+  # closes the transaction has the error in hand and the record reports it.
+  # chunks 2 is the second WRITE plus the COMMIT: a COMMIT counts as a chunk,
+  # the opening write does not
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: WRITE
+        nfs.version: 3
+        src_port: 952
+        nfs.status: ERR_IO
+        nfs.status_code: 5
+        nfs.write.offset: 0
+        nfs.write.size: 128
+        nfs.write.chunks: 2
+  # flow A: the COMMIT is pipelined ahead of the replies, so the transaction
+  # closes before any status has been seen. The record is still there, with the
+  # accounting intact (chunks 2 as in flow B), but:
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: WRITE
+        src_port: 951
+        nfs.write.size: 128
+        nfs.write.chunks: 2
+  # so nothing may report a status for it
+  - filter:
+      count: 0
+      match:
+        event_type: nfs
+        nfs.procedure: WRITE
+        src_port: 951
+        nfs.status: ERR_IO
+  - filter:
+      count: 0
+      match:
+        event_type: nfs
+        nfs.procedure: WRITE
+        src_port: 951
+        nfs.status: OK
+  # the file record of flow A is written when the file closes, before the
+  # replies land, so it keeps the default name and leaves the number out. Do
+  # not read it as a reply status: the WRITE record of the same flow has none
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 951
+        nfs.procedure: WRITE
+        nfs.status: OK
+  - filter:
+      count: 0
+      match:
+        event_type: fileinfo
+        src_port: 951
+        nfs.status_code: 5
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 952
+        nfs.procedure: WRITE
+        nfs.status: ERR_IO
+        nfs.status_code: 5
+  # both flows are NFS: the ordering must not cost either its protocol
+  - filter:
+      count: 2
+      match:
+        event_type: flow
+        app_proto: nfs

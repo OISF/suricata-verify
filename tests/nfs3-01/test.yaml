@@ -1455,6 +1455,8 @@ checks:
       stream: 0
       tx_id: 7
 - filter:
+    requires:
+      lt-version: 9
     count: 1
     match:
       alert.action: allowed
@@ -1504,6 +1506,59 @@ checks:
       stream: 0
       tx_id: 8
 - filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: ''
+      alert.signature_id: 3
+      app_proto: nfs
+      community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
+      dest_ip: 139.25.22.102
+      dest_port: 2049
+      ether.dest_mac: 00:c0:95:f8:4d:d3
+      ether.src_mac: 00:c0:95:e0:19:be
+      event_type: alert
+      flow.bytes_toclient: 1368
+      flow.bytes_toserver: 1638
+      flow.pkts_toclient: 8
+      flow.pkts_toserver: 9
+      nfs.file_tx: false
+      nfs.filename: a
+      nfs.id: 9
+      nfs.procedure: SETATTR
+      nfs.status: OK
+      nfs.type: response
+      nfs.version: 3
+      packet: AMCV+E3TAMCV4Bm+CABFAADAZUoAAP8RE0iLGRYCixkWZgP+CAEArCZrXh0L5AAAAAAAAAACAAGGowAAAAMAAAACAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACj7AAAAA4ACgAAAACyWgAAACkAAAAAAAAAAAAAAAAAAAAAAAAAAjhHdgse/pIAAAAAAQAAAAA=
+      packet_info.linktype: 1
+      payload: Xh0L5AAAAAAAAAACAAGGowAAAAMAAAACAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACj7AAAAA4ACgAAAACyWgAAACkAAAAAAAAAAAAAAAAAAAAAAAAAAjhHdgse/pIAAAAAAQAAAAA=
+      payload_printable: '^..............................48Gv.....werrmsche..............................................
+        .........
+
+        ...........
+
+        .....Z...)....................8Gv.............'
+      pcap_cnt: 27
+      proto: UDP
+      rpc.auth_type: UNIX
+      rpc.creds.gid: 0
+      rpc.creds.machine_name: werrmsche
+      rpc.creds.uid: 0
+      rpc.status: ACCEPTED
+      rpc.xid: 1578961892
+      src_ip: 139.25.22.2
+      src_port: 1022
+      stream: 0
+      tx_id: 8
+- filter:
+    requires:
+      lt-version: 9
     count: 1
     match:
       alert.action: allowed
@@ -1553,6 +1608,59 @@ checks:
       stream: 0
       tx_id: 8
 - filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: ''
+      alert.signature_id: 6
+      app_proto: nfs
+      community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
+      dest_ip: 139.25.22.102
+      dest_port: 2049
+      ether.dest_mac: 00:c0:95:f8:4d:d3
+      ether.src_mac: 00:c0:95:e0:19:be
+      event_type: alert
+      flow.bytes_toclient: 1368
+      flow.bytes_toserver: 1638
+      flow.pkts_toclient: 8
+      flow.pkts_toserver: 9
+      nfs.file_tx: false
+      nfs.filename: a
+      nfs.id: 9
+      nfs.procedure: SETATTR
+      nfs.status: OK
+      nfs.type: response
+      nfs.version: 3
+      packet: AMCV+E3TAMCV4Bm+CABFAADAZUoAAP8RE0iLGRYCixkWZgP+CAEArCZrXh0L5AAAAAAAAAACAAGGowAAAAMAAAACAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACj7AAAAA4ACgAAAACyWgAAACkAAAAAAAAAAAAAAAAAAAAAAAAAAjhHdgse/pIAAAAAAQAAAAA=
+      packet_info.linktype: 1
+      payload: Xh0L5AAAAAAAAAACAAGGowAAAAMAAAACAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACj7AAAAA4ACgAAAACyWgAAACkAAAAAAAAAAAAAAAAAAAAAAAAAAjhHdgse/pIAAAAAAQAAAAA=
+      payload_printable: '^..............................48Gv.....werrmsche..............................................
+        .........
+
+        ...........
+
+        .....Z...)....................8Gv.............'
+      pcap_cnt: 27
+      proto: UDP
+      rpc.auth_type: UNIX
+      rpc.creds.gid: 0
+      rpc.creds.machine_name: werrmsche
+      rpc.creds.uid: 0
+      rpc.status: ACCEPTED
+      rpc.xid: 1578961892
+      src_ip: 139.25.22.2
+      src_port: 1022
+      stream: 0
+      tx_id: 8
+- filter:
+    requires:
+      lt-version: 9
     count: 1
     match:
       alert.action: allowed
@@ -1602,6 +1710,59 @@ checks:
       stream: 0
       tx_id: 8
 - filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: ''
+      alert.signature_id: 10
+      app_proto: nfs
+      community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
+      dest_ip: 139.25.22.102
+      dest_port: 2049
+      ether.dest_mac: 00:c0:95:f8:4d:d3
+      ether.src_mac: 00:c0:95:e0:19:be
+      event_type: alert
+      flow.bytes_toclient: 1368
+      flow.bytes_toserver: 1638
+      flow.pkts_toclient: 8
+      flow.pkts_toserver: 9
+      nfs.file_tx: false
+      nfs.filename: a
+      nfs.id: 9
+      nfs.procedure: SETATTR
+      nfs.status: OK
+      nfs.type: response
+      nfs.version: 3
+      packet: AMCV+E3TAMCV4Bm+CABFAADAZUoAAP8RE0iLGRYCixkWZgP+CAEArCZrXh0L5AAAAAAAAAACAAGGowAAAAMAAAACAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACj7AAAAA4ACgAAAACyWgAAACkAAAAAAAAAAAAAAAAAAAAAAAAAAjhHdgse/pIAAAAAAQAAAAA=
+      packet_info.linktype: 1
+      payload: Xh0L5AAAAAAAAAACAAGGowAAAAMAAAACAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACj7AAAAA4ACgAAAACyWgAAACkAAAAAAAAAAAAAAAAAAAAAAAAAAjhHdgse/pIAAAAAAQAAAAA=
+      payload_printable: '^..............................48Gv.....werrmsche..............................................
+        .........
+
+        ...........
+
+        .....Z...)....................8Gv.............'
+      pcap_cnt: 27
+      proto: UDP
+      rpc.auth_type: UNIX
+      rpc.creds.gid: 0
+      rpc.creds.machine_name: werrmsche
+      rpc.creds.uid: 0
+      rpc.status: ACCEPTED
+      rpc.xid: 1578961892
+      src_ip: 139.25.22.2
+      src_port: 1022
+      stream: 0
+      tx_id: 8
+- filter:
+    requires:
+      lt-version: 9
     count: 1
     match:
       alert.action: allowed
@@ -1652,6 +1813,58 @@ checks:
       tx_id: 8
 - filter:
     requires:
+      min-version: 9
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: ''
+      alert.signature_id: 15
+      app_proto: nfs
+      community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
+      dest_ip: 139.25.22.102
+      dest_port: 2049
+      ether.dest_mac: 00:c0:95:f8:4d:d3
+      ether.src_mac: 00:c0:95:e0:19:be
+      event_type: alert
+      flow.bytes_toclient: 1368
+      flow.bytes_toserver: 1638
+      flow.pkts_toclient: 8
+      flow.pkts_toserver: 9
+      nfs.file_tx: false
+      nfs.filename: a
+      nfs.id: 9
+      nfs.procedure: SETATTR
+      nfs.status: OK
+      nfs.type: response
+      nfs.version: 3
+      packet: AMCV+E3TAMCV4Bm+CABFAADAZUoAAP8RE0iLGRYCixkWZgP+CAEArCZrXh0L5AAAAAAAAAACAAGGowAAAAMAAAACAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACj7AAAAA4ACgAAAACyWgAAACkAAAAAAAAAAAAAAAAAAAAAAAAAAjhHdgse/pIAAAAAAQAAAAA=
+      packet_info.linktype: 1
+      payload: Xh0L5AAAAAAAAAACAAGGowAAAAMAAAACAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACj7AAAAA4ACgAAAACyWgAAACkAAAAAAAAAAAAAAAAAAAAAAAAAAjhHdgse/pIAAAAAAQAAAAA=
+      payload_printable: '^..............................48Gv.....werrmsche..............................................
+        .........
+
+        ...........
+
+        .....Z...)....................8Gv.............'
+      pcap_cnt: 27
+      proto: UDP
+      rpc.auth_type: UNIX
+      rpc.creds.gid: 0
+      rpc.creds.machine_name: werrmsche
+      rpc.creds.uid: 0
+      rpc.status: ACCEPTED
+      rpc.xid: 1578961892
+      src_ip: 139.25.22.2
+      src_port: 1022
+      stream: 0
+      tx_id: 8
+- filter:
+    requires:
+      lt-version: 9
       min-version: 8.0.8
     count: 1
     match:
@@ -1663,6 +1876,34 @@ checks:
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: ''
+      nfs.id: 9
+      nfs.procedure: SETATTR
+      nfs.status: OK
+      nfs.type: response
+      nfs.version: 3
+      pcap_cnt: 28
+      proto: UDP
+      rpc.auth_type: UNIX
+      rpc.creds.gid: 0
+      rpc.creds.machine_name: werrmsche
+      rpc.creds.uid: 0
+      rpc.status: ACCEPTED
+      rpc.xid: 1578961892
+      src_ip: 139.25.22.2
+      src_port: 1022
+- filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
+      dest_ip: 139.25.22.102
+      dest_port: 2049
+      ether.src_mac: 00:c0:95:e0:19:be
+      ether.dest_mac: 00:c0:95:f8:4d:d3
+      event_type: nfs
+      nfs.file_tx: false
+      nfs.filename: a
       nfs.id: 9
       nfs.procedure: SETATTR
       nfs.status: OK
@@ -3448,6 +3689,8 @@ checks:
       src_ip: 139.25.22.2
       src_port: 1022
 - filter:
+    requires:
+      lt-version: 9
     count: 1
     match:
       alert.action: allowed
@@ -3501,6 +3744,63 @@ checks:
       stream: 0
       tx_id: 17
 - filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: ''
+      alert.signature_id: 3
+      app_proto: nfs
+      community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
+      dest_ip: 139.25.22.102
+      dest_port: 2049
+      ether.dest_mac: 00:c0:95:f8:4d:d3
+      ether.src_mac: 00:c0:95:e0:19:be
+      event_type: alert
+      flow.bytes_toclient: 2790
+      flow.bytes_toserver: 3320
+      flow.pkts_toclient: 17
+      flow.pkts_toserver: 18
+      nfs.file_tx: false
+      nfs.filename: bln
+      nfs.id: 18
+      nfs.procedure: LINK
+      nfs.status: OK
+      nfs.type: response
+      nfs.version: 3
+      packet: AMCV+E3TAMCV4Bm+CABFAADIZVMAAP8REzeLGRYCixkWZgP+CAEAtL8QXh0L7QAAAAAAAAACAAGGowAAAAMAAAAPAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZW9tZQAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACyXQAAACoACgAAAACyWgAAACkAAAAgABAQhQAAA+cACgAAAACyWgAAACkACgAAAACyWgAAACkAAAADYmxuAA==
+      packet_info.linktype: 1
+      payload: Xh0L7QAAAAAAAAACAAGGowAAAAMAAAAPAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZW9tZQAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACyXQAAACoACgAAAACyWgAAACkAAAAgABAQhQAAA+cACgAAAACyWgAAACkACgAAAACyWgAAACkAAAADYmxuAA==
+      payload_printable: '^..............................48Gv.....werrmscheome...........................................
+        .........
+
+        .....]...*.
+
+        .....Z...)... .........
+
+        .....Z...).
+
+        .....Z...)....bln.'
+      pcap_cnt: 45
+      proto: UDP
+      rpc.auth_type: UNIX
+      rpc.creds.gid: 0
+      rpc.creds.machine_name: werrmsche
+      rpc.creds.uid: 1869440256
+      rpc.status: ACCEPTED
+      rpc.xid: 1578961901
+      src_ip: 139.25.22.2
+      src_port: 1022
+      stream: 0
+      tx_id: 17
+- filter:
+    requires:
+      lt-version: 9
     count: 1
     match:
       alert.action: allowed
@@ -3554,6 +3854,63 @@ checks:
       stream: 0
       tx_id: 17
 - filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: ''
+      alert.signature_id: 6
+      app_proto: nfs
+      community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
+      dest_ip: 139.25.22.102
+      dest_port: 2049
+      ether.dest_mac: 00:c0:95:f8:4d:d3
+      ether.src_mac: 00:c0:95:e0:19:be
+      event_type: alert
+      flow.bytes_toclient: 2790
+      flow.bytes_toserver: 3320
+      flow.pkts_toclient: 17
+      flow.pkts_toserver: 18
+      nfs.file_tx: false
+      nfs.filename: bln
+      nfs.id: 18
+      nfs.procedure: LINK
+      nfs.status: OK
+      nfs.type: response
+      nfs.version: 3
+      packet: AMCV+E3TAMCV4Bm+CABFAADIZVMAAP8REzeLGRYCixkWZgP+CAEAtL8QXh0L7QAAAAAAAAACAAGGowAAAAMAAAAPAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZW9tZQAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACyXQAAACoACgAAAACyWgAAACkAAAAgABAQhQAAA+cACgAAAACyWgAAACkACgAAAACyWgAAACkAAAADYmxuAA==
+      packet_info.linktype: 1
+      payload: Xh0L7QAAAAAAAAACAAGGowAAAAMAAAAPAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZW9tZQAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACyXQAAACoACgAAAACyWgAAACkAAAAgABAQhQAAA+cACgAAAACyWgAAACkACgAAAACyWgAAACkAAAADYmxuAA==
+      payload_printable: '^..............................48Gv.....werrmscheome...........................................
+        .........
+
+        .....]...*.
+
+        .....Z...)... .........
+
+        .....Z...).
+
+        .....Z...)....bln.'
+      pcap_cnt: 45
+      proto: UDP
+      rpc.auth_type: UNIX
+      rpc.creds.gid: 0
+      rpc.creds.machine_name: werrmsche
+      rpc.creds.uid: 1869440256
+      rpc.status: ACCEPTED
+      rpc.xid: 1578961901
+      src_ip: 139.25.22.2
+      src_port: 1022
+      stream: 0
+      tx_id: 17
+- filter:
+    requires:
+      lt-version: 9
     count: 1
     match:
       alert.action: allowed
@@ -3608,6 +3965,62 @@ checks:
       tx_id: 17
 - filter:
     requires:
+      min-version: 9
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: ''
+      alert.signature_id: 11
+      app_proto: nfs
+      community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
+      dest_ip: 139.25.22.102
+      dest_port: 2049
+      ether.dest_mac: 00:c0:95:f8:4d:d3
+      ether.src_mac: 00:c0:95:e0:19:be
+      event_type: alert
+      flow.bytes_toclient: 2790
+      flow.bytes_toserver: 3320
+      flow.pkts_toclient: 17
+      flow.pkts_toserver: 18
+      nfs.file_tx: false
+      nfs.filename: bln
+      nfs.id: 18
+      nfs.procedure: LINK
+      nfs.status: OK
+      nfs.type: response
+      nfs.version: 3
+      packet: AMCV+E3TAMCV4Bm+CABFAADIZVMAAP8REzeLGRYCixkWZgP+CAEAtL8QXh0L7QAAAAAAAAACAAGGowAAAAMAAAAPAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZW9tZQAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACyXQAAACoACgAAAACyWgAAACkAAAAgABAQhQAAA+cACgAAAACyWgAAACkACgAAAACyWgAAACkAAAADYmxuAA==
+      packet_info.linktype: 1
+      payload: Xh0L7QAAAAAAAAACAAGGowAAAAMAAAAPAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZW9tZQAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACyXQAAACoACgAAAACyWgAAACkAAAAgABAQhQAAA+cACgAAAACyWgAAACkACgAAAACyWgAAACkAAAADYmxuAA==
+      payload_printable: '^..............................48Gv.....werrmscheome...........................................
+        .........
+
+        .....]...*.
+
+        .....Z...)... .........
+
+        .....Z...).
+
+        .....Z...)....bln.'
+      pcap_cnt: 45
+      proto: UDP
+      rpc.auth_type: UNIX
+      rpc.creds.gid: 0
+      rpc.creds.machine_name: werrmsche
+      rpc.creds.uid: 1869440256
+      rpc.status: ACCEPTED
+      rpc.xid: 1578961901
+      src_ip: 139.25.22.2
+      src_port: 1022
+      stream: 0
+      tx_id: 17
+- filter:
+    requires:
+      lt-version: 9
       min-version: 8.0.8
     count: 1
     match:
@@ -3619,6 +4032,34 @@ checks:
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: ''
+      nfs.id: 18
+      nfs.procedure: LINK
+      nfs.status: OK
+      nfs.type: response
+      nfs.version: 3
+      pcap_cnt: 46
+      proto: UDP
+      rpc.auth_type: UNIX
+      rpc.creds.gid: 0
+      rpc.creds.machine_name: werrmsche
+      rpc.creds.uid: 1869440256
+      rpc.status: ACCEPTED
+      rpc.xid: 1578961901
+      src_ip: 139.25.22.2
+      src_port: 1022
+- filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
+      dest_ip: 139.25.22.102
+      dest_port: 2049
+      ether.src_mac: 00:c0:95:e0:19:be
+      ether.dest_mac: 00:c0:95:f8:4d:d3
+      event_type: nfs
+      nfs.file_tx: false
+      nfs.filename: bln
       nfs.id: 18
       nfs.procedure: LINK
       nfs.status: OK
@@ -4083,6 +4524,8 @@ checks:
       src_ip: 139.25.22.2
       src_port: 1022
 - filter:
+    requires:
+      lt-version: 9
     count: 1
     match:
       alert.action: allowed
@@ -4133,6 +4576,60 @@ checks:
       stream: 0
       tx_id: 20
 - filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: ''
+      alert.signature_id: 3
+      app_proto: nfs
+      community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
+      dest_ip: 139.25.22.102
+      dest_port: 2049
+      ether.dest_mac: 00:c0:95:f8:4d:d3
+      ether.src_mac: 00:c0:95:e0:19:be
+      event_type: alert
+      flow.bytes_toclient: 3212
+      flow.bytes_toserver: 3898
+      flow.pkts_toclient: 20
+      flow.pkts_toserver: 21
+      nfs.file_tx: false
+      nfs.filename: blns
+      nfs.id: 21
+      nfs.procedure: SYMLINK
+      nfs.status: OK
+      nfs.type: response
+      nfs.version: 3
+      packet: AMCV+E3TAMCV4Bm+CABFAADQZVYAAP8REyyLGRYCixkWZgP+CAEAvEIaXh0L8AAAAAAAAAACAAGGowAAAAMAAAAKAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACyWgAAACkACgAAAACyWgAAACkAAAAEYmxucwAAAAEAAAH/AAAAAQAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAFiAAAA
+      packet_info.linktype: 1
+      payload: Xh0L8AAAAAAAAAACAAGGowAAAAMAAAAKAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACyWgAAACkACgAAAACyWgAAACkAAAAEYmxucwAAAAEAAAH/AAAAAQAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAFiAAAA
+      payload_printable: '^......................
+
+        .......48Gv.....werrmsche.............................................. .........
+
+        .....Z...).
+
+        .....Z...)....blns........................................b...'
+      pcap_cnt: 51
+      proto: UDP
+      rpc.auth_type: UNIX
+      rpc.creds.gid: 0
+      rpc.creds.machine_name: werrmsche
+      rpc.creds.uid: 0
+      rpc.status: ACCEPTED
+      rpc.xid: 1578961904
+      src_ip: 139.25.22.2
+      src_port: 1022
+      stream: 0
+      tx_id: 20
+- filter:
+    requires:
+      lt-version: 9
     count: 1
     match:
       alert.action: allowed
@@ -4183,6 +4680,60 @@ checks:
       stream: 0
       tx_id: 20
 - filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: ''
+      alert.signature_id: 6
+      app_proto: nfs
+      community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
+      dest_ip: 139.25.22.102
+      dest_port: 2049
+      ether.dest_mac: 00:c0:95:f8:4d:d3
+      ether.src_mac: 00:c0:95:e0:19:be
+      event_type: alert
+      flow.bytes_toclient: 3212
+      flow.bytes_toserver: 3898
+      flow.pkts_toclient: 20
+      flow.pkts_toserver: 21
+      nfs.file_tx: false
+      nfs.filename: blns
+      nfs.id: 21
+      nfs.procedure: SYMLINK
+      nfs.status: OK
+      nfs.type: response
+      nfs.version: 3
+      packet: AMCV+E3TAMCV4Bm+CABFAADQZVYAAP8REyyLGRYCixkWZgP+CAEAvEIaXh0L8AAAAAAAAAACAAGGowAAAAMAAAAKAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACyWgAAACkACgAAAACyWgAAACkAAAAEYmxucwAAAAEAAAH/AAAAAQAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAFiAAAA
+      packet_info.linktype: 1
+      payload: Xh0L8AAAAAAAAAACAAGGowAAAAMAAAAKAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACyWgAAACkACgAAAACyWgAAACkAAAAEYmxucwAAAAEAAAH/AAAAAQAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAFiAAAA
+      payload_printable: '^......................
+
+        .......48Gv.....werrmsche.............................................. .........
+
+        .....Z...).
+
+        .....Z...)....blns........................................b...'
+      pcap_cnt: 51
+      proto: UDP
+      rpc.auth_type: UNIX
+      rpc.creds.gid: 0
+      rpc.creds.machine_name: werrmsche
+      rpc.creds.uid: 0
+      rpc.status: ACCEPTED
+      rpc.xid: 1578961904
+      src_ip: 139.25.22.2
+      src_port: 1022
+      stream: 0
+      tx_id: 20
+- filter:
+    requires:
+      lt-version: 9
     count: 1
     match:
       alert.action: allowed
@@ -4234,6 +4785,59 @@ checks:
       tx_id: 20
 - filter:
     requires:
+      min-version: 9
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: ''
+      alert.signature_id: 11
+      app_proto: nfs
+      community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
+      dest_ip: 139.25.22.102
+      dest_port: 2049
+      ether.dest_mac: 00:c0:95:f8:4d:d3
+      ether.src_mac: 00:c0:95:e0:19:be
+      event_type: alert
+      flow.bytes_toclient: 3212
+      flow.bytes_toserver: 3898
+      flow.pkts_toclient: 20
+      flow.pkts_toserver: 21
+      nfs.file_tx: false
+      nfs.filename: blns
+      nfs.id: 21
+      nfs.procedure: SYMLINK
+      nfs.status: OK
+      nfs.type: response
+      nfs.version: 3
+      packet: AMCV+E3TAMCV4Bm+CABFAADQZVYAAP8REyyLGRYCixkWZgP+CAEAvEIaXh0L8AAAAAAAAAACAAGGowAAAAMAAAAKAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACyWgAAACkACgAAAACyWgAAACkAAAAEYmxucwAAAAEAAAH/AAAAAQAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAFiAAAA
+      packet_info.linktype: 1
+      payload: Xh0L8AAAAAAAAAACAAGGowAAAAMAAAAKAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACyWgAAACkACgAAAACyWgAAACkAAAAEYmxucwAAAAEAAAH/AAAAAQAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAFiAAAA
+      payload_printable: '^......................
+
+        .......48Gv.....werrmsche.............................................. .........
+
+        .....Z...).
+
+        .....Z...)....blns........................................b...'
+      pcap_cnt: 51
+      proto: UDP
+      rpc.auth_type: UNIX
+      rpc.creds.gid: 0
+      rpc.creds.machine_name: werrmsche
+      rpc.creds.uid: 0
+      rpc.status: ACCEPTED
+      rpc.xid: 1578961904
+      src_ip: 139.25.22.2
+      src_port: 1022
+      stream: 0
+      tx_id: 20
+- filter:
+    requires:
+      lt-version: 9
       min-version: 8.0.8
     count: 1
     match:
@@ -4245,6 +4849,34 @@ checks:
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: ''
+      nfs.id: 21
+      nfs.procedure: SYMLINK
+      nfs.status: OK
+      nfs.type: response
+      nfs.version: 3
+      pcap_cnt: 52
+      proto: UDP
+      rpc.auth_type: UNIX
+      rpc.creds.gid: 0
+      rpc.creds.machine_name: werrmsche
+      rpc.creds.uid: 0
+      rpc.status: ACCEPTED
+      rpc.xid: 1578961904
+      src_ip: 139.25.22.2
+      src_port: 1022
+- filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
+      dest_ip: 139.25.22.102
+      dest_port: 2049
+      ether.src_mac: 00:c0:95:e0:19:be
+      ether.dest_mac: 00:c0:95:f8:4d:d3
+      event_type: nfs
+      nfs.file_tx: false
+      nfs.filename: blns
       nfs.id: 21
       nfs.procedure: SYMLINK
       nfs.status: OK
@@ -4865,6 +5497,8 @@ checks:
       stream: 0
       tx_id: 23
 - filter:
+    requires:
+      lt-version: 9
     count: 1
     match:
       alert.action: allowed
@@ -4914,6 +5548,59 @@ checks:
       stream: 0
       tx_id: 24
 - filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: ''
+      alert.signature_id: 3
+      app_proto: nfs
+      community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
+      dest_ip: 139.25.22.102
+      dest_port: 2049
+      ether.dest_mac: 00:c0:95:f8:4d:d3
+      ether.src_mac: 00:c0:95:e0:19:be
+      event_type: alert
+      flow.bytes_toclient: 4100
+      flow.bytes_toserver: 4610
+      flow.pkts_toclient: 24
+      flow.pkts_toserver: 25
+      nfs.file_tx: false
+      nfs.filename: .
+      nfs.id: 25
+      nfs.procedure: READDIR
+      nfs.status: OK
+      nfs.type: response
+      nfs.version: 3
+      packet: AMCV+E3TAMCV4Bm+CABFAACwZVoAAP8RE0iLGRYCixkWZgP+CAEAnHM4Xh0L9AAAAAAAAAACAAGGowAAAAMAAAAQAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACyWgAAACkACgAAAACyWgAAACkAAAAAAAAAAAAAAAAAAAAAAAAEAA==
+      packet_info.linktype: 1
+      payload: Xh0L9AAAAAAAAAACAAGGowAAAAMAAAAQAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACyWgAAACkACgAAAACyWgAAACkAAAAAAAAAAAAAAAAAAAAAAAAEAA==
+      payload_printable: '^..............................48Gv.....werrmsche..............................................
+        .........
+
+        .....Z...).
+
+        .....Z...)....................'
+      pcap_cnt: 59
+      proto: UDP
+      rpc.auth_type: UNIX
+      rpc.creds.gid: 0
+      rpc.creds.machine_name: werrmsche
+      rpc.creds.uid: 0
+      rpc.status: ACCEPTED
+      rpc.xid: 1578961908
+      src_ip: 139.25.22.2
+      src_port: 1022
+      stream: 0
+      tx_id: 24
+- filter:
+    requires:
+      lt-version: 9
     count: 1
     match:
       alert.action: allowed
@@ -4963,6 +5650,59 @@ checks:
       stream: 0
       tx_id: 24
 - filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: ''
+      alert.signature_id: 6
+      app_proto: nfs
+      community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
+      dest_ip: 139.25.22.102
+      dest_port: 2049
+      ether.dest_mac: 00:c0:95:f8:4d:d3
+      ether.src_mac: 00:c0:95:e0:19:be
+      event_type: alert
+      flow.bytes_toclient: 4100
+      flow.bytes_toserver: 4610
+      flow.pkts_toclient: 24
+      flow.pkts_toserver: 25
+      nfs.file_tx: false
+      nfs.filename: .
+      nfs.id: 25
+      nfs.procedure: READDIR
+      nfs.status: OK
+      nfs.type: response
+      nfs.version: 3
+      packet: AMCV+E3TAMCV4Bm+CABFAACwZVoAAP8RE0iLGRYCixkWZgP+CAEAnHM4Xh0L9AAAAAAAAAACAAGGowAAAAMAAAAQAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACyWgAAACkACgAAAACyWgAAACkAAAAAAAAAAAAAAAAAAAAAAAAEAA==
+      packet_info.linktype: 1
+      payload: Xh0L9AAAAAAAAAACAAGGowAAAAMAAAAQAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACyWgAAACkACgAAAACyWgAAACkAAAAAAAAAAAAAAAAAAAAAAAAEAA==
+      payload_printable: '^..............................48Gv.....werrmsche..............................................
+        .........
+
+        .....Z...).
+
+        .....Z...)....................'
+      pcap_cnt: 59
+      proto: UDP
+      rpc.auth_type: UNIX
+      rpc.creds.gid: 0
+      rpc.creds.machine_name: werrmsche
+      rpc.creds.uid: 0
+      rpc.status: ACCEPTED
+      rpc.xid: 1578961908
+      src_ip: 139.25.22.2
+      src_port: 1022
+      stream: 0
+      tx_id: 24
+- filter:
+    requires:
+      lt-version: 9
     count: 1
     match:
       alert.action: allowed
@@ -5013,6 +5753,58 @@ checks:
       tx_id: 24
 - filter:
     requires:
+      min-version: 9
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: ''
+      alert.signature_id: 11
+      app_proto: nfs
+      community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
+      dest_ip: 139.25.22.102
+      dest_port: 2049
+      ether.dest_mac: 00:c0:95:f8:4d:d3
+      ether.src_mac: 00:c0:95:e0:19:be
+      event_type: alert
+      flow.bytes_toclient: 4100
+      flow.bytes_toserver: 4610
+      flow.pkts_toclient: 24
+      flow.pkts_toserver: 25
+      nfs.file_tx: false
+      nfs.filename: .
+      nfs.id: 25
+      nfs.procedure: READDIR
+      nfs.status: OK
+      nfs.type: response
+      nfs.version: 3
+      packet: AMCV+E3TAMCV4Bm+CABFAACwZVoAAP8RE0iLGRYCixkWZgP+CAEAnHM4Xh0L9AAAAAAAAAACAAGGowAAAAMAAAAQAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACyWgAAACkACgAAAACyWgAAACkAAAAAAAAAAAAAAAAAAAAAAAAEAA==
+      packet_info.linktype: 1
+      payload: Xh0L9AAAAAAAAAACAAGGowAAAAMAAAAQAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACyWgAAACkACgAAAACyWgAAACkAAAAAAAAAAAAAAAAAAAAAAAAEAA==
+      payload_printable: '^..............................48Gv.....werrmsche..............................................
+        .........
+
+        .....Z...).
+
+        .....Z...)....................'
+      pcap_cnt: 59
+      proto: UDP
+      rpc.auth_type: UNIX
+      rpc.creds.gid: 0
+      rpc.creds.machine_name: werrmsche
+      rpc.creds.uid: 0
+      rpc.status: ACCEPTED
+      rpc.xid: 1578961908
+      src_ip: 139.25.22.2
+      src_port: 1022
+      stream: 0
+      tx_id: 24
+- filter:
+    requires:
+      lt-version: 9
       min-version: 8.0.8
     count: 1
     match:
@@ -5024,6 +5816,34 @@ checks:
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: ''
+      nfs.id: 25
+      nfs.procedure: READDIR
+      nfs.status: OK
+      nfs.type: response
+      nfs.version: 3
+      pcap_cnt: 60
+      proto: UDP
+      rpc.auth_type: UNIX
+      rpc.creds.gid: 0
+      rpc.creds.machine_name: werrmsche
+      rpc.creds.uid: 0
+      rpc.status: ACCEPTED
+      rpc.xid: 1578961908
+      src_ip: 139.25.22.2
+      src_port: 1022
+- filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
+      dest_ip: 139.25.22.102
+      dest_port: 2049
+      ether.src_mac: 00:c0:95:e0:19:be
+      ether.dest_mac: 00:c0:95:f8:4d:d3
+      event_type: nfs
+      nfs.file_tx: false
+      nfs.filename: .
       nfs.id: 25
       nfs.procedure: READDIR
       nfs.status: OK
@@ -6621,6 +7441,69 @@ checks:
       stream: 0
       tx_id: 32
 - filter:
+    requires:
+        min-version: 9
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: ''
+      alert.signature_id: 3
+      app_proto: nfs
+      community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
+      dest_ip: 139.25.22.102
+      dest_port: 2049
+      ether.dest_mac: 00:c0:95:f8:4d:d3
+      ether.src_mac: 00:c0:95:e0:19:be
+      event_type: alert
+      files[0].filename: h
+      files[0].gaps: false
+      files[0].size: 6
+      files[0].state: UNKNOWN
+      files[0].stored: false
+      files[0].tx_id: 33
+      flow.bytes_toclient: 6102
+      flow.bytes_toserver: 6300
+      flow.pkts_toclient: 33
+      flow.pkts_toserver: 34
+      nfs.file_tx: true
+      nfs.filename: h
+      nfs.hhash: 3baec21a
+      nfs.id: 34
+      nfs.procedure: WRITE
+      nfs.status: OK
+      nfs.type: response
+      nfs.version: 3
+      nfs.write.chunks: 0
+      nfs.write.first: true
+      nfs.write.last: false
+      nfs.write.last_xid: 1578961917
+      packet: AMCV+E3TAMCV4Bm+CABFAAC4ZWQAAP8REzaLGRYCixkWZgP+CAEApD9XXh0L/QAAAAAAAAACAAGGowAAAAMAAAAHAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACmVAAAABsACgAAAACyWgAAACkAAAAAAAAAAAAAAAYAAAABAAAABmhhbGxvCgAA
+      packet_info.linktype: 1
+      payload: Xh0L/QAAAAAAAAACAAGGowAAAAMAAAAHAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACmVAAAABsACgAAAACyWgAAACkAAAAAAAAAAAAAAAYAAAABAAAABmhhbGxvCgAA
+      payload_printable: '^..............................48Gv.....werrmsche..............................................
+        .........
+
+        .....T.....
+
+        .....Z...)....................hallo
+
+        ..'
+      pcap_cnt: 77
+      proto: UDP
+      rpc.auth_type: 'NULL'
+      rpc.status: ACCEPTED
+      rpc.xid: 1578961917
+      src_ip: 139.25.22.2
+      src_port: 1022
+      stream: 0
+      tx_id: 33
+- filter:
+    requires:
+        lt-version: 9
     count: 1
     match:
       alert.action: allowed
@@ -6680,6 +7563,69 @@ checks:
       stream: 0
       tx_id: 33
 - filter:
+    requires:
+        min-version: 9
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: ''
+      alert.signature_id: 6
+      app_proto: nfs
+      community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
+      dest_ip: 139.25.22.102
+      dest_port: 2049
+      ether.dest_mac: 00:c0:95:f8:4d:d3
+      ether.src_mac: 00:c0:95:e0:19:be
+      event_type: alert
+      files[0].filename: h
+      files[0].gaps: false
+      files[0].size: 6
+      files[0].state: UNKNOWN
+      files[0].stored: false
+      files[0].tx_id: 33
+      flow.bytes_toclient: 6102
+      flow.bytes_toserver: 6300
+      flow.pkts_toclient: 33
+      flow.pkts_toserver: 34
+      nfs.file_tx: true
+      nfs.filename: h
+      nfs.hhash: 3baec21a
+      nfs.id: 34
+      nfs.procedure: WRITE
+      nfs.status: OK
+      nfs.type: response
+      nfs.version: 3
+      nfs.write.chunks: 0
+      nfs.write.first: true
+      nfs.write.last: false
+      nfs.write.last_xid: 1578961917
+      packet: AMCV+E3TAMCV4Bm+CABFAAC4ZWQAAP8REzaLGRYCixkWZgP+CAEApD9XXh0L/QAAAAAAAAACAAGGowAAAAMAAAAHAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACmVAAAABsACgAAAACyWgAAACkAAAAAAAAAAAAAAAYAAAABAAAABmhhbGxvCgAA
+      packet_info.linktype: 1
+      payload: Xh0L/QAAAAAAAAACAAGGowAAAAMAAAAHAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACmVAAAABsACgAAAACyWgAAACkAAAAAAAAAAAAAAAYAAAABAAAABmhhbGxvCgAA
+      payload_printable: '^..............................48Gv.....werrmsche..............................................
+        .........
+
+        .....T.....
+
+        .....Z...)....................hallo
+
+        ..'
+      pcap_cnt: 77
+      proto: UDP
+      rpc.auth_type: 'NULL'
+      rpc.status: ACCEPTED
+      rpc.xid: 1578961917
+      src_ip: 139.25.22.2
+      src_port: 1022
+      stream: 0
+      tx_id: 33
+- filter:
+    requires:
+        lt-version: 9
     count: 1
     match:
       alert.action: allowed
@@ -6739,6 +7685,69 @@ checks:
       stream: 0
       tx_id: 33
 - filter:
+    requires:
+        min-version: 9
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: ''
+      alert.signature_id: 11
+      app_proto: nfs
+      community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
+      dest_ip: 139.25.22.102
+      dest_port: 2049
+      ether.dest_mac: 00:c0:95:f8:4d:d3
+      ether.src_mac: 00:c0:95:e0:19:be
+      event_type: alert
+      files[0].filename: h
+      files[0].gaps: false
+      files[0].size: 6
+      files[0].state: UNKNOWN
+      files[0].stored: false
+      files[0].tx_id: 33
+      flow.bytes_toclient: 6102
+      flow.bytes_toserver: 6300
+      flow.pkts_toclient: 33
+      flow.pkts_toserver: 34
+      nfs.file_tx: true
+      nfs.filename: h
+      nfs.hhash: 3baec21a
+      nfs.id: 34
+      nfs.procedure: WRITE
+      nfs.status: OK
+      nfs.type: response
+      nfs.version: 3
+      nfs.write.chunks: 0
+      nfs.write.first: true
+      nfs.write.last: false
+      nfs.write.last_xid: 1578961917
+      packet: AMCV+E3TAMCV4Bm+CABFAAC4ZWQAAP8REzaLGRYCixkWZgP+CAEApD9XXh0L/QAAAAAAAAACAAGGowAAAAMAAAAHAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACmVAAAABsACgAAAACyWgAAACkAAAAAAAAAAAAAAAYAAAABAAAABmhhbGxvCgAA
+      packet_info.linktype: 1
+      payload: Xh0L/QAAAAAAAAACAAGGowAAAAMAAAAHAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACmVAAAABsACgAAAACyWgAAACkAAAAAAAAAAAAAAAYAAAABAAAABmhhbGxvCgAA
+      payload_printable: '^..............................48Gv.....werrmsche..............................................
+        .........
+
+        .....T.....
+
+        .....Z...)....................hallo
+
+        ..'
+      pcap_cnt: 77
+      proto: UDP
+      rpc.auth_type: 'NULL'
+      rpc.status: ACCEPTED
+      rpc.xid: 1578961917
+      src_ip: 139.25.22.2
+      src_port: 1022
+      stream: 0
+      tx_id: 33
+- filter:
+    requires:
+        lt-version: 9
     count: 1
     match:
       alert.action: allowed
@@ -10389,6 +11398,8 @@ checks:
       src_ip: 139.25.22.2
       src_port: 1022
 - filter:
+    requires:
+      lt-version: 9
     count: 1
     match:
       alert.action: allowed
@@ -10438,6 +11449,59 @@ checks:
       stream: 0
       tx_id: 52
 - filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: ''
+      alert.signature_id: 3
+      app_proto: nfs
+      community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
+      dest_ip: 139.25.22.102
+      dest_port: 2049
+      ether.dest_mac: 00:c0:95:f8:4d:d3
+      ether.src_mac: 00:c0:95:e0:19:be
+      event_type: alert
+      flow.bytes_toclient: 10330
+      flow.bytes_toserver: 9864
+      flow.pkts_toclient: 53
+      flow.pkts_toserver: 54
+      nfs.file_tx: false
+      nfs.filename: blns
+      nfs.id: 53
+      nfs.procedure: READLINK
+      nfs.status: OK
+      nfs.type: response
+      nfs.version: 3
+      packet: AMCV+E3TAMCV4Bm+CABFAACcZXgAAP8REz6LGRYCixkWZgP+CAEAiIXWXh0MEQAAAAAAAAACAAGGowAAAAMAAAAFAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACj7QAAAA4ACgAAAACyWgAAACk=
+      packet_info.linktype: 1
+      payload: Xh0MEQAAAAAAAAACAAGGowAAAAMAAAAFAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACj7QAAAA4ACgAAAACyWgAAACk=
+      payload_printable: '^..............................48Gv.....werrmsche..............................................
+        .........
+
+        ...........
+
+        .....Z...)'
+      pcap_cnt: 117
+      proto: UDP
+      rpc.auth_type: UNIX
+      rpc.creds.gid: 0
+      rpc.creds.machine_name: werrmsche
+      rpc.creds.uid: 0
+      rpc.status: ACCEPTED
+      rpc.xid: 1578961937
+      src_ip: 139.25.22.2
+      src_port: 1022
+      stream: 0
+      tx_id: 52
+- filter:
+    requires:
+      lt-version: 9
     count: 1
     match:
       alert.action: allowed
@@ -10487,6 +11551,59 @@ checks:
       stream: 0
       tx_id: 52
 - filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: ''
+      alert.signature_id: 6
+      app_proto: nfs
+      community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
+      dest_ip: 139.25.22.102
+      dest_port: 2049
+      ether.dest_mac: 00:c0:95:f8:4d:d3
+      ether.src_mac: 00:c0:95:e0:19:be
+      event_type: alert
+      flow.bytes_toclient: 10330
+      flow.bytes_toserver: 9864
+      flow.pkts_toclient: 53
+      flow.pkts_toserver: 54
+      nfs.file_tx: false
+      nfs.filename: blns
+      nfs.id: 53
+      nfs.procedure: READLINK
+      nfs.status: OK
+      nfs.type: response
+      nfs.version: 3
+      packet: AMCV+E3TAMCV4Bm+CABFAACcZXgAAP8REz6LGRYCixkWZgP+CAEAiIXWXh0MEQAAAAAAAAACAAGGowAAAAMAAAAFAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACj7QAAAA4ACgAAAACyWgAAACk=
+      packet_info.linktype: 1
+      payload: Xh0MEQAAAAAAAAACAAGGowAAAAMAAAAFAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACj7QAAAA4ACgAAAACyWgAAACk=
+      payload_printable: '^..............................48Gv.....werrmsche..............................................
+        .........
+
+        ...........
+
+        .....Z...)'
+      pcap_cnt: 117
+      proto: UDP
+      rpc.auth_type: UNIX
+      rpc.creds.gid: 0
+      rpc.creds.machine_name: werrmsche
+      rpc.creds.uid: 0
+      rpc.status: ACCEPTED
+      rpc.xid: 1578961937
+      src_ip: 139.25.22.2
+      src_port: 1022
+      stream: 0
+      tx_id: 52
+- filter:
+    requires:
+      lt-version: 9
     count: 1
     match:
       alert.action: allowed
@@ -10537,6 +11654,58 @@ checks:
       tx_id: 52
 - filter:
     requires:
+      min-version: 9
+    count: 1
+    match:
+      alert.action: allowed
+      alert.category: ''
+      alert.gid: 1
+      alert.rev: 0
+      alert.severity: 3
+      alert.signature: ''
+      alert.signature_id: 11
+      app_proto: nfs
+      community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
+      dest_ip: 139.25.22.102
+      dest_port: 2049
+      ether.dest_mac: 00:c0:95:f8:4d:d3
+      ether.src_mac: 00:c0:95:e0:19:be
+      event_type: alert
+      flow.bytes_toclient: 10330
+      flow.bytes_toserver: 9864
+      flow.pkts_toclient: 53
+      flow.pkts_toserver: 54
+      nfs.file_tx: false
+      nfs.filename: blns
+      nfs.id: 53
+      nfs.procedure: READLINK
+      nfs.status: OK
+      nfs.type: response
+      nfs.version: 3
+      packet: AMCV+E3TAMCV4Bm+CABFAACcZXgAAP8REz6LGRYCixkWZgP+CAEAiIXWXh0MEQAAAAAAAAACAAGGowAAAAMAAAAFAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACj7QAAAA4ACgAAAACyWgAAACk=
+      packet_info.linktype: 1
+      payload: Xh0MEQAAAAAAAAACAAGGowAAAAMAAAAFAAAAAQAAADQ4R3YLAAAACXdlcnJtc2NoZQAAAAAAAAAAAAABAAAABQAAAAEAAAAAAAAAAgAAAAMAAAARAAAAAAAAAAAAAAAgABAQhQAAA+cACgAAAACj7QAAAA4ACgAAAACyWgAAACk=
+      payload_printable: '^..............................48Gv.....werrmsche..............................................
+        .........
+
+        ...........
+
+        .....Z...)'
+      pcap_cnt: 117
+      proto: UDP
+      rpc.auth_type: UNIX
+      rpc.creds.gid: 0
+      rpc.creds.machine_name: werrmsche
+      rpc.creds.uid: 0
+      rpc.status: ACCEPTED
+      rpc.xid: 1578961937
+      src_ip: 139.25.22.2
+      src_port: 1022
+      stream: 0
+      tx_id: 52
+- filter:
+    requires:
+      lt-version: 9
       min-version: 8.0.8
     count: 1
     match:
@@ -10548,6 +11717,34 @@ checks:
       event_type: nfs
       nfs.file_tx: false
       nfs.filename: ''
+      nfs.id: 53
+      nfs.procedure: READLINK
+      nfs.status: OK
+      nfs.type: response
+      nfs.version: 3
+      pcap_cnt: 118
+      proto: UDP
+      rpc.auth_type: UNIX
+      rpc.creds.gid: 0
+      rpc.creds.machine_name: werrmsche
+      rpc.creds.uid: 0
+      rpc.status: ACCEPTED
+      rpc.xid: 1578961937
+      src_ip: 139.25.22.2
+      src_port: 1022
+- filter:
+    requires:
+      min-version: 9
+    count: 1
+    match:
+      community_id: 1:Vz08QRsy2I1yGIXi37yvHKBnVwM=
+      dest_ip: 139.25.22.102
+      dest_port: 2049
+      ether.src_mac: 00:c0:95:e0:19:be
+      ether.dest_mac: 00:c0:95:f8:4d:d3
+      event_type: nfs
+      nfs.file_tx: false
+      nfs.filename: blns
       nfs.id: 53
       nfs.procedure: READLINK
       nfs.status: OK

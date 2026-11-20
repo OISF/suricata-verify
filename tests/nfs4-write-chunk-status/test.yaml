@@ -1,0 +1,40 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+  - --set
+  - app-layer.protocols.nfs.enabled=yes
+
+pcap: input.pcap
+
+checks:
+  # the two chunks are one write: the tracker appends past its high-water
+  # mark, so 150 bytes are inspected in a single transaction
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: WRITE
+        nfs.type: response
+        nfs.version: 4
+        nfs.status: ERR_IO
+        nfs.status_code: 5
+        nfs.write.offset: 0
+        nfs.write.size: 150
+  # the OK to the newer chunk must not replace the status already seen
+  - filter:
+      count: 0
+      match:
+        event_type: nfs
+        nfs.procedure: WRITE
+        nfs.status: OK
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: nfs

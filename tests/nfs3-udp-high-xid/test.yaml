@@ -1,0 +1,31 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # Unmarked datagrams whose xids have the top bit set. The write/read
+  # xids (0x80000030/31) imply plausible marker claims (48/49) that do
+  # not end at the datagram boundary; the NULL-exchange xid
+  # (0x80000003) implies a claim below the 24-byte minimum. The header
+  # sniff must fall back to the unmarked layout in all cases:
+  # detection, the 4096B FILE_SYNC write + 4096B read reply file, and
+  # no malformed events.
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: nfs
+  - filter:
+      count: 2
+      match:
+        event_type: fileinfo
+        fileinfo.state: CLOSED
+        fileinfo.size: 4096
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: READ
+  - shell:
+      args: test "$(grep -Ec 'malformed_data' eve.json)" -eq 0

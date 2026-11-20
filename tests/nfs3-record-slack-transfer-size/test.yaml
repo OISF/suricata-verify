@@ -1,0 +1,57 @@
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+checks:
+  # W2 completes in a segment that also carries two pipelined calls: 3000 file
+  # bytes, not the 3224 the chunk call was handed
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        rpc.xid: 2
+        nfs.procedure: WRITE
+        nfs.file_tx: true
+        nfs.write.size: 3000
+        nfs.write.chunks: 1
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        rpc.xid: 1
+        nfs.procedure: WRITE
+        nfs.file_tx: true
+        nfs.write.size: 2000
+        nfs.write.chunks: 0
+  # R1 completes in the segment holding its XDR pad and R2's whole reply
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        rpc.xid: 3
+        nfs.procedure: READ
+        nfs.file_tx: true
+        nfs.read.size: 4099
+        nfs.read.chunks: 2
+        nfs.read.eof: true
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        rpc.xid: 4
+        nfs.procedure: READ
+        nfs.file_tx: true
+        nfs.read.size: 64
+        nfs.read.chunks: 1
+        nfs.read.eof: true
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
