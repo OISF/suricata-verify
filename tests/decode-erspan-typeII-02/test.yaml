@@ -1,0 +1,28 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+  # Version 2 instead of 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: 2.2.2.2
+        dest_ip: 1.1.1.1
+        alert.signature_id: 2200106
+  # Header cut to 4 of its 8 bytes
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: 2.2.2.2
+        dest_ip: 1.1.1.1
+        alert.signature_id: 2200105
+  - stats:
+      decoder.gre: 2
+      decoder.erspan: 2
+      decoder.event.erspan.unsupported_version: 1
+      decoder.event.erspan.header_too_small: 1
