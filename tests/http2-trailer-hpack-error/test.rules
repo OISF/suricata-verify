@@ -1,0 +1,2 @@
+# the field that decodes before the undecodable one still reaches the trailer buffer
+alert http any any -> any any (msg:"trailer field before the undecodable one"; flow:to_server; http.trailer; content:"x-ok|3a 20|fine"; sid:1; rev:1;)
