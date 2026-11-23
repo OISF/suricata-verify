@@ -1,0 +1,25 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - -k none
+
+checks:
+  # The second message's data frame starts at stream offset 3401. It is
+  # open while its 22 KB body arrives, so it is inspected once per 2500
+  # bytes: 9 alerts, as for the same body in a first message at offset 46.
+  # Before the fix, it was inspected and alerted on every segment (2000).
+  - filter:
+      count: 9
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        frame.type: data
+        frame.stream_offset: 3401
+  - filter:
+      count: 9
+      match:
+        event_type: alert
+        alert.signature_id: 1
