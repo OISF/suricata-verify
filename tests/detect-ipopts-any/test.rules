@@ -1,0 +1,2 @@
+alert ip any any -> any any (msg:"IPv4 options present"; ipopts:any; sid:1; rev:1;)
+alert udp any any -> any 45001 (msg:"UDP fixture packet seen"; sid:2; rev:1;)
