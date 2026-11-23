@@ -1,0 +1,27 @@
+requires:
+  min-version: 9
+
+pcap: ../smtp-frames-offset-01/input.pcap
+
+args:
+  - -k none
+
+checks:
+  # Both messages' data frames are logged. Before the fix, the frame logger
+  # added the stream base offset to the already absolute frame offset, so
+  # once the stream had released data, frames missed the logging threshold
+  # and were pruned without a frame record.
+  - filter:
+      count: 1
+      match:
+        event_type: frame
+        frame.type: data
+        frame.direction: toserver
+        frame.stream_offset: 46
+  - filter:
+      count: 1
+      match:
+        event_type: frame
+        frame.type: data
+        frame.direction: toserver
+        frame.stream_offset: 3401

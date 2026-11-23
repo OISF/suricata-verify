@@ -1,0 +1,1 @@
+alert smtp any any -> any any (msg:"SMTP data frame with AAAA"; flow:to_server; frame:smtp.data; content:"AAAA"; sid:1; rev:1;)
