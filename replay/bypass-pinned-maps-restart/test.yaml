@@ -1,0 +1,56 @@
+requires:
+  min-version: 9
+  os: linux
+  features:
+    - EBPF
+  files:
+    - ebpf/xdp_filter.bpf
+  command:
+    - bpftool
+  script:
+    # pinned maps need the bpf filesystem
+    - grep -q " /sys/fs/bpf bpf " /proc/mounts
+
+pcap: ../bypass-stats-shutdown/input.pcap
+
+# First Suricata run: it bypasses the flows of the pcap and leaves the XDP
+# filter and the pinned maps for the run of the test itself.
+setup:
+  - script: bash ${TEST_DIR}/first-run.sh
+
+args:
+  - --set af-packet.0.xdp-filter-file=${SRCDIR}/ebpf/xdp_filter.bpf
+
+timeout: 2
+
+# Dump the pinned flow table, then remove the XDP filter and the pinned maps
+# that Suricata leaves on the test interface.
+pre-check: |
+  bpftool -j map dump pinned /sys/fs/bpf/suricata-${INTERFACE}-flow_table_v4 > flow_table_v4.json
+  ip link set dev ${INTERFACE} xdpgeneric off
+  rm -f /sys/fs/bpf/suricata-${INTERFACE}-*
+
+checks:
+  # first stop: the entries of both flows are left in the pinned map
+  - shell:
+      args: python3 ${TEST_DIR}/keys.py run1/flow_table_v4.json | diff ${TEST_DIR}/expected-keys.txt - | wc -l
+      expect: 0
+  # second run: the flows are still bypassed, no packet reaches the rule
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+  # and Suricata tracks the 2 flows it found in the pinned map
+  - filter:
+      count: 2
+      match:
+        event_type: flow
+        flow.state: bypassed
+        flow.bypass: capture
+  - stats:
+      flow_bypassed.pkts: 101
+      flow_bypassed.closed: 2
+  # second stop: the entries are left in the pinned map again
+  - shell:
+      args: python3 ${TEST_DIR}/keys.py flow_table_v4.json | diff ${TEST_DIR}/expected-keys.txt - | wc -l
+      expect: 0

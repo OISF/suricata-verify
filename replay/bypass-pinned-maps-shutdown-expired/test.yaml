@@ -1,0 +1,41 @@
+requires:
+  min-version: 9
+  os: linux
+  features:
+    - EBPF
+  files:
+    - ebpf/xdp_filter.bpf
+  command:
+    - bpftool
+  script:
+    # pinned maps need the bpf filesystem
+    - grep -q " /sys/fs/bpf bpf " /proc/mounts
+
+args:
+  - --set af-packet.0.xdp-filter-file=${SRCDIR}/ebpf/xdp_filter.bpf
+
+timeout: 1
+
+# Start without the XDP filter and the pinned maps that an earlier test left
+# on the test interface when it failed.
+setup:
+  - script: |
+      ip link set dev ${INTERFACE} xdpgeneric off
+      rm -f /sys/fs/bpf/suricata-${INTERFACE}-*
+
+# Dump the pinned flow table, then remove the XDP filter and the pinned maps
+# that Suricata leaves on the test interface.
+pre-check: |
+  bpftool -j map dump pinned /sys/fs/bpf/suricata-${INTERFACE}-flow_table_v4 > flow_table_v4.json
+  ip link set dev ${INTERFACE} xdpgeneric off
+  rm -f /sys/fs/bpf/suricata-${INTERFACE}-*
+
+checks:
+  # a packet lost at capture shows here and not as a wrong flow count
+  - stats:
+      capture.kernel_drops: 0
+  - shell:
+      args: python3 -c 'import json; print(len(json.load(open("flow_table_v4.json"))))'
+      expect: 20
+  - stats:
+      flow_bypassed.closed: 50

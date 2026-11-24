@@ -1,0 +1,26 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - stats
+        - alert
+        - flow
+
+flow-timeouts:
+  tcp:
+    bypassed: 100
+  udp:
+    bypassed: 100
+
+af-packet:
+  - interface: default
+    # one capture thread is enough and starts faster on hosts with many CPUs
+    threads: 1
+    xdp-mode: soft
+    bypass: yes
+    pinned-maps: true

@@ -1,0 +1,32 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - stats
+
+flow-timeouts:
+  udp:
+    bypassed: 10
+    emergency-bypassed: 5
+
+# With a low memcap pressure the flow manager takes 10 seconds to go through
+# the flow table, so part of the timed out flows are still in it at the stop.
+flow:
+  memcap: 1gb
+stream:
+  memcap: 1gb
+
+af-packet:
+  - interface: default
+    # One capture thread, so that it gets the whole ring: with one ring per
+    # CPU a ring can be a single block on hosts with many CPUs, and the kernel
+    # then drops packets of a burst.
+    threads: 1
+    xdp-mode: soft
+    bypass: yes
+    pinned-maps: true
