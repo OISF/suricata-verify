@@ -9,9 +9,9 @@ SERVER_PORT = 20000
 # transaction exists. Valid application data then follows in the opposite
 # direction to expose duplicate or misdirected event inspection.
 VALID_REQUEST = bytes.fromhex("05640844010002004d6cc0c0016da0")
-VALID_RESPONSE = bytes.fromhex("05640a43030004006e47c0c08100009ce8")
+VALID_RESPONSE = bytes.fromhex("05640a44030004007caec0c08100009ce8")
 BAD_REQUEST = bytes.fromhex("05640844010002004c6cc0c0016da0")
-BAD_RESPONSE = bytes.fromhex("05640a43030004006f47c0c08100009ce8")
+BAD_RESPONSE = bytes.fromhex("05640a44030004007daec0c08100009ce8")
 
 
 def make_flow(client, server, sport, segments, start_time):
