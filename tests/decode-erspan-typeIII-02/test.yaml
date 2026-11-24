@@ -1,0 +1,38 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+  # Valid header, frame type 2 (IP): only ethernet is supported
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: 172.16.0.1
+        dest_ip: 172.16.0.2
+        alert.signature_id: 2200131
+  # Version 1 instead of 2
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: 172.16.0.1
+        dest_ip: 172.16.0.2
+        alert.signature_id: 2200106
+  # Header cut to 8 of its 12 bytes, sub-header cut to 4 of its 8 bytes,
+  # and mirrored frames of 10 and 6 bytes, too short for ethernet
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        src_ip: 172.16.0.1
+        dest_ip: 172.16.0.2
+        alert.signature_id: 2200105
+  - stats:
+      decoder.gre: 6
+      decoder.erspan: 6
+      decoder.event.erspan.unsupported_encapsulation: 1
+      decoder.event.erspan.unsupported_version: 1
+      decoder.event.erspan.header_too_small: 4
