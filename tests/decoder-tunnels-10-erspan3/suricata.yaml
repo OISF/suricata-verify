@@ -1,0 +1,31 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert
+        - flow
+
+decoder:
+  tunnels:
+    - id: 1
+      type: erspan3
+      src: 192.168.1.4
+      dst: 192.168.1.2
+      session: 321
+    - id: 2
+      type: erspan3
+      src: 192.168.1.4
+      dst: 192.168.1.2
+      session: 322
+    # same addresses and session as id 1, but ERSPAN Type II: must not
+    # match Type III traffic
+    - id: 3
+      type: erspan2
+      src: 192.168.1.4
+      dst: 192.168.1.2
+      session: 321
