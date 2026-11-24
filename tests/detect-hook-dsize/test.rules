@@ -1,0 +1,1 @@
+alert http1:response_headers any any -> any any (msg: "Test HTTP"; dsize:<=10; sid:3; rev:1;)
