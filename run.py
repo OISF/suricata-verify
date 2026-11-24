@@ -189,6 +189,20 @@ class SelfTest(unittest.TestCase):
         with self.assertRaisesRegex(TestError, "exit code 3"):
             runner.setup()
 
+    def test_remove_pinned_maps(self):
+        bpffs = "sv-selftest-bpffs-%d" % os.getpid()
+        os.mkdir(bpffs)
+        try:
+            names = ["suricata-sv_1_rx-flow_table_v4", "suricata-sv_1_rx-cpu_map",
+                     "suricata-sv_12_rx-flow_table_v4", "suricata-eth0-flow_table_v4"]
+            for name in names:
+                with open(os.path.join(bpffs, name), "w"):
+                    pass
+            remove_pinned_maps("sv_1", bpffs)
+            self.assertEqual(sorted(os.listdir(bpffs)), sorted(names[2:]))
+        finally:
+            shutil.rmtree(bpffs)
+
 class TestError(Exception):
     pass
 
@@ -1033,6 +1047,22 @@ def run_test(dirpath, args, cwd, suricata_config):
             failedLogs.append(dirpath)
             raise TerminatePoolError()
 
+def remove_pinned_maps(interface, bpffs="/sys/fs/bpf"):
+    """Remove the eBPF maps that Suricata pinned for a replay interface."""
+    for path in glob.glob(os.path.join(bpffs, "suricata-%s_rx-*" % interface)):
+        try:
+            os.unlink(path)
+        except OSError:
+            pass
+
+def delete_replay_interface(interface):
+    try:
+        subprocess.check_call(["ip", "link", "delete", interface+"_tx"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    finally:
+        # Pinned maps outlive the interface. A test only removes its own when
+        # it gets to its checks.
+        remove_pinned_maps(interface)
+
 def signal_handler(signum, frame):
     global shutdown_requested, executor_instance
     print("\nReceived interrupt signal, shutting down gracefully...")
@@ -1259,12 +1289,12 @@ def main():
         run_parallel(args.j, tests, args, cwd, suricata_config)
     except KeyboardInterrupt:
         print("\nInterrupted by user")
-        if suricata_config.interface != None:
-            subprocess.check_call(["ip", "link", "delete", suricata_config.interface+"_tx"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         return 1
+    finally:
+        # also on the SystemExit of the signal handler
+        if suricata_config.interface != None:
+            delete_replay_interface(suricata_config.interface)
 
-    if suricata_config.interface != None:
-        subprocess.check_call(["ip", "link", "delete", suricata_config.interface+"_tx"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     passed = count_dict["passed"]
     failed = count_dict["failed"]
     skipped = count_dict["skipped"]
