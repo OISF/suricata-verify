@@ -1,0 +1,2 @@
+alert http1 any any -> any any (msg: "Test HTTP"; http.stat_code; content: "200"; flowbits:set, http_200; sid:1; rev:1;)
+alert http1 any any -> any any (msg: "Test HTTP";flowbits:isset, http_200; prefilter; content:"...";  sid:2; dsize:<10; rev:1;)
