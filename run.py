@@ -175,6 +175,20 @@ class SelfTest(unittest.TestCase):
             self.assertEqual(env["INTERFACE"], "sv_1_rx")
             self.assertEqual(env["REPLAY_INTERFACE"], "sv_1_tx")
 
+    @unittest.skipIf(WIN32, "test \"setup\" not supported on Windows")
+    def test_setup_script_failure(self):
+        runner = TestRunner.__new__(TestRunner)
+        runner.cwd = "/suricata"
+        runner.directory = "/sv/tests/test"
+        runner.suricata_config = SuricataConfig.__new__(SuricataConfig)
+        runner.suricata_config.interface = None
+        runner.output = "."
+        runner.config = {"setup": [{"script": "true"}]}
+        runner.setup()
+        runner.config = {"setup": [{"script": "exit 3"}]}
+        with self.assertRaisesRegex(TestError, "exit code 3"):
+            runner.setup()
+
 class TestError(Exception):
     pass
 
@@ -470,11 +484,15 @@ class TestRunner:
             for setup in self.config["setup"]:
                 for command in setup:
                     if command == "script":
-                        subprocess.check_call(
-                            "%s" % setup[command],
-                            shell=True,
-                            cwd=self.output,
-                            env=self.build_env())
+                        try:
+                            subprocess.check_call(
+                                "%s" % setup[command],
+                                shell=True,
+                                cwd=self.output,
+                                env=self.build_env())
+                        except subprocess.CalledProcessError as err:
+                            raise TestError(
+                                "setup script failed with exit code %d" % err.returncode)
 
     def check_unix_socket(self):
         if "unix-commands" in self.config:
