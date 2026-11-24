@@ -37,6 +37,7 @@ import yaml
 import glob
 import re
 import unittest
+import unittest.mock
 from concurrent.futures import ThreadPoolExecutor
 from collections import namedtuple
 import threading
@@ -154,6 +155,25 @@ class SelfTest(unittest.TestCase):
         )
         self.assertTrue(check.match({"flow": {"age": 2, "bytes": 99}}))
         self.assertFalse(check.match({"flow": {"age": 1, "bytes": 99}}))
+
+    def test_build_env_replay_interfaces(self):
+        runner = TestRunner.__new__(TestRunner)
+        runner.cwd = "/suricata"
+        runner.directory = "/sv/replay/test"
+        runner.output = "/sv/replay/test/output"
+        runner.config = {}
+        runner.suricata_config = SuricataConfig.__new__(SuricataConfig)
+        with unittest.mock.patch.dict(os.environ):
+            os.environ.pop("INTERFACE", None)
+            os.environ.pop("REPLAY_INTERFACE", None)
+            runner.suricata_config.interface = None
+            env = runner.build_env()
+            self.assertNotIn("INTERFACE", env)
+            self.assertNotIn("REPLAY_INTERFACE", env)
+            runner.suricata_config.interface = "sv_1"
+            env = runner.build_env()
+            self.assertEqual(env["INTERFACE"], "sv_1_rx")
+            self.assertEqual(env["REPLAY_INTERFACE"], "sv_1_tx")
 
 class TestError(Exception):
     pass
@@ -509,6 +529,9 @@ class TestRunner:
         env["TZ"] = "UTC"
         env["TEST_DIR"] = self.directory
         env["OUTPUT_DIR"] = self.output
+        if self.suricata_config.interface != None:
+            env["INTERFACE"] = self.suricata_config.interface + "_rx"
+            env["REPLAY_INTERFACE"] = self.suricata_config.interface + "_tx"
         if not "ASAN_OPTIONS" in env:
             env["ASAN_OPTIONS"] = "detect_leaks=1"
         if self.config.get("env"):
@@ -719,7 +742,8 @@ class TestRunner:
 
     def pre_check(self):
         if "pre-check" in self.config:
-            subprocess.call(self.config["pre-check"], shell=True, cwd=self.output)
+            subprocess.call(
+                self.config["pre-check"], shell=True, cwd=self.output, env=self.build_env())
 
     @handle_exceptions
     def perform_filter_checks(self, check, count, test_num, test_name):
