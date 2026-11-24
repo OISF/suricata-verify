@@ -1,0 +1,1 @@
+alert udp any any -> any 9999 (msg:"bypass"; bypass; sid:1; rev:1;)
