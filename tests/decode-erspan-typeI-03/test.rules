@@ -1,0 +1,1 @@
+alert pkthdr any any -> any any (msg:"SURICATA ERSPAN pkt too small"; decode-event:erspan.header_too_small; classtype:protocol-command-decode; sid:2200105; rev:2;)
