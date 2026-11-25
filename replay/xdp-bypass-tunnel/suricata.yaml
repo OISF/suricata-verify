@@ -1,0 +1,24 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - stats
+        - flow
+
+af-packet:
+  - interface: default
+    xdp-mode: soft
+    bypass: yes
+
+decoder:
+  tunnels:
+    - id: 1
+      type: erspan2
+      src: 192.168.1.3
+      dst: 192.168.1.2
+      session: 321
