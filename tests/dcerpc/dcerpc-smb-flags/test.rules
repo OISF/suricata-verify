@@ -1,0 +1,8 @@
+alert smb any any -> any any (msg:"smb dcerpc.flags request pfc_flags 0x03"; flow:to_server; dcerpc.flags:0x03; sid:1;)
+alert smb any any -> any any (msg:"smb dcerpc.flags decimal 3 equals hex 0x03"; flow:to_server; dcerpc.flags:3; sid:2;)
+alert smb any any -> any any (msg:"smb dcerpc.flags PFC_FIRST_FRAG bit via bitmask"; flow:to_server; dcerpc.flags:&0x01=0x01; sid:3;)
+alert smb any any -> any any (msg:"smb dcerpc.flags PFC_LAST_FRAG bit via bitmask"; flow:to_server; dcerpc.flags:&0x02=0x02; sid:4;)
+alert smb any any -> any any (msg:"smb dcerpc.flags negative 0x83 does not match"; flow:to_server; dcerpc.flags:0x83; sid:5;)
+alert smb any any -> any any (msg:"smb dcerpc.flags response pfc_flags 0x03 (to_client)"; flow:to_client; dcerpc.flags:0x03; sid:6;)
+alert smb any any -> any any (msg:"smb dcerpc.flags response PFC_LAST_FRAG bit (to_client)"; flow:to_client; dcerpc.flags:&0x02=0x02; sid:7;)
+alert smb any any -> any any (msg:"smb dcerpc.flags response must be pfc_flags not packet_type 0x0c"; flow:to_client; dcerpc.flags:0x0c; sid:8;)
