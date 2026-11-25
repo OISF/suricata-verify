@@ -1,0 +1,5 @@
+# The only rule is out of the flows scope, so no LTE rule is pending at the hook and the
+# app default policy of the state has to decide. With the fast pattern in charge the rule
+# is not a candidate here, and treating a window that went silent as if a rule were
+# pending would defer the policy and accept the packet instead of dropping it.
+accept:flow,alert http1:<request_headers $HOME_NET any -> 198.51.100.0/24 80 (http.host.raw; content:"nope.example.com"; sid:211;)

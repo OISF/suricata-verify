@@ -27,11 +27,11 @@ accept:flow,alert tls:<client_cert $HOME_NET any -> $EXTERNAL_NET any (tls.versi
 
 # Foreign http1 LTE rules: hook 1 (client_hello) with raw ClientHello bytes,
 # and hook 2 (client_cert) out of scope.
-accept:flow,alert http1:<request_line $HOME_NET any -> $EXTERNAL_NET any (content:"www.google.com"; sid:200;)
-accept:flow,alert http1:<request_headers 198.51.100.0/24 any -> 198.51.100.0/24 any (content:"www.google.com"; sid:201;)
+accept:flow,alert http1:<request_line $HOME_NET any -> $EXTERNAL_NET any (http.uri; content:"google"; sid:200;)
+accept:flow,alert http1:<request_headers 198.51.100.0/24 any -> 198.51.100.0/24 any (http.host; content:"www.google.com"; sid:201;)
 
 # Foreign smtp LTE rule: hook 1 (client_hello)
-accept:flow,alert smtp:<request_data $HOME_NET any -> $EXTERNAL_NET any (content:"www.google.com"; sid:202;)
+accept:flow,alert smtp:request_data $HOME_NET any -> $EXTERNAL_NET any (content:"www.google.com"; sid:202;)
 
 # Foreign http2 stream LTE rule: hook 1 (client_hello)
-accept:flow,alert http2:stream:<request_headers any any -> any any (content:"www.google.com"; sid:203;)
+accept:flow,alert http2:stream:<request_headers any any -> any any (http.host; content:"www.google.com"; sid:203;)
