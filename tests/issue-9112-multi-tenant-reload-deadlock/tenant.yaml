@@ -1,0 +1,6 @@
+%YAML 1.1
+---
+
+default-rule-path: .
+rule-files:
+  - tenant.rules

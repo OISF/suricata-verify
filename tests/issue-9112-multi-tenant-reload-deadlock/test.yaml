@@ -1,0 +1,25 @@
+# reload-tenants deadlocks when loaders are shared between tenants: the
+# loader holds its task lock while the task takes the master lock, and
+# reload-tenants holds the master lock while queuing tasks.
+#
+# sc-driver.py kills Suricata if a command gets no reply, so a deadlock
+# fails the test instead of hanging the run.
+
+requires:
+  pcap: false
+  features:
+    - UNIX_SOCKET
+
+command: |
+  seq 20 | sed "s/.*/reload-tenants/" |
+  python3 ${TEST_DIR}/sc-driver.py ${SRCDIR}/src/suricata \
+      -c ${TEST_DIR}/suricata.yaml -l ${OUTPUT_DIR} \
+      --set classification-file=${SRCDIR}/etc/classification.config \
+      --set reference-config-file=${SRCDIR}/etc/reference.config
+
+checks:
+  - filter:
+      filename: sc.json
+      count: 20
+      match:
+        return: OK
