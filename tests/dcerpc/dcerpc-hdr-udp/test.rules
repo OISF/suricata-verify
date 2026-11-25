@@ -1,0 +1,5 @@
+alert dcerpc any any -> any any (msg:"dcerpc.hdr udp request header (to_server)"; flow:to_server; dcerpc.hdr; content:"|04 00|"; startswith; sid:1;)
+alert dcerpc any any -> any any (msg:"dcerpc.hdr udp response header (to_client)"; flow:to_client; dcerpc.hdr; content:"|04 02|"; startswith; sid:2;)
+alert dcerpc any any -> any any (msg:"dcerpc.hdr udp request bytes must not match to_client"; flow:to_client; dcerpc.hdr; content:"|04 00|"; startswith; sid:3;)
+alert dcerpc any any -> any any (msg:"dcerpc.hdr udp response bytes must not match to_server"; flow:to_server; dcerpc.hdr; content:"|04 02|"; startswith; sid:4;)
+alert dcerpc any any -> any any (msg:"dcerpc.hdr udp full 80-byte header inspectable: drep at offset 4"; flow:to_server; dcerpc.hdr; content:"|10|"; offset:4; depth:1; sid:5;)
