@@ -1,0 +1,25 @@
+requires:
+  min-version: 8.0.9
+
+pcap: input.pcap
+
+args:
+- -k none
+# the 65537 fragments are about 1.6MB, past the default stream depth
+- --set stream.reassembly.depth=0
+
+checks:
+  # all 65537 fragments land on a single transaction
+  - filter:
+      count: 1
+      match:
+        event_type: dcerpc
+        dcerpc.request: REQUEST
+  # the fragment counter saturates instead of wrapping around
+  - filter:
+      count: 1
+      match:
+        event_type: dcerpc
+        dcerpc.request: REQUEST
+        dcerpc.call_id: 2
+        dcerpc.req.frag_cnt: 65535
