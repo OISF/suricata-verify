@@ -1,0 +1,3 @@
+# var followed by extract in one xor transform must fail to load. Test 18
+# covers the other order.
+alert http any any -> any any (msg:"xor var and extract combined"; http.uri; byte_extract:1,1,xkey; http.request_body; xor:var xkey extract 1 0; content:"SECRET"; sid:1;)

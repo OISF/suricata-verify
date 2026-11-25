@@ -1,0 +1,3 @@
+# extract and var are mutually exclusive xor key sources; combining them
+# in one xor transform must fail to load. Test 21 covers the other order.
+alert http any any -> any any (msg:"xor extract and var combined"; http.request_body; xor:extract 1 0 var xkey; content:"SECRET"; sid:1;)
