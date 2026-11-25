@@ -1,0 +1,23 @@
+requires:
+  min-version: 9
+  features:
+    - MAGIC
+
+pcap: ../../filemagic-flowbits/pdf-dl.pcap
+
+args:
+  - -k none
+
+checks:
+  # must_error matches when file magic fails strict base64 decode
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # must_succeed: transform error -> no match
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2

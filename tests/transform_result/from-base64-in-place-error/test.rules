@@ -1,0 +1,19 @@
+# pcap has one HTTP request with URI /Zm9vYmFyYmF6cXV4!!. After the "/",
+# strict mode decodes "foobarbazqux" and then fails on "!!".
+
+# strip_whitespace leaves the URI in the buffer's own memory, so from_base64
+# reads and writes the same bytes; the failed decode must leave them as they were
+alert http any any -> any any (msg:"after a transform: original URI kept"; \
+    flow:established,to_server; http.uri; strip_whitespace; from_base64: offset 1, mode strict; \
+    content:"/Zm9vYmFyYmF6cXV4!!"; startswith; endswith; sid:1;)
+alert http any any -> any any (msg:"after a transform: no decoded bytes"; \
+    flow:established,to_server; http.uri; strip_whitespace; \
+    from_base64: offset 1, mode strict; content:"foobar"; sid:2;)
+alert http any any -> any any (msg:"after a transform: error flagged"; flow:established,to_server; \
+    http.uri; strip_whitespace; from_base64: offset 1, mode strict; \
+    transform_result: must_error; sid:3;)
+
+# the same decode with no transform before it
+alert http any any -> any any (msg:"first transform: original URI kept"; \
+    flow:established,to_server; http.uri; from_base64: offset 1, mode strict; \
+    content:"/Zm9vYmFyYmF6cXV4!!"; startswith; endswith; sid:4;)

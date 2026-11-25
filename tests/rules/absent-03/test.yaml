@@ -1,0 +1,16 @@
+requires:
+  min-version: 9
+
+pcap: ../../content-incomplete-hex-t-version-7-init-errors-fatal/empty.pcap
+
+args:
+  - --init-errors-fatal
+
+checks:
+  # or_else with a transform that cannot fail (strip_whitespace) should
+  # load without errors and produce no alerts on the empty pcap
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
