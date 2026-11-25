@@ -1,0 +1,36 @@
+# Similar to ftp-md5, but the data connection never finishes closing.
+# The server does not ACK the client's FIN because we started
+# dropping once the file had already been delivered.
+
+requires:
+  min-version: 8
+
+args:
+  - --simulate-ips
+  - -k none
+  - --runmode=single
+
+checks:
+  # The file is hashed and the rule matched
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        alert.action: blocked
+
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.filename: EICAR-Test-File
+        fileinfo.md5: 44d88612fea8a8f36de82e1278abb02f
+        fileinfo.state: CLOSED
+
+  # The drop should match on the packet carrying the file (frame 27, IP len 120)
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        pcap_cnt: 27
+        drop.len: 120
