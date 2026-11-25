@@ -1,0 +1,52 @@
+requires:
+  min-version: 9
+
+pcap: .
+
+args:
+- --pcap-file-recursive
+
+checks:
+  # Race-condition regression: two pcap files are processed sequentially, so
+  # the global pcap_filename ends up pointing to whichever was processed last.
+  # Each event must still report the pcap it actually belongs to (via the
+  # per-flow/per-packet pfv), not the stale global.
+  #
+  # Both files have the same mtime in a checkout, so the processing order is
+  # not fixed. When http.pcap is processed first, the jump to alert.pcap's
+  # later timestamps can time out its flow while packets are still queued,
+  # splitting it into a varying number of flows. Only the alert.pcap UDP flow
+  # count is deterministic; for everything else assert that nothing is
+  # attributed to the wrong pcap.
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        proto: UDP
+        pcap_filename.__endswith: "alert.pcap"
+
+  - filter:
+      count: 0
+      match:
+        event_type: flow
+        proto: UDP
+        pcap_filename.__endswith: "http.pcap"
+
+  - filter:
+      count: 0
+      match:
+        event_type: flow
+        proto: TCP
+        pcap_filename.__endswith: "alert.pcap"
+
+  - filter:
+      count: 0
+      match:
+        event_type: http
+        pcap_filename.__endswith: "alert.pcap"
+
+  - filter:
+      count: 0
+      match:
+        event_type: fileinfo
+        pcap_filename.__endswith: "alert.pcap"
