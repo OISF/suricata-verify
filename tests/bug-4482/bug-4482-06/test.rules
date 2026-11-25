@@ -1,0 +1,2 @@
+alert ip any any -> any any (msg:"SURICATA detect too many buffers"; detect-event:TOO_MANY_BUFFERS; classtype:protocol-command-decode; sid:1;)
+alert ip any any -> any any (msg:"SURICATA detect post match queue failed"; detect-event:POST_MATCH_QUEUE_FAILED; classtype:protocol-command-decode; sid:2;)

@@ -1,0 +1,1 @@
+alert http any any -> any any (msg:"trigger file_data inspection"; file_data; content:"CWS"; sid:1;)
