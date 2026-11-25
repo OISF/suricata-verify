@@ -1,0 +1,43 @@
+requires:
+  min-version: 8.0.9
+
+pcap: input.pcap
+
+args:
+- -k none
+
+checks:
+  # header-only pdus in their own segments: the following call is parsed
+  - filter:
+      count: 1
+      match:
+        event_type: dcerpc
+        src_port: 1025
+        dcerpc.request: REQUEST
+        dcerpc.response: RESPONSE
+        dcerpc.call_id: 2
+        dcerpc.req.frag_cnt: 1
+        dcerpc.req.stub_data_size: 8
+        dcerpc.res.frag_cnt: 1
+  # header-only pdus sharing a segment with the next pdu: same result
+  - filter:
+      count: 1
+      match:
+        event_type: dcerpc
+        src_port: 1026
+        dcerpc.request: REQUEST
+        dcerpc.response: RESPONSE
+        dcerpc.call_id: 2
+        dcerpc.req.frag_cnt: 1
+        dcerpc.req.stub_data_size: 8
+        dcerpc.res.frag_cnt: 1
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.app_layer.error.dcerpc_tcp.parser: 0

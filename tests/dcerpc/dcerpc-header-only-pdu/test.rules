@@ -1,0 +1,1 @@
+alert dcerpc any any -> any any (msg:"dcerpc request stub after header-only pdu"; flow:to_server; dcerpc.stub_data; content:"AAAAAAAA"; bsize:8; sid:1;)
