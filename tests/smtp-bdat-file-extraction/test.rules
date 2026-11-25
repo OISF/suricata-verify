@@ -1,0 +1,1 @@
+alert smtp any any -> any any (msg:"bdat file_data"; file_data; content:"Hello from BDAT stream"; sid:1; rev:1;)

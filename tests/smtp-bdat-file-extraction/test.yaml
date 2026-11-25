@@ -1,0 +1,51 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - -k none
+
+checks:
+  # Both messages must be reassembled into one email object, whichever framing
+  # the sender used.
+  - filter:
+      count: 2
+      match:
+        event_type: smtp
+        email.status: PARSE_DONE
+
+  - filter:
+      count: 2
+      match:
+        event_type: smtp
+        email.attachment[0]: note.bin
+
+  # The BDAT message is tx 0 of its flow; the chunk split lands in the middle of
+  # a base64 line, so the decoder has to see the carry across the chunk edge.
+  - filter:
+      count: 1
+      match:
+        event_type: smtp
+        src_port: 41414
+        tx_id: 0
+        smtp.mail_from: <alice@example.com>
+        smtp.rcpt_to[0]: <bob@example.com>
+        email.attachment[0]: note.bin
+
+  # Detection on the decoded file data of both flows: the alert only matches
+  # after base64 decoding, and the file must be closed, not left open.
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1
+
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_port: 41414
+        files[0].filename: note.bin
+        files[0].state: CLOSED
+        files[0].size: 35
