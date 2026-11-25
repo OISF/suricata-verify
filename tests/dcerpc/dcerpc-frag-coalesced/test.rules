@@ -1,0 +1,5 @@
+# The three request fragments reassemble into one stub in wire order.
+alert dcerpc any any -> any any (msg:"dcerpc middle frag request stub reassembled"; flow:to_server; dcerpc.stub_data; content:"AAAAAAAABBBBBBBBCCCCCCCC"; bsize:24; sid:1;)
+
+# Regression guard: the last fragment must not land on a transaction of its own.
+alert dcerpc any any -> any any (msg:"dcerpc middle frag request last frag split off"; flow:to_server; dcerpc.stub_data; content:"CCCCCCCC"; bsize:8; sid:2;)
