@@ -1,0 +1,128 @@
+requires:
+  min-version: 9.0.0
+
+args:
+  - --simulate-ips
+  - -k none
+
+checks:
+  # control: DIRECT_OPERATE alone: the DIRECT_OPERATE is blocked.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: 10.0.0.1
+        alert.signature_id: 1
+        alert.action: blocked
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        src_ip: 10.0.0.1
+        anomaly.app_proto: dnp3
+        anomaly.event: BAD_LINK_RULE
+  # 0xC9 REQUEST_LINK_STATUS, LENGTH 60: the DIRECT_OPERATE is blocked.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: 10.0.1.1
+        alert.signature_id: 1
+        alert.action: blocked
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        src_ip: 10.0.1.1
+        anomaly.app_proto: dnp3
+        anomaly.event: BAD_LINK_RULE
+  # 0xC9 REQUEST_LINK_STATUS, LENGTH 255: the DIRECT_OPERATE is blocked.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: 10.0.2.1
+        alert.signature_id: 1
+        alert.action: blocked
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        src_ip: 10.0.2.1
+        anomaly.app_proto: dnp3
+        anomaly.event: BAD_LINK_RULE
+  # 0xC0 RESET_LINK_STATES, LENGTH 60: the DIRECT_OPERATE is blocked.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: 10.0.3.1
+        alert.signature_id: 1
+        alert.action: blocked
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        src_ip: 10.0.3.1
+        anomaly.app_proto: dnp3
+        anomaly.event: BAD_LINK_RULE
+  # 0xD4 UNCONFIRMED_USER_DATA with FCV set, LENGTH 60: the DIRECT_OPERATE is blocked.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: 10.0.4.1
+        alert.signature_id: 1
+        alert.action: blocked
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        src_ip: 10.0.4.1
+        anomaly.app_proto: dnp3
+        anomaly.event: BAD_LINK_RULE
+  # 0xC7 reserved function code, LENGTH 60: the DIRECT_OPERATE is blocked.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: 10.0.5.1
+        alert.signature_id: 1
+        alert.action: blocked
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        src_ip: 10.0.5.1
+        anomaly.app_proto: dnp3
+        anomaly.event: BAD_LINK_RULE
+  # control: valid 0xC9 REQUEST_LINK_STATUS, LENGTH 5: the DIRECT_OPERATE is blocked.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: 10.0.6.1
+        alert.signature_id: 1
+        alert.action: blocked
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        src_ip: 10.0.6.1
+        anomaly.app_proto: dnp3
+        anomaly.event: BAD_LINK_RULE
+  # control: valid 0xD2 TEST_LINK_STATES, LENGTH 5: the DIRECT_OPERATE is blocked.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: 10.0.7.1
+        alert.signature_id: 1
+        alert.action: blocked
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        src_ip: 10.0.7.1
+        anomaly.app_proto: dnp3
+        anomaly.event: BAD_LINK_RULE

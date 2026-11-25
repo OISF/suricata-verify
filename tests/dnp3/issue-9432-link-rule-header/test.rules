@@ -1,0 +1,1 @@
+drop dnp3 any any -> any any (msg:"block DNP3 DIRECT_OPERATE"; dnp3_func:direct_operate; sid:1; rev:1;)
