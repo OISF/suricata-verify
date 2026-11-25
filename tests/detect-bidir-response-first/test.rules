@@ -1,0 +1,7 @@
+alert http any any => any any (msg:"early response, unmatched body"; http.request_body; content:"secret"; fast_pattern; http.stat_msg; content:"ZZZZZZ"; sid:1; rev:1;)
+alert http any any => any any (msg:"early response, unmatched file.data"; file.data: to_server; content:"secret"; fast_pattern; http.stat_code; content:"404"; sid:2; rev:1;)
+
+alert http any any => any any (msg:"pair, both halves match"; http.request_body; content:"secret"; fast_pattern; http.stat_msg; content:"OK"; sid:3; rev:1;)
+
+alert http any any -> any any (msg:"standard: stat_msg, set flowbit"; flow:established,to_client; http.stat_msg; content:"OK"; flowbits:set,ok_resp; flowbits:noalert; sid:21; rev:1;)
+alert http any any -> any any (msg:"standard: flowbit and body"; flow:established,to_server; flowbits:isset,ok_resp; http.request_body; content:"secret"; sid:22; rev:1;)

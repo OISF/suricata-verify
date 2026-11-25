@@ -1,0 +1,8 @@
+alert http2 any any => any any (msg:"http2 pair, body plus unmatched status message"; http.uri; content:"/upload"; http.request_body; content:"secret"; fast_pattern; http.stat_msg; content:"ZZZZ"; sid:1; rev:1;)
+alert http2 any any => any any (msg:"http2 pair, one buffer per direction, unmatched status"; http.uri; content:"/upload"; fast_pattern; http.stat_code; content:"404"; sid:2; rev:1;)
+
+alert http2 any any => any any (msg:"http2 pair, body plus matching status"; http.uri; content:"/upload"; http.request_body; content:"secret"; fast_pattern; http.stat_code; content:"200"; sid:3; rev:1;)
+alert http2 any any => any any (msg:"http2 pair, one buffer per direction, both match"; http.uri; content:"/upload"; fast_pattern; http.stat_code; content:"200"; sid:4; rev:1;)
+
+alert http2 any any -> any any (msg:"standard: uri, set flowbit"; flow:established,to_server; http.uri; content:"/upload"; flowbits:set,h2_upload; flowbits:noalert; sid:21; rev:1;)
+alert http2 any any -> any any (msg:"standard: status and flowbit"; flow:established,to_client; flowbits:isset,h2_upload; http.stat_code; content:"200"; sid:22; rev:1;)

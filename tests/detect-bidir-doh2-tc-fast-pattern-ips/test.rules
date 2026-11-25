@@ -1,0 +1,6 @@
+alert doh2 any any => any any (msg:"DoH2 pair, dns.query + DNS response name, fast pattern on the response"; flow:established; dns.query; content:"example"; dns.response.rrname; content:"x.example.com"; fast_pattern; sid:1; rev:1;)
+alert doh2 any any => any any (msg:"DoH2 pair, dns.query + HTTP status, fast pattern on the response"; flow:established; dns.query; content:"example"; http.stat_code; content:"200"; fast_pattern; sid:2; rev:1;)
+alert doh2 any any => any any (msg:"DoH2 pair, dns.query with the fast pattern + DNS response name (control)"; flow:established; dns.query; content:"example"; fast_pattern; dns.response.rrname; content:"x.example.com"; sid:3; rev:1;)
+alert doh2 any any => any any (msg:"DoH2 pair, request body + DNS response name (control)"; flow:established; http.request_body; content:"example"; dns.response.rrname; content:"x.example.com"; sid:4; rev:1;)
+alert doh2 any any => any any (msg:"DoH2 pair, unmatched dns.query + HTTP status, fast pattern on the response"; flow:established; dns.query; content:"nomatchzzz"; http.stat_code; content:"200"; fast_pattern; sid:5; rev:1;)
+alert doh2 any any => any any (msg:"DoH2 pair, unmatched dns.query + DNS response name, fast pattern on the response"; flow:established; dns.query; content:"nomatchzzz"; dns.response.rrname; content:"x.example.com"; fast_pattern; sid:6; rev:1;)

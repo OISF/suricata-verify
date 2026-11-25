@@ -1,0 +1,4 @@
+alert http any any => any any (msg:"streaming response, both halves match"; http.request_body; pcre:"/secret/"; http.stat_code; pcre:"/^200$/"; sid:1; rev:1;)
+
+alert http any any -> any any (msg:"standard: response stat_code"; flow:established,to_client; http.stat_code; pcre:"/^200$/"; sid:21; rev:1;)
+alert http any any -> any any (msg:"standard: request body secret"; flow:established,to_server; http.request_body; pcre:"/secret/"; sid:22; rev:1;)

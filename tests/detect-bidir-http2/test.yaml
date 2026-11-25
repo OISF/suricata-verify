@@ -1,0 +1,72 @@
+requires:
+  min-version: 9
+
+args:
+  - --simulate-ips
+
+pcap: input.pcap
+
+checks:
+  # sid 1 and sid 2 have a toclient half that cannot match (no 404, and
+  # HTTP/2 has no reason phrase for stat_msg). On 7ad9874c0 sid 1 alerts on
+  # the request alone at packet 7; sid 2 is the same pair with one buffer
+  # per direction, where the toclient engine happens to be last in the
+  # progress order so even main waits.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+
+  # sid 3 and sid 4 are the pairs whose halves both match: they must alert
+  # exactly once, at the response. They also alert on 7ad9874c0 and on
+  # c4c778035 alone, so they pin that neither the bug fix nor the pair
+  # requirement costs an HTTP/2 alert.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3
+        pcap_cnt: 8
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 4
+        pcap_cnt: 8
+
+  # sid 21 sets the flowbit on the request and does not alert itself; sid
+  # 22 alerting on the response proves both buffers really matched on this
+  # transaction, in the directions the rule claims.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 21
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 22
+        pcap_cnt: 8
+
+  # pin the exchange so the checks above cannot pass vacuously
+  - filter:
+      count: 1
+      match:
+        event_type: http
+        http.version: "2"
+        http.hostname: example.com
+        http.url: /upload
+        http.http_method: POST
+        http.status: 200
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        fileinfo.state: CLOSED
