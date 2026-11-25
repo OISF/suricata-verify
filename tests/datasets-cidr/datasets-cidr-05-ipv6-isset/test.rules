@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"ULA src"; ip.src; dataset:isset,ula,type cidr,load ula.lst; sid:1;)

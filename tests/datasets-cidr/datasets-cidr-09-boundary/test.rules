@@ -1,0 +1,2 @@
+alert ip any any -> any any (msg:"Boundary isset"; ip.src; dataset:isset,boundary,type cidr,load boundary.lst; sid:1;)
+alert ip any any -> any any (msg:"Boundary isnotset"; ip.src; dataset:isnotset,boundary,type cidr,load boundary.lst; sid:2;)

@@ -1,0 +1,27 @@
+requires:
+  min-version: 9
+
+pcap: input-ipv6.pcap
+
+args:
+  - -k none
+
+checks:
+  # set fires only once per unique IPv6 source address (new entry only)
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_ip: "fc00::1"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_ip: "2001:db8::1"

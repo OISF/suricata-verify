@@ -1,0 +1,1 @@
+alert ip any any -> any any (msg:"datarep with cidr type"; ip.src; datarep:my-rep,>,10,type cidr,load rep.lst; sid:1;)
