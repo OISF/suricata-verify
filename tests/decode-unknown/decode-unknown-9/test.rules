@@ -1,0 +1,1 @@
+alert pkthdr any any -> any any (msg:"Ethertype unknown"; decode-event:ethernet.unknown_ethertype; sid:1;)
