@@ -1,0 +1,22 @@
+%YAML 1.1
+---
+
+requires:
+  min-version: 9.0
+
+args:
+  - -k none
+
+checks:
+  # b is 5 and two bytes follow "END"
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  # the literal form means "END" ends the buffer, which it does not
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2

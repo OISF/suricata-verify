@@ -1,0 +1,17 @@
+%YAML 1.1
+---
+
+requires:
+  min-version: 9.0
+args:
+  - -k none
+  # the second connection only disturbs the first one's byte values when
+  # one thread inspects both
+  - --runmode=single
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1

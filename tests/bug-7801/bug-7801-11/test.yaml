@@ -1,0 +1,28 @@
+%YAML 1.1
+---
+
+requires:
+  min-version: 9.0
+
+args:
+  - -k none
+  # the second connection only disturbs the first one's byte values when
+  # one thread inspects both
+  - --runmode=single
+
+checks:
+  # Conn2 (10.0.0.3) is the only connection that may alert. Conn1 (10.0.0.1)
+  # got a 404 and alerts only when Conn2's byte value has clobbered it.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_ip: 10.0.0.2
+        dest_ip: 10.0.0.3
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        dest_ip: 10.0.0.1
