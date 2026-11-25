@@ -1,0 +1,20 @@
+requires:
+  min-version: 9
+
+skip:
+  - feature: FUZZ
+
+args:
+  - --set app-layer.protocols.dnp3.resync-on-bad-start=yes
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: dnp3
+        dnp3.type: request
+  - filter:
+      count: 2
+      match:
+        event_type: dnp3
+        dnp3.type: response
