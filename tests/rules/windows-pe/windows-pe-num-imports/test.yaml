@@ -1,0 +1,31 @@
+pcap: ../windows-pe-basic/input.pcap
+
+requires:
+  min-version: 9
+
+args:
+- -k none
+
+checks:
+- filter:
+    count: 5
+    match:
+      event_type: alert
+      alert.signature_id: 1
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 2
+
+# Verify num_imports is logged
+- filter:
+    count: 5
+    match:
+      event_type: fileinfo
+      executable.num_imports: 0
+- filter:
+    count: 5
+    match:
+      event_type: fileinfo
+      executable.num_exports: 0

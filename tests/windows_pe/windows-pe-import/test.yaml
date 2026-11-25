@@ -1,0 +1,111 @@
+requires:
+  min-version: 9
+
+args:
+- -k none
+
+checks:
+# SID 1: ws2_32.dll — only malware PE has it (1 match)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+
+# SID 2: wininet.dll — only malware PE has it (1 match)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 2
+
+# SID 3: kernel32.dll — both PEs have it (2 matches)
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 3
+
+# SID 4: urlmon.dll — neither PE has it (0 matches)
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 4
+
+# SID 5: x86 + ws2_32.dll combined — malware PE only (1 match)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 5
+
+# SID 6: advapi32.dll — malware PE only (1 match)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 6
+
+# SID 7: user32.dll — benign PE only (1 match)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 7
+
+# SID 8: ws2_32.dll AND wininet.dll — malware PE has both (1 match)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 8
+
+# SID 9: ws2_32.dll AND user32.dll — no single PE has both (0 matches)
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 9
+
+# SID 10: arch x86 + ws2_32 + wininet — malware PE only (1 match)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 10
+
+# SID 11: arch x86 + ws2_32 + wininet + advapi32 — malware PE only (1 match)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 11
+
+# SID 12: arch x86_64 + ws2_32 — wrong arch, no match (0 matches)
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 12
+
+# SID 13: subsystem 3 + ws2_32 + advapi32 — malware PE only (1 match)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 13
+
+# SID 14: sections 2 + kernel32 — both PEs match (2 matches)
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 14
+
+# Verify imports are logged in fileinfo events
+- filter:
+    count: 2
+    match:
+      event_type: fileinfo
+      executable.type: windows_pe

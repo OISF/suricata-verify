@@ -1,0 +1,6 @@
+alert http any any -> any any (msg:"WPE signed"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: signature; sid:1; rev:1;)
+alert http any any -> any any (msg:"WPE cert_thumbprint match"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: cert_thumbprint 29D492AD11646EB10B9F0BC7CB816D4318C7F4D6; sid:2; rev:1;)
+alert http any any -> any any (msg:"WPE cert_thumbprint no match"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: cert_thumbprint DEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEF; sid:3; rev:1;)
+alert http any any -> any any (msg:"WPE cert_serial"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: cert_serial 0A:1B:2C:3D:4E:5F; sid:4; rev:1;)
+alert http any any -> any any (msg:"WPE cert_subject"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: cert_subject "Acme Corp"; sid:5; rev:1;)
+alert http any any -> any any (msg:"WPE cert_issuer"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: cert_issuer "Acme Test Code Signing"; sid:6; rev:1;)

@@ -1,0 +1,2 @@
+alert http any any -> any any (msg:"WPE signed (header only)"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: signature; sid:1; rev:1;)
+alert http any any -> any any (msg:"WPE cert_thumbprint (needs full file)"; flow:established,to_client; file.data; content:"MZ"; startswith; windows_pe: cert_thumbprint 29D492AD11646EB10B9F0BC7CB816D4318C7F4D6; sid:2; rev:1;)
