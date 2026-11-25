@@ -1,0 +1,14 @@
+requires:
+  min-version: 9
+
+pcap: ../detect-app-pkt/input.pcap 
+
+args:
+  - -k none
+
+exit-code: 1
+
+checks:
+  - shell:
+      args: grep "can't use packet keywords in an app hook rule." suricata.log | wc -l | xargs
+      expect: 1
