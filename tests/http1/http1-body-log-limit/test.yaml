@@ -1,0 +1,24 @@
+requires:
+  min-version: 9
+
+# HTTP/1 body log limit.
+#
+# The request carries a 5-MiB body with request-body-limit: 0 and
+# stream.reassembly.depth: 0, so htp stores all of it. The rule matches
+# at body offset 60000 (past the logger cap) so the alert record carries
+# a large body; the configured 16-KiB http-body-log-limit cuts both
+# representations and sets http_request_body_truncated.
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 1
+      http.http_request_body_truncated: true
+- shell:
+    # base64(16384) = 21848 chars, printable = 16384 bytes
+    args: python3 -c "import json;d=[json.loads(l) for l in open('eve.json') if json.loads(l).get('event_type')=='alert' and json.loads(l)['alert']['signature_id']==1];h=d[0]['http'];print(len(h['http_request_body']),len(h['http_request_body_printable']))"
+    expect: '21848 16384'
+- shell:
+    args: grep -c 'Mem buffer asked' stdout || true
+    expect: '0'

@@ -1,0 +1,25 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+  # Startup parameters are cut with a marker; the response list stops at
+  # the message cap.
+  - filter:
+      count: 1
+      match:
+        event_type: pgsql
+        pgsql.request.protocol_version: '3.0'
+        pgsql.request.startup_parameters.user.__endswith: "[truncated 76 additional bytes]"
+        pgsql.response.parameter_status.__len.__lte: 256
+        pgsql.truncated: true
+
+  # A 1200-byte simple query is cut with a marker.
+  - filter:
+      count: 1
+      match:
+        event_type: pgsql
+        pgsql.request.simple_query.__endswith: "[truncated 176 additional bytes]"
+        pgsql.truncated: true

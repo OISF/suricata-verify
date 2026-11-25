@@ -1,0 +1,18 @@
+pcap: ../output-eve-tftp-01/input.pcap
+
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+  # The file name is not logged by default.
+  - filter:
+      count: 1
+      match:
+        event_type: tftp
+        tftp.packet: read
+        tftp.mode: octet
+        not-has-key:
+          - tftp.file

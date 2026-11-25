@@ -1,0 +1,15 @@
+requires:
+  min-version: 9
+
+# TLS logger limits: 300 cipher suites and 300 extensions are cut to 256.
+checks:
+- filter:
+    count: 1
+    match:
+      event_type: tls
+- shell:
+    args: python3 -c "import json;d=[json.loads(l) for l in open('eve.json') if json.loads(l).get('event_type')=='tls'];h=d[0]['tls']['client_handshake'];print(len(h['ciphers']),h['ciphers_truncated'],len(h['exts']),h['exts_truncated'])"
+    expect: '256 True 256 True'
+- shell:
+    args: grep -c 'Mem buffer asked' stdout || true
+    expect: '0'

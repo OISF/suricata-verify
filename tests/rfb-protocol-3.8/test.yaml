@@ -1,3 +1,6 @@
+requires:
+  min-version: 9
+
 checks:
 
   - filter:
@@ -16,7 +19,9 @@ checks:
         rfb.client_protocol_version.minor: "008"
         rfb.authentication.security_type: 2
         rfb.authentication.vnc.challenge: "1d03c57f2dffcc72a5ae3ad559c9c3db"
-        rfb.authentication.vnc.response: "547b7a6f36a154db03a2575c6f2a4ec5"
+        rfb.authentication.vnc.response_redacted: true
+        not-has-key:
+          - rfb.authentication.vnc.response
         rfb.authentication.security_result: "OK"
         rfb.screen_shared: false
         rfb.framebuffer.width: 800

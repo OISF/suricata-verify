@@ -1,5 +1,5 @@
 requires:
-  min-version: 8.0.7
+  min-version: 9
   os: linux
   features:
     - ASAN
@@ -37,6 +37,8 @@ checks:
         dnp3.application.objects[0].variation: 2
         dnp3.application.objects[0].qualifier: 8
         dnp3.application.objects[0].count: 512
-        dnp3.application.objects[0].points[511].index: 511
-        dnp3.application.objects[0].points[511].username_size: 0
-        dnp3.application.objects[0].points[511].password_size: 0
+        dnp3.application.objects[0].points.__len: 256
+        dnp3.application.objects[0].points[255].index: 255
+        dnp3.application.objects[0].points[255].username_size: 0
+        dnp3.application.objects[0].points[255].password_size: 0
+        dnp3.points_truncated: true

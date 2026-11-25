@@ -1,0 +1,60 @@
+requires:
+  min-version: 9
+
+# HTTP/2 decoded header limits.
+#
+# tx /a: 25 distinct 2000-B headers -> decoded ~51 KiB. Below the 64-KiB
+#        list threshold, above the 32-KiB logger budget: the record is
+#        cut and request_headers_truncated is set.
+# tx /b: one 2000-B dynamic entry + 40 indexed refs -> decoded ~81 KiB:
+#        HeaderListTooLarge is raised, but every header is still decoded
+#        and inspected (no truncation, table stays in sync).
+# tx /c: references the dynamic entry inserted while decoding /b; the
+#        entry must still resolve to x-amplify.
+#
+# No MemBuffer/MAX_LIMIT drop anywhere.
+checks:
+- filter:
+    count: 4
+    match:
+      event_type: http
+- filter:
+    count: 1
+    match:
+      event_type: http
+      http.url: /a
+      http.request_headers_truncated: true
+- shell:
+    # logged header name+value bytes stay within the 32-KiB budget
+    args: python3 -c "import json;d=[json.loads(l) for l in open('eve.json') if json.loads(l).get('event_type')=='http' and json.loads(l)['http'].get('url')=='/a'];h=d[0]['http']['request_headers'];s=sum(len(x.get('name',''))+len(x.get('value','')) for x in h);print(len(h)>0,s<=32768,s>0)"
+    expect: 'True True True'
+- filter:
+    count: 1
+    match:
+      event_type: anomaly
+      anomaly.event: header_list_too_large
+- filter:
+    count: 1
+    match:
+      event_type: http
+      http.url: /b
+      not-has-key: http.request_headers_truncated
+- filter:
+    count: 1
+    match:
+      event_type: http
+      http.url: /c
+      http.request_headers[2].name: x-amplify
+- filter:
+    count: 1
+    match:
+      event_type: http
+      http.url: /flood
+      http.request_headers_truncated: true
+- shell:
+    # the size-update flood stays at the entry cap, not the wire size
+    args: python3 -c "import json;d=[json.loads(l) for l in open('eve.json') if json.loads(l).get('event_type')=='http' and json.loads(l)['http'].get('url')=='/flood'];print(len(d)==1 and len(d[0]['http']['request_headers'])<=1024 and max(len(l) for l in open('eve.json'))<512*1024)"
+    expect: 'True'
+- shell:
+    args: grep -c 'Mem buffer asked' stdout || true
+    expect: '0'

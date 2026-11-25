@@ -1,0 +1,38 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+  # Long uri, request line and SDP session name are cut with a marker.
+  - filter:
+      count: 1
+      match:
+        event_type: sip
+        sip.method: INVITE
+        sip.truncated: true
+        sip.uri.__endswith: "[truncated 824 additional bytes]"
+        sip.sdp.session_name.__endswith: "[truncated 11808 additional bytes]"
+
+  # The SDP k= lines are replaced by their redaction markers.
+  - filter:
+      count: 1
+      match:
+        event_type: sip
+        sip.sdp.encryption_key_redacted: true
+        sip.sdp.media_descriptions[0].encryption_key_redacted: true
+        sip.sdp.attributes_redacted: true
+        sip.sdp.media_descriptions[0].attributes_redacted: true
+        not-has-key:
+          - sip.sdp.encryption_key
+          - sip.sdp.media_descriptions[0].encryption_key
+
+  - shell:
+      args: grep -c -E 'supersecret|cryptosecret' eve.json || true
+      expect: '0'
+
+  # The whole record stays small; the wire payload is ~35 KiB.
+  - shell:
+      args: python3 -c "import json;print(max(len(l) for l in open('eve.json'))<160*1024)"
+      expect: 'True'

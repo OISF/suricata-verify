@@ -1,5 +1,5 @@
 requires:
-  min-version: 8
+  min-version: 9
 
 args:
   - -k none
@@ -23,12 +23,12 @@ checks:
         sip.sdp.time_descriptions[0].time: 3034423619 3042462419
         sip.sdp.time_descriptions[0].repeat_time: 604800 3600 0 90000
         sip.sdp.timezone: 2882844526 -1h 2898848070 0
-        sip.sdp.encryption_key: prompt
+        sip.sdp.encryption_key_redacted: true
         sip.sdp.attributes[0]: sendrecv
         sip.sdp.media_descriptions[0].media: audio 30000 RTP/AVP 0 8 97 2 3
         sip.sdp.media_descriptions[0].media_info: media info
         sip.sdp.media_descriptions[0].connection_data: IN IP4 192.168.1.2
-        sip.sdp.media_descriptions[0].encryption_key: prompt
+        sip.sdp.media_descriptions[0].encryption_key_redacted: true
         sip.sdp.media_descriptions[0].attributes[0]: rtpmap:0 pcmu/8000
   - filter:
       count: 1
