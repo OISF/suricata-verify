@@ -1,0 +1,11 @@
+# bsize depth is applied after DetectContentPropagateLimits, so it must not
+# break offset/distance propagation or negation. The dns.query buffer
+# is "google.com" (10 bytes). sids 11-13 match; sid 14 does not. sids 15-17
+# match with nocase, a chopped fast pattern and within.
+alert dns any any -> any any (msg:"bsize with offset"; dns.query; content:"com"; offset:7; bsize:10; sid:11;)
+alert dns any any -> any any (msg:"bsize multi-content distance"; dns.query; content:"google"; content:"com"; distance:1; bsize:10; sid:12;)
+alert dns any any -> any any (msg:"bsize negated content present-elsewhere"; dns.query; content:!"example"; bsize:10; sid:13;)
+alert dns any any -> any any (msg:"bsize multi-content no match"; dns.query; content:"google"; content:"net"; distance:0; bsize:10; sid:14;)
+alert dns any any -> any any (msg:"bsize nocase"; dns.query; content:"GOOGLE.COM"; nocase; bsize:10; sid:15;)
+alert dns any any -> any any (msg:"bsize chopped fast pattern"; dns.query; content:"google.com"; fast_pattern:2,4; bsize:10; sid:16;)
+alert dns any any -> any any (msg:"bsize multi-content within"; dns.query; content:"goo"; content:"com"; within:10; bsize:10; sid:17;)

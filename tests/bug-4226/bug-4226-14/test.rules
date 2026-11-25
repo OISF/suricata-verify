@@ -1,0 +1,11 @@
+# With more than one bsize on a buffer, the smallest upper bound is the depth,
+# whatever the keyword order.
+# sids 1 and 2: bsize:<20 and bsize:<8 give depth 8.
+# sid 3: a lower bound before the upper one; bsize:<10 gives depth 10.
+# sid 4: a range and an exact bsize; the exact value 5 is the smaller bound.
+# sid 5: bsize:<=6 gives depth 6.
+alert dns any any -> any any (msg:"smaller bound last"; dns.query; content:"abc"; bsize:<20; bsize:<8; sid:1;)
+alert dns any any -> any any (msg:"smaller bound first"; dns.query; content:"abc"; bsize:<8; bsize:<20; sid:2;)
+alert dns any any -> any any (msg:"lower bound first"; dns.query; content:"abc"; bsize:>2; bsize:<10; sid:3;)
+alert dns any any -> any any (msg:"exact and range"; dns.query; content:"abc"; bsize:2<>20; bsize:5; sid:4;)
+alert dns any any -> any any (msg:"less-than-or-equal"; dns.query; content:"abc"; bsize:<=6; sid:5;)
