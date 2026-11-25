@@ -1,0 +1,4 @@
+# an empty trailer block still ends the request: the header block is logged and matched
+alert http any any -> any any (msg:"request header present"; flow:to_server; http.header; content:"suricata.io"; sid:1; rev:1;)
+# the request still reaches the trailer state
+alert http2:stream:request_trailers any any -> any any (msg:"trailer state reached"; flow:to_server; sid:2; rev:1;)
