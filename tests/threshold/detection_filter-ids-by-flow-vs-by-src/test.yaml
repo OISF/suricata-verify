@@ -1,0 +1,43 @@
+requires:
+  min-version: 8.0.8
+
+pcap: input.pcap
+
+args:
+  - -k none
+
+checks:
+  # by_flow: each 4-segment flow trips once on its own counter.
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_port: 40000
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_port: 40001
+  # by_src: one counter across both flows, 8 matches, 5 alerts. Which
+  # packets alert depends on worker thread ordering, so only the count is
+  # pinned.
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.engines[0].rules_loaded: 2
+        stats.detect.engines[0].rules_failed: 0
+        stats.detect.alert: 7
+        stats.detect.alerts_suppressed: 9

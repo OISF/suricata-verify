@@ -1,0 +1,2 @@
+alert tcp-pkt any any -> any 9999 (msg:"df by_flow"; flow:established,to_server; content:"DFMATCH"; detection_filter:track by_flow, count 3, seconds 60; sid:1;)
+alert tcp-pkt any any -> any 9999 (msg:"df by_src"; flow:established,to_server; content:"DFMATCH"; detection_filter:track by_src, count 3, seconds 60; sid:2;)

@@ -1,0 +1,64 @@
+requires:
+  min-version: 8.0.8
+
+pcap: ../detection_filter-ips-drop-udp/input.pcap
+
+args:
+  - -k none
+  - --simulate-ips
+
+checks:
+  # Datagrams 1-3 are dropped; from datagram 4 the pass rule trips and, being
+  # first in action order, masks the drop rule: datagrams 4-6 go through.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        alert.action: blocked
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        pcap_cnt: 3
+  - filter:
+      count: 0
+      match:
+        event_type: flow
+        flow.action: drop
+  - filter:
+      requires:
+        lt-version: 9
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.engines[0].rules_loaded: 2
+        stats.detect.engines[0].rules_failed: 0
+        stats.detect.alert: 3
+        stats.detect.alerts_suppressed: 3
+        stats.ips.accepted: 3
+        stats.ips.blocked: 3
+        stats.ips.drop_reason.rules: 3
+        stats.ips.drop_reason.flow_drop: 0
+        stats.ips.drop_reason.threshold_detection_filter: 0
+  - filter:
+      requires:
+        min-version: 9
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.engines[0].rules_loaded: 2
+        stats.detect.engines[0].rules_failed: 0
+        stats.detect.alert: 6
+        stats.detect.alerts_suppressed: 3
+        stats.ips.accepted: 3
+        stats.ips.blocked: 3
+        stats.ips.drop_reason.rules: 3
+        stats.ips.drop_reason.flow_drop: 0
+        stats.ips.drop_reason.threshold_detection_filter: 0

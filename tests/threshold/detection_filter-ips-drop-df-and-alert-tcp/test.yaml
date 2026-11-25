@@ -1,0 +1,42 @@
+requires:
+  min-version: 8.0.8
+
+pcap: ../detection_filter-ids-alert-tcp-stream/input.pcap
+
+args:
+  - -k none
+  - --simulate-ips
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        alert.action: blocked
+        pcap_cnt: 10
+  # The alert rule fires on segments 1-4, then the flow drop stops inspection.
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        alert.action: allowed
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.action: drop
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.engines[0].rules_loaded: 2
+        stats.detect.engines[0].rules_failed: 0
+        stats.detect.alert: 5
+        stats.detect.alerts_suppressed: 3
+        stats.ips.accepted: 9
+        stats.ips.blocked: 9
+        stats.ips.drop_reason.rules: 1
+        stats.ips.drop_reason.flow_drop: 8
+        stats.ips.drop_reason.threshold_detection_filter: 0

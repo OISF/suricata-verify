@@ -37,6 +37,11 @@ checks:
 - filter:
     count: 100
     match:
+      event_type: drop
+
+- filter:
+    count: 100
+    match:
       event_type: flow
       flow.action: drop
 
@@ -47,3 +52,10 @@ checks:
       stats.firewall.accepted: 100
       stats.firewall.blocked: 100
       stats.firewall.drop_reason.rules: 100
+
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.ips.blocked: 0
+      stats.ips.accepted: 100

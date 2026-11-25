@@ -1,0 +1,31 @@
+requires:
+  min-version: 8.0.8
+
+pcap: input.pcap
+
+args:
+  - -k none
+  - --runmode=single
+  - --set stream.reassembly.randomize-chunk-size=no
+
+checks:
+  # 40 segments of 500 bytes give 7 raw stream inspections: the first 3
+  # are suppressed by the detection_filter, the other 4 alert.
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 7
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.engines[0].rules_loaded: 2
+        stats.detect.engines[0].rules_failed: 0
+        stats.detect.alert: 11
+        stats.detect.alerts_suppressed: 3

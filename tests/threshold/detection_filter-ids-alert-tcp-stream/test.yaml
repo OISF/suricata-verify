@@ -1,0 +1,30 @@
+requires:
+  min-version: 8.0.8
+
+pcap: input.pcap
+
+args:
+  - -k none
+
+checks:
+  # IDS raw stream inspection runs once for the whole flow, so 6 segments
+  # give a single match and the detection_filter never trips.
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        pcap_cnt: 16
+  - filter:
+      count: 1
+      match:
+        event_type: stats
+        stats.detect.engines[0].rules_loaded: 2
+        stats.detect.engines[0].rules_failed: 0
+        stats.detect.alert: 1
+        stats.detect.alerts_suppressed: 1
