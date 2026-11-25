@@ -1,0 +1,18 @@
+%YAML 1.1
+---
+
+stats:
+  enabled: yes
+  interval: 8
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - stats
+        - alert:
+            verdict: true
+        - flow
+        - http

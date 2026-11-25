@@ -1,0 +1,9 @@
+# App-layer TD rule on the tx that firewall sid:103 bypasses. Inspected after
+# sid:103 in the same tx, so it must not run once the flow is bypassed.
+alert http any any -> any any (msg:"TD dataset set on the bypassed tx"; flow:to_server,established; http.uri; content:"/alpha"; http.host; dataset:set,td_bypassed_hosts, type string; sid:100003;)
+
+# The probe, on the second flow. Matches only if sid:100003 added the host.
+alert http any any -> any any (msg:"TD dataset entry survived firewall bypass"; flow:to_server,established; http.uri; content:"/beta"; http.host; dataset:isset,td_bypassed_hosts, type string; sid:100004;)
+
+# Control: proves the second flow is inspected.
+alert http any any -> any any (msg:"Control: second flow is inspected"; flow:to_server,established; http.uri; content:"/beta"; sid:100005;)

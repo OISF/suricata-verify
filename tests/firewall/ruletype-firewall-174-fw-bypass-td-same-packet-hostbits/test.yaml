@@ -1,0 +1,34 @@
+requires:
+  min-version: 9
+
+args:
+  - --simulate-ips
+  - -k none
+  - --runmode single
+
+pcap: ../ruletype-firewall-185-bypass-td-post-match-side-effects/input.pcap
+
+checks:
+# The setter matched.
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 100003
+      pcap_cnt: 4
+
+# The point: with a firewall bypass rule loaded, the hostbit is still visible on
+# the same packet.
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 100004
+
+- filter:
+    count: 1
+    match:
+      event_type: stats
+      stats.flow.end.state.local_bypassed: 0
+      stats.ips.blocked: 0
+      stats.firewall.blocked: 0

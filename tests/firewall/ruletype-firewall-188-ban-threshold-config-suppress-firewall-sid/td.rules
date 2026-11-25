@@ -1,0 +1,3 @@
+# 100001 is covered by a suppress entry, 100002 is not.
+alert http any any -> any any (msg:"TD suppressed"; flow:to_server,established; http.host; content:"www.testmyids.com"; sid:100001;)
+alert http any any -> any any (msg:"TD control, not suppressed"; flow:to_server,established; http.host; content:"www.testmyids.com"; sid:100002;)
