@@ -1,0 +1,57 @@
+requires:
+  min-version: 9
+  pcap: false
+
+args:
+- --engine-analysis
+
+# Same five IPv4 rules as iponly-negated-single-host-01. Assert via
+# engine-analysis that every one of them (including the single negated host
+# rules, sids 1-3) is classified as ip-only, i.e. handled by the ip-only engine
+# rather than the general packet engine (which would be type "like_ip_only").
+checks:
+  # all five rules are ip-only
+  - filter:
+      filename: rules.json
+      count: 5
+      match:
+        type: ip_only
+
+  # and specifically each rule by id
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 1
+        type: ip_only
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 2
+        type: ip_only
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 3
+        type: ip_only
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 4
+        type: ip_only
+  - filter:
+      filename: rules.json
+      count: 1
+      match:
+        id: 5
+        type: ip_only
+
+  # none of them fell back to the packet engine
+  - filter:
+      filename: rules.json
+      count: 0
+      match:
+        type: like_ip_only

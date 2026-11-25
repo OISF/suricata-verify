@@ -1,0 +1,64 @@
+requires:
+  min-version: 9
+
+args:
+- -k none
+
+checks:
+  # sid 1 (src != 10.0.0.1): P2,P3,P4,P6 -> 4; never on a packet from 10.0.0.1
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        src_ip: 10.0.0.1
+
+  # sid 2 (dst != 10.0.0.2): P1,P2,P4,P6 -> 4; never on a packet to 10.0.0.2
+  - filter:
+      count: 4
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+        dest_ip: 10.0.0.2
+
+  # sid 3 (src != 10.0.0.1 AND dst != 10.0.0.2): P2,P4,P6 -> 3
+  - filter:
+      count: 3
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 3
+        src_ip: 10.0.0.1
+  - filter:
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 3
+        dest_ip: 10.0.0.2
+
+  # positive controls complement the negations: sid4 (src == A) P1,P5 -> 2
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 4
+  # sid5 (dst == B) P3,P5 -> 2
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 5

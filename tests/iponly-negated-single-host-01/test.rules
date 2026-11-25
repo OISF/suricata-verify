@@ -1,0 +1,15 @@
+# Single negated host, IPv4. A = 10.0.0.1 (src), B = 10.0.0.2 (dst).
+# These are all ip-only rules (single negated host -> handled by ip-only engine).
+
+# src negated: matches every packet whose src is NOT 10.0.0.1
+alert ip !10.0.0.1 any -> any any (msg:"src not 10.0.0.1"; sid:1; rev:1;)
+
+# dst negated: matches every packet whose dst is NOT 10.0.0.2
+alert ip any any -> !10.0.0.2 any (msg:"dst not 10.0.0.2"; sid:2; rev:1;)
+
+# both negated: matches when src is NOT 10.0.0.1 AND dst is NOT 10.0.0.2
+alert ip !10.0.0.1 any -> !10.0.0.2 any (msg:"src not 10.0.0.1 and dst not 10.0.0.2"; sid:3; rev:1;)
+
+# positive controls: complements of sid 1 and sid 2
+alert ip 10.0.0.1 any -> any any (msg:"src is 10.0.0.1"; sid:4; rev:1;)
+alert ip any any -> 10.0.0.2 any (msg:"dst is 10.0.0.2"; sid:5; rev:1;)
