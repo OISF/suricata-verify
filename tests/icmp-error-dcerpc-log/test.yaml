@@ -1,0 +1,35 @@
+requires:
+  min-version: 9
+
+pcap: input.pcap
+
+args:
+  - -k none
+  - --runmode=single
+  - --set
+  - detect.guess-applayer-tx=yes
+
+checks:
+  # the to-client inspect id is still 0 at the error, so the alert guesses
+  # the flow's only tx; the dcerpc record must be built with the flow's
+  # proto (TCP), not the packet's (ICMP)
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+        pcap_cnt: 6
+        tx_id: 0
+        tx_guessed: true
+        app_proto: dcerpc
+        dcerpc.request: REQUEST
+        dcerpc.response: UNREPLIED
+  # the client's ACK hands the response to the parser: the tx is complete
+  # and logged with the TCP builder
+  - filter:
+      count: 1
+      match:
+        event_type: dcerpc
+        pcap_cnt: 7
+        dcerpc.request: REQUEST
+        dcerpc.response: RESPONSE

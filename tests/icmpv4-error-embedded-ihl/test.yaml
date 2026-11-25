@@ -1,0 +1,36 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+  - --runmode=single
+
+checks:
+  # flow 1: the Router Alert option bytes (94 04 00 87) encode this flow's
+  # ports at fixed offset 20 (37892,135); the TCP header at the embedded
+  # IHL 24 has 12345,54321. After the fix the error is not attached.
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        proto: TCP
+        src_ip: 10.0.0.1
+        src_port: 37892
+        dest_ip: 10.0.0.2
+        dest_port: 135
+        flow.pkts_toserver: 2
+        flow.pkts_toclient: 1
+  # flow 2: the option bytes (94 04 00 01) do not encode this flow's ports;
+  # the TCP header at IHL 24 does (40000,80). After the fix the error is
+  # attached to its flow.
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        proto: TCP
+        src_ip: 10.0.0.3
+        src_port: 40000
+        dest_ip: 10.0.0.2
+        dest_port: 80
+        flow.pkts_toserver: 2
+        flow.pkts_toclient: 2

@@ -1,0 +1,1 @@
+alert icmp any any -> any any (msg:"icmp destination unreachable"; itype:3; icode:3; sid:1; rev:1;)
