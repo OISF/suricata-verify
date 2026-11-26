@@ -1,0 +1,31 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+
+args:
+  # checksums are not computed in the pcap
+  - -k none
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      comment: "the trailer field reaches the trailer buffer"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      comment: "ETag is allowed in a trailer section by RFC 9110 section 8.8.3"
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      comment: "the field is logged in the response trailer array"
+      count: 1
+      match:
+        event_type: http
+        http.response_trailers[0].name: etag
+        http.response_trailers[0].value: '"abc123"'
