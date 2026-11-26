@@ -1,0 +1,28 @@
+requires:
+  min-version: 9
+
+args:
+- -k none --set stream.inline=true
+
+checks:
+- filter:
+    count: 400
+    match:
+      event_type: alert
+      alert.signature_id: 3
+- filter:
+    count: 400
+    match:
+      event_type: alert
+      alert.signature_id: 5
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 6
+      websocket.opcode: text
+- filter:
+    count: 9
+    match:
+      event_type: websocket
+      websocket.opcode: continuation
