@@ -1,0 +1,5 @@
+alert tcp-pkt any any -> any any (content:"Q"; depth:1; sid:11;)
+alert tcp-pkt any any -> any any (content:"E"; depth:1; sid:12;)
+alert tcp-stream any any -> any any (content:"A"; depth:1; sid:10;)
+alert tcp-pkt any any -> any any (content:"|05 00|"; depth:2; sid:13;)
+alert tcp-pkt any any -> any any (content:"LM"; depth:2; sid:14;)

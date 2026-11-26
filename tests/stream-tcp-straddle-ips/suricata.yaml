@@ -1,0 +1,20 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert:
+            payload: yes
+            payload-buffer-size: 8kb
+            payload-printable: yes
+        - flow
+
+stream:
+  reassembly:
+    toserver-chunk-size: 512
+    toclient-chunk-size: 512
+    randomize-chunk-size: no

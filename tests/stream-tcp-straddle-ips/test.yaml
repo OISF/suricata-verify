@@ -1,0 +1,56 @@
+%YAML 1.1
+---
+
+requires:
+  min-version: 9
+
+pcap: stream-tcp-straddle-ips.pcap
+
+args:
+- -k none
+
+checks:
+# stream reassembly works: the tcp-stream rule matches the reassembled
+# stream on the first two data packets
+- filter:
+    count: 2
+    match:
+      event_type: alert
+      alert.signature_id: 10
+# packet 11 (retransmit of [33768, 34024)) must be rewritten in place
+# from the stored stream data: its head byte is Q (stream byte 33768),
+# not its own H. A missed or misaligned overlap rewrite leaves H.
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 11
+# the E packet is not rewritten (it extends the stream, no overlap)
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 12
+# flow 2: the retransmit at base_seq overlaps a segment whose head was
+# pruned by the sliding stream base. Its first two bytes must be the stored
+# DNS length prefix (05 00).
+- filter:
+    count: 1
+    match:
+      event_type: alert
+      alert.signature_id: 13
+# ... and not the stored bytes 25 further into the segment (LM), which is
+# what the pre-fix offset arithmetic copies.
+- filter:
+    count: 0
+    match:
+      event_type: alert
+      alert.signature_id: 14
+- filter:
+    count: 1
+    match:
+      event_type: flow
+      proto: TCP
+      src_ip: 10.0.0.1
+      dest_ip: 10.0.0.2
+      flow.alerted: true
