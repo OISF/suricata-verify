@@ -1,0 +1,79 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+  - --set
+  - app-layer.protocols.nfs.enabled=yes
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 3
+      match:
+        event_type: flow
+        app_proto: nfs
+        dest_port: 2049
+
+  # the LOOKUP reply is the only place the object handle and name pair up
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.version: 2
+        nfs.procedure: LOOKUP
+        nfs.filename: cfile
+        nfs.hhash: 207d31bd
+
+  # a handle-only op on that handle resolves to the name the reply provided
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.version: 2
+        nfs.procedure: READLINK
+        nfs.filename: cfile
+
+  # a message-level rejected LOOKUP has no body: the transaction is still
+  # logged, and nothing is flagged
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.version: 2
+        nfs.procedure: LOOKUP
+        nfs.filename: dfile
+
+  # a handle-only op on the same handle resolves the name the LOOKUP gave
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.version: 2
+        nfs.procedure: SETATTR
+        src_port: 941
+        nfs.filename: cfile
+
+  # and on the long-named object, whose record name is too long to spell out
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.version: 2
+        nfs.procedure: SETATTR
+        src_port: 943
+        nfs.hhash: 207d31bd
+
+  # exactly one: the LOOKUP whose request carried a 300 byte name. The
+  # SETATTR that resolves that name from the map must not flag again.
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
