@@ -1,0 +1,87 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+  - --set
+  - app-layer.protocols.nfs.enabled=yes
+
+pcap: input.pcap
+
+checks:
+  # every flow stays NFS, denied replies included
+  - filter:
+      count: 4
+      match:
+        event_type: flow
+        app_proto: nfs
+        dest_port: 2049
+
+  # flow A: the denial answers chunk 1, the OK for chunk 2 must not replace it
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        rpc.xid: 1
+        nfs.procedure: WRITE
+        rpc.status: DENIED
+        nfs.status: OK
+        nfs.status_code: 0
+
+  # flow B: the reverse order, the held OK must survive the denial
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        rpc.xid: 3
+        nfs.procedure: WRITE
+        rpc.status: DENIED
+        nfs.status: OK
+        nfs.status_code: 0
+
+  # flow C: a READ answered by a denial, and by nothing else: the denial is
+  # reported, and there is no NFS status to report
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        rpc.xid: 5
+        nfs.procedure: READ
+        rpc.status: DENIED
+  - filter:
+      count: 0
+      match:
+        event_type: nfs
+        rpc.xid: 5
+        nfs.status_code: 0
+
+  # flow D: a denied record claiming a READ reply body is not RFC traffic.
+  # The denial is reported, the tail is flagged and no file is reconstructed.
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        rpc.xid: 6
+        nfs.procedure: READ
+        rpc.status: DENIED
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+  # the two file transactions are the WRITE flows, 128 bytes each
+  - filter:
+      count: 2
+      match:
+        event_type: fileinfo
+        fileinfo.size: 128
+  - filter:
+      count: 0
+      match:
+        event_type: fileinfo
+        fileinfo.size: 512
