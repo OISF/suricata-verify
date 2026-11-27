@@ -1,0 +1,77 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+  - --set
+  - app-layer.protocols.nfs.enabled=yes
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 4
+      match:
+        event_type: flow
+        app_proto: nfs
+        dest_port: 2049
+
+  # flow A: the trailing GETATTR failed, the WRITE did not - the write's
+  # transaction reports the write's result
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.version: 4
+        nfs.procedure: WRITE
+        nfs.status: OK
+        nfs.status_code: 0
+
+  # flow C: same displacement on a READ: the READ result is what counts
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.version: 4
+        nfs.procedure: READ
+        nfs.status: OK
+        nfs.status_code: 0
+
+  # flow B: the reply rejected at the message level carries no NFS body
+  # logged on the reply that answers it, not at flow teardown
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.version: 4
+        nfs.procedure: CLOSE
+        rpc.xid: 2
+        pcap_cnt: 13
+
+  # ... so its record has no NFS status at all, and nothing is flagged
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: CLOSE
+        rpc.xid: 2
+        not-has-key: nfs.status
+  # flow D: the PROG_MISMATCH reply finishes its LOOKUP with no NFS status
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.version: 3
+        nfs.procedure: LOOKUP
+        rpc.xid: 4
+        not-has-key: nfs.status
+  - filter:
+      count: 0
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
