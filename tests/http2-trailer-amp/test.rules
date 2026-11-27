@@ -1,2 +1,4 @@
 # one 4 KB literal plus 12000 one-byte references: the trailer buffer holds what fits
 alert http any any -> any any (msg:"amplified trailer field"; flow:to_server; http.trailer; content:"x-amp|3a 20|AAAA"; sid:1; rev:1;)
+# the section is larger than the 64 KiB the buffers hold, so the truncation is reportable
+alert http any any -> any any (msg:"amplified trailer section truncated"; flow:to_server; app-layer-event:http2.trailer_section_truncated; sid:2; rev:1;)

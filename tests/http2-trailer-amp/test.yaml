@@ -23,6 +23,12 @@ checks:
         event_type: http
         http.request_trailers[0].name: x-amp
   - filter:
+      comment: "the truncation is reported as an event"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
       comment: "the repeat budget stops the array at 17 entries"
       count: 1
       match:

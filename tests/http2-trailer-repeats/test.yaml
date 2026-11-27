@@ -23,6 +23,12 @@ checks:
         event_type: alert
         alert.signature_id: 2
   - filter:
+      comment: "a section this small is not truncated"
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
       comment: "both fields are logged, not merged"
       count: 1
       match:

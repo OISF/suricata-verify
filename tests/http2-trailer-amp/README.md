@@ -8,8 +8,8 @@ This is the amplification case the trailer logging bound exists for. Logging
 every field once made the engine print "Formatted JSON EVE record too large, will
 be dropped" for the alert, fileinfo and http records, so appending a trailer
 block to a stream made its EVE alerts disappear. The test asserts the `http`
-event is still written and that `request_trailers` is bounded instead of listing
-all 12001 entries.
+event is still written, that `request_trailers` is bounded instead of listing all
+12001 entries, and that `http2.trailer_section_truncated` reports the truncation.
 
 `make-pcap.py` generates the capture: request header block at #4, the amplified
 trailer block at #8. tshark reads the frame as a trailer block and decodes until
