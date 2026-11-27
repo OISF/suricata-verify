@@ -1,0 +1,1 @@
+alert ip4 10.0.0.0/8 any -> any any (msg:"bypass the flows of the pcap"; bypass; sid:1; rev:1;)

@@ -1,0 +1,34 @@
+%YAML 1.1
+---
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - stats
+        - flow
+
+flow:
+  memcap: 128kb
+  hash-size: 256
+  prealloc: 10
+
+flow-timeouts:
+  udp:
+    new: 100
+    established: 100
+    bypassed: 100
+    emergency-new: 100
+    emergency-established: 100
+    emergency-bypassed: 100
+
+af-packet:
+  - interface: default
+    # One capture thread, so that it gets the whole ring: with one ring per
+    # CPU a ring can be a single block on hosts with many CPUs, and the kernel
+    # then drops packets of a burst.
+    threads: 1
+    xdp-mode: soft
+    bypass: yes

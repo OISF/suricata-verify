@@ -1,0 +1,27 @@
+requires:
+  min-version: 9
+  os: linux
+  features:
+    - EBPF
+  files:
+    - ebpf/xdp_filter.bpf
+
+args:
+  - --set af-packet.0.xdp-filter-file=${SRCDIR}/ebpf/xdp_filter.bpf
+
+timeout: 1
+
+checks:
+  # a packet lost at capture shows here and not as a wrong flow count
+  - stats:
+      capture.kernel_drops: 0
+  - stats:
+      flow.get_used_failed.__gt: 0
+  - filter:
+      count: 50
+      match:
+        event_type: flow
+        dest_port: 9999
+        flow.state: bypassed
+        flow.bypass: capture
+        flow.reason: shutdown

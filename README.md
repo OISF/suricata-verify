@@ -32,6 +32,10 @@ where Suricata listens to (using a veth pair created for each run).
 They require a `timeout` value in their `test.yaml` to know when to
 terminate Suricata.
 
+The `setup`, `pre-check` and `shell` check scripts of a replay test get
+the interface Suricata listens on in the `INTERFACE` environment variable
+and the interface the pcap is replayed on in `REPLAY_INTERFACE`.
+
 These tests are in the `replay` directory and are run by
 
 ```

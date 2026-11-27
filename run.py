@@ -37,6 +37,7 @@ import yaml
 import glob
 import re
 import unittest
+import unittest.mock
 from concurrent.futures import ThreadPoolExecutor
 from collections import namedtuple
 import threading
@@ -154,6 +155,53 @@ class SelfTest(unittest.TestCase):
         )
         self.assertTrue(check.match({"flow": {"age": 2, "bytes": 99}}))
         self.assertFalse(check.match({"flow": {"age": 1, "bytes": 99}}))
+
+    def test_build_env_replay_interfaces(self):
+        runner = TestRunner.__new__(TestRunner)
+        runner.cwd = "/suricata"
+        runner.directory = "/sv/replay/test"
+        runner.output = "/sv/replay/test/output"
+        runner.config = {}
+        runner.suricata_config = SuricataConfig.__new__(SuricataConfig)
+        with unittest.mock.patch.dict(os.environ):
+            os.environ.pop("INTERFACE", None)
+            os.environ.pop("REPLAY_INTERFACE", None)
+            runner.suricata_config.interface = None
+            env = runner.build_env()
+            self.assertNotIn("INTERFACE", env)
+            self.assertNotIn("REPLAY_INTERFACE", env)
+            runner.suricata_config.interface = "sv_1"
+            env = runner.build_env()
+            self.assertEqual(env["INTERFACE"], "sv_1_rx")
+            self.assertEqual(env["REPLAY_INTERFACE"], "sv_1_tx")
+
+    @unittest.skipIf(WIN32, "test \"setup\" not supported on Windows")
+    def test_setup_script_failure(self):
+        runner = TestRunner.__new__(TestRunner)
+        runner.cwd = "/suricata"
+        runner.directory = "/sv/tests/test"
+        runner.suricata_config = SuricataConfig.__new__(SuricataConfig)
+        runner.suricata_config.interface = None
+        runner.output = "."
+        runner.config = {"setup": [{"script": "true"}]}
+        runner.setup()
+        runner.config = {"setup": [{"script": "exit 3"}]}
+        with self.assertRaisesRegex(TestError, "exit code 3"):
+            runner.setup()
+
+    def test_remove_pinned_maps(self):
+        bpffs = "sv-selftest-bpffs-%d" % os.getpid()
+        os.mkdir(bpffs)
+        try:
+            names = ["suricata-sv_1_rx-flow_table_v4", "suricata-sv_1_rx-cpu_map",
+                     "suricata-sv_12_rx-flow_table_v4", "suricata-eth0-flow_table_v4"]
+            for name in names:
+                with open(os.path.join(bpffs, name), "w"):
+                    pass
+            remove_pinned_maps("sv_1", bpffs)
+            self.assertEqual(sorted(os.listdir(bpffs)), sorted(names[2:]))
+        finally:
+            shutil.rmtree(bpffs)
 
 class TestError(Exception):
     pass
@@ -450,11 +498,15 @@ class TestRunner:
             for setup in self.config["setup"]:
                 for command in setup:
                     if command == "script":
-                        subprocess.check_call(
-                            "%s" % setup[command],
-                            shell=True,
-                            cwd=self.output,
-                            env=self.build_env())
+                        try:
+                            subprocess.check_call(
+                                "%s" % setup[command],
+                                shell=True,
+                                cwd=self.output,
+                                env=self.build_env())
+                        except subprocess.CalledProcessError as err:
+                            raise TestError(
+                                "setup script failed with exit code %d" % err.returncode)
 
     def check_unix_socket(self):
         if "unix-commands" in self.config:
@@ -509,6 +561,9 @@ class TestRunner:
         env["TZ"] = "UTC"
         env["TEST_DIR"] = self.directory
         env["OUTPUT_DIR"] = self.output
+        if self.suricata_config.interface != None:
+            env["INTERFACE"] = self.suricata_config.interface + "_rx"
+            env["REPLAY_INTERFACE"] = self.suricata_config.interface + "_tx"
         if not "ASAN_OPTIONS" in env:
             env["ASAN_OPTIONS"] = "detect_leaks=1"
         if self.config.get("env"):
@@ -719,7 +774,8 @@ class TestRunner:
 
     def pre_check(self):
         if "pre-check" in self.config:
-            subprocess.call(self.config["pre-check"], shell=True, cwd=self.output)
+            subprocess.call(
+                self.config["pre-check"], shell=True, cwd=self.output, env=self.build_env())
 
     @handle_exceptions
     def perform_filter_checks(self, check, count, test_num, test_name):
@@ -991,6 +1047,22 @@ def run_test(dirpath, args, cwd, suricata_config):
             failedLogs.append(dirpath)
             raise TerminatePoolError()
 
+def remove_pinned_maps(interface, bpffs="/sys/fs/bpf"):
+    """Remove the eBPF maps that Suricata pinned for a replay interface."""
+    for path in glob.glob(os.path.join(bpffs, "suricata-%s_rx-*" % interface)):
+        try:
+            os.unlink(path)
+        except OSError:
+            pass
+
+def delete_replay_interface(interface):
+    try:
+        subprocess.check_call(["ip", "link", "delete", interface+"_tx"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    finally:
+        # Pinned maps outlive the interface. A test only removes its own when
+        # it gets to its checks.
+        remove_pinned_maps(interface)
+
 def signal_handler(signum, frame):
     global shutdown_requested, executor_instance
     print("\nReceived interrupt signal, shutting down gracefully...")
@@ -1217,12 +1289,12 @@ def main():
         run_parallel(args.j, tests, args, cwd, suricata_config)
     except KeyboardInterrupt:
         print("\nInterrupted by user")
-        if suricata_config.interface != None:
-            subprocess.check_call(["ip", "link", "delete", suricata_config.interface+"_tx"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         return 1
+    finally:
+        # also on the SystemExit of the signal handler
+        if suricata_config.interface != None:
+            delete_replay_interface(suricata_config.interface)
 
-    if suricata_config.interface != None:
-        subprocess.check_call(["ip", "link", "delete", suricata_config.interface+"_tx"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     passed = count_dict["passed"]
     failed = count_dict["failed"]
     skipped = count_dict["skipped"]
