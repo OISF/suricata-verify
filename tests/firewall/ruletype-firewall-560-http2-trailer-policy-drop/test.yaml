@@ -1,0 +1,27 @@
+requires:
+  min-version: 9
+
+pcap: ../../http2-trailer/input.pcap
+
+args:
+  # checksums are not computed in the pcap
+  - --simulate-ips
+  - -k none
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: drop
+        pcap_cnt: 8
+        drop.reason: firewall default app policy
+  - filter:
+      count: 3
+      match:
+        event_type: drop
+        drop.reason: firewall flow drop
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        flow.action: drop

@@ -1,0 +1,36 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+
+args:
+  # checksums are not computed in the pcap
+  - -k none
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      comment: "a size update is not a field, so http.trailer has nothing"
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      comment: "and nothing reaches http.trailer_names"
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      comment: "the size update is logged as itself, without a name or value"
+      count: 1
+      match:
+        event_type: http
+        http.request_trailers[0].table_size_update: 0
+  - filter:
+      comment: "the block was classified as a trailer, not left uninspected"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 3

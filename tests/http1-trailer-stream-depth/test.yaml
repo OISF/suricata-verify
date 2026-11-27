@@ -1,0 +1,35 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+
+args:
+  # checksums are not computed in the pcap
+  - -k none
+  # cut reassembly inside the block
+  - --set
+  - stream.reassembly.depth=2000
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 10
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 11
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 20
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 21

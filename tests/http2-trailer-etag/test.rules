@@ -1,0 +1,4 @@
+# RFC 9110 section 8.8.3 allows ETag in a trailer section
+alert http any any -> any any (msg:"response trailer field"; flow:to_client; http.trailer; content:"etag|3a 20|"; sid:1; rev:1;)
+# so it must not raise the forbidden-field event
+alert http any any -> any any (msg:"etag is allowed in trailers"; flow:to_client; app-layer-event:http2.trailer_forbidden_field; sid:2; rev:1;)

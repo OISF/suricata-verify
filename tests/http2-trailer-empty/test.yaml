@@ -1,0 +1,31 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+
+args:
+  # checksums are not computed in the pcap
+  - -k none
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      comment: "the header block is logged and matched"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      comment: "the request still reaches the trailer state"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      comment: "an empty trailer block logs no trailer array"
+      count: 1
+      match:
+        event_type: http
+        http.request_headers[0].name: :method
+        not-has-key: http.request_trailers

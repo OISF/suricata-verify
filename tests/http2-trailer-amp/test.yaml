@@ -1,0 +1,37 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+
+args:
+  # checksums are not computed in the pcap
+  - -k none
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      comment: "the trailer field reaches the buffer"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      comment: "the http event is still written, not dropped as too large"
+      count: 1
+      match:
+        event_type: http
+        http.request_trailers[0].name: x-amp
+  - filter:
+      comment: "the truncation is reported as an event"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      comment: "the repeat budget stops the array at 17 entries"
+      count: 1
+      match:
+        event_type: http
+        has-key: http.request_trailers[16]
+        not-has-key: http.request_trailers[17]

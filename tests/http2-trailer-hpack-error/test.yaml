@@ -1,0 +1,26 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+
+args:
+  # checksums are not computed in the pcap
+  - -k none
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      comment: "the field that decodes reaches the trailer buffer"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      comment: "an undecodable HPACK field is logged as an error entry, not dropped"
+      count: 1
+      match:
+        event_type: http
+        http.request_trailers[0].name: x-ok
+        http.request_trailers[0].value: fine
+        http.request_trailers[1].error: HTTP2HeaderDecodeIndex0

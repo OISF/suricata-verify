@@ -1,0 +1,15 @@
+# trailer fields are reachable through the trailer buffers
+alert http any any -> any any (msg:"trailer value"; flow:to_server; http.trailer; content:"trailval"; sid:1; rev:1;)
+alert http any any -> any any (msg:"trailer name and value"; flow:to_server; http.trailer; content:"User-Agent|3a 20|TRAILER-UA|0d 0a|"; sid:2; rev:1;)
+alert http any any -> any any (msg:"trailer raw"; flow:to_server; http.trailer.raw; content:"Host|3a 20|TRAILER-HOST|0d 0a|"; sid:3; rev:1;)
+alert http any any -> any any (msg:"trailer names"; flow:to_server; http.trailer_names; content:"|0d 0a|Server-Timing|0d 0a|"; sid:4; rev:1;)
+alert http any any -> any any (msg:"fast pattern elsewhere"; flow:to_server; content:"p=0123456789"; http_client_body; http.trailer; content:"TRAILER-HOST"; sid:5; rev:1;)
+# the header section keeps working
+alert http any any -> any any (msg:"header field"; flow:to_server; http.header; content:"User-Agent|3a 20|Mozilla|0d 0a|"; sid:10; rev:1;)
+alert http any any -> any any (msg:"user agent"; flow:to_server; http.user_agent; content:"Mozilla"; sid:11; rev:1;)
+alert http any any -> any any (msg:"header names"; flow:to_server; http.header_names; content:"|0d 0a|Trailer|0d 0a|"; sid:12; rev:1;)
+# must not match: trailer fields are not part of the header section
+alert http any any -> any any (msg:"leak http.header"; flow:to_server; http.header; content:"TRAILER"; sid:20; rev:1;)
+alert http any any -> any any (msg:"leak http.user_agent"; flow:to_server; http.user_agent; content:"TRAILER-UA"; sid:21; rev:1;)
+alert http any any -> any any (msg:"leak http.header.raw"; flow:to_server; http.header.raw; content:"TRAILER-HOST"; sid:22; rev:1;)
+alert http any any -> any any (msg:"leak http.header_names"; flow:to_server; http.header_names; content:"|0d 0a|Server-Timing|0d 0a|"; sid:23; rev:1;)

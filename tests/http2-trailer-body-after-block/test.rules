@@ -1,0 +1,6 @@
+# the first body frame, before the malformed trailer block
+alert http2 any any -> any any (msg:"body before the block"; flow:to_server; http.request_body; content:"FIRSTBODY"; sid:1; rev:1;)
+# body data behind the block must still be inspected
+alert http2 any any -> any any (msg:"body after the block"; flow:to_server; http.request_body; content:"SECONDBODY"; sid:2; rev:1;)
+# the trailer field itself is still reachable
+alert http2 any any -> any any (msg:"trailer field"; flow:to_server; http.trailer; content:"x-checksum|3a 20|deadbeef"; sid:3; rev:1;)

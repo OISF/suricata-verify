@@ -33,12 +33,16 @@ class Flow:
         self.c(b"", "F", pkts); self.s(b"", "A", pkts)
 
 pkts = []
-pkts = []
 for sp, hdr in ((49165, b"X-Marker: yes\r\n"), (49166, b"X-Marker: no\r\n")):
     f = Flow(sp, 1000 + sp, 5000 + sp); f.hs(pkts)
     f.c(b"POST /submit HTTP/1.1\r\nHost: x\r\n" + hdr + b"Content-Length: 4\r\n\r\ndata",
         "PA", pkts); f.s(b"", "A", pkts)
     f.s(b"HTTP/1.1 200 OK\r\nContent-Length: 0\r\n\r\n", "PA", pkts)
     f.fin(pkts)
+# pin the timestamps so the capture regenerates byte for byte
+base = 1_700_880_500
+for i, pkt in enumerate(pkts):
+    pkt.time = base + i / 1_000_000
+
 wrpcap("input.pcap", pkts)
 print("wrote input.pcap:", len(pkts), "packets")

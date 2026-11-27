@@ -1,0 +1,39 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+
+args:
+  # checksums are not computed in the pcap
+  - -k none
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      comment: "both occurrences of the repeated field reach http.trailer"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      comment: "both names reach http.trailer_names"
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  - filter:
+      comment: "a section this small is not truncated"
+      count: 0
+      match:
+        event_type: alert
+        alert.signature_id: 3
+  - filter:
+      comment: "both fields are logged, not merged"
+      count: 1
+      match:
+        event_type: http
+        http.request_trailers[0].name: server-timing
+        http.request_trailers[0].value: dur=2
+        http.request_trailers[1].name: server-timing
+        http.request_trailers[1].value: dur=2

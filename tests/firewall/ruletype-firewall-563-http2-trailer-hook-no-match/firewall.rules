@@ -1,0 +1,12 @@
+# Exact-state rules for the http2 stream states this stream passes through, other
+# than the one under test. They carry accept:hook, which is also the protocol
+# default policy in suricata.yaml that every state not listed here falls to.
+# No LTE (<) rule on purpose: the engine builds an LTE rule per state up to its
+# bound, so it would be evaluated at the trailer state as well and shadow the
+# behaviour under test.
+
+# The rule under test: hooked at the trailer state with a buffer that completes
+# at that state, so it loads and is evaluated there. It cannot match, so it takes
+# no action and the state falls back to its policy, which is accept:hook here and
+# records no flow action.
+accept:flow,alert http2:stream:request_trailers any any -> any any (http.trailer; content:"never-present-value"; sid:100;)
