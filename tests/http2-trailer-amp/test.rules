@@ -1,0 +1,2 @@
+# one 4 KB literal plus 12000 one-byte references: the trailer buffer holds what fits
+alert http any any -> any any (msg:"amplified trailer field"; flow:to_server; http.trailer; content:"x-amp|3a 20|AAAA"; sid:1; rev:1;)
