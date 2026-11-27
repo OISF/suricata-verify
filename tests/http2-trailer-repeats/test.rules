@@ -1,0 +1,3 @@
+# two field lines on the wire, one HPACK entry: both must reach the buffer
+alert http any any -> any any (msg:"repeated trailer field twice"; flow:to_server; http.trailer; content:"server-timing|3a 20|dur=2|0d 0a|server-timing|3a 20|dur=2"; sid:1; rev:1;)
+alert http any any -> any any (msg:"repeated trailer name twice"; flow:to_server; http.trailer_names; content:"|0d 0a|server-timing|0d 0a|server-timing|0d 0a|"; sid:2; rev:1;)
