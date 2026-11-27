@@ -1,0 +1,5 @@
+# the trailer block holds only an HPACK size update, so there is no field to match
+alert http any any -> any any (msg:"no field from a size update"; flow:to_server; http.trailer; content:"|3a 20|"; sid:1; rev:1;)
+alert http any any -> any any (msg:"no name from a size update"; flow:to_server; http.trailer_names; content:"|0d 0a 0d 0a|"; sid:2; rev:1;)
+# a positive control: the block was classified as a trailer and inspected
+alert http2:stream:request_trailers any any -> any any (msg:"trailer state reached"; flow:to_server; sid:3; rev:1;)
