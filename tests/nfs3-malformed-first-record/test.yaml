@@ -1,0 +1,50 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+  - --set
+  - app-layer.protocols.nfs.enabled=yes
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 2
+      match:
+        event_type: flow
+        app_proto: nfs
+        dest_port: 2049
+
+  # both flows raise it: the first record of flow A has no transaction yet, and
+  # flow B's malformed record must not be pinned on the LOOKUP's transaction
+  - filter:
+      count: 2
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+
+  # flow B's anomaly sits on the record's own transaction, after the LOOKUP's
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: malformed_data
+        src_port: 942
+        tx_id: 1
+
+  # the anomaly transaction is event-only, so it is not logged as an nfs record
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: LOOKUP
