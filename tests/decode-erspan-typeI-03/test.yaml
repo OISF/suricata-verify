@@ -1,0 +1,19 @@
+requires:
+  min-version: 9
+
+args:
+  - -k none
+
+checks:
+  # Mirrored frame of 10 bytes, too short for ethernet
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        src_ip: 192.168.1.4
+        dest_ip: 192.168.1.2
+        alert.signature_id: 2200105
+  - stats:
+      decoder.gre: 1
+      decoder.erspan: 1
+      decoder.event.erspan.header_too_small: 1
