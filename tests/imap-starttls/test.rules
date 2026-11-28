@@ -1,0 +1,1 @@
+alert imap any any -> any any (app-layer-event:imap.invalid_data; sid:1; rev:1;)

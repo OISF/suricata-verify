@@ -1,0 +1,5 @@
+alert imap any 42010 <> any any (msg:"SURICATA IMAP line too long"; app-layer-event:imap.line_too_long; classtype:protocol-command-decode; sid:101; rev:1;)
+alert imap any 42020 <> any any (app-layer-event:imap.invalid_data; sid:201; rev:1;)
+alert tcp any 42010 -> any any (content:"A002 LOGOUT"; sid:102; rev:1;)
+alert imap any 42020 -> any any (frame:imap.pdu; content:"A006 NOOP"; startswith; sid:203; rev:1;)
+alert imap any any -> any 42020 (frame:imap.pdu; content:"A004 OK"; startswith; sid:204; rev:1;)

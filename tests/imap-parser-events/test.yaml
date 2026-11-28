@@ -1,0 +1,137 @@
+requires:
+  min-version: 9
+args:
+  - -k none
+  - --set app-layer.protocols.imap.enabled=yes
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        pcap_cnt: 9
+        event_type: imap
+        imap.responses[0]: A001 OK NOOP completed
+        src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: imap
+        anomaly.event: line_too_long
+        dest_port: 42010
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 101
+        flow.src_port: 42010
+  # Invalid lines are skipped, with one event per run of them (two runs from
+  # the client and one from the server on 42020, one continuation line on
+  # 42030, one line on 42040), and parsing continues.
+  - filter:
+      count: 5
+      match:
+        event_type: anomaly
+        anomaly.app_proto: imap
+        anomaly.event: invalid_data
+  - filter:
+      count: 2
+      match:
+        event_type: alert
+        alert.signature_id: 201
+        direction: to_server
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 201
+        direction: to_client
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.requests[0]: A004 NOOP
+        imap.responses[0]: A004 OK NOOP completed
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        imap.responses[0]: A001 BAD invalid string
+  # The events of invalid lines add no empty imap records.
+  - filter:
+      count: 6
+      match:
+        event_type: imap
+        src_port: 42020
+  - filter:
+      count: 3
+      match:
+        event_type: imap
+        src_port: 42030
+  # A malformed continuation line is skipped once its LF arrives.
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: invalid_data
+        dest_port: 42030
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42030
+        imap.requests[0]: A001 IDLE
+        imap.requests[1]: DONE
+        imap.responses[1]: A001 OK IDLE terminated
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42030
+        imap.requests[0]: A002 NOOP
+        imap.responses[0]: A002 OK NOOP completed
+  # An invalid line following a later command is not taken as data of an
+  # AUTHENTICATE whose tagged reply was never seen.
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.event: invalid_data
+        dest_port: 42040
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42040
+        imap.requests.__len: 1
+        imap.requests[0]: A001 AUTHENTICATE PLAIN
+        imap.responses.__len: 1
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42040
+        imap.requests[0]: A003 NOOP
+        imap.responses[0]: A003 OK NOOP completed
+  # The frame of a line after a skipped one starts at that line.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 203
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 204
+  # Raw stream content is inspected once the command is parsed, not only at
+  # the end of the flow.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 102
+        pcap_cnt: 13
+  - stats:
+      app_layer.error.imap.parser: 0

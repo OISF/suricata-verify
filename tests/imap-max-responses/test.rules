@@ -1,0 +1,1 @@
+alert imap any any -> any any (app-layer-event:imap.too_many_responses; flow:to_client; sid:1; rev:1;)

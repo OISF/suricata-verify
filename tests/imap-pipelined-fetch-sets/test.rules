@@ -1,0 +1,1 @@
+alert imap any any -> any any (imap.response; content:"* 2 FETCH (FLAGS ())"; sid:1; rev:1;)

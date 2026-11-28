@@ -1,0 +1,91 @@
+requires:
+  min-version: 9
+args:
+  - -k none
+  - --set app-layer.protocols.imap.enabled=yes
+pcap: input.pcap
+
+checks:
+  # Nothing is parsed after the reply accepting COMPRESS, not even the
+  # compressed data following it in the same segment.
+  - filter:
+      count: 2
+      match:
+        event_type: imap
+        src_port: 42010
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42010
+        imap.requests[0]: A1 COMPRESS DEFLATE
+        imap.responses.__len: 1
+        imap.responses[0]: A1 OK DEFLATE active
+  # A rejected COMPRESS changes nothing.
+  - filter:
+      count: 3
+      match:
+        event_type: imap
+        src_port: 42020
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42020
+        imap.requests[0]: A1 COMPRESS DEFLATE
+        imap.responses[0]: A1 NO DEFLATE not available
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42020
+        imap.requests[0]: A2 NOOP
+        imap.responses[0]: A2 OK NOOP completed
+  # A COMPRESS line the server may have read as data of the command before
+  # it is not trusted: the OK may answer another command, and parsing goes on.
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42030
+        imap.requests[0]: A9 LOGIN <redacted>
+        imap.responses[0]: A9 OK LOGIN completed
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42040
+        imap.requests[0]: A9 LOGIN <redacted>
+        imap.responses[0]: A9 OK LOGIN completed
+  # Nor is a COMPRESS behind a UID prefix.
+  - filter:
+      count: 1
+      match:
+        event_type: imap
+        src_port: 42050
+        imap.requests[0]: A9 LOGIN <redacted>
+        imap.responses[0]: A9 OK LOGIN completed
+  - filter:
+      count: 5
+      match:
+        event_type: alert
+        alert.signature_id: 2
+  # The compressed data raises nothing. The only invalid line is the rest of
+  # the LOGIN line after its literal.
+  - filter:
+      count: 1
+      match:
+        event_type: alert
+        alert.signature_id: 1
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        dest_port: 42040
+        anomaly.event: invalid_data
+  - stats:
+      app_layer.error.imap.parser: 0
