@@ -1,0 +1,3 @@
+alert tcp any 40400 -> any 8080 (msg:"Overlap with different data in a contiguous segment"; stream-event:reassembly_overlap_different_data; sid:1;)
+alert tcp any 41400 -> any 8080 (msg:"Overlap with different data in a 2 mbuf segment"; stream-event:reassembly_overlap_different_data; sid:2;)
+alert tcp any 48960 -> any 8080 (msg:"Overlap with different data in a 9 mbuf segment"; stream-event:reassembly_overlap_different_data; sid:3;)

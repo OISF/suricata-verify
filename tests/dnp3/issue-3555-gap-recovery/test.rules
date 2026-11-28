@@ -1,0 +1,6 @@
+alert dnp3 any any -> any any (msg:"DNP3 request before gap"; flow:established,to_server; dnp3_func:read; dnp3_data; content:"|11 11 11 11|"; sid:1; rev:1;)
+alert dnp3 any any -> any any (msg:"DNP3 response before gap"; flow:established,to_client; dnp3_func:response; dnp3_data; content:"|11 11 11 11|"; sid:2; rev:1;)
+alert dnp3 any any -> any any (msg:"DNP3 first request after gap"; flow:established,to_server; dnp3_func:read; dnp3_data; content:"|33 33 33 33|"; sid:3; rev:1;)
+alert dnp3 any any -> any any (msg:"DNP3 first response after gap"; flow:established,to_client; dnp3_func:response; dnp3_data; content:"|33 33 33 33|"; sid:4; rev:1;)
+alert dnp3 any any -> any any (msg:"DNP3 later request after gap"; flow:established,to_server; dnp3_func:read; dnp3_data; content:"|44 44 44 44|"; sid:5; rev:1;)
+alert dnp3 any any -> any any (msg:"DNP3 later response after gap"; flow:established,to_client; dnp3_func:response; dnp3_data; content:"|44 44 44 44|"; sid:6; rev:1;)
