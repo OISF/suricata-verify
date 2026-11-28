@@ -1,0 +1,162 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+  - --set
+  - app-layer.protocols.nfs.enabled=yes
+
+pcap: input.pcap
+
+checks:
+  # flow A: chunk 1 answered with an error, chunk 2 answered OK
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        src_port: 941
+        nfs.procedure: WRITE
+        nfs.type: response
+        nfs.version: 3
+        nfs.status: ERR_IO
+        nfs.status_code: 5
+        nfs.write.offset: 0
+        nfs.write.size: 128
+        nfs.write.last_xid: 2
+  # flow B: both chunks out before either reply, same expectation
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        src_port: 942
+        nfs.procedure: WRITE
+        nfs.type: response
+        nfs.version: 3
+        nfs.status: ERR_IO
+        nfs.status_code: 5
+        nfs.write.offset: 0
+        nfs.write.size: 128
+        nfs.write.last_xid: 2
+  # flows C and D: accepted first, rejected second. The error is the last
+  # thing said about the write, so it is what the record reports.
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        src_port: 943
+        nfs.procedure: WRITE
+        nfs.type: response
+        nfs.version: 3
+        nfs.status: ERR_NOSPC
+        nfs.status_code: 28
+        nfs.write.offset: 0
+        nfs.write.size: 128
+        nfs.write.last_xid: 2
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        src_port: 944
+        nfs.procedure: WRITE
+        nfs.type: response
+        nfs.version: 3
+        nfs.status: ERR_NOSPC
+        nfs.status_code: 28
+        nfs.write.offset: 0
+        nfs.write.size: 128
+        nfs.write.last_xid: 2
+  - filter:
+      count: 0
+      match:
+        event_type: nfs
+        src_port: 943
+        nfs.procedure: WRITE
+        nfs.status: OK
+  - filter:
+      count: 0
+      match:
+        event_type: nfs
+        src_port: 944
+        nfs.procedure: WRITE
+        nfs.status: OK
+  # flows A and B: no write of a split record reads as accepted because a
+  # later reply said OK; the two checks above show the records these run over
+  - filter:
+      count: 0
+      match:
+        event_type: nfs
+        src_port: 941
+        nfs.procedure: WRITE
+        nfs.status: OK
+  - filter:
+      count: 0
+      match:
+        event_type: nfs
+        src_port: 942
+        nfs.procedure: WRITE
+        nfs.status: OK
+  # flow E: a FILE_SYNC write and an UNSTABLE write to one handle. The first
+  # is settled from its request, so its reply has nothing to land on and must
+  # not be carried over to the second, whose own reply accepted it. Two write
+  # records for the flow, only the second with a status of its own.
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        src_port: 945
+        nfs.procedure: WRITE
+        nfs.type: response
+        nfs.version: 3
+        nfs.status: OK
+        nfs.status_code: 0
+        nfs.write.offset: 64
+        nfs.write.size: 64
+        nfs.write.last_xid: 2
+  - filter:
+      count: 2
+      match:
+        event_type: nfs
+        src_port: 945
+        nfs.procedure: WRITE
+        nfs.type: response
+  - filter:
+      count: 0
+      match:
+        event_type: nfs
+        src_port: 945
+        nfs.procedure: WRITE
+        nfs.status: ERR_IO
+  # the file record of flow A was written after a status had been seen
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 941
+        nfs.procedure: WRITE
+        nfs.status: ERR_IO
+        nfs.status_code: 5
+  # the file record of flow B was written when the file closed, before the
+  # replies reached the transaction, so it keeps the default name and leaves
+  # the numeric status out
+  - filter:
+      count: 1
+      match:
+        event_type: fileinfo
+        src_port: 942
+        nfs.procedure: WRITE
+        nfs.status: OK
+  - filter:
+      count: 0
+      match:
+        event_type: fileinfo
+        src_port: 942
+        nfs.status_code: 5
+  - filter:
+      count: 5
+      match:
+        event_type: flow
+        app_proto: nfs

@@ -1,0 +1,75 @@
+requires:
+  min-version: 9
+
+args:
+  - -k
+  - none
+  - --set app-layer.protocols.nfs.enabled=yes
+
+pcap: input.pcap
+
+checks:
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.version: 3
+        nfs.procedure: CREATE
+        nfs.type: response
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.version: 3
+        nfs.procedure: LOOKUP
+        nfs.type: response
+        nfs.truncated: true
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.version: 3
+        nfs.procedure: RENAME
+        nfs.type: response
+        nfs.truncated: true
+  # RFC 1813 3.2 puts no limit on a v3 name: the single anomaly below is the
+  # v2 one, the v3 stream must not add to it
+  # under the 8 KiB cap the name is logged whole even though it is long
+  - shell:
+      args: jq -r 'select(.event_type=="nfs" and .nfs.version==3 and .nfs.procedure=="CREATE") | .nfs.filename | length' eve.json
+      expect: 4096
+  - shell:
+      args: jq -r 'select(.event_type=="nfs" and .nfs.version==3 and .nfs.procedure=="LOOKUP") | .nfs.filename | length' eve.json
+      expect: 8226
+  - shell:
+      args: jq -r 'select(.event_type=="nfs" and .nfs.version==3 and .nfs.procedure=="LOOKUP") | .nfs.filename' eve.json | grep -Ec '\[truncated 32768 additional bytes\]$'
+      expect: 1
+  # the rename source is 70 KiB and is logged twice (filename and rename.from),
+  # so it must cost the budget what is written, not what was parsed
+  - shell:
+      args: jq -r 'select(.event_type=="nfs" and .nfs.version==3 and .nfs.procedure=="RENAME") | .nfs.rename.from | length' eve.json
+      expect: 8226
+  - shell:
+      args: jq -r 'select(.event_type=="nfs" and .nfs.version==3 and .nfs.procedure=="RENAME") | .nfs.rename.to | length' eve.json
+      expect: 8226
+  - shell:
+      args: jq -r 'select(.event_type=="nfs" and .nfs.version==3 and .nfs.procedure=="RENAME") | .nfs.rename | has("from_truncated")' eve.json | grep -c '^false$'
+      expect: 1
+  # v2 is the one version that bounds a name (RFC 1094 MAXNAMLEN 255): out of
+  # spec raises the event, but the name is still kept whole for detection
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: malformed_data
+  - shell:
+      args: jq -r 'select(.event_type=="nfs" and .nfs.version==2) | .nfs.filename | length' eve.json
+      expect: 300
+  # nothing anywhere near the 10 MiB MemBuffer limit that used to be the bound.
+  # The longest string any nfs record carries is the cap plus its marker: a
+  # count of the payload, not of the JSON layout, so it does not move with the
+  # build the way the longest record line does.
+  - shell:
+      args: jq -r 'select(.event_type=="nfs") | .. | strings | length' eve.json | sort -rn | head -1
+      expect: 8226

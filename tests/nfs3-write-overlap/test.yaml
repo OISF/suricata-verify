@@ -1,0 +1,49 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+
+args:
+  - -k
+  - none
+
+pcap: input.pcap
+
+checks:
+  # The second write starts at 50, inside the 100 bytes the tracker already
+  # holds for this file.
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: file_overlap
+  # one file transaction covers both writes. size is the bytes the two WRITE
+  # calls carried, so the 50 overlapping bytes count twice: 150. What the
+  # tracker kept is the file record, which says size 100. file_overlap is what
+  # tells the analyst the two numbers are meant to disagree
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: WRITE
+        nfs.version: 3
+        nfs.write.offset: 0
+        nfs.write.size: 150
+        nfs.write.chunks: 1
+        nfs.status: OK
+        nfs.status_code: 0
+  # the second write must not open a second transaction: one flow, one file,
+  # one WRITE record
+  - filter:
+      count: 0
+      match:
+        event_type: nfs
+        nfs.procedure: WRITE
+        nfs.write.chunks: 2
+  # the anomaly must not cost the flow its protocol
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: nfs

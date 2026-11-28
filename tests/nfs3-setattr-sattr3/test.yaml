@@ -1,0 +1,36 @@
+requires:
+  min-version: 9
+
+args:
+  # the synthetic capture carries zeroed checksums
+  - -k
+  - none
+  - --set app-layer.protocols.nfs.enabled=yes
+
+pcap: input.pcap
+
+checks:
+  # the CREATE reply carries the created handle; the handle->name mapping
+  # lands in the namemap
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.version: 3
+        nfs.procedure: CREATE
+        nfs.type: response
+        rpc.xid: 1342177281
+  # the SETATTR (RFC 1813 3.2.4 sattr3: atime SET_TO_CLIENT_TIME with the
+  # 8-byte nfstime3 inside the union) keeps the record walk in sync and
+  # the response fileinfo resolves the created name
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.version: 3
+        nfs.procedure: SETATTR
+        nfs.type: response
+        nfs.filename: cfile
+        rpc.xid: 1342177282
+  - shell:
+      args: test "$(grep -Ec 'malformed_data' eve.json)" -eq 0

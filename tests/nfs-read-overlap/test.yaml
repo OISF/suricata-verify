@@ -1,0 +1,45 @@
+%YAML 1.1
+---
+requires:
+  min-version: 9
+
+args:
+  - -k
+  - none
+
+pcap: input.pcap
+
+checks:
+  # the second read asks for offset 50, inside the 100 bytes the first reply
+  # already put in the tracker
+  - filter:
+      count: 1
+      match:
+        event_type: anomaly
+        anomaly.app_proto: nfs
+        anomaly.event: file_overlap
+  # both replies stay on one file transaction, and size is the bytes they
+  # carried: 100 + 50, the overlap counted twice. A read logs a chunk per reply
+  # record, where a write does not count the one that opened the transaction
+  - filter:
+      count: 1
+      match:
+        event_type: nfs
+        nfs.procedure: READ
+        nfs.version: 3
+        nfs.read.offset: 0
+        nfs.read.size: 150
+        nfs.read.chunks: 2
+        nfs.status: OK
+        nfs.status_code: 0
+  - filter:
+      count: 0
+      match:
+        event_type: nfs
+        nfs.procedure: READ
+        nfs.read.size: 100
+  - filter:
+      count: 1
+      match:
+        event_type: flow
+        app_proto: nfs
